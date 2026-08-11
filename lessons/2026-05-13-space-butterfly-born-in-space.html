@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pola News - Space Butterfly | 太空蝴蝶</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #2C3E50;
+            --light: #F7F9FC;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.8;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-1);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .header .date-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            position: sticky;
+            top: 4px;
+            height: calc(100vh - 4px);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            background: var(--gradient-3);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.1em;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: linear-gradient(90deg, rgba(102,126,234,0.1) 0%, transparent 100%);
+            color: #667eea;
+            border-left: 4px solid #667eea;
+        }
+
+        .nav-item .icon {
+            font-size: 1.4em;
+            width: 30px;
+            text-align: center;
+        }
+
+        .nav-item .label {
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.8em;
+            color: var(--dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-title .icon {
+            font-size: 1.2em;
+        }
+
+        .card-title .en {
+            font-size: 0.7em;
+            color: #888;
+            font-weight: normal;
+        }
+
+        /* Reading Section */
+        .segment {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .segment-label {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+
+        .segment-text {
+            font-size: 1.15em;
+            line-height: 2;
+            color: var(--dark);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffeaa7 0%, #ffeaa7 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 90%;
+            padding: 0 4px;
+            border-radius: 4px;
+            cursor: help;
+            position: relative;
+        }
+
+        .highlight:hover::after {
+            content: attr(data-meaning);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            white-space: nowrap;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gradient-2);
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .play-btn.playing {
+            animation: none;
+            background: var(--gradient-3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 87, 108, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(245, 87, 108, 0); }
+        }
+
+        /* Vocabulary Cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .vocab-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .vocab-word {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vocab-phonetic {
+            font-size: 0.8em;
+            color: #888;
+            font-weight: normal;
+        }
+
+        .vocab-type {
+            display: inline-block;
+            background: var(--light);
+            color: var(--secondary);
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        .vocab-meaning {
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .vocab-example {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.95em;
+            position: relative;
+        }
+
+        .vocab-sound {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .vocab-sound:hover {
+            opacity: 1;
+        }
+
+        /* Sentence Patterns */
+        .pattern-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .pattern-en {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .pattern-zh {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .pattern-example {
+            background: rgba(255,255,255,0.2);
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-style: italic;
+        }
+
+        /* Grammar Section */
+        .grammar-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .grammar-title {
+            font-size: 1.3em;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .grammar-en {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .grammar-zh {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .grammar-example {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .quiz-number {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+
+        .quiz-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--secondary);
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--secondary);
+            background: rgba(78, 205, 196, 0.2);
+        }
+
+        .quiz-option.correct {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.2);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--primary);
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .check-btn {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .check-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Knowledge Section */
+        .knowledge-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .knowledge-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .knowledge-content {
+            line-height: 2;
+            font-size: 1.05em;
+        }
+
+        .knowledge-content p {
+            margin-bottom: 15px;
+        }
+
+        .knowledge-facts {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .knowledge-facts h4 {
+            margin-bottom: 10px;
+        }
+
+        .knowledge-facts ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .knowledge-facts li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .knowledge-facts li::before {
+            content: "⭐";
+            position: absolute;
+            left: 0;
+        }
+
+        /* About Section */
+        .about-card {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .about-section h4 {
+            color: var(--dark);
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .about-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .about-section li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .about-section li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .print-btn {
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 30px auto 0;
+            transition: transform 0.3s ease;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                transition: left 0.3s ease;
+                z-index: 1000;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar, .menu-toggle, .progress-container, .play-btn, .vocab-sound, .print-btn {
+                display: none !important;
+            }
+
+            .container {
+                display: block;
+            }
+
+            .main-content {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .section {
+                display: block !important;
+                page-break-after: always;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>🦋 Pola News</h1>
+        <p class="subtitle">Space Butterfly Born in Space | 太空蝴蝶</p>
+        <span class="date-badge">📅 May 13, 2026</span>
+    </header>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>📚 Learning Menu</h3>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="showSection('reading')">
+                    <span class="icon">📖</span>
+                    <span class="label">全文阅读</span>
+                </li>
+                <li class="nav-item" onclick="showSection('vocabulary')">
+                    <span class="icon">📝</span>
+                    <span class="label">词汇表</span>
+                </li>
+                <li class="nav-item" onclick="showSection('sentences')">
+                    <span class="icon">💬</span>
+                    <span class="label">句型练习</span>
+                </li>
+                <li class="nav-item" onclick="showSection('grammar')">
+                    <span class="icon">📐</span>
+                    <span class="label">语法点</span>
+                </li>
+                <li class="nav-item" onclick="showSection('quiz')">
+                    <span class="icon">✅</span>
+                    <span class="label">练习测验</span>
+                </li>
+                <li class="nav-item" onclick="showSection('knowledge')">
+                    <span class="icon">🌟</span>
+                    <span class="label">中文知识扩展</span>
+                </li>
+                <li class="nav-item" onclick="showSection('about')">
+                    <span class="icon">ℹ️</span>
+                    <span class="label">关于本课</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Section 1: Reading -->
+            <section class="section active" id="reading">
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="icon">📖</span>
+                        全文阅读
+                        <span class="en">Full Reading</span>
+                    </h2>
+
+                    <div class="segment">
+                        <span class="segment-label">Segment 1: Hook</span>
+                        <p class="segment-text">
+                            Wow! Do you know a <span class="highlight" data-meaning="n. 蝴蝶">butterfly</span> just flew in space? No, really! Scientists in China watched a tiny <span class="highlight" data-meaning="n. 蛹">chrysalis</span> <span class="highlight" data-meaning="v. 变成，转化">transform</span> into a beautiful butterfly while flying around Earth!
+                        </p>
+                        <button class="play-btn" onclick="playSegment(0, this)">▶</button>
+                    </div>
+
+                    <div class="segment">
+                        <span class="segment-label">Segment 2: Story</span>
+                        <p class="segment-text">
+                            A team at Chongqing University sent a <span class="highlight" data-meaning="adj. 密封的">sealed</span> container to space. Inside was a chrysalis and a small plant. Scientists hoped the butterfly could <span class="highlight" data-meaning="v. 孵化">hatch</span> and live inside this tiny <span class="highlight" data-meaning="n. 生态系统">ecosystem</span>. And guess what? It worked perfectly!
+                        </p>
+                        <button class="play-btn" onclick="playSegment(1, this)">▶</button>
+                    </div>
+
+                    <div class="segment">
+                        <span class="segment-label">Segment 3: Why It Matters</span>
+                        <p class="segment-text">
+                            This little butterfly is actually a big hero! If butterflies can live in space, maybe one day <span class="highlight" data-meaning="n. 宇航员">astronauts</span> could grow their own food on long trips to Mars. The butterfly helped scientists learn how to build <span class="highlight" data-meaning="n. 生命支持系统">life support</span> systems for space exploration!
+                        </p>
+                        <button class="play-btn" onclick="playSegment(2, this)">▶</button>
+                    </div>
+
+                    <div class="segment">
+                        <span class="segment-label">Segment 4: Sign-off</span>
+                        <p class="segment-text">
+                            That's all for today, friends! Remember, even the smallest creatures can help us explore the biggest mysteries of space. See you next time on Pola News!
+                        </p>
+                        <button class="play-btn" onclick="playSegment(3, this)">▶</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Vocabulary -->
+            <section class="section" id="vocabulary">
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="icon">📝</span>
+                        词汇表
+                        <span class="en">Vocabulary</span>
+                    </h2>
+
+                    <div class="vocab-grid">
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                butterfly
+                                <span class="vocab-phonetic">/ˈbʌtərflaɪ/</span>
+                                <span class="vocab-sound" onclick="speakWord('butterfly')">🔊</span>
+                            </div>
+                            <span class="vocab-type">noun</span>
+                            <p class="vocab-meaning">🦋 蝴蝶 — 一种有彩色翅膀的昆虫，会从毛毛虫变成蝴蝶</p>
+                            <p class="vocab-example">"The butterfly emerged from its chrysalis beautifully."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                chrysalis
+                                <span class="vocab-phonetic">/ˈkrɪsəlɪs/</span>
+                                <span class="vocab-sound" onclick="speakWord('chrysalis')">🔊</span>
+                            </div>
+                            <span class="vocab-type">noun</span>
+                            <p class="vocab-meaning">🐛 蛹 — 毛毛虫在内部变成蝴蝶时的保护壳</p>
+                            <p class="vocab-example">"The butterfly stayed inside the chrysalis until it was ready to emerge."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                transform
+                                <span class="vocab-phonetic">/trænsˈfɔːrm/</span>
+                                <span class="vocab-sound" onclick="speakWord('transform')">🔊</span>
+                            </div>
+                            <span class="vocab-type">verb</span>
+                            <p class="vocab-meaning">🔄 转变，变形 — 完全改变形态或外观</p>
+                            <p class="vocab-example">"Caterpillars transform into butterflies."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                ecosystem
+                                <span class="vocab-phonetic">/ˈiːkoʊsɪstəm/</span>
+                                <span class="vocab-sound" onclick="speakWord('ecosystem')">🔊</span>
+                            </div>
+                            <span class="vocab-type">noun</span>
+                            <p class="vocab-meaning">🌍 生态系统 — 生物和它们所处环境共同组成的系统</p>
+                            <p class="vocab-example">"Space needs a special ecosystem to support life."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                sealed
+                                <span class="vocab-phonetic">/siːld/</span>
+                                <span class="vocab-sound" onclick="speakWord('sealed')">🔊</span>
+                            </div>
+                            <span class="vocab-type">adjective</span>
+                            <p class="vocab-meaning">🔒 密封的 — 紧密关闭的，空气进不去也出不来</p>
+                            <p class="vocab-example">"The scientists sent a sealed container to space."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                hatch
+                                <span class="vocab-phonetic">/hætʃ/</span>
+                                <span class="vocab-sound" onclick="speakWord('hatch')">🔊</span>
+                            </div>
+                            <span class="vocab-type">verb</span>
+                            <p class="vocab-meaning">🐣 孵化 — 从卵或蛹中出来</p>
+                            <p class="vocab-example">"The baby bird hatched from its egg this morning."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                astronaut
+                                <span class="vocab-phonetic">/ˈæstrənɔːt/</span>
+                                <span class="vocab-sound" onclick="speakWord('astronaut')">🔊</span>
+                            </div>
+                            <span class="vocab-type">noun</span>
+                            <p class="vocab-meaning">🚀 宇航员 — 前往太空旅行的人</p>
+                            <p class="vocab-example">"Astronauts live and work on the International Space Station."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                Mars
+                                <span class="vocab-phonetic">/mɑːrz/</span>
+                                <span class="vocab-sound" onclick="speakWord('Mars')">🔊</span>
+                            </div>
+                            <span class="vocab-type">noun</span>
+                            <p class="vocab-meaning">🔴 火星 — 太阳系中的第四颗行星</p>
+                            <p class="vocab-example">"Scientists want to send astronauts to Mars one day."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                life support
+                                <span class="vocab-phonetic">/laɪf səˈpɔːrt/</span>
+                                <span class="vocab-sound" onclick="speakWord('life support')">🔊</span>
+                            </div>
+                            <span class="vocab-type">noun phrase</span>
+                            <p class="vocab-meaning">💨 生命支持系统 — 为生物提供空气、食物和水的设备系统</p>
+                            <p class="vocab-example">"The life support system provides oxygen for astronauts."</p>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">
+                                container
+                                <span class="vocab-phonetic">/kənˈteɪnər/</span>
+                                <span class="vocab-sound" onclick="speakWord('container')">🔊</span>
+                            </div>
+                            <span class="vocab-type">noun</span>
+                            <p class="vocab-meaning">📦 容器 — 用来装东西的盒子或箱子</p>
+                            <p class="vocab-example">"The butterfly lived inside a special container in space."</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Sentence Patterns -->
+            <section class="section" id="sentences">
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="icon">💬</span>
+                        句型练习
+                        <span class="en">Sentence Patterns</span>
+                    </h2>
+
+                    <div class="pattern-card">
+                        <p class="pattern-en">Do you know + (that) + ...?</p>
+                        <p class="pattern-zh">你知道……吗？（用来引出一个令人惊讶的事实）</p>
+                        <p class="pattern-example">"Do you know a butterfly just flew in space?"</p>
+                    </div>
+
+                    <div class="pattern-card">
+                        <p class="pattern-en">...and guess what?</p>
+                        <p class="pattern-zh">你猜怎么着？（用来引出令人惊讶的结果）</p>
+                        <p class="pattern-example">"Scientists sent a container to space, and guess what? It worked perfectly!"</p>
+                    </div>
+
+                    <div class="pattern-card">
+                        <p class="pattern-en">If ..., maybe one day ...</p>
+                        <p class="pattern-zh">如果……，也许有一天……（表达可能性和希望）</p>
+                        <p class="pattern-example">"If butterflies can live in space, maybe one day astronauts could grow food on Mars."</p>
+                    </div>
+
+                    <div class="pattern-card">
+                        <p class="pattern-en">...is actually a big hero!</p>
+                        <p class="pattern-zh">……其实是个大英雄！（强调某物/某人的重要性）</p>
+                        <p class="pattern-example">"This little butterfly is actually a big hero!"</p>
+                    </div>
+
+                    <div class="pattern-card">
+                        <p class="pattern-en">Remember, even ... can ...</p>
+                        <p class="pattern-zh">记住，即使是……也能……（用来鼓励和启发）</p>
+                        <p class="pattern-example">"Remember, even the smallest creatures can help us explore space."</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Grammar -->
+            <section class="section" id="grammar">
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="icon">📐</span>
+                        语法点
+                        <span class="en">Grammar Points</span>
+                    </h2>
+
+                    <div class="grammar-card">
+                        <h3 class="grammar-title">1. 一般过去时 (Simple Past Tense)</h3>
+                        <div class="grammar-en">
+                            <strong>Structure:</strong> Subject + Verb(past) + Object<br>
+                            Scientists <u>watched</u> a chrysalis transform. (科学家们观察了一个蛹的转变。)
+                        </div>
+                        <p class="grammar-zh">描述过去发生的动作或事件。注意不规则动词的变化：watch → watched, send → sent, work → worked</p>
+                        <div class="grammar-example">
+                            ✓ The team <u>sent</u> a container to space.<br>
+                            ✓ It <u>worked</u> perfectly!
+                        </div>
+                    </div>
+
+                    <div class="grammar-card">
+                        <h3 class="grammar-title">2. 不定代词 + 动词单数 (Indefinite Pronoun + Singular Verb)</h3>
+                        <div class="grammar-en">
+                            <strong>Structure:</strong> Something / Anything / Everything + Verb(singular)<br>
+                            <u>Something</u> <u>is</u> wrong. / <u>Nothing</u> <u>matters</u>.
+                        </div>
+                        <p class="grammar-zh">当主语是 something, anything, everything, nothing 等不定代词时，谓语动词用单数形式。</p>
+                        <div class="grammar-example">
+                            ✓ <u>Everything</u> <u>looks</u> beautiful.<br>
+                            ✓ <u>Something</u> <u>is</u> happening in space.
+                        </div>
+                    </div>
+
+                    <div class="grammar-card">
+                        <h3 class="grammar-title">3. if 引导的条件句 (First Conditional)</h3>
+                        <div class="grammar-en">
+                            <strong>Structure:</strong> If + Present Simple, + Will + Verb<br>
+                            <u>If</u> butterflies <u>can</u> live in space, <u>astronauts</u> <u>could</u> grow food.
+                        </div>
+                        <p class="grammar-zh">用 if 条件句谈论真实或可能的未来情况。"如果...，就..."</p>
+                        <div class="grammar-example">
+                            ✓ <u>If</u> it <u>rains</u>, I <u>will</u> stay home.<br>
+                            ✓ <u>If</u> you <u>study</u> hard, you <u>will</u> improve.
+                        </div>
+                    </div>
+
+                    <div class="grammar-card">
+                        <h3 class="grammar-title">4. 一般现在时被动语态 (Simple Present Passive)</h3>
+                        <div class="grammar-en">
+                            <strong>Structure:</strong> Subject + am/is/are + Past participle<br>
+                            Butterflies <u>are watched</u> by scientists. (科学家们观察蝴蝶。)<br>
+                            Food <u>is grown</u> on the farm. (食物是在农场种植的。)
+                        </div>
+                        <p class="grammar-zh">当强调动作的承受者而不是执行者时使用被动语态。</p>
+                        <div class="grammar-example">
+                            ✓ The butterfly <u>is called</u> a space hero.<br>
+                            ✓ Plants <u>are grown</u> in the ecosystem.
+                        </div>
+                    </div>
+
+                    <div class="grammar-card">
+                        <h3 class="grammar-title">5. 让步状语从句 (Although / Even though)</h3>
+                        <div class="grammar-en">
+                            <strong>Structure:</strong> Although/Even though + Subject + Verb, + Subject + Verb<br>
+                            <u>Although</u> it <u>is</u> small, the butterfly <u>helped</u> science a lot.
+                        </div>
+                        <p class="grammar-zh">用来表达"虽然……但是……"的意思。</p>
+                        <div class="grammar-example">
+                            ✓ <u>Although</u> it <u>was</u> tiny, the butterfly did something amazing.<br>
+                            ✓ <u>Even though</u> space <u>is</u> cold, life can survive there.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Quiz -->
+            <section class="section" id="quiz">
+                <div class="card">
+                    <h2 class="card-title">
+                        <span class="icon">✅</span>
+                        练习测验
+                        <span class="en">Quiz</span>
+                    </h2>
+
+                    <div class="quiz-question" id="q1">
+                        <span class="quiz-number">1</span>
+                        <p class="quiz-text"><strong>Where did the space butterfly experiment happen?</strong><br><em>太空蝴蝶实验是在哪里进行的？</em></p>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(1, 'A')">A) Harvard University</div>
+                            <div class="quiz-option" onclick="selectOption(1, 'B')">B) Chongqing University</div>
+                            <div class="quiz-option" onclick="selectOption(1, 'C')">C) Oxford University</div>
+                            <div class="quiz-option" onclick="selectOption(1, 'D')">D) MIT</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" id="q2">
+                        <span class="quiz-number">2</span>
+                        <p class="quiz-text"><strong>What is a chrysalis?</strong><br><em>什么是蛹（chrysalis）？</em></p>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(2, 'A')">A) A type of butterfly</div>
+                            <div class="quiz-option" onclick="selectOption(2, 'B')">B) The protective covering where a caterpillar transforms into a butterfly</div>
+                            <div class="quiz-option" onclick="selectOption(2, 'C')">C) A space container</div>
+                            <div class="quiz-option" onclick="selectOption(2, 'D')">D) A small plant</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" id="q3">
+                        <span class="quiz-number">3</span>
+                        <p class="quiz-text"><strong>How much did the space payload weigh?</strong><br><em>太空载荷有多重？</em></p>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(3, 'A')">A) 83 kilograms</div>
+                            <div class="quiz-option" onclick="selectOption(3, 'B')">B) 8.3 kilograms</div>
+                            <div class="quiz-option" onclick="selectOption(3, 'C')">C) 83 grams</div>
+                            <div class="quiz-option" onclick="selectOption(3, 'D')">D) 830 kilograms</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" id="q4">
+                        <span class="quiz-number">4</span>
+                        <p class="quiz-text"><strong>Why is the space butterfly important?</strong><br><em>为什么太空蝴蝶很重要？</em></p>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(4, 'A')">A) It can help scientists build life support systems for future space travel</div>
+                            <div class="quiz-option" onclick="selectOption(4, 'B')">B) It proves butterflies are the strongest animals</div>
+                            <div class="quiz-option" onclick="selectOption(4, 'C')">C) It can fly faster than rockets</div>
+                            <div class="quiz-option" onclick="selectOption(4, 'D')">D) It changed the color of space</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" id="q5">
+                        <span class="quiz-number">5</span>
+                        <p class="quiz-text"><strong>What does "transform" mean in this lesson?</strong><br><em>在这节课中，"transform"是什么意思？</em></p>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(5, 'A')">A) To destroy something</div>
+                            <div class="quiz-option" onclick="selectOption(5, 'B')">B) To move quickly</div>
+                            <div class="quiz-option" onclick="selectOption(5, 'C')">C) To change completely in form or appearance</div>
+                            <div class="quiz-option" onclick="selectOption(5, 'D')">D) To talk to someone</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" id="q6">
+                        <span class="quiz-number">6</span>
+                        <p class="quiz-text"><strong>What was the ecosystem in the space container made of?</strong><br><em>太空容器中的生态系统是由什么组成的？</em></p>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(6, 'A')">A) Only a butterfly</div>
+                            <div class="quiz-option" onclick="selectOption(6, 'B')">B) A butterfly, a plant, and microorganisms</div>
+                            <div class="quiz-option" onclick="selectOption(6, 'C')">C) Water and air only</div>
+                            <div class="quiz-option" onclick="selectOption(6, 'D')">D) Rocks and soil</div>
+                        </div>
+                    </div>
+
+                    <button class="check-btn" onclick="checkAnswers()">检查答案 | Check Answers</button>
+                </div>
+            </section>
+
+            <!-- Section 6: Knowledge -->
+            <section class="section" id="knowledge">
+                <div class="knowledge-card">
+                    <h2 class="knowledge-title">
+                        🌟 中文知识扩展
+                        <span style="font-size: 0.8em; opacity: 0.8;">Knowledge Extension</span>
+                    </h2>
+
+                    <div class="knowledge-content">
+                        <h3>🦋 什么是"破茧成蝶"？</h3>
+                        <p>
+                            你知道蝴蝶是怎么变成的吗？蝴蝶的一生要经历四个阶段：<strong>卵 → 幼虫(毛毛虫) → 蛹 → 成虫(蝴蝶)</strong>。这个过程叫做<strong>完全变态发育</strong>。
+                        </p>
+                        <p>
+                            当毛毛虫变成蛹时，它会在蛹内部"溶解"自己，然后重新组合，形成蝴蝶的身体结构。这就像蝴蝶在蛹里"大变身"一样！所以说"破茧成蝶"象征着通过努力和坚持获得美好的改变。
+                        </p>
+                    </div>
+
+                    <div class="knowledge-content">
+                        <h3>🚀 太空生态系统是什么？</h3>
+                        <p>
+                            在地球上，生态系统是由生物和它们的环境组成的——比如森林里有树、动物、微生物、空气和水，它们互相依赖，组成一个平衡的系统。
+                        </p>
+                        <p>
+                            但在太空里，没有空气、没有食物、也没有水。太空中的一切都需要从地球带上去，而且必须是<strong>封闭循环</strong>的——植物产生氧气、宇航员呼出二氧化碳被植物吸收、微生物处理废物……这就是"太空生态系统"。
+                        </p>
+                    </div>
+
+                    <div class="knowledge-content">
+                        <h3>🌍 为什么要在太空做这个实验？</h3>
+                        <p>
+                            科学家想在太空中测试：在微重力（几乎失重）的环境下，生物还能正常生长发育吗？如果蝴蝶可以在太空孵化，那说明地球上的生命有可能适应太空环境。这对未来人类去火星、甚至更远的星球非常重要！
+                        </p>
+                        <p>
+                            去火星的旅程需要大约<strong>6-9个月</strong>，宇航员需要自己种植食物、净化空气，不能一直依赖从地球补给。所以太空生态系统技术是人类成为"多行星物种"的关键一步。
+                        </p>
+                    </div>
+
+                    <div class="knowledge-facts">
+                        <h4>🔬 有趣的事实 Fun Facts:</h4>
+                        <ul>
+                            <li><strong>重量奇迹：</strong>整个太空实验载荷只有8.3公斤，比一台笔记本电脑还轻！</li>
+                            <li><strong>中国航天：</strong>这是中国科学家完成的实验，标志着中国航天技术的进步。</li>
+                            <li><strong>辣椒很重要：</strong>实验中的植物是辣椒，它不仅能产生氧气，还可能成为蝴蝶的食物来源！</li>
+                            <li><strong>首例成功：</strong>这是科学家首次在太空轨道上完整观察到蝴蝶从蛹到成虫的变态过程。</li>
+                            <li><strong>未来火星任务：</strong>如果人类要去火星，就需要类似这样的太空生态系统来提供食物和氧气！</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 7: About -->
+            <section class="section" id="about">
+                <div class="about-card">
+                    <h2 class="card-title">
+                        <span class="icon">ℹ️</span>
+                        关于本课
+                        <span class="en">About This Lesson</span>
+                    </h2>
+
+                    <div class="about-section">
+                        <h4>🎯 学习目标 Learning Objectives</h4>
+                        <ul>
+                            <li>掌握10个核心词汇：butterfly, chrysalis, transform, ecosystem, sealed, hatch, astronaut, Mars, life support, container</li>
+                            <li>理解5个重要句型：Do you know...? / And guess what? / If...maybe... / ...is actually a hero! / Remember...</li>
+                            <li>学习5个语法点：一般过去时、不定代词单数动词、if条件句、被动语态、让步状语从句</li>
+                            <li>了解太空生态系统的基础概念</li>
+                            <li>培养科学探索精神和环保意识</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-section">
+                        <h4>💡 学习建议 Study Tips</h4>
+                        <ul>
+                            <li><strong>多听多读：</strong>点击播放按钮，反复听课文朗读，模仿语音语调</li>
+                            <li><strong>词汇卡片：</strong>利用词汇表的音频功能，学习单词发音</li>
+                            <li><strong>造句练习：</strong>用学到的句型造句，比如用 "Do you know..." 问朋友一个问题</li>
+                            <li><strong>语法游戏：</strong>尝试把句子从主动语态改成被动语态</li>
+                            <li><strong>扩展阅读：</strong>了解更多关于太空探索的新闻，比如 SpaceX、NASA 的最新消息</li>
+                            <li><strong>观看视频：</strong>搜索"蝴蝶变态过程"视频，直观了解"破茧成蝶"</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-section">
+                        <h4>📚 相关主题 Related Topics</h4>
+                        <ul>
+                            <li>Space Exploration 太空探索</li>
+                            <li>Ecosystems 生态系统</li>
+                            <li>Life Cycles of Insects 昆虫的生命周期</li>
+                            <li>Future of Space Travel 未来太空旅行</li>
+                            <li>China's Space Program 中国航天计划</li>
+                        </ul>
+                    </div>
+
+                    <button class="print-btn" onclick="window.print()">
+                        🖨️ 打印本课 | Print This Lesson
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Speech synthesis setup
+        let voices = [];
+        let currentUtterance = null;
+
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            // Prefer English voices, especially enhanced ones
+            if (voices.length === 0) {
+                // Chrome loads voices asynchronously
+                speechSynthesis.onvoiceschanged = () => {
+                    voices = speechSynthesis.getVoices();
+                };
+            }
+        }
+
+        function getBestEnglishVoice() {
+            loadVoices();
+            // Priority: Enhanced English > Daniel > Alex > Microsoft Mark > any English male > any English
+            const priorities = [
+                (v) => v.name.toLowerCase().includes('enhanced') && v.lang.includes('en'),
+                (v) => v.name === 'Daniel',
+                (v) => v.name === 'Alex',
+                (v) => v.name.toLowerCase().includes('mark') && v.lang.includes('en'),
+                (v) => v.lang.startsWith('en') && v.name.toLowerCase().includes('male'),
+                (v) => v.lang.startsWith('en')
+            ];
+
+            for (const priority of priorities) {
+                const found = voices.find(priority);
+                if (found) return found;
+            }
+            return voices[0];
+        }
+
+        // Segment texts for reading
+        const segmentTexts = [
+            "Wow! Do you know a butterfly just flew in space? No, really! Scientists in China watched a tiny chrysalis transform into a beautiful butterfly while flying around Earth!",
+            "A team at Chongqing University sent a sealed container to space. Inside was a chrysalis and a small plant. Scientists hoped the butterfly could hatch and live inside this tiny ecosystem. And guess what? It worked perfectly!",
+            "This little butterfly is actually a big hero! If butterflies can live in space, maybe one day astronauts could grow their own food on long trips to Mars. The butterfly helped scientists learn how to build life support systems for space exploration!",
+            "That's all for today, friends! Remember, even the smallest creatures can help us explore the biggest mysteries of space. See you next time on Pola News!"
+        ];
+
+        function playSegment(index, btn) {
+            // Stop any currently playing speech
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+                document.querySelectorAll('.play-btn').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '▶';
+                });
+            }
+
+            const text = segmentTexts[index];
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            const bestVoice = getBestEnglishVoice();
+            if (bestVoice) {
+                utterance.voice = bestVoice;
+            }
+
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+
+            utterance.onstart = () => {
+                btn.classList.add('playing');
+                btn.textContent = '⏸';
+            };
+
+            utterance.onend = () => {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+                currentUtterance = null;
+            };
+
+            utterance.onerror = () => {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+                currentUtterance = null;
+            };
+
+            currentUtterance = utterance;
+            speechSynthesis.speak(utterance);
+        }
+
+        function speakWord(word) {
+            // Stop any currently playing speech
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+                document.querySelectorAll('.play-btn').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '▶';
+                });
+            }
+
+            const utterance = new SpeechSynthesisUtterance(word);
+
+            const bestVoice = getBestEnglishVoice();
+            if (bestVoice) {
+                utterance.voice = bestVoice;
+            }
+
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+
+            currentUtterance = utterance;
+            speechSynthesis.speak(utterance);
+        }
+
+        // Initialize voices
+        loadVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(n => {
+                n.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+
+            // Close sidebar on mobile
+            if (window.innerWidth <= 900) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+
+            // Update progress
+            updateProgress(sectionId);
+        }
+
+        function updateProgress(sectionId) {
+            const sections = ['reading', 'vocabulary', 'sentences', 'grammar', 'quiz', 'knowledge', 'about'];
+            const index = sections.indexOf(sectionId);
+            const progress = ((index + 1) / sections.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Quiz functionality
+        const answers = {
+            1: 'B',
+            2: 'B',
+            3: 'B',
+            4: 'A',
+            5: 'C',
+            6: 'B'
+        };
+
+        let selectedAnswers = {};
+
+        function selectOption(questionNum, optionLetter) {
+            selectedAnswers[questionNum] = optionLetter;
+
+            const questionDiv = document.getElementById('q' + questionNum);
+            questionDiv.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+
+            event.target.closest('.quiz-option').classList.add('selected');
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+            let total = Object.keys(answers).length;
+
+            for (let q in answers) {
+                const questionDiv = document.getElementById('q' + q);
+                const options = questionDiv.querySelectorAll('.quiz-option');
+
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect');
+
+                    const letter = opt.textContent.charAt(0);
+                    if (letter === answers[q]) {
+                        opt.classList.add('correct');
+                    }
+
+                    if (selectedAnswers[q] === letter && letter !== answers[q]) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                if (selectedAnswers[q] === answers[q]) {
+                    correct++;
+                }
+            }
+
+            alert('你答对了 ' + correct + ' / ' + total + ' 题！\nYou got ' + correct + ' / ' + total + ' questions correct!\n\n' +
+                  (correct === total ? '🎉 太棒了！Perfect score!' :
+                   correct >= total * 0.7 ? '👍 做得好！Good job!' :
+                   '💪 再接再厉！Keep practicing!'));
+        }
+
+        // Scroll progress
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+
+            // Only update if not already handled by section navigation
+            if (!document.querySelector('.section.active') ||
+                document.querySelector('.section.active').id === 'reading') {
+                document.getElementById('progressBar').style.width =
+                    Math.max(scrollPercent, 14.28) + '%';
+            }
+        });
+    </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

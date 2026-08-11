@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全部课程 · Pola News</title>
+<link rel="icon" href="assets/pola.webp">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top">
+  <a href="index.html" class="logo">
+    <img src="assets/pola.webp" alt="Pola">
+    POLA NEWS<small>少儿英语科学新闻</small>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">首页</a>
+    <a href="episodes.html" class="active">全部课程</a>
+    <a href="about.html">关于Pola</a>
+    <a href="#grid" class="btn-cta">开始学习</a>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">全部<span class="em">课程</span></h2>
+    <p class="section-sub">共 <strong id="totalCount"></strong> 期课程，按更新时间倒序排列。选择一节课，开始你的英语科学之旅吧！</p>
+
+    <div class="controls">
+      <div class="search-box">
+        <span class="ic">🔍</span>
+        <input type="text" id="search" placeholder="搜索课程标题或关键词…">
+      </div>
+      <div class="filters" id="filters"></div>
+    </div>
+
+    <div class="card-grid" id="grid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">🦘 POLA NEWS</div>
+  <p>少儿英语科学新闻 · B1 英语水平</p>
+  <p>为充满好奇心的小朋友而做 <span class="heart">♥</span></p>
+</footer>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script>
+let activeCat = "all";
+let query = "";
+
+// 读取 URL 参数 ?cat=xxx
+(function(){
+  const params = new URLSearchParams(location.search);
+  const c = params.get("cat");
+  if(c && CATS[c]) activeCat = c;
+})();
+
+// 总数
+document.getElementById("totalCount").textContent = EPISODES.length;
+
+// 筛选 chips
+(function(){
+  const f = document.getElementById("filters");
+  const c = catCounts();
+  let html = `<button class="chip ${activeCat==='all'?'active':''}" data-cat="all">全部 <span class="cnt">${EPISODES.length}</span></button>`;
+  Object.entries(CATS).forEach(([k,v])=>{
+    html += `<button class="chip ${activeCat===k?'active':''}" data-cat="${k}">${v.emoji} ${v.label} <span class="cnt">${c[k]||0}</span></button>`;
+  });
+  f.innerHTML = html;
+  f.addEventListener("click", e=>{
+    const b = e.target.closest(".chip");
+    if(!b) return;
+    f.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+    b.classList.add("active");
+    activeCat = b.dataset.cat;
+    render();
+  });
+})();
+
+// 搜索
+document.getElementById("search").addEventListener("input", e=>{
+  query = e.target.value.toLowerCase().trim();
+  render();
+});
+
+function render(){
+  const grid = document.getElementById("grid");
+  let list = sortedEpisodes();
+  if(activeCat !== "all") list = list.filter(e=> e.category === activeCat);
+  if(query) list = list.filter(e => (e.title+" "+e.desc).toLowerCase().includes(query));
+  if(!list.length){
+    grid.innerHTML = `<div class="no-results"><div class="big">🔭</div><h3>没有找到相关课程</h3><p>试试其他关键词或分类吧</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(renderCard).join("");
+}
+render();
+</script>
+</body>
+</html>

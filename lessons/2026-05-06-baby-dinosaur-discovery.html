@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pola News - Baby Dinosaur Discovery | 恐龙宝宝发现记</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #2C3E50;
+            --light: #F7F9FC;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-1);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .header .date-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            position: fixed;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(255,107,107,0.1) 0%, transparent 100%);
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 1.3em;
+            width: 30px;
+            text-align: center;
+        }
+
+        .nav-toggle {
+            display: none;
+            position: fixed;
+            top: 90px;
+            left: 10px;
+            z-index: 200;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+            max-width: 900px;
+        }
+
+        /* Section Styles */
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Reading Section */
+        .reading-segment {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .segment-label {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        .segment-text {
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffe66d 0%, #ffe66d 100%);
+            background-size: 100% 40%;
+            background-repeat: no-repeat;
+            background-position: 0 90%;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+        }
+
+        .play-btn.playing {
+            animation: pulse 1.5s infinite;
+            background: var(--secondary);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(78, 205, 196, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(78, 205, 196, 0); }
+        }
+
+        /* Vocabulary Cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .vocab-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            border-left: 5px solid var(--secondary);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .vocab-word {
+            font-size: 1.3em;
+            color: var(--dark);
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vocab-speaker {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .vocab-speaker:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .vocab-pos {
+            color: var(--secondary);
+            font-size: 0.85em;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .vocab-meaning {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .vocab-example {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #555;
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Sentence Patterns */
+        .pattern-card {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid var(--accent);
+        }
+
+        .pattern-english {
+            font-size: 1.2em;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .pattern-chinese {
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .pattern-example {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        /* Grammar Section */
+        .grammar-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-top: 4px solid var(--primary);
+        }
+
+        .grammar-point {
+            font-size: 1.1em;
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grammar-explanation {
+            color: #555;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .grammar-example {
+            background: #f0f4f8;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 12px;
+        }
+
+        .quiz-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #a5d6a7;
+        }
+
+        .quiz-box strong {
+            color: #2e7d32;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: var(--gradient-2);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.05em;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .question-english {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .option.correct {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .option.incorrect {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+
+        /* Knowledge Section */
+        .knowledge-card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #2196f3;
+        }
+
+        .knowledge-title {
+            font-size: 1.2em;
+            color: #1565c0;
+            margin-bottom: 12px;
+        }
+
+        .knowledge-content {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .knowledge-content p {
+            margin-bottom: 12px;
+        }
+
+        /* About Section */
+        .objectives-list {
+            list-style: none;
+        }
+
+        .objectives-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .objective-icon {
+            color: var(--secondary);
+            font-size: 1.2em;
+        }
+
+        .tips-card {
+            background: linear-gradient(135deg, #fff3e0 0%, #fff 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .tip-icon {
+            color: #ff9800;
+            font-size: 1.2em;
+        }
+
+        /* Print Button */
+        .print-btn {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .print-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px 15px;
+            }
+
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.4em;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar, .nav-toggle, .progress-container, .play-btn, .vocab-speaker, .print-btn {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                display: block !important;
+                page-break-after: always;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            cursor: help;
+            border-bottom: 2px dotted var(--secondary);
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            background: var(--dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.85em;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>🦘 Pola News - Baby Dinosaur Discovery</h1>
+        <div class="subtitle">恐龙宝宝发现记 | 2026年5月6日</div>
+        <div class="date-badge">📅 May 6, 2026 | 星期三</div>
+    </header>
+
+    <!-- Mobile Nav Toggle -->
+    <button class="nav-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="nav-item active" onclick="showSection('reading')">
+                <span class="nav-icon">📖</span>
+                <span>全文阅读</span>
+            </div>
+            <div class="nav-item" onclick="showSection('vocabulary')">
+                <span class="nav-icon">📝</span>
+                <span>词汇表</span>
+            </div>
+            <div class="nav-item" onclick="showSection('sentences')">
+                <span class="nav-icon">💬</span>
+                <span>句型练习</span>
+            </div>
+            <div class="nav-item" onclick="showSection('grammar')">
+                <span class="nav-icon">📐</span>
+                <span>语法点</span>
+            </div>
+            <div class="nav-item" onclick="showSection('quiz')">
+                <span class="nav-icon">✅</span>
+                <span>练习测验</span>
+            </div>
+            <div class="nav-item" onclick="showSection('knowledge')">
+                <span class="nav-icon">🌟</span>
+                <span>中文知识扩展</span>
+            </div>
+            <div class="nav-item" onclick="showSection('about')">
+                <span class="nav-icon">ℹ️</span>
+                <span>关于本课</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Reading Section -->
+            <section id="reading" class="section active">
+                <h2 class="section-title">📖 全文阅读 | Full Reading</h2>
+
+                <div class="card">
+                    <div class="card-title">🎙️ Segment 1: Hook | 吸引注意</div>
+                    <div class="reading-segment">
+                        <span class="segment-label">Hook</span>
+                        <button class="play-btn" onclick="playSegment(0)">▶</button>
+                        <p class="segment-text">
+                            Hey everyone! Welcome back to Pola News! I've got some <span class="highlight">AMAZING</span> dinosaur news today! Scientists in South Korea just found a real baby dinosaur hidden inside a rock. And guess what? They named it after a famous cartoon character! Isn't that cool?
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🎙️ Segment 2: Story | 讲解故事</div>
+                    <div class="reading-segment">
+                        <span class="segment-label">Story</span>
+                        <button class="play-btn" onclick="playSegment(1)">▶</button>
+                        <p class="segment-text">
+                            This little dinosaur is called "<span class="highlight">Doolysaurus</span>." It lived about 113 million years ago, and when it died, it was only two years old — about the size of a turkey! The scientists used a special X-ray machine called a <span class="highlight">CT scanner</span> to look inside the rock. They found bones they couldn't see before, including parts of its skull! That's the first dinosaur skull ever found in South Korea!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🎙️ Segment 3: Why It Matters | 意义/启发</div>
+                    <div class="reading-segment">
+                        <span class="segment-label">Why It Matters</span>
+                        <button class="play-btn" onclick="playSegment(2)">▶</button>
+                        <p class="segment-text">
+                            Why is this so important? Well, finding dinosaur bones in South Korea is very rare! The country is famous for dinosaur footprints and eggs, but actual bones are <span class="highlight">super hard to find</span>. The CT scanner helped scientists see inside the rock without breaking anything. They also found small stones in its stomach — that means this baby dinosaur ate both plants AND insects. It was an <span class="highlight">omnivore</span>!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🎙️ Segment 4: Sign-off | 再见</div>
+                    <div class="reading-segment">
+                        <span class="segment-label">Sign-off</span>
+                        <button class="play-btn" onclick="playSegment(3)">▶</button>
+                        <p class="segment-text">
+                            So the next time you watch cartoons, remember — one day, a real dinosaur might be named after YOUR favorite character! That's all for today, everyone. I'm Pola, and this is Pola News. See you next time! Don't forget to keep exploring and learning!
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vocabulary Section -->
+            <section id="vocabulary" class="section">
+                <h2 class="section-title">📝 词汇表 | Vocabulary</h2>
+
+                <div class="vocab-grid">
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            dinosaur
+                            <button class="vocab-speaker" onclick="speakWord('dinosaur')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">n. 恐龙</div>
+                        <div class="vocab-meaning">一种生活在数百万年前的巨型爬行动物</div>
+                        <div class="vocab-example">"Scientists found a baby dinosaur in South Korea."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            fossil
+                            <button class="vocab-speaker" onclick="speakWord('fossil')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">n. 化石</div>
+                        <div class="vocab-meaning">保存在岩石中的古代动物遗骸</div>
+                        <div class="vocab-example">"This fossil is 113 million years old."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            CT scan
+                            <button class="vocab-speaker" onclick="speakWord('CT scan')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">n. CT扫描</div>
+                        <div class="vocab-meaning">一种特殊的X光机器，可以看到物体内部</div>
+                        <div class="vocab-example">"Scientists used a CT scan to look inside the rock."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            omnivore
+                            <button class="vocab-speaker" onclick="speakWord('omnivore')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">n. 杂食动物</div>
+                        <div class="vocab-meaning">既吃植物又吃肉的动物</div>
+                        <div class="vocab-example">"The baby dinosaur was an omnivore."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            skull
+                            <button class="vocab-speaker" onclick="speakWord('skull')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">n. 头骨、颅骨</div>
+                        <div class="vocab-meaning">头部的骨头，包括大脑</div>
+                        <div class="vocab-example">"They found parts of the dinosaur skull."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            discovery
+                            <button class="vocab-speaker" onclick="speakWord('discovery')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">n. 发现</div>
+                        <div class="vocab-meaning">发现或找到新东西</div>
+                        <div class="vocab-example">"This is an important discovery for scientists."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            scientists
+                            <button class="vocab-speaker" onclick="speakWord('scientists')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">n. 科学家（复数）</div>
+                        <div class="vocab-meaning">研究和学习世界的人</div>
+                        <div class="vocab-example">"Scientists from Korea and the US worked together."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            amazing
+                            <button class="vocab-speaker" onclick="speakWord('amazing')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">adj. 惊人的、棒的</div>
+                        <div class="vocab-meaning">令人惊奇或印象深刻的</div>
+                        <div class="vocab-example">"That's an amazing dinosaur discovery!"</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            rare
+                            <button class="vocab-speaker" onclick="speakWord('rare')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">adj. 稀有的、罕见的</div>
+                        <div class="vocab-meaning">不常见或很难找到的</div>
+                        <div class="vocab-example">"Dinosaur bones are very rare in South Korea."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="vocab-word">
+                            million
+                            <button class="vocab-speaker" onclick="speakWord('million')">🔊</button>
+                        </div>
+                        <div class="vocab-pos">n. 百万</div>
+                        <div class="vocab-meaning">数字1后面跟6个零 (1,000,000)</div>
+                        <div class="vocab-example">"This dinosaur lived 113 million years ago."</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sentence Patterns Section -->
+            <section id="sentences" class="section">
+                <h2 class="section-title">💬 句型练习 | Sentence Patterns</h2>
+
+                <div class="pattern-card">
+                    <div class="pattern-english">"...just found a real baby dinosaur..."</div>
+                    <div class="pattern-chinese">刚刚/终于发现了... (表示刚刚完成的动作)</div>
+                    <p><strong>用法:</strong> 用"just"表示刚刚发生的事</p>
+                    <div class="pattern-example">
+                        Scientists just discovered a new species!<br>
+                        科学家们刚刚发现了一个新物种！
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-english">"And guess what? ..."</div>
+                    <div class="pattern-chinese">你猜怎么着？... (用来引出令人惊讶的消息)</div>
+                    <p><strong>用法:</strong> 引起听众注意，引出令人惊讶或有趣的信息</p>
+                    <div class="pattern-example">
+                        Guess what? They named it after a cartoon character!<br>
+                        你猜怎么着？他们用卡通角色的名字给它命名了！
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-english">"It's about the size of a turkey."</div>
+                    <div class="pattern-chinese">它大约有火鸡那么大。 (用熟悉的事物来比较大小)</div>
+                    <p><strong>用法:</strong> 用"about the size of + 熟悉事物"来描述大小</p>
+                    <div class="pattern-example">
+                        The dinosaur was about the size of a cat.<br>
+                        那只恐龙大约有猫那么大。
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-english">"That's the first... ever found in..."</div>
+                    <div class="pattern-chinese">这是...的首次发现 (强调历史性成就)</div>
+                    <p><strong>用法:</strong> 表示某物在该地区或领域的首次发现</p>
+                    <div class="pattern-example">
+                        That's the first dinosaur skull found in Korea.<br>
+                        这是韩国发现的首块恐龙头骨。
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-english">"Why is this so important?"</div>
+                    <div class="pattern-chinese">为什么这很重要？ (引出解释原因)</div>
+                    <p><strong>用法:</strong> 用"Why is this important?"来引出某事的重要性</p>
+                    <div class="pattern-example">
+                        Why is this discovery so important?<br>
+                        为什么这个发现如此重要？
+                    </div>
+                </div>
+            </section>
+
+            <!-- Grammar Section -->
+            <section id="grammar" class="section">
+                <h2 class="section-title">📐 语法点 | Grammar Points</h2>
+
+                <div class="grammar-card">
+                    <div class="grammar-point">1️⃣ 一般过去时 (Simple Past Tense)</div>
+                    <div class="grammar-explanation">
+                        描述过去发生的动作或状态。<br>
+                        <strong>用法:</strong> 动词 + ed (规则动词)<br>
+                        <strong>例:</strong> Scientists found a fossil. / They named it Doolysaurus.
+                    </div>
+                    <div class="grammar-example">
+                        The dinosaur lived 113 million years ago. (lived = live + ed)
+                    </div>
+                    <div class="quiz-box">
+                        <strong>练习:</strong> 用一般过去时改写句子<br>
+                        Scientists (find) ______ a baby dinosaur. → <strong>found</strong>
+                    </div>
+                </div>
+
+                <div class="grammar-card">
+                    <div class="grammar-point">2️⃣ 不定代词 (Indefinite Pronouns)</div>
+                    <div class="grammar-explanation">
+                        <strong>something, anything, nothing</strong> 表示不确定或泛指的事物<br>
+                        something = 某物<br>
+                        anything = 任何东西<br>
+                        nothing = 没有东西
+                    </div>
+                    <div class="grammar-example">
+                        They found bones they couldn't see before.<br>
+                        (他们发现了之前看不到的骨头。)
+                    </div>
+                    <div class="quiz-box">
+                        <strong>练习:</strong> 选择正确的不定代词<br>
+                        There is ______ inside the rock. (something / anything)
+                    </div>
+                </div>
+
+                <div class="grammar-card">
+                    <div class="grammar-point">3️⃣ "be + 形容词 + to do" 结构</div>
+                    <div class="grammar-explanation">
+                        表示某事的性质或原因<br>
+                        <strong>例:</strong> Finding bones is <strong>very rare</strong> in Korea.<br>
+                        <strong>例:</strong> This is <strong>important</strong> for science.
+                    </div>
+                    <div class="grammar-example">
+                        Finding dinosaur bones in Korea is very rare.<br>
+                        在韩国发现恐龙骨骼是非常罕见的。
+                    </div>
+                    <div class="quiz-box">
+                        <strong>练习:</strong> 完成句子<br>
+                        This discovery is ______ (important) for science.
+                    </div>
+                </div>
+
+                <div class="grammar-card">
+                    <div class="grammar-point">4️⃣ 时间副词 (Time Adverbs)</div>
+                    <div class="grammar-explanation">
+                        表示动作发生的时间<br>
+                        <strong>just</strong> = 刚刚 (表示最近完成的动)<br>
+                        <strong>about</strong> = 大约 (表示不确定的数量)<br>
+                        <strong>still</strong> = 仍然 (表示继续)
+                    </div>
+                    <div class="grammar-example">
+                        Scientists <strong>just</strong> found it. It lived <strong>about</strong> 113 million years ago.
+                    </div>
+                    <div class="quiz-box">
+                        <strong>练习:</strong> 用时间副词填空<br>
+                        The fossil is ______ 113 million years old. (about)
+                    </div>
+                </div>
+
+                <div class="grammar-card">
+                    <div class="grammar-point">5️⃣ 宾语从句 (Object Clauses)</div>
+                    <div class="grammar-explanation">
+                        用that/if/what等引导的句子作宾语<br>
+                        <strong>结构:</strong> 主句 + that + 从句
+                    </div>
+                    <div class="grammar-example">
+                        Scientists say <strong>that</strong> the dinosaur ate plants and insects.<br>
+                        科学家说这只恐龙吃了植物和昆虫。
+                    </div>
+                    <div class="quiz-box">
+                        <strong>练习:</strong> 合并句子<br>
+                        Scientists say. The dinosaur was two years old.<br>
+                        → Scientists say <strong>that</strong> the dinosaur was two years old.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section id="quiz" class="section">
+                <h2 class="section-title">✅ 练习测验 | Quiz</h2>
+
+                <div class="quiz-question" data-answer="A">
+                    <span class="question-number">1</span>
+                    <div class="question-text">恐龙"Doolysaurus"是在哪个国家被发现的？</div>
+                    <div class="question-english">In which country was the dinosaur "Doolysaurus" discovered?</div>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, 'A')">A) 美国 (USA)</div>
+                        <div class="option" onclick="checkAnswer(this, 'A')">B) 韩国 (South Korea)</div>
+                        <div class="option" onclick="checkAnswer(this, 'A')">C) 中国 (China)</div>
+                        <div class="option" onclick="checkAnswer(this, 'A')">D) 日本 (Japan)</div>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="B">
+                    <span class="question-number">2</span>
+                    <div class="question-text">这只恐龙死的时候大约有多大？</div>
+                    <div class="question-english">How old was the dinosaur when it died?</div>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, 'B')">A) 1岁 (1 year old)</div>
+                        <div class="option" onclick="checkAnswer(this, 'B')">B) 2岁 (2 years old)</div>
+                        <div class="option" onclick="checkAnswer(this, 'B')">C) 5岁 (5 years old)</div>
+                        <div class="option" onclick="checkAnswer(this, 'B')">D) 10岁 (10 years old)</div>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="A">
+                    <span class="question-number">3</span>
+                    <div class="question-text">科学家用什么工具来看岩石内部？</div>
+                    <div class="question-english">What tool did scientists use to see inside the rock?</div>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, 'A')">A) CT扫描仪 (CT Scanner)</div>
+                        <div class="option" onclick="checkAnswer(this, 'A')">B) 显微镜 (Microscope)</div>
+                        <div class="option" onclick="checkAnswer(this, 'A')">C) 望远镜 (Telescope)</div>
+                        <div class="option" onclick="checkAnswer(this, 'A')">D) 照相机 (Camera)</div>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="C">
+                    <span class="question-number">4</span>
+                    <div class="question-text">恐龙的名字是根据什么起的？</div>
+                    <div class="question-english">What was the dinosaur named after?</div>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, 'C')">A) 科学家 (A scientist)</div>
+                        <div class="option" onclick="checkAnswer(this, 'C')">B) 一个地方 (A place)</div>
+                        <div class="option" onclick="checkAnswer(this, 'C')">C) 一个卡通角色 (A cartoon character)</div>
+                        <div class="option" onclick="checkAnswer(this, 'C')">D) 它的样子 (Its appearance)</div>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="B">
+                    <span class="question-number">5</span>
+                    <div class="question-text">这只恐龙是什么食性的？</div>
+                    <div class="question-english">What kind of eater was this dinosaur?</div>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, 'B')">A) 草食动物 (Herbivore)</div>
+                        <div class="option" onclick="checkAnswer(this, 'B')">B) 杂食动物 (Omnivore)</div>
+                        <div class="option" onclick="checkAnswer(this, 'B')">C) 肉食动物 (Carnivore)</div>
+                        <div class="option" onclick="checkAnswer(this, 'B')">D) 食腐动物 (Scavenger)</div>
+                    </div>
+                </div>
+
+                <div class="quiz-question" data-answer="D">
+                    <span class="question-number">6</span>
+                    <div class="question-text">这个发现为什么特别重要？</div>
+                    <div class="question-english">Why is this discovery particularly special?</div>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, 'D')">A) 这是最大的恐龙 (It's the biggest dinosaur)</div>
+                        <div class="option" onclick="checkAnswer(this, 'D')">B) 这是最古老的恐龙 (It's the oldest dinosaur)</div>
+                        <div class="option" onclick="checkAnswer(this, 'D')">C) 韩国有很多恐龙化石 (Korea has many dinosaur fossils)</div>
+                        <div class="option" onclick="checkAnswer(this, 'D')">D) 这是韩国发现的首块恐龙头骨 (It's the first dinosaur skull found in Korea)</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Knowledge Section -->
+            <section id="knowledge" class="section">
+                <h2 class="section-title">🌟 中文知识扩展 | Knowledge Extension</h2>
+
+                <div class="knowledge-card">
+                    <div class="knowledge-title">🦕 关于Doolysaurus</div>
+                    <div class="knowledge-content">
+                        <p><strong>学名:</strong> Doolysaurus huhmini</p>
+                        <p><strong>发现地点:</strong> 韩国南部的Aphae Island（阿海岛）</p>
+                        <p><strong>生存年代:</strong> 约1.13亿年前的白垩纪中期</p>
+                        <p><strong>死亡年龄:</strong> 约2岁，相当于人类儿童的年龄</p>
+                        <p><strong>成年体型:</strong> 幼年时约火鸡大小，成年后约为幼年的两倍大</p>
+                        <p><strong>分类:</strong> 棱齿龙科（thescelosaurid），是一种两足行走的恐龙</p>
+                    </div>
+                </div>
+
+                <div class="knowledge-card">
+                    <div class="knowledge-title">🏛️ 韩国的恐龙化石之谜</div>
+                    <div class="knowledge-content">
+                        <p>韩国其实是一个非常特别的恐龙化石产地！但这里的化石类型和大多数国家不同：</p>
+                        <p>✅ <strong>丰富:</strong> 恐龙脚印化石、恐龙蛋化石、巢穴遗迹</p>
+                        <p>❌ <strong>稀有:</strong> 恐龙骨骼/身体化石</p>
+                        <p>这是因为韩国在白垩纪时期有很多湖泊和浅海，适合留下脚印，但不太适合保存完整的骨骼。所以这次发现的头骨化石非常珍贵！</p>
+                    </div>
+                </div>
+
+                <div class="knowledge-card">
+                    <div class="knowledge-title">🔬 CT扫描技术</div>
+                    <div class="knowledge-content">
+                        <p><strong>什么是CT扫描?</strong></p>
+                        <p>CT是"Computed Tomography"（计算机断层扫描）的缩写。它使用X射线从多个角度拍摄物体，然后计算机把这些图片组合起来，形成物体内部的详细图像。</p>
+                        <p><strong>为什么重要?</strong></p>
+                        <p>传统的化石发掘需要用工具慢慢去除岩石，可能损坏脆弱的化石。但CT扫描可以在不接触化石的情况下看清内部结构，既快速又不损伤化石！</p>
+                    </div>
+                </div>
+
+                <div class="knowledge-card">
+                    <div class="knowledge-title">📺 韩国的"小恐龙"卡通</div>
+                    <div class="knowledge-content">
+                        <p><strong>Dooly（두리안）</strong>是韩国最著名的卡通形象之一！</p>
+                        <p>这个角色由插画师Kim Soo-jung于1978年创作，讲述了一只可爱的小恐龙"豆粒"的故事。Dooly是一个绿色的小恐龙，头上有两撮毛，性格活泼可爱。</p>
+                        <p>在韩国，几乎每个年龄层的人都认识Dooly！这就是为什么科学家选择用Dooly来命名这只可爱的恐龙宝宝。</p>
+                        <p>这个命名既科学又充满童趣，是科学家和公众沟通的好方式！</p>
+                    </div>
+                </div>
+
+                <div class="knowledge-card">
+                    <div class="knowledge-title">💎 胃石的秘密</div>
+                    <div class="knowledge-content">
+                        <p>科学家在Doolysaurus的胃部发现了许多小石头，这些叫做<strong>胃石（gastroliths）</strong>。</p>
+                        <p>很多恐龙会吞下石头来帮助消化食物，就像现在的鸟类一样。这些石头在胃里滚动，可以把食物磨碎。</p>
+                        <p>胃石的存在说明这只小恐龙是杂食性的——它既吃植物也吃小动物！</p>
+                    </div>
+                </div>
+
+                <div class="knowledge-card">
+                    <div class="knowledge-title">🌍 未来的发现</div>
+                    <div class="knowledge-content">
+                        <p>研究团队的Jongyun Jung博士说，他们计划：</p>
+                        <p>1. 返回Aphae Island寻找更多化石</p>
+                        <p>2. 使用CT扫描技术检查韩国其他化石</p>
+                        <p>3. 期待发现更多新的恐龙物种</p>
+                        <p>也许下一个新发现的恐龙就来自中国或其他地方！你也可以关注新闻，说不定未来的恐龙会以你喜欢的角色命名呢！</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="section">
+                <h2 class="section-title">ℹ️ 关于本课 | About This Lesson</h2>
+
+                <div class="card">
+                    <div class="card-title">🎯 学习目标 | Learning Objectives</div>
+                    <ul class="objectives-list">
+                        <li>
+                            <span class="objective-icon">✓</span>
+                            能够理解并复述关于恐龙发现的新闻内容
+                        </li>
+                        <li>
+                            <span class="objective-icon">✓</span>
+                            掌握10个与科学/恐龙相关的新词汇
+                        </li>
+                        <li>
+                            <span class="objective-icon">✓</span>
+                            学会使用5个实用的英语句型
+                        </li>
+                        <li>
+                            <span class="objective-icon">✓</span>
+                            理解一般过去时的基本用法
+                        </li>
+                        <li>
+                            <span class="objective-icon">✓</span>
+                            了解CT扫描技术和恐龙化石知识
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tips-card">
+                    <div class="card-title">💡 学习建议 | Learning Tips</div>
+                    <div class="tip-item">
+                        <span class="tip-icon">👂</span>
+                        <span>先听音频朗读，感受英语的自然语调</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">📚</span>
+                        <span>学习词汇时，尝试用每个词造一个句子</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🗣️</span>
+                        <span>大声朗读课文，练习发音和语速</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🔄</span>
+                        <span>用中文向朋友或家人复述这个故事</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🔍</span>
+                        <span>课后可以搜索更多关于恐龙或CT扫描的知识</span>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-title">📊 课程信息 | Course Info</div>
+                    <p><strong>主题:</strong> 恐龙宝宝化石发现</p>
+                    <p><strong>日期:</strong> 2026年5月6日</p>
+                    <p><strong>英语等级:</strong> B1 (中级)</p>
+                    <p><strong>时长:</strong> 约60秒新闻播报</p>
+                    <p><strong>来源:</strong> ScienceDaily, Natural History Museum London</p>
+                </div>
+
+                <button class="print-btn" onclick="window.print()">
+                    🖨️ 打印本课 | Print This Lesson
+                </button>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Segment texts for speech (no HTML tags)
+        const segmentTexts = [
+            "Hey everyone! Welcome back to Pola News! I've got some AMAZING dinosaur news today! Scientists in South Korea just found a real baby dinosaur hidden inside a rock. And guess what? They named it after a famous cartoon character! Isn't that cool?",
+            "This little dinosaur is called Doolysaurus. It lived about 113 million years ago, and when it died, it was only two years old — about the size of a turkey! The scientists used a special X-ray machine called a CT scanner to look inside the rock. They found bones they couldn't see before, including parts of its skull! That's the first dinosaur skull ever found in South Korea!",
+            "Why is this so important? Well, finding dinosaur bones in South Korea is very rare! The country is famous for dinosaur footprints and eggs, but actual bones are super hard to find. The CT scanner helped scientists see inside the rock without breaking anything. They also found small stones in its stomach — that means this baby dinosaur ate both plants AND insects. It was an omnivore!",
+            "So the next time you watch cartoons, remember — one day, a real dinosaur might be named after YOUR favorite character! That's all for today, everyone. I'm Pola, and this is Pola News. See you next time! Don't forget to keep exploring and learning!"
+        ];
+
+        let currentUtterance = null;
+        let voices = [];
+
+        // Load voices
+        function loadVoices() {
+            voices = window.speechSynthesis.getVoices();
+            // Chrome loads voices asynchronously
+            if (voices.length === 0) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    voices = window.speechSynthesis.getVoices();
+                };
+            }
+        }
+
+        // Find best English voice
+        function getBestVoice() {
+            loadVoices();
+            const priorityVoices = [
+                'Enhanced', 'Daniel', 'Alex', 'Microsoft', 'Google', 'Samantha', 'Karen'
+            ];
+
+            for (const priority of priorityVoices) {
+                const voice = voices.find(v =>
+                    v.lang.includes('en') &&
+                    (v.name.includes(priority) || v.voiceURI.includes(priority))
+                );
+                if (voice) return voice;
+            }
+
+            // Fallback to any English male voice
+            const maleVoice = voices.find(v =>
+                v.lang.includes('en') && (v.name.includes('Male') || v.name.includes('Guy'))
+            );
+            if (maleVoice) return maleVoice;
+
+            // Fallback to any English voice
+            return voices.find(v => v.lang.includes('en')) || null;
+        }
+
+        // Play segment
+        function playSegment(index) {
+            // Stop any current speech
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+
+            const buttons = document.querySelectorAll('#reading .play-btn');
+            buttons.forEach((btn, i) => {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+            });
+
+            const btn = buttons[index];
+            btn.classList.add('playing');
+            btn.textContent = '⏸';
+
+            currentUtterance = new SpeechSynthesisUtterance(segmentTexts[index]);
+            currentUtterance.rate = 0.97;
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1.0;
+
+            const voice = getBestVoice();
+            if (voice) {
+                currentUtterance.voice = voice;
+            }
+
+            currentUtterance.onend = () => {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+            };
+
+            currentUtterance.onerror = () => {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+            };
+
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        // Speak word
+        function speakWord(word) {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            const voice = getBestVoice();
+            if (voice) {
+                utterance.voice = voice;
+            }
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Show section
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('show');
+            }
+
+            // Update progress
+            updateProgress(sectionId);
+        }
+
+        // Update progress bar
+        function updateProgress(sectionId) {
+            const sections = ['reading', 'vocabulary', 'sentences', 'grammar', 'quiz', 'knowledge', 'about'];
+            const index = sections.indexOf(sectionId);
+            const progress = ((index + 1) / sections.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Toggle sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // Check quiz answer
+        function checkAnswer(element, answer) {
+            const question = element.closest('.quiz-question');
+            const correctAnswer = question.dataset.answer;
+
+            // Disable all options in this question
+            question.querySelectorAll('.option').forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+
+            if (answer === correctAnswer) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                question.querySelectorAll('.option').forEach(opt => {
+                    if (opt.textContent.startsWith(correctAnswer)) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadVoices();
+            updateProgress('reading');
+        });
+    </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

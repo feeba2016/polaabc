@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Bee Brain Puzzle | Pola News 互动课堂</title>
+  <style>
+    :root {
+      --primary: #f57f17;
+      --secondary: #f9a825;
+      --accent: #fff8e1;
+      --highlight: #fff3cd;
+      --highlight-border: #ffc107;
+      --bg: #fff8e1;
+      --card: #ffffff;
+      --text: #3e2723;
+      --muted: #795548;
+      --success: #2e7d32;
+      --shadow: rgba(245, 127, 23, 0.15);
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 50%, #ffe082 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: rgba(255,255,255,0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, var(--primary), #e65100);
+      color: white;
+      padding: 24px 16px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 4px 0 20px var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand small {
+      font-size: 0.75rem;
+      opacity: 0.85;
+      font-weight: 500;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 0;
+    }
+
+    .nav-list li {
+      margin-bottom: 6px;
+    }
+
+    .nav-list a {
+      display: block;
+      padding: 12px 14px;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .nav-list a:hover, .nav-list a.active {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      transform: translateX(4px);
+    }
+
+    .nav-list a .num {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      margin-right: 8px;
+      font-size: 0.8rem;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+      margin-top: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fdd835, #fbc02d);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-label {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* Mobile menu */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 200;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 99;
+    }
+
+    /* Main content */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 32px;
+      max-width: calc(100% - 260px);
+    }
+
+    .section {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 30px var(--shadow);
+      scroll-margin-top: 24px;
+    }
+
+    .section h2 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section h2 .icon {
+      font-size: 1.5rem;
+    }
+
+    /* Reading section */
+    .intro-banner {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .intro-banner h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+    }
+
+    .intro-banner p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 1.05rem;
+    }
+
+    .segment {
+      position: relative;
+      background: #fffbf0;
+      border-radius: 16px;
+      padding: 24px 24px 24px 56px;
+      margin-bottom: 18px;
+      border-left: 5px solid var(--secondary);
+      transition: transform 0.2s ease;
+    }
+
+    .segment:hover { transform: translateY(-2px); }
+
+    .segment-num {
+      position: absolute;
+      left: 18px;
+      top: 22px;
+      width: 28px;
+      height: 28px;
+      background: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .segment p {
+      margin: 0;
+      line-height: 1.8;
+      font-size: 1.15rem;
+    }
+
+    .segment-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .play-btn:hover {
+      background: var(--primary);
+      transform: scale(1.05);
+    }
+
+    .play-btn.playing {
+      background: var(--success);
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.5); }
+      70% { box-shadow: 0 0 0 12px rgba(46, 125, 50, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); }
+    }
+
+    .segment-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* Vocabulary */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .vocab-card {
+      background: linear-gradient(180deg, #ffffff, #fff8e1);
+      border: 2px solid #ffe082;
+      border-radius: 16px;
+      padding: 20px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .vocab-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px var(--shadow);
+    }
+
+    .vocab-word {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .vocab-pronounce {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--secondary);
+      transition: transform 0.2s ease;
+      padding: 4px;
+    }
+
+    .vocab-pronounce:hover { transform: scale(1.2); }
+
+    .vocab-pronounce.playing { animation: pulse 1.2s infinite; color: var(--success); }
+
+    .vocab-pos {
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: #fff8e1;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .vocab-meaning {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .vocab-example {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-style: italic;
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
+    }
+
+    /* Sentence patterns & grammar */
+    .pattern-list, .grammar-list, .quiz-list, .extend-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .pattern-item, .grammar-item, .quiz-item, .extend-item {
+      background: #fffbf0;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--secondary);
+    }
+
+    .pattern-en {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .pattern-zh {
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .pattern-example {
+      background: white;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px dashed #ffe082;
+    }
+
+    .pattern-practice {
+      width: 100%;
+      border: 2px solid #ffe082;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .pattern-practice:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    /* Grammar */
+    .grammar-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .grammar-explanation {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+
+    .grammar-example {
+      background: white;
+      border-radius: 8px;
+      padding: 10px 14px;
+      border-left: 4px solid var(--accent);
+      font-style: italic;
+    }
+
+    /* Quiz */
+    .quiz-question {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
+
+    .quiz-options label {
+      display: block;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      background: white;
+      border: 2px solid #ffe082;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quiz-options label:hover { border-color: var(--secondary); }
+
+    .quiz-options input { margin-right: 10px; }
+
+    .quiz-options .correct {
+      border-color: var(--success);
+      background: #e8f5e9;
+    }
+
+    .quiz-options .wrong {
+      border-color: #c62828;
+      background: #ffebee;
+    }
+
+    .quiz-feedback {
+      margin-top: 10px;
+      font-weight: 600;
+      min-height: 24px;
+    }
+
+    .check-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      margin-top: 20px;
+      transition: background 0.2s ease;
+    }
+
+    .check-btn:hover { background: var(--secondary); }
+
+    .score-box {
+      margin-top: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, #fff8e1, #ffecb3);
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: none;
+    }
+
+    /* Knowledge extension */
+    .extend-item h4 {
+      margin: 0 0 8px;
+      color: var(--primary);
+    }
+
+    .extend-item p {
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .fun-fact {
+      background: linear-gradient(135deg, #fff8e1, #ffecb3);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 20px;
+      border-left: 5px solid #ffb300;
+    }
+
+    .fun-fact h4 {
+      margin: 0 0 10px;
+      color: #e65100;
+    }
+
+    /* About */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .about-card {
+      background: #fffbf0;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .about-card h4 {
+      margin: 0 0 8px;
+      color: var(--primary);
+    }
+
+    .about-card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .about-card li { margin-bottom: 6px; }
+
+    .print-btn {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s ease;
+    }
+
+    .print-btn:hover { background: var(--primary); }
+
+    /* Tooltip */
+    .keyword {
+      background: var(--highlight);
+      border-bottom: 2px dashed var(--highlight-border);
+      cursor: help;
+      position: relative;
+      padding: 0 3px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    }
+
+    .keyword:hover {
+      background: #ffe8a1;
+    }
+
+    .tooltip {
+      position: fixed;
+      background: var(--primary);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      max-width: 220px;
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: var(--primary) transparent transparent transparent;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .menu-toggle { display: block; }
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .overlay.open { display: block; }
+      .main {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 70px 20px 24px;
+      }
+      .vocab-grid { grid-template-columns: 1fr; }
+      .intro-banner h1 { font-size: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .section { padding: 20px; }
+      .segment { padding: 18px 18px 18px 50px; }
+      .segment p { font-size: 1rem; }
+      .section h2 { font-size: 1.4rem; }
+    }
+
+    /* Print styles */
+    @media print {
+      body { background: white; }
+      .sidebar, .menu-toggle, .play-btn, .vocab-pronounce, .check-btn, .print-btn, .pattern-practice, .segment-actions, .quiz-options input {
+        display: none !important;
+      }
+      .main {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 20px;
+      }
+      .section {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+      }
+      .keyword {
+        background: none !important;
+        border-bottom: 1px solid #999;
+      }
+      .tooltip { display: none !important; }
+      .pattern-practice { display: none; }
+      .quiz-options label { border: 1px solid #999; }
+    }
+  </style>
+</head>
+<body>
+  <button class="menu-toggle" id="menuToggle" aria-label="打开菜单">☰ 菜单</button>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        🎙️ Pola News
+        <small>每日英语科普新闻</small>
+      </div>
+      <ul class="nav-list">
+        <li><a href="#reading" class="active"><span class="num">1</span>全文阅读</a></li>
+        <li><a href="#vocab"><span class="num">2</span>词汇表</a></li>
+        <li><a href="#patterns"><span class="num">3</span>句型练习</a></li>
+        <li><a href="#grammar"><span class="num">4</span>语法点</a></li>
+        <li><a href="#quiz"><span class="num">5</span>练习测验</a></li>
+        <li><a href="#extend"><span class="num">6</span>知识扩展</a></li>
+        <li><a href="#about"><span class="num">7</span>关于本课</a></li>
+      </ul>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-label" id="progressLabel">阅读进度 0%</div>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="intro-banner">
+        <h1>The Bee Brain Puzzle</h1>
+        <p>今天的主题：熊蜂智力测试 —— 芝麻大的脑袋解开了百年难题。主持人：Pola the Quokka</p>
+      </div>
+
+      <section class="section" id="reading">
+        <h2><span class="icon">📖</span>全文阅读</h2>
+        <p style="color: var(--muted); margin-bottom: 20px;">点击黄色高亮词汇查看中文释义；点击 ▶ 播放段落朗读。</p>
+
+        <div class="segment" data-index="0">
+          <span class="segment-num">1</span>
+          <p>
+            What has a <span class="keyword" data-zh="大脑">brain</span> smaller than a <span class="keyword" data-zh="芝麻">sesame seed</span> and just <span class="keyword" data-zh="胜过；智取">outsmarted</span> a century-old <span class="keyword" data-zh="谜题">puzzle</span>? Meet the <span class="keyword" data-zh="熊蜂">bumble bee</span>! <span class="keyword" data-zh="科学家">Scientists</span> in Finland were absolutely <span class="keyword" data-zh="震惊的">stunned</span> when these tiny <span class="keyword" data-zh="昆虫">insects</span> solved a <span class="keyword" data-zh="经典的">classic</span> <span class="keyword" data-zh="智力测试">intelligence test</span> — all by themselves, with <span class="keyword" data-zh="零；没有">zero</span> <span class="keyword" data-zh="训练">training</span>.
+          </p>
+          <div class="segment-actions">
+            <button class="play-btn" data-index="0">▶ 播放段落</button>
+            <span class="segment-label">Segment 1: Hook</span>
+          </div>
+        </div>
+
+        <div class="segment" data-index="1">
+          <span class="segment-num">2</span>
+          <p>
+            Here's what happened. <span class="keyword" data-zh="研究人员">Researchers</span> from three Finnish <span class="keyword" data-zh="大学">universities</span> set up a <span class="keyword" data-zh="棘手的">tricky</span> <span class="keyword" data-zh="挑战">challenge</span>. They hung a <span class="keyword" data-zh=" yummy;美味的">yummy</span> blue <span class="keyword" data-zh="人造花">artificial flower</span> on the <span class="keyword" data-zh="天花板">ceiling</span>, too high for a bee to <span class="keyword" data-zh="够到">reach</span>. Nearby, they placed a small <span class="keyword" data-zh="球">ball</span>. No one <span class="keyword" data-zh="展示">showed</span> the bees what to do. But the <span class="keyword" data-zh="聪明的">clever</span> bees <span class="keyword" data-zh="弄明白了">figured it out</span>! They <span class="keyword" data-zh="推">pushed</span> the ball under the flower, <span class="keyword" data-zh="爬">climbed</span> on top, and <span class="keyword" data-zh="抓住">grabbed</span> their sweet <span class="keyword" data-zh="奖励">reward</span>. It was like a bee-sized version of the famous "<span class="keyword" data-zh="箱子-香蕉">box-and-banana</span>" test that <span class="keyword" data-zh="黑猩猩">chimpanzees</span> solved over a hundred years ago!
+          </p>
+          <div class="segment-actions">
+            <button class="play-btn" data-index="1">▶ 播放段落</button>
+            <span class="segment-label">Segment 2: Story</span>
+          </div>
+        </div>
+
+        <div class="segment" data-index="2">
+          <span class="segment-num">3</span>
+          <p>
+            For more than a <span class="keyword" data-zh="世纪">century</span>, scientists <span class="keyword" data-zh="相信">believed</span> only big-brained <span class="keyword" data-zh="动物">animals</span> like chimpanzees, <span class="keyword" data-zh="乌鸦">crows</span>, and <span class="keyword" data-zh="人类">humans</span> could solve <span class="keyword" data-zh="全新的">brand-new</span> <span class="keyword" data-zh="问题">problems</span> like this. But this <span class="keyword" data-zh="研究">study</span>, <span class="keyword" data-zh="发表">published</span> in the top <span class="keyword" data-zh="期刊">journal</span> <span class="keyword" data-zh="《科学》">Science</span>, <span class="keyword" data-zh="证明">proves</span> that a tiny brain can still be <span class="keyword" data-zh=" brilliant; 杰出的">brilliant</span>. The <span class="keyword" data-zh="信息；启示">message</span>? Never <span class="keyword" data-zh="判断">judge</span> someone's <span class="keyword" data-zh=" cleverness; 聪明才智">cleverness</span> by their <span class="keyword" data-zh="大小">size</span>!
+          </p>
+          <div class="segment-actions">
+            <button class="play-btn" data-index="2">▶ 播放段落</button>
+            <span class="segment-label">Segment 3: Why It Matters</span>
+          </div>
+        </div>
+
+        <div class="segment" data-index="3">
+          <span class="segment-num">4</span>
+          <p>
+            So next time you see a bumble bee <span class="keyword" data-zh="嗡嗡叫">buzzing</span> in your <span class="keyword" data-zh="花园">garden</span>, remember — that little <span class="keyword" data-zh=" buzzer; 嗡嗡叫的东西">buzzer</span> might just be <span class="keyword" data-zh=" smarter than; 比……更聪明">smarter than</span> you think! I'm Pola, <span class="keyword" data-zh="报道">reporting</span> for Pola News. Stay <span class="keyword" data-zh="好奇的">curious</span> and keep <span class="keyword" data-zh=" buzzing with; 充满">buzzing with</span> <span class="keyword" data-zh="问题">questions</span>! Bye-bye!
+          </p>
+          <div class="segment-actions">
+            <button class="play-btn" data-index="3">▶ 播放段落</button>
+            <span class="segment-label">Segment 4: Sign-off</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="vocab">
+        <h2><span class="icon">📝</span>词汇表</h2>
+        <div class="vocab-grid">
+          <div class="vocab-card">
+            <div class="vocab-word">outsmart <button class="vocab-pronounce" data-word="outsmart">🔊</button></div>
+            <span class="vocab-pos">v. 动词</span>
+            <div class="vocab-meaning">智取；以智胜过（用聪明的方式击败对手）</div>
+            <div class="vocab-example">The tiny bee outsmarted a puzzle that only big animals were supposed to solve.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">stunned <button class="vocab-pronounce" data-word="stunned">🔊</button></div>
+            <span class="vocab-pos">adj. 形容词</span>
+            <div class="vocab-meaning">震惊的；目瞪口呆的</div>
+            <div class="vocab-example">The scientists were stunned when the bees solved the test all by themselves.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">intelligence <button class="vocab-pronounce" data-word="intelligence">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">智力；智慧</div>
+            <div class="vocab-example">This classic intelligence test was once thought too hard for insects.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">artificial <button class="vocab-pronounce" data-word="artificial">🔊</button></div>
+            <span class="vocab-pos">adj. 形容词</span>
+            <div class="vocab-meaning">人造的；人工的</div>
+            <div class="vocab-example">The researchers used an artificial flower and a small ball in their experiment.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">reward <button class="vocab-pronounce" data-word="reward">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">奖励；报酬（完成某事后获得的东西）</div>
+            <div class="vocab-example">The sweet reward was sugar water inside the blue flower.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">chimpanzee <button class="vocab-pronounce" data-word="chimpanzee">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">黑猩猩（非洲的一种大型类人猿）</div>
+            <div class="vocab-example">Over a hundred years ago, chimpanzees were famous for solving the box-and-banana test.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">prove <button class="vocab-pronounce" data-word="prove">🔊</button></div>
+            <span class="vocab-pos">v. 动词</span>
+            <div class="vocab-meaning">证明；证实</div>
+            <div class="vocab-example">This study proves that a tiny brain can still be brilliant.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">brilliant <button class="vocab-pronounce" data-word="brilliant">🔊</button></div>
+            <span class="vocab-pos">adj. 形容词</span>
+            <div class="vocab-meaning">杰出的；聪明的；卓越的</div>
+            <div class="vocab-example">A tiny brain can still be brilliant, as the clever bees showed us.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">buzzing <button class="vocab-pronounce" data-word="buzzing">🔊</button></div>
+            <span class="vocab-pos">v. 动词（现在分词）</span>
+            <div class="vocab-meaning">嗡嗡叫（蜜蜂飞行时发出的声音）</div>
+            <div class="vocab-example">I love hearing bees buzzing among the flowers in my garden.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">curious <button class="vocab-pronounce" data-word="curious">🔊</button></div>
+            <span class="vocab-pos">adj. 形容词</span>
+            <div class="vocab-meaning">好奇的；求知欲强的</div>
+            <div class="vocab-example">Stay curious and keep asking questions about the world!</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="patterns">
+        <h2><span class="icon">🔧</span>句型练习</h2>
+        <p style="color: var(--muted); margin-bottom: 20px;">从课文中提取的实用句型，先读例句，再尝试自己造句。</p>
+        <ul class="pattern-list">
+          <li class="pattern-item">
+            <div class="pattern-en">1. What has ... and just ...?</div>
+            <div class="pattern-zh">什么有……并且刚刚……？（用排比引出令人惊叹的事物）</div>
+            <div class="pattern-example">What has a brain smaller than a sesame seed and just outsmarted a century-old puzzle?</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：What has ... and just ...?"></textarea>
+          </li>
+          <li class="pattern-item">
+            <div class="pattern-en">2. ... were absolutely stunned when ...</div>
+            <div class="pattern-zh">当……时，……完全震惊了（表达强烈惊讶）</div>
+            <div class="pattern-example">Scientists were absolutely stunned when these tiny insects solved the test.</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：... were absolutely stunned when ..."></textarea>
+          </li>
+          <li class="pattern-item">
+            <div class="pattern-en">3. ... figured it out!</div>
+            <div class="pattern-zh">……想出了办法！/ ……弄明白了！</div>
+            <div class="pattern-example">No one showed the bees what to do, but the clever bees figured it out!</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：... figured it out!"></textarea>
+          </li>
+          <li class="pattern-item">
+            <div class="pattern-en">4. ... proves that ...</div>
+            <div class="pattern-zh">……证明……（用于陈述研究结论）</div>
+            <div class="pattern-example">This study proves that a tiny brain can still be brilliant.</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：... proves that ..."></textarea>
+          </li>
+          <li class="pattern-item">
+            <div class="pattern-en">5. Never judge ... by ...</div>
+            <div class="pattern-zh">永远不要以……来判断……（经典劝诫句型）</div>
+            <div class="pattern-example">Never judge someone's cleverness by their size!</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：Never judge ... by ..."></textarea>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section" id="grammar">
+        <h2><span class="icon">📐</span>语法点</h2>
+        <ul class="grammar-list">
+          <li class="grammar-item">
+            <div class="grammar-title">1. 现在完成时 — 描述已经完成的动作</div>
+            <div class="grammar-explanation">用 have/has + 过去分词 表示动作已经完成，且对现在有影响。本课中用于描述蜜蜂已经完成的惊人成就。</div>
+            <div class="grammar-example">These tiny insects have solved a classic intelligence test.</div>
+          </li>
+          <li class="grammar-item">
+            <div class="grammar-title">2. 过去时 — 讲述过去发生的故事</div>
+            <div class="grammar-explanation">规则动词加 -ed，不规则动词需记忆。本课中用于描述实验过程和科学家们的反应。</div>
+            <div class="grammar-example">They hung a blue flower on the ceiling. / Scientists were stunned.</div>
+          </li>
+          <li class="grammar-item">
+            <div class="grammar-title">3. 被动语态 — 强调动作的承受者</div>
+            <div class="grammar-explanation">用 be + 过去分词 表示被动。本课中用于描述研究论文的发表状态。</div>
+            <div class="grammar-example">This study was published in the top journal Science.</div>
+          </li>
+          <li class="grammar-item">
+            <div class="grammar-title">4. 情态动词 can/could — 表达能力或可能性</div>
+            <div class="grammar-explanation">can 表示现在的能力，could 表示过去的能力或更委婉的可能性。</div>
+            <div class="grammar-example">A tiny brain can still be brilliant. / Only big animals could solve this problem.</div>
+          </li>
+          <li class="grammar-item">
+            <div class="grammar-title">5. 比较级 — 比较两者</div>
+            <div class="grammar-explanation">形容词+er 或 more+形容词，用于比较两个事物。本课中比较了大脑的大小和聪明程度。</div>
+            <div class="grammar-example">smaller than a sesame seed / smarter than you think</div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section" id="quiz">
+        <h2><span class="icon">✅</span>练习测验</h2>
+        <p style="color: var(--muted); margin-bottom: 20px;">选择正确答案，检验你对课文的理解。</p>
+        <ul class="quiz-list" id="quizList">
+          <li class="quiz-item" data-correct="B">
+            <div class="quiz-question">1. How big is a bumble bee's brain compared to?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q1" value="A"> A) A peanut</label>
+              <label><input type="radio" name="q1" value="B"> B) A sesame seed</label>
+              <label><input type="radio" name="q1" value="C"> C) A basketball</label>
+              <label><input type="radio" name="q1" value="D"> D) An apple</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="C">
+            <div class="quiz-question">2. Where did the scientists conduct the experiment?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q2" value="A"> A) Germany</label>
+              <label><input type="radio" name="q2" value="B"> B) Japan</label>
+              <label><input type="radio" name="q2" value="C"> C) Finland</label>
+              <label><input type="radio" name="q2" value="D"> D) Australia</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="A">
+            <div class="quiz-question">3. What did the bees have to do to reach the reward?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q3" value="A"> A) Push a ball under the flower and climb on it</label>
+              <label><input type="radio" name="q3" value="B"> B) Fly higher and grab the flower</label>
+              <label><input type="radio" name="q3" value="C"> C) Ask another bee for help</label>
+              <label><input type="radio" name="q3" value="D"> D) Wait for the flower to fall down</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="D">
+            <div class="quiz-question">4. Which famous animal was the original "box-and-banana" test for?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q4" value="A"> A) Dolphins</label>
+              <label><input type="radio" name="q4" value="B"> B) Elephants</label>
+              <label><input type="radio" name="q4" value="C"> C) Crows</label>
+              <label><input type="radio" name="q4" value="D"> D) Chimpanzees</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="B">
+            <div class="quiz-question">5. In which famous scientific journal was the study published?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q5" value="A"> A) Nature</label>
+              <label><input type="radio" name="q5" value="B"> B) Science</label>
+              <label><input type="radio" name="q5" value="C"> C) National Geographic</label>
+              <label><input type="radio" name="q5" value="D"> D) The New York Times</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="A">
+            <div class="quiz-question">6. What is the main message of the story?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q6" value="A"> A) Never judge someone's cleverness by their size</label>
+              <label><input type="radio" name="q6" value="B"> B) Bees are the smartest animals on Earth</label>
+              <label><input type="radio" name="q6" value="C"> C) Scientists should stop testing animals</label>
+              <label><input type="radio" name="q6" value="D"> D) Big brains are always better</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+        </ul>
+        <button class="check-btn" id="checkBtn">检查答案</button>
+        <div class="score-box" id="scoreBox"></div>
+      </section>
+
+      <section class="section" id="extend">
+        <h2><span class="icon">🌏</span>中文知识扩展</h2>
+        <ul class="extend-list">
+          <li class="extend-item">
+            <h4>🐝 熊蜂（Bumble Bee）—— 大自然的高效授粉者</h4>
+            <p>熊蜂（Bombus terrestris）是一种体型较大、浑身毛茸茸的蜜蜂，与大黄蜂（honey bee）不同。熊蜂是重要的授粉昆虫，特别喜欢访问番茄、辣椒、蓝莓等农作物。它们有独特的能力——"花振授粉"（buzz pollination），通过翅膀高速振动使花朵释放花粉。熊蜂的大脑虽然只有一个芝麻那么大，但包含了约100万个神经元。相比之下，人类大脑有约860亿个神经元，是熊蜂的86万倍！</p>
+          </li>
+          <li class="extend-item">
+            <h4>🧠 科勒的"箱子-香蕉"实验（1917年）</h4>
+            <p>德国心理学家沃尔夫冈·科勒（Wolfgang Köhler）在1917年设计了一个经典实验：他把香蕉挂在天花板上，黑猩猩够不到。黑猩猩尝试了各种方法后，突然"顿悟"——把箱子推到香蕉下方，叠起来爬上去取食。这种不需要事先训练、而是突然组合已有知识解决新问题的能力，被称为"顿悟式问题解决"（insight problem-solving）。在过去一个多世纪里，这种能力被认为只属于大脑较大的脊椎动物（如黑猩猩、乌鸦、海豚）。芬兰这项最新研究首次证明，昆虫也拥有这种能力！</p>
+          </li>
+          <li class="extend-item">
+            <h4>🔬 实验设计——如何证明这不是"巧合"？</h4>
+            <p>科学家们非常谨慎。为了排除"蜜蜂只是碰巧把球推到花下"的可能性，他们设计了多组对照实验：① 在蜜蜂移动球的时候把花遮挡起来，让蜜蜂看不到目标，但蜜蜂依然把球推到正确位置；② 分析蜜蜂的运动轨迹，证明它们的移动是有方向性的，不是随机乱撞；③ 证明蜜蜂之前从未接受过"推球取食"的训练。这些严格的控制让结论非常有力——蜜蜂确实是在自发地解决问题。</p>
+          </li>
+          <li class="extend-item">
+            <h4>📖 期刊《Science》—— 科学界的"顶刊"</h4>
+            <p>《Science》（科学）是美国科学促进会（AAAS）出版的顶级学术期刊，与《Nature》（自然）并称为全球科学期刊的"两大顶刊"。能在《Science》上发表论文意味着研究经过全球最严格的同行评审，代表了该领域的最高水准。这项熊蜂研究于2026年6月4日发表，迅速引起全球科学界的关注，因为它彻底改写了我们对"智能"的定义——智能不一定需要大脑袋！</p>
+          </li>
+        </ul>
+        <div class="fun-fact">
+          <h4>💡 趣味冷知识</h4>
+          <p>熊蜂的大脑虽然只有芝麻大小，但它已经能解决的问题，很多人工智能（AI）机器人还做不到！AI机器人通常需要大量数据训练才能学会推球取物，而这些蜜蜂只接触过"球可以移动"和"蓝色花里有糖水"这两个独立信息，就自发组合出了解决方案。大自然的"小大脑"有时比人类制造的"大机器"更聪明呢！</p>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <h2><span class="icon">🎓</span>关于本课</h2>
+        <div class="about-grid">
+          <div class="about-card">
+            <h4>学习目标</h4>
+            <ul>
+              <li>掌握 10 个核心词汇（动物、智力、实验相关）</li>
+              <li>理解"顿悟式问题解决"这一科学概念</li>
+              <li>学会用英文表达惊讶、证明和劝诫</li>
+              <li>复习现在完成时、过去时和比较级</li>
+            </ul>
+          </div>
+          <div class="about-card">
+            <h4>学习建议</h4>
+            <ul>
+              <li>先完整听一遍课文朗读</li>
+              <li>跟读每个段落，模仿语音语调</li>
+              <li>用句型练习自己造句</li>
+              <li>完成测验并复习错题</li>
+              <li>想一想：你身边有什么"小身材大能量"的例子？</li>
+            </ul>
+          </div>
+          <div class="about-card">
+            <h4>课程信息</h4>
+            <ul>
+              <li>日期：2026-07-11</li>
+              <li>主题：The Bee Brain Puzzle</li>
+              <li>英语等级：B1（10-12岁）</li>
+              <li>主持人：Pola the Quokka</li>
+              <li>来源：Science / University of Oulu, Finland</li>
+            </ul>
+          </div>
+        </div>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Segment texts for speech (plain text, no HTML)
+    const segmentTexts = [
+      "What has a brain smaller than a sesame seed and just outsmarted a century-old puzzle? Meet the bumble bee! Scientists in Finland were absolutely stunned when these tiny insects solved a classic intelligence test — all by themselves, with zero training.",
+      "Here's what happened. Researchers from three Finnish universities set up a tricky challenge. They hung a yummy blue artificial flower on the ceiling, too high for a bee to reach. Nearby, they placed a small ball. No one showed the bees what to do. But the clever bees figured it out! They pushed the ball under the flower, climbed on top, and grabbed their sweet reward. It was like a bee-sized version of the famous box-and-banana test that chimpanzees solved over a hundred years ago!",
+      "For more than a century, scientists believed only big-brained animals like chimpanzees, crows, and humans could solve brand-new problems like this. But this study, published in the top journal Science, proves that a tiny brain can still be brilliant. The message? Never judge someone's cleverness by their size!",
+      "So next time you see a bumble bee buzzing in your garden, remember — that little buzzer might just be smarter than you think! I'm Pola, reporting for Pola News. Stay curious and keep buzzing with questions! Bye-bye!"
+    ];
+
+    let voices = [];
+    let currentUtterance = null;
+    let currentPlayingBtn = null;
+
+    function loadVoices() {
+      voices = window.speechSynthesis.getVoices();
+      if (voices.length === 0) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          voices = window.speechSynthesis.getVoices();
+        };
+      }
+    }
+
+    function selectBestVoice() {
+      const englishVoices = voices.filter(v => v.lang && v.lang.startsWith('en'));
+      if (englishVoices.length === 0) return voices[0] || null;
+
+      const preferred = [
+        v => v.name.includes('Enhanced') && v.name.toLowerCase().includes('male'),
+        v => v.name.includes('Daniel'),
+        v => v.name.includes('Alex'),
+        v => v.name.includes('Microsoft Mark'),
+        v => v.name.toLowerCase().includes('male'),
+        v => true
+      ];
+
+      for (const check of preferred) {
+        const found = englishVoices.find(check);
+        if (found) return found;
+      }
+      return englishVoices[0];
+    }
+
+    function stopSpeech() {
+      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        window.speechSynthesis.cancel();
+      }
+      if (currentPlayingBtn) {
+        currentPlayingBtn.classList.remove('playing');
+        currentPlayingBtn.textContent = currentPlayingBtn.dataset.originalText || '▶ 播放';
+        currentPlayingBtn = null;
+      }
+      currentUtterance = null;
+    }
+
+    function speak(text, button) {
+      if (currentPlayingBtn === button) {
+        stopSpeech();
+        return;
+      }
+      stopSpeech();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voice = selectBestVoice();
+      if (voice) utterance.voice = voice;
+      utterance.rate = 0.97;
+      utterance.pitch = 1.0;
+      utterance.lang = 'en-US';
+
+      utterance.onend = () => {
+        if (currentPlayingBtn) {
+          currentPlayingBtn.classList.remove('playing');
+          currentPlayingBtn.textContent = currentPlayingBtn.dataset.originalText || '▶ 播放';
+        }
+        currentPlayingBtn = null;
+        currentUtterance = null;
+      };
+
+      utterance.onerror = () => {
+        if (currentPlayingBtn) {
+          currentPlayingBtn.classList.remove('playing');
+          currentPlayingBtn.textContent = currentPlayingBtn.dataset.originalText || '▶ 播放';
+        }
+        currentPlayingBtn = null;
+        currentUtterance = null;
+      };
+
+      currentUtterance = utterance;
+      currentPlayingBtn = button;
+      button.dataset.originalText = button.textContent;
+      button.classList.add('playing');
+      button.textContent = '⏸ 播放中';
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Segment play buttons
+    document.querySelectorAll('.play-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const index = parseInt(btn.dataset.index, 10);
+        speak(segmentTexts[index], btn);
+      });
+    });
+
+    // Vocabulary pronunciation buttons
+    document.querySelectorAll('.vocab-pronounce').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const word = btn.dataset.word;
+        speak(word, btn);
+      });
+    });
+
+    // Tooltip for keywords
+    const tooltip = document.getElementById('tooltip');
+    document.querySelectorAll('.keyword').forEach(el => {
+      el.addEventListener('mouseenter', (e) => {
+        tooltip.textContent = el.dataset.zh;
+        tooltip.classList.add('visible');
+        positionTooltip(e.target);
+      });
+      el.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('visible');
+      });
+      el.addEventListener('mousemove', (e) => {
+        positionTooltip(e.target);
+      });
+    });
+
+    function positionTooltip(target) {
+      const rect = target.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+      let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+      let top = rect.top - tooltipRect.height - 10;
+      if (left < 10) left = 10;
+      if (left + tooltipRect.width > window.innerWidth - 10) left = window.innerWidth - tooltipRect.width - 10;
+      if (top < 10) top = rect.bottom + 10;
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = top + 'px';
+    }
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function toggleMenu() {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+    document.querySelectorAll('.nav-list a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 900) toggleMenu();
+      });
+    });
+
+    // Active nav + progress
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-list a');
+    const progressFill = document.getElementById('progressFill');
+    const progressLabel = document.getElementById('progressLabel');
+
+    function updateActiveNav() {
+      let current = '';
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 120) current = sec.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = window.scrollY;
+      const pct = Math.min(100, Math.round((scrolled / docHeight) * 100));
+      progressFill.style.width = pct + '%';
+      progressLabel.textContent = '阅读进度 ' + pct + '%';
+    }
+
+    window.addEventListener('scroll', updateActiveNav);
+    window.addEventListener('resize', updateActiveNav);
+
+    // Quiz
+    const checkBtn = document.getElementById('checkBtn');
+    const scoreBox = document.getElementById('scoreBox');
+
+    checkBtn.addEventListener('click', () => {
+      let score = 0;
+      document.querySelectorAll('.quiz-item').forEach(item => {
+        const correct = item.dataset.correct;
+        const selected = item.querySelector('input[type="radio"]:checked');
+        const feedback = item.querySelector('.quiz-feedback');
+        const labels = item.querySelectorAll('label');
+
+        labels.forEach(label => label.classList.remove('correct', 'wrong'));
+
+        if (!selected) {
+          feedback.textContent = '请先选择一个答案。';
+          feedback.style.color = '#c62828';
+          return;
+        }
+
+        const value = selected.value;
+        if (value === correct) {
+          score++;
+          feedback.textContent = '✅ 正确！';
+          feedback.style.color = 'var(--success)';
+          selected.parentElement.classList.add('correct');
+        } else {
+          feedback.textContent = '❌ 不正确，正确答案：' + correct;
+          feedback.style.color = '#c62828';
+          selected.parentElement.classList.add('wrong');
+          item.querySelector('input[value="' + correct + '"]').parentElement.classList.add('correct');
+        }
+      });
+
+      scoreBox.style.display = 'block';
+      scoreBox.textContent = '🎉 你的得分：' + score + ' / 6';
+    });
+
+    // Initialize
+    loadVoices();
+    updateActiveNav();
+  </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

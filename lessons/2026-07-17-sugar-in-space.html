@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sugar in Space | Pola News ✨ 互动课堂</title>
+  <style>
+    :root {
+      --primary: #6a1b9a;
+      --secondary: #8e24aa;
+      --accent: #fce4ec;
+      --highlight: #fff9c4;
+      --highlight-border: #f9a825;
+      --bg: #f3e5f5;
+      --card: #ffffff;
+      --text: #4a148c;
+      --muted: #ab47bc;
+      --success: #7b1fa2;
+      --star: #e040fb;
+      --raspberry: #d81b60;
+      --shadow: rgba(106, 27, 154, 0.15);
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #ce93d8 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: rgba(255,255,255,0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, var(--primary), #311b92);
+      color: white;
+      padding: 24px 16px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 4px 0 20px var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand small {
+      font-size: 0.75rem;
+      opacity: 0.85;
+      font-weight: 500;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 0;
+    }
+
+    .nav-list li {
+      margin-bottom: 6px;
+    }
+
+    .nav-list a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-list a:hover, .nav-list a.active {
+      background: rgba(255,255,255,0.18);
+      color: white;
+      font-weight: 600;
+    }
+
+    .nav-list .icon { font-size: 1.2rem; width: 24px; text-align: center; }
+
+    .progress-wrap {
+      margin-top: 24px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .progress-wrap .label { font-size: 0.75rem; opacity: 0.8; margin-bottom: 8px; }
+    .progress-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--star), var(--raspberry));
+      border-radius: 3px;
+      transition: width 0.4s;
+      width: 0%;
+    }
+
+    /* Main Content */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 32px 36px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0 0 6px;
+      color: var(--primary);
+    }
+    .header .meta {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .section {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 20px var(--shadow);
+      position: relative;
+      scroll-margin-top: 100px;
+    }
+
+    .section h2 {
+      font-size: 1.5rem;
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    .section h2 .s-icon { font-size: 1.4rem; }
+
+    /* Reading passage */
+    .passage {
+      font-size: 1.15rem;
+      line-height: 2;
+      color: #333;
+    }
+
+    .kw {
+      background: var(--highlight);
+      border-bottom: 2px solid var(--highlight-border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .kw:hover { background: #ffe082; }
+
+    .kw-tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      z-index: 10;
+      font-weight: 400;
+    }
+    .kw-tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #333;
+    }
+    .kw:hover .kw-tooltip { display: block; }
+
+    /* Segment play buttons */
+    .seg-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .seg-wrap .seg-text { flex: 1; }
+    .play-btn {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      box-shadow: 0 3px 10px var(--shadow);
+    }
+    .play-btn:hover { transform: scale(1.1); }
+    .play-btn.playing {
+      animation: pulse 1.2s infinite;
+      background: linear-gradient(135deg, var(--raspberry), #e91e63);
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(216, 27, 96, 0.5); }
+      50% { box-shadow: 0 0 0 14px rgba(216, 27, 96, 0); }
+    }
+
+    /* Vocabulary cards */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .vocab-card {
+      background: linear-gradient(135deg, var(--accent), #f8bbd0);
+      border-radius: 14px;
+      padding: 18px;
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .vocab-card:hover { transform: translateY(-3px); }
+    .vocab-card .word {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .vocab-card .pos {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+    .vocab-card .def { font-size: 0.95rem; color: #555; margin-bottom: 6px; }
+    .vocab-card .ex { font-size: 0.9rem; color: #777; font-style: italic; }
+    .vocab-play {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .vocab-play:hover { transform: scale(1.15); }
+    .vocab-play.playing { animation: pulse 1.2s infinite; background: var(--raspberry); }
+
+    /* Sentence patterns */
+    .pattern-item {
+      background: #fafafa;
+      border-left: 4px solid var(--secondary);
+      border-radius: 0 12px 12px 0;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .pattern-item .en { font-weight: 700; color: var(--primary); font-size: 1.05rem; }
+    .pattern-item .zh { color: #777; font-size: 0.9rem; margin: 4px 0 8px; }
+    .pattern-item .note { font-size: 0.85rem; color: var(--muted); }
+    .pattern-item textarea {
+      width: 100%;
+      margin-top: 8px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 50px;
+      transition: border-color 0.3s;
+    }
+    .pattern-item textarea:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    /* Grammar */
+    .grammar-item {
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .grammar-item h4 { margin: 0 0 8px; color: var(--primary); font-size: 1.1rem; }
+    .grammar-item .desc { color: #555; font-size: 0.95rem; margin-bottom: 8px; }
+    .grammar-item .ex-en { font-style: italic; color: var(--secondary); }
+    .grammar-item .ex-zh { color: #888; font-size: 0.85rem; margin: 2px 0 10px; }
+    .grammar-item input[type="text"] {
+      width: 100%;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+    }
+    .grammar-item input[type="text"]:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    /* Quiz */
+    .quiz-item {
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .quiz-item .q { font-weight: 700; font-size: 1.05rem; margin-bottom: 4px; }
+    .quiz-item .q-zh { color: #888; font-size: 0.9rem; margin-bottom: 12px; }
+    .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    .quiz-opt:hover { border-color: var(--muted); background: var(--accent); }
+    .quiz-opt.selected { border-color: var(--secondary); background: var(--accent); font-weight: 600; }
+    .quiz-opt.correct { border-color: #4caf50; background: #e8f5e9; }
+    .quiz-opt.wrong { border-color: #f44336; background: #ffebee; }
+    .quiz-result { margin-top: 10px; font-weight: 600; font-size: 0.9rem; display: none; }
+
+    /* Knowledge extension */
+    .ext-block {
+      margin-bottom: 20px;
+    }
+    .ext-block h3 {
+      color: var(--primary);
+      font-size: 1.15rem;
+      margin: 0 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ext-block p { line-height: 1.8; color: #444; font-size: 0.95rem; }
+
+    /* About */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .about-card {
+      background: linear-gradient(135deg, var(--accent), #f8bbd0);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .about-card h4 { margin: 0 0 8px; color: var(--primary); }
+    .about-card ul { padding-left: 20px; color: #555; font-size: 0.9rem; line-height: 1.8; }
+
+    .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+    .print-btn:hover { transform: scale(1.05); }
+
+    /* Mobile */
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 200;
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+        padding: 20px 16px;
+      }
+      .mobile-toggle { display: flex; align-items: center; justify-content: center; }
+      .section { padding: 20px; }
+      .passage { font-size: 1rem; }
+      .vocab-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      .sidebar, .mobile-toggle, .play-btn, .vocab-play, .print-btn, .progress-wrap { display: none !important; }
+      .main { margin-left: 0; padding: 0; }
+      .section { box-shadow: none; break-inside: avoid; margin-bottom: 16px; padding: 16px; }
+      body { background: white; }
+      .app { background: white; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Mobile toggle -->
+  <button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="brand">
+      <span>🍬</span>
+      <div>
+        POLA NEWS
+        <small>Sugar in Space</small>
+      </div>
+    </div>
+    <ul class="nav-list">
+      <li><a href="#reading" class="active" onclick="setActive(this)"><span class="icon">📖</span> 全文阅读</a></li>
+      <li><a href="#vocabulary" onclick="setActive(this)"><span class="icon">📝</span> 词汇表</a></li>
+      <li><a href="#patterns" onclick="setActive(this)"><span class="icon">💬</span> 句型练习</a></li>
+      <li><a href="#grammar" onclick="setActive(this)"><span class="icon">📐</span> 语法点</a></li>
+      <li><a href="#quiz" onclick="setActive(this)"><span class="icon">✅</span> 练习测验</a></li>
+      <li><a href="#knowledge" onclick="setActive(this)"><span class="icon">🌌</span> 知识扩展</a></li>
+      <li><a href="#about" onclick="setActive(this)"><span class="icon">📋</span> 关于本课</a></li>
+    </ul>
+    <div class="progress-wrap">
+      <div class="label">📊 阅读进度</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div style="font-size:0.75rem;opacity:0.7;margin-top:6px;" id="progressPct">0%</div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <div class="header">
+      <h1>🍬 Sugar in Space</h1>
+      <p class="meta">📅 July 17, 2026 &nbsp;|&nbsp; 🎤 Pola the Quokka &nbsp;|&nbsp; ⭐ B1 Level</p>
+    </div>
+
+    <!-- ==================== 1. 全文阅读 ==================== -->
+    <section class="section" id="reading">
+      <h2><span class="s-icon">📖</span> 全文阅读 Full Text</h2>
+      <div class="passage" id="passage">
+        <div class="seg-wrap">
+          <div class="seg-text">
+            Did you know the center of our <span class="kw">galaxy<span class="kw-tooltip">星系</span></span> tastes sweet? Scientists just found real <span class="kw">sugar<span class="kw-tooltip">糖</span></span> floating in space — the same kind you'd find in raspberries! It's called <span class="kw">erythrulose<span class="kw-tooltip">赤藓酮糖 — 一种四碳糖，存在于覆盆子中</span></span>, and it's the first true sugar ever <span class="kw">detected<span class="kw-tooltip">探测到</span></span> between the stars. The galaxy, it turns out, has a sweet tooth!
+          </div>
+          <button class="play-btn" onclick="toggleSegment(this, 0)" title="播放本段">▶</button>
+        </div>
+        <div class="seg-wrap">
+          <div class="seg-text">
+            A team of <span class="kw">astronomers<span class="kw-tooltip">天文学家</span></span> in Spain pointed two giant radio <span class="kw">telescopes<span class="kw-tooltip">望远镜</span></span> at a cloud near the Milky Way's center. They weren't looking with their eyes — they were <span class="kw">listening<span class="kw-tooltip">聆听</span></span> to <span class="kw">molecules<span class="kw-tooltip">分子</span></span> spinning and dancing in space. Each molecule has its own radio "fingerprint," and after matching twelve signals, they confirmed it: real sugar! And get this — there's <em>more</em> sugar than anyone expected, at least eight times more than smaller sugars.
+          </div>
+          <button class="play-btn" onclick="toggleSegment(this, 1)" title="播放本段">▶</button>
+        </div>
+        <div class="seg-wrap">
+          <div class="seg-text">
+            Here's the amazing part — this sugar formed before any <span class="kw">stars<span class="kw-tooltip">恒星</span></span> or <span class="kw">planets<span class="kw-tooltip">行星</span></span> even existed! Scientists think millions of tons of space sugar rained down on early Earth, helping create the "<span class="kw">primordial soup<span class="kw-tooltip">原始汤 — 早期地球上孕育生命的化学混合物</span></span>" that gave rise to <span class="kw">life<span class="kw-tooltip">生命</span></span>. It means the building blocks of life are scattered all across the galaxy. If sugar can form in deep space, maybe life can form on other worlds too.
+          </div>
+          <button class="play-btn" onclick="toggleSegment(this, 2)" title="播放本段">▶</button>
+        </div>
+        <div class="seg-wrap">
+          <div class="seg-text">
+            So next time you eat a raspberry, remember — you're tasting a molecule that floats between the stars. The <span class="kw">universe<span class="kw-tooltip">宇宙</span></span> is sweeter than we ever imagined! This is Pola, reporting from the sweetest corner of the galaxy. See you next time, space explorers! ✨👋
+          </div>
+          <button class="play-btn" onclick="toggleSegment(this, 3)" title="播放本段">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. 词汇表 ==================== -->
+    <section class="section" id="vocabulary">
+      <h2><span class="s-icon">📝</span> 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab-card">
+          <div class="word"><button class="vocab-play" onclick="speakWord('galaxy', this)">🔊</button> galaxy</div>
+          <div class="pos">noun /ˈɡæləksi/</div>
+          <div class="def">星系 — 由恒星、气体和尘埃组成的巨大天体系统</div>
+          <div class="ex">"Our solar system is part of the Milky Way galaxy."</div>
+        </div>
+        <div class="vocab-card">
+          <div class="word"><button class="vocab-play" onclick="speakWord('erythrulose', this)">🔊</button> erythrulose</div>
+          <div class="pos">noun /ˌerɪˈθruːloʊs/</div>
+          <div class="def">赤藓酮糖 — 一种四碳酮糖，天然存在于覆盆子中</div>
+          <div class="ex">"Erythrulose is the first true sugar found in interstellar space."</div>
+        </div>
+        <div class="vocab-card">
+          <div class="word"><button class="vocab-play" onclick="speakWord('molecule', this)">🔊</button> molecule</div>
+          <div class="pos">noun /ˈmɑːlɪkjuːl/</div>
+          <div class="def">分子 — 由原子组成的最小化学单元</div>
+          <div class="ex">"A sugar molecule contains carbon, hydrogen, and oxygen atoms."</div>
+        </div>
+        <div class="vocab-card">
+          <div class="word"><button class="vocab-play" onclick="speakWord('telescope', this)">🔊</button> telescope</div>
+          <div class="pos">noun /ˈtelɪskoʊp/</div>
+          <div class="def">望远镜 — 用于观测远处天体的仪器</div>
+          <div class="ex">"Radio telescopes can 'hear' signals from molecules in space."</div>
+        </div>
+        <div class="vocab-card">
+          <div class="word"><button class="vocab-play" onclick="speakWord('detect', this)">🔊</button> detect</div>
+          <div class="pos">verb /dɪˈtekt/</div>
+          <div class="def">探测；发现 — 通过科学手段察觉或识别某物</div>
+          <div class="ex">"Scientists detected twelve matching signals from the sugar molecule."</div>
+        </div>
+        <div class="vocab-card">
+          <div class="word"><button class="vocab-play" onclick="speakWord('astronomer', this)">🔊</button> astronomer</div>
+          <div class="pos">noun /əˈstrɑːnəmər/</div>
+          <div class="def">天文学家 — 研究恒星、行星和宇宙的科学家</div>
+          <div class="ex">"A team of astronomers in Spain made this sweet discovery."</div>
+        </div>
+        <div class="vocab-card">
+          <div class="word"><button class="vocab-play" onclick="speakWord('primordial', this)">🔊</button> primordial</div>
+          <div class="pos">adjective /praɪˈmɔːrdiəl/</div>
+          <div class="def">原始的 — 从宇宙或地球最早时期就存在的</div>
+          <div class="ex">"The primordial soup is the mixture of chemicals that led to life on Earth."</div>
+        </div>
+        <div class="vocab-card">
+          <div class="word"><button class="vocab-play" onclick="speakWord('universe', this)">🔊</button> universe</div>
+          <div class="pos">noun /ˈjuːnɪvɜːrs/</div>
+          <div class="def">宇宙 — 所有空间、时间、物质和能量的总和</div>
+          <div class="ex">"The universe is sweeter than we ever imagined!"</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. 句型练习 ==================== -->
+    <section class="section" id="patterns">
+      <h2><span class="s-icon">💬</span> 句型练习 Sentence Patterns</h2>
+
+      <div class="pattern-item">
+        <div class="en">"Did you know (that) + 从句？"</div>
+        <div class="zh">用来引入一个有趣或令人惊讶的事实，吸引听众注意。</div>
+        <div class="note">💡 口语中 "that" 可以省略。这是新闻播报常用的开场方式。</div>
+        <textarea placeholder="用这个句型写一个关于太空的有趣事实...&#10;例：Did you know the Sun is 4.6 billion years old?"></textarea>
+      </div>
+
+      <div class="pattern-item">
+        <div class="en">"It turns out (that) + 从句"</div>
+        <div class="zh">用来揭示一个出乎意料的结果或真相，相当于"原来……"。</div>
+        <div class="note">💡 常用于表达经过研究发现或最终确认的事实。</div>
+        <textarea placeholder="用这个句型揭示一个有趣的科学发现...&#10;例：It turns out that bees can sense the Earth's magnetic field!"></textarea>
+      </div>
+
+      <div class="pattern-item">
+        <div class="en">"... before + 名词 + even existed"</div>
+        <div class="zh">用来强调某事发生在某个事物出现之前，加强时间对比。</div>
+        <div class="note">💡 "even" 用来加强语气，强调"甚至还没有……的时候"。</div>
+        <textarea placeholder="用这个句型描述一个古老的事物...&#10;例：This fossil formed before dinosaurs even existed!"></textarea>
+      </div>
+
+      <div class="pattern-item">
+        <div class="en">"If + 从句 (现在时), maybe + 从句 (将来可能)"</div>
+        <div class="zh">第一类条件句 — 表达可能发生的情况及其结果。</div>
+        <div class="note">💡 注意用 "maybe"（而非 "will"）来表达不确定的推测，体现科学中的谨慎态度。</div>
+        <textarea placeholder="用这个句型推测一个科学可能性...&#10;例：If water exists on Mars, maybe tiny microbes live there too."></textarea>
+      </div>
+
+      <div class="pattern-item">
+        <div class="en">"So next time you + 动词, remember — + 从句"</div>
+        <div class="zh">结尾句型 — 将故事与听众的日常生活建立联系，留下深刻印象。</div>
+        <div class="note">💡 这是 Pola 标志性的收尾方式，让复杂的科学概念变得亲切可感。</div>
+        <textarea placeholder="用这个句型为你的新闻故事写一个有力的结尾...&#10;例：So next time you look at the Moon, remember — twelve astronauts once walked on its surface!"></textarea>
+      </div>
+    </section>
+
+    <!-- ==================== 4. 语法点 ==================== -->
+    <section class="section" id="grammar">
+      <h2><span class="s-icon">📐</span> 语法点 Grammar Points</h2>
+
+      <div class="grammar-item">
+        <h4>1. 现在完成时 — "Scientists just found..." vs "Scientists have just found..."</h4>
+        <div class="desc">课文中使用了 "just found"，这是一种口语化的简化用法。在正式写作中，通常使用现在完成时 "have just found" 来表示刚刚完成的动作。</div>
+        <div class="ex-en">"Scientists have just found real sugar floating in space."</div>
+        <div class="ex-zh">科学家们刚刚在太空中发现了真正的糖。</div>
+        <div style="font-size:0.85rem;color:#888;margin-bottom:6px;">✏️ 练习：用现在完成时改写 — "The team _____ (discover) a new molecule in the cloud."</div>
+        <input type="text" placeholder="输入你的答案..." onchange="checkGrammar(this, 'has discovered')">
+        <div class="quiz-result" id="gram1" style="margin-top:6px;"></div>
+      </div>
+
+      <div class="grammar-item">
+        <h4>2. 比较级 — "eight times more than"</h4>
+        <div class="desc">使用 "X times more than" 来表达倍数比较。结构：数字 + times + more + 形容词 + than + 比较对象。</div>
+        <div class="ex-en">"There's at least eight times more sugar than smaller sugars."</div>
+        <div class="ex-zh">糖的含量至少是小分子糖的八倍。</div>
+        <div style="font-size:0.85rem;color:#888;margin-bottom:6px;">✏️ 练习：用比较级填空 — "Jupiter is 11 _____ (wide) than Earth."</div>
+        <input type="text" placeholder="输入你的答案..." onchange="checkGrammar(this, 'times wider')">
+        <div class="quiz-result" id="gram2" style="margin-top:6px;"></div>
+      </div>
+
+      <div class="grammar-item">
+        <h4>3. 反身强调 — "the same kind you'd find in raspberries"</h4>
+        <div class="desc">"you'd find" 是 "you would find" 的缩略形式，这是一种口语化的表达方式，让句子更亲切自然。</div>
+        <div class="ex-en">"The same kind you'd find in raspberries."</div>
+        <div class="ex-zh">和你在覆盆子里能找到的一模一样。</div>
+        <div style="font-size:0.85rem;color:#888;margin-bottom:6px;">✏️ 练习：补全句子 — "It's the same type of rock you ____ (find) on the Moon."</div>
+        <input type="text" placeholder="输入你的答案..." onchange="checkGrammar(this, "'d find',would find")">
+        <div class="quiz-result" id="gram3" style="margin-top:6px;"></div>
+      </div>
+
+      <div class="grammar-item">
+        <h4>4. 将来时推测 — "maybe life can form on other worlds too"</h4>
+        <div class="desc">在科学报道中，用 "maybe" 或 "might" 而非 "will" 来表达不确定的推测，展现科学思维的严谨性。</div>
+        <div class="ex-en">"Maybe life can form on other worlds too."</div>
+        <div class="ex-zh">也许其他星球上也能形成生命。</div>
+        <div style="font-size:0.85rem;color:#888;margin-bottom:6px;">✏️ 练习：用 "maybe" 造一个科学推测句 — "_____ there _____ (be) oceans under Europa's ice."</div>
+        <input type="text" placeholder="输入你的答案..." onchange="checkGrammar(this, 'maybe,are', 'maybe,may be')">
+        <div class="quiz-result" id="gram4" style="margin-top:6px;"></div>
+      </div>
+
+      <div class="grammar-item">
+        <h4>5. 动名词作主语 — "Spinning and dancing"</h4>
+        <div class="desc">动词 + -ing 变成动名词后可以作主语或宾语，使描述更加生动动态。课文中用来描述分子在太空中的运动。</div>
+        <div class="ex-en">"Molecules spinning and dancing in space."</div>
+        <div class="ex-zh">分子在太空中旋转舞动。</div>
+        <div style="font-size:0.85rem;color:#888;margin-bottom:6px;">✏️ 练习：用动名词补全 — "_____ (watch) stars through a telescope is an amazing experience."</div>
+        <input type="text" placeholder="输入你的答案..." onchange="checkGrammar(this, 'Watching')">
+        <div class="quiz-result" id="gram5" style="margin-top:6px;"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. 练习测验 ==================== -->
+    <section class="section" id="quiz">
+      <h2><span class="s-icon">✅</span> 练习测验 Quiz</h2>
+
+      <div class="quiz-item" id="q1">
+        <div class="q">1. What is the name of the sugar molecule found in space?</div>
+        <div class="q-zh">在太空中发现的糖分子叫什么名字？</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q1', 'A')">A. Glucose (葡萄糖)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q1', 'B')">B. Erythrulose (赤藓酮糖)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q1', 'C')">C. Ribose (核糖)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q1', 'D')">D. Fructose (果糖)</div>
+        </div>
+        <div class="quiz-result" id="q1-result"></div>
+      </div>
+
+      <div class="quiz-item" id="q2">
+        <div class="q">2. Where can you find erythrulose on Earth?</div>
+        <div class="q-zh">地球上哪里可以找到赤藓酮糖？</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q2', 'A')">A. In rocks (岩石中)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q2', 'B')">B. In the ocean (海洋中)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q2', 'C')">C. In raspberries (覆盆子中)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q2', 'D')">D. In the air (空气中)</div>
+        </div>
+        <div class="quiz-result" id="q2-result"></div>
+      </div>
+
+      <div class="quiz-item" id="q3">
+        <div class="q">3. How did scientists detect the sugar in space?</div>
+        <div class="q-zh">科学家是如何探测到太空中的糖的？</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q3', 'A')">A. They sent a spaceship to collect samples (派飞船采集样本)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q3', 'B')">B. They saw it through a microscope (用显微镜观察)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q3', 'C')">C. They used radio telescopes to "listen" to molecules (用射电望远镜"聆听"分子)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q3', 'D')">D. Astronauts tasted it (宇航员品尝到了)</div>
+        </div>
+        <div class="quiz-result" id="q3-result"></div>
+      </div>
+
+      <div class="quiz-item" id="q4">
+        <div class="q">4. How much more erythrulose was found compared to smaller sugars?</div>
+        <div class="q-zh">与小分子糖相比，赤藓酮糖多了多少？</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q4', 'A')">A. Twice as much (两倍)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q4', 'B')">B. At least eight times more (至少八倍)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q4', 'C')">C. About the same (差不多)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q4', 'D')">D. A hundred times more (一百倍)</div>
+        </div>
+        <div class="quiz-result" id="q4-result"></div>
+      </div>
+
+      <div class="quiz-item" id="q5">
+        <div class="q">5. Why is this discovery important for understanding life?</div>
+        <div class="q-zh">这项发现对理解生命为什么重要？</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q5', 'A')">A. Sugar in space can be eaten by astronauts (太空糖可以被宇航员吃)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q5', 'B')">B. It shows that building blocks of life exist before stars and planets form (表明生命的基础材料在恒星和行星形成前就已存在)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q5', 'C')">C. It proves aliens exist (证明了外星人存在)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q5', 'D')">D. Sugar helps rockets fly faster (糖能帮助火箭飞得更快)</div>
+        </div>
+        <div class="quiz-result" id="q5-result"></div>
+      </div>
+
+      <div class="quiz-item" id="q6">
+        <div class="q">6. Which country's scientists made this discovery?</div>
+        <div class="q-zh">哪个国家的科学家完成了这项发现？</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q6', 'A')">A. United States (美国)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q6', 'B')">B. China (中国)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q6', 'C')">C. Spain (西班牙)</div>
+          <div class="quiz-opt" onclick="selectQuiz(this, 'q6', 'D')">D. Japan (日本)</div>
+        </div>
+        <div class="quiz-result" id="q6-result"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. 知识扩展 ==================== -->
+    <section class="section" id="knowledge">
+      <h2><span class="s-icon">🌌</span> 中文知识扩展 Knowledge Extension</h2>
+
+      <div class="ext-block">
+        <h3>🍬 什么是"真正的糖"？—— 糖的化学定义</h3>
+        <p>在我们的日常生活中，"糖"通常指白砂糖（蔗糖）。但在化学上，<strong>糖类（碳水化合物）</strong>是一个庞大的家族，包括<strong>单糖</strong>（如葡萄糖、果糖）、<strong>双糖</strong>（如蔗糖、乳糖）和<strong>多糖</strong>（如淀粉、纤维素）。科学家将"真正的糖"定义为<strong>至少含有三个碳原子的糖类分子</strong>。2000年，天文学家曾在星际空间探测到乙醇醛（只有两个碳原子），但它只能算"类糖前体"，不是真正的糖。这次的赤藓酮糖含有四个碳原子（C₄H₈O₄），是货真价实的"星际第一糖"！</p>
+      </div>
+
+      <div class="ext-block">
+        <h3>🔭 射电望远镜：聆听宇宙的"耳朵"</h3>
+        <p>我们平时用光学望远镜"看"星星，但射电望远镜是"听"宇宙的。太空中的分子在旋转和振动时会发出特定频率的无线电波，就像每个人有不同的指纹一样。科学家把太空中接收到的信号和实验室里测出的分子"指纹谱"进行比对，就能确定太空中有什么分子。<strong>耶韦斯40米望远镜</strong>（西班牙）和<strong>IRAM 30米望远镜</strong>（位于西班牙内华达山脉）这两台"巨耳"捕捉到了12组与赤藓酮糖完全匹配的信号，从而确认了这一发现。这种技术叫做<strong>射电天文学</strong>（radio astronomy）。</p>
+      </div>
+
+      <div class="ext-block">
+        <h3>🧪 原始汤：地球生命诞生的"厨房"</h3>
+        <p>大约46亿年前，地球刚刚形成时是一个炽热的岩浆球。随着地表逐渐冷却，大气中的水蒸气凝结成雨，形成了原始的海洋。科学家认为，在这片早期的海洋中，简单的化学物质（如甲烷、氨、水）在闪电、紫外线辐射和火山热量的作用下，逐渐合成出更复杂的有机分子——这就是著名的<strong>"原始汤"假说</strong>（primordial soup hypothesis）。现在我们知道，这些"食材"中有一部分可能来自太空！在被称为<strong>"后期重轰炸期"</strong>的阶段（约41亿至38亿年前），大量小行星和彗星撞击地球，可能将数百万吨的星际糖类物质送到了地球表面，为生命起源提供了关键的化学原料。</p>
+      </div>
+
+      <div class="ext-block">
+        <h3>🧬 糖和DNA的故事</h3>
+        <p>你可能知道DNA（脱氧核糖核酸）是生命的"说明书"，但你知道DNA的名字里就有"糖"吗？DNA的全名是<strong>"脱氧核糖核酸"</strong>，它的骨架正是由<strong>脱氧核糖</strong>（一种五碳糖）和磷酸交替连接而成的。RNA（核糖核酸）的骨架则使用<strong>核糖</strong>。赤藓酮糖虽然不能直接构成DNA或RNA，但它可以通过简单的化学反应转化为合成DNA/RNA所需的关键糖分子。所以，这次在星际空间发现赤藓酮糖，相当于在宇宙的"厨房"里找到了做出生命"说明书"的基础原料！</p>
+      </div>
+
+      <div class="ext-block">
+        <h3>🌟 我们在宇宙中是孤独的吗？</h3>
+        <p>这项发现最深远的意义在于：<strong>生命的"积木"在恒星和行星诞生之前就已经存在于星际分子云中了。</strong>这意味着，银河系中每一片正在孕育新恒星和行星的分子云，都可能含有相同的生命原材料。正如研究团队负责人希门尼斯-塞拉所说："生命的要素可能广泛分布在整个银河系中，这有助于生命以类似于地球的方式在其他地方演化。"虽然我们还没有找到外星生命，但每一次这样的发现都让"我们不孤单"的可能性更大了一分。也许在银河系的某个角落，也有一群外星小朋友在仰望星空，思考着同样的问题呢！</p>
+      </div>
+    </section>
+
+    <!-- ==================== 7. 关于本课 ==================== -->
+    <section class="section" id="about">
+      <h2><span class="s-icon">📋</span> 关于本课 About This Lesson</h2>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <h4>🎯 学习目标</h4>
+          <ul>
+            <li>理解"星际糖分子"发现及其意义</li>
+            <li>掌握 8 个核心天文科普词汇</li>
+            <li>学习 5 个实用英语句型</li>
+            <li>了解射电天文学和生命起源知识</li>
+            <li>区分科学事实和有趣推测</li>
+          </ul>
+        </div>
+        <div class="about-card">
+          <h4>💡 学习建议</h4>
+          <ul>
+            <li>先听全文朗读，感受语音语调</li>
+            <li>逐段跟读，练习发音和流利度</li>
+            <li>用词汇卡片记忆核心单词</li>
+            <li>在句型练习区动手写句子</li>
+            <li>阅读中文扩展，加深背景理解</li>
+          </ul>
+        </div>
+        <div class="about-card">
+          <h4>📊 难度信息</h4>
+          <ul>
+            <li>英语等级：B1（CEFR）</li>
+            <li>适合年龄：10-12 岁</li>
+            <li>核心词汇：8 个</li>
+            <li>语法点：5 个</li>
+            <li>测验题数：6 道</li>
+            <li>来源：Nature Astronomy (July 13, 2026)</li>
+          </ul>
+        </div>
+        <div class="about-card">
+          <h4>🌟 延伸探索</h4>
+          <ul>
+            <li>搜索"What is a radio telescope?"了解更多</li>
+            <li>查找"primordial soup theory"学习生命起源假说</li>
+            <li>探索"OSIRIS-REx mission"了解小行星采样</li>
+            <li>阅读关于"astrochemistry"的科普文章</li>
+          </ul>
+        </div>
+      </div>
+      <button class="print-btn" onclick="window.print()">🖨️ 打印友好版本</button>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// --- Voice Setup ---
+let voices = [];
+let currentUtterance = null;
+let currentPlayBtn = null;
+let vocabVoices = [];
+let currentVocabBtn = null;
+
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+  vocabVoices = voices;
+}
+loadVoices();
+speechSynthesis.onvoiceschanged = loadVoices;
+
+function getEnglishVoice() {
+  const allVoices = speechSynthesis.getVoices();
+  if (allVoices.length === 0) return null;
+  // Priority: Enhanced male English > Daniel > Alex > Mark > any English male > any English
+  const priority = [
+    v => v.name.includes('Enhanced') && v.lang.startsWith('en') && !v.name.includes('Female'),
+    v => v.name === 'Daniel' && v.lang.startsWith('en'),
+    v => v.name === 'Alex' && v.lang.startsWith('en'),
+    v => v.name.includes('Mark') && v.lang.startsWith('en'),
+    v => v.lang.startsWith('en') && !v.name.includes('Female'),
+    v => v.lang.startsWith('en'),
+  ];
+  for (const check of priority) {
+    const found = allVoices.find(check);
+    if (found) return found;
+  }
+  return null;
+}
+
+const segmentTexts = [
+  "Did you know the center of our galaxy tastes sweet? Scientists just found real sugar floating in space — the same kind you'd find in raspberries! It's called erythrulose, and it's the first true sugar ever detected between the stars. The galaxy, it turns out, has a sweet tooth!",
+  "A team of astronomers in Spain pointed two giant radio telescopes at a cloud near the Milky Way's center. They weren't looking with their eyes — they were listening to molecules spinning and dancing in space. Each molecule has its own radio fingerprint, and after matching twelve signals, they confirmed it: real sugar! And get this — there's more sugar than anyone expected, at least eight times more than smaller sugars.",
+  "Here's the amazing part — this sugar formed before any stars or planets even existed! Scientists think millions of tons of space sugar rained down on early Earth, helping create the primordial soup that gave rise to life. It means the building blocks of life are scattered all across the galaxy. If sugar can form in deep space, maybe life can form on other worlds too.",
+  "So next time you eat a raspberry, remember — you're tasting a molecule that floats between the stars. The universe is sweeter than we ever imagined! This is Pola, reporting from the sweetest corner of the galaxy. See you next time, space explorers!"
+];
+
+// --- Segment Playback ---
+function toggleSegment(btn, idx) {
+  if (currentUtterance && currentPlayBtn === btn) {
+    // Stop current
+    speechSynthesis.cancel();
+    resetPlayBtn(btn);
+    return;
+  }
+  // Stop any ongoing
+  speechSynthesis.cancel();
+  resetAllPlayBtns();
+
+  const voice = getEnglishVoice();
+  const utterance = new SpeechSynthesisUtterance(segmentTexts[idx]);
+  utterance.voice = voice;
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+
+  utterance.onstart = () => {
+    btn.textContent = '⏸';
+    btn.classList.add('playing');
+    currentUtterance = utterance;
+    currentPlayBtn = btn;
+  };
+  utterance.onend = () => resetPlayBtn(btn);
+  utterance.onerror = () => resetPlayBtn(btn);
+
+  speechSynthesis.speak(utterance);
+}
+
+function resetPlayBtn(btn) {
+  btn.textContent = '▶';
+  btn.classList.remove('playing');
+  if (currentPlayBtn === btn) {
+    currentUtterance = null;
+    currentPlayBtn = null;
+  }
+}
+
+function resetAllPlayBtns() {
+  document.querySelectorAll('.play-btn.playing').forEach(b => {
+    b.textContent = '▶';
+    b.classList.remove('playing');
+  });
+  currentUtterance = null;
+  currentPlayBtn = null;
+}
+
+// --- Vocab Word Playback ---
+function speakWord(word, btn) {
+  if (currentVocabBtn === btn) {
+    speechSynthesis.cancel();
+    resetVocabBtn(btn);
+    return;
+  }
+  speechSynthesis.cancel();
+  resetAllVocabBtns();
+  resetAllPlayBtns();
+
+  const voice = getEnglishVoice();
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.voice = voice;
+  utterance.rate = 0.9;
+  utterance.pitch = 1.0;
+
+  utterance.onstart = () => {
+    btn.textContent = '⏸';
+    btn.classList.add('playing');
+    currentVocabBtn = btn;
+  };
+  utterance.onend = () => resetVocabBtn(btn);
+  utterance.onerror = () => resetVocabBtn(btn);
+
+  speechSynthesis.speak(utterance);
+}
+
+function resetVocabBtn(btn) {
+  btn.textContent = '🔊';
+  btn.classList.remove('playing');
+  if (currentVocabBtn === btn) currentVocabBtn = null;
+}
+
+function resetAllVocabBtns() {
+  document.querySelectorAll('.vocab-play.playing').forEach(b => {
+    b.textContent = '🔊';
+    b.classList.remove('playing');
+  });
+  currentVocabBtn = null;
+}
+
+// --- Quiz ---
+function selectQuiz(optEl, qId, choice) {
+  const container = optEl.parentElement;
+  if (container.dataset.answered) return;
+  container.dataset.answered = '1';
+
+  const correctAnswers = { q1: 'B', q2: 'C', q3: 'C', q4: 'B', q5: 'B', q6: 'C' };
+  const correct = correctAnswers[qId];
+  const isCorrect = choice === correct;
+
+  container.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+  optEl.classList.add('selected');
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  const resultEl = document.getElementById(qId + '-result');
+  resultEl.textContent = isCorrect ? '✅ 正确！太棒了！' : '❌ 再想想哦～';
+  resultEl.style.color = isCorrect ? '#4caf50' : '#f44336';
+  resultEl.style.display = 'block';
+
+  if (!isCorrect) {
+    const correctEl = container.querySelectorAll('.quiz-opt')[['A','B','C','D'].indexOf(correct)];
+    if (correctEl) correctEl.classList.add('correct');
+  }
+  updateQuizScore();
+}
+
+function updateQuizScore() {
+  const total = document.querySelectorAll('.quiz-item').length;
+  let correct = 0;
+  document.querySelectorAll('.quiz-result').forEach(el => {
+    if (el.textContent.includes('✅ 正确')) correct++;
+  });
+  const pct = Math.round((correct / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+// --- Grammar Check ---
+function checkGrammar(input, ...accept) {
+  const val = input.value.trim().toLowerCase();
+  const resultEl = input.nextElementSibling;
+  const matched = accept.some(a => {
+    const opts = a.split(',').map(o => o.trim().toLowerCase());
+    return opts.some(o => val.includes(o) || val === o);
+  });
+  if (matched && val.length > 0) {
+    resultEl.textContent = '✅ 不错！';
+    resultEl.style.color = '#4caf50';
+    resultEl.style.display = 'block';
+  } else if (val.length > 0) {
+    resultEl.textContent = '💡 再试一次～（答案：' + accept[0].split(',')[0] + '）';
+    resultEl.style.color = '#ff9800';
+    resultEl.style.display = 'block';
+  }
+}
+
+// --- Navigation ---
+function setActive(link) {
+  document.querySelectorAll('.nav-list a').forEach(a => a.classList.remove('active'));
+  link.classList.add('active');
+  // Close mobile sidebar
+  document.querySelector('.sidebar').classList.remove('open');
+}
+
+// --- Scroll progress ---
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('.section');
+  const scrollPos = window.scrollY + 120;
+  let foundId = null;
+  sections.forEach(sec => {
+    if (sec.offsetTop <= scrollPos) foundId = sec.id;
+  });
+  if (foundId) {
+    document.querySelectorAll('.nav-list a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + foundId);
+    });
+  }
+});
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Air on a Super-Earth — Interactive Lesson</title>
+<style>
+  :root{
+    --accent:#4f46e5;
+    --accent2:#06b6d4;
+    --bg:#f6f8fc;
+    --card:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --highlight:#fff3a8;
+    --border:#e5e7eb;
+    --soft:#eef2ff;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.7;
+  }
+  /* progress bar */
+  #progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+  /* header */
+  header.topbar{
+    position:sticky;top:0;z-index:900;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;
+  }
+  .brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+  .brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+  .menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+  /* layout */
+  .wrap{display:flex;min-height:calc(100vh - 60px);}
+  nav.sidebar{
+    width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);
+    padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;
+  }
+  nav.sidebar a{
+    display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;
+    color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;
+  }
+  nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+  nav.sidebar a:hover{background:var(--soft);}
+  nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(79,70,229,.3);}
+  main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+  section{display:none;animation:fade .35s ease;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+  .subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+  h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+  /* reading */
+  .seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #e0e7ff;}
+  .seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+  .seg .body{flex:1;}
+  .seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+  .play-btn{
+    background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;
+    cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(79,70,229,.35);
+  }
+  .play-btn.playing{animation:pulse 1s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,70,229,.55);}70%{box-shadow:0 0 0 12px rgba(79,70,229,0);}100%{box-shadow:0 0 0 0 rgba(79,70,229,0);}}
+  .kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #f59e0b;transition:.15s;}
+  .kw:hover{background:#ffe066;}
+  /* tooltip */
+  #tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+  #tip b{color:#fbbf24;}
+  /* vocab */
+  .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+  .vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+  .vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+  .vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+  .vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+  .vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+  .vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+  .speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+  .speak-btn.playing{animation:pulse 1s infinite;}
+  /* patterns & grammar */
+  .item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+  .item:last-child{border-bottom:none;}
+  .item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+  .item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+  .item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+  .practice{margin-top:8px;font-size:14px;color:#374151;}
+  .practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+  /* quiz */
+  .q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+  .q .qt{font-weight:700;margin-bottom:10px;}
+  .q .opts{display:flex;flex-direction:column;gap:8px;}
+  .q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+  .q label:hover{background:var(--soft);}
+  .q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+  .q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+  .q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+  .q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+  /* ext */
+  .ext p{margin:10px 0;font-size:15px;}
+  .ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+  .ext ul{padding-left:22px;}
+  .ext li{margin:6px 0;}
+  /* about */
+  .goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+  .goal .ic{font-size:20px;}
+  .print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(79,70,229,.3);}
+  .print-btn:hover{filter:brightness(1.05);}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+  /* responsive */
+  @media(max-width:780px){
+    .menu-btn{display:block;}
+    nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+    nav.sidebar.open{transform:none;}
+    .seg{flex-wrap:wrap;}
+  }
+  @media print{
+    header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+    body{background:#fff;}
+    main{max-width:100%;padding:0;}
+    section{display:block!important;page-break-inside:avoid;}
+    .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+    .kw{background:#fff3a8;color:#000;}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Science Broadcast</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Air on a Super-Earth</h1>
+      <p class="subtitle">49 光年外，一颗岩石超级地球可能拥有自己的大气 — 全文阅读（点黄色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Imagine another world that might breathe like Earth! Scientists have found signs of <span class="kw" data-def="空气 / 大气：包裹行星的气体层">air</span> on a faraway planet. It sits 49 <span class="kw" data-def="光年：光走一年的距离，约 9.5 万亿公里">light-years</span> from us, in a corner of the sky. Could this <span class="kw" data-def="岩石构成的（像地球、火星一样）">rocky</span> world be wearing a blanket of gas?</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>The planet is called LHS 1140b, and it is a <span class="kw" data-def="超级地球：比地球大但比海王星小的行星">super-Earth</span>. It is about five times heavier than our home, and made of rock. Its star is a small <span class="kw" data-def="红矮星：小而冷但辐射凶猛的恒星">red sun</span>, much cooler — but very fierce. <span class="kw" data-def="望远镜：让我们看见遥远太空的工具">Telescopes</span> saw <span class="kw" data-def="氦气：一种很轻、会往上飘的气体">helium</span> gas slowly leaking from it: a clue of air!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>This may be the first time we have found air on a rocky world. And it lives in the <span class="kw" data-def="宜居带（金凤花区）：温度'刚刚好'、可能有液态水的区域">"just right" zone</span>, where liquid water could be. That big question comes alive again: are we alone out there? Every discovery like this helps us listen to the universe.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>Keep looking up, little explorers — the sky is full of stories! This is Pola, signing off from POLA NEWS. See you next time, and never stop wondering. Bye for now!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="super-Earth">🔊</button><div class="word">super-Earth<span class="pos">n.</span></div><div class="zh">超级地球：比地球大、比海王星小的行星</div><div class="ex">"LHS 1140b is a super-Earth."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="atmosphere">🔊</button><div class="word">atmosphere<span class="pos">n.</span></div><div class="zh">大气：包裹行星的气体层</div><div class="ex">"Does this planet have an atmosphere?"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="light-year">🔊</button><div class="word">light-year<span class="pos">n.</span></div><div class="zh">光年：光在一年内走的距离</div><div class="ex">"It is 49 light-years away."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="habitable zone">🔊</button><div class="word">habitable zone<span class="pos">n.</span></div><div class="zh">宜居带：温度"刚刚好"、可能有液态水的区域</div><div class="ex">"It lives in the habitable zone."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rocky">🔊</button><div class="word">rocky<span class="pos">adj.</span></div><div class="zh">岩石构成的（像地球、火星）</div><div class="ex">"It is a rocky planet."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="red dwarf">🔊</button><div class="word">red dwarf<span class="pos">n.</span></div><div class="zh">红矮星：小而冷、但辐射凶猛的恒星</div><div class="ex">"Its star is a red dwarf."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="helium">🔊</button><div class="word">helium<span class="pos">n.</span></div><div class="zh">氦气：很轻、会往上飘的气体</div><div class="ex">"Helium gas was leaking out."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="telescope">🔊</button><div class="word">telescope<span class="pos">n.</span></div><div class="zh">望远镜：让我们看见遥远太空的工具</div><div class="ex">"Telescopes saw the gas."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="signal">🔊</button><div class="word">signal<span class="pos">n.</span></div><div class="zh">信号：可被探测到的迹象或信息</div><div class="ex">"We found a signal of air."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="leak">🔊</button><div class="word">leak<span class="pos">v.</span></div><div class="zh">泄漏：从小孔慢慢逃出</div><div class="ex">"The gas began to leak away."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Scientists found [signs of X] on [a planet].</h3>
+          <div class="zh">科学家在[某行星]上发现了[某迹象]。</div>
+          <div class="eg">Scientists found signs of air on a faraway planet.</div>
+          <div class="practice">练习：用 "water / Mars" 造句 → Scientists found signs of <input placeholder="your answer"> on Mars.</div>
+        </div>
+        <div class="item">
+          <h3>2. It is [five times heavier] than [Earth].</h3>
+          <div class="zh">它比[地球]重[五倍]。</div>
+          <div class="eg">LHS 1140b is five times heavier than Earth.</div>
+          <div class="practice">练习：用 "bigger / our school" → It is <input placeholder="your answer"> than our school.</div>
+        </div>
+        <div class="item">
+          <h3>3. This is the first time [we have found X].</h3>
+          <div class="zh">这是我们第一次[发现 X]。</div>
+          <div class="eg">This is the first time we have found air on a rocky world.</div>
+          <div class="practice">练习：用 "seen snow" → This is the first time we <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. It helps us ask: [Are we alone?]</h3>
+          <div class="zh">它帮助我们追问：[我们是否孤独？]</div>
+          <div class="eg">Every discovery helps us ask big questions.</div>
+          <div class="practice">练习：用 "Is there life?" → It helps us ask: <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>5. The planet is called [LHS 1140b].</h3>
+          <div class="zh">这颗行星名叫[……]。</div>
+          <div class="eg">The planet is called LHS 1140b.</div>
+          <div class="practice">练习：用 "Venus" → The planet is called <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 比较级 + than（heavier than）</h3>
+          <div class="zh">用 "形容词比较级 + than" 表示两者比较。heavy → heavier。</div>
+          <div class="eg">It is five times heavier than Earth. / A red sun is cooler than our Sun.</div>
+        </div>
+        <div class="item">
+          <h3>2. 现在完成时（have found）</h3>
+          <div class="zh">"have / has + 过去分词" 表示过去发生、与现在相关的事。常用于 "This is the first time…"。</div>
+          <div class="eg">This is the first time we have found air on a rocky world.</div>
+        </div>
+        <div class="item">
+          <h3>3. 被动语态（is called）</h3>
+          <div class="zh">"be + 过去分词" 表示"被……"。is called = 被叫做。</div>
+          <div class="eg">The planet is called LHS 1140b. / The gas was seen by telescopes.</div>
+        </div>
+        <div class="item">
+          <h3>4. 距离 / 位置介词（away, from, in）</h3>
+          <div class="zh">away 表距离，from 表来源/起点，in 表在某个区域。</div>
+          <div class="eg">49 light-years away / from us / in the habitable zone.</div>
+        </div>
+        <div class="item">
+          <h3>5. be made of（由……制成）</h3>
+          <div class="zh">"be made of + 材料" 说明构成物质，看得见原材料。</div>
+          <div class="eg">It is made of rock. / The vest is made of blue cloth.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>什么是"超级地球"？</h3>
+        <p>超级地球（super-Earth）指的是质量比地球大、但比海王星小的系外行星。它们不一定像地球一样宜居，但比木星、土星这类"巨行星"更接近岩石世界。LHS 1140b 的质量约为地球的 5 倍，密度显示它有一颗铁质核心和硅酸盐地幔——和地球很像，只是更大、更重。</p>
+
+        <h3>宜居带：宇宙的"金凤花区"</h3>
+        <p>宜居带（habitable zone）又称"金凤花区"（Goldilocks zone），是指一颗恒星周围温度"刚刚好"的地带：不太热、也不太冷，使得液态水可以稳定存在。水被认为是生命存在的关键。LHS 1140b 恰好运行在它那颗红矮星的宜居带内。</p>
+
+        <h3>红矮星：小而冷，却很"凶猛"</h3>
+        <p>LHS 1140b 围绕一颗红矮星运转。红矮星是宇宙中最常见的恒星，体积小、表面温度低，因此偏红。但它们活动剧烈，会喷发大量 X 射线和紫外线。这类强辐射很容易加热并吹散行星的大气层。所以科学家一直好奇：岩石行星到底能不能在红矮星旁边保住自己的空气？LHS 1140b 的发现，可能是第一次给出"能"的答案。</p>
+
+        <h3>我们怎么"看见"49光年外的空气？</h3>
+        <p>行星本身不发光，我们看不到它的表面。但当恒星的光穿过行星大气时，大气中的气体会吸收特定颜色的光，留下独特的"指纹"。詹姆斯·韦布太空望远镜（JWST）和哈勃太空望远镜把镜头对准 LHS 1140b，捕捉到了氦气正在从行星逃逸的信号——这正是它拥有大气的有力线索。氦是宇宙中第二轻、第二多的元素，常从行星高层大气中慢慢"漏"向太空。</p>
+
+        <h3>为什么这件事很重要？</h3>
+        <ul>
+          <li>这是人类首次在宜居带内的<b>岩石</b>行星上探测到大气迹象，而非气态巨行星。</li>
+          <li>它让我们离回答"宇宙中是否还有生命"这个大问题更近一步。</li>
+          <li>后续 JWST、哈勃将持续观测，确认这层空气是否真的存在、又由什么组成。</li>
+        </ul>
+        <p>寻找另一颗"会呼吸"的星球，是人类最浪漫也最严谨的科学探索之一。也许有一天，答案就藏在某颗 49 光年外的红矮星旁边。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>认识系外行星、超级地球、宜居带、大气等太空科学概念。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握比较级（heavier than）、现在完成时（have found）等实用语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 10 个太空与科学主题核心词汇，并能听懂、跟读。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用 5 个句型简单描述一项科学发现。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的童声朗读，模仿语调和节奏。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听单词发音，并试着用每个词造一句英文。</div></div>
+        <div class="goal"><span class="ic">🌌</span><div>今晚抬头看看星星——你看到的某颗光点，可能也有自己的行星。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Air on a Super-Earth · 2026-08-07 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|男)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|男)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+function stopSpeech(){if('speechSynthesis' in window)window.speechSynthesis.cancel();}
+function speak(text,btn){
+  if(!('speechSynthesis' in window))return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.rate=0.97; u.pitch=1.0;
+  u.onend=()=>{if(btn){btn.textContent=btn.dataset.icon||'▶';btn.classList.remove('playing');}};
+  u.onerror=u.onend;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Imagine another world that might breathe like Earth! Scientists have found signs of air on a faraway planet. It sits 49 light-years from us, in a corner of the sky. Could this rocky world be wearing a blanket of gas?",
+  "The planet is called LHS 1140b, and it is a super-Earth. It is about five times heavier than our home, and made of rock. Its star is a small red sun, much cooler, but very fierce. Telescopes saw helium gas slowly leaking from it: a clue of air!",
+  "This may be the first time we have found air on a rocky world. And it lives in the just right zone, where liquid water could be. That big question comes alive again: are we alone out there? Every discovery like this helps us listen to the universe.",
+  "Keep looking up, little explorers. The sky is full of stories! This is Pola, signing off from POLA NEWS. See you next time, and never stop wondering. Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>speak(segmentTexts[+b.dataset.seg],b));
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>speak(b.dataset.word,b));
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"How far away is LHS 1140b?",opts:["49 light-years","5 light-years","49 million km"],ans:0,
+   fb:"Correct! 49 light-years means light from there takes 49 years to reach us."},
+  {q:"How much heavier is it than Earth?",opts:["5 times","2 times","10 times"],ans:0,
+   fb:"Right! It is about five times heavier than our home planet."},
+  {q:"What gas did telescopes see leaking from it?",opts:["Helium","Oxygen","Water"],ans:0,
+   fb:"Yes! Helium gas was seen slowly escaping — a clue of an atmosphere."},
+  {q:"What kind of star does it orbit?",opts:["A red dwarf","A yellow sun like ours","A blue giant"],ans:0,
+   fb:"Correct! Its small red sun is a red dwarf, cool but very fierce."},
+  {q:"What is the 'habitable zone'?",opts:["Where liquid water can exist","An area with no air","A place far from any star"],ans:0,
+   fb:"Right! The habitable zone is the 'just right' area for liquid water."},
+  {q:"Why is this discovery important?",opts:["First air on a rocky habitable-zone planet","The first planet ever found","The first Moon landing"],ans:0,
+   fb:"Yes! It may be the first time we found air on a rocky world in the habitable zone."}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

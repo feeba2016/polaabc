@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · 波拉少儿英语科学新闻</title>
+<meta name="description" content="Pola News 是一档少儿英语科普新闻节目。跟着短尾矮袋鼠 Pola 一起探索太空、恐龙、海洋、动物的科学故事，边看新闻边学英语！">
+<link rel="icon" href="assets/pola.webp">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top">
+  <a href="index.html" class="logo">
+    <img src="assets/pola.webp" alt="Pola">
+    POLA NEWS<small>少儿英语科学新闻</small>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="active">首页</a>
+    <a href="episodes.html">全部课程</a>
+    <a href="about.html">关于Pola</a>
+    <a href="episodes.html" class="btn-cta">开始学习</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="wrap hero-inner">
+    <div>
+      <span class="hero-tag"><span class="dot"></span> 每周更新 · 持续连载中</span>
+      <h1>用英语看科学新闻，<br><span class="grad">跟着 Pola 闯世界！</span></h1>
+      <p class="lead">Pola 是一只爱笑的短尾矮袋鼠，也是你的科学小记者。每期带你走进一个真实的科学发现——从深海到太空，从恐龙到机器人——边听故事边学英语！</p>
+      <div class="hero-btns">
+        <a href="episodes.html" class="btn btn-primary">🚀 浏览全部课程</a>
+        <a href="about.html" class="btn btn-ghost">认识 Pola</a>
+      </div>
+      <div class="hero-stats" id="heroStats"></div>
+    </div>
+    <div class="mascot-wrap">
+      <img src="assets/pola.webp" alt="Pola 袋鼠">
+      <div class="mascot-bubble">你好，我是 Pola！👋<small>你的科学新闻小伙伴</small></div>
+    </div>
+  </div>
+</header>
+
+<!-- 分类导航 -->
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">探索<span class="em">六大主题</span></h2>
+    <p class="section-sub">点击任意主题，进入对应课程列表。</p>
+    <div class="cat-nav" id="catNav"></div>
+  </div>
+</section>
+
+<!-- 最新课程 -->
+<section class="section" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div>
+        <h2 class="section-title">最新<span class="em">课程</span></h2>
+        <p class="section-sub">最新更新的 6 节课，快来看看 Pola 最近去了哪里！</p>
+      </div>
+      <a href="episodes.html" class="btn btn-ghost">查看全部 →</a>
+    </div>
+    <div class="card-grid" id="latestGrid"></div>
+  </div>
+</section>
+
+<!-- 统计 -->
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">Pola News <span class="em">数据一览</span></h2>
+    <p class="section-sub">持续更新中，每天都有新发现。</p>
+    <div class="stats-row" id="statsRow"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">🦘 POLA NEWS</div>
+  <p>少儿英语科学新闻 · B1 英语水平</p>
+  <p>为充满好奇心的小朋友而做 <span class="heart">♥</span></p>
+</footer>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script>
+// hero stats
+(function(){
+  const c = catCounts();
+  document.getElementById("heroStats").innerHTML = `
+    <div class="s"><b>${EPISODES.length}</b><span>期课程</span></div>
+    <div class="s"><b>6</b><span>大主题</span></div>
+    <div class="s"><b>B1</b><span>英语等级</span></div>
+    <div class="s"><b>免费</b><span>完全开放</span></div>`;
+})();
+
+// category nav
+(function(){
+  const c = catCounts();
+  document.getElementById("catNav").innerHTML = Object.entries(CATS).map(([k,v])=>`
+    <a class="cat-card" href="episodes.html?cat=${k}" style="background:${v.grad}">
+      <span class="em">${v.emoji}</span>
+      <b>${v.label}</b>
+      <span>${c[k]||0} 期课程</span>
+    </a>`).join("");
+})();
+
+// latest 6
+(function(){
+  const list = sortedEpisodes().slice(0,6);
+  document.getElementById("latestGrid").innerHTML = list.map(renderCard).join("");
+})();
+
+// stats row
+(function(){
+  const c = catCounts();
+  const latest = sortedEpisodes()[0];
+  document.getElementById("statsRow").innerHTML = `
+    <div class="stat-item"><b>${EPISODES.length}</b><span>期课程</span></div>
+    <div class="stat-item"><b>6</b><span>大主题</span></div>
+    <div class="stat-item"><b>${fmtDate(latest.date)}</b><span>最新更新</span></div>
+    <div class="stat-item"><b>100%</b><span>免费开放</span></div>`;
+})();
+</script>
+</body>
+</html>

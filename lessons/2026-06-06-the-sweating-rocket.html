@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS — The Sweating Rocket — Interactive Lesson</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #1a0a00 0%, #3d1c00 30%, #1e293b 70%, #0f172a 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ===== Progress Bar ===== */
+#progressBar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: linear-gradient(90deg, #fb923c, #f97316, #ea580c);
+  z-index: 1000; transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(251,146,60,0.6);
+}
+
+/* ===== Layout ===== */
+.app-container { display: flex; min-height: 100vh; }
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0;
+  background: rgba(15,23,42,0.95); backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(251,146,60,0.2);
+  display: flex; flex-direction: column; z-index: 100;
+  transition: transform 0.3s ease;
+}
+.sidebar-header {
+  padding: 20px 16px; border-bottom: 1px solid rgba(251,146,60,0.15);
+  text-align: center;
+}
+.sidebar-header h2 {
+  font-size: 1.1rem; color: #fb923c; font-weight: 700;
+  letter-spacing: 1px;
+}
+.sidebar-header p { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px; cursor: pointer; transition: all 0.2s;
+  border-left: 3px solid transparent; font-size: 0.9rem;
+  color: #cbd5e1; text-decoration: none;
+}
+.nav-item:hover { background: rgba(251,146,60,0.08); color: #fb923c; }
+.nav-item.active { background: rgba(251,146,60,0.12); color: #fb923c; border-left-color: #fb923c; }
+.nav-icon { font-size: 1.2rem; width: 28px; text-align: center; }
+
+/* ===== Main Content ===== */
+.main-content { flex: 1; margin-left: 260px; padding: 32px 40px 60px; max-width: 900px; }
+.section { display: none; animation: fadeIn 0.4s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== Typography ===== */
+h1 { font-size: 1.8rem; color: #fb923c; margin-bottom: 8px; font-weight: 800; }
+h2 { font-size: 1.4rem; color: #fb923c; margin: 28px 0 16px; font-weight: 700; border-bottom: 2px solid rgba(251,146,60,0.3); padding-bottom: 8px; }
+h3 { font-size: 1.1rem; color: #fdba74; margin: 20px 0 10px; font-weight: 600; }
+p { margin-bottom: 14px; color: #cbd5e1; font-size: 1rem; }
+a { color: #60a5fa; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== Highlighted Words (Tooltip) ===== */
+.highlight-word {
+  background: #fb923c; color: #1e293b; padding: 1px 5px; border-radius: 3px;
+  cursor: pointer; font-weight: 600; position: relative;
+  border-bottom: 2px solid #ea580c;
+  transition: background 0.2s;
+}
+.highlight-word:hover { background: #f97316; }
+
+/* ===== Tooltip ===== */
+.tooltip-box {
+  display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  background: #1e293b; color: #e2e8f0; border: 1px solid #fb923c;
+  border-radius: 8px; padding: 10px 14px; font-size: 0.85rem;
+  width: 240px; z-index: 200; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  margin-bottom: 8px; pointer-events: none;
+}
+.highlight-word:hover .tooltip-box { display: block; }
+.tooltip-box .word-en { color: #fb923c; font-weight: 700; font-size: 1rem; }
+.tooltip-box .word-pos { color: #94a3b8; font-size: 0.8rem; margin: 2px 0; }
+.tooltip-box .word-zh { color: #86efac; font-size: 0.9rem; }
+.tooltip-box .word-ex { color: #cbd5e1; font-size: 0.8rem; margin-top: 6px; font-style: italic; }
+
+/* ===== Segment Block ===== */
+.segment-block {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(251,146,60,0.2);
+  border-radius: 12px; padding: 20px 24px; margin-bottom: 20px;
+  position: relative;
+}
+.segment-label {
+  position: absolute; top: -12px; left: 20px;
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  color: #1e293b; font-weight: 700; font-size: 0.75rem;
+  padding: 3px 12px; border-radius: 20px; letter-spacing: 0.5px;
+}
+.play-btn {
+  position: absolute; top: 12px; right: 16px;
+  background: rgba(251,146,60,0.15); border: 1px solid rgba(251,146,60,0.4);
+  color: #fb923c; width: 36px; height: 36px; border-radius: 50%;
+  cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.play-btn:hover { background: rgba(251,146,60,0.3); transform: scale(1.1); }
+.play-btn.playing { animation: pulse 1.2s infinite; background: rgba(251,146,60,0.3); }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(251,146,60,0.5); } 50% { box-shadow: 0 0 0 10px rgba(251,146,60,0); } }
+.segment-text { margin-top: 8px; font-size: 1.05rem; line-height: 1.8; color: #e2e8f0; }
+
+/* ===== Vocabulary Cards ===== */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.vocab-card {
+  background: rgba(30,41,59,0.8); border: 1px solid rgba(251,146,60,0.2);
+  border-radius: 12px; padding: 18px; transition: all 0.2s;
+}
+.vocab-card:hover { border-color: rgba(251,146,60,0.5); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+.vocab-word { color: #fb923c; font-size: 1.15rem; font-weight: 700; }
+.vocab-pos { color: #94a3b8; font-size: 0.8rem; margin: 4px 0 8px; }
+.vocab-zh { color: #86efac; font-size: 0.95rem; font-weight: 600; }
+.vocab-en-meaning { color: #cbd5e1; font-size: 0.85rem; margin: 6px 0; }
+.vocab-example { color: #94a3b8; font-size: 0.8rem; font-style: italic; margin-top: 8px; padding-left: 10px; border-left: 2px solid rgba(251,146,60,0.3); }
+.speak-btn {
+  background: rgba(251,146,60,0.15); border: 1px solid rgba(251,146,60,0.4);
+  color: #fb923c; padding: 4px 10px; border-radius: 20px; cursor: pointer;
+  font-size: 0.8rem; margin-top: 8px; display: inline-flex; align-items: center; gap: 4px;
+  transition: all 0.2s;
+}
+.speak-btn:hover { background: rgba(251,146,60,0.3); }
+
+/* ===== Sentence Patterns ===== */
+.pattern-card {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(96,165,250,0.3);
+  border-radius: 12px; padding: 20px; margin-bottom: 16px;
+}
+.pattern-en { color: #60a5fa; font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+.pattern-zh { color: #86efac; font-size: 0.9rem; margin-bottom: 8px; }
+.pattern-explain { color: #cbd5e1; font-size: 0.85rem; line-height: 1.6; }
+.pattern-practice {
+  background: rgba(15,23,42,0.6); border: 1px dashed rgba(251,146,60,0.3);
+  border-radius: 8px; padding: 12px; margin-top: 12px;
+}
+.pattern-practice p { color: #fdba74; font-size: 0.85rem; margin-bottom: 8px; }
+.pattern-practice textarea {
+  width: 100%; background: rgba(15,23,42,0.8); border: 1px solid rgba(251,146,60,0.3);
+  border-radius: 6px; color: #e2e8f0; padding: 8px 12px; font-size: 0.9rem;
+  resize: vertical; min-height: 60px; font-family: inherit;
+}
+.pattern-practice textarea:focus { outline: none; border-color: #fb923c; }
+
+/* ===== Grammar Points ===== */
+.grammar-card {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 12px; padding: 20px; margin-bottom: 16px;
+}
+.grammar-title { color: #a78bfa; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.grammar-explain { color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
+.grammar-example { color: #e2e8f0; font-size: 0.85rem; margin: 6px 0; padding-left: 12px; border-left: 2px solid rgba(167,139,250,0.4); }
+.grammar-practice { margin-top: 12px; }
+.grammar-practice p { color: #c4b5fd; font-size: 0.85rem; margin-bottom: 6px; }
+.grammar-practice input {
+  width: 100%; background: rgba(15,23,42,0.8); border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 6px; color: #e2e8f0; padding: 8px 12px; font-size: 0.9rem;
+}
+.grammar-practice input:focus { outline: none; border-color: #a78bfa; }
+
+/* ===== Quiz ===== */
+.quiz-q { background: rgba(30,41,59,0.7); border: 1px solid rgba(251,146,60,0.2); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.quiz-q-title { color: #fb923c; font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  background: rgba(15,23,42,0.6); border: 1px solid rgba(251,146,60,0.2);
+  border-radius: 8px; padding: 10px 14px; cursor: pointer; transition: all 0.2s;
+  color: #cbd5e1; font-size: 0.9rem;
+}
+.quiz-opt:hover { border-color: rgba(251,146,60,0.5); background: rgba(251,146,60,0.08); }
+.quiz-opt.selected { border-color: #fb923c; background: rgba(251,146,60,0.15); }
+.quiz-opt.correct { border-color: #22c55e; background: rgba(34,197,94,0.15); color: #86efac; }
+.quiz-opt.wrong { border-color: #ef4444; background: rgba(239,68,68,0.15); color: #fca5a5; }
+.quiz-feedback { margin-top: 10px; font-size: 0.85rem; padding: 8px 12px; border-radius: 6px; display: none; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
+.quiz-feedback.wrong-fb { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+
+/* ===== Knowledge Extension ===== */
+.knowledge-block {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(134,239,172,0.2);
+  border-radius: 12px; padding: 20px; margin-bottom: 16px;
+}
+.knowledge-block h3 { color: #86efac; margin-top: 0; }
+.knowledge-block p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.7; }
+.knowledge-block ul { margin: 10px 0 10px 20px; color: #cbd5e1; }
+.knowledge-block li { margin-bottom: 6px; }
+
+/* ===== About Lesson ===== */
+.about-card {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(251,146,60,0.2);
+  border-radius: 12px; padding: 24px; margin-bottom: 16px;
+}
+.about-card h3 { color: #fb923c; margin-top: 0; }
+.objectives-list { list-style: none; padding: 0; }
+.objectives-list li { padding: 8px 0 8px 28px; position: relative; color: #cbd5e1; }
+.objectives-list li::before { content: '✅'; position: absolute; left: 0; }
+.print-btn {
+  background: linear-gradient(135deg, #fb923c, #f97316); color: #1e293b;
+  border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700;
+  cursor: pointer; font-size: 0.95rem; margin-top: 12px; transition: all 0.2s;
+}
+.print-btn:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(251,146,60,0.4); }
+
+/* ===== Mobile Toggle ===== */
+.mobile-toggle {
+  display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+  background: rgba(15,23,42,0.95); border: 1px solid rgba(251,146,60,0.3);
+  color: #fb923c; width: 42px; height: 42px; border-radius: 8px;
+  font-size: 1.3rem; cursor: pointer; align-items: center; justify-content: center;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .mobile-toggle { display: flex; }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-left: 0; padding: 60px 16px 40px; }
+  .vocab-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Print ===== */
+@media print {
+  body { background: white; color: #1e293b; }
+  .sidebar, .mobile-toggle, .play-btn, .speak-btn, .print-btn, #progressBar { display: none !important; }
+  .main-content { margin-left: 0; padding: 20px; max-width: 100%; }
+  .section { display: block !important; page-break-before: always; }
+  .segment-block { border: 1px solid #ccc; background: white; }
+  .highlight-word { background: #fed7aa; color: #9a3412; }
+}
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<div class="app-container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <h2>🚀 POLA NEWS</h2>
+      <p>The Sweating Rocket</p>
+    </div>
+    <div class="sidebar-nav">
+      <a class="nav-item active" data-section="reading" onclick="showSection('reading', this)">
+        <span class="nav-icon">📖</span> 全文阅读
+      </a>
+      <a class="nav-item" data-section="vocabulary" onclick="showSection('vocabulary', this)">
+        <span class="nav-icon">📝</span> 词汇表
+      </a>
+      <a class="nav-item" data-section="patterns" onclick="showSection('patterns', this)">
+        <span class="nav-icon">💬</span> 句型练习
+      </a>
+      <a class="nav-item" data-section="grammar" onclick="showSection('grammar', this)">
+        <span class="nav-icon">📐</span> 语法点
+      </a>
+      <a class="nav-item" data-section="quiz" onclick="showSection('quiz', this)">
+        <span class="nav-icon">❓</span> 练习测验
+      </a>
+      <a class="nav-item" data-section="knowledge" onclick="showSection('knowledge', this)">
+        <span class="nav-icon">🌍</span> 中文知识扩展
+      </a>
+      <a class="nav-item" data-section="about" onclick="showSection('about', this)">
+        <span class="nav-icon">ℹ️</span> 关于本课
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ===== Section 1: Full Reading ===== -->
+    <div class="section active" id="sec-reading">
+      <h1>🚀 POLA NEWS: The Sweating Rocket</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">2026年6月6日 | B1水平 | 适合10–12岁</p>
+
+      <div class="segment-block">
+        <span class="segment-label">SEGMENT 1 — Hook</span>
+        <button class="play-btn" id="play-btn-0" onclick="playSegment(0)">▶</button>
+        <div class="segment-text" id="seg-text-0">
+          Have you ever run around on a hot day and felt <span class="highlight-word">sweat<span class="tooltip-box"><span class="word-en">sweat</span><span class="word-pos">n. / v. 名词/动词</span><span class="word-zh">汗水；出汗</span><span class="word-ex">Ex: When you run on a hot day, sweat cools your body down!</span></span></span> on your skin? That sweat cools you down — it's your body's natural air conditioner!
+          Now, what if I told you that a rocket engine could <span class="highlight-word">sweat<span class="tooltip-box"><span class="word-en">sweat</span><span class="word-pos">v. 动词</span><span class="word-zh">出汗；渗出液体</span><span class="word-ex">Ex: The rocket nozzle can "sweat" propellant to stay cool — just like your skin!</span></span></span> too? Three teenagers just proved it works — and it could change how we travel to space!
+        </div>
+      </div>
+
+      <div class="segment-block">
+        <span class="segment-label">SEGMENT 2 — Story</span>
+        <button class="play-btn" id="play-btn-1" onclick="playSegment(1)">▶</button>
+        <div class="segment-text" id="seg-text-1">
+          Meet Devin, Michael, and Mazon — three 17-year-old students from Virginia. They redesigned a rocket <span class="highlight-word">nozzle<span class="tooltip-box"><span class="word-en">nozzle</span><span class="word-pos">n. 名词</span><span class="word-zh">喷管；喷嘴</span><span class="word-ex">Ex: A rocket nozzle is the part at the back that pushes hot gas out to make the rocket fly!</span></span></span> called an <span class="highlight-word">aerospike<span class="tooltip-box"><span class="word-en">aerospike</span><span class="word-pos">n. 名词</span><span class="word-zh">气尖喷管</span><span class="word-ex">Ex: An aerospike is a special rocket nozzle with a spike in the middle — more efficient than regular ones!</span></span></span>. It's more <span class="highlight-word">efficient<span class="tooltip-box"><span class="word-en">efficient</span><span class="word-pos">adj. 形容词</span><span class="word-zh">高效的</span><span class="word-ex">Ex: An efficient engine uses less fuel to go farther — like a car that drives more miles per liter!</span></span></span> than regular rockets!
+          But there was a big problem: <span class="highlight-word">extreme<span class="tooltip-box"><span class="word-en">extreme</span><span class="word-pos">adj. 形容词</span><span class="word-zh">极端的</span><span class="word-ex">Ex: Extreme heat means heat so strong it can melt metal — like the temperature inside a rocket engine!</span></span></span> heat — hot enough to <span class="highlight-word">melt<span class="tooltip-box"><span class="word-en">melt</span><span class="word-pos">v. 动词</span><span class="word-zh">熔化</span><span class="word-ex">Ex: When metal gets extremely hot, it can melt — turn from solid into liquid!</span></span></span> metal. So they looked to <span class="highlight-word">nature<span class="tooltip-box"><span class="word-en">nature</span><span class="word-pos">n. 名词</span><span class="word-zh">自然；自然界</span><span class="word-ex">Ex: Scientists often look to nature for smart design ideas — this is called biomimicry!</span></span></span> for an answer... and found it in your own skin!
+        </div>
+      </div>
+
+      <div class="segment-block">
+        <span class="segment-label">SEGMENT 3 — Why It Matters</span>
+        <button class="play-btn" id="play-btn-2" onclick="playSegment(2)">▶</button>
+        <div class="segment-text" id="seg-text-2">
+          Just like your skin releases sweat through tiny <span class="highlight-word">pores<span class="tooltip-box"><span class="word-en">pores</span><span class="word-pos">n. 名词（复数）</span><span class="word-zh">毛孔；细孔</span><span class="word-ex">Ex: Your skin has millions of tiny pores that let sweat out to cool your body!</span></span></span>, their rocket nozzle "sweats" <span class="highlight-word">propellant<span class="tooltip-box"><span class="word-en">propellant</span><span class="word-pos">n. 名词</span><span class="word-zh">推进剂</span><span class="word-ex">Ex: Propellant is the fuel that pushes a rocket forward — here it also works as a coolant!</span></span></span> to fight the heat! They built an AI called ICARUS to <span class="highlight-word">optimize<span class="tooltip-box"><span class="word-en">optimize</span><span class="word-pos">v. 动词</span><span class="word-zh">优化</span><span class="word-ex">Ex: To optimize means to make something work as well as possible — like finding the best design!</span></span></span> the design — and it reduced temperatures by 40 percent!
+          They won a prize at the world's biggest science fair — and the same cooling pattern could even protect houses from wildfires!
+        </div>
+      </div>
+
+      <div class="segment-block">
+        <span class="segment-label">SEGMENT 4 — Sign-off</span>
+        <button class="play-btn" id="play-btn-3" onclick="playSegment(3)">▶</button>
+        <div class="segment-text" id="seg-text-3">
+          Three teenagers, one <span class="highlight-word">nature-inspired<span class="tooltip-box"><span class="word-en">nature-inspired</span><span class="word-pos">adj. 形容词</span><span class="word-zh">受自然启发的</span><span class="word-ex">Ex: Nature-inspired designs copy smart ideas from plants, animals, and the human body!</span></span></span> idea, and a rocket that literally sweats! The next time you wipe <span class="highlight-word">sweat<span class="tooltip-box"><span class="word-en">sweat</span><span class="word-pos">n. 名词</span><span class="word-zh">汗水</span><span class="word-ex">Ex: Next time you sweat, remember — you share a cooling superpower with a rocket!</span></span></span> from your forehead on a hot day, remember — you're using the same cooling superpower as a future spaceship!
+          I'm Pola, and this was Pola News. See you next time!
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section 2: Vocabulary ===== -->
+    <div class="section" id="sec-vocabulary">
+      <h1>📝 词汇表</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">本课核心词汇（点击🔊听发音）</p>
+      <div class="vocab-grid">
+        <div class="vocab-card">
+          <div class="vocab-word">sweat</div>
+          <div class="vocab-pos">n. / v. 名词/动词</div>
+          <div class="vocab-zh">汗水；出汗</div>
+          <div class="vocab-en-meaning">the salty liquid that comes out of your skin when you are hot; to produce this liquid</div>
+          <div class="vocab-example">"When you run on a hot day, sweat cools your body down!"</div>
+          <button class="speak-btn" onclick="speakWord('sweat', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">aerospike</div>
+          <div class="vocab-pos">n. 名词</div>
+          <div class="vocab-zh">气尖喷管</div>
+          <div class="vocab-en-meaning">a special rocket nozzle with a central spike that makes it more efficient at all altitudes</div>
+          <div class="vocab-example">"An aerospike engine doesn't lose power at high altitudes like regular rockets do."</div>
+          <button class="speak-btn" onclick="speakWord('aerospike', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">nozzle</div>
+          <div class="vocab-pos">n. 名词</div>
+          <div class="vocab-zh">喷管；喷嘴</div>
+          <div class="vocab-en-meaning">the part at the back of a rocket engine that pushes hot gas out to create thrust</div>
+          <div class="vocab-example">"A rocket nozzle is the part that pushes hot gas out to make the rocket fly!"</div>
+          <button class="speak-btn" onclick="speakWord('nozzle', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">propellant</div>
+          <div class="vocab-pos">n. 名词</div>
+          <div class="vocab-zh">推进剂</div>
+          <div class="vocab-en-meaning">the fuel or substance that pushes a rocket forward; can also be used as a coolant</div>
+          <div class="vocab-example">"In this design, the propellant does two jobs — pushing the rocket AND cooling it down!"</div>
+          <button class="speak-btn" onclick="speakWord('propellant', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">pore</div>
+          <div class="vocab-pos">n. 名词</div>
+          <div class="vocab-zh">毛孔；细孔</div>
+          <div class="vocab-en-meaning">a tiny hole in the skin or a surface that lets liquid or gas pass through</div>
+          <div class="vocab-example">"Your skin has millions of tiny pores — and so does the new rocket nozzle design!"</div>
+          <button class="speak-btn" onclick="speakWord('pore', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">efficient</div>
+          <div class="vocab-pos">adj. 形容词</div>
+          <div class="vocab-zh">高效的</div>
+          <div class="vocab-en-meaning">working well without wasting time, energy, or fuel</div>
+          <div class="vocab-example">"An efficient engine uses less fuel to go farther — just like a bike that's easy to pedal!"</div>
+          <button class="speak-btn" onclick="speakWord('efficient', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">extreme</div>
+          <div class="vocab-pos">adj. 形容词</div>
+          <div class="vocab-zh">极端的</div>
+          <div class="vocab-en-meaning">very great in degree; far beyond what is normal or safe</div>
+          <div class="vocab-example">"Extreme heat inside a rocket engine can reach over 3,000°C — hot enough to melt steel!"</div>
+          <button class="speak-btn" onclick="speakWord('extreme', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">optimize</div>
+          <div class="vocab-pos">v. 动词</div>
+          <div class="vocab-zh">优化</div>
+          <div class="vocab-en-meaning">to make something as good or effective as possible</div>
+          <div class="vocab-example">"The AI helps optimize the nozzle shape — it tries thousands of designs to find the best one!"</div>
+          <button class="speak-btn" onclick="speakWord('optimize', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">melt</div>
+          <div class="vocab-pos">v. 动词</div>
+          <div class="vocab-zh">熔化</div>
+          <div class="vocab-en-meaning">to change from a solid to a liquid because of extreme heat</div>
+          <div class="vocab-example">"If a rocket nozzle gets too hot, the metal can melt — turning from solid into liquid!"</div>
+          <button class="speak-btn" onclick="speakWord('melt', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">nature-inspired</div>
+          <div class="vocab-pos">adj. 形容词</div>
+          <div class="vocab-zh">受自然启发的</div>
+          <div class="vocab-en-meaning">a design or idea that copies smart solutions found in plants, animals, or the human body</div>
+          <div class="vocab-example">"Velcro was nature-inspired too — it copies the way burrs stick to animal fur!"</div>
+          <button class="speak-btn" onclick="speakWord('nature-inspired', this)">🔊 发音</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section 3: Sentence Patterns ===== -->
+    <div class="section" id="sec-patterns">
+      <h1>💬 句型练习</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">从课文中提取的5个实用句型</p>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"Have you ever run around on a hot day and felt sweat on your skin?"</div>
+        <div class="pattern-zh">🤔 句型1：Have you ever + 过去分词...?（现在完成时疑问句）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>用"Have you ever..."询问对方是否曾经有过某种经历。这是英语中最常用、最自然的开场方式之一。Pola用这个句型把科学发现和读者的日常生活连接起来。<br>
+          <strong>结构：</strong>Have/Has + subject + ever + past participle + ...?<br>
+          <strong>例句：</strong>Have you ever watched a rocket launch? / Have you ever tried to build something yourself?
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用"Have you ever..."造一个问句（关于科学或发明）</p>
+          <textarea placeholder="写下你的句子..."></textarea>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"It's your body's natural air conditioner!"</div>
+        <div class="pattern-zh">🌬️ 句型2：It's + noun phrase（比喻/解释说明）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>用"It's..."来做一个生动的比喻或简单解释，让复杂的科学概念变得好懂。Pola把"出汗"比作"身体的天然空调"，一下就让小朋友们明白了。<br>
+          <strong>结构：</strong>It's + (determiner) + adjective + noun + (explanation)<br>
+          <strong>例句：</strong>It's like a natural fire extinguisher! / It's the rocket's cooling superpower!
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用一个比喻来解释"太阳"是什么</p>
+          <textarea placeholder="It's like..."></textarea>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"So they looked to nature for an answer... and found it in your own skin!"</div>
+        <div class="pattern-zh">🔍 句型3：So + subject + looked to... for an answer（叙事推进句）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>"So they looked to..."是一个自然的叙事推进句，用来解释"遇到问题 → 去哪里找答案"。这个句型在讲科学发现故事时特别有用。<br>
+          <strong>结构：</strong>So + subject + looked to + source + for + solution<br>
+          <strong>例句：</strong>So she looked to the library for an answer. / So the engineers looked to birds for inspiration.
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用"So...looked to...for..."造一个句子</p>
+          <textarea placeholder="写下你的句子..."></textarea>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"Just like your skin releases sweat through tiny pores, their rocket nozzle 'sweats' propellant!"</div>
+        <div class="pattern-zh">🔄 句型4：Just like + A..., B...（类比比较句）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>"Just like..."是一个超级实用的类比句型。用一个大家熟悉的事物（A）来解释一个大家不熟悉的事物（B），让复杂的概念变得一目了然。<br>
+          <strong>结构：</strong>Just like + familiar thing + verb..., + new thing + verb...<br>
+          <strong>例句：</strong>Just like a bird flaps its wings to fly, a helicopter spins its blades to lift off. / Just like a sponge soaks up water, this material absorbs heat.
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用"Just like..."造一个类比句（用动物或自然现象解释科技）</p>
+          <textarea placeholder="写下你的句子..."></textarea>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"The next time you wipe sweat from your forehead, remember — you're using the same cooling superpower as a future spaceship!"</div>
+        <div class="pattern-zh">🎯 句型5：The next time + 从句..., remember — ...（结尾提醒句）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>"The next time you..., remember — ..." 是一个强大的结尾句型，给听众一个具体的"下次你看到/做到X时，请想起Y"的记忆锚点。这让科学发现变得个人化、难忘。<br>
+          <strong>结构：</strong>The next time + subject + present verb..., remember + clause<br>
+          <strong>例句：</strong>The next time you look at the stars, remember — some of them have planets just like Earth! / The next time you see a bee, remember — it has a compass built into its body!
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用"The next time you..., remember — ..."造一个句子</p>
+          <textarea placeholder="写下你的句子..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section 4: Grammar Points ===== -->
+    <div class="section" id="sec-grammar">
+      <h1>📐 语法点</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">本课相关的5个语法知识点</p>
+
+      <div class="grammar-card">
+        <div class="grammar-title">1. 现在完成时：Have you ever + 过去分词?</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>现在完成时（Present Perfect）用来表达"至今为止的经历"。Pola用"Have you ever run around...?"让小朋友立刻联想到自己的经历，然后引出科学话题。<br><br>
+          <strong>结构：</strong>have/has + 过去分词<br>
+          <strong>用法：</strong><br>
+          • Have you ever + 过去分词? = 你曾经...过吗？（询问经历）<br>
+          • ...have proved... = ...证明了（强调结果至今有效）<br><br>
+          <strong>例子：</strong><br>
+          • Have you ever built a model rocket?（你造过模型火箭吗？）<br>
+          • Scientists have found a new way to cool engines.（科学家找到了一种冷却引擎的新方法。）
+        </div>
+        <div class="grammar-example">📌 ever = 曾经（用于疑问句）；already = 已经（用于肯定句）；yet = 还（用于否定句和疑问句）</div>
+        <div class="grammar-practice">
+          <p>✏️ 填空：______ you ever ______ (try) to invent something?</p>
+          <input type="text" placeholder="输入你的答案...">
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="grammar-title">2. 情态动词 "could" — 表示可能性</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>文中用"could"来表达"可能性"。注意区分 can（能/会）和 could（可能/可以）：<br><br>
+          <strong>can vs. could：</strong><br>
+          • can = 能够（确定的能力）：It can cool the engine.（它能冷却引擎——这是确定的）<br>
+          • could = 可能（不确定的可能性）：It could change space travel.（它可能改变太空旅行——这是推测）<br>
+          • could = 也可以（委婉建议）：You could try this experiment at home!<br><br>
+          <strong>课文例句：</strong><br>
+          • "...and it could change how we travel to space!"（可能改变太空旅行）<br>
+          • "...the same pattern could even protect houses..."（甚至可能保护房屋）
+        </div>
+        <div class="grammar-example">📌 课文中有多处could：could sweat, could change, could protect — 都表示"有可能"</div>
+        <div class="grammar-practice">
+          <p>✏️ 选择题：This discovery ______ help us build better rockets. (can / could)</p>
+          <input type="text" placeholder="can 还是 could？">
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="grammar-title">3. 比较级：more + 形容词 + than</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>比较级用来比较两个事物的差异。文中"It's more efficient than regular rockets"就是一个典型的比较级句子。<br><br>
+          <strong>规则：</strong><br>
+          • 短形容词（1-2音节）：adj + er + than → faster than, hotter than<br>
+          • 长形容词（3+音节）：more + adj + than → more efficient than, more powerful than<br>
+          • 不规则：good → better than, bad → worse than<br><br>
+          <strong>课文例句：</strong><br>
+          • It's more efficient than regular rockets!（它比普通火箭更高效）<br>
+          • The aerospike is more powerful at high altitudes.（气尖喷管在高空更有力）
+        </div>
+        <div class="grammar-example">📌 efficient = 3音节 → more efficient；big = 1音节 → bigger</div>
+        <div class="grammar-practice">
+          <p>✏️ 填空：This new design is ______ (efficient) than the old one.</p>
+          <input type="text" placeholder="输入比较级形式...">
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="grammar-title">4. "just like" — 类比连接词</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>"Just like" 是一个连接词，用来建立类比——用熟悉的事物解释不熟悉的事物。它在科普写作中非常重要！<br><br>
+          <strong>结构：</strong>Just like + A + verb..., B + verb...<br>
+          <strong>A = 熟悉的、简单的概念（你的皮肤出汗）</strong><br>
+          <strong>B = 新的、复杂的概念（火箭喷管"出汗"）</strong><br><br>
+          <strong>课文例句：</strong><br>
+          • "Just like your skin releases sweat through tiny pores, their rocket nozzle 'sweats' propellant..."<br><br>
+          <strong>更多例子：</strong><br>
+          • Just like a submarine dives underwater, a spaceship travels through space.<br>
+          • Just like a tree grows toward sunlight, solar panels turn toward the sun.
+        </div>
+        <div class="grammar-example">📌 just like ≠ like（just like 更强调"完全一样的方式"）</div>
+        <div class="grammar-practice">
+          <p>✏️ 造句：用"Just like..."解释为什么蝙蝠在黑暗中不会撞到东西</p>
+          <input type="text" placeholder="Just like...">
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="grammar-title">5. "so" — 因果连接词</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>"so" 是英语中最常用的因果连接词，用来连接原因和结果。在讲科学故事时，"so"让叙事逻辑清晰流畅。<br><br>
+          <strong>结构：</strong>原因 + , so + 结果<br>
+          <strong>注意：</strong>so 前面通常有逗号，连接两个完整句子。<br><br>
+          <strong>课文例句：</strong><br>
+          • "But there was a big problem: extreme heat..., so they looked to nature for an answer..."<br>
+          （有极端热量问题 → 所以他们向自然界寻找答案）<br><br>
+          <strong>其他因果连接词：</strong><br>
+          • because + 原因（放在结果后面）：They looked to nature because they needed a solution.<br>
+          • therefore（更正式）：The engine was overheating; therefore, they needed a new design.
+        </div>
+        <div class="grammar-example">📌 so = 所以（口语常用）；because = 因为（说明原因）；therefore = 因此（书面语）</div>
+        <div class="grammar-practice">
+          <p>✏️ 完成句子：The rocket was too hot, so ______.</p>
+          <input type="text" placeholder="写出一个合理的结果...">
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section 5: Quiz ===== -->
+    <div class="section" id="sec-quiz">
+      <h1>❓ 练习测验</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">检验你对课文的理解（6道选择题）</p>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">1. 💧 What cools your body down on a hot day?（大热天是什么让你的身体变凉？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. Sweat（汗水）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. Water you drink（你喝的水）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. The wind（风）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="1">
+        <div class="quiz-q-title">2. 🚀 What kind of rocket nozzle did the three teenagers redesign?（三个青少年重新设计了哪种火箭喷管？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. Bell nozzle（钟形喷管）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. Aerospike nozzle（气尖喷管）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. Cone nozzle（锥形喷管）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">3. 🧬 Where did the teens find inspiration for their cooling design?（他们从哪里找到了冷却设计的灵感？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. Human skin（人类皮肤）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. Plant leaves（植物叶子）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. Shark skin（鲨鱼皮肤）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="2">
+        <div class="quiz-q-title">4. 🤖 What is the name of the AI the teens built?（他们创建的人工智能叫什么名字？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. PROMETHEUS（普罗米修斯）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. ATLAS（阿特拉斯）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. ICARUS（伊卡洛斯）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="1">
+        <div class="quiz-q-title">5. 📊 By how much did the new design reduce temperatures?（新设计将温度降低了多少？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. 20 percent（20%）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. 40 percent（40%）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. 60 percent（60%）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">6. 🏠 What else could the cooling pattern help protect?（这个冷却图案还能帮助保护什么？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. Houses from wildfires（房屋免受野火侵害）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. Phones from overheating（手机过热）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. Food from spoiling（食物变质）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </div>
+
+    <!-- ===== Section 6: Knowledge Extension ===== -->
+    <div class="section" id="sec-knowledge">
+      <h1>🌍 中文知识扩展</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">深入了解仿生学、火箭科学和青少年创新</p>
+
+      <div class="knowledge-block">
+        <h3>🧬 仿生学：向大自然学设计</h3>
+        <p>Devin、Michael 和 Mazon 的故事背后，是一个叫做<b>仿生学</b>（Biomimicry）的学科。"Bio" = 生命，"mimicry" = 模仿——合起来就是"向生命学习设计"。</p>
+        <p>大自然已经花了<b>38亿年</b>的时间来"测试"各种设计方案，所以今天我们身边的很多科技都来自自然灵感：</p>
+        <ul>
+          <li><strong>魔术贴（Velcro）</strong>：瑞士工程师 George de Mestral 在遛狗时发现苍耳（burdock burrs）会粘在狗毛上。他用显微镜一看——满是小钩子！于是他模仿这个结构发明了魔术贴。</li>
+          <li><strong>新干线列车头</strong>：日本工程师发现列车高速进入隧道时会发出巨大的"音爆"声。后来他们模仿<b>翠鸟</b>（kingfisher）的长尖喙形状，把车头改成了流线型——噪音消失了，还省电15%！</li>
+          <li><strong>鲨鱼皮泳衣</strong>：鲨鱼皮肤表面有微小的"肋状结构"（riblets），能减少水中的阻力。Speedo公司模仿这个结构生产泳衣，运动员穿着它打破了多项世界纪录——后来甚至被禁赛了，因为它太厉害了！</li>
+          <li><strong>荷花效应</strong>：荷花的叶子永远不会湿——水珠会滚落并带走灰尘。科学家模仿荷叶表面的微观结构，制造出了防水、防污的涂料和织物。</li>
+        </ul>
+        <p>我们的三位小科学家做的事情和这些伟大的发明家一样：<b>遇到问题 → 观察自然 → 模仿设计 → 解决问题</b>。只不过，他们的灵感来自人类自己的皮肤！</p>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🚀 火箭发动机的进化史</h3>
+        <p>火箭发动机的原理其实很简单：<b>牛顿第三定律 — 力的作用是相互的</b>。你把气体朝一个方向高速喷出去，火箭就朝相反方向飞出去。但具体怎么"喷"，工程师们已经研究了一百多年：</p>
+        <ul>
+          <li><strong>钟形喷管（Bell Nozzle）</strong>：最常见的火箭喷管，形状像一个倒扣的钟。在地面（高气压环境）效率很高，但飞到高空（低气压）时，喷出的气体会向外扩散，效率可以降低<b>30%</b>。SpaceX猎鹰9号、NASA土星五号都用的这种喷管。</li>
+          <li><strong>气尖喷管（Aerospike Nozzle）</strong>：一个中央"尖刺"（spike）周围环绕着喷气流。不管在大气层内还是外，大气压力会自动"压紧"气流贴着尖刺表面走，所以<b>效率不随高度变化</b>。NASA在上世纪60-70年代就测试过气尖发动机，但因为一个致命问题放弃了——<b>尖刺会熔化！</b></li>
+          <li><strong>三位少年的贡献</strong>：他们解决了NASA半个世纪都没完全攻克的问题——通过让尖刺像皮肤一样"出汗"来散热，用AI优化出汗孔的形状和分布，最终降低了<b>40%</b>的温度。这就是为什么他们的成果如此特别！</li>
+        </ul>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🏆 ISEF：全球最大青少年科学竞赛</h3>
+        <p>Devin、Michael 和 Mazon 是在<b>再生元国际科学与工程大奖赛</b>（Regeneron ISEF）上获奖的。你可能没听过这个名字，但它是世界上<b>规模最大、级别最高</b>的高中生科学竞赛：</p>
+        <ul>
+          <li><strong>历史</strong>：由美国科学学会（Society for Science）于1950年创办，已有76年历史，被称为"中学生诺贝尔奖"</li>
+          <li><strong>规模</strong>：2026年第76届共有来自<b>65个国家/地区</b>的<b>1725名学生</b>参赛，总奖金近<b>700万美元</b></li>
+          <li><strong>中国选手</strong>：中国学生是ISEF上的常胜军。2024年，上海一名高中生凭借"基于AI的抗生素耐药性预测系统"获得大奖；2025年，中国学生更是包揽了多项学科组别的最高奖</li>
+          <li><strong>参赛路径</strong>：中国学生可以通过"全国青少年科技创新大赛"（CASTIC）等国内赛事获得ISEF参赛资格</li>
+          <li><strong>著名校友</strong>：很多ISEF获奖者后来都成为了顶尖科学家，其中包括至少<b>8位诺贝尔奖得主</b>！</li>
+        </ul>
+        <p>三位少年在"工程技术：静力学与动力学"组别中获得第四名，赢得600美元奖金。但更重要的是，他们证明了<b>17岁的想法也可以改变航天领域</b>。</p>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>💧 人体的散热奇迹：你的皮肤有多厉害？</h3>
+        <p>你每天都在出汗，但你有没有想过——你的皮肤其实是一个<b>超高效的冷却系统</b>？</p>
+        <p>人体皮肤表面大约有<b>200万～400万个汗腺</b>（sweat glands）。当你热的时候，大脑会向汗腺发送信号，汗腺从血液中提取水分，通过毛孔排到皮肤表面。当汗液蒸发时，它会带走热量——这就是"蒸发冷却"（evaporative cooling）。</p>
+        <p>令人惊讶的数字：</p>
+        <ul>
+          <li>剧烈运动时，人每小时可以排出<b>1-2升</b>汗液</li>
+          <li>1克汗液蒸发可以带走约<b>580卡路里</b>的热量——相当于给身体"吸走"的热量</li>
+          <li>如果没有出汗机制，人在烈日下跑<b>15分钟</b>就可能中暑死亡</li>
+          <li>人类是地球上<b>出汗能力最强</b>的哺乳动物之一——这也是我们祖先能在非洲草原上长时间奔跑追逐猎物的关键优势！</li>
+        </ul>
+        <p>三位少年正是模仿了这个天然而精妙的进化成果。在工程术语中，这叫做<b>"发汗冷却"</b>（transpiration cooling 或 sweat cooling）——让冷却液从多孔材料表面渗出，蒸发吸热。这个概念其实早就有了（火箭工程师20世纪60年代就提出了），但真正实现它、优化它、让它可用的——是三个17岁的学生。</p>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🌟 从课堂作业到改变世界：青少年科学家的真实力量</h3>
+        <p>最令人感动的是，这个项目的起点非常简单。</p>
+        <p>三位少年接受采访时说，这原本只是一个<b>课堂作业</b>。Michael Obeng说："我们想做航空航天领域的东西，想做涉及仿生学的内容，还要做<b>没人做过的东西</b>。"</p>
+        <p>他们做到了。而且他们创造的ICARUS算法不仅可以用于火箭，还可以应用于建造更防火的房屋。正如Mazon所说："如果把这些冷却图案印在木头上盖房子，房子就更安全了。"</p>
+        <p>这个故事之所以适合Pola News，不只是因为科学发现——更是因为它的精神：<b>你不需要等待成为"大人"才能改变世界。好奇心 + 观察力 + 动手尝试 = 改变世界的可能。</b></p>
+        <p>Devin说的一句话特别适合送给所有看Pola News的小朋友们参考：<b>"ICARUS是我们项目里最具创新性的部分。它不仅能测试我们的想法，还能主动提出我们没想到的新方案。"</b></p>
+        <p>所以——如果你有一个想法，别等着"长大"。现在就可以开始尝试。就像三位17岁的少年一样。</p>
+      </div>
+    </div>
+
+    <!-- ===== Section 7: About This Lesson ===== -->
+    <div class="section" id="sec-about">
+      <h1>ℹ️ 关于本课</h1>
+
+      <div class="about-card">
+        <h3>🎯 学习目标</h3>
+        <ul class="objectives-list">
+          <li>理解并能讲述"出汗火箭"的仿生学科学发现</li>
+          <li>掌握本课10个核心词汇的英文和中文含义</li>
+          <li>学会使用5个实用英语句型进行口语表达</li>
+          <li>理解现在完成时、"could"情态动词、比较级等语法点</li>
+          <li>了解仿生学、火箭发动机、ISEF科学竞赛和人体散热机制等科学知识</li>
+        </ul>
+      </div>
+
+      <div class="about-card">
+        <h3>📚 学习建议</h3>
+        <p>1. <strong>先听全文</strong>：点击每段旁边的▶按钮，听Pola的朗读，熟悉发音和语调。</p>
+        <p>2. <strong>学习词汇</strong>：在"词汇表"部分，点击🔊按钮听每个单词的标准发音，跟读3遍。</p>
+        <p>3. <strong>理解句型</strong>：在"句型练习"部分，先理解句型的语法结构，然后完成练习题。</p>
+        <p>4. <strong>挑战测验</strong>：完成"练习测验"的6道题，检验自己对课文的理解。</p>
+        <p>5. <strong>扩展阅读</strong>：阅读"中文知识扩展"部分，了解仿生学、火箭科学和青少年创新故事。</p>
+        <p>6. <strong>打印复习</strong>：点击下面的"打印本课"按钮，打印纸质版带回家复习！</p>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+      </div>
+
+      <div class="about-card">
+        <h3>📖 课文原文（打印版）</h3>
+        <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:16px; font-size:0.9rem; line-height:1.8; color:#cbd5e1;">
+          <p><strong>SEGMENT 1 — Hook</strong><br>
+          Have you ever run around on a hot day and felt sweat on your skin? That sweat cools you down — it's your body's natural air conditioner! Now, what if I told you that a rocket engine could sweat too? Three teenagers just proved it works — and it could change how we travel to space!</p>
+          <p><strong>SEGMENT 2 — Story</strong><br>
+          Meet Devin, Michael, and Mazon — three 17-year-old students from Virginia. They redesigned a rocket nozzle called an aerospike. It's more efficient than regular rockets! But there was a big problem: extreme heat — hot enough to melt metal. So they looked to nature for an answer... and found it in your own skin!</p>
+          <p><strong>SEGMENT 3 — Why It Matters</strong><br>
+          Just like your skin releases sweat through tiny pores, their rocket nozzle "sweats" propellant to fight the heat! They built an AI called ICARUS to optimize the design — and it reduced temperatures by 40 percent! They won a prize at the world's biggest science fair — and the same cooling pattern could even protect houses from wildfires!</p>
+          <p><strong>SEGMENT 4 — Sign-off</strong><br>
+          Three teenagers, one nature-inspired idea, and a rocket that literally sweats! The next time you wipe sweat from your forehead on a hot day, remember — you're using the same cooling superpower as a future spaceship! I'm Pola, and this was Pola News. See you next time!</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ===== Voice Playback (Web Speech API) =====
+let currentUtterance = null;
+let voices = [];
+
+// Segment texts (plain text, no HTML)
+const segmentTexts = [
+  "Have you ever run around on a hot day and felt sweat on your skin? That sweat cools you down — it's your body's natural air conditioner! Now, what if I told you that a rocket engine could sweat too? Three teenagers just proved it works — and it could change how we travel to space!",
+  "Meet Devin, Michael, and Mazon — three 17-year-old students from Virginia. They redesigned a rocket nozzle called an aerospike. It's more efficient than regular rockets! But there was a big problem: extreme heat — hot enough to melt metal. So they looked to nature for an answer... and found it in your own skin!",
+  "Just like your skin releases sweat through tiny pores, their rocket nozzle 'sweats' propellant to fight the heat! They built an AI called ICARUS to optimize the design — and it reduced temperatures by 40 percent! They won a prize at the world's biggest science fair — and the same cooling pattern could even protect houses from wildfires!",
+  "Three teenagers, one nature-inspired idea, and a rocket that literally sweats! The next time you wipe sweat from your forehead on a hot day, remember — you're using the same cooling superpower as a future spaceship! I'm Pola, and this was Pola News. See you next time!"
+];
+
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+}
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+function getBestVoice() {
+  const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+  let best = englishVoices.find(v => v.name.includes('Enhanced') && v.name.includes('Male'));
+  if (!best) best = englishVoices.find(v => v.name.includes('Daniel'));
+  if (!best) best = englishVoices.find(v => v.name.includes('Alex'));
+  if (!best) best = englishVoices.find(v => v.name.includes('Microsoft Mark'));
+  if (!best) best = englishVoices.find(v => v.name.includes('Male'));
+  if (!best) best = englishVoices.find(v => v.lang.startsWith('en'));
+  return best;
+}
+
+function stopCurrent() {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  document.querySelectorAll('.play-btn, .speak-btn').forEach(btn => {
+    btn.textContent = btn.textContent.includes('🔊') ? '🔊 发音' : '▶';
+    btn.classList.remove('playing');
+  });
+}
+
+function playSegment(idx) {
+  stopCurrent();
+  const btn = document.getElementById('play-btn-' + idx);
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+
+  const utterance = new SpeechSynthesisUtterance(segmentTexts[idx]);
+  const voice = getBestVoice();
+  if (voice) utterance.voice = voice;
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  utterance.onend = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+  utterance.onerror = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+function speakWord(word, btn) {
+  stopCurrent();
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+
+  const utterance = new SpeechSynthesisUtterance(word);
+  const voice = getBestVoice();
+  if (voice) utterance.voice = voice;
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  utterance.onend = () => {
+    btn.textContent = '🔊 发音';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+  utterance.onerror = () => {
+    btn.textContent = '🔊 发音';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+// ===== Navigation =====
+function showSection(sectionId, navEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + sectionId).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  navEl.classList.add('active');
+  document.querySelector('.sidebar').classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Progress Bar =====
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// ===== Quiz =====
+function selectOpt(el, idx) {
+  const qDiv = el.closest('.quiz-q');
+  const correctIdx = parseInt(qDiv.dataset.answer);
+  const options = qDiv.querySelectorAll('.quiz-opt');
+  const feedback = qDiv.querySelector('.quiz-feedback');
+
+  options.forEach(o => { o.classList.remove('selected', 'correct', 'wrong'); });
+
+  const allQuestions = document.querySelectorAll('.quiz-q');
+  const qIdx = Array.from(allQuestions).indexOf(qDiv);
+
+  el.classList.add('selected');
+
+  const correctMessages = [
+    '汗水蒸发时会带走热量，这就是为什么出汗让你变凉。',
+    '三位少年重新设计了气尖喷管（aerospike nozzle），比传统钟形喷管更高效。',
+    '他们最终从人类皮肤找到了灵感——模仿出汗来散热！',
+    '他们创建的人工智能叫ICARUS（伊卡洛斯），可以自动优化喷管的冷却图案。',
+    '新设计将温度降低了40%——这是一个巨大的进步！',
+    '相同的冷却图案可以印在木头上，帮助房屋抵御野火。'
+  ];
+
+  if (idx === correctIdx) {
+    el.classList.add('correct');
+    feedback.textContent = '✅ 正确！' + correctMessages[qIdx];
+    feedback.className = 'quiz-feedback show correct-fb';
+  } else {
+    el.classList.add('wrong');
+    options[correctIdx].classList.add('correct');
+    const explanations = [
+      '汗水蒸发会带走热量——这就是人体的"天然空调"。',
+      '他们重新设计了气尖喷管（aerospike）——一种更高效但有散热难题的火箭喷管。',
+      '他们从人类皮肤找到灵感——皮肤通过出汗来散热，火箭喷管也可以用同样的方式！',
+      'AI的名字是ICARUS（伊卡洛斯）——在希腊神话中，伊卡洛斯用蜡做的翅膀飞向太阳。',
+      '他们的设计将温度降低了40%（40 percent）——这也是他们在ISEF获奖的原因。',
+      '冷却图案可以帮助房屋抵御野火（wildfires）——Mazon说这是意外的收获！'
+    ];
+    feedback.textContent = '❌ 不对哦～ ' + explanations[qIdx];
+    feedback.className = 'quiz-feedback show wrong-fb';
+  }
+}
+
+// ===== Keyboard shortcut =====
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelector('.sidebar').classList.remove('open');
+  }
+});
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

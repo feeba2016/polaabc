@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pola News - Extinct Plant Found Alive! | English Learning</title>
+    <style>
+        :root {
+            --primary: #2D5A27;
+            --primary-light: #4A8B3C;
+            --secondary: #F4A261;
+            --accent: #E76F51;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #2C3E50;
+            --text-light: #5D6D7E;
+            --highlight: #FFF3CD;
+            --success: #28a745;
+            --shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            z-index: 1000;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: rgba(45, 90, 39, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            z-index: 999;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 10px 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header .episode-date {
+            color: var(--secondary);
+            font-size: 0.85rem;
+        }
+
+        .nav-item {
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--secondary);
+        }
+
+        .nav-item .icon {
+            font-size: 1.2rem;
+            width: 28px;
+            text-align: center;
+        }
+
+        .nav-item .label {
+            font-size: 0.95rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Reading Section */
+        .reading-segment {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .segment-label {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .segment-text {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: var(--text-dark);
+        }
+
+        .segment-text .highlight {
+            background: var(--highlight);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #856404;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3);
+        }
+
+        .play-btn:hover {
+            background: var(--primary-light);
+            transform: scale(1.1);
+        }
+
+        .play-btn.playing {
+            background: var(--accent);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(45, 90, 39, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(45, 90, 39, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(45, 90, 39, 0); }
+        }
+
+        .play-btn:not(.playing) {
+            animation: pulse 2s infinite;
+        }
+
+        /* Vocabulary Cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .vocab-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid var(--primary);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .vocab-word {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .vocab-type {
+            color: var(--secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: rgba(244, 162, 97, 0.2);
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+
+        .vocab-definition {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .vocab-example {
+            color: var(--text-light);
+            font-style: italic;
+            font-size: 0.9rem;
+            padding-left: 15px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .vocab-sound {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--secondary);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vocab-sound:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* Sentence Patterns */
+        .pattern-card {
+            background: linear-gradient(135deg, #fff 0%, #f0f7ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .pattern-english {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .pattern-chinese {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .pattern-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .pattern-example-title {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        /* Grammar Section */
+        .grammar-card {
+            background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .grammar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grammar-english {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(231, 111, 81, 0.1);
+            border-radius: 8px;
+        }
+
+        .grammar-chinese {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .grammar-example {
+            background: #fff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .question-number {
+            background: var(--accent);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            display: inline;
+        }
+
+        .question-chinese {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-top: 8px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: var(--primary);
+        }
+
+        .option.selected {
+            background: rgba(45, 90, 39, 0.1);
+            border-color: var(--primary);
+        }
+
+        .option.correct {
+            background: rgba(40, 167, 69, 0.2);
+            border-color: var(--success);
+        }
+
+        .option.incorrect {
+            background: rgba(220, 53, 69, 0.2);
+            border-color: #dc3545;
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Knowledge Section */
+        .knowledge-block {
+            background: linear-gradient(135deg, #fff 0%, #f0f7ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .knowledge-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .knowledge-content {
+            color: var(--text-dark);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .knowledge-content p {
+            margin-bottom: 15px;
+        }
+
+        .knowledge-content .fact-box {
+            background: rgba(244, 162, 97, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid var(--secondary);
+        }
+
+        /* About Section */
+        .about-goals {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .goal-item {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .goal-icon {
+            font-size: 1.5rem;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, #fff 0%, #fff8e1 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .tip-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar, .play-btn, .vocab-sound, .progress-bar {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            body {
+                background: white;
+            }
+            .card, .reading-segment, .vocab-card, .pattern-card, .grammar-card, .quiz-question, .knowledge-block, .tip-card, .about-goals {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .mobile-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+            .menu-toggle {
+                display: block;
+                background: var(--primary);
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-header {
+                display: none;
+            }
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 998;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <button class="menu-toggle" onclick="toggleSidebar()">Menu</button>
+    </div>
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Pola News</h2>
+            <div class="episode-date">May 19, 2026</div>
+        </div>
+        <div class="nav-item active" onclick="showSection('reading')">
+            <span class="icon">📖</span>
+            <span class="label">Full Reading</span>
+        </div>
+        <div class="nav-item" onclick="showSection('vocabulary')">
+            <span class="icon">📝</span>
+            <span class="label">Vocabulary</span>
+        </div>
+        <div class="nav-item" onclick="showSection('sentences')">
+            <span class="icon">💬</span>
+            <span class="label">Sentence Patterns</span>
+        </div>
+        <div class="nav-item" onclick="showSection('grammar')">
+            <span class="icon">📚</span>
+            <span class="label">Grammar Points</span>
+        </div>
+        <div class="nav-item" onclick="showSection('quiz')">
+            <span class="icon">✅</span>
+            <span class="label">Quiz</span>
+        </div>
+        <div class="nav-item" onclick="showSection('knowledge')">
+            <span class="icon">🌏</span>
+            <span class="label">Knowledge</span>
+        </div>
+        <div class="nav-item" onclick="showSection('about')">
+            <span class="icon">ℹ️</span>
+            <span class="label">About This Lesson</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Reading Section -->
+        <section id="reading" class="content-section active">
+            <h1 class="section-title">📖 Full Reading - Extinct Plant Found Alive!</h1>
+
+            <div class="reading-segment">
+                <span class="segment-label">Segment 1: Hook</span>
+                <p class="segment-text">
+                    Hey friends! Have you ever thought a plant could disappear... and then come back to life? Sounds like a magic trick, right? But it just happened in Australia!
+                </p>
+                <button class="play-btn" onclick="playSegment(0, 'segment1')">
+                    <span class="play-icon">▶</span>
+                </button>
+            </div>
+
+            <div class="reading-segment">
+                <span class="segment-label">Segment 2: Story</span>
+                <p class="segment-text">
+                    A man named Aaron was working on a farm in northern Australia. He saw a strange plant with <span class="highlight">purple-pink flowers</span>. He took a photo with his phone and shared it online. A scientist recognized it right away — this plant had not been seen for almost 60 years! Everyone thought it was <span class="highlight">extinct</span>.
+                </p>
+                <button class="play-btn" onclick="playSegment(1, 'segment2')">
+                    <span class="play-icon">▶</span>
+                </button>
+            </div>
+
+            <div class="reading-segment">
+                <span class="segment-label">Segment 3: Why It Matters</span>
+                <p class="segment-text">
+                    The plant is called <span class="highlight">Ptilotus senarius</span>. Now scientists know it still exists! They can <span class="highlight">protect</span> it and help it grow. This shows that <span class="highlight">everyone can be a scientist</span>. You just need eyes to see and a phone to share what you find.
+                </p>
+                <button class="play-btn" onclick="playSegment(2, 'segment3')">
+                    <span class="play-icon">▶</span>
+                </button>
+            </div>
+
+            <div class="reading-segment">
+                <span class="segment-label">Segment 4: Sign-off</span>
+                <p class="segment-text">
+                    So next time you're outside, look closely at the plants and animals around you. You never know — maybe YOU will discover something amazing! I'm Pola. See you next time, friends!
+                </p>
+                <button class="play-btn" onclick="playSegment(3, 'segment4')">
+                    <span class="play-icon">▶</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Vocabulary Section -->
+        <section id="vocabulary" class="content-section">
+            <h1 class="section-title">📝 Vocabulary - 核心词汇</h1>
+
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="vocab-word">extinct</div>
+                    <span class="vocab-type">adj. 形容词</span>
+                    <div class="vocab-definition">不再存在的；已灭绝的</div>
+                    <div class="vocab-example">"This plant had not been seen for almost 60 years. Everyone thought it was extinct."</div>
+                    <button class="vocab-sound" onclick="speakWord('extinct')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">rediscover</div>
+                    <span class="vocab-type">v. 动词</span>
+                    <div class="vocab-definition">重新发现；再次发现</div>
+                    <div class="vocab-example">"Scientists were excited to rediscover the missing plant."</div>
+                    <button class="vocab-sound" onclick="speakWord('rediscover')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">citizen science</div>
+                    <span class="vocab-type">n. 名词短语</span>
+                    <div class="vocab-definition">公民科学；大众科学（普通人参与科学研究）</div>
+                    <div class="vocab-example">"Citizen science means ordinary people helping with research."</div>
+                    <button class="vocab-sound" onclick="speakWord('citizen science')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">species</div>
+                    <span class="vocab-type">n. 名词</span>
+                    <div class="vocab-definition">物种；种类（生物学分类）</div>
+                    <div class="vocab-example">"The plant is called Ptilotus senarius, a unique species."</div>
+                    <button class="vocab-sound" onclick="speakWord('species')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">protect</div>
+                    <span class="vocab-type">v. 动词</span>
+                    <div class="vocab-definition">保护；防护</div>
+                    <div class="vocab-example">"Now scientists can protect this rare plant."</div>
+                    <button class="vocab-sound" onclick="speakWord('protect')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">exist</div>
+                    <span class="vocab-type">v. 动词</span>
+                    <div class="vocab-definition">存在；存活</div>
+                    <div class="vocab-example">"Scientists know it still exists somewhere!"</div>
+                    <button class="vocab-sound" onclick="speakWord('exist')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">observation</div>
+                    <span class="vocab-type">n. 名词</span>
+                    <div class="vocab-definition">观察；观测</div>
+                    <div class="vocab-example">"Good observation skills helped Aaron find the plant."</div>
+                    <button class="vocab-sound" onclick="speakWord('observation')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">recognize</div>
+                    <span class="vocab-type">v. 动词</span>
+                    <div class="vocab-definition">认出；识别；认可</div>
+                    <div class="vocab-example">"A scientist recognized the plant right away."</div>
+                    <button class="vocab-sound" onclick="speakWord('recognize')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">endangered</div>
+                    <span class="vocab-type">adj. 形容词</span>
+                    <div class="vocab-definition">濒危的；处于危险中的</div>
+                    <div class="vocab-example">"The plant is now on the critically endangered list."</div>
+                    <button class="vocab-sound" onclick="speakWord('endangered')">🔊</button>
+                </div>
+
+                <div class="vocab-card">
+                    <div class="vocab-word">document</div>
+                    <span class="vocab-type">v. 动词</span>
+                    <div class="vocab-definition">记录；记载（用文件或照片保存信息）</div>
+                    <div class="vocab-example">"Aaron documented the plant with photos on his phone."</div>
+                    <button class="vocab-sound" onclick="speakWord('document')">🔊</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sentence Patterns Section -->
+        <section id="sentences" class="content-section">
+            <h1 class="section-title">💬 Sentence Patterns - 实用句型</h1>
+
+            <div class="pattern-card">
+                <div class="pattern-english">Have you ever thought...?</div>
+                <div class="pattern-chinese">你有没有想过……？</div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">例句 Example:</div>
+                    "Have you ever thought a plant could disappear... and then come back to life?"
+                </div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">练习 Practice:</div>
+                    Have you ever thought ________________ could ________________?
+                </div>
+            </div>
+
+            <div class="pattern-card">
+                <div class="pattern-english">It shows that + 主语 + 动词</div>
+                <div class="pattern-chinese">这表明……</div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">例句 Example:</div>
+                    "This shows that everyone can be a scientist."
+                </div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">练习 Practice:</div>
+                    This shows that ________________ can ________________.
+                </div>
+            </div>
+
+            <div class="pattern-card">
+                <div class="pattern-english">You just need... to + 动词</div>
+                <div class="pattern-chinese">你只需要……就能……</div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">例句 Example:</div>
+                    "You just need eyes to see and a phone to share what you find."
+                </div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">练习 Practice:</div>
+                    You just need ________________ to ________________.
+                </div>
+            </div>
+
+            <div class="pattern-card">
+                <div class="pattern-english">Maybe YOU will...</div>
+                <div class="pattern-chinese">也许你会……</div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">例句 Example:</div>
+                    "You never know — maybe YOU will discover something amazing!"
+                </div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">练习 Practice:</div>
+                    Maybe you will ________________ something ________________!
+                </div>
+            </div>
+
+            <div class="pattern-card">
+                <div class="pattern-english">...not...for + 时间段</div>
+                <div class="pattern-chinese">……已经多久了</div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">例句 Example:</div>
+                    "This plant had not been seen for almost 60 years!"
+                </div>
+                <div class="pattern-example">
+                    <div class="pattern-example-title">练习 Practice:</div>
+                    This animal has not been seen for ________________.
+                </div>
+            </div>
+        </section>
+
+        <!-- Grammar Section -->
+        <section id="grammar" class="content-section">
+            <h1 class="section-title">📚 Grammar Points - 语法点</h1>
+
+            <div class="grammar-card">
+                <div class="grammar-title">1. Present Perfect (现在完成时)</div>
+                <div class="grammar-english">has/have + past participle</div>
+                <div class="grammar-chinese">描述过去发生的事对现在的影响，或从过去持续到现在的状态</div>
+                <div class="grammar-example">"This plant had not been seen for almost 60 years."</div>
+                <div class="grammar-example">"Scientists have discovered many new species."</div>
+            </div>
+
+            <div class="grammar-card">
+                <div class="grammar-title">2. Present Perfect vs Simple Past (现在完成时 vs 一般过去时)</div>
+                <div class="grammar-english">have done (结果重要) / did (时间重要)</div>
+                <div class="grammar-chinese">现在完成时强调结果；一般过去时强调动作发生的时间</div>
+                <div class="grammar-example">"He shared it online." (强调分享这个动作)</div>
+                <div class="grammar-example">"The plant has been found." (强调找到了这个结果)</div>
+            </div>
+
+            <div class="grammar-card">
+                <div class="grammar-title">3. Modal Verbs: can/could (情态动词)</div>
+                <div class="grammar-english">can / could + verb (原形)</div>
+                <div class="grammar-chinese">表示能力、可能性或建议</div>
+                <div class="grammar-example">"Now scientists can protect it." (能力)</div>
+                <div class="grammar-example">"You just need eyes to see." (可能性)</div>
+            </div>
+
+            <div class="grammar-card">
+                <div class="grammar-title">4. Reflexive Pronouns (反身代词)</div>
+                <div class="grammar-english">myself, yourself, himself, herself, ourselves, themselves</div>
+                <div class="grammar-chinese">主语和宾语是同一个人时使用</div>
+                <div class="grammar-example">"Everyone thought it was extinct." (不用反身代词)</div>
+                <div class="grammar-example">"He found it himself." (他自己找到了)</div>
+            </div>
+
+            <div class="grammar-card">
+                <div class="grammar-title">5. Passive Voice (被动语态)</div>
+                <div class="grammar-english">be + past participle</div>
+                <div class="grammar-chinese">当不知道动作执行者或强调动作本身时使用</div>
+                <div class="grammar-example">"The plant was thought to be extinct." (被认为灭绝)</div>
+                <div class="grammar-example">"It was rediscovered by a farmer." (被农民重新发现)</div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="content-section">
+            <h1 class="section-title">✅ Quiz - 理解测验</h1>
+
+            <div class="quiz-question" data-correct="b">
+                <span class="question-number">1</span>
+                <span class="question-text">Where was the extinct plant found?</span>
+                <span class="question-chinese">这个灭绝的植物在哪里被发现的？</span>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">A</span>
+                        <span>South America</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">B</span>
+                        <span>Northern Australia</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">C</span>
+                        <span>Africa</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">D</span>
+                        <span>Europe</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+                <span class="question-number">2</span>
+                <span class="question-text">Who found the plant?</span>
+                <span class="question-chinese">是谁发现了这个植物？</span>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">A</span>
+                        <span>A scientist</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">B</span>
+                        <span>A teacher</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">C</span>
+                        <span>A farmer/horticulturalist</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">D</span>
+                        <span>A student</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-question" data-correct="a">
+                <span class="question-number">3</span>
+                <span class="question-text">How long had the plant been missing?</span>
+                <span class="question-chinese">这个植物失踪了多久？</span>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">A</span>
+                        <span>Almost 60 years</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">B</span>
+                        <span>About 100 years</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">C</span>
+                        <span>30 years</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">D</span>
+                        <span>10 years</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-question" data-correct="d">
+                <span class="question-number">4</span>
+                <span class="question-text">What platform did the finder use?</span>
+                <span class="question-chinese">发现者使用了什么平台？</span>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">A</span>
+                        <span>Facebook</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">B</span>
+                        <span>Instagram</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">C</span>
+                        <span>Twitter</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">D</span>
+                        <span>iNaturalist</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-question" data-correct="b">
+                <span class="question-number">5</span>
+                <span class="question-text">What is the name of the plant?</span>
+                <span class="question-chinese">这个植物叫什么名字？</span>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">A</span>
+                        <span>Ptilotus exaltatus</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">B</span>
+                        <span>Ptilotus senarius</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">C</span>
+                        <span>Ptilotus nobilis</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">D</span>
+                        <span>Ptilotus grandis</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+                <span class="question-number">6</span>
+                <span class="question-text">What is "citizen science"?</span>
+                <span class="question-chinese">什么是"公民科学"？</span>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">A</span>
+                        <span>Scientist who study citizens</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">B</span>
+                        <span>Scientists from the city</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">C</span>
+                        <span>Ordinary people helping with research</span>
+                    </div>
+                    <div class="option" onclick="selectOption(this)">
+                        <span class="option-letter">D</span>
+                        <span>Science about cities</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Knowledge Section -->
+        <section id="knowledge" class="content-section">
+            <h1 class="section-title">🌏 中文知识扩展</h1>
+
+            <div class="knowledge-block">
+                <div class="knowledge-title">🌿 什么是公民科学 (Citizen Science)?</div>
+                <div class="knowledge-content">
+                    <p>公民科学是指普通大众参与科学研究项目的实践。在这个故事中，亚伦只是一个普通的园艺师，但他的手机照片帮助科学家们重新发现了一种被认为已经灭绝60年的植物。</p>
+                    <p>著名的公民科学平台包括：</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>iNaturalist</strong> - 帮助记录世界各地的动植物</li>
+                        <li><strong>Zooniverse</strong> - 公众帮助分析天文图像和历史文献</li>
+                        <li><strong>eBird</strong> - 记录鸟类观察数据</li>
+                    </ul>
+                    <div class="fact-box">
+                        💡 知道吗？澳大利亚是世界上生物多样性最丰富的国家之一，但约三分之一的土地是私人拥有的。这意味着如果没有像亚伦这样的普通人帮助，很多物种可能永远不会被发现！
+                    </div>
+                </div>
+            </div>
+
+            <div class="knowledge-block">
+                <div class="knowledge-title">🌸 Ptilotus senarius 是什么样的植物？</div>
+                <div class="knowledge-content">
+                    <p><em>Ptilotus senarius</em> 是苋科（Amaranthaceae）的一种小型灌木，原产于澳大利亚北部。这种植物最引人注目的是它独特的花朵——紫粉色的花看起来像小小的羽毛烟花，或者说是爆炸的羽毛！</p>
+                    <p>它的学名 "senarius" 在拉丁语中意为"六个"，可能指的是它的花瓣数量或花的结构。</p>
+                    <div class="fact-box">
+                        🌺 澳大利亚有许多独特的植物，其中很多只在澳大利亚才能找到。一些植物因为生长在偏远地区，几十年都没有被科学家记录，这让保护工作变得困难。
+                    </div>
+                </div>
+            </div>
+
+            <div class="knowledge-block">
+                <div class="knowledge-title">🇦🇺 澳大利亚内陆 (Australian Outback)</div>
+                <div class="knowledge-content">
+                    <p>故事发生在澳大利亚北部，特别是卡彭塔利亚湾（Gulf of Carpentaria）附近的内陆地区。这里是澳大利亚最偏远的地区之一——广阔、干燥、人烟稀少。</p>
+                    <p>澳大利亚内陆的特点：</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>以红色沙漠和岩石地形为主</li>
+                        <li>气候极端——非常炎热干燥</li>
+                        <li>独特的野生动物和植物适应了这里的环境</li>
+                        <li>许多地方只有四驱车才能到达</li>
+                    </ul>
+                    <div class="fact-box">
+                        🦘 澳大利亚是世界上哺乳动物灭绝率最高的国家之一。保护像 Ptilotus senarius 这样的濒危植物对维护生态平衡非常重要！
+                    </div>
+                </div>
+            </div>
+
+            <div class="knowledge-block">
+                <div class="knowledge-title">🔬 科学家如何知道一个物种"灭绝"了？</div>
+                <div class="knowledge-content">
+                    <p>科学家认为一个物种灭绝通常是因为：</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>50年或更长时间没有发现任何活体</li>
+                        <li>该物种的栖息地已经被完全破坏</li>
+                        <li>尽管进行了彻底的搜索，仍然没有发现</li>
+                    </ul>
+                    <p>但是，"灭绝"的宣布并不总是最终的！这就是为什么像亚伦这样的发现如此重要——它们证明了有时候物种只是躲藏了起来。</p>
+                    <div class="fact-box">
+                        📚 自1750年以来，全球约有900种植物从野外消失。环境保护者们正在努力防止更多物种走向灭绝的道路。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="content-section">
+            <h1 class="section-title">ℹ️ About This Lesson - 关于本课</h1>
+
+            <div class="card">
+                <div class="card-title">🎯 Learning Objectives - 学习目标</div>
+                <div class="about-goals">
+                    <div class="goal-item">
+                        <span class="goal-icon">📖</span>
+                        <span>理解文章主旨</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-icon">📝</span>
+                        <span>掌握10个核心词汇</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-icon">💬</span>
+                        <span>运用5个实用句型</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-icon">📚</span>
+                        <span>了解现在完成时</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-icon">🔬</span>
+                        <span>认识公民科学</span>
+                    </div>
+                    <div class="goal-item">
+                        <span class="goal-icon">🌏</span>
+                        <span>了解澳大利亚生态</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💡 Study Tips - 学习建议</div>
+                <div class="tip-card">
+                    <div class="tip-title">1. Listen First（先听）</div>
+                    <p>点击每个段落旁边的播放按钮，先听 Pola 的朗读。注意她的发音和语调。</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-title">2. Read Along（跟读）</div>
+                    <p>一边听一边看文本，标记你不认识的单词，然后点击词汇表学习它们。</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-title">3. Practice Speaking（练习口语）</div>
+                    <p>尝试自己朗读文章并录音，然后和 Pola 的朗读对比。</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-title">4. Do the Quiz（做测验）</div>
+                    <p>完成6道选择题来检验你对文章的理解程度。</p>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-title">5. Explore More（拓展探索）</div>
+                    <p>阅读"知识扩展"部分，了解更多关于公民科学和澳大利亚生态的信息。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🖨️ Print Version - 打印版本</div>
+                <p style="margin-bottom: 15px; color: var(--text-light);">点击下方按钮可以打印本课内容（不含交互元素）：</p>
+                <button onclick="window.print()" style="background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 1rem;">
+                    🖨️ Print This Lesson
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📚 Episode Information - 节目信息</div>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px 0; color: var(--text-light);">Date / 日期</td>
+                        <td style="padding: 12px 0; font-weight: 600;">May 19, 2026</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px 0; color: var(--text-light);">Host / 主持人</td>
+                        <td style="padding: 12px 0; font-weight: 600;">Pola (Quokka)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px 0; color: var(--text-light);">Topic / 主题</td>
+                        <td style="padding: 12px 0; font-weight: 600;">Extinct Plant Found Alive!</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px 0; color: var(--text-light);">Level / 难度</td>
+                        <td style="padding: 12px 0; font-weight: 600;">B1 (Intermediate)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0; color: var(--text-light);">Duration / 时长</td>
+                        <td style="padding: 12px 0; font-weight: 600;">~60 seconds</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Segment texts for speech
+        const segmentTexts = [
+            "Hey friends! Have you ever thought a plant could disappear, and then come back to life? Sounds like a magic trick, right? But it just happened in Australia!",
+            "A man named Aaron was working on a farm in northern Australia. He saw a strange plant with purple-pink flowers. He took a photo with his phone and shared it online. A scientist recognized it right away, this plant had not been seen for almost 60 years! Everyone thought it was extinct.",
+            "The plant is called Ptilotus senarius. Now scientists know it still exists! They can protect it and help it grow. This shows that everyone can be a scientist. You just need eyes to see and a phone to share what you find.",
+            "So next time you're outside, look closely at the plants and animals around you. You never know, maybe YOU will discover something amazing! I'm Pola. See you next time, friends!"
+        ];
+
+        let currentUtterance = null;
+        let voices = [];
+        let selectedVoice = null;
+
+        // Load voices
+        function loadVoices() {
+            return new Promise((resolve) => {
+                voices = speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    resolve();
+                } else {
+                    speechSynthesis.onvoiceschanged = () => {
+                        voices = speechSynthesis.getVoices();
+                        resolve();
+                    };
+                }
+            });
+        }
+
+        // Find best English male voice
+        function findBestVoice() {
+            const priorityNames = ['Daniel', 'Alex', 'Mark', 'James', 'John', 'David', 'Mike', 'Paul', 'Chris', 'Steve'];
+            
+            // Try priority voices first
+            for (const name of priorityNames) {
+                const voice = voices.find(v => 
+                    v.lang.startsWith('en') && 
+                    (v.name.includes(name) || v.name.includes(name.toLowerCase())) &&
+                    (v.name.includes('Male') || v.name.includes('male') || !v.name.includes('Female'))
+                );
+                if (voice) return voice;
+            }
+            
+            // Try any English voice
+            const englishVoice = voices.find(v => v.lang.startsWith('en'));
+            if (englishVoice) return englishVoice;
+            
+            // Fallback to first available voice
+            return voices[0];
+        }
+
+        // Initialize voices on load
+        loadVoices().then(() => {
+            selectedVoice = findBestVoice();
+            console.log('Selected voice:', selectedVoice?.name);
+        });
+
+        // Play segment
+        function playSegment(index, segmentId) {
+            // Stop any current speech
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(segmentTexts[index]);
+            utterance.voice = selectedVoice;
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+            
+            // Update button state
+            const btn = document.querySelector(`[onclick="playSegment(${index}, '${segmentId}')"]`);
+            const icon = btn.querySelector('.play-icon');
+            btn.classList.add('playing');
+            icon.textContent = '⏸';
+
+            utterance.onend = () => {
+                btn.classList.remove('playing');
+                icon.textContent = '▶';
+            };
+
+            utterance.onerror = () => {
+                btn.classList.remove('playing');
+                icon.textContent = '▶';
+            };
+
+            currentUtterance = utterance;
+            speechSynthesis.speak(utterance);
+        }
+
+        // Speak word
+        function speakWord(word) {
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.voice = selectedVoice;
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+            speechSynthesis.speak(utterance);
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+
+            // Update sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update progress
+            const sectionIds = ['reading', 'vocabulary', 'sentences', 'grammar', 'quiz', 'knowledge', 'about'];
+            const progress = ((sectionIds.indexOf(sectionId) + 1) / sectionIds.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        }
+
+        // Toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Quiz selection
+        function selectOption(option) {
+            const question = option.closest('.quiz-question');
+            const options = question.querySelectorAll('.option');
+            const correct = question.dataset.correct;
+            const selectedLetter = option.querySelector('.option-letter').textContent;
+
+            // Remove previous selection
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // Mark selected
+            option.classList.add('selected');
+
+            // Check answer after delay
+            setTimeout(() => {
+                if (selectedLetter === correct) {
+                    option.classList.remove('selected');
+                    option.classList.add('correct');
+                } else {
+                    option.classList.remove('selected');
+                    option.classList.add('incorrect');
+                    // Show correct answer
+                    options.forEach(opt => {
+                        if (opt.querySelector('.option-letter').textContent === correct) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                }
+            }, 300);
+        }
+    </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

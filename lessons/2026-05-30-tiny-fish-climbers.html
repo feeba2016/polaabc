@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS — Tiny Fish Climbers — Interactive Lesson</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0d2818 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ===== Progress Bar ===== */
+#progressBar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b, #d97706);
+  z-index: 1000; transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(251,191,36,0.6);
+}
+
+/* ===== Layout ===== */
+.app-container { display: flex; min-height: 100vh; }
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0;
+  background: rgba(15,23,42,0.95); backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(251,191,36,0.2);
+  display: flex; flex-direction: column; z-index: 100;
+  transition: transform 0.3s ease;
+}
+.sidebar-header {
+  padding: 20px 16px; border-bottom: 1px solid rgba(251,191,36,0.15);
+  text-align: center;
+}
+.sidebar-header h2 {
+  font-size: 1.1rem; color: #fbbf24; font-weight: 700;
+  letter-spacing: 1px;
+}
+.sidebar-header p { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px; cursor: pointer; transition: all 0.2s;
+  border-left: 3px solid transparent; font-size: 0.9rem;
+  color: #cbd5e1; text-decoration: none;
+}
+.nav-item:hover { background: rgba(251,191,36,0.08); color: #fbbf24; }
+.nav-item.active { background: rgba(251,191,36,0.12); color: #fbbf24; border-left-color: #fbbf24; }
+.nav-icon { font-size: 1.2rem; width: 28px; text-align: center; }
+
+/* ===== Main Content ===== */
+.main-content { flex: 1; margin-left: 260px; padding: 32px 40px 60px; max-width: 900px; }
+.section { display: none; animation: fadeIn 0.4s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== Typography ===== */
+h1 { font-size: 1.8rem; color: #fbbf24; margin-bottom: 8px; font-weight: 800; }
+h2 { font-size: 1.4rem; color: #fbbf24; margin: 28px 0 16px; font-weight: 700; border-bottom: 2px solid rgba(251,191,36,0.3); padding-bottom: 8px; }
+h3 { font-size: 1.1rem; color: #fcd34d; margin: 20px 0 10px; font-weight: 600; }
+p { margin-bottom: 14px; color: #cbd5e1; font-size: 1rem; }
+a { color: #60a5fa; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== Highlighted Words (Tooltip) ===== */
+.highlight-word {
+  background: #fbbf24; color: #1e293b; padding: 1px 5px; border-radius: 3px;
+  cursor: pointer; font-weight: 600; position: relative;
+  border-bottom: 2px solid #f59e0b;
+  transition: background 0.2s;
+}
+.highlight-word:hover { background: #f59e0b; }
+
+/* ===== Tooltip ===== */
+.tooltip-box {
+  display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  background: #1e293b; color: #e2e8f0; border: 1px solid #fbbf24;
+  border-radius: 8px; padding: 10px 14px; font-size: 0.85rem;
+  width: 240px; z-index: 200; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  margin-bottom: 8px; pointer-events: none;
+}
+.highlight-word:hover .tooltip-box { display: block; }
+.tooltip-box .word-en { color: #fbbf24; font-weight: 700; font-size: 1rem; }
+.tooltip-box .word-pos { color: #94a3b8; font-size: 0.8rem; margin: 2px 0; }
+.tooltip-box .word-zh { color: #86efac; font-size: 0.9rem; }
+.tooltip-box .word-ex { color: #cbd5e1; font-size: 0.8rem; margin-top: 6px; font-style: italic; }
+
+/* ===== Segment Block ===== */
+.segment-block {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 12px; padding: 20px 24px; margin-bottom: 20px;
+  position: relative;
+}
+.segment-label {
+  position: absolute; top: -12px; left: 20px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1e293b; font-weight: 700; font-size: 0.75rem;
+  padding: 3px 12px; border-radius: 20px; letter-spacing: 0.5px;
+}
+.play-btn {
+  position: absolute; top: 12px; right: 16px;
+  background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.4);
+  color: #fbbf24; width: 36px; height: 36px; border-radius: 50%;
+  cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.play-btn:hover { background: rgba(251,191,36,0.3); transform: scale(1.1); }
+.play-btn.playing { animation: pulse 1.2s infinite; background: rgba(251,191,36,0.3); }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(251,191,36,0.5); } 50% { box-shadow: 0 0 0 10px rgba(251,191,36,0); } }
+.segment-text { margin-top: 8px; font-size: 1.05rem; line-height: 1.8; color: #e2e8f0; }
+
+/* ===== Vocabulary Cards ===== */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.vocab-card {
+  background: rgba(30,41,59,0.8); border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 12px; padding: 18px; transition: all 0.2s;
+}
+.vocab-card:hover { border-color: rgba(251,191,36,0.5); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+.vocab-word { color: #fbbf24; font-size: 1.15rem; font-weight: 700; }
+.vocab-pos { color: #94a3b8; font-size: 0.8rem; margin: 4px 0 8px; }
+.vocab-zh { color: #86efac; font-size: 0.95rem; font-weight: 600; }
+.vocab-en-meaning { color: #cbd5e1; font-size: 0.85rem; margin: 6px 0; }
+.vocab-example { color: #94a3b8; font-size: 0.8rem; font-style: italic; margin-top: 8px; padding-left: 10px; border-left: 2px solid rgba(251,191,36,0.3); }
+.speak-btn {
+  background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.4);
+  color: #fbbf24; padding: 4px 10px; border-radius: 20px; cursor: pointer;
+  font-size: 0.8rem; margin-top: 8px; display: inline-flex; align-items: center; gap: 4px;
+  transition: all 0.2s;
+}
+.speak-btn:hover { background: rgba(251,191,36,0.3); }
+
+/* ===== Sentence Patterns ===== */
+.pattern-card {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(96,165,250,0.3);
+  border-radius: 12px; padding: 20px; margin-bottom: 16px;
+}
+.pattern-en { color: #60a5fa; font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+.pattern-zh { color: #86efac; font-size: 0.9rem; margin-bottom: 8px; }
+.pattern-explain { color: #cbd5e1; font-size: 0.85rem; line-height: 1.6; }
+.pattern-practice {
+  background: rgba(15,23,42,0.6); border: 1px dashed rgba(251,191,36,0.3);
+  border-radius: 8px; padding: 12px; margin-top: 12px;
+}
+.pattern-practice p { color: #fcd34d; font-size: 0.85rem; margin-bottom: 8px; }
+.pattern-practice textarea {
+  width: 100%; background: rgba(15,23,42,0.8); border: 1px solid rgba(251,191,36,0.3);
+  border-radius: 6px; color: #e2e8f0; padding: 8px 12px; font-size: 0.9rem;
+  resize: vertical; min-height: 60px; font-family: inherit;
+}
+.pattern-practice textarea:focus { outline: none; border-color: #fbbf24; }
+
+/* ===== Grammar Points ===== */
+.grammar-card {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 12px; padding: 20px; margin-bottom: 16px;
+}
+.grammar-title { color: #a78bfa; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.grammar-explain { color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
+.grammar-example { color: #e2e8f0; font-size: 0.85rem; margin: 6px 0; padding-left: 12px; border-left: 2px solid rgba(167,139,250,0.4); }
+.grammar-practice { margin-top: 12px; }
+.grammar-practice p { color: #c4b5fd; font-size: 0.85rem; margin-bottom: 6px; }
+.grammar-practice input {
+  width: 100%; background: rgba(15,23,42,0.8); border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 6px; color: #e2e8f0; padding: 8px 12px; font-size: 0.9rem;
+}
+.grammar-practice input:focus { outline: none; border-color: #a78bfa; }
+
+/* ===== Quiz ===== */
+.quiz-q { background: rgba(30,41,59,0.7); border: 1px solid rgba(251,191,36,0.2); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.quiz-q-title { color: #fbbf24; font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  background: rgba(15,23,42,0.6); border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 8px; padding: 10px 14px; cursor: pointer; transition: all 0.2s;
+  color: #cbd5e1; font-size: 0.9rem;
+}
+.quiz-opt:hover { border-color: rgba(251,191,36,0.5); background: rgba(251,191,36,0.08); }
+.quiz-opt.selected { border-color: #fbbf24; background: rgba(251,191,36,0.15); }
+.quiz-opt.correct { border-color: #22c55e; background: rgba(34,197,94,0.15); color: #86efac; }
+.quiz-opt.wrong { border-color: #ef4444; background: rgba(239,68,68,0.15); color: #fca5a5; }
+.quiz-feedback { margin-top: 10px; font-size: 0.85rem; padding: 8px 12px; border-radius: 6px; display: none; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
+.quiz-feedback.wrong-fb { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+
+/* ===== Knowledge Extension ===== */
+.knowledge-block {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(134,239,172,0.2);
+  border-radius: 12px; padding: 20px; margin-bottom: 16px;
+}
+.knowledge-block h3 { color: #86efac; margin-top: 0; }
+.knowledge-block p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.7; }
+.knowledge-block ul { margin: 10px 0 10px 20px; color: #cbd5e1; }
+.knowledge-block li { margin-bottom: 6px; }
+
+/* ===== About Lesson ===== */
+.about-card {
+  background: rgba(30,41,59,0.7); border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 12px; padding: 24px; margin-bottom: 16px;
+}
+.about-card h3 { color: #fbbf24; margin-top: 0; }
+.objectives-list { list-style: none; padding: 0; }
+.objectives-list li { padding: 8px 0 8px 28px; position: relative; color: #cbd5e1; }
+.objectives-list li::before { content: '✅'; position: absolute; left: 0; }
+.print-btn {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e293b;
+  border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700;
+  cursor: pointer; font-size: 0.95rem; margin-top: 12px; transition: all 0.2s;
+}
+.print-btn:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(251,191,36,0.4); }
+
+/* ===== Mobile Toggle ===== */
+.mobile-toggle {
+  display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+  background: rgba(15,23,42,0.95); border: 1px solid rgba(251,191,36,0.3);
+  color: #fbbf24; width: 42px; height: 42px; border-radius: 8px;
+  font-size: 1.3rem; cursor: pointer; align-items: center; justify-content: center;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .mobile-toggle { display: flex; }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-left: 0; padding: 60px 16px 40px; }
+  .vocab-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Print ===== */
+@media print {
+  body { background: white; color: #1e293b; }
+  .sidebar, .mobile-toggle, .play-btn, .speak-btn, .print-btn, #progressBar { display: none !important; }
+  .main-content { margin-left: 0; padding: 20px; max-width: 100%; }
+  .section { display: block !important; page-break-before: always; }
+  .segment-block { border: 1px solid #ccc; background: white; }
+  .highlight-word { background: #fef3c7; color: #92400e; }
+}
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<div class="app-container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <h2>🎙️ POLA NEWS</h2>
+      <p>Tiny Fish Climbers</p>
+    </div>
+    <div class="sidebar-nav">
+      <a class="nav-item active" data-section="reading" onclick="showSection('reading', this)">
+        <span class="nav-icon">📖</span> 全文阅读
+      </a>
+      <a class="nav-item" data-section="vocabulary" onclick="showSection('vocabulary', this)">
+        <span class="nav-icon">📝</span> 词汇表
+      </a>
+      <a class="nav-item" data-section="patterns" onclick="showSection('patterns', this)">
+        <span class="nav-icon">💬</span> 句型练习
+      </a>
+      <a class="nav-item" data-section="grammar" onclick="showSection('grammar', this)">
+        <span class="nav-icon">📐</span> 语法点
+      </a>
+      <a class="nav-item" data-section="quiz" onclick="showSection('quiz', this)">
+        <span class="nav-icon">❓</span> 练习测验
+      </a>
+      <a class="nav-item" data-section="knowledge" onclick="showSection('knowledge', this)">
+        <span class="nav-icon">🌍</span> 中文知识扩展
+      </a>
+      <a class="nav-item" data-section="about" onclick="showSection('about', this)">
+        <span class="nav-icon">ℹ️</span> 关于本课
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ===== Section 1: 全文阅读 ===== -->
+    <div class="section active" id="sec-reading">
+      <h1>🎙️ POLA NEWS: Tiny Fish Climbers</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">2026年5月30日 | B1水平 | 适合10-12岁</p>
+
+      <div class="segment-block">
+        <span class="segment-label">SEGMENT 1 — Hook</span>
+        <button class="play-btn" id="play-btn-0" onclick="playSegment(0)">▶</button>
+        <div class="segment-text" id="seg-text-0">
+          Can a fish climb a waterfall? It sounds <span class="highlight-word">impossible<span class="tooltip-box"><span class="word-en">impossible</span><span class="word-pos">adj. 形容词</span><span class="word-zh">不可能的</span><span class="word-ex">Ex: Climbing a waterfall sounds impossible, but these fish can do it!</span></span></span>, right?
+          Well, in the rainforests of the Democratic Republic of Congo, tiny fish are doing exactly that.
+          <span class="highlight-word">Scientists<span class="tooltip-box"><span class="word-en">scientists</span><span class="word-pos">n. 名词（复数）</span><span class="word-zh">科学家</span><span class="word-ex">Ex: Scientists study fish to learn how they climb waterfalls.</span></span></span> watched with their mouths wide open as thousands of tiny <span class="highlight-word">Shellears<span class="tooltip-box"><span class="word-en">Shellears</span><span class="word-pos">n. 名词（专名）</span><span class="word-zh">谢尔耳鱼（鱼名）</span><span class="word-ex">Ex: Shellears are tiny fish that climb waterfalls in Congo.</span></span></span> climbed a <span class="highlight-word">waterfall<span class="tooltip-box"><span class="word-en">waterfall</span><span class="word-pos">n. 名词</span><span class="word-zh">瀑布</span><span class="word-ex">Ex: The waterfall in Congo is fifteen meters tall!</span></span></span> FIFTEEN meters tall!
+        </div>
+      </div>
+
+      <div class="segment-block">
+        <span class="segment-label">SEGMENT 2 — Story</span>
+        <button class="play-btn" id="play-btn-1" onclick="playSegment(1)">▶</button>
+        <div class="segment-text" id="seg-text-1">
+          These little <span class="highlight-word">champions<span class="tooltip-box"><span class="word-en">champions</span><span class="word-pos">n. 名词（复数）</span><span class="word-zh">勇士；冠军</span><span class="word-ex">Ex: The tiny fish are champions because they climb giants waterfalls!</span></span></span> are only five <span class="highlight-word">centimeters<span class="tooltip-box"><span class="word-en">centimeters</span><span class="word-pos">n. 名词（复数）</span><span class="word-zh">厘米</span><span class="word-ex">Ex: The fish are only five centimeters long — very small!</span></span></span> long — smaller than your finger.
+          They have special <span class="highlight-word">fins<span class="tooltip-box"><span class="word-en">fins</span><span class="word-pos">n. 名词（复数）</span><span class="word-zh">鳍</span><span class="word-ex">Ex: Fish use their fins to swim and climb rocks.</span></span></span> with tiny hooks, like nature's very own <span class="highlight-word">velcro<span class="tooltip-box"><span class="word-en">velcro</span><span class="word-pos">n. 名词</span><span class="word-zh">魔术贴</span><span class="word-ex">Ex: The fish fins have hooks like velcro to grip rocks.</span></span></span>. They <span class="highlight-word">grip<span class="tooltip-box"><span class="word-en">grip</span><span class="word-pos">v. 动词</span><span class="word-zh">抓握；紧握</span><span class="word-ex">Ex: The fish grip the wet rocks with their special fins.</span></span></span> the wet, slippery rocks behind the falling water.
+          The <span class="highlight-word">climb<span class="tooltip-box"><span class="word-en">climb</span><span class="word-pos">v. 动词</span><span class="word-zh">攀爬</span><span class="word-ex">Ex: It takes the fish ten hours to climb the waterfall.</span></span></span> takes about ten hours — imagine climbing a mountain all night!
+          And here's the secret: only the young, small fish can do it. When they grow too big, they get too heavy!
+        </div>
+      </div>
+
+      <div class="segment-block">
+        <span class="segment-label">SEGMENT 3 — Why It Matters</span>
+        <button class="play-btn" id="play-btn-2" onclick="playSegment(2)">▶</button>
+        <div class="segment-text" id="seg-text-2">
+          This is the first time anyone has seen fish <span class="highlight-word">climb<span class="tooltip-box"><span class="word-en">climb</span><span class="word-pos">v. 动词</span><span class="word-zh">攀爬</span><span class="word-ex">Ex: These fish climb waterfalls that are fifteen meters tall.</span></span></span> waterfalls in Africa.
+          <span class="highlight-word">Scientists<span class="tooltip-box"><span class="word-en">scientists</span><span class="word-pos">n. 名词（复数）</span><span class="word-zh">科学家</span><span class="word-ex">Ex: Scientists say we must protect these amazing fish.</span></span></span> say studying these amazing fish is super important for protecting them.
+          These Shellears need clean, free-flowing rivers to <span class="highlight-word">survive<span class="tooltip-box"><span class="word-en">survive</span><span class="word-pos">v. 动词</span><span class="word-zh">生存；存活</span><span class="word-ex">Ex: Fish need clean water to survive and climb waterfalls.</span></span></span>. If we block rivers with dams, these incredible climbers could disappear forever.
+        </div>
+      </div>
+
+      <div class="segment-block">
+        <span class="segment-label">SEGMENT 4 — Sign-off</span>
+        <button class="play-btn" id="play-btn-3" onclick="playSegment(3)">▶</button>
+        <div class="segment-text" id="seg-text-3">
+          The next time you face something that feels impossible, think of these tiny fish.
+          If a fish smaller than your hand can <span class="highlight-word">climb<span class="tooltip-box"><span class="word-en">climb</span><span class="word-pos">v. 动词</span><span class="word-zh">攀爬</span><span class="word-ex">Ex: The fish climb a giant waterfall to go home.</span></span></span> a giant <span class="highlight-word">waterfall<span class="tooltip-box"><span class="word-en">waterfall</span><span class="word-pos">n. 名词</span><span class="word-zh">瀑布</span><span class="word-ex">Ex: The waterfall is in the Democratic Republic of Congo.</span></span></span> in ten hours, you can climb any mountain in your life!
+          This is Pola, for POLA NEWS. Keep exploring — see you next time!
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section 2: 词汇表 ===== -->
+    <div class="section" id="sec-vocabulary">
+      <h1>📝 词汇表</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">本课核心词汇（点击🔊听发音）</p>
+      <div class="vocab-grid">
+        <div class="vocab-card">
+          <div class="vocab-word">waterfall</div>
+          <div class="vocab-pos">n. 名词</div>
+          <div class="vocab-zh">瀑布</div>
+          <div class="vocab-en-meaning">a place where water flows over the edge of a cliff or rock</div>
+          <div class="vocab-example">"The waterfall in Congo is fifteen meters tall."</div>
+          <button class="speak-btn" onclick="speakWord('waterfall', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">impossible</div>
+          <div class="vocab-pos">adj. 形容词</div>
+          <div class="vocab-zh">不可能的</div>
+          <div class="vocab-en-meaning">something that cannot be done or happen</div>
+          <div class="vocab-example">"Climbing a waterfall sounds impossible, but fish can do it!"</div>
+          <button class="speak-btn" onclick="speakWord('impossible', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">scientists</div>
+          <div class="vocab-pos">n. 名词（复数）</div>
+          <div class="vocab-zh">科学家</div>
+          <div class="vocab-en-meaning">people who study science and make discoveries</div>
+          <div class="vocab-example">"Scientists discovered fish climbing waterfalls in Africa."</div>
+          <button class="speak-btn" onclick="speakWord('scientists', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">centimeters</div>
+          <div class="vocab-pos">n. 名词（复数）</div>
+          <div class="vocab-zh">厘米</div>
+          <div class="vocab-en-meaning">a unit of length equal to 0.01 meter</div>
+          <div class="vocab-example">"The fish are only five centimeters long."</div>
+          <button class="speak-btn" onclick="speakWord('centimeters', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">fins</div>
+          <div class="vocab-pos">n. 名词（复数）</div>
+          <div class="vocab-zh">鳍</div>
+          <div class="vocab-en-meaning">the flat parts on a fish's body that help it swim</div>
+          <div class="vocab-example">"Fish use their fins to grip wet rocks."</div>
+          <button class="speak-btn" onclick="speakWord('fins', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">grip</div>
+          <div class="vocab-pos">v. 动词</div>
+          <div class="vocab-zh">抓握；紧握</div>
+          <div class="vocab-en-meaning">to hold something tightly</div>
+          <div class="vocab-example">"The fish grip the rocks with tiny hooks on their fins."</div>
+          <button class="speak-btn" onclick="speakWord('grip', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">champions</div>
+          <div class="vocab-pos">n. 名词（复数）</div>
+          <div class="vocab-zh">勇士；冠军</div>
+          <div class="vocab-en-meaning">winners or brave fighters who never give up</div>
+          <div class="vocab-example">"These little champions climb a 15-meter waterfall!"</div>
+          <button class="speak-btn" onclick="speakWord('champions', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">climb</div>
+          <div class="vocab-pos">v. 动词</div>
+          <div class="vocab-zh">攀爬</div>
+          <div class="vocab-en-meaning">to go up something using your hands and feet</div>
+          <div class="vocab-example">"It takes ten hours to climb the waterfall."</div>
+          <button class="speak-btn" onclick="speakWord('climb', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">survive</div>
+          <div class="vocab-pos">v. 动词</div>
+          <div class="vocab-zh">生存；存活</div>
+          <div class="vocab-en-meaning">to continue living or staying alive</div>
+          <div class="vocab-example">"Fish need clean rivers to survive."</div>
+          <button class="speak-btn" onclick="speakWord('survive', this)">🔊 发音</button>
+        </div>
+        <div class="vocab-card">
+          <div class="vocab-word">velcro</div>
+          <div class="vocab-pos">n. 名词</div>
+          <div class="vocab-zh">魔术贴</div>
+          <div class="vocab-en-meaning">a fastener with tiny hooks and loops</div>
+          <div class="vocab-example">"The fish have hooks like velcro on their fins."</div>
+          <button class="speak-btn" onclick="speakWord('velcro', this)">🔊 发音</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section 3: 句型练习 ===== -->
+    <div class="section" id="sec-patterns">
+      <h1>💬 句型练习</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">从课文中提取的5个实用句型</p>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"Can a fish climb a waterfall?"</div>
+        <div class="pattern-zh">🐟 句型1：Can + 主语 + 动词...?（能力疑问句）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>用"Can"开头可以询问某人或某物是否有能力做某事。<br>
+          <strong>结构：</strong>Can + subject + base verb + ...?<br>
+          <strong>例句：</strong>Can you swim? / Can birds fly? / Can fish climb?
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用"Can"造一个问句（关于动物能力）</p>
+          <textarea placeholder="写下你的句子..."></textarea>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"Scientists watched with their mouths wide open..."</div>
+        <div class="pattern-zh">😮 句型2：with + 身体部位 + 形容词（伴随状态）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>"with + 身体部位 + 形容词"描述某人做动作时的伴随状态或表情。<br>
+          <strong>结构：</strong>with + [body part] + adjective<br>
+          <strong>例句：</strong>She listened with her eyes wide open. / He ran with his heart beating fast.
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用"with + 身体部位 + 形容词"造句</p>
+          <textarea placeholder="写下你的句子..."></textarea>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"It takes about ten hours to climb the waterfall."</div>
+        <div class="pattern-zh">⏰ 句型3：It takes + 时间 + to + 动词（花费时间）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>"It takes..."用来表达完成某事需要花费多少时间。<br>
+          <strong>结构：</strong>It takes + (time) + to + verb<br>
+          <strong>例句：</strong>It takes me 20 minutes to walk to school. / It takes 10 hours to climb.
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用"It takes..."造句（关于你每天做的事）</p>
+          <textarea placeholder="写下你的句子..."></textarea>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"If we block rivers with dams, these fish could disappear."</div>
+        <div class="pattern-zh">🌊 句型4：If + 现在时..., 将来时...（第一类条件句）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>第一类条件句用来表达可能发生的未来情况及其结果。<br>
+          <strong>结构：</strong>If + present simple, ... will/can/may + verb<br>
+          <strong>例句：</strong>If it rains, we will stay home. / If we study hard, we will pass.
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：完成这个条件句 — "If we protect the rivers, ..."</p>
+          <textarea placeholder="完成这个条件句..."></textarea>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-en">"The next time you face something impossible, think of these fish."</div>
+        <div class="pattern-zh">💪 句型5：The next time + 从句..., ...（时间状语引导）</div>
+        <div class="pattern-explain">
+          <strong>中文解释：</strong>"The next time..."用来引出下次发生某事时的建议或行动。<br>
+          <strong>结构：</strong>The next time + subject + verb, ... command/advice<br>
+          <strong>例句：</strong>The next time you feel sad, call me. / The next time you see him, say hello.
+        </div>
+        <div class="pattern-practice">
+          <p>✏️ 练习：用"The next time..."造一个给朋友的建议</p>
+          <textarea placeholder="写下你的句子..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section 4: 语法点 ===== -->
+    <div class="section" id="sec-grammar">
+      <h1>📐 语法点</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">本课相关的5个语法知识点</p>
+
+      <div class="grammar-card">
+        <div class="grammar-title">1. 副词 "right" 和 "exactly" 的用法</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>在英语中，"right"和"exactly"常用来强调语气，表示"正是、就是"。文中 "...doing exactly that" 意为"正是那样做"。这种用法让语言更生动。<br><br>
+          <strong>例子：</strong><br>
+          • That's exactly right! （完全正确！）<br>
+          • The fish are doing exactly that. （鱼正是那样做的。）<br>
+          • Right now, they are climbing. （此刻它们正在攀爬。）
+        </div>
+        <div class="grammar-example">📌 提示：exactly + that/so 是很常见的口语搭配</div>
+        <div class="grammar-practice">
+          <p>✏️ 填空：That's ______ what I meant! (exactly / right)</p>
+          <input type="text" placeholder="输入你的答案...">
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="grammar-title">2. 比较级：smaller than, bigger than</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>比较级用来比较两个事物。短形容词加"-er"，长形容词用"more"。文中 "smaller than your finger" 比较了鱼和手指的大小。<br><br>
+          <strong>规则：</strong><br>
+          • 短词（1 syllable）：small → smaller<br>
+          • 短词（2 syllables 以y结尾）：happy → happier<br>
+          • 长词（3+ syllables）：more beautiful<br><br>
+          <strong>例子：</strong><br>
+          • The fish is smaller than my finger.<br>
+          • The waterfall is bigger than our house.
+        </div>
+        <div class="grammar-example">📌 不规则比较级：good → better, bad → worse</div>
+        <div class="grammar-practice">
+          <p>✏️ 造句：用"smaller than"造一个比较句</p>
+          <input type="text" placeholder="输入你的句子...">
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="grammar-title">3. 第一类条件句（First Conditional）</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>第一类条件句表达有可能发生的未来情况。条件从句用现在时，主句用将来时(will/can/may)。文中 "If we block rivers with dams, these fish could disappear." <br><br>
+          <strong>结构：</strong>If + present simple, ... will/can/may + verb<br>
+          <strong>例子：</strong><br>
+          • If it rains, we will cancel the trip.<br>
+          • If you study, you will pass the test.<br>
+          • If we protect nature, animals can survive.
+        </div>
+        <div class="grammar-example">📌 注意：if从句中用现在时，不是将来时(will)</div>
+        <div class="grammar-practice">
+          <p>✏️ 完成句子：If we plant more trees, ...</p>
+          <input type="text" placeholder="完成这个句子...">
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="grammar-title">4. 情态动词 "can" 和 "could" 表能力/可能性</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>"can"表示现在的能力或可能性；"could"表示过去的能力或未来的可能性（较不确定）。文中 "only the young fish can do it"（现在能力）；"these fish could disappear"（未来可能性）。<br><br>
+          <strong>区别：</strong><br>
+          • can = 现在能力/确定可能性<br>
+          • could = 过去能力/不确定可能性<br><br>
+          <strong>例子：</strong><br>
+          • I can swim. （我会游泳。）<br>
+          • When I was young, I could run fast. （我年轻时跑得快。）<br>
+          • It could rain tomorrow. （明天可能下雨。）
+        </div>
+        <div class="grammar-example">📌 could 比 can 语气更不确定</div>
+        <div class="grammar-practice">
+          <p>✏️ 选择：She ______ speak French when she was five. (can / could)</p>
+          <input type="text" placeholder="can 还是 could？">
+        </div>
+      </div>
+
+      <div class="grammar-card">
+        <div class="grammar-title">5. 时间表达：数字+meters/tall/long</div>
+        <div class="grammar-explain">
+          <strong>中文讲解：</strong>描述高度用"tall"，描述长度用"long"，描述深度用"deep"。文中 "FIFTEEN meters tall" 描述瀑布高度。<br><br>
+          <strong>搭配：</strong><br>
+          • tall → 建筑物、山、瀑布、人<br>
+          • long → 河流、鱼、道路<br>
+          • deep → 海洋、湖、洞<br>
+          • wide → 河、路、房间<br><br>
+          <strong>例子：</strong><br>
+          • The waterfall is 15 meters tall.<br>
+          • The fish is 5 centimeters long.<br>
+          • The pool is 2 meters deep.
+        </div>
+        <div class="grammar-example">📌 tall vs. high：tall用于有高度的事物，high用于抽象或宽广概念</div>
+        <div class="grammar-practice">
+          <p>✏️ 填空：The river is 100 meters ______ (tall / long / deep)</p>
+          <input type="text" placeholder="tall, long 还是 deep？">
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Section 5: 练习测验 ===== -->
+    <div class="section" id="sec-quiz">
+      <h1>❓ 练习测验</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">检验你对课文的理解（6道选择题）</p>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">1. 🌍 Where did scientists see fish climbing waterfalls?（科学家在哪里看到鱼爬瀑布？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. Democratic Republic of Congo（刚果民主共和国）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. China（中国）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. United States（美国）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">2. 📏 How tall is the Luvilombo Falls?（卢维隆博瀑布有多高？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. 15 meters（15米）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. 50 meters（50米）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. 5 meters（5米）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">3. 🐟 How long are the Shellears fish?（谢尔耳鱼有多长？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. 5 centimeters（5厘米）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. 15 centimeters（15厘米）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. 50 centimeters（50厘米）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">4. ⏰ How long does the climb take?（攀爬需要多长时间？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. About 10 hours（大约10小时）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. About 10 minutes（大约10分钟）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. About 10 days（大约10天）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">5. 🐠 Which fish can climb the waterfall?（哪种鱼能爬瀑布？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. Only young, small fish（只有年幼的小鱼）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. All fish（所有鱼）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. Only old, big fish（只有年老的大鱼）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-q" data-answer="0">
+        <div class="quiz-q-title">6. 🌊 Why is it important to protect these fish?（为什么保护这些鱼很重要？）</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="selectOpt(this, 0)">A. They need clean rivers to survive（它们需要干净的河流才能生存）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 1)">B. They are very big and strong（它们非常大且强壮）</div>
+          <div class="quiz-opt" onclick="selectOpt(this, 2)">C. They live in the ocean（它们生活在海洋里）</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </div>
+
+    <!-- ===== Section 6: 中文知识扩展 ===== -->
+    <div class="section" id="sec-knowledge">
+      <h1>🌍 中文知识扩展</h1>
+      <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:20px;">深入了解背后的科学与故事</p>
+
+      <div class="knowledge-block">
+        <h3>🌊 刚果民主共和国与卢维隆博瀑布</h3>
+        <p>刚果民主共和国（Democratic Republic of the Congo，简称DRC）位于非洲中部，是非洲面积第二大的国家，拥有世界第二大热带雨林——刚果雨林。这片雨林是地球上生物多样性最丰富的地区之一，被称为"地球的第二个肺"（第一个是亚马逊雨林）。</p>
+        <p>卢维隆博瀑布（Luvilombo Falls）位于刚果民主共和国境内，是一处约15米高的瀑布。对于人类来说，15米并不算特别高（大约相当于5层楼），但对于只有5厘米长的小鱼来说，这就像人类要攀爬一座500米的高楼——难度难以想象！</p>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🐟 谢尔耳鱼（Shellears / Parakneria thysi）</h3>
+        <p>谢尔耳鱼是一种小型淡水鱼类，属于鲑形目（Characiformes）。它们生活在刚果雨林的河流系统中。这种鱼最惊人的能力就是——攀爬瀑布！</p>
+        <p>科学家发现，谢尔耳鱼利用其胸鳍上微小的钩状结构，像"魔术贴"一样紧紧抓住湿滑的岩石表面。它们不在瀑布正中央的水流中最湍急的地方攀爬，而是选择瀑布边缘的"溅水区"（splash zone），那里的岩石相对更容易抓握。</p>
+        <p>更有趣的是：只有体型小（小于5厘米）的年轻鱼才能完成这项壮举。一旦鱼长大超过这个尺寸，体重就会太重，无法支撑自己在岩壁上攀爬。这意味着——每一条成功爬上瀑布的鱼，都是"年轻时的勇者"！</p>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🌍 鱼类攀爬瀑布：不只是刚果！</h3>
+        <p>其实，鱼类攀爬瀑布并不是刚果独有的现象。世界上最著名的"鱼梯"（fish ladder）就是为了帮助鲑鱼（salmon）跨越水坝、回到出生地产卵而设计的。</p>
+        <p>在北美洲和亚洲，太平洋鲑鱼（Pacific salmon）会逆流而上，跳跃越过小型瀑布，回到它们出生的溪流中产卵。这种行为已经持续了数百万年。但谢尔耳鱼的特殊之处在于：它们不是"跳"过瀑布，而是用自己的鳍"爬"上去——这在非洲是首次被科学记录到！</p>
+        <p>其他能攀爬的鱼类还包括： Hawaiian goby（夏威夷虾虎鱼，能爬131米高的瀑布）、New Zealand's kōaro（新西兰的kōaro鱼）等。</p>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🏗️ 水坝对生态环境的影响</h3>
+        <p>文中提到："如果我们用水坝阻断河流，这些令人难以置信的攀爬者可能会永远消失。" 这背后有一个重要的环保议题。</p>
+        <p>水坝（dam）是人类用来储存水源、发电的大型建筑。但水坝也会：</p>
+        <ul>
+          <li><strong>阻断鱼类洄游路线</strong>：鱼无法越过水坝回到上游产卵地</li>
+          <li><strong>改变水流速度</strong>：下游水流减少，影响整个生态系统</li>
+          <li><strong>提高水温</strong>：水库蓄水后水温变化，影响鱼类生存</li>
+          <li><strong>阻断泥沙</strong>：泥沙无法下游输送，导致三角洲缩小</li>
+        </ul>
+        <p>好消息是：现代"鱼道"（fish passage / fish ladder）技术可以帮助鱼类越过水坝。中国在长江上建设的鱼道帮助中华鲟等珍稀鱼类洄游产卵，是一个成功的案例。</p>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🔬 科学发现的过程</h3>
+        <p>这个故事还有一个有趣的"科学发现"侧面：最早注意到谢尔耳鱼攀爬瀑布的，是卢本巴希大学（University of Lubumbashi）的一位科学家。他在2009年就观察到这个现象并拍了视频，但后来视频丢失了！</p>
+        <p>直到2018年，另一位研究者帕西菲克·基韦莱·穆坦巴拉（Pacifique Kiwele Mutambala）注意到了早期报告，决定亲自去卢维隆博瀑布验证。经过实地考察，他确认了这个惊人的现象，并将研究结果发表在《科学报告》（Scientific Reports）期刊上。</p>
+        <p>这个故事告诉我们：科学发现有时需要"再验证"和"不放弃"的精神。那位最早的科学家虽然丢了视频，但他的观察记录激发了后来者的验证工作！</p>
+      </div>
+    </div>
+
+    <!-- ===== Section 7: 关于本课 ===== -->
+    <div class="section" id="sec-about">
+      <h1>ℹ️ 关于本课</h1>
+
+      <div class="about-card">
+        <h3>🎯 学习目标</h3>
+        <ul class="objectives-list">
+          <li>理解并能够复述 Tiny Fish Climbers 故事的主要内容</li>
+          <li>掌握本课10个核心词汇的英文和中文含义</li>
+          <li>学会使用5个实用英语句型进行口语表达</li>
+          <li>理解第一类条件句（First Conditional）的语法结构</li>
+          <li>了解水坝对生态环境的影响，培养环保意识</li>
+        </ul>
+      </div>
+
+      <div class="about-card">
+        <h3>📚 学习建议</h3>
+        <p>1. <strong>先听全文</strong>：点击每段旁边的▶按钮，听Pola的朗读，熟悉发音和语调。</p>
+        <p>2. <strong>学习词汇</strong>：在"词汇表"部分，点击🔊按钮听每个单词的标准发音，跟读3遍。</p>
+        <p>3. <strong>理解句型</strong>：在"句型练习"部分，先理解句型的语法结构，然后完成练习题。</p>
+        <p>4. <strong>挑战测验</strong>：完成"练习测验"的6道题，检验自己对课文的理解。</p>
+        <p>5. <strong>扩展阅读</strong>：阅读"中文知识扩展"部分，了解更多背景知识。</p>
+        <p>6. <strong>打印复习</strong>：点击下面的"打印本课"按钮，打印纸质版带回家复习！</p>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+      </div>
+
+      <div class="about-card">
+        <h3>📖 课文原文（打印版）</h3>
+        <div style="background:rgba(15,23,42,0.6); border-radius:8px; padding:16px; font-size:0.9rem; line-height:1.8; color:#cbd5e1;">
+          <p><strong>SEGMENT 1 — Hook</strong><br>
+          Can a fish climb a waterfall? It sounds impossible, right? Well, in the rainforests of the Democratic Republic of Congo, tiny fish are doing exactly that. Scientists watched with their mouths wide open as thousands of tiny Shellears climbed a waterfall FIFTEEN meters tall!</p>
+          <p><strong>SEGMENT 2 — Story</strong><br>
+          These little champions are only five centimeters long — smaller than your finger. They have special fins with tiny hooks, like nature's very own velcro. They grip the wet, slippery rocks behind the falling water. The climb takes about ten hours — imagine climbing a mountain all night! And here's the secret: only the young, small fish can do it. When they grow too big, they get too heavy!</p>
+          <p><strong>SEGMENT 3 — Why It Matters</strong><br>
+          This is the first time anyone has seen fish climb waterfalls in Africa. Scientists say studying these amazing fish is super important for protecting them. These Shellears need clean, free-flowing rivers to survive. If we block rivers with dams, these incredible climbers could disappear forever.</p>
+          <p><strong>SEGMENT 4 — Sign-off</strong><br>
+          The next time you face something that feels impossible, think of these tiny fish. If a fish smaller than your hand can climb a giant waterfall in ten hours, you can climb any mountain in your life! This is Pola, for POLA NEWS. Keep exploring — see you next time!</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ===== Voice Playback (Web Speech API) =====
+let currentUtterance = null;
+let voices = [];
+
+// Segment texts (plain text, no HTML)
+const segmentTexts = [
+  "Can a fish climb a waterfall? It sounds impossible, right? Well, in the rainforests of the Democratic Republic of Congo, tiny fish are doing exactly that. Scientists watched with their mouths wide open as thousands of tiny Shellears climbed a waterfall FIFTEEN meters tall!",
+  "These little champions are only five centimeters long — smaller than your finger. They have special fins with tiny hooks, like nature's very own velcro. They grip the wet, slippery rocks behind the falling water. The climb takes about ten hours — imagine climbing a mountain all night! And here's the secret: only the young, small fish can do it. When they grow too big, they get too heavy!",
+  "This is the first time anyone has seen fish climb waterfalls in Africa. Scientists say studying these amazing fish is super important for protecting them. These Shellears need clean, free-flowing rivers to survive. If we block rivers with dams, these incredible climbers could disappear forever.",
+  "The next time you face something that feels impossible, think of these tiny fish. If a fish smaller than your hand can climb a giant waterfall in ten hours, you can climb any mountain in your life! This is Pola, for POLA NEWS. Keep exploring — see you next time!"
+];
+
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+}
+// Chrome needs this event
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+function getBestVoice() {
+  // Priority: Enhanced English male > Daniel > Alex > Microsoft Mark > any English male > any English
+  const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+  let best = englishVoices.find(v => v.name.includes('Enhanced') && v.name.includes('Male'));
+  if (!best) best = englishVoices.find(v => v.name.includes('Daniel'));
+  if (!best) best = englishVoices.find(v => v.name.includes('Alex'));
+  if (!best) best = englishVoices.find(v => v.name.includes('Microsoft Mark'));
+  if (!best) best = englishVoices.find(v => v.name.includes('Male'));
+  if (!best) best = englishVoices.find(v => v.lang.startsWith('en'));
+  return best;
+}
+
+function stopCurrent() {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  // Reset all play buttons
+  document.querySelectorAll('.play-btn, .speak-btn').forEach(btn => {
+    btn.textContent = btn.textContent.includes('🔊') ? '🔊 发音' : '▶';
+    btn.classList.remove('playing');
+  });
+}
+
+function playSegment(idx) {
+  stopCurrent();
+  const btn = document.getElementById('play-btn-' + idx);
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+
+  const utterance = new SpeechSynthesisUtterance(segmentTexts[idx]);
+  const voice = getBestVoice();
+  if (voice) utterance.voice = voice;
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  utterance.onend = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+  utterance.onerror = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+function speakWord(word, btn) {
+  stopCurrent();
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+
+  const utterance = new SpeechSynthesisUtterance(word);
+  const voice = getBestVoice();
+  if (voice) utterance.voice = voice;
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  utterance.onend = () => {
+    btn.textContent = '🔊 发音';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+  utterance.onerror = () => {
+    btn.textContent = '🔊 发音';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+// ===== Navigation =====
+function showSection(sectionId, navEl) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  // Show target
+  document.getElementById('sec-' + sectionId).classList.add('active');
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  navEl.classList.add('active');
+  // Close mobile sidebar
+  document.querySelector('.sidebar').classList.remove('open');
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Progress Bar =====
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// ===== Quiz =====
+function selectOpt(el, idx) {
+  const qDiv = el.closest('.quiz-q');
+  const correctIdx = parseInt(qDiv.dataset.answer);
+  const options = qDiv.querySelectorAll('.quiz-opt');
+  const feedback = qDiv.querySelector('.quiz-feedback');
+
+  // Remove previous
+  options.forEach(o => { o.classList.remove('selected', 'correct', 'wrong'); });
+
+  // Find question index
+  const allQuestions = document.querySelectorAll('.quiz-q');
+  const qIdx = Array.from(allQuestions).indexOf(qDiv);
+
+  // Mark selected
+  el.classList.add('selected');
+
+  const correctMessages = [
+    '刚果民主共和国是故事发生地。',
+    '15米是文中提到的高度（FIFTEEN meters tall）。',
+    '5厘米是鱼的长度（five centimeters long）。',
+    '攀爬需要大约10小时（about ten hours）。',
+    '只有年幼、体型小的鱼才能攀爬（only the young, small fish）。',
+    '它们需要干净河流才能生存（need clean rivers to survive）。'
+  ];
+
+  if (idx === correctIdx) {
+    el.classList.add('correct');
+    feedback.textContent = '✅ 正确！' + correctMessages[qIdx];
+    feedback.className = 'quiz-feedback show correct-fb';
+  } else {
+    el.classList.add('wrong');
+    options[correctIdx].classList.add('correct');
+    const explanations = [
+      '科学家在刚果民主共和国的卢维隆博瀑布观察到鱼爬瀑布。',
+      '文中说瀑布有15米高（FIFTEEN meters tall）。',
+      '文中说鱼只有5厘米长（five centimeters long）。',
+      '文中说攀爬需要大约10小时（ten hours）。',
+      '文中说只有年幼、体型小的鱼才能爬（only the young, small fish）。',
+      '文中说鱼需要干净的河流才能生存（need clean rivers to survive）。'
+    ];
+    feedback.textContent = '❌ 不对哦～ ' + explanations[qIdx];
+    feedback.className = 'quiz-feedback show wrong-fb';
+  }
+}
+
+// ===== Keyboard shortcut: Escape to close mobile nav =====
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelector('.sidebar').classList.remove('open');
+  }
+});
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

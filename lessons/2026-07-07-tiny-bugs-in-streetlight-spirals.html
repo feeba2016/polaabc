@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLA NEWS — Tiny Bugs in Streetlight Spirals | 互动学习</title>
+    <style>
+        :root {
+            --deep: #0f1420;
+            --night: #141929;
+            --navy: #1a1f3a;
+            --slate: #2a3048;
+            --amber: #f5b800;
+            --gold: #ffdb70;
+            --coral: #ff8c69;
+            --accent: #6ee7b7;
+            --text: #f0f2ff;
+            --text-dark: #0f1420;
+            --card-bg: #1a1f2e;
+            --highlight: #ffe066;
+            --highlight-bg: rgba(255, 224, 102, 0.15);
+            --success: #4caf84;
+            --danger: #ef5350;
+            --sidebar-w: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(160deg, #0f1420 0%, #141929 25%, #1a1f3a 50%, #141929 75%, #0f1420 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--amber), var(--gold), var(--coral));
+            z-index: 9999;
+            transition: width 0.15s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .app-container { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: rgba(15, 20, 32, 0.97);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 100;
+            overflow-y: auto;
+            padding: 20px 0;
+            backdrop-filter: blur(20px);
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            padding: 10px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 10px;
+        }
+        .sidebar-logo .logo-icon { font-size: 36px; display: block; }
+        .sidebar-logo h2 { font-size: 16px; color: var(--gold); margin-top: 4px; letter-spacing: 1px; }
+        .sidebar-logo .episode-title { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+        .sidebar nav { padding: 0 12px; }
+        .sidebar nav a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; margin: 2px 0;
+            border-radius: 8px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none; font-size: 14px;
+            transition: all 0.2s;
+        }
+        .sidebar nav a:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .sidebar nav a.active { background: rgba(245, 184, 0, 0.12); color: var(--gold); font-weight: 600; }
+        .sidebar nav a .nav-icon { font-size: 18px; width: 24px; text-align: center; }
+
+        .sidebar-footer {
+            padding: 16px; margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            text-align: center; font-size: 11px;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            padding: 40px 48px;
+            max-width: 900px;
+        }
+
+        .section { margin-bottom: 60px; padding-top: 20px; }
+
+        .section-header {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 24px; padding-bottom: 12px;
+            border-bottom: 2px solid rgba(245, 184, 0, 0.25);
+        }
+        .section-header .section-icon { font-size: 28px; }
+        .section-header h2 { font-size: 24px; color: var(--gold); }
+
+        /* Passage */
+        .passage-container { position: relative; }
+        .passage-segment {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px 60px 24px 28px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative; font-size: 17px; line-height: 1.9;
+        }
+        .passage-segment .seg-label {
+            font-size: 11px; color: var(--coral);
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 8px; font-weight: 700;
+        }
+        .keyword {
+            background: var(--highlight-bg);
+            color: var(--highlight); padding: 1px 6px;
+            border-radius: 4px; cursor: pointer;
+            border-bottom: 2px dotted var(--highlight);
+            position: relative; font-weight: 600;
+            transition: background 0.2s;
+        }
+        .keyword:hover { background: rgba(255, 224, 102, 0.3); }
+
+        .keyword-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px); left: 50%;
+            transform: translateX(-50%);
+            background: #1a1f2e;
+            border: 1px solid var(--gold);
+            border-radius: 8px; padding: 10px 14px;
+            font-size: 13px; color: var(--text);
+            white-space: nowrap; z-index: 200;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .keyword-tooltip .tooltip-zh { color: var(--accent); font-size: 12px; margin-top: 2px; }
+        .keyword:hover .keyword-tooltip { display: block; }
+
+        /* Play button */
+        .play-btn {
+            position: absolute; right: 16px; top: 50%;
+            transform: translateY(-50%);
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 2px solid var(--coral);
+            background: rgba(255, 140, 105, 0.1);
+            color: var(--coral); font-size: 16px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.25s; z-index: 10;
+        }
+        .play-btn:hover {
+            background: rgba(255, 140, 105, 0.25);
+            transform: translateY(-50%) scale(1.08);
+        }
+        .play-btn.playing {
+            background: var(--coral); color: #fff;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 140, 105, 0.6); }
+            50% { box-shadow: 0 0 0 12px rgba(255, 140, 105, 0); }
+        }
+
+        /* Vocab cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        .vocab-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .vocab-card .word {
+            font-size: 20px; font-weight: 700; color: var(--gold);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .vocab-card .pos {
+            font-size: 12px; color: var(--accent);
+            background: rgba(110, 231, 183, 0.15);
+            padding: 2px 8px; border-radius: 4px;
+        }
+        .vocab-card .zh-meaning { color: var(--accent); font-size: 14px; margin: 6px 0; }
+        .vocab-card .example { font-size: 13px; color: rgba(255,255,255,0.55); font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        .vocab-play-btn {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 1.5px solid var(--accent);
+            background: rgba(110, 231, 183, 0.1);
+            color: var(--accent); font-size: 12px;
+            cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: all 0.2s; flex-shrink: 0;
+        }
+        .vocab-play-btn:hover { background: rgba(110, 231, 183, 0.25); }
+        .vocab-play-btn.playing { background: var(--accent); color: var(--deep); animation: pulse-vocab 1.2s ease-in-out infinite; }
+        @keyframes pulse-vocab {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.6); }
+            50% { box-shadow: 0 0 0 10px rgba(110, 231, 183, 0); }
+        }
+
+        /* Sentence patterns */
+        .pattern-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .pattern-card .pattern-en { font-size: 18px; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
+        .pattern-card .pattern-zh { color: var(--accent); font-size: 14px; margin-bottom: 12px; }
+        .pattern-card .pattern-explain { font-size: 14px; color: rgba(255,255,255,0.65); margin-bottom: 12px; }
+        .pattern-card .practice-box {
+            background: rgba(0,0,0,0.25); border-radius: 8px; padding: 14px;
+            font-size: 14px; color: rgba(255,255,255,0.45);
+            border: 1px dashed rgba(255,255,255,0.08);
+        }
+
+        /* Grammar */
+        .grammar-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .grammar-card h4 { color: var(--gold); font-size: 17px; margin-bottom: 4px; }
+        .grammar-card .grammar-zh { color: var(--accent); font-size: 13px; margin-bottom: 10px; }
+        .grammar-card .grammar-explain { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 12px; line-height: 1.8; }
+        .grammar-card .grammar-ex {
+            background: rgba(0,0,0,0.25); border-radius: 8px; padding: 12px 16px;
+            font-size: 14px; color: rgba(255,255,255,0.5);
+            border-left: 3px solid var(--amber);
+        }
+
+        /* Quiz */
+        .quiz-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .quiz-card .quiz-q { font-size: 16px; color: #fff; margin-bottom: 12px; }
+        .quiz-card .quiz-q-zh { font-size: 13px; color: var(--accent); margin-bottom: 16px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-option {
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 10px; padding: 12px 16px;
+            color: rgba(255,255,255,0.8); font-size: 15px;
+            cursor: pointer; text-align: left;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); }
+        .quiz-option.correct { background: rgba(76, 175, 132, 0.2); border-color: var(--success); color: var(--success); }
+        .quiz-option.wrong { background: rgba(239, 83, 80, 0.2); border-color: var(--danger); color: var(--danger); }
+        .quiz-option:disabled { pointer-events: none; opacity: 0.7; }
+        .quiz-feedback { font-size: 14px; margin-top: 10px; min-height: 20px; }
+        .quiz-feedback.correct-fb { color: var(--success); }
+        .quiz-feedback.wrong-fb { color: var(--danger); }
+
+        .quiz-score {
+            text-align: center; padding: 16px; margin-top: 20px;
+            border-radius: 12px; font-size: 18px; font-weight: 700;
+            display: none;
+        }
+        .quiz-score.show { display: block; }
+        .quiz-score.perfect { background: rgba(76, 175, 132, 0.12); color: var(--success); border: 1px solid rgba(76, 175, 132, 0.2); }
+        .quiz-score.good { background: rgba(245, 184, 0, 0.12); color: var(--gold); border: 1px solid rgba(245, 184, 0, 0.2); }
+        .quiz-score.ok { background: rgba(255, 140, 105, 0.12); color: var(--coral); border: 1px solid rgba(255, 140, 105, 0.2); }
+
+        /* Knowledge expansion */
+        .knowledge-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .knowledge-card h4 { color: var(--gold); font-size: 17px; margin-bottom: 10px; }
+        .knowledge-card p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.85; margin-bottom: 10px; }
+        .knowledge-card .fun-fact {
+            background: rgba(245, 184, 0, 0.08);
+            border-left: 3px solid var(--gold);
+            padding: 10px 16px; border-radius: 0 8px 8px 0;
+            font-size: 13px; color: var(--gold); margin-top: 12px;
+        }
+
+        /* About section */
+        .about-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .about-card h4 { color: var(--gold); font-size: 17px; margin-bottom: 10px; }
+        .about-card ul { padding-left: 20px; }
+        .about-card ul li { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 8px; line-height: 1.7; }
+        .about-card ul li::marker { color: var(--amber); }
+
+        .print-btn {
+            display: inline-block; margin-top: 16px;
+            background: var(--amber); color: #fff;
+            border: none; border-radius: 8px;
+            padding: 10px 24px; font-size: 14px;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .print-btn:hover { background: #c69000; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%; height: auto; position: relative;
+                padding: 12px; border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
+            }
+            .sidebar nav { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+            .sidebar nav a { font-size: 12px; padding: 6px 10px; }
+            .sidebar-logo { padding: 4px 8px 10px; border: none; margin: 0; }
+            .sidebar-logo .logo-icon { font-size: 24px; }
+            .sidebar-logo h2 { font-size: 14px; }
+            .sidebar-footer { display: none; }
+            .main-content { margin-left: 0; padding: 20px 16px; }
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print */
+        @media print {
+            .sidebar, #progress-bar, .play-btn, .vocab-play-btn, .print-btn { display: none !important; }
+            .main-content { margin-left: 0; padding: 20px; }
+            body { background: #fff; color: #000; }
+            .card, .passage-segment, .vocab-card, .pattern-card, .grammar-card, .quiz-card, .knowledge-card, .about-card {
+                background: #fff; border: 1px solid #ddd; break-inside: avoid;
+            }
+            .keyword { color: #b8860b; background: #fff8e1; border-color: #b8860b; }
+            .section-header h2 { color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">💡</span>
+                <h2>POLA NEWS</h2>
+                <div class="episode-title">Tiny Bugs in Streetlight Spirals</div>
+            </div>
+            <nav>
+                <a href="#reading" class="active" data-section="reading"><span class="nav-icon">📖</span> 全文阅读</a>
+                <a href="#vocabulary" data-section="vocabulary"><span class="nav-icon">📝</span> 词汇表</a>
+                <a href="#patterns" data-section="patterns"><span class="nav-icon">💬</span> 句型练习</a>
+                <a href="#grammar" data-section="grammar"><span class="nav-icon">📐</span> 语法点</a>
+                <a href="#quiz" data-section="quiz"><span class="nav-icon">✅</span> 练习测验</a>
+                <a href="#knowledge" data-section="knowledge"><span class="nav-icon">🧠</span> 知识扩展</a>
+                <a href="#about" data-section="about"><span class="nav-icon">ℹ️</span> 关于本课</a>
+            </nav>
+            <div class="sidebar-footer">POLA NEWS · July 7, 2026</div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Section 1: Reading -->
+            <section id="reading" class="section">
+                <div class="section-header">
+                    <span class="section-icon">📖</span>
+                    <h2>全文阅读 Full Reading</h2>
+                </div>
+                <div class="passage-container">
+                    <div class="passage-segment" id="seg1">
+                        <div class="seg-label">💡 Segment 1 — Hook</div>
+                        <p>
+                            Have you ever seen a tiny <span class="keyword">pill bug<span class="keyword-tooltip">鼠妇；潮虫<span class="tooltip-zh">a small creature that can roll into a ball</span></span></span> roll into a little ball? Now picture thousands of them <span class="keyword">dancing<span class="keyword-tooltip">跳舞；移动<span class="tooltip-zh">moving in a rhythm, like dancing</span></span></span> in circles under a <span class="keyword">streetlight<span class="keyword-tooltip">街灯<span class="tooltip-zh">a light on a pole along a street</span></span></span> — and they can't stop! That's exactly what <span class="keyword">scientists<span class="keyword-tooltip">科学家<span class="tooltip-zh">people who study nature and the world</span></span></span> just found in Israel, and it's stranger than any science fiction movie.
+                        </p>
+                        <button class="play-btn" onclick="toggleSegment(0, this)" title="播放段落">▶</button>
+                    </div>
+                    <div class="passage-segment" id="seg2">
+                        <div class="seg-label">🔬 Segment 2 — Story</div>
+                        <p>
+                            <span class="keyword">Researchers<span class="keyword-tooltip">研究人员<span class="tooltip-zh">scientists who do detailed studies</span></span></span> from Hebrew University were studying a small woodlouse called <span class="keyword">Armadillo sordidus<span class="keyword-tooltip">暗色卷甲虫（鼠妇的学名）<span class="tooltip-zh">the scientific name of this pill bug species</span></span></span> in the Golan Heights. At night, under white streetlights, thousands of these bugs gathered in <span class="keyword">giant circles<span class="keyword-tooltip">巨大的圆圈<span class="tooltip-zh">very large round shapes</span></span></span> — more than <span class="keyword">five thousand<span class="keyword-tooltip">五千<span class="tooltip-zh">5,000</span></span></span> in one group! They walked around and around the edge of the light, like a never-ending <span class="keyword">merry-go-round<span class="keyword-tooltip">旋转木马<span class="tooltip-zh">a round ride at a fair that goes in circles</span></span></span>. The team tested flashlights and magnets, but only white light created this weird <span class="keyword">spiral<span class="keyword-tooltip">螺旋<span class="tooltip-zh">a curve that goes around and around</span></span></span>.
+                        </p>
+                        <button class="play-btn" onclick="toggleSegment(1, this)" title="播放段落">▶</button>
+                    </div>
+                    <div class="passage-segment" id="seg3">
+                        <div class="seg-label">💡 Segment 3 — Why It Matters</div>
+                        <p>
+                            Most of the trapped bugs were female, and many were carrying <span class="keyword">eggs<span class="keyword-tooltip">卵；蛋<span class="tooltip-zh">the small round things that baby bugs grow inside</span></span></span>. A <span class="keyword">centipede<span class="keyword-tooltip">蜈蚣<span class="tooltip-zh">a long animal with many legs</span></span></span> was even seen eating them while they were stuck! It shows that our streetlights can accidentally <span class="keyword">trap<span class="keyword-tooltip">困住；使陷入困境<span class="tooltip-zh">to catch and prevent from escaping</span></span></span> small animals and change their ancient <span class="keyword">instincts<span class="keyword-tooltip">本能<span class="tooltip-zh">natural behaviors that animals are born with</span></span></span>. The good news? We can help by using dimmer lights and <span class="keyword">shielding<span class="keyword-tooltip">遮挡；保护<span class="tooltip-zh">covering something to block light or protect</span></span></span> lamps so they point down, not up.
+                        </p>
+                        <button class="play-btn" onclick="toggleSegment(2, this)" title="播放段落">▶</button>
+                    </div>
+                    <div class="passage-segment" id="seg4">
+                        <div class="seg-label">👋 Segment 4 — Sign-off</div>
+                        <p>
+                            So tonight, when you look at a streetlight, remember — it might be a stage for a thousand tiny dancers. But let's make sure they can dance their way home! This is Pola, reporting for POLA NEWS. <span class="keyword">Stay curious<span class="keyword-tooltip">保持好奇<span class="tooltip-zh">keep wanting to learn new things</span></span></span>, and see you next time!
+                        </p>
+                        <button class="play-btn" onclick="toggleSegment(3, this)" title="播放段落">▶</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Vocabulary -->
+            <section id="vocabulary" class="section">
+                <div class="section-header">
+                    <span class="section-icon">📝</span>
+                    <h2>词汇表 Vocabulary</h2>
+                </div>
+                <div class="vocab-grid">
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('pill bug', this)">🔊</button> pill bug <span class="pos">n.</span></div>
+                        <div class="zh-meaning">鼠妇；潮虫；球鼠妇（能卷成小球的小动物）</div>
+                        <div class="example">"Have you ever seen a tiny pill bug roll into a little ball?"<br>A pill bug is not an insect — it's actually a tiny crustacean, like a crab!</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('streetlight', this)">🔊</button> streetlight <span class="pos">n.</span></div>
+                        <div class="zh-meaning">街灯；路灯</div>
+                        <div class="example">"Thousands of them were dancing in circles under a streetlight."<br>The streetlight outside my window helps cars see the road at night.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('spiral', this)">🔊</button> spiral <span class="pos">n.</span></div>
+                        <div class="zh-meaning">螺旋；螺旋形</div>
+                        <div class="example">"Only white light created this weird spiral."<br>A snail's shell grows in a beautiful spiral pattern.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('researcher', this)">🔊</button> researcher <span class="pos">n.</span></div>
+                        <div class="zh-meaning">研究人员；科研工作者</div>
+                        <div class="example">"Researchers from Hebrew University were studying a small woodlouse."<br>The researcher spent three years watching the birds in the forest.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('species', this)">🔊</button> species <span class="pos">n.</span></div>
+                        <div class="zh-meaning">物种</div>
+                        <div class="example">"They were studying a small woodlouse called Armadillo sordidus."<br>A tiger and a lion are different species, but both are big cats.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('artificial', this)">🔊</button> artificial <span class="pos">adj.</span></div>
+                        <div class="zh-meaning">人造的；人工的</div>
+                        <div class="example">"Artificial streetlights can trap thousands of woodlice."<br>This drink uses artificial sweetener instead of real sugar.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('instinct', this)">🔊</button> instinct <span class="pos">n.</span></div>
+                        <div class="zh-meaning">本能；天性</div>
+                        <div class="example">"Streetlights can change the ancient instincts of these small animals."<br>Birds fly south in winter by instinct, not by learning.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('trap', this)">🔊</button> trap <span class="pos">v./n.</span></div>
+                        <div class="zh-meaning">困住；使陷入困境；陷阱</div>
+                        <div class="example">"Our streetlights can accidentally trap small animals."<br>The clever fox escaped from the hunter's trap.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('light pollution', this)">🔊</button> light pollution <span class="pos">n.</span></div>
+                        <div class="zh-meaning">光污染</div>
+                        <div class="example">"This discovery shows the surprising power of light pollution."<br>Light pollution makes it hard to see stars in big cities.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('shield', this)">🔊</button> shield <span class="pos">v./n.</span></div>
+                        <div class="zh-meaning">遮挡；保护；防护罩</div>
+                        <div class="example">"We can help by shielding lamps so they point down, not up."<br>A knight carries a shield to protect himself in battle.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Sentence Patterns -->
+            <section id="patterns" class="section">
+                <div class="section-header">
+                    <span class="section-icon">💬</span>
+                    <h2>句型练习 Sentence Patterns</h2>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">1. "Have you ever seen a tiny pill bug roll into a little ball?"</div>
+                    <div class="pattern-zh">你见过小小的鼠妇卷成一个球吗？</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "Have you ever + 过去分词...?" 用来询问对方是否曾经有过某种经历，是吸引听众的开场常用句。<br><strong>Structure:</strong> "Have you ever + past participle...?" asks if someone has had a certain experience. It's a great hook.</div>
+                    <div class="practice-box">💡 试试看 Try it: Have you ever <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> a firefly at night? (Hint: seen)</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">2. "Now picture thousands of them dancing in circles..."</div>
+                    <div class="pattern-zh">现在想象一下，成千上万只它们在圆圈中移动……</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "Picture + 名词 + 动词-ing" 是一种邀请听众在脑中"画"出画面的表达方式。<br><strong>Structure:</strong> "Picture + noun + verb-ing" invites the listener to create a mental image.</div>
+                    <div class="practice-box">💡 试试看 Try it: Picture <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> under the full moon. (Hint: whales / swimming)</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">3. "That's exactly what scientists just found in Israel."</div>
+                    <div class="pattern-zh">这正是科学家们在以色列刚刚发现的。</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "That's exactly what..." 用来强调前面描述的内容与事实完全吻合，有"正是如此"的感觉。<br><strong>Structure:</strong> "That's exactly what..." emphasizes that the description matches the real situation perfectly.</div>
+                    <div class="practice-box">💡 试试看 Try it: That's exactly what <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> during the experiment. (Hint: happened)</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">4. "It shows that our streetlights can accidentally trap small animals."</div>
+                    <div class="pattern-zh">这说明我们的街灯可能会无意中困住小动物。</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "It shows that..." 用来解释一个事实或发现"说明了什么"，常用于总结观察结果。<br><strong>Structure:</strong> "It shows that..." explains what a fact or discovery proves.</div>
+                    <div class="practice-box">💡 试试看 Try it: It shows that <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> care about their babies. (Hint: elephants)</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">5. "The good news? We can help by using dimmer lights and shielding lamps."</div>
+                    <div class="pattern-zh">好消息是？我们可以通过使用更暗的灯和加装灯罩来帮助它们。</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "The good news? We can help by + 动词-ing" 用积极语气提出问题解决方案，适合结尾升华。<br><strong>Structure:</strong> "The good news? We can help by + verb-ing" offers a positive solution.</div>
+                    <div class="practice-box">💡 试试看 Try it: The good news? We can help by <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> less plastic. (Hint: using)</div>
+                </div>
+            </section>
+
+            <!-- Section 4: Grammar -->
+            <section id="grammar" class="section">
+                <div class="section-header">
+                    <span class="section-icon">📐</span>
+                    <h2>语法点 Grammar Points</h2>
+                </div>
+                <div class="grammar-card">
+                    <h4>1. 现在完成时 + ever — "Have you ever seen...?"</h4>
+                    <div class="grammar-zh">现在完成时 + ever：询问曾经有过的经历</div>
+                    <div class="grammar-explain">
+                        课文："Have you ever seen a tiny pill bug roll into a little ball?" — 询问对方是否"曾经"见过鼠妇卷成球。<br>
+                        <strong>形式：</strong> Have/Has + 主语 + ever + 过去分词...?<br>
+                        <strong>用法：</strong> 用来询问从过去到现在为止的经历，常与 ever/never 连用。
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> you ever <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (visit) a science museum? I <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> never <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (see) a real dinosaur fossil.
+                    </div>
+                </div>
+                <div class="grammar-card">
+                    <h4>2. 被动语态 — "were studied", "were trapped"</h4>
+                    <div class="grammar-zh">被动语态：动作的承受者作主语</div>
+                    <div class="grammar-explain">
+                        课文："Researchers were studying a small woodlouse..."（主动）和 "the bugs were stuck..."（被动）。<br>
+                        被动语态强调"谁被做了什么"，而不是"谁做"。<br>
+                        <strong>形式：</strong> be + 过去分词<br>
+                        <strong>例子：</strong> The bugs were trapped by the light. (虫子被光线困住了。)
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: The streetlights <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (turn) on at night. The small animals <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (trap) by the bright circle of light.
+                    </div>
+                </div>
+                <div class="grammar-card">
+                    <h4>3. 情态动词 can — 能力与可能性</h4>
+                    <div class="grammar-zh">情态动词 can：表示"能够"或"可能"</div>
+                    <div class="grammar-explain">
+                        课文："they can't stop"（不能够停止）、"Our streetlights can accidentally trap small animals"（可能会无意中困住小动物）、"We can help"（我们能够帮忙）。<br>
+                        <strong>can</strong> 可以表示能力，也可以表示可能性。它的否定形式是 <strong>can't</strong>。
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: Fish <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> swim, but they <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> breathe air. Bright lights <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> confuse night animals.
+                    </div>
+                </div>
+                <div class="grammar-card">
+                    <h4>4. "more than" + 数字 — 表示"超过"</h4>
+                    <div class="grammar-zh">more than + 数字：表示"多于……"</div>
+                    <div class="grammar-explain">
+                        课文："more than five thousand in one group" — 一群中有超过五千只。<br>
+                        <strong>more than</strong> 后面接数字，表示数量超过某个界限。类似的表达还有 over。
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: There were <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> 5,000 pill bugs in the circle. The park is <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> 100 years old.
+                    </div>
+                </div>
+                <div class="grammar-card">
+                    <h4>5. 祈使句 — "Remember", "Stay curious", "See you next time"</h4>
+                    <div class="grammar-zh">祈使句：表示请求、命令、建议或祝愿</div>
+                    <div class="grammar-explain">
+                        课文结尾："So tonight, when you look at a streetlight, remember..."、"Stay curious, and see you next time!"<br>
+                        祈使句通常以动词原形开头，省略主语 you。它常用来表达建议、提醒或道别。<br>
+                        <strong>例子：</strong> Be careful! Have a good day! Keep exploring!
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (turn) off the lights when you leave. <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (not / forget) to look under the rock for pill bugs!
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Quiz -->
+            <section id="quiz" class="section">
+                <div class="section-header">
+                    <span class="section-icon">✅</span>
+                    <h2>练习测验 Quiz</h2>
+                </div>
+
+                <div class="quiz-card" id="q1">
+                    <div class="quiz-q">1. In which country did scientists discover the pill bug spirals?</div>
+                    <div class="quiz-q-zh">科学家们是在哪个国家发现鼠妇螺旋现象的？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q1')">A. Australia</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q1')">B. Israel</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q1')">C. Brazil</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q1')">D. England</button>
+                    </div>
+                    <div class="quiz-feedback" id="q1-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q2">
+                    <div class="quiz-q">2. Which university led the study?</div>
+                    <div class="quiz-q-zh">哪所大学领导了这项研究？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q2')">A. Hebrew University of Jerusalem</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q2')">B. Harvard University</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q2')">C. University of Tokyo</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q2')">D. Oxford University</button>
+                    </div>
+                    <div class="quiz-feedback" id="q2-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q3">
+                    <div class="quiz-q">3. What is the scientific name of the pill bug species?</div>
+                    <div class="quiz-q-zh">这种鼠妇的学名是什么？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q3')">A. Doolysaurus huhmini</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q3')">B. Armadillo sordidus</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q3')">C. Microeledone galapagensis</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q3')">D. Nagatitan chaiyaphumensis</button>
+                    </div>
+                    <div class="quiz-feedback" id="q3-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q4">
+                    <div class="quiz-q">4. How many pill bugs were found in one giant circle?</div>
+                    <div class="quiz-q-zh">一个巨大的圆圈中发现了多少只鼠妇？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q4')">A. About 500</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q4')">B. More than 5,000</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q4')">C. Exactly 100</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q4')">D. Less than 50</button>
+                    </div>
+                    <div class="quiz-feedback" id="q4-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q5">
+                    <div class="quiz-q">5. What kind of light made the pill bugs form the spiral?</div>
+                    <div class="quiz-q-zh">什么类型的光使鼠妇形成了螺旋？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q5')">A. Red light</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q5')">B. UV (ultraviolet) flashlight</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q5')">C. Green light</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q5')">D. White light</button>
+                    </div>
+                    <div class="quiz-feedback" id="q5-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q6">
+                    <div class="quiz-q">6. What can people do to help protect these night animals?</div>
+                    <div class="quiz-q-zh">人们可以做些什么来保护这些夜间动物？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q6')">A. Turn all streetlights off completely</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q6')">B. Use dimmer lights and shield lamps to point downward</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q6')">C. Move all the bugs to a zoo</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q6')">D. Paint the streetlights blue</button>
+                    </div>
+                    <div class="quiz-feedback" id="q6-fb"></div>
+                </div>
+
+                <div class="quiz-score" id="quiz-score"></div>
+            </section>
+
+            <!-- Section 6: Knowledge Expansion -->
+            <section id="knowledge" class="section">
+                <div class="section-header">
+                    <span class="section-icon">🧠</span>
+                    <h2>中文知识扩展 Knowledge Expansion</h2>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🐛 鼠妇不是昆虫？它是螃蟹和虾的"陆地亲戚"！</h4>
+                    <p>很多人看到鼠妇（pill bug / woodlouse）有很多条腿，以为它是昆虫。其实鼠妇属于<strong>等足目（Isopoda）</strong>，和螃蟹、龙虾、虾是亲戚！鼠妇的身体扁平，有14条腿，外骨骼坚硬，遇到危险时会卷成小球，这种行为叫做"成球反应"（conglobation）。它们喜欢潮湿阴暗的地方，比如石头下、落叶堆里，因为它们的鳃需要 moisture（水分）来呼吸。本期故事中提到的 <em>Armadillo sordidus</em> 名字里就带有"armadillo"（犰狳），因为犰狳也会卷成球！</p>
+                    <div class="fun-fact">💡 趣味冷知识：鼠妇是少数能够从海洋移居到陆地并成功的甲壳类动物之一。它们的祖先生活在海里，经过几亿年的进化，才变成了我们今天看到的"陆地小潮虫"。</div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>💡 光污染：我们习以为常的"夜晚光明"正在改变自然</h4>
+                    <p><strong>光污染（Light Pollution）</strong>是指人类过度使用人工照明，导致夜晚比自然状态更亮的现象。它不仅让城市里的人很难看到星星，还会严重干扰动植物的行为。例如，海龟宝宝孵化后会本能地爬向最亮的地方——原本是月光反射的海面，但现在城市的灯光会让它们误爬到马路上；迁徙的鸟类会被高楼灯光迷惑而撞楼；许多夜行性动物因为光线无法入睡或无法捕猎。本期发现的鼠妇"死亡螺旋"就是一个全新的例子：连地面爬行的小动物也会被街灯改变行为。</p>
+                    <div class="fun-fact">💡 趣味冷知识：据科学家估计，全球超过80%的人口生活在受光污染影响的夜空下。换句话说，只有不到20%的人还能看到真正的银河！</div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🇮🇱 戈兰高地：以色列北部的岩石丘陵与夜行动物乐园</h4>
+                    <p>本期的发现发生在以色列北部的<strong>戈兰高地（Golan Heights）</strong>。这里是一个多岩石的丘陵地区，冬季多雨，夏季干燥，生长着低矮的灌木和草地。夜晚，戈兰高地的石头下和落叶层中生活着许多小型无脊椎动物，包括本期主角 <em>Armadillo sordidus</em>。研究团队的成员在夏夜观察到街灯周围出现巨大的鼠妇圆圈，最初以为是某种幻觉，直到用相机和科学仪器确认：这是一种真实存在、从未被记录过的行为。</p>
+                    <div class="fun-fact">💡 趣味冷知识：科学家在实验中测试了磁铁和紫外线手电筒，但鼠妇对它们毫无反应。只有垂直照射的白光，才会让它们像被施了魔法一样沿着光圈边缘绕圈！</div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🔬 科学方法：如何研究这种奇怪的行为？</h4>
+                    <p>当科学家发现鼠妇的"死亡螺旋"时，他们需要做实验来找出原因。这叫做<strong>控制变量实验（controlled experiment）</strong>。研究团队测试了多种可能性：① 强磁铁——因为戈兰高地有异常磁场，但磁铁无效；② 紫外线手电筒——只吸引少量鼠妇，没有形成圆圈；③ 白光台灯——成功复制出螺旋！最终他们得出结论：不是光的颜色本身，而是<strong>被照亮区域的圆形边界</strong>让鼠妇沿着边缘走，越来越多加入，形成了自维持的螺旋。这种研究方法告诉我们：科学发现往往需要不断排除错误猜测，才能找到真相。</p>
+                    <div class="fun-fact">💡 趣味冷知识：大多数参与螺旋的鼠妇是雌性，而且很多正在携带卵。这意味着"死亡螺旋"可能不仅困住成年个体，还影响下一代的诞生，科学家因此特别担忧。</div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🌃 我们能做什么？成为"暗夜守护者"</h4>
+                    <p>好消息是，光污染是最容易解决的环境问题之一！我们可以：① 在家里使用有<strong>灯罩（shield）</strong>的户外灯，让光线只照向地面，而不是射向天空；② 选择更暗、更温暖的灯光（如黄色或琥珀色），避免过于明亮的冷白光；③ 不用灯时随手关掉；④ 支持和参与"国际暗夜星空保护区（International Dark Sky Places）"等活动。每个小小的改变，都能帮助成千上万的小动物——包括鼠妇、飞蛾、萤火虫、鸟类——重新拥有安全的夜晚。</p>
+                    <div class="fun-fact">💡 趣味冷知识：萤火虫通过腹部发光来吸引配偶。如果城市灯光太亮，萤火虫可能会"找不到对象"，因为它们的信号被淹没在光污染中！</div>
+                </div>
+            </section>
+
+            <!-- Section 7: About -->
+            <section id="about" class="section">
+                <div class="section-header">
+                    <span class="section-icon">ℹ️</span>
+                    <h2>关于本课 About This Lesson</h2>
+                </div>
+
+                <div class="about-card">
+                    <h4>🎯 学习目标 Learning Goals</h4>
+                    <ul>
+                        <li>了解鼠妇（pill bug / woodlouse）的基本知识：它不是昆虫，而是甲壳类动物，与螃蟹虾是亲戚</li>
+                        <li>理解光污染（light pollution）的概念及其对夜间小动物的影响</li>
+                        <li>认识科学家如何通过控制变量实验来研究动物行为</li>
+                        <li>掌握 10 个核心英语词汇（pill bug, streetlight, spiral, researcher, species, artificial, instinct, trap, light pollution, shield）</li>
+                        <li>学习 5 个实用英语句型和 5 个语法点</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h4>📚 学习建议 Study Tips</h4>
+                    <ul>
+                        <li><strong>先听后读：</strong>点击每个段落右侧的 ▶ 按钮，先听英文朗读，再跟读模仿发音和语调</li>
+                        <li><strong>词汇卡片：</strong>在词汇表区域点击 🔊 按钮听单词发音，大声跟读 3 遍</li>
+                        <li><strong>句型练习：</strong>遮住答案部分，尝试自己完成句型填空，然后对照检查</li>
+                        <li><strong>语法点：</strong>先读懂中文解释，再做英文练习题，加深理解</li>
+                        <li><strong>知识扩展：</strong>阅读中文扩展部分，尝试用简单的英语向家人或朋友复述你学到的知识</li>
+                        <li><strong>测验检验：</strong>完成 6 道选择题，看看自己掌握了多少</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h4>📰 新闻来源 Source</h4>
+                    <ul>
+                        <li>The Hebrew University of Jerusalem — "Streetlights are trapping thousands of pill bugs in giant 'death spirals'" (July 6, 2026)</li>
+                        <li>研究发表于 <em>Ecology and Evolution</em></li>
+                        <li>研究团队：Idan Sheizaf（博士生，第一作者）、Ariel Chipman 教授（耶路撒冷希伯来大学），Eviatar Itzkovich（业余博物学家）</li>
+                    </ul>
+                </div>
+
+                <button class="print-btn" onclick="window.print()">🖨️ 打印本课 Print This Lesson</button>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // ── Speech Engine ──
+        let currentUtterance = null;
+        let voices = [];
+
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                speechSynthesis.addEventListener('voiceschanged', () => {
+                    voices = speechSynthesis.getVoices();
+                }, { once: true });
+            }
+        }
+        loadVoices();
+
+        function getBestVoice() {
+            const priority = ['Enhanced', 'Daniel', 'Alex', 'Microsoft Mark'];
+            for (const name of priority) {
+                const v = voices.find(v => v.name.includes(name) && v.lang.startsWith('en'));
+                if (v) return v;
+            }
+            const male = voices.find(v => v.lang.startsWith('en') && /male/i.test(v.name));
+            if (male) return male;
+            const anyEn = voices.find(v => v.lang.startsWith('en'));
+            return anyEn || voices[0];
+        }
+
+        function speak(text, btn) {
+            speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = getBestVoice();
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+            currentUtterance = utterance;
+
+            if (btn) {
+                btn.classList.add('playing');
+                btn.textContent = '⏸';
+                utterance.onend = () => {
+                    btn.classList.remove('playing');
+                    btn.textContent = '▶';
+                    currentUtterance = null;
+                };
+                utterance.onerror = () => {
+                    btn.classList.remove('playing');
+                    btn.textContent = '▶';
+                    currentUtterance = null;
+                };
+            }
+            speechSynthesis.speak(utterance);
+        }
+
+        // Segment texts (plain text, no HTML)
+        const segmentTexts = [
+            "Have you ever seen a tiny pill bug roll into a little ball? Now picture thousands of them dancing in circles under a streetlight — and they can't stop! That's exactly what scientists just found in Israel, and it's stranger than any science fiction movie.",
+            "Researchers from Hebrew University were studying a small woodlouse called Armadillo sordidus in the Golan Heights. At night, under white streetlights, thousands of these bugs gathered in giant circles — more than five thousand in one group! They walked around and around the edge of the light, like a never-ending merry-go-round. The team tested flashlights and magnets, but only white light created this weird spiral.",
+            "Most of the trapped bugs were female, and many were carrying eggs. A centipede was even seen eating them while they were stuck! It shows that our streetlights can accidentally trap small animals and change their ancient instincts. The good news? We can help by using dimmer lights and shielding lamps so they point down, not up.",
+            "So tonight, when you look at a streetlight, remember — it might be a stage for a thousand tiny dancers. But let's make sure they can dance their way home! This is Pola, reporting for POLA NEWS. Stay curious, and see you next time!"
+        ];
+
+        function toggleSegment(idx, btn) {
+            if (btn.classList.contains('playing')) {
+                speechSynthesis.cancel();
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+                currentUtterance = null;
+            } else {
+                document.querySelectorAll('.play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '▶';
+                });
+                document.querySelectorAll('.vocab-play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '🔊';
+                });
+                speak(segmentTexts[idx], btn);
+            }
+        }
+
+        function playWord(word, btn) {
+            if (btn.classList.contains('playing')) {
+                speechSynthesis.cancel();
+                btn.classList.remove('playing');
+                btn.textContent = '🔊';
+                currentUtterance = null;
+            } else {
+                document.querySelectorAll('.play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '▶';
+                });
+                document.querySelectorAll('.vocab-play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '🔊';
+                });
+                speak(word, btn);
+            }
+        }
+
+        // ── Quiz Logic ──
+        const quizState = {};
+        for (let i = 1; i <= 6; i++) quizState['q' + i] = null;
+
+        function checkAnswer(btn, isCorrect, qid) {
+            if (quizState[qid] !== null) return;
+            quizState[qid] = isCorrect;
+
+            const card = btn.closest('.quiz-card');
+            card.querySelectorAll('.quiz-option').forEach(opt => opt.disabled = true);
+
+            const fb = document.getElementById(qid + '-fb');
+            if (isCorrect) {
+                btn.classList.add('correct');
+                fb.textContent = '✅ Correct! 回答正确！做得好！';
+                fb.className = 'quiz-feedback correct-fb';
+            } else {
+                btn.classList.add('wrong');
+                const correctOpt = card.querySelector('.quiz-option[onclick*="true"]');
+                if (correctOpt) correctOpt.classList.add('correct');
+                fb.textContent = '❌ Not quite. 再想想！正确答案已标出。';
+                fb.className = 'quiz-feedback wrong-fb';
+            }
+
+            checkAllAnswered();
+        }
+
+        function checkAllAnswered() {
+            const allAnswered = Object.values(quizState).every(v => v !== null);
+            if (!allAnswered) return;
+
+            const correctCount = Object.values(quizState).filter(v => v === true).length;
+            const scoreDiv = document.getElementById('quiz-score');
+            scoreDiv.classList.add('show');
+
+            if (correctCount === 6) {
+                scoreDiv.className = 'quiz-score show perfect';
+                scoreDiv.textContent = `🏆 Perfect! ${correctCount}/6 — 满分！你真是太棒了！`;
+            } else if (correctCount >= 4) {
+                scoreDiv.className = 'quiz-score show good';
+                scoreDiv.textContent = `👍 Great job! ${correctCount}/6 — 做得很好，继续加油！`;
+            } else {
+                scoreDiv.className = 'quiz-score show ok';
+                scoreDiv.textContent = `📚 ${correctCount}/6 — 再读一遍课文试试看，你可以做得更好！`;
+            }
+        }
+
+        // ── Progress Bar ──
+        function updateProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        // ── Sidebar Active ──
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.sidebar nav a');
+            let currentId = '';
+            sections.forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if (rect.top <= 150) currentId = sec.id;
+            });
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-section') === currentId);
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            updateProgress();
+            updateActiveNav();
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('.sidebar nav a').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Initial call
+        updateProgress();
+        updateActiveNav();
+    </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

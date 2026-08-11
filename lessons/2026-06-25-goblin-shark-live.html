@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLA NEWS — Goblin Shark Spotted Alive! | 互动学习</title>
+    <style>
+        :root {
+            --deep-blue: #0a1628;
+            --ocean: #0d2137;
+            --teal: #0f5e6b;
+            --coral: #e8734a;
+            --gold: #f0c060;
+            --sand: #f5e6d3;
+            --text: #e0e8f0;
+            --text-dark: #1a2a3a;
+            --card-bg: #132a42;
+            --highlight: #ffd54f;
+            --highlight-bg: rgba(255, 213, 79, 0.15);
+            --accent: #4dc9f6;
+            --success: #4caf84;
+            --danger: #ef5350;
+            --sidebar-w: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #0d2847 30%, #0a1628 60%, #061220 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* Reading Progress Bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--coral), var(--gold));
+            z-index: 9999;
+            transition: width 0.15s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: rgba(10, 22, 40, 0.95);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            overflow-y: auto;
+            padding: 20px 0;
+            backdrop-filter: blur(20px);
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            padding: 10px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo .logo-icon {
+            font-size: 36px;
+            display: block;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 16px;
+            color: var(--gold);
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-logo .episode-title {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 2px;
+        }
+
+        .sidebar nav {
+            padding: 0 12px;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 13px;
+            transition: all 0.2s;
+            margin-bottom: 2px;
+        }
+
+        .sidebar nav a:hover {
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.9);
+        }
+
+        .sidebar nav a.active {
+            background: rgba(240, 192, 96, 0.12);
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .sidebar nav a .nav-icon {
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            padding: 40px 50px;
+            max-width: 900px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            scroll-margin-top: 30px;
+        }
+
+        .section h2 {
+            font-size: 26px;
+            color: var(--gold);
+            margin-bottom: 8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(240, 192, 96, 0.2);
+        }
+
+        .section .section-subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Full Reading */
+        .reading-text {
+            font-size: 17px;
+            line-height: 2;
+            letter-spacing: 0.3px;
+        }
+
+        .reading-text .segment {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border-left: 3px solid var(--teal);
+        }
+
+        .reading-text .segment-label {
+            font-size: 11px;
+            color: var(--teal);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .reading-text .keyword {
+            color: var(--highlight);
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 1px dashed var(--highlight);
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .reading-text .keyword:hover {
+            background: var(--highlight-bg);
+            border-radius: 3px;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--deep-blue);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            color: var(--text);
+            white-space: nowrap;
+            z-index: 200;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .reading-text .keyword:hover .tooltip {
+            display: block;
+        }
+
+        /* Play Button */
+        .play-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--teal);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 8px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .play-btn:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .play-btn.playing {
+            background: var(--coral);
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(232, 115, 74, 0.5); }
+            50% { box-shadow: 0 0 0 10px rgba(232, 115, 74, 0); }
+        }
+
+        .segment-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        /* Vocab Cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+        }
+
+        .vocab-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 18px;
+            transition: all 0.2s;
+        }
+
+        .vocab-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 4px 20px rgba(15, 94, 107, 0.2);
+        }
+
+        .vocab-card .word {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vocab-card .word-type {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .vocab-card .cn-meaning {
+            color: var(--gold);
+            font-size: 14px;
+            margin: 4px 0 8px;
+        }
+
+        .vocab-card .example {
+            font-size: 13px;
+            color: rgba(255,255,255,0.55);
+            font-style: italic;
+            border-left: 2px solid rgba(255,255,255,0.1);
+            padding-left: 10px;
+        }
+
+        .vocab-play {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--accent);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .vocab-play:hover {
+            background: var(--accent);
+            color: var(--deep-blue);
+            border-color: var(--accent);
+        }
+
+        .vocab-play.playing {
+            background: var(--coral);
+            border-color: var(--coral);
+            color: white;
+            animation: pulse 1.2s infinite;
+        }
+
+        /* Sentence Patterns */
+        .pattern-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+        }
+
+        .pattern-card .pattern-title {
+            font-size: 16px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .pattern-card .pattern-en {
+            font-size: 15px;
+            color: var(--text);
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 6px;
+            margin: 8px 0;
+            font-family: 'SF Mono', 'Cascadia Code', monospace;
+        }
+
+        .pattern-card .pattern-cn {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 8px;
+        }
+
+        .pattern-card .practice {
+            font-size: 13px;
+            color: var(--gold);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(255,255,255,0.08);
+        }
+
+        /* Grammar */
+        .grammar-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+        }
+
+        .grammar-card h4 {
+            color: var(--accent);
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .grammar-card .grammar-en {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 8px;
+        }
+
+        .grammar-card .grammar-example {
+            background: rgba(255,255,255,0.04);
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .grammar-card .grammar-practice {
+            color: var(--gold);
+            font-size: 13px;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(240, 192, 96, 0.05);
+            border-radius: 6px;
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .quiz-question .q-num {
+            font-size: 12px;
+            color: var(--coral);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .quiz-question .q-text {
+            font-size: 15px;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quiz-option {
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: var(--teal);
+        }
+
+        .quiz-option.correct {
+            background: rgba(76, 175, 132, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .quiz-option.wrong {
+            background: rgba(239, 83, 80, 0.2);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .quiz-option:disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .quiz-feedback {
+            margin-top: 8px;
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: rgba(76,175,132,0.1); color: var(--success); }
+        .quiz-feedback.wrong { background: rgba(239,83,80,0.1); color: var(--danger); }
+
+        /* Knowledge Extension */
+        .knowledge-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .knowledge-card h3 {
+            color: var(--gold);
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .knowledge-card p, .knowledge-card li {
+            font-size: 14px;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.9;
+            margin-bottom: 8px;
+        }
+
+        .knowledge-card ul {
+            padding-left: 20px;
+        }
+
+        .knowledge-card .fun-fact {
+            background: rgba(240, 192, 96, 0.08);
+            border-left: 3px solid var(--gold);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+            font-size: 14px;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .about-card h4 {
+            color: var(--accent);
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .about-card ul {
+            padding-left: 18px;
+        }
+
+        .about-card li {
+            font-size: 13px;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 4px;
+        }
+
+        .print-btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--teal);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+
+        .print-btn:hover {
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 12px;
+            }
+
+            .sidebar nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                padding: 0;
+            }
+
+            .sidebar nav a {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
+            .sidebar-logo { padding: 8px; }
+            .sidebar-logo h2 { font-size: 14px; }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px 16px;
+            }
+
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section h2 { font-size: 22px; }
+        }
+
+        /* Print */
+        @media print {
+            body { background: white; color: black; }
+            .sidebar, #progress-bar, .play-btn, .vocab-play, .print-btn { display: none !important; }
+            .main-content { margin-left: 0; padding: 0; }
+            .card, .vocab-card, .grammar-card, .pattern-card, .quiz-question, .knowledge-card, .about-card {
+                background: white;
+                border: 1px solid #ccc;
+                color: black;
+            }
+            .section h2 { color: #0a1628; border-bottom-color: #ccc; }
+            .keyword { color: #b8860b; border-bottom-color: #b8860b; }
+            .tooltip { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">🦈</span>
+                <h2>POLA NEWS</h2>
+                <div class="episode-title">Goblin Shark Spotted Alive!</div>
+            </div>
+            <nav>
+                <a href="#reading" class="active"><span class="nav-icon">📖</span> 全文阅读</a>
+                <a href="#vocabulary"><span class="nav-icon">📝</span> 词汇表</a>
+                <a href="#patterns"><span class="nav-icon">💬</span> 句型练习</a>
+                <a href="#grammar"><span class="nav-icon">📐</span> 语法点</a>
+                <a href="#quiz"><span class="nav-icon">✏️</span> 练习测验</a>
+                <a href="#knowledge"><span class="nav-icon">🌊</span> 知识扩展</a>
+                <a href="#about"><span class="nav-icon">ℹ️</span> 关于本课</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Section 1: Full Reading -->
+            <section class="section" id="reading">
+                <h2>📖 全文阅读</h2>
+                <p class="section-subtitle">Full Reading — 点击高亮词汇查看释义，点击 ▶ 按钮收听朗读</p>
+
+                <div class="reading-text">
+                    <div class="segment" id="seg1">
+                        <div class="segment-header">
+                            <span class="segment-label">Segment 1 — Hook</span>
+                            <button class="play-btn" onclick="playSegment(0, this)" title="播放段落">▶</button>
+                        </div>
+                        <p>Did you know there's a <span class="keyword">shark<span class="tooltip">鲨鱼 — a large fish with sharp teeth</span></span> that looks like it came straight out of a monster movie? It has a long <span class="keyword">pointy<span class="tooltip">尖尖的 — having a sharp, narrow tip</span></span> nose and <span class="keyword">jaws<span class="tooltip">下颚 — the bones in the mouth that hold teeth</span></span> that shoot forward to grab its food. It's called a <span class="keyword">goblin shark<span class="tooltip">哥布林鲨/剑吻鲨 — a rare deep-sea shark with a long snout</span></span> — and until now, nobody had ever seen one alive in the <span class="keyword">deep ocean<span class="tooltip">深海 — the deepest part of the sea</span></span>. But last month, scientists finally did. And what they found will blow your mind!</p>
+                    </div>
+
+                    <div class="segment" id="seg2">
+                        <div class="segment-header">
+                            <span class="segment-label">Segment 2 — Story</span>
+                            <button class="play-btn" onclick="playSegment(1, this)" title="播放段落">▶</button>
+                        </div>
+                        <p>For over 125 million years, <span class="keyword">goblin sharks</span> have been hiding in the darkest parts of the ocean. Scientists had only ever seen dead ones pulled up by fishing boats. But in 2019 and 2024, two teams — one near Jarvis Island and another at the <span class="keyword">Tonga Trench<span class="tooltip">汤加海沟 — one of the deepest places in the Pacific Ocean</span></span> — used <span class="keyword">underwater robots<span class="tooltip">水下机器人 — a machine (ROV) that explores the ocean floor</span></span> to film these pink-skinned sharks swimming freely. One was spotted nearly 700 meters <span class="keyword">deeper<span class="tooltip">更深 — farther down below the surface</span></span> than anyone thought possible!</p>
+                    </div>
+
+                    <div class="segment" id="seg3">
+                        <div class="segment-header">
+                            <span class="segment-label">Segment 3 — Why It Matters</span>
+                            <button class="play-btn" onclick="playSegment(2, this)" title="播放段落">▶</button>
+                        </div>
+                        <p>This <span class="keyword">discovery<span class="tooltip">发现 — the act of finding something new</span></span> teaches us something really important: our ocean still holds so many <span class="keyword">secrets<span class="tooltip">秘密 — things that are unknown or hidden</span></span>. If a shark that's been around since the <span class="keyword">dinosaurs<span class="tooltip">恐龙 — ancient reptiles that lived millions of years ago</span></span> can stay hidden for this long, imagine what else is down there! The <span class="keyword">scientists<span class="tooltip">科学家 — people who study the natural world</span></span> say this is just the beginning. Every time we send a robot into the deep, we might meet a <span class="keyword">creature<span class="tooltip">生物 — any living thing, especially an animal</span></span> nobody has ever seen alive before.</p>
+                    </div>
+
+                    <div class="segment" id="seg4">
+                        <div class="segment-header">
+                            <span class="segment-label">Segment 4 — Sign-off</span>
+                            <button class="play-btn" onclick="playSegment(3, this)" title="播放段落">▶</button>
+                        </div>
+                        <p>The goblin shark may look a little <span class="keyword">spooky<span class="tooltip">有点吓人的 — slightly scary or creepy</span></span>, but it's not scary — it's a <span class="keyword">survivor<span class="tooltip">幸存者 — someone/something that lives through difficult conditions</span></span>. And now, thanks to some brave robots and curious scientists, we finally get to see it in its real home. Who knows what we'll <span class="keyword">discover<span class="tooltip">发现 — to find something new or unknown</span></span> next? This is Pola, reporting from the edge of the deep blue. See you next time on POLA NEWS!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Vocabulary -->
+            <section class="section" id="vocabulary">
+                <h2>📝 词汇表</h2>
+                <p class="section-subtitle">Vocabulary — 点击 🔊 按钮听单词发音</p>
+
+                <div class="vocab-grid">
+                    <div class="vocab-card">
+                        <div class="word">
+                            goblin shark
+                            <span class="word-type">noun</span>
+                            <button class="vocab-play" onclick="playWord('goblin shark', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">哥布林鲨 / 剑吻鲨 — 一种罕见的深海鲨鱼</div>
+                        <div class="example">"The goblin shark has a long, pointy nose and pink skin."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            deep ocean
+                            <span class="word-type">noun phrase</span>
+                            <button class="vocab-play" onclick="playWord('deep ocean', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">深海 — 海洋最深、最暗的区域</div>
+                        <div class="example">"Many strange creatures live in the deep ocean."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            underwater robot
+                            <span class="word-type">noun phrase</span>
+                            <button class="vocab-play" onclick="playWord('underwater robot', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">水下机器人（ROV）— 用于深海探索的遥控机器</div>
+                        <div class="example">"Scientists used an underwater robot to film the shark."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            discovery
+                            <span class="word-type">noun</span>
+                            <button class="vocab-play" onclick="playWord('discovery', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">发现 — 找到或了解到以前未知的事物</div>
+                        <div class="example">"The discovery of the live goblin shark amazed everyone."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            survivor
+                            <span class="word-type">noun</span>
+                            <button class="vocab-play" onclick="playWord('survivor', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">幸存者 — 在困难或危险中存活下来的生命</div>
+                        <div class="example">"The goblin shark is a survivor from the age of dinosaurs."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            spooky
+                            <span class="word-type">adjective</span>
+                            <button class="vocab-play" onclick="playWord('spooky', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">有点吓人的 / 诡异的 — 让人感到轻微害怕但又有趣</div>
+                        <div class="example">"The old house looked spooky in the moonlight."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            species
+                            <span class="word-type">noun</span>
+                            <button class="vocab-play" onclick="playWord('species', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">物种 — 一群相似并能繁衍后代的生物</div>
+                        <div class="example">"The goblin shark is one of the rarest shark species."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            jaws
+                            <span class="word-type">noun</span>
+                            <button class="vocab-play" onclick="playWord('jaws', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">下颚 / 嘴巴 — 动物口中含牙齿的骨骼结构</div>
+                        <div class="example">"The shark's jaws can shoot forward to catch prey."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            trench
+                            <span class="word-type">noun</span>
+                            <button class="vocab-play" onclick="playWord('trench', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">海沟 — 海底又深又窄的峡谷</div>
+                        <div class="example">"The Tonga Trench is one of the deepest places on Earth."</div>
+                    </div>
+
+                    <div class="vocab-card">
+                        <div class="word">
+                            habitat
+                            <span class="word-type">noun</span>
+                            <button class="vocab-play" onclick="playWord('habitat', this)" title="播放发音">🔊</button>
+                        </div>
+                        <div class="cn-meaning">栖息地 — 动植物生活和生长的自然环境</div>
+                        <div class="example">"The deep ocean is the goblin shark's natural habitat."</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Sentence Patterns -->
+            <section class="section" id="patterns">
+                <h2>💬 句型练习</h2>
+                <p class="section-subtitle">Sentence Patterns — 从课文中提取的实用句型</p>
+
+                <div class="pattern-card">
+                    <div class="pattern-title">1. "Did you know (that) ... ?" — 你知道吗……？</div>
+                    <div class="pattern-cn">用来引出一个令人惊讶的事实，吸引听众注意。</div>
+                    <div class="pattern-en">Did you know there's a shark that looks like a monster?</div>
+                    <div class="practice">💡 试一试：Did you know that ______ ?</div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-title">2. "Until now, nobody had ever ..." — 直到现在，从来没有人……</div>
+                    <div class="pattern-cn">强调某事是第一次发生，使用过去完成时（had + 过去分词）。</div>
+                    <div class="pattern-en">Until now, nobody had ever seen one alive in the deep ocean.</div>
+                    <div class="practice">💡 试一试：Until now, nobody had ever ______ .</div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-title">3. "If ... can ..., imagine what else ...!" — 如果……都能……，想象一下还有多少……！</div>
+                    <div class="pattern-cn">用对比激发好奇心和想象力。</div>
+                    <div class="pattern-en">If a shark that's been around since the dinosaurs can stay hidden, imagine what else is down there!</div>
+                    <div class="practice">💡 试一试：If a tiny ant can lift 50 times its weight, imagine what ______ !</div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-title">4. "Thanks to ..., we finally ..." — 多亏了……，我们终于……</div>
+                    <div class="pattern-cn">表达因为某物/某人的帮助，才实现了某个结果。</div>
+                    <div class="pattern-en">Thanks to some brave robots and curious scientists, we finally get to see it in its real home.</div>
+                    <div class="practice">💡 试一试：Thanks to ______ , we finally ______ .</div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-title">5. "Who knows what we'll ... next?" — 谁知道我们接下来会发现什么？</div>
+                    <div class="pattern-cn">用反问句制造悬念，让听众期待未来的新发现。</div>
+                    <div class="pattern-en">Who knows what we'll discover next?</div>
+                    <div class="practice">💡 试一试：Who knows what we'll ______ next?</div>
+                </div>
+            </section>
+
+            <!-- Section 4: Grammar -->
+            <section class="section" id="grammar">
+                <h2>📐 语法点</h2>
+                <p class="section-subtitle">Grammar Points — 5个核心语法知识点</p>
+
+                <div class="grammar-card">
+                    <h4>1. 现在完成时 — Present Perfect (have/has + 过去分词)</h4>
+                    <div class="grammar-en">Used to talk about experiences or actions that started in the past and continue to the present.</div>
+                    <div class="grammar-example">
+                        📖 "Goblin sharks <strong>have been hiding</strong> in the darkest parts of the ocean for over 125 million years."
+                    </div>
+                    <div class="grammar-practice">
+                        ✏️ 练习：用现在完成时填空 — "Scientists ______ (study) deep-sea creatures for many years."
+                        <br><small>答案：have studied</small>
+                    </div>
+                </div>
+
+                <div class="grammar-card">
+                    <h4>2. 过去完成时 — Past Perfect (had + 过去分词)</h4>
+                    <div class="grammar-en">Used to talk about something that happened BEFORE another past event.</div>
+                    <div class="grammar-example">
+                        📖 "Nobody <strong>had ever seen</strong> one alive in the deep ocean — until now."
+                    </div>
+                    <div class="grammar-practice">
+                        ✏️ 练习：用过去完成时填空 — "Before 2019, scientists ______ (not film) a live goblin shark."
+                        <br><small>答案：had not filmed / hadn't filmed</small>
+                    </div>
+                </div>
+
+                <div class="grammar-card">
+                    <h4>3. 比较级 — Comparatives (形容词 + er / more + 形容词)</h4>
+                    <div class="grammar-en">Used to compare two things. Short adjectives add "-er"; long adjectives use "more".</div>
+                    <div class="grammar-example">
+                        📖 "One was spotted nearly 700 meters <strong>deeper</strong> than anyone thought possible!"
+                    </div>
+                    <div class="grammar-practice">
+                        ✏️ 练习：写出下列词的比较级 — deep → ______, spooky → ______, long → ______
+                        <br><small>答案：deeper, spookier, longer</small>
+                    </div>
+                </div>
+
+                <div class="grammar-card">
+                    <h4>4. 条件句 Type 1 — First Conditional (If + 现在时, will + 动词原形)</h4>
+                    <div class="grammar-en">Used for real or possible situations in the future.</div>
+                    <div class="grammar-example">
+                        📖 "Every time we send a robot into the deep, we <strong>might meet</strong> a creature nobody has ever seen."
+                    </div>
+                    <div class="grammar-practice">
+                        ✏️ 练习：完成条件句 — "If we explore more of the ocean, we ______ (find) new species."
+                        <br><small>答案：will find / might find</small>
+                    </div>
+                </div>
+
+                <div class="grammar-card">
+                    <h4>5. 感官动词 — Sense Verbs (look, sound, feel, smell, taste + 形容词)</h4>
+                    <div class="grammar-en">Used to describe how something appears to our senses. Followed by an adjective, NOT an adverb.</div>
+                    <div class="grammar-example">
+                        📖 "The goblin shark may <strong>look</strong> a little spooky, but it's not scary."
+                    </div>
+                    <div class="grammar-practice">
+                        ✏️ 练习：选择正确的词 — "This music ______ (sounds / sounds like) beautiful." → ______
+                        <br><small>答案：sounds（感官动词 + 形容词，不需要 like）</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Quiz -->
+            <section class="section" id="quiz">
+                <h2>✏️ 练习测验</h2>
+                <p class="section-subtitle">Quiz — 6道理解题，检验你对课文的理解</p>
+
+                <div id="quiz-container">
+                    <div class="quiz-question" data-answer="B">
+                        <div class="q-num">Question 1 / 第 1 题</div>
+                        <div class="q-text">What makes the goblin shark look unusual? / 哥布林鲨为什么看起来与众不同？</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="checkAnswer(this, 'A')">A. It has bright blue skin and three eyes.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'B')">B. It has a long pointy nose and jaws that shoot forward.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'C')">C. It can walk on land using its fins.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'D')">D. It glows in the dark like a flashlight.</div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-answer="C">
+                        <div class="q-num">Question 2 / 第 2 题</div>
+                        <div class="q-text">How long have goblin sharks existed on Earth? / 哥布林鲨在地球上存在了多久？</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="checkAnswer(this, 'A')">A. About 1 million years</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'B')">B. About 65 million years</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'C')">C. Over 125 million years</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'D')">D. About 500 million years</div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-answer="A">
+                        <div class="q-num">Question 3 / 第 3 题</div>
+                        <div class="q-text">How did scientists film the live goblin shark? / 科学家是如何拍摄到活体哥布林鲨的？</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="checkAnswer(this, 'A')">A. They used underwater robots (ROVs).</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'B')">B. They swam down with special cameras.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'C')">C. They caught one and put it in an aquarium.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'D')">D. They used a submarine with people inside.</div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-answer="D">
+                        <div class="q-num">Question 4 / 第 4 题</div>
+                        <div class="q-text">Where was the goblin shark spotted? / 哥布林鲨在哪里被发现的？</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="checkAnswer(this, 'A')">A. Near Australia and Japan only</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'B')">B. In the Atlantic Ocean near Africa</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'C')">C. In the Arctic Ocean under the ice</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'D')">D. Near Jarvis Island and the Tonga Trench in the Central Pacific</div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-answer="B">
+                        <div class="q-num">Question 5 / 第 5 题</div>
+                        <div class="q-text">What is the main message of this news story? / 这篇新闻的主要信息是什么？</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="checkAnswer(this, 'A')">A. Sharks are dangerous and should be avoided.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'B')">B. The ocean still holds many secrets waiting to be discovered.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'C')">C. Robots are better than humans at everything.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'D')">D. Goblin sharks are going extinct very soon.</div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-answer="C">
+                        <div class="q-num">Question 6 / 第 6 题</div>
+                        <div class="q-text">Why does Pola call the goblin shark a "survivor"? / 为什么 Pola 称哥布林鲨为"幸存者"？</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="checkAnswer(this, 'A')">A. Because it survived a shark attack.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'B')">B. Because it was rescued by scientists.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'C')">C. Because it has lived on Earth since the time of dinosaurs.</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, 'D')">D. Because it can survive without food for years.</div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: Knowledge Extension -->
+            <section class="section" id="knowledge">
+                <h2>🌊 中文知识扩展</h2>
+                <p class="section-subtitle">Knowledge Extension — 深入了解哥布林鲨和深海探索</p>
+
+                <div class="knowledge-card">
+                    <h3>🦈 什么是哥布林鲨？</h3>
+                    <p>哥布林鲨（学名：<em>Mitsukurina owstoni</em>），中文也叫"剑吻鲨"或"欧氏尖吻鲨"，是地球上最古老的鲨鱼物种之一。它的家族可以追溯到约 <strong>1.25 亿年前</strong>的白垩纪早期——那时候恐龙还在陆地上漫步呢！</p>
+                    <p>它最独特的特征是：</p>
+                    <ul>
+                        <li><strong>长而扁平的鼻子</strong>（吻部），像一把剑，上面布满了能感应电场的传感器，帮助它在漆黑的深海中找到猎物。</li>
+                        <li><strong>可弹射的下颚</strong>——捕食时，它的上下颚会像弹簧一样向前弹出，一口咬住猎物，这在整个鲨鱼家族中都是独一无二的！</li>
+                        <li><strong>粉红色的半透明皮肤</strong>——因为它的皮肤很薄，血管的颜色透出来，所以看起来是粉红色的。</li>
+                    </ul>
+                    <div class="fun-fact">
+                        🎯 <strong>趣味冷知识：</strong>哥布林鲨的英文名 "goblin shark" 来自日文 "tenguzame"（天狗鲨），因为它的长鼻子让人联想到日本民间传说中的天狗——一种长鼻子妖怪。而它的中文名"剑吻鲨"则形象地描述了它像剑一样的吻部。
+                    </div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h3>🤖 水下机器人（ROV）是如何工作的？</h3>
+                    <p>ROV 的全称是 <strong>Remotely Operated Vehicle</strong>（遥控潜水器）。它是一种无人驾驶的水下机器人，由海面上的科考船通过一根长长的电缆（脐带缆）进行控制和供电。</p>
+                    <p>这次拍摄到哥布林鲨的两个 ROV 分别是：</p>
+                    <ul>
+                        <li><strong>Hercules（大力神）</strong>——由海洋探索信托基金（Ocean Exploration Trust）的 E/V Nautilus 科考船操作，2019年在贾维斯岛附近拍摄到第一条。</li>
+                        <li><strong>海底着陆器 + 诱饵相机</strong>——由 Minderoo-UWA 深海研究中心的 R/V Dagon 科考船在汤加海沟投放，2024年拍摄到第二条。</li>
+                    </ul>
+                    <div class="fun-fact">
+                        🎯 <strong>趣味冷知识：</strong>汤加海沟是地球上最深的地方之一，最深处约 10,882 米！而这次发现的哥布林鲨出现在约 2,000 米的深度——这已经比之前认为的哥布林鲨最深栖息记录深了将近 700 米。
+                    </div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h3>🌏 为什么深海探索如此重要？</h3>
+                    <p>你知道吗？人类对火星表面的了解，<strong>比对自己星球深海海底的了解还要多</strong>。地球上超过 80% 的海洋仍然没有被探索过。</p>
+                    <p>深海探索的意义：</p>
+                    <ul>
+                        <li><strong>发现新物种：</strong>每一次深海考察几乎都能发现新的生物。从发光的鱿鱼到透明的水母，深海是一个充满惊喜的世界。</li>
+                        <li><strong>了解地球历史：</strong>像哥布林鲨这样的"活化石"帮助我们了解生命是如何在地球上演化的。</li>
+                        <li><strong>医学突破：</strong>深海生物产生的特殊化学物质可能成为未来的药物。例如，某些深海海绵的化合物已被用于抗癌研究。</li>
+                        <li><strong>保护海洋：</strong>只有了解海洋中有什么，我们才能更好地保护它。</li>
+                    </ul>
+                    <div class="fun-fact">
+                        🎯 <strong>趣味冷知识：</strong>海洋最深处的压力大约是海平面的 1,000 倍——相当于你的一根手指上站了 50 头大象！但哥布林鲨和其他深海生物却能轻松适应这种极端环境。
+                    </div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h3>🔬 这次发现的科学意义</h3>
+                    <p>这篇论文于 2026 年 5 月 19 日发表在《鱼类生物学杂志》（<em>Journal of Fish Biology</em>）上，第一作者是夏威夷大学马诺阿分校的博士生 <strong>Aaron Judah</strong>。</p>
+                    <p>这次发现的重要意义：</p>
+                    <ul>
+                        <li>首次在<strong>中太平洋</strong>记录到哥布林鲨，大大扩展了它的已知分布范围。</li>
+                        <li>创造了鼠鲨目（Lamniformes）——包括大白鲨、姥鲨在内的整个鲨鱼目——的<strong>最深观察记录</strong>。</li>
+                        <li>证明了即使是"明星级"的深海动物，我们对它们的了解仍然非常有限。</li>
+                        <li>为各国制定海洋保护区政策提供了重要数据——"如果我们不知道它生活在那里，我们就无法保护它。"</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 7: About This Lesson -->
+            <section class="section" id="about">
+                <h2>ℹ️ 关于本课</h2>
+                <p class="section-subtitle">About This Lesson</p>
+
+                <div class="about-grid">
+                    <div class="about-card">
+                        <h4>🎯 学习目标</h4>
+                        <ul>
+                            <li>了解哥布林鲨的独特特征和栖息环境</li>
+                            <li>掌握 10 个核心英语词汇（goblin shark, deep ocean, ROV 等）</li>
+                            <li>练习 5 个实用英语句型</li>
+                            <li>复习现在完成时、过去完成时、比较级等语法点</li>
+                            <li>理解深海探索的科学意义</li>
+                        </ul>
+                    </div>
+                    <div class="about-card">
+                        <h4>📋 学习建议</h4>
+                        <ul>
+                            <li>先听一遍全文朗读（点击 ▶ 按钮）</li>
+                            <li>逐段阅读，点击黄色词汇查看释义</li>
+                            <li>用词汇卡片练习发音和例句</li>
+                            <li>完成语法练习和测验</li>
+                            <li>阅读中文知识扩展，加深理解</li>
+                            <li>试着用自己的话复述这个故事！</li>
+                        </ul>
+                    </div>
+                    <div class="about-card">
+                        <h4>📰 新闻来源</h4>
+                        <ul>
+                            <li><em>Journal of Fish Biology</em> (May 19, 2026)</li>
+                            <li>University of Hawaiʻi at Mānoa</li>
+                            <li>Minderoo-UWA Deep-Sea Research Center</li>
+                            <li>Ocean Exploration Trust / E/V Nautilus</li>
+                            <li>SciTechDaily (June 24, 2026)</li>
+                        </ul>
+                    </div>
+                    <div class="about-card">
+                        <h4>🐾 关于 POLA NEWS</h4>
+                        <ul>
+                            <li>主持人：Pola（短尾矮袋鼠 Quokka）</li>
+                            <li>定位：儿童英语科普新闻播报</li>
+                            <li>英语水平：B1（10-12 岁）</li>
+                            <li>每期 60 秒，4 段播报</li>
+                            <li>实景记者出镜风格</li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="print-btn" onclick="window.print()">🖨️ 打印本课（打印友好版）</button>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // === Reading Progress Bar ===
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        });
+
+        // === Sidebar Active State ===
+        const navLinks = document.querySelectorAll('.sidebar nav a');
+        const sections = document.querySelectorAll('.section');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // === Web Speech API ===
+        let currentUtterance = null;
+        let voices = [];
+
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+        }
+        loadVoices();
+        speechSynthesis.onvoiceschanged = loadVoices;
+
+        function getBestVoice() {
+            const priority = [
+                'Daniel', 'Alex', 'Microsoft Mark',
+                'Google UK English Male', 'Google US English',
+                'Samantha', 'Karen', 'Moira', 'Fiona',
+                'Microsoft David', 'Microsoft Zira'
+            ];
+            // Try enhanced voices first
+            const enhancedMale = voices.filter(v => 
+                v.lang.startsWith('en') && 
+                (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('guy') || v.name.toLowerCase().includes('man'))
+            );
+            if (enhancedMale.length > 0) {
+                // Prefer "Enhanced" or "Premium" voices
+                const premium = enhancedMale.find(v => v.name.includes('Enhanced') || v.name.includes('Premium'));
+                if (premium) return premium;
+                return enhancedMale[0];
+            }
+            // Fall back to priority list
+            for (const name of priority) {
+                const found = voices.find(v => v.name === name);
+                if (found) return found;
+            }
+            // Any English voice
+            const anyEn = voices.find(v => v.lang.startsWith('en'));
+            return anyEn || voices[0];
+        }
+
+        function stopSpeech() {
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+                currentUtterance = null;
+            }
+        }
+
+        // Segment texts (plain text, no HTML)
+        const segmentTexts = [
+            "Did you know there's a shark that looks like it came straight out of a monster movie? It has a long pointy nose and jaws that shoot forward to grab its food. It's called a goblin shark — and until now, nobody had ever seen one alive in the deep ocean. But last month, scientists finally did. And what they found will blow your mind!",
+            "For over 125 million years, goblin sharks have been hiding in the darkest parts of the ocean. Scientists had only ever seen dead ones pulled up by fishing boats. But in 2019 and 2024, two teams — one near Jarvis Island and another at the Tonga Trench — used underwater robots to film these pink-skinned sharks swimming freely. One was spotted nearly 700 meters deeper than anyone thought possible!",
+            "This discovery teaches us something really important: our ocean still holds so many secrets. If a shark that's been around since the dinosaurs can stay hidden for this long, imagine what else is down there! The scientists say this is just the beginning. Every time we send a robot into the deep, we might meet a creature nobody has ever seen alive before.",
+            "The goblin shark may look a little spooky, but it's not scary — it's a survivor. And now, thanks to some brave robots and curious scientists, we finally get to see it in its real home. Who knows what we'll discover next? This is Pola, reporting from the edge of the deep blue. See you next time on POLA NEWS!"
+        ];
+
+        function playSegment(index, btn) {
+            // If already playing, stop it
+            if (btn.classList.contains('playing')) {
+                stopSpeech();
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+                return;
+            }
+
+            stopSpeech();
+
+            // Reset all play buttons
+            document.querySelectorAll('.play-btn').forEach(b => {
+                b.classList.remove('playing');
+                b.textContent = '▶';
+            });
+
+            const utterance = new SpeechSynthesisUtterance(segmentTexts[index]);
+            utterance.voice = getBestVoice();
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+            utterance.lang = 'en-US';
+
+            btn.classList.add('playing');
+            btn.textContent = '⏸';
+            currentUtterance = utterance;
+
+            utterance.onend = () => {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+                currentUtterance = null;
+            };
+
+            utterance.onerror = () => {
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+                currentUtterance = null;
+            };
+
+            speechSynthesis.speak(utterance);
+        }
+
+        function playWord(word, btn) {
+            if (btn.classList.contains('playing')) {
+                stopSpeech();
+                btn.classList.remove('playing');
+                return;
+            }
+
+            stopSpeech();
+
+            // Reset all vocab play buttons
+            document.querySelectorAll('.vocab-play').forEach(b => {
+                b.classList.remove('playing');
+            });
+
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.voice = getBestVoice();
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            utterance.lang = 'en-US';
+
+            btn.classList.add('playing');
+            currentUtterance = utterance;
+
+            utterance.onend = () => {
+                btn.classList.remove('playing');
+                currentUtterance = null;
+            };
+
+            utterance.onerror = () => {
+                btn.classList.remove('playing');
+                currentUtterance = null;
+            };
+
+            speechSynthesis.speak(utterance);
+        }
+
+        // === Quiz ===
+        function checkAnswer(optionEl, selected) {
+            const questionEl = optionEl.closest('.quiz-question');
+            const correctAnswer = questionEl.dataset.answer;
+            const feedbackEl = questionEl.querySelector('.quiz-feedback');
+            const allOptions = questionEl.querySelectorAll('.quiz-option');
+
+            // Prevent double-answering
+            if (allOptions[0].disabled) return;
+
+            // Disable all options
+            allOptions.forEach(opt => opt.disabled = true);
+
+            const isCorrect = selected === correctAnswer;
+
+            if (isCorrect) {
+                optionEl.classList.add('correct');
+                feedbackEl.textContent = '✅ Correct! / 回答正确！';
+                feedbackEl.classList.add('show', 'correct');
+            } else {
+                optionEl.classList.add('wrong');
+                // Highlight correct answer
+                allOptions.forEach(opt => {
+                    if (opt.onclick && opt.onclick.toString().includes("'" + correctAnswer + "'")) {
+                        opt.classList.add('correct');
+                    }
+                });
+                const correctText = allOptions[['A','B','C','D'].indexOf(correctAnswer)].textContent;
+                feedbackEl.textContent = '❌ Not quite. The correct answer is ' + correctAnswer + '. / 正确答案是 ' + correctAnswer + '。';
+                feedbackEl.classList.add('show', 'wrong');
+            }
+        }
+    </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

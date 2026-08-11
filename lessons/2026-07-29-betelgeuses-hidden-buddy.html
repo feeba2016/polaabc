@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News — Betelgeuse's Hidden Buddy | Interactive English Lesson</title>
+<style>
+  :root {
+    --bg-start: #0b0d1a;
+    --bg-end: #1a1040;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.1);
+    --text: #e8e6f0;
+    --text-secondary: #b0adc0;
+    --accent: #ff9d5c;
+    --accent2: #ff6b9d;
+    --highlight: #ffd166;
+    --highlight-bg: rgba(255,209,102,0.18);
+    --nav-bg: rgba(15,12,30,0.95);
+    --btn-bg: rgba(255,157,92,0.15);
+    --btn-hover: rgba(255,157,92,0.3);
+    --correct: #4ecdc4;
+    --wrong: #ff6b6b;
+    --tooltip-bg: #1e1b3a;
+    --progress-bg: rgba(255,255,255,0.08);
+    --progress-fill: linear-gradient(90deg, #ff9d5c, #ff6b9d);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+  /* Progress Bar */
+  #progress-bar {
+    position: fixed; top:0; left:0; height:3px;
+    background: var(--progress-fill);
+    z-index: 1000;
+    transition: width 0.3s ease;
+    border-radius: 0 2px 2px 0;
+  }
+  /* Nav */
+  #sidebar {
+    position: fixed; left:0; top:0; bottom:0; width: 240px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    padding: 24px 16px;
+    overflow-y: auto;
+    z-index: 900;
+    border-right: 1px solid var(--card-border);
+    transition: transform 0.3s ease;
+  }
+  #sidebar h2 {
+    font-size: 1.1rem; margin-bottom: 20px; color: var(--accent);
+    display: flex; align-items: center; gap: 8px;
+  }
+  #sidebar nav a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; border-radius: 10px;
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 0.9rem; margin-bottom: 4px;
+    transition: all 0.2s ease;
+  }
+  #sidebar nav a:hover, #sidebar nav a.active {
+    background: var(--btn-bg); color: var(--text);
+  }
+  #sidebar nav a .icon { font-size: 1.1rem; width: 22px; text-align: center; }
+  /* Mobile menu toggle */
+  #menu-toggle {
+    display: none; position: fixed; top: 12px; left: 12px; z-index: 950;
+    background: var(--nav-bg); border: 1px solid var(--card-border);
+    color: var(--text); font-size: 1.3rem; padding: 8px 12px;
+    border-radius: 8px; cursor: pointer;
+  }
+  /* Main */
+  #main {
+    margin-left: 240px; padding: 40px 48px; max-width: 900px;
+  }
+  .section {
+    display: none; margin-bottom: 40px;
+    scroll-margin-top: 60px;
+  }
+  .section.active { display: block; }
+  .section h2 {
+    font-size: 1.6rem; margin-bottom: 20px;
+    color: var(--accent); border-bottom: 2px solid var(--card-border);
+    padding-bottom: 10px;
+  }
+  .section h3 {
+    font-size: 1.2rem; color: var(--accent2); margin: 24px 0 10px;
+  }
+  /* Typography */
+  p { margin-bottom: 12px; color: var(--text-secondary); }
+  .highlight {
+    color: var(--highlight); font-weight: 600;
+    background: var(--highlight-bg); padding: 1px 6px;
+    border-radius: 4px; cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .highlight:hover { background: rgba(255,209,102,0.35); }
+  /* Tooltip */
+  .tooltip {
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--tooltip-bg); color: var(--text);
+    padding: 8px 14px; border-radius: 8px; font-size: 0.85rem;
+    white-space: nowrap; pointer-events: none; opacity: 0;
+    transition: opacity 0.2s; z-index: 10;
+    border: 1px solid var(--card-border);
+    font-weight: 400;
+  }
+  .highlight:hover .tooltip { opacity: 1; }
+  /* Reading Segment */
+  .reading-segment {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 20px 24px; margin-bottom: 16px;
+    position: relative;
+  }
+  .reading-segment .seg-label {
+    font-size: 0.75rem; text-transform: uppercase;
+    color: var(--accent); letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .reading-segment .seg-text {
+    font-size: 1.05rem; line-height: 1.8; padding-right: 48px;
+  }
+  .play-btn {
+    position: absolute; top: 20px; right: 20px;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--btn-bg); border: 2px solid var(--accent);
+    color: var(--accent); font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; animation: pulse 2s infinite;
+  }
+  .play-btn:hover { background: var(--btn-hover); }
+  .play-btn.playing { animation: none; background: var(--accent); color: #0b0d1a; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,157,92,0.5); }
+    50% { box-shadow: 0 0 0 10px rgba(255,157,92,0); }
+  }
+  /* Vocab Cards */
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px; margin-top: 16px;
+  }
+  .vocab-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 18px; position: relative;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .vocab-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .vocab-card .word {
+    font-size: 1.15rem; font-weight: 700; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .vocab-card .word .pos {
+    font-size: 0.7rem; color: var(--accent); font-weight: 400;
+    background: rgba(255,157,92,0.15); padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .vocab-card .def { color: var(--text-secondary); margin: 6px 0; font-size: 0.92rem; }
+  .vocab-card .example {
+    color: var(--accent2); font-size: 0.85rem; font-style: italic;
+  }
+  .vocab-play {
+    position: absolute; top: 14px; right: 14px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: transparent; border: 1.5px solid var(--accent2);
+    color: var(--accent2); font-size: 0.75rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .vocab-play:hover { background: rgba(255,107,157,0.2); }
+  .vocab-play.playing { background: var(--accent2); color: #0b0d1a; }
+  /* Practice */
+  .pattern-item, .grammar-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 20px; margin-bottom: 14px;
+  }
+  .pattern-item h4, .grammar-item h4 {
+    color: var(--text); font-size: 1.05rem; margin-bottom: 6px;
+  }
+  .pattern-item .en, .grammar-item .en {
+    color: var(--accent); font-weight: 500; margin-bottom: 4px;
+  }
+  .pattern-item .zh, .grammar-item .zh {
+    color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px;
+  }
+  textarea.practice {
+    width: 100%; min-height: 60px; background: rgba(0,0,0,0.3);
+    border: 1px solid var(--card-border); border-radius: 8px;
+    color: var(--text); padding: 10px; font-family: inherit;
+    font-size: 0.92rem; resize: vertical; margin-top: 8px;
+  }
+  textarea.practice:focus { outline: none; border-color: var(--accent); }
+  /* Quiz */
+  .quiz-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 22px; margin-bottom: 14px;
+  }
+  .quiz-item .q { font-weight: 600; margin-bottom: 12px; font-size: 1rem; }
+  .quiz-item .q .qzh { font-size: 0.85rem; color: var(--text-secondary); display: block; margin-top: 2px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 6px; }
+  .quiz-options label {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: rgba(0,0,0,0.2); border-radius: 8px;
+    cursor: pointer; transition: background 0.2s; font-size: 0.92rem;
+  }
+  .quiz-options label:hover { background: rgba(0,0,0,0.35); }
+  .quiz-options input[type="radio"] { accent-color: var(--accent); }
+  .quiz-feedback { margin-top: 10px; font-weight: 600; font-size: 0.9rem; display: none; }
+  .quiz-feedback.correct { color: var(--correct); display: block; }
+  .quiz-feedback.wrong { color: var(--wrong); display: block; }
+  .quiz-options label.correct-choice { background: rgba(78,205,196,0.15); border: 1px solid var(--correct); }
+  .quiz-options label.wrong-choice { background: rgba(255,107,107,0.15); border: 1px solid var(--wrong); }
+  .check-btn {
+    padding: 8px 20px; background: var(--btn-bg); border: 1px solid var(--accent);
+    color: var(--accent); border-radius: 8px; cursor: pointer;
+    font-size: 0.85rem; margin-top: 10px; transition: all 0.2s;
+  }
+  .check-btn:hover { background: var(--btn-hover); }
+  /* Knowledge Expansion */
+  .knowledge-block {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 22px; margin-bottom: 16px;
+  }
+  .knowledge-block h3 { margin-top: 0; }
+  .knowledge-block p { font-size: 0.95rem; }
+  /* About */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .about-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 20px;
+  }
+  .about-card h4 { color: var(--accent); margin-bottom: 8px; }
+  .about-card ul { padding-left: 20px; color: var(--text-secondary); font-size: 0.92rem; }
+  .about-card ul li { margin-bottom: 4px; }
+  .print-btn {
+    padding: 10px 24px; background: var(--accent); color: #0b0d1a;
+    border: none; border-radius: 8px; cursor: pointer;
+    font-weight: 600; font-size: 0.9rem; margin-top: 16px;
+    transition: opacity 0.2s;
+  }
+  .print-btn:hover { opacity: 0.85; }
+  /* Responsive */
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #menu-toggle { display: block; }
+    #main { margin-left: 0; padding: 20px 16px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .reading-segment .seg-text { padding-right: 0; }
+    .play-btn { position: static; margin-top: 12px; }
+  }
+  /* Print */
+  @media print {
+    #sidebar, #menu-toggle, #progress-bar, .play-btn, .vocab-play,
+    .check-btn, .print-btn, textarea.practice { display: none !important; }
+    body { background: white; color: black; }
+    #main { margin-left: 0; padding: 0; max-width: 100%; }
+    .section { display: block !important; margin-bottom: 20px; break-inside: avoid; }
+    .reading-segment, .vocab-card, .pattern-item, .grammar-item,
+    .quiz-item, .knowledge-block, .about-card {
+      background: white; border: 1px solid #ccc; box-shadow: none;
+    }
+    .highlight { color: #d4a017; background: #fff8e1; }
+    .section h2 { color: #333; border-bottom-color: #999; }
+    p, .def, .zh { color: #555; }
+    .en, .word { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar" style="width:0%"></div>
+
+<button id="menu-toggle" onclick="toggleMenu()">☰</button>
+
+<aside id="sidebar">
+  <h2>🌟 Pola News</h2>
+  <nav>
+    <a href="#reading" class="active" onclick="showSection('reading')"><span class="icon">📖</span> 全文阅读</a>
+    <a href="#vocab" onclick="showSection('vocab')"><span class="icon">📝</span> 词汇表</a>
+    <a href="#patterns" onclick="showSection('patterns')"><span class="icon">💬</span> 句型练习</a>
+    <a href="#grammar" onclick="showSection('grammar')"><span class="icon">📐</span> 语法点</a>
+    <a href="#quiz" onclick="showSection('quiz')"><span class="icon">✅</span> 练习测验</a>
+    <a href="#knowledge" onclick="showSection('knowledge')"><span class="icon">🔭</span> 知识扩展</a>
+    <a href="#about" onclick="showSection('about')"><span class="icon">ℹ️</span> 关于本课</a>
+  </nav>
+</aside>
+
+<main id="main">
+
+<!-- ==================== 1. READING ==================== -->
+<section id="section-reading" class="section active">
+  <h2>📖 全文阅读 — Betelgeuse's Hidden Buddy</h2>
+  <p style="color:var(--text-secondary);margin-bottom:20px;">
+    点击高亮词汇查看释义。点击每段右侧的 ▶ 按钮听取朗读。
+  </p>
+
+  <div class="reading-segment">
+    <div class="seg-label">🔴 Segment 1 — Hook</div>
+    <div class="seg-text">
+      Look up at the night sky. See that bright reddish
+      <span class="highlight">star<span class="tooltip">恒星 — a huge ball of burning gas in space that produces light</span></span>
+      on Orion's shoulder? That's Betelgeuse — and it's been keeping a secret for over a hundred years.
+      <span class="highlight">Astronomers<span class="tooltip">天文学家 — scientists who study stars, planets, and space</span></span>
+      always had a feeling it wasn't alone up there. And guess what? They were right. Betelgeuse has a hidden
+      <span class="highlight">companion<span class="tooltip">伴星 — a star that orbits another star; a partner</span></span>,
+      and we finally have the photo to prove it!
+    </div>
+    <button class="play-btn" onclick="toggleSegmentPlay(this, 0)" title="Play">▶</button>
+  </div>
+
+  <div class="reading-segment">
+    <div class="seg-label">🟠 Segment 2 — Story</div>
+    <div class="seg-text">
+      For a whole
+      <span class="highlight">century<span class="tooltip">世纪 — one hundred years</span></span>,
+      scientists noticed something strange. Betelgeuse's light
+      <span class="highlight">flickers<span class="tooltip">闪烁 — shines unsteadily, goes brighter and dimmer</span></span>
+      in a six-year pattern that just didn't make sense — unless something was
+      <span class="highlight">tugging<span class="tooltip">拖拽 — pulling gently but steadily</span></span>
+      on it. Last December, a team used the Very Large
+      <span class="highlight">Telescope<span class="tooltip">望远镜 — a powerful instrument that makes distant objects look closer</span></span>
+      in Chile with a special tool called a
+      <span class="highlight">coronagraph<span class="tooltip">日冕仪 — a device that blocks bright starlight to reveal dimmer objects nearby</span></span>.
+      It blocked Betelgeuse's blinding light — and there it was! A smaller star, glowing right next to the giant.
+    </div>
+    <button class="play-btn" onclick="toggleSegmentPlay(this, 1)" title="Play">▶</button>
+  </div>
+
+  <div class="reading-segment">
+    <div class="seg-label">🟣 Segment 3 — Why It Matters</div>
+    <div class="seg-text">
+      This little companion, named
+      <span class="highlight">Siwarha<span class="tooltip">Siwarha — 意为"她的手镯"，Betelgeuse伴星的阿拉伯语名称</span></span>,
+      is actually two to three times heavier than our entire Sun! It's been hiding in plain
+      <span class="highlight">sight<span class="tooltip">在眼前 — in a place where everyone can see it, yet nobody noticed it</span></span>
+      all along, right next to one of the most famous stars in the night sky. If we can miss something like that — imagine what else is out there waiting to be found. The
+      <span class="highlight">universe<span class="tooltip">宇宙 — all of space and everything in it</span></span>
+      still has plenty of surprises, even in places we thought we knew well.
+    </div>
+    <button class="play-btn" onclick="toggleSegmentPlay(this, 2)" title="Play">▶</button>
+  </div>
+
+  <div class="reading-segment">
+    <div class="seg-label">🌟 Segment 4 — Sign-off</div>
+    <div class="seg-text">
+      So next time you
+      <span class="highlight">spot<span class="tooltip">发现/看到 — to see or notice something</span></span>
+      Orion in the sky, remember — that bright red star isn't alone. It has a
+      <span class="highlight">cosmic<span class="tooltip">宇宙的 — relating to the universe or outer space</span></span>
+      dance partner! That's all for today's Pola News. Keep looking up, keep asking questions, and I'll see you next time. Bye-bye!
+    </div>
+    <button class="play-btn" onclick="toggleSegmentPlay(this, 2)" title="Play">▶</button>
+  </div>
+</section>
+
+<!-- ==================== 2. VOCABULARY ==================== -->
+<section id="section-vocab" class="section">
+  <h2>📝 词汇表 — Vocabulary</h2>
+  <p style="color:var(--text-secondary);margin-bottom:16px;">点击 🔊 按钮听取单词发音</p>
+  <div class="vocab-grid" id="vocab-grid"></div>
+</section>
+
+<!-- ==================== 3. SENTENCE PATTERNS ==================== -->
+<section id="section-patterns" class="section">
+  <h2>💬 句型练习 — Sentence Patterns</h2>
+
+  <div class="pattern-item">
+    <h4>1. Present Perfect Continuous — 现在完成进行时</h4>
+    <div class="en">"It's <strong>been keeping</strong> a secret for over a hundred years."</div>
+    <div class="zh">它已经保守这个秘密超过一百年了。<br>用法：has/have + been + V-ing，表示从过去开始一直持续到现在的动作。</div>
+    <textarea class="practice" placeholder="用现在完成进行时造句：I ________ (study) English for three years."></textarea>
+  </div>
+
+  <div class="pattern-item">
+    <h4>2. "Unless" Clause — unless 条件从句</h4>
+    <div class="en">"It just didn't make sense — <strong>unless</strong> something was tugging on it."</div>
+    <div class="zh">这完全讲不通——除非有什么东西在牵引着它。<br>用法：unless = if...not，引出唯一能使情况成立的条件。</div>
+    <textarea class="practice" placeholder="用 unless 造句：We won't understand it unless we ________."></textarea>
+  </div>
+
+  <div class="pattern-item">
+    <h4>3. Dramatic Reveal — 戏剧性揭示</h4>
+    <div class="en">"It blocked Betelgeuse's blinding light — <strong>and there it was!</strong>"</div>
+    <div class="zh">它挡住了参宿四刺眼的光芒——��后它就出现了！<br>用法：用破折号制造停顿感，再用 "and there it was" 表达惊喜的发现。</div>
+    <textarea class="practice" placeholder="模仿造句：I opened the dusty box — and there it was! ________."></textarea>
+  </div>
+
+  <div class="pattern-item">
+    <h4>4. First Conditional + Imagination — 第一条件句 + 想象</h4>
+    <div class="en">"<strong>If</strong> we can miss something like that — <strong>imagine</strong> what else is out there!"</div>
+    <div class="zh">如果我们连这种东西都能错过——想象一下还有什么在外面等着呢！<br>用法：If + 现在时, imagine/think about... 用于引发思考和好奇心。</div>
+    <textarea class="practice" placeholder="模仿造句：If one small garden can feed a family — imagine what ________."></textarea>
+  </div>
+
+  <div class="pattern-item">
+    <h4>5. "Next time" + Imperative — "下次" + 祈使句</h4>
+    <div class="en">"<strong>So next time</strong> you spot Orion in the sky, <strong>remember</strong> — that bright red star isn't alone."</div>
+    <div class="zh">所以下次你在天空中看到猎��座时，记住——那颗明亮的红星并不孤单。<br>用法：Next time + 从句, 祈使句，用于给建议或提醒。</div>
+    <textarea class="practice" placeholder="模仿造句：So next time you ________, remember — ________."></textarea>
+  </div>
+</section>
+
+<!-- ==================== 4. GRAMMAR ==================== -->
+<section id="section-grammar" class="section">
+  <h2>📐 语法点 — Grammar Points</h2>
+
+  <div class="grammar-item">
+    <h4>1. Present Perfect Continuous 现在完成进行时</h4>
+    <div class="en">"It's <strong>been keeping</strong> a secret for over a hundred years."</div>
+    <div class="zh">结构：have/has + been + V-ing，强调动作从过去持续到现在，可能仍在继续。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>练习：</strong>将下列句子改为现在完成进行时：<br>She waits for this moment. → She ________ for this moment. <em>(has been waiting)</em></p>
+  </div>
+
+  <div class="grammar-item">
+    <h4>2. Past Simple for Narrative 叙事中的一般过去时</h4>
+    <div class="en">"Scientists <strong>noticed</strong>... a team <strong>used</strong>... it <strong>blocked</strong>..."</div>
+    <div class="zh">讲故事时使用一般过去时描述已完成的动作。文中多用于 Segment 2 的故事叙述部分。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>改为过去时：</strong>They use a telescope. → They ________ a telescope. <em>(used)</em></p>
+  </div>
+
+  <div class="grammar-item">
+    <h4>3. Comparative Structures 比较级结构</h4>
+    <div class="en">"<strong>two to three times heavier</strong> than our entire Sun"</div>
+    <div class="zh">倍数 + 比较级 + than：表示"A 比 B 重/大/快 X 倍"。还可以说 "twice as heavy as"（两倍重）。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>翻译：</strong>这颗伴星比太阳重两到三倍。<br>→ The companion is ________ times ________ than the Sun. <em>(two to three, heavier)</em></p>
+  </div>
+
+  <div class="grammar-item">
+    <h4>4. Relative Clauses 关系从句</h4>
+    <div class="en">"a special tool <strong>that blocks bright starlight</strong>"<br>"places <strong>we thought we knew well</strong>"</div>
+    <div class="zh">关系从句修饰前面的名词。注意：第二句中省略了关系代词 that/which（在口语中常见）。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>合并句子：</strong>I saw a star. The star was flickering.<br>→ I saw a star ________ was flickering. <em>(that/which)</em></p>
+  </div>
+
+  <div class="grammar-item">
+    <h4>5. "Even in" — Emphatic Preposition Phrase 强调性介词短语</h4>
+    <div class="en">"<strong>even in</strong> places we thought we knew well"</div>
+    <div class="zh">even + 介词短语用于强调"就连……也"的意外感。even 可以修饰名词、动词、介词短语、从句。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>翻译：</strong>就连天文学家也感到惊讶。<br>→ ________ astronomers were surprised. <em>(Even)</em></p>
+  </div>
+</section>
+
+<!-- ==================== 5. QUIZ ==================== -->
+<section id="section-quiz" class="section">
+  <h2>✅ 练习测验 — Comprehension Quiz</h2>
+  <p style="color:var(--text-secondary);margin-bottom:16px;">选择正确答案后点击"检查"按钮。</p>
+
+  <div class="quiz-item" id="q1">
+    <div class="q">1. What is Betelgeuse?<span class="qzh">参宿四是什么？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q1" value="A"> A. A planet in our solar system</label>
+      <label><input type="radio" name="q1" value="B"> B. A red supergiant star in the constellation Orion</label>
+      <label><input type="radio" name="q1" value="C"> C. A telescope in Chile</label>
+      <label><input type="radio" name="q1" value="D"> D. A moon orbiting Jupiter</label>
+    </div>
+    <div class="quiz-feedback" id="fb1"></div>
+    <button class="check-btn" onclick="checkQuiz(1, 'B')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q2">
+    <div class="q">2. How long have astronomers suspected Betelgeuse might have a companion?<span class="qzh">天文学家怀疑参宿四有伴星多久了？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q2" value="A"> A. About 10 years</label>
+      <label><input type="radio" name="q2" value="B"> B. About 50 years</label>
+      <label><input type="radio" name="q2" value="C"> C. Over 100 years (a century)</label>
+      <label><input type="radio" name="q2" value="D"> D. Since last month</label>
+    </div>
+    <div class="quiz-feedback" id="fb2"></div>
+    <button class="check-btn" onclick="checkQuiz(2, 'C')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q3">
+    <div class="q">3. What instrument helped astronomers block Betelgeuse's bright light?<span class="qzh">什么仪器帮助天文学家挡住了参宿四的强光？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q3" value="A"> A. A microscope</label>
+      <label><input type="radio" name="q3" value="B"> B. A coronagraph</label>
+      <label><input type="radio" name="q3" value="C"> C. A periscope</label>
+      <label><input type="radio" name="q3" value="D"> D. A kaleidoscope</label>
+    </div>
+    <div class="quiz-feedback" id="fb3"></div>
+    <button class="check-btn" onclick="checkQuiz(3, 'B')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q4">
+    <div class="q">4. What is the name of Betelgeuse's companion star?<span class="qzh">参宿四的伴星叫什么名字？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q4" value="A"> A. Polaris</label>
+      <label><input type="radio" name="q4" value="B"> B. Sirius</label>
+      <label><input type="radio" name="q4" value="C"> C. Siwarha</label>
+      <label><input type="radio" name="q4" value="D"> D. Vega</label>
+    </div>
+    <div class="quiz-feedback" id="fb4"></div>
+    <button class="check-btn" onclick="checkQuiz(4, 'C')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q5">
+    <div class="q">5. How massive is the companion star compared to our Sun?<span class="qzh">伴星的质量与太阳相比如何？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q5" value="A"> A. About the same mass</label>
+      <label><input type="radio" name="q5" value="B"> B. Half the mass</label>
+      <label><input type="radio" name="q5" value="C"> C. Two to three times heavier</label>
+      <label><input type="radio" name="q5" value="D"> D. Ten times heavier</label>
+    </div>
+    <div class="quiz-feedback" id="fb5"></div>
+    <button class="check-btn" onclick="checkQuiz(5, 'C')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q6">
+    <div class="q">6. What is the main message of this news story?<span class="qzh">这则新闻的主要信息是什么？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q6" value="A"> A. Telescopes are getting cheaper</label>
+      <label><input type="radio" name="q6" value="B"> B. Betelgeuse is about to explode</label>
+      <label><input type="radio" name="q6" value="C"> C. Even famous stars can hide surprises — the universe still has much to discover</label>
+      <label><input type="radio" name="q6" value="D"> D. Chile has the biggest telescopes</label>
+    </div>
+    <div class="quiz-feedback" id="fb6"></div>
+    <button class="check-btn" onclick="checkQuiz(6, 'C')">检查 ✓</button>
+  </div>
+</section>
+
+<!-- ==================== 6. KNOWLEDGE ==================== -->
+<section id="section-knowledge" class="section">
+  <h2>🔭 中文知识扩展 — Explore More</h2>
+
+  <div class="knowledge-block">
+    <h3>🌟 参宿四：猎户座肩上的"红宝石"</h3>
+    <p>参宿四（Betelgeuse）是夜空中最容易辨认的恒星之一。它位于猎户座的左肩位置，呈现出明显的红橙色。这颗恒星是一颗<strong>红超巨星</strong>���—它的体积极其巨大，如果把它放在太阳系的中心，它的表面会吞没水星、金星、地球、火星，甚至接��木星的轨道！参宿四的半径大约是太阳的 <strong>1400 倍</strong>。</p>
+    <p>参宿四距离地球约 <strong>650 光年</strong>。这意味着我们现在看到的参宿四的光芒，实际上是在大约 650 年前发出的——那时候中国还是明朝！</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🤝 Siwarha：百年谜团的答案</h3>
+    <p>新发现的伴星被正式命名为 <strong>Siwarha</strong>（意为"她的手镯"），源自阿拉伯语。参宿四本身的名称 Betelgeuse 也来自阿拉伯语"Yad al-Jauzā"，意为"巨人的手"。两颗星的名字形成了一个美丽的呼应——"巨人的手"和"她的手镯"。</p>
+    <p>Siwarha 的质量是太阳的 <strong>2 到 3 倍</strong>，听起来很重，但与参宿四相比还是小得多。天文学家最初估计它可能和太阳差不多大，但实际观测发现它比预想的更大更亮——这也是为什么这次能够成功拍到它的原因��一！</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🔬 日冕仪：给星星"戴墨镜"的神奇工具</h3>
+    <p>这次发现使用的关键工具叫做<strong>日冕仪（coronagraph）</strong>，安装在欧洲南方天文台的<strong>甚大望远镜（VLT）</strong>���。日冕仪的工作原理就像用手挡住太阳来看清周围的景物——它会人为制造一个"小圆盘"挡住明亮恒星的强光，让周围较暗的天体显现出来。</p>
+    <p>这项技术最初是为了研究太阳的日冕和寻找系外行星而开发的。这次它成功找到了藏在参宿四旁边的伴星，证明好工具可以有多种用途！VLT 位于智利的阿塔卡马沙漠，那里干燥少雨、几乎没有光污染，是世界上最好的天文观测地点之一��</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>💫 参宿四会爆炸吗？</h3>
+    <p>参宿四是一颗接近生命末期的恒星。作为红超巨星，它最终会以<strong>超新星爆发</strong>的方式结束生命——届时它会变得极其明亮，可能在白天也能看到，亮度堪比满月！</p>
+    <p>不过不用担心：科学家认为这可能在 <strong>10 万年内</strong>发生，对于人类来说还非常遥远。而且参宿四距离我们足够远，不会对地球造成任何危害。</p>
+    <p>有趣的是：2019-2020 年间，参宿四经历了一次"大暗淡"事件（Great Dimming），亮度突然下降了约三分之二。当时很多人猜测它要爆炸了！后来发现，这次暗淡是因为参宿四喷出了一大团尘埃云挡住了光线。现在它的亮度已经恢复正常了。</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🌌 为什么要寻找双星和伴星？</h3>
+    <p>实际上，宇宙中大多数恒星都不是孤单一颗的——超过一半的恒星属于<strong>��星系统或多星系统</strong>！研究伴星可以帮助天文学家了解：</p>
+    <p>• 恒星是如何诞生和演化的<br>
+    • 伴星的引力如何影响��星的亮度和运动<br>
+    • 双星系统是否可能孕育行星<br>
+    • 恒星最终会以什么方式结束生命</p>
+    <p>参宿四的六年度亮度周期一直是个谜，现在有了 Siwarha 的发现，这个谜题终于有了一个令人信服的答案。</p>
+  </div>
+</section>
+
+<!-- ==================== 7. ABOUT ==================== -->
+<section id="section-about" class="section">
+  <h2>ℹ️ 关于本课 — About This Lesson</h2>
+  <div class="about-grid">
+    <div class="about-card">
+      <h4>🎯 学习目标</h4>
+      <ul>
+        <li>阅读并理解一篇关于天文学发现的英语新闻</li>
+        <li>掌握 10 个天文和科学相关核心词汇</li>
+        <li>学��使用现在完成进行时和比较级结构</li>
+        <li>了解参宿四及其伴星的科学背景</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h4>📋 课程内容</h4>
+      <ul>
+        <li>主题：Betelgeuse's Hidden Buddy</li>
+        <li>英语水平：B1（10-12岁）</li>
+        <li>来��：ESO / Astronomy &amp; Astrophysics, 2026.7.28</li>
+        <li>时长：约30-45分钟</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h4>💡 学习建议</h4>
+      <ul>
+        <li>先通读全文，利用高亮提示理解生词</li>
+        <li>使用语音按钮跟读练习发音</li>
+        <li>完成句型练习中的造句任务</li>
+        <li>做完测验后对照答案，复习错误题目</li>
+        <li>阅读知识扩展部分加深理解</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h4>🔗 延伸探索</h4>
+      <ul>
+        <li>今晚尝试在夜空寻找猎户座和参宿四</li>
+        <li>搜索"Betelgeuse"了解更多关于红超巨星的知识</li>
+        <li>了解 ESO 甚大望远镜（VLT）的工作原理</li>
+        <li>思考：为什么发现伴星对我们理解宇宙很重要？</li>
+      </ul>
+    </div>
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+</section>
+
+</main>
+
+<script>
+// ==================== VOCABULARY DATA ====================
+const vocabData = [
+  { word: "supergiant", pos: "n.", def: "超巨星 — 体积和质量都极大的恒星", example: "Betelgeuse is a red supergiant star.", pronounce: "supergiant" },
+  { word: "companion", pos: "n.", def: "伴星；伙伴 — 围绕另一颗恒星运行的恒星", example: "The companion star has been hiding for a century.", pronounce: "companion" },
+  { word: "constellation", pos: "n.", def: "星座 — 天空中由恒星组成的图案", example: "Orion is one of the easiest constellations to find.", pronounce: "constellation" },
+  { word: "coronagraph", pos: "n.", def: "日冕仪 — 遮挡恒星强光的仪器", example: "The coronagraph blocked Betelgeuse's bright light.", pronounce: "coronagraph" },
+  { word: "flicker", pos: "v.", def: "闪烁 — 光线忽明忽暗", example: "The star's light flickers in a six-year pattern.", pronounce: "flicker" },
+  { word: "tug", pos: "v.", def: "拖拽；牵引 — 轻轻地拉", example: "Something was tugging on the star.", pronounce: "tug" },
+  { word: "telescope", pos: "n.", def: "望远镜 — 观测遥远天体的仪器", example: "They used the Very Large Telescope in Chile.", pronounce: "telescope" },
+  { word: "universe", pos: "n.", def: "宇宙 — 包含所有空间、时间和物质", example: "The universe still has plenty of surprises.", pronounce: "universe" },
+  { word: "cosmic", pos: "adj.", def: "宇宙的 — 与宇宙或太空相关的", example: "It has a cosmic dance partner!", pronounce: "cosmic" },
+  { word: "detect", pos: "v.", def: "探测；发现 — 发现原本不易察觉的东西", example: "Astronomers finally detected the hidden companion.", pronounce: "detect" }
+];
+
+function buildVocabGrid() {
+  const grid = document.getElementById('vocab-grid');
+  grid.innerHTML = vocabData.map((v, i) => `
+    <div class="vocab-card">
+      <div class="word">${v.word} <span class="pos">${v.pos}</span></div>
+      <div class="def">${v.def}</div>
+      <div class="example">"${v.example}"</div>
+      <button class="vocab-play" onclick="toggleVocabPlay(this, '${v.pronounce}', event)" title="Listen">🔊</button>
+    </div>
+  `).join('');
+}
+buildVocabGrid();
+
+// ==================== NAVIGATION ====================
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const section = document.getElementById('section-' + name);
+  if (section) section.classList.add('active');
+  document.querySelectorAll('#sidebar nav a').forEach(a => a.classList.remove('active'));
+  const link = document.querySelector(`#sidebar nav a[href="#${name}"]`);
+  if (link) link.classList.add('active');
+  // Close mobile menu
+  document.getElementById('sidebar').classList.remove('open');
+  // Reset scroll
+  document.getElementById('main').scrollTop = 0;
+  window.scrollTo(0,0);
+  updateProgress();
+}
+
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Progress bar
+function updateProgress() {
+  const main = document.getElementById('main');
+  const scrollTop = main.scrollTop || window.scrollY;
+  const scrollHeight = (main.scrollHeight || document.body.scrollHeight) - (main.clientHeight || window.innerHeight);
+  const progress = scrollHeight > 0 ? Math.min(100, (scrollTop / scrollHeight) * 100) : 0;
+  document.getElementById('progress-bar').style.width = progress + '%';
+}
+
+window.addEventListener('scroll', updateProgress);
+window.addEventListener('resize', updateProgress);
+
+// ==================== VOICE PLAYBACK ====================
+let currentUtterance = null;
+let voicesLoaded = false;
+let availableVoices = [];
+
+// Segment texts (plain text, no HTML)
+const segmentTexts = [
+  "Look up at the night sky. See that bright reddish star on Orion's shoulder? That's Betelgeuse — and it's been keeping a secret for over a hundred years. Astronomers always had a feeling it wasn't alone up there. And guess what? They were right. Betelgeuse has a hidden companion, and we finally have the photo to prove it!",
+  "For a whole century, scientists noticed something strange. Betelgeuse's light flickers in a six-year pattern that just didn't make sense — unless something was tugging on it. Last December, a team used the Very Large Telescope in Chile with a special tool called a coronagraph. It blocked Betelgeuse's blinding light — and there it was! A smaller star, glowing right next to the giant.",
+  "This little companion, named Siwarha, is actually two to three times heavier than our entire Sun! It's been hiding in plain sight all along, right next to one of the most famous stars in the night sky. If we can miss something like that — imagine what else is out there waiting to be found. The universe still has plenty of surprises, even in places we thought we knew well.",
+  "So next time you spot Orion in the sky, remember — that bright red star isn't alone. It has a cosmic dance partner! That's all for today's Pola News. Keep looking up, keep asking questions, and I'll see you next time. Bye-bye!"
+];
+
+function loadVoices() {
+  return new Promise((resolve) => {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      availableVoices = voices;
+      voicesLoaded = true;
+      resolve();
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        availableVoices = speechSynthesis.getVoices();
+        voicesLoaded = true;
+        resolve();
+      };
+    }
+  });
+}
+
+function getBestVoice() {
+  // Priority: Enhanced English male > Daniel > Alex > Microsoft Mark > any English male > any English
+  const enhanced = availableVoices.find(v => v.name.includes('Enhanced') && v.lang.startsWith('en') && !v.name.includes('Female'));
+  if (enhanced) return enhanced;
+  const daniel = availableVoices.find(v => v.name === 'Daniel' && v.lang.startsWith('en'));
+  if (daniel) return daniel;
+  const alex = availableVoices.find(v => v.name === 'Alex' && v.lang.startsWith('en'));
+  if (alex) return alex;
+  const mark = availableVoices.find(v => v.name.includes('Mark') && v.lang.startsWith('en'));
+  if (mark) return mark;
+  const englishMale = availableVoices.find(v => v.lang.startsWith('en') && !v.name.includes('Female'));
+  if (englishMale) return englishMale;
+  const english = availableVoices.find(v => v.lang.startsWith('en'));
+  return english || availableVoices[0];
+}
+
+function stopCurrentSpeech() {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  // Reset all play buttons
+  document.querySelectorAll('.play-btn.playing').forEach(b => {
+    b.classList.remove('playing');
+    b.textContent = '▶';
+  });
+  document.querySelectorAll('.vocab-play.playing').forEach(b => {
+    b.classList.remove('playing');
+    b.textContent = '🔊';
+  });
+}
+
+async function toggleSegmentPlay(btn, index) {
+  if (btn.classList.contains('playing')) {
+    stopCurrentSpeech();
+    return;
+  }
+  stopCurrentSpeech();
+  if (!voicesLoaded) await loadVoices();
+
+  const voice = getBestVoice();
+  const utterance = new SpeechSynthesisUtterance(segmentTexts[index]);
+  utterance.voice = voice;
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+
+  utterance.onend = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+    currentUtterance = null;
+  };
+  utterance.onerror = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+async function toggleVocabPlay(btn, word, event) {
+  event.stopPropagation();
+  if (btn.classList.contains('playing')) {
+    stopCurrentSpeech();
+    return;
+  }
+  stopCurrentSpeech();
+  if (!voicesLoaded) await loadVoices();
+
+  const voice = getBestVoice();
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.voice = voice;
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+
+  utterance.onend = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '🔊';
+    currentUtterance = null;
+  };
+  utterance.onerror = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '🔊';
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+// Preload voices
+loadVoices();
+
+// ==================== QUIZ ====================
+function checkQuiz(num, correctAnswer) {
+  const qDiv = document.getElementById('q' + num);
+  const fb = document.getElementById('fb' + num);
+  const selected = qDiv.querySelector('input[type="radio"]:checked');
+
+  // Reset all labels in this question
+  qDiv.querySelectorAll('.quiz-options label').forEach(l => {
+    l.classList.remove('correct-choice', 'wrong-choice');
+  });
+
+  if (!selected) {
+    fb.textContent = '⚠️ 请先选择一个答案！/ Please select an answer first!';
+    fb.className = 'quiz-feedback wrong';
+    return;
+  }
+
+  const selectedLabel = selected.parentElement;
+  if (selected.value === correctAnswer) {
+    fb.textContent = '✅ 正确！/ Correct! Great job! 🌟';
+    fb.className = 'quiz-feedback correct';
+    selectedLabel.classList.add('correct-choice');
+  } else {
+    fb.textContent = '❌ 再试一次！/ Try again! 正确答案是 ' + correctAnswer;
+    fb.className = 'quiz-feedback wrong';
+    selectedLabel.classList.add('wrong-choice');
+    const correctLabel = qDiv.querySelector(`input[value="${correctAnswer}"]`).parentElement;
+    correctLabel.classList.add('correct-choice');
+  }
+}
+
+// ==================== INIT ====================
+// Fix segment 4 play button index
+document.querySelectorAll('.reading-segment .play-btn').forEach((btn, i) => {
+  btn.setAttribute('onclick', `toggleSegmentPlay(this, ${i})`);
+});
+
+updateProgress();
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

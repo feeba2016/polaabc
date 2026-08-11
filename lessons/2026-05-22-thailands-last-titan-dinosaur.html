@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News | Thailand's Last Titan Dinosaur</title>
+<style>
+:root {
+  --primary: #e67e22;
+  --primary-dark: #d35400;
+  --accent: #f39c12;
+  --bg-gradient-1: #ffecd2;
+  --bg-gradient-2: #fcb69f;
+  --sidebar-bg: #2c3e50;
+  --sidebar-hover: #34495e;
+  --sidebar-active: #e67e22;
+  --card-bg: rgba(255,255,255,0.95);
+  --text-dark: #2c3e50;
+  --text-light: #ecf0f1;
+  --highlight: #fff3cd;
+  --correct: #27ae60;
+  --wrong: #e74c3c;
+  --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(135deg,var(--bg-gradient-1),var(--bg-gradient-2));min-height:100vh;color:var(--text-dark);display:flex;}
+.progress-bar{position:fixed;top:0;left:0;width:100%;height:4px;background:rgba(0,0,0,0.1);z-index:1000;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width 0.3s;}
+.sidebar{width:260px;min-height:100vh;background:var(--sidebar-bg);color:var(--text-light);padding:20px 0;position:fixed;left:0;top:0;z-index:100;overflow-y:auto;transition:transform 0.3s;}
+.sidebar-header{text-align:center;padding:20px 15px 25px;border-bottom:1px solid rgba(255,255,255,0.1);}
+.sidebar-header .logo{font-size:1.6em;font-weight:800;color:var(--accent);letter-spacing:1px;}
+.sidebar-header .subtitle{font-size:0.8em;color:rgba(255,255,255,0.6);margin-top:4px;}
+.nav-item{padding:14px 20px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;display:flex;align-items:center;gap:10px;font-size:0.95em;}
+.nav-item:hover{background:var(--sidebar-hover);border-left-color:var(--accent);}
+.nav-item.active{background:var(--sidebar-hover);border-left-color:var(--sidebar-active);color:var(--accent);font-weight:600;}
+.nav-icon{font-size:1.2em;width:28px;text-align:center;}
+.main-content{margin-left:260px;flex:1;padding:30px 40px 60px;max-width:900px;min-height:100vh;}
+.section{display:none;animation:fadeIn 0.4s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.section-title{font-size:1.8em;font-weight:700;margin-bottom:8px;color:var(--primary-dark);}
+.section-subtitle{font-size:1em;color:#7f8c8d;margin-bottom:25px;}
+.card{background:var(--card-bg);border-radius:16px;padding:28px;margin-bottom:20px;box-shadow:var(--shadow);line-height:1.8;}
+.card h3{color:var(--primary-dark);margin-bottom:12px;font-size:1.15em;}
+.highlight-word{background:#fff3cd;padding:2px 6px;border-radius:4px;cursor:pointer;position:relative;font-weight:600;border-bottom:2px solid var(--accent);transition:background 0.2s;}
+.highlight-word:hover{background:#ffeaa7;}
+.tooltip{display:none;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:var(--sidebar-bg);color:#fff;padding:8px 14px;border-radius:8px;font-size:0.85em;white-space:nowrap;z-index:50;line-height:1.4;font-weight:400;}
+.highlight-word:hover .tooltip{display:block;}
+.segment-block{margin-bottom:18px;padding:16px 20px;background:linear-gradient(135deg,#fff,#fef9f0);border-left:4px solid var(--primary);border-radius:0 12px 12px 0;position:relative;}
+.segment-label{font-size:0.75em;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.play-btn{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:2px solid var(--primary);background:rgba(230,126,34,0.1);color:var(--primary);font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.play-btn:hover{background:var(--primary);color:#fff;}
+.play-btn.playing{background:var(--primary);color:#fff;animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(230,126,34,0.4);}50%{box-shadow:0 0 0 10px rgba(230,126,34,0);}}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.vocab-card{background:var(--card-bg);border-radius:14px;padding:22px;box-shadow:var(--shadow);border-top:4px solid var(--primary);transition:transform 0.2s;}
+.vocab-card:hover{transform:translateY(-3px);}
+.vocab-word{font-size:1.3em;font-weight:700;color:var(--primary-dark);display:flex;align-items:center;gap:8px;}
+.vocab-pos{font-size:0.8em;color:#999;font-style:italic;font-weight:400;}
+.vocab-zh{font-size:0.95em;color:#555;margin:6px 0;}
+.vocab-example{font-size:0.88em;color:#777;font-style:italic;border-left:3px solid var(--accent);padding-left:10px;margin-top:8px;}
+.speak-btn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--primary);background:rgba(230,126,34,0.08);color:var(--primary);font-size:0.9em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;}
+.speak-btn:hover{background:var(--primary);color:#fff;}
+.pattern-card{background:var(--card-bg);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow);border-left:5px solid var(--accent);}
+.pattern-en{font-size:1.1em;font-weight:600;color:var(--primary-dark);margin-bottom:4px;}
+.pattern-zh{font-size:0.9em;color:#666;margin-bottom:10px;}
+.pattern-example{font-size:0.92em;color:#555;background:#fef9f0;padding:10px 14px;border-radius:8px;margin:8px 0;}
+.grammar-card{background:var(--card-bg);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow);}
+.grammar-title{font-size:1.1em;font-weight:700;color:var(--primary-dark);margin-bottom:6px;}
+.grammar-rule{font-size:0.95em;color:#555;margin-bottom:10px;line-height:1.7;}
+.grammar-examples{background:#fef9f0;padding:12px 16px;border-radius:8px;font-size:0.9em;color:#666;}
+.quiz-card{background:var(--card-bg);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow);}
+.quiz-q{font-weight:600;margin-bottom:12px;font-size:1em;line-height:1.6;}
+.quiz-q .q-zh{font-size:0.85em;color:#888;font-weight:400;display:block;margin-top:2px;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{padding:10px 16px;border:2px solid #e0e0e0;border-radius:10px;cursor:pointer;transition:all 0.2s;font-size:0.93em;}
+.quiz-opt:hover{border-color:var(--primary);background:rgba(230,126,34,0.05);}
+.quiz-opt.correct{border-color:var(--correct);background:rgba(39,174,96,0.1);color:var(--correct);}
+.quiz-opt.wrong{border-color:var(--wrong);background:rgba(231,76,60,0.1);color:var(--wrong);}
+.quiz-opt.disabled{pointer-events:none;}
+.quiz-feedback{margin-top:10px;font-size:0.9em;font-weight:600;padding:8px 12px;border-radius:8px;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct-fb{background:rgba(39,174,96,0.1);color:var(--correct);}
+.quiz-feedback.wrong-fb{background:rgba(231,76,60,0.1);color:var(--wrong);}
+.ext-card{background:var(--card-bg);border-radius:14px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow);}
+.ext-card h3{color:var(--primary-dark);margin-bottom:10px;font-size:1.15em;}
+.ext-card p{color:#555;line-height:1.8;font-size:0.95em;}
+.ext-card ul{padding-left:20px;margin-top:8px;}
+.ext-card li{color:#555;line-height:2;font-size:0.93em;}
+.about-card{background:var(--card-bg);border-radius:14px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow);}
+.about-card h3{color:var(--primary-dark);margin-bottom:10px;}
+.about-card ul{padding-left:20px;}
+.about-card li{color:#555;line-height:2;font-size:0.93em;}
+.print-btn{display:inline-block;padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:1em;cursor:pointer;margin-top:10px;transition:background 0.2s;}
+.print-btn:hover{background:var(--primary-dark);}
+.menu-toggle{display:none;position:fixed;top:15px;left:15px;z-index:200;width:44px;height:44px;border-radius:10px;background:var(--sidebar-bg);color:#fff;border:none;font-size:1.4em;cursor:pointer;align-items:center;justify-content:center;}
+.score-box{text-align:center;margin-top:20px;padding:20px;background:linear-gradient(135deg,#ffecd2,#fcb69f);border-radius:14px;font-size:1.1em;font-weight:600;color:var(--primary-dark);}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main-content{margin-left:0;padding:20px 16px 60px;}
+  .menu-toggle{display:flex;}
+  .vocab-grid{grid-template-columns:1fr;}
+}
+@media print{
+  .sidebar,.menu-toggle,.progress-bar,.play-btn,.speak-btn{display:none!important;}
+  .main-content{margin-left:0;padding:10px;}
+  .section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab-card,.pattern-card,.grammar-card,.quiz-card,.ext-card,.about-card{box-shadow:none;border:1px solid #ddd;}
+  body{background:#fff;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">&#9776;</button>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">POLA NEWS</div>
+    <div class="subtitle">Thailand's Last Titan Dinosaur</div>
+  </div>
+  <div class="nav-item active" data-section="reading" onclick="showSection('reading',this)">
+    <span class="nav-icon">📖</span> 全文阅读
+  </div>
+  <div class="nav-item" data-section="vocab" onclick="showSection('vocab',this)">
+    <span class="nav-icon">🔤</span> 词汇表
+  </div>
+  <div class="nav-item" data-section="patterns" onclick="showSection('patterns',this)">
+    <span class="nav-icon">💬</span> 句型练习
+  </div>
+  <div class="nav-item" data-section="grammar" onclick="showSection('grammar',this)">
+    <span class="nav-icon">📐</span> 语法点
+  </div>
+  <div class="nav-item" data-section="quiz" onclick="showSection('quiz',this)">
+    <span class="nav-icon">✅</span> 练习测验
+  </div>
+  <div class="nav-item" data-section="extend" onclick="showSection('extend',this)">
+    <span class="nav-icon">🔬</span> 知识扩展
+  </div>
+  <div class="nav-item" data-section="about" onclick="showSection('about',this)">
+    <span class="nav-icon">ℹ️</span> 关于本课
+  </div>
+</nav>
+
+<div class="main-content">
+
+<!-- ============ 1. 全文阅读 ============ -->
+<div class="section active" id="reading">
+  <div class="section-title">📖 Full Text Reading</div>
+  <div class="section-subtitle">全文阅读 — 点击高亮词汇查看释义，点击 ▶ 收听朗读</div>
+
+  <div class="segment-block">
+    <div class="segment-label">Segment 1 — Hook</div>
+    <button class="play-btn" onclick="playSegment(0,this)" title="播放">▶</button>
+    Imagine a <span class="highlight-word">dinosaur<span class="tooltip">恐龙 — a giant reptile that lived millions of years ago</span></span> as long as two school buses — and heavier than nine <span class="highlight-word">elephants<span class="tooltip">大象 — the largest land animal alive today</span></span>! Scientists in Thailand just found one, and it's the biggest <span class="highlight-word">dinosaur<span class="tooltip">恐龙 — a giant reptile that lived millions of years ago</span></span> ever <span class="highlight-word">discovered<span class="tooltip">发现 — found for the first time</span></span> in Southeast Asia!
+  </div>
+
+  <div class="segment-block">
+    <div class="segment-label">Segment 2 — Story</div>
+    <button class="play-btn" onclick="playSegment(1,this)" title="播放">▶</button>
+    Its name is <span class="highlight-word">Nagatitan<span class="tooltip">那伽泰坦龙 — "Naga" = mythic water dragon, "titan" = giant</span></span> — "Naga" means a <span class="highlight-word">mythic<span class="tooltip">神话的 — from ancient stories and legends</span></span> water dragon, and "titan" means <span class="highlight-word">giant<span class="tooltip">巨人 — extremely large and powerful</span></span>! This long-necked plant-eater was 27 metres long and weighed about 27 <span class="highlight-word">tonnes<span class="tooltip">吨 — a unit of weight; 1 tonne = 1,000 kg</span></span>. Its front leg bone alone was 1.78 metres — taller than most grown-ups! It lived around 110 million years ago, when Thailand had <span class="highlight-word">winding<span class="tooltip">蜿蜒的 — curving and twisting like a snake</span></span> rivers and dry <span class="highlight-word">savannas<span class="tooltip">热带草原 — grassland with scattered trees in warm regions</span></span>.
+  </div>
+
+  <div class="segment-block">
+    <div class="segment-label">Segment 3 — Why It Matters</div>
+    <button class="play-btn" onclick="playSegment(2,this)" title="播放">▶</button>
+    Nagatitan is special because it's the "last titan" — found in the <span class="highlight-word">youngest<span class="tooltip">最年轻的 — the most recent in time</span></span> dinosaur rocks in Thailand. After this giant lived, <span class="highlight-word">shallow<span class="tooltip">浅的 — not deep</span></span> seas covered the land, and big dinosaurs could no longer <span class="highlight-word">survive<span class="tooltip">生存 — continue to live</span></span> there. The lead <span class="highlight-word">researcher<span class="tooltip">研究员 — a scientist who studies something carefully</span></span>, Perth, has dreamed of naming a dinosaur since he was a kid — and now his dream came true!
+  </div>
+
+  <div class="segment-block">
+    <div class="segment-label">Segment 4 — Sign-off</div>
+    <button class="play-btn" onclick="playSegment(3,this)" title="播放">▶</button>
+    So remember, your biggest dream might come true too — just like Perth and his dinosaur! This is Pola for Pola News. See you next time!
+  </div>
+</div>
+
+<!-- ============ 2. 词汇表 ============ -->
+<div class="section" id="vocab">
+  <div class="section-title">🔤 Vocabulary</div>
+  <div class="section-subtitle">核心词汇 — 点击 🔊 收听发音</div>
+  <div class="vocab-grid">
+
+    <div class="vocab-card">
+      <div class="vocab-word">dinosaur <button class="speak-btn" onclick="speakWord('dinosaur',this)">🔊</button></div>
+      <div class="vocab-pos">noun /ˈdaɪnəsɔːr/</div>
+      <div class="vocab-zh">恐龙 — 数百万年前灭绝的大型爬行动物</div>
+      <div class="vocab-example">The dinosaur was as long as two school buses.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">discover <button class="speak-btn" onclick="speakWord('discover',this)">🔊</button></div>
+      <div class="vocab-pos">verb /dɪˈskʌvər/</div>
+      <div class="vocab-zh">发现 — 首次找到或认识到某事物</div>
+      <div class="vocab-example">Scientists discovered a new dinosaur in Thailand.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">mythic <button class="speak-btn" onclick="speakWord('mythic',this)">🔊</button></div>
+      <div class="vocab-pos">adj /ˈmɪθɪk/</div>
+      <div class="vocab-zh">神话的 — 来自古老传说和故事的</div>
+      <div class="vocab-example">"Naga" means a mythic water dragon.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">giant <button class="speak-btn" onclick="speakWord('giant',this)">🔊</button></div>
+      <div class="vocab-pos">noun/adj /ˈdʒaɪənt/</div>
+      <div class="vocab-zh">巨人；巨大的 — 极大极强的</div>
+      <div class="vocab-example">The titan was a giant among dinosaurs.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">tonne <button class="speak-btn" onclick="speakWord('tonne',this)">🔊</button></div>
+      <div class="vocab-pos">noun /tʌn/</div>
+      <div class="vocab-zh">吨 — 重量单位，1吨 = 1000公斤</div>
+      <div class="vocab-example">It weighed about 27 tonnes — as heavy as nine elephants!</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">winding <button class="speak-btn" onclick="speakWord('winding',this)">🔊</button></div>
+      <div class="vocab-pos">adj /ˈwaɪndɪŋ/</div>
+      <div class="vocab-zh">蜿蜒的 — 像蛇一样弯曲扭转的</div>
+      <div class="vocab-example">The river had a winding path through the savanna.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">savanna <button class="speak-btn" onclick="speakWord('savanna',this)">🔊</button></div>
+      <div class="vocab-pos">noun /səˈvænə/</div>
+      <div class="vocab-zh">热带草原 — 温暖地区散布树木的草地</div>
+      <div class="vocab-example">Dinosaurs walked across the dry savanna 110 million years ago.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">shallow <button class="speak-btn" onclick="speakWord('shallow',this)">🔊</button></div>
+      <div class="vocab-pos">adj /ˈʃæləʊ/</div>
+      <div class="vocab-zh">浅的 — 水不深的</div>
+      <div class="vocab-example">Shallow seas covered the land after the dinosaurs disappeared.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">survive <button class="speak-btn" onclick="speakWord('survive',this)">🔊</button></div>
+      <div class="vocab-pos">verb /səˈvaɪv/</div>
+      <div class="vocab-zh">生存 — 在困难条件下继续活着</div>
+      <div class="vocab-example">Big dinosaurs could no longer survive there.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">researcher <button class="speak-btn" onclick="speakWord('researcher',this)">🔊</button></div>
+      <div class="vocab-pos">noun /rɪˈsɜːrtʃər/</div>
+      <div class="vocab-zh">研究员 — 认真研究某事物的科学家</div>
+      <div class="vocab-example">The lead researcher dreamed of naming a dinosaur as a kid.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 3. 句型练习 ============ -->
+<div class="section" id="patterns">
+  <div class="section-title">💬 Sentence Patterns</div>
+  <div class="section-subtitle">实用句型 — 从课文中提取的关键表达</div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">as + adjective + as — 和……一样……</div>
+    <div class="pattern-zh">用于比较两个事物的相似程度</div>
+    <div class="pattern-example">📝 课文例句：as long as two school buses<br>✏️ 练习：The blue whale is __________ __________ __________ three buses. (as big as)</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">heavier than — 比……更重</div>
+    <div class="pattern-zh">"形容词比较级 + than" 用于两者比较</div>
+    <div class="pattern-example">📝 课文例句：heavier than nine elephants<br>✏️ 练习：An elephant is __________ __________ a horse. (heavier than)</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">could no longer + verb — 再也不能……</div>
+    <div class="pattern-zh">表示过去某个时间之后不再能做某事</div>
+    <div class="pattern-example">📝 课文例句：big dinosaurs could no longer survive there<br>✏️ 练习：After the river dried up, fish __________ __________ __________ live there. (could no longer)</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">has/have dreamed of + -ing — 一直梦想做……</div>
+    <div class="pattern-zh">现在完成时 + dream of + 动名词，表示从过去持续到现在的梦想</div>
+    <div class="pattern-example">📝 课文例句：Perth has dreamed of naming a dinosaur<br>✏️ 练习：She __________ __________ __________ becoming a scientist since she was five. (has dreamed of)</div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">might come true — 可能成真</div>
+    <div class="pattern-zh">might + 动词原形表示可能性；come true 表示梦想实现</div>
+    <div class="pattern-example">📝 课文例句：your biggest dream might come true too<br>✏️ 练习：If you work hard, your wish __________ __________ __________. (might come true)</div>
+  </div>
+</div>
+
+<!-- ============ 4. 语法点 ============ -->
+<div class="section" id="grammar">
+  <div class="section-title">📐 Grammar Points</div>
+  <div class="section-subtitle">语法讲解 — 课文中的关键语法</div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">1. 一般过去时 (Simple Past Tense)</div>
+    <div class="grammar-rule">描述过去发生的事情时，动词用过去式。课文用了 <strong>found</strong>（find的过去式）、<strong>lived</strong>（live的过去式）、<strong>covered</strong>（cover的过去式）。</div>
+    <div class="grammar-examples">
+      ✅ Scientists <u>found</u> one.（科学家发现了它。）<br>
+      ✅ It <u>lived</u> around 110 million years ago.（它生活在大约1.1亿年前。）<br>
+      🎯 练习：用过去式填空 — The dinosaur (live) ______ in Thailand. → <em>lived</em>
+    </div>
+  </div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">2. "one" 作为代词 (Pronoun "one")</div>
+    <div class="grammar-rule">"one" 可以代替前面提过的名词，避免重复。课文说 "just found <strong>one</strong>"，one 指代前面的 dinosaur。</div>
+    <div class="grammar-examples">
+      ✅ Scientists just found <u>one</u>.（科学家刚发现了一个。）<br>
+      ✅ I need a pen. Do you have <u>one</u>?（我需要一支笔。你有吗？）<br>
+      🎯 练习：I like the red shirt, but I prefer the blue ___. → <em>one</em>
+    </div>
+  </div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">3. 现在完成时 (Present Perfect Tense)</div>
+    <div class="grammar-rule">has/have + 过去分词，表示从过去持续到现在的状态或经历。课文用了 <strong>has dreamed</strong>。</div>
+    <div class="grammar-examples">
+      ✅ Perth <u>has dreamed</u> of naming a dinosaur since he was a kid.（Perth从小就梦想命名一只恐龙。）<br>
+      ✅ She <u>has studied</u> English for three years.（她学英语已经三年了。）<br>
+      🎯 练习：He (dream) ______ of this since childhood. → <em>has dreamed</em>
+    </div>
+  </div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">4. 比较结构 (Comparative Structures)</div>
+    <div class="grammar-rule"><strong>as + 形容词原级 + as</strong> 表示"和……一样"；<strong>形容词比较级 + than</strong> 表示"比……更"。</div>
+    <div class="grammar-examples">
+      ✅ as long as two school buses（和两辆校车一样长）<br>
+      ✅ heavier than nine elephants（比九头大象还重）<br>
+      🎯 练习：This room is ___ (big) ___ that one. → <em>as big as</em>
+    </div>
+  </div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">5. could no longer (双重否定表否定)</div>
+    <div class="grammar-rule"><strong>could no longer + 动词原形</strong> 表示"再也不能"，相当于 could not ... any longer。</div>
+    <div class="grammar-examples">
+      ✅ Big dinosaurs could no longer survive there.（大型恐龙再也无法在那里生存。）<br>
+      ✅ He could no longer wait. = He could not wait any longer.（他再也等不了了。）<br>
+      🎯 练习：改写 — They could not stay there any longer. → They ___ ___ ___ stay there. → <em>could no longer</em>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 5. 练习测验 ============ -->
+<div class="section" id="quiz">
+  <div class="section-title">✅ Quiz</div>
+  <div class="section-subtitle">理解测验 — 检查你对课文的理解</div>
+
+  <div class="quiz-card" id="q1">
+    <div class="quiz-q">1. How big was Nagatitan?<span class="q-zh">Nagatitan有多大？</span></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q1',this,false)">A. 10 metres long, 5 tonnes</div>
+      <div class="quiz-opt" onclick="checkAnswer('q1',this,true)">B. 27 metres long, 27 tonnes</div>
+      <div class="quiz-opt" onclick="checkAnswer('q1',this,false)">C. 50 metres long, 60 tonnes</div>
+      <div class="quiz-opt" onclick="checkAnswer('q1',this,false)">D. 15 metres long, 10 tonnes</div>
+    </div>
+    <div class="quiz-feedback" id="q1fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q2">
+    <div class="quiz-q">2. What does "Naga" mean?<span class="q-zh">"Naga"是什么意思？</span></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q2',this,false)">A. A giant mountain</div>
+      <div class="quiz-opt" onclick="checkAnswer('q2',this,true)">B. A mythic water dragon</div>
+      <div class="quiz-opt" onclick="checkAnswer('q2',this,false)">C. A type of flower</div>
+      <div class="quiz-opt" onclick="checkAnswer('q2',this,false)">D. A kind of tree</div>
+    </div>
+    <div class="quiz-feedback" id="q2fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q3">
+    <div class="quiz-q">3. Why is Nagatitan called the "last titan"?<span class="q-zh">为什么Nagatitan被称为"最后的泰坦"？</span></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q3',this,false)">A. It was the smallest dinosaur</div>
+      <div class="quiz-opt" onclick="checkAnswer('q3',this,false)">B. It was the first dinosaur found</div>
+      <div class="quiz-opt" onclick="checkAnswer('q3',this,true)">C. It was found in the youngest dinosaur rocks — after it, shallow seas covered the land</div>
+      <div class="quiz-opt" onclick="checkAnswer('q3',this,false)">D. It was the only dinosaur in Thailand</div>
+    </div>
+    <div class="quiz-feedback" id="q3fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q4">
+    <div class="quiz-q">4. How long was Nagatitan's front leg bone?<span class="q-zh">Nagatitan的前腿骨有多长？</span></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q4',this,false)">A. 50 centimetres</div>
+      <div class="quiz-opt" onclick="checkAnswer('q4',this,true)">B. 1.78 metres — taller than most adults</div>
+      <div class="quiz-opt" onclick="checkAnswer('q4',this,false)">C. 5 metres</div>
+      <div class="quiz-opt" onclick="checkAnswer('q4',this,false)">D. 10 metres</div>
+    </div>
+    <div class="quiz-feedback" id="q4fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q5">
+    <div class="quiz-q">5. What was Perth's dream?<span class="q-zh">Perth的梦想是什么？</span></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q5',this,false)">A. To travel around the world</div>
+      <div class="quiz-opt" onclick="checkAnswer('q5',this,true)">B. To name a dinosaur</div>
+      <div class="quiz-opt" onclick="checkAnswer('q5',this,false)">C. To become a teacher</div>
+      <div class="quiz-opt" onclick="checkAnswer('q5',this,false)">D. To dig up gold</div>
+    </div>
+    <div class="quiz-feedback" id="q5fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q6">
+    <div class="quiz-q">6. What happened after Nagatitan lived in Thailand?<span class="q-zh">Nagatitan在泰国生活之后发生了什么？</span></div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q6',this,false)">A. A volcano erupted</div>
+      <div class="quiz-opt" onclick="checkAnswer('q6',this,false)">B. A big forest fire burned the land</div>
+      <div class="quiz-opt" onclick="checkAnswer('q6',this,true)">C. Shallow seas covered the land</div>
+      <div class="quiz-opt" onclick="checkAnswer('q6',this,false)">D. An ice age began</div>
+    </div>
+    <div class="quiz-feedback" id="q6fb"></div>
+  </div>
+
+  <div class="score-box" id="scoreBox" style="display:none;"></div>
+</div>
+
+<!-- ============ 6. 知识扩展 ============ -->
+<div class="section" id="extend">
+  <div class="section-title">🔬 Knowledge Extension</div>
+  <div class="section-subtitle">知识扩展 — 深入了解相关背景</div>
+
+  <div class="ext-card">
+    <h3>🦕 蜥脚类恐龙：地球上的巨无霸</h3>
+    <p>Nagatitan属于<strong>蜥脚类恐龙（Sauropoda）</strong>——地球上出现过最大的陆地动物家族。它们的共同特征是：</p>
+    <ul>
+      <li>🦕 极长的脖子和尾巴</li>
+      <li>🦴 柱状粗腿支撑庞大体型</li>
+      <li>🌿 只吃植物（植食性）</li>
+      <li>🥚 用蛋繁殖，但不照顾幼崽</li>
+    </ul>
+    <p>著名蜥脚类包括：梁龙（Diplodocus）、腕龙（Brachiosaurus）、阿根廷龙（Argentinosaurus，史上最重恐龙，约70吨！）。</p>
+  </div>
+
+  <div class="ext-card">
+    <h3>🐉 "Naga"——东南亚的神话水龙</h3>
+    <p>"Naga"（那伽）是泰国、柬埔寨、老挝等东南亚国家传说中的<strong>水蛇神</strong>。在寺庙屋脊、河岸雕塑上随处可见Naga的形象。它象征雨水和丰收，被认为是河流和湖泊的守护者。科学家用Naga命名这只恐龙，既因为它在池塘边被发现，也因为它像神话中的水龙一样壮观！</p>
+  </div>
+
+  <div class="ext-card">
+    <h3>🇹🇭 泰国的恐龙化石宝库</h3>
+    <p>泰国是东南亚发现恐龙最多的国家，已有<strong>14种</strong>正式命名的恐龙！主要化石点在东北部的猜也蓬府（Chaiyaphum）和卡拉辛府（Kalasin）。这些地区1亿多年前是干旱的河流平原，非常适合大型恐龙生存。你可以去曼谷Asiatique的<strong>Thainosaur博物馆</strong>看Nagatitan的1:1复原模型！</p>
+  </div>
+
+  <div class="ext-card">
+    <h3>🌊 大陆漂移与浅海淹没</h3>
+    <p>Nagatitan被称为"最后的泰坦"，是因为在它生活之后，东南亚地区被<strong>浅海</strong>覆盖。这和大陆漂移有关——地球的板块在不断移动。1亿年前，东南亚大部分还是陆地；但随着印度板块向北挤压，海平面上升，低洼地区被海水淹没。这就是为什么科学家认为在泰国"不太可能找到更晚的大型恐龙化石"。</p>
+  </div>
+
+  <div class="ext-card">
+    <h3>🔬 古生物学家是如何工作的？</h3>
+    <ul>
+      <li>1️⃣ <strong>发现</strong>：在野外寻找暴露的岩石中的化石碎片</li>
+      <li>2️⃣ <strong>挖掘</strong>：用小刷子、小凿子小心翼翼地取出化石</li>
+      <li>3️⃣ <strong>清理</strong>：在实验室中去除围岩（包裹化石的石头）</li>
+      <li>4️⃣ <strong>对比</strong>：和其他已知物种比较骨骼特征</li>
+      <li>5️⃣ <strong>命名</strong>：如果确认是新种，给它取一个科学名称</li>
+      <li>6️⃣ <strong>发表</strong>：在科学期刊上发表论文，让全世界知道</li>
+    </ul>
+    <p>Perth从2016年化石出土到2026年正式发表，整整花了<strong>10年</strong>！</p>
+  </div>
+</div>
+
+<!-- ============ 7. 关于本课 ============ -->
+<div class="section" id="about">
+  <div class="section-title">ℹ️ About This Lesson</div>
+  <div class="section-subtitle">关于本课 — 学习目标与建议</div>
+
+  <div class="about-card">
+    <h3>🎯 学习目标</h3>
+    <ul>
+      <li>理解并朗读课文中的4段英语口播内容</li>
+      <li>掌握10个核心词汇（dinosaur, discover, mythic, giant, tonne, winding, savanna, shallow, survive, researcher）</li>
+      <li>学会5个实用句型（as...as比较、比较级+than、could no longer、has dreamed of、might come true）</li>
+      <li>理解5个语法点（一般过去时、代词one、现在完成时、比较结构、could no longer）</li>
+      <li>了解泰国恐龙发现、蜥脚类恐龙、大陆漂移等相关科学知识</li>
+    </ul>
+  </div>
+
+  <div class="about-card">
+    <h3>💡 学习建议</h3>
+    <ul>
+      <li>🔊 先听全文朗读，再跟读每一段，注意模仿语音语调</li>
+      <li>📝 把10个核心词汇抄写一遍，每个词造一个句子</li>
+      <li>🔄 反复练习5个句型，尝试用它们描述你身边的事物</li>
+      <li>✅ 完成全部6道测验题，目标正确率 ≥ 5/6</li>
+      <li>🔬 阅读知识扩展，选出最让你惊讶的一个事实分享给家人</li>
+      <li>🧠 用英语写3-5句话总结：如果你发现了一只新恐龙，你会给它取什么名字？为什么？</li>
+    </ul>
+  </div>
+
+  <div class="about-card">
+    <h3>🖨️ 打印学习</h3>
+    <p>点击下方按钮打印本课全部内容（朗读按钮和导航栏会自动隐藏）。</p>
+    <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+  </div>
+
+  <div class="about-card">
+    <h3>📚 本课信息</h3>
+    <ul>
+      <li><strong>节目</strong>：Pola News — 儿童英语科普新闻播报</li>
+      <li><strong>主持人</strong>：Pola（短尾矮袋鼠 Quokka）</li>
+      <li><strong>主题</strong>：泰国发现东南亚最大恐龙 Nagatitan chaiyaphumensis</li>
+      <li><strong>英语等级</strong>：B1（CEFR）/ 10-12岁</li>
+      <li><strong>新闻来源</strong>：UCL / Scientific Reports (2026-05-14)</li>
+      <li><strong>制作日期</strong>：2026年5月22日</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end main-content -->
+
+<script>
+// ====== Navigation ======
+function showSection(id, navEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  // Update progress
+  const sections = ['reading','vocab','patterns','grammar','quiz','extend','about'];
+  const idx = sections.indexOf(id);
+  document.getElementById('progressFill').style.width = ((idx + 1) / sections.length * 100) + '%';
+  // Close sidebar on mobile
+  if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ====== Speech ======
+let currentUtterance = null;
+let currentBtn = null;
+const segmentTexts = [
+  "Imagine a dinosaur as long as two school buses — and heavier than nine elephants! Scientists in Thailand just found one, and it's the biggest dinosaur ever discovered in Southeast Asia!",
+  "Its name is Nagatitan — Naga means a mythic water dragon, and titan means giant! This long-necked plant-eater was 27 metres long and weighed about 27 tonnes. Its front leg bone alone was 1.78 metres — taller than most grown-ups! It lived around 110 million years ago, when Thailand had winding rivers and dry savannas.",
+  "Nagatitan is special because it's the last titan — found in the youngest dinosaur rocks in Thailand. After this giant lived, shallow seas covered the land, and big dinosaurs could no longer survive there. The lead researcher, Perth, has dreamed of naming a dinosaur since he was a kid — and now his dream came true!",
+  "So remember, your biggest dream might come true too — just like Perth and his dinosaur! This is Pola for Pola News. See you next time!"
+];
+
+function loadVoices() {
+  speechSynthesis.getVoices();
+}
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+function getBestVoice() {
+  const voices = speechSynthesis.getVoices();
+  const prefs = ['Enhanced','Daniel','Alex','Microsoft Mark'];
+  let english = voices.filter(v => v.lang && v.lang.startsWith('en'));
+  for (const p of prefs) {
+    const found = english.find(v => v.name.includes(p));
+    if (found) return found;
+  }
+  let male = english.filter(v => /male|man|daniel|alex|mark|james|richard|george|david/i.test(v.name));
+  if (male.length) return male[0];
+  if (english.length) return english[0];
+  return voices[0] || null;
+}
+
+function stopSpeech() {
+  speechSynthesis.cancel();
+  if (currentBtn) { currentBtn.innerHTML = '▶'; currentBtn.classList.remove('playing'); currentBtn = null; }
+}
+
+function playSegment(idx, btn) {
+  if (currentBtn === btn && currentBtn.classList.contains('playing')) { stopSpeech(); return; }
+  stopSpeech();
+  currentBtn = btn;
+  btn.innerHTML = '⏸';
+  btn.classList.add('playing');
+  const utt = new SpeechSynthesisUtterance(segmentTexts[idx]);
+  const voice = getBestVoice();
+  if (voice) utt.voice = voice;
+  utt.rate = 0.97;
+  utt.pitch = 1.0;
+  utt.onend = () => { btn.innerHTML = '▶'; btn.classList.remove('playing'); currentBtn = null; };
+  utt.onerror = () => { btn.innerHTML = '▶'; btn.classList.remove('playing'); currentBtn = null; };
+  speechSynthesis.speak(utt);
+}
+
+function speakWord(word, btn) {
+  stopSpeech();
+  const utt = new SpeechSynthesisUtterance(word);
+  const voice = getBestVoice();
+  if (voice) utt.voice = voice;
+  utt.rate = 0.9;
+  utt.pitch = 1.0;
+  speechSynthesis.speak(utt);
+}
+
+// ====== Quiz ======
+const answers = {q1:'B',q2:'B',q3:'C',q4:'B',q5:'B',q6:'C'};
+let quizDone = {q1:false,q2:false,q3:false,q4:false,q5:false,q6:false};
+let score = 0;
+
+function checkAnswer(qid, el, isCorrect) {
+  if (quizDone[qid]) return;
+  quizDone[qid] = true;
+  const card = document.getElementById(qid);
+  const opts = card.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById(qid + 'fb');
+  opts.forEach(o => o.classList.add('disabled'));
+  if (isCorrect) {
+    el.classList.add('correct');
+    fb.className = 'quiz-feedback show correct-fb';
+    fb.textContent = '✅ 正确！Correct!';
+    score++;
+  } else {
+    el.classList.add('wrong');
+    // Highlight correct answer
+    const correctIdx = answers[qid].charCodeAt(0) - 65;
+    opts[correctIdx].classList.add('correct');
+    fb.className = 'quiz-feedback show wrong-fb';
+    fb.textContent = '❌ 不正确。正确答案是 ' + answers[qid] + '。';
+  }
+  // Check if all done
+  if (Object.values(quizDone).every(v => v)) {
+    const sb = document.getElementById('scoreBox');
+    sb.style.display = 'block';
+    sb.innerHTML = '🏆 得分 Score: ' + score + ' / 6' + (score >= 5 ? ' — 太棒了！Excellent!' : score >= 3 ? ' — 不错！Good effort!' : ' — 继续加油！Keep trying!');
+  }
+}
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

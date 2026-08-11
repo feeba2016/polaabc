@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS — Octopus Mirror Genius | 互动英语学习</title>
+<style>
+  :root {
+    --bg-start: #001a33;
+    --bg-mid: #003366;
+    --bg-end: #0a1628;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.12);
+    --text: #e8e8f0;
+    --text-secondary: #b0b0c8;
+    --accent: #ff7f50;
+    --accent-glow: rgba(255,127,80,0.3);
+    --highlight: #ffd700;
+    --highlight-bg: rgba(255,215,0,0.15);
+    --btn-play: #4fc3f7;
+    --btn-play-hover: #29b6f6;
+    --correct: #66bb6a;
+    --wrong: #ef5350;
+    --nav-width: 240px;
+    --progress-height: 4px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+  /* ── Progress Bar ── */
+  #progress-bar {
+    position: fixed; top:0; left:0; height:var(--progress-height);
+    background: linear-gradient(90deg, var(--accent), #ff6b6b);
+    z-index: 1000; transition: width 0.15s ease-out;
+  }
+  /* ── Layout ── */
+  .app-container {
+    display: flex; min-height: 100vh;
+  }
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--nav-width); background: rgba(0,26,51,0.95);
+    backdrop-filter: blur(12px); position: fixed; top:0; left:0;
+    height: 100vh; overflow-y: auto; z-index: 100;
+    border-right: 1px solid var(--card-border);
+    padding: 24px 0; flex-shrink: 0;
+  }
+  .sidebar-header {
+    padding: 0 20px 20px; border-bottom: 1px solid var(--card-border);
+    margin-bottom: 8px;
+  }
+  .sidebar-header h2 { font-size: 1.1rem; color: var(--accent); margin-bottom: 4px; }
+  .sidebar-header .date { font-size: 0.78rem; color: var(--text-secondary); }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px; cursor: pointer; transition: all 0.2s;
+    font-size: 0.9rem; color: var(--text-secondary);
+    border-left: 3px solid transparent; text-decoration: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+  .nav-item.active {
+    background: rgba(255,127,80,0.1); color: var(--accent);
+    border-left-color: var(--accent);
+  }
+  .nav-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+  /* ── Main Content ── */
+  .main-content {
+    margin-left: var(--nav-width); flex:1; padding: 40px 48px;
+    max-width: 900px;
+  }
+  .section {
+    display: none; margin-bottom: 48px; scroll-margin-top: 48px;
+    animation: fadeSlideIn 0.4s ease;
+  }
+  .section.active { display: block; }
+  @keyframes fadeSlideIn {
+    from { opacity:0; transform:translateY(16px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .section-title {
+    font-size: 1.6rem; font-weight: 700; margin-bottom: 24px;
+    color: var(--accent); display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .emoji { font-size: 1.4rem; }
+  /* ── Cards ── */
+  .card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 24px; margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .card:hover { border-color: rgba(255,255,255,0.2); }
+  /* ── Reading Section ── */
+  .reading-paragraph {
+    position: relative; padding: 16px 56px 16px 20px;
+    margin-bottom: 16px; border-radius: 12px;
+    background: rgba(255,255,255,0.04); border-left: 3px solid var(--accent);
+    font-size: 1.05rem; line-height: 1.9;
+  }
+  .keyword {
+    color: var(--highlight); font-weight: 600; cursor: pointer;
+    border-bottom: 1px dashed var(--highlight);
+    position: relative; transition: all 0.2s;
+  }
+  .keyword:hover { background: var(--highlight-bg); border-radius: 3px; }
+  .keyword .tooltip {
+    display: none; position: absolute; bottom: calc(100% + 8px);
+    left: 50%; transform: translateX(-50%); background: #1a1a3e;
+    border: 1px solid var(--accent); border-radius: 8px;
+    padding: 8px 14px; font-size: 0.82rem; white-space: nowrap;
+    z-index: 50; color: var(--text); font-weight: 400;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  }
+  .keyword:hover .tooltip { display: block; }
+  /* ── Play Buttons ── */
+  .play-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--btn-play); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; transition: all 0.25s; color: #0a0a2e;
+  }
+  .play-btn:hover { background: var(--btn-play-hover); transform: translateY(-50%) scale(1.08); }
+  .play-btn.playing { background: var(--accent); }
+  .play-btn.pulse { animation: pulse 1.5s infinite; }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.5); }
+    50% { box-shadow: 0 0 0 12px rgba(79,195,247,0); }
+  }
+  .vocab-play-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(79,195,247,0.2); border: 1px solid var(--btn-play);
+    cursor: pointer; font-size: 0.8rem; color: var(--btn-play);
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .vocab-play-btn:hover { background: rgba(79,195,247,0.4); }
+  .vocab-play-btn.playing { background: var(--accent); color: #0a0a2e; border-color: var(--accent); }
+  /* ── Vocabulary Cards ── */
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .vocab-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 18px; transition: all 0.25s;
+  }
+  .vocab-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .vocab-word {
+    font-size: 1.2rem; font-weight: 700; color: var(--highlight);
+    margin-bottom: 4px; display: flex; align-items: center; gap: 10px;
+  }
+  .vocab-pos {
+    font-size: 0.72rem; color: var(--accent); font-style: italic;
+    background: rgba(255,127,80,0.15); padding: 2px 8px; border-radius: 4px;
+  }
+  .vocab-zh { font-size: 0.88rem; color: var(--text-secondary); margin: 6px 0; }
+  .vocab-example {
+    font-size: 0.85rem; color: #c0c0d8; font-style: italic;
+    padding: 8px; background: rgba(255,255,255,0.03); border-radius: 6px;
+    margin-top: 8px;
+  }
+  /* ── Grammar & Sentence Patterns ── */
+  .pattern-item, .grammar-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  }
+  .pattern-en { font-size: 1.05rem; color: var(--highlight); font-weight: 600; margin-bottom: 6px; }
+  .pattern-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px; }
+  .pattern-practice {
+    background: rgba(255,255,255,0.03); border-radius: 8px;
+    padding: 12px; font-size: 0.88rem; color: #a0a0c0;
+    border-left: 3px solid var(--accent);
+  }
+  .grammar-title { font-size: 1rem; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+  .grammar-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
+  .grammar-example {
+    background: rgba(255,255,255,0.03); border-radius: 8px;
+    padding: 12px; font-size: 0.88rem; margin-bottom: 8px;
+  }
+  .grammar-example .en { color: var(--highlight); }
+  .grammar-exercise {
+    background: rgba(79,195,247,0.08); border-radius: 8px;
+    padding: 12px; font-size: 0.85rem; color: var(--text-secondary);
+  }
+  /* ── Quiz ── */
+  .quiz-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  }
+  .quiz-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option {
+    padding: 10px 16px; border-radius: 8px; cursor: pointer;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s; font-size: 0.88rem;
+  }
+  .quiz-option:hover { background: rgba(255,255,255,0.08); }
+  .quiz-option.selected { border-color: var(--btn-play); background: rgba(79,195,247,0.15); }
+  .quiz-option.correct { border-color: var(--correct); background: rgba(102,187,106,0.2); }
+  .quiz-option.wrong { border-color: var(--wrong); background: rgba(239,83,80,0.15); }
+  .quiz-feedback { margin-top: 10px; font-size: 0.85rem; display: none; padding: 8px 12px; border-radius: 8px; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(102,187,106,0.12); color: var(--correct); }
+  .quiz-feedback.wrong { background: rgba(239,83,80,0.12); color: var(--wrong); }
+  .quiz-score { text-align: center; padding: 20px; font-size: 1.2rem; margin-top: 16px; }
+  /* ── Chinese Knowledge Section ── */
+  .knowledge-block {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 24px; margin-bottom: 20px;
+  }
+  .knowledge-block h3 {
+    font-size: 1.1rem; color: var(--accent); margin-bottom: 12px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--card-border);
+  }
+  .knowledge-block p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.9; margin-bottom: 10px; }
+  .knowledge-block .fact-box {
+    background: rgba(255,127,80,0.08); border-left: 3px solid var(--accent);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 0.88rem;
+  }
+  /* ── About Section ── */
+  .about-list { list-style: none; }
+  .about-list li {
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem;
+  }
+  .about-list li::before { content: '✦'; color: var(--accent); flex-shrink: 0; }
+  .print-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 24px; background: var(--accent); color: #0a0a2e;
+    border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; margin-top: 16px; transition: all 0.2s;
+  }
+  .print-btn:hover { background: #ff9a70; transform: translateY(-1px); }
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%; height: auto; position: relative;
+      border-right: none; border-bottom: 1px solid var(--card-border);
+      padding: 12px 0; display: flex; overflow-x: auto; flex-wrap: nowrap;
+    }
+    .sidebar-header { display: none; }
+    .nav-item { flex-shrink: 0; padding: 8px 14px; font-size: 0.8rem; border-left: none; border-bottom: 2px solid transparent; }
+    .nav-item.active { border-left: none; border-bottom-color: var(--accent); }
+    .main-content { margin-left: 0; padding: 20px 16px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .reading-paragraph { padding-right: 50px; font-size: 0.95rem; }
+  }
+  @media (max-width: 480px) {
+    .section-title { font-size: 1.3rem; }
+    .main-content { padding: 16px 12px; }
+  }
+  /* ── Print ── */
+  @media print {
+    body { background: white; color: #222; }
+    .sidebar, #progress-bar, .play-btn, .vocab-play-btn, .print-btn { display: none !important; }
+    .main-content { margin-left: 0; padding: 0; max-width: 100%; }
+    .card, .vocab-card, .pattern-item, .grammar-item, .quiz-item, .knowledge-block {
+      background: white; border: 1px solid #ddd; break-inside: avoid;
+    }
+    .keyword { color: #b8860b; border-bottom: none; }
+    .section { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar" style="width:0%"></div>
+
+<div class="app-container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <h2>🐙 POLA NEWS</h2>
+      <div class="date">2026.06.11 — Octopus Mirror Genius</div>
+    </div>
+    <a class="nav-item active" data-section="reading">
+      <span class="nav-icon">📖</span> 全文阅读
+    </a>
+    <a class="nav-item" data-section="vocabulary">
+      <span class="nav-icon">📝</span> 词汇表
+    </a>
+    <a class="nav-item" data-section="patterns">
+      <span class="nav-icon">💬</span> 句型练习
+    </a>
+    <a class="nav-item" data-section="grammar">
+      <span class="nav-icon">📐</span> 语法点
+    </a>
+    <a class="nav-item" data-section="quiz">
+      <span class="nav-icon">🎯</span> 练习测验
+    </a>
+    <a class="nav-item" data-section="knowledge">
+      <span class="nav-icon">🧠</span> 知识扩展
+    </a>
+    <a class="nav-item" data-section="about">
+      <span class="nav-icon">📋</span> 关于本课
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ═══════════ SECTION 1: 全文阅读 ═══════════ -->
+    <section class="section active" id="section-reading">
+      <div class="section-title"><span class="emoji">📖</span> 全文阅读</div>
+
+      <div class="reading-paragraph" id="seg1">
+        Imagine looking in a <span class="keyword" data-def="镜子 — a surface that reflects light and shows your image">mirror</span> — and using it to find your snack! That's exactly what scientists just discovered 
+        <span class="keyword" data-def="章鱼 — a sea animal with eight arms and a soft body">octopuses</span> can do. For the first time ever, an animal with no backbone — an 
+        <span class="keyword" data-def="无脊椎动物 — an animal without a backbone or spine">invertebrate</span> — has shown it can use 
+        <span class="keyword" data-def="镜子 — a surface that reflects light and shows your image">mirrors</span> to solve problems. Let's dive in!
+        <button class="play-btn pulse" data-seg="0" title="播放">▶</button>
+      </div>
+
+      <div class="reading-paragraph" id="seg2">
+        Researchers at Dartmouth College worked with three California two-spot 
+        <span class="keyword" data-def="章鱼 — a sea animal with eight arms and a soft body">octopuses</span>. They placed a 
+        <span class="keyword" data-def="镜子 — a surface that reflects light and shows your image">mirror</span> in front of each 
+        <span class="keyword" data-def="章鱼 — a sea animal with eight arms and a soft body">octopus</span>, then showed a virtual crab behind them. To get the real crab 
+        <span class="keyword" data-def="奖励 — something given for doing well">reward</span>, the 
+        <span class="keyword" data-def="章鱼 — a sea animal with eight arms and a soft body">octopus</span> had to turn around and find the right spot. And guess what? They got it right 73% of the time — without ever attacking the 
+        <span class="keyword" data-def="镜子 — a surface that reflects light and shows your image">mirror</span>!
+        <button class="play-btn pulse" data-seg="1" title="播放">▶</button>
+      </div>
+
+      <div class="reading-paragraph" id="seg3">
+        Here's the mind-blowing part: 
+        <span class="keyword" data-def="章鱼 — a sea animal with eight arms and a soft body">octopuses</span> and humans haven't shared an 
+        <span class="keyword" data-def="祖先 — a living thing from which others have evolved">ancestor</span> for over 350 million years. That 
+        <span class="keyword" data-def="祖先 — a living thing from which others have evolved">ancestor</span> was a worm! Yet both of us figured out how to use 
+        <span class="keyword" data-def="镜子 — a surface that reflects light and shows your image">mirrors</span>. This is called 
+        <span class="keyword" data-def="趋同进化 — when different species independently evolve similar traits">convergent evolution</span> — it means 
+        <span class="keyword" data-def="智力；聪明 — the ability to learn, understand, and solve problems">intelligence</span> can bloom in totally different branches of the tree of life.
+        <button class="play-btn pulse" data-seg="2" title="播放">▶</button>
+      </div>
+
+      <div class="reading-paragraph" id="seg4">
+        So next time you see an 
+        <span class="keyword" data-def="章鱼 — a sea animal with eight arms and a soft body">octopus</span> at an aquarium, give it a little wave. There might be a lot more going on behind those eyes than we ever imagined. This is Pola, reporting from under the sea to the stars above. Stay curious, explorers!
+        <button class="play-btn pulse" data-seg="3" title="播放">▶</button>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 2: 词汇表 ═══════════ -->
+    <section class="section" id="section-vocabulary">
+      <div class="section-title"><span class="emoji">📝</span> 词汇表</div>
+      <div class="vocab-grid" id="vocab-grid"></div>
+    </section>
+
+    <!-- ═══════════ SECTION 3: 句型练习 ═══════════ -->
+    <section class="section" id="section-patterns">
+      <div class="section-title"><span class="emoji">💬</span> 句型练习</div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"Imagine… — and using it to…"</div>
+        <div class="pattern-desc">想象式开场 — 用"想象"邀请听众进入一个有趣的场景，再揭示故事的核心。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> Imagine ______ — and using it to ______!
+          <br><em>（例如：Imagine having wings — and using them to fly over the ocean!）</em>
+        </div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"For the first time ever…"</div>
+        <div class="pattern-desc">历史性突破 — 强调某件事是历史上的首次，用在科学发现中特别有力量。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> For the first time ever, scientists have ______.
+          <br><em>（例如：For the first time ever, a robot has passed a university entrance exam!）</em>
+        </div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"And guess what?"</div>
+        <div class="pattern-desc">制造悬念 — 在讲故事时停顿一下，让听众期待接下来要说的内容，增强互动感。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> I tried something crazy yesterday. And guess what? ______!
+          <br><em>（例如：I entered a cooking contest. And guess what? I won first prize!）</em>
+        </div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"Here's the mind-blowing part…"</div>
+        <div class="pattern-desc">引出最震撼信息 — "mind-blowing"表示"令人难以置信的"，用来引出故事中最惊人的事实。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> Here's the mind-blowing part: ______.
+          <br><em>（例如：Here's the mind-blowing part: this tiny fish can live both in water AND on land!）</em>
+        </div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"There might be a lot more going on… than we ever imagined."</div>
+        <div class="pattern-desc">开放结尾 — 暗示还有更多未知等待探索，鼓励听众保持好奇心。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> There might be a lot more ______ than we ever imagined.
+          <br><em>（例如：There might be a lot more life in the deep ocean than we ever imagined.）</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 4: 语法点 ═══════════ -->
+    <section class="section" id="section-grammar">
+      <div class="section-title"><span class="emoji">📐</span> 语法点</div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">1. 现在完成时 — has/have + 过去分词</div>
+        <div class="grammar-desc">现在完成时连接过去发生的动作和现在的结果或状态。"haven't shared"强调"从过去到现在一直没有"。</div>
+        <div class="grammar-example">
+          <span class="en">"Octopuses and humans <strong>haven't shared</strong> an ancestor for over 350 million years."</span><br>
+          <span class="en">"An invertebrate <strong>has shown</strong> it can use mirrors."</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ have/has + 过去分词（shared, shown）</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 用现在完成时填空："Scientists ______ (discover) that octopuses can use mirrors. I ______ never ______ (see) such a smart animal!"
+        </div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">2. to + 动词原形 — 表示目的</div>
+        <div class="grammar-desc">"to + 动词原形"用来解释做某事的目的（= in order to）。</div>
+        <div class="grammar-example">
+          <span class="en">"Using it <strong>to find</strong> your snack!"</span><br>
+          <span class="en">"The octopus had <strong>to turn</strong> around and find the right spot."</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ "to + 动词" = 为了……（表目的）；"had to" = 不得不（表必要）</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 用 to + 动词完成："I went to the library ______ (borrow) a book about sea animals."
+        </div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">3. might — 情态动词表示可能性</div>
+        <div class="grammar-desc">"might" 表示不确定的可能性，比 "will" 更柔和，适合科学推测。</div>
+        <div class="grammar-example">
+          <span class="en">"There <strong>might be</strong> a lot more going on behind those eyes than we ever imagined."</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ might + 动词原形 = 可能……（不确定但有可能）</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 用 might 改写："It is possible that octopuses dream." → "Octopuses ______ dream."
+        </div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">4. 比较级 — "a lot more" vs "more"</div>
+        <div class="grammar-desc">"a lot more" 比简单的 "more" 程度更深，意思是"多得多"。</div>
+        <div class="grammar-example">
+          <span class="en">"There might be <strong>a lot more</strong> going on behind those eyes than we ever imagined."</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ a lot more = much more = 多得多（强调程度）</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 用比较级改写："Octopuses are much smarter than we thought." → "Octopuses are ______ ______ than we thought."
+        </div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">5. 反身代词与强调 — "both of us", "yet"</div>
+        <div class="grammar-desc">"both of us"（我们两个都）强调两个主体都做了同样的事；"yet" 表示强烈转折（"然而"）。</div>
+        <div class="grammar-example">
+          <span class="en">"<strong>Yet both of us</strong> figured out how to use mirrors."</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ "Yet" 在这里 = 但是/然而（比 "but" 更正式）；"both of us" = 我们两个（指人类和章鱼）</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 用 yet 造句："Octopuses have no bones. ______ they can solve complex puzzles."
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 5: 练习测验 ═══════════ -->
+    <section class="section" id="section-quiz">
+      <div class="section-title"><span class="emoji">🎯</span> 练习测验</div>
+      <div id="quiz-container"></div>
+      <div class="quiz-score" id="quiz-score" style="display:none;"></div>
+    </section>
+
+    <!-- ═══════════ SECTION 6: 中文知识扩展 ═══════════ -->
+    <section class="section" id="section-knowledge">
+      <div class="section-title"><span class="emoji">🧠</span> 中文知识扩展</div>
+
+      <div class="knowledge-block">
+        <h3>🐙 章鱼的智力之谜：海洋中最聪明的无脊椎动物</h3>
+        <p>章鱼被公认为<strong>地球上最聪明的无脊椎动物</strong>。它们的大脑中有约5亿个神经元（相比之下，狗大约有5.3亿个，而人类有约860亿个）。更神奇的是，章鱼约三分之二的神经元分布在它们的八条手臂上——这意味着每条手臂都能<strong>独立"思考"和做决策</strong>！一条章鱼的手臂被切断后，它仍然能做出抓取动作和对刺激作出反应。</p>
+        <div class="fact-box">
+          💡 <strong>你知道吗？</strong> 章鱼可以拧开瓶盖、走迷宫、认出不同的人脸，甚至学会通过观察其他章鱼来解决问题。在水族馆里，有些章鱼会故意朝不喜欢的饲养员脸上喷水！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🪞 镜像测试与动物认知：从大象到章鱼</h3>
+        <p><strong>镜像自我认知测试</strong>（Mirror Self-Recognition Test, MSR）长期以来被认为是衡量动物自我意识的金标准。通过在动物脸上涂一个看不到的标记，看它是否会用镜子来检查和触碰那个标记。通过这项测试的动物非常少，包括：人类（18-24个月大时）、黑猩猩、倭黑猩猩、红毛猩猩、海豚、大象、喜鹊等。但章鱼的这项研究有所不同——它测试的是<strong>镜像引导的空间认知</strong>（mirror-guided spatial cognition），即用镜子定位物体，而非自我识别。这是首次在无脊椎动物中观察到这种能力！</p>
+        <div class="fact-box">
+          💡 <strong>你知道吗？</strong> 研究者特意用了"虚拟螃蟹"的投影而非真螃蟹，因为章鱼有化学感受器——它们能通过触手"闻到"水中的气味。如果放真螃蟹，章鱼可能直接用气味找到食物，而不需要依靠镜子！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🌳 趋同进化：不同的路，同样的答案</h3>
+        <p><strong>趋同进化</strong>（Convergent Evolution）是生物学中最迷人的现象之一——亲缘关系很远的物种，为了适应相似的生存环境，独立进化出了相似的特征或能力。例如：蝙蝠、鸟类和昆虫都进化出了翅膀，但它们来自完全不同的祖先。鸟类的翅膀由前肢演化而来，而昆虫的翅膀则是从外骨骼延伸出来的。</p>
+        <p>章鱼和人类的最后共同祖先是一种生活在3.5-5亿年前的<strong>蠕虫状生物</strong>。在那之后的漫长岁月里，脊椎动物（包括人类）和无脊椎动物（包括章鱼）走上了完全不同的进化路线。但令人惊讶的是，它们<strong>都独立进化出了复杂的神经系统、学习能力和使用工具的行为</strong>——包括这次发现的镜像空间认知能力。</p>
+        <div class="fact-box">
+          💡 <strong>你知道吗？</strong> 章鱼的眼睛和人类的眼睛在结构上非常相似——都有晶状体、虹膜和视网膜！但它们的进化路径完全不同：人类的眼睛是大脑的延伸，而章鱼的眼睛是从皮肤组织独立演化出来的。这就是趋同进化的经典案例！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🫀 章鱼的奇特生理结构：三颗心脏和蓝色血液</h3>
+        <p>章鱼的身体简直像来自外星：它们有<strong>三颗心脏</strong>（两颗给鳃供血，一颗给全身供血）、<strong>蓝色血液</strong>（因为用含铜的血蓝蛋白而非含铁的血红蛋白运输氧气）、<strong>没有骨头</strong>（唯一坚硬的部分是像鹦鹉喙一样的嘴），以及可以<strong>改变颜色和纹理</strong>的皮肤（通过色素细胞和肌肉控制）。</p>
+        <p>它们还能<strong>挤过任何比嘴巴大的缝隙</strong>——一只大型章鱼可以穿过一个硬币大小的洞口！2016年，新西兰国家水族馆一只名叫Inky的章鱼从水箱中逃脱，通过一根排水管溜回了大海，轰动全球。</p>
+        <div class="fact-box">
+          💡 <strong>你知道吗？</strong> 章鱼在遇到危险时可以喷出墨汁迷惑捕食者，但它们最厉害的"超能力"是在0.3秒内完美地改变皮肤的颜色、纹理和形状来伪装——这比任何人类的伪装技术都快！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🔬 这项研究的意义：重新定义"智慧"</h3>
+        <p>达特茅斯学院这项发表于《当代生物学》（Current Biology）的研究，由博士生Mary Kieseler和教授Peter Tse领导，使用了3只加州双斑章鱼（California two-spot octopus, <em>Octopus bimaculoides</em>）。实验证明章鱼能以<strong>73%的正确率</strong>通过镜子找到被藏起来的食物，且<strong>从未攻击镜像</strong>（这说明它们理解镜像不是真实的章鱼）。</p>
+        <p>这项研究的深远意义在于：<strong>它打破了"复杂认知必须依赖脊椎动物大脑结构"的假设</strong>。如果连章鱼这样与人类亲缘关系极远的生物都能进化出镜像空间认知，那么宇宙中的智慧生命可能比我们想象的更加多样——不一定需要和我们类似的大脑结构。</p>
+        <div class="fact-box">
+          💡 <strong>思考时刻：</strong> 如果地球上就存在一种"外星智慧"（章鱼的进化路线与人类完全不同），那么在广袤的宇宙中，智慧生命会以什么样的形式存在呢？也许不像科幻电影里的"小绿人"，而是更像……一只八条手臂的海洋生物？
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 7: 关于本课 ═══════════ -->
+    <section class="section" id="section-about">
+      <div class="section-title"><span class="emoji">📋</span> 关于本课</div>
+
+      <div class="card">
+        <h3 style="color:var(--accent);margin-bottom:16px;">🎯 学习目标</h3>
+        <ul class="about-list">
+          <li>了解章鱼使用镜子定位食物的科学发现</li>
+          <li>掌握10个动物认知与进化相关的核心英语词汇</li>
+          <li>学习5个实用的英语表达句型</li>
+          <li>理解现在完成时、情态动词、比较级等语法点</li>
+          <li>深入了解章鱼智力、趋同进化和镜像认知的中文背景知识</li>
+        </ul>
+
+        <h3 style="color:var(--accent);margin:24px 0 16px;">💡 学习建议</h3>
+        <ul class="about-list">
+          <li>先听一遍全文朗读（点击每段右侧的 ▶ 按钮），感受语音语调</li>
+          <li>阅读时点击金色关键词查看中文释义</li>
+          <li>对照词汇表学习核心单词，每个词都有发音按钮 🔊</li>
+          <li>完成句型练习和语法练习，试着仿写自己的句子</li>
+          <li>做完6道测验题检验理解程度</li>
+          <li>阅读中文知识扩展，深入了解章鱼智力和进化科学</li>
+        </ul>
+
+        <h3 style="color:var(--accent);margin:24px 0 16px;">📚 内容来源</h3>
+        <ul class="about-list">
+          <li>Dartmouth College — "Study Shows Octopuses' Impressive Ability to Navigate Space" (June 3, 2026)</li>
+          <li>Current Biology — M. Kieseler et al., DOI: 10.1016/j.cub.2026.05.012 (June 2026)</li>
+          <li>ScienceDaily — "Octopuses use mirrors to find food they cannot see" (June 5, 2026)</li>
+          <li>Neuroscience News — "Octopuses Can Use Mirrors to Find Food" (June 4, 2026)</li>
+        </ul>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ═══════════ Navigation ═══════════
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('.section');
+
+navItems.forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    const sectionId = item.dataset.section;
+    navItems.forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    sections.forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + sectionId).classList.add('active');
+    document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ═══════════ Progress Bar ═══════════
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = progress + '%';
+});
+
+// ═══════════ Vocabulary Data ═══════════
+const vocabulary = [
+  { word: 'octopus', pos: 'noun', zh: '章鱼', example: 'The octopus has eight arms, three hearts, and blue blood!' },
+  { word: 'mirror', pos: 'noun', zh: '镜子', example: 'She looked in the mirror and saw her own reflection.' },
+  { word: 'invertebrate', pos: 'noun', zh: '无脊椎动物', example: 'Over 97% of all animals on Earth are invertebrates — including insects, worms, and octopuses.' },
+  { word: 'experiment', pos: 'noun', zh: '实验', example: 'The experiment showed that octopuses are much smarter than we thought.' },
+  { word: 'virtual', pos: 'adjective', zh: '虚拟的', example: 'Scientists used a virtual crab image so the octopus couldn\'t smell it.' },
+  { word: 'reward', pos: 'noun/verb', zh: '奖励；奖赏', example: 'The octopus got a real crab as a reward for finding the right spot.' },
+  { word: 'evolution', pos: 'noun', zh: '进化', example: 'Evolution has shaped octopuses into one of the smartest animals in the ocean.' },
+  { word: 'ancestor', pos: 'noun', zh: '祖先', example: 'The last common ancestor of humans and octopuses was a worm-like creature.' },
+  { word: 'convergent', pos: 'adjective', zh: '趋同的', example: 'Convergent evolution means similar traits appear in very different species.' },
+  { word: 'intelligence', pos: 'noun', zh: '智力；聪明', example: 'The octopus shows amazing intelligence — it can open jars and solve puzzles!' }
+];
+
+// Build vocab cards
+const vocabGrid = document.getElementById('vocab-grid');
+vocabulary.forEach((v, i) => {
+  const card = document.createElement('div');
+  card.className = 'vocab-card';
+  card.innerHTML = `
+    <div class="vocab-word">
+      <button class="vocab-play-btn" data-vocab="${v.word}" title="发音">🔊</button>
+      ${v.word}
+      <span class="vocab-pos">${v.pos}</span>
+    </div>
+    <div class="vocab-zh">${v.zh}</div>
+    <div class="vocab-example">📖 ${v.example}</div>
+  `;
+  vocabGrid.appendChild(card);
+});
+
+// ═══════════ Quiz Data ═══════════
+const quizData = [
+  {
+    q: '1. What animal is this news story about?',
+    options: ['Dolphin', 'Octopus', 'Shark', 'Sea turtle'],
+    answer: 1,
+    explanation: '这篇新闻的主角是章鱼（octopus）！科学家发现它们可以用镜子找到藏起来的食物。🐙'
+  },
+  {
+    q: '2. What tool did the octopuses use to find food?',
+    options: ['A flashlight', 'A map', 'A mirror', 'A compass'],
+    answer: 2,
+    explanation: '章鱼使用镜子（mirror）来找食物！镜子里反射出虚拟螃蟹的位置，章鱼通过镜子判断食物在哪里。🪞'
+  },
+  {
+    q: '3. How many octopuses took part in the experiment?',
+    options: ['Only 1', '3', '10', 'Over 50'],
+    answer: 1,
+    explanation: '实验使用了3只加州双斑章鱼（California two-spot octopuses），每只都展示了使用镜子定位的能力。'
+  },
+  {
+    q: '4. How often did the octopuses correctly find the food?',
+    options: ['About 50% of the time', '73% of the time', '90% of the time', '100% of the time'],
+    answer: 1,
+    explanation: '章鱼在73%的情况下成功通过镜子找到了正确的食物位置——这远远超过随机猜测的概率（50%）！📊'
+  },
+  {
+    q: '5. What did the octopuses NOT do during the experiment?',
+    options: ['Use the mirror', 'Find the food', 'Attack the mirror', 'Turn around'],
+    answer: 2,
+    explanation: '章鱼从未攻击镜子里的影像！这说明它们理解了镜像不是另一只章鱼，而是用来获取信息的工具。这非常聪明！🧠'
+  },
+  {
+    q: '6. When did octopuses and humans last share a common ancestor?',
+    options: ['About 10 million years ago', 'About 65 million years ago', 'Over 350 million years ago', 'They never shared an ancestor'],
+    answer: 2,
+    explanation: '人类和章鱼的最后共同祖先生活在超过3.5亿年前，而且那个祖先是一种蠕虫状的生物！之后我们走了完全不同的进化路线。🌳'
+  }
+];
+
+// Build quiz
+const quizContainer = document.getElementById('quiz-container');
+const quizScore = document.getElementById('quiz-score');
+let answeredCount = 0;
+let correctCount = 0;
+
+quizData.forEach((item, qi) => {
+  const qDiv = document.createElement('div');
+  qDiv.className = 'quiz-item';
+  let optionsHTML = item.options.map((opt, oi) =>
+    `<div class="quiz-option" data-q="${qi}" data-o="${oi}">${String.fromCharCode(65+oi)}. ${opt}</div>`
+  ).join('');
+
+  qDiv.innerHTML = `
+    <div class="quiz-q">${item.q}</div>
+    <div class="quiz-options">${optionsHTML}</div>
+    <div class="quiz-feedback" id="fb-${qi}"></div>
+  `;
+  quizContainer.appendChild(qDiv);
+});
+
+// Quiz click handler
+quizContainer.addEventListener('click', (e) => {
+  const opt = e.target.closest('.quiz-option');
+  if (!opt || opt.classList.contains('correct') || opt.classList.contains('wrong')) return;
+
+  const qi = parseInt(opt.dataset.q);
+  const oi = parseInt(opt.dataset.o);
+  const item = quizData[qi];
+  const feedback = document.getElementById('fb-' + qi);
+  const options = quizContainer.querySelectorAll(`[data-q="${qi}"]`);
+
+  options.forEach(o => {
+    if (parseInt(o.dataset.o) === item.answer) o.classList.add('correct');
+    if (parseInt(o.dataset.o) === oi && oi !== item.answer) o.classList.add('wrong');
+  });
+
+  if (oi === item.answer) {
+    feedback.textContent = '✅ 正确！' + item.explanation;
+    feedback.className = 'quiz-feedback correct show';
+    correctCount++;
+  } else {
+    feedback.textContent = '❌ 不对哦。' + item.explanation;
+    feedback.className = 'quiz-feedback wrong show';
+  }
+
+  answeredCount++;
+  if (answeredCount === quizData.length) {
+    quizScore.style.display = 'block';
+    quizScore.innerHTML = `🎉 你的得分：<strong>${correctCount} / ${quizData.length}</strong> ` +
+      (correctCount === quizData.length ? '🏆 满分！你是海洋生物专家！' :
+       correctCount >= 4 ? '👏 很好！章鱼知识掌握得不错！' :
+       correctCount >= 2 ? '📚 还不错，再复习一下词汇表吧！' :
+       '💪 再试一次，你可以做得更好！八条手臂给你加油！🐙');
+  }
+});
+
+// ═══════════ Web Speech API ═══════════
+let currentUtterance = null;
+let currentPlayBtn = null;
+
+const segmentTexts = [
+  "Imagine looking in a mirror — and using it to find your snack! That's exactly what scientists just discovered octopuses can do. For the first time ever, an animal with no backbone — an invertebrate — has shown it can use mirrors to solve problems. Let's dive in!",
+  "Researchers at Dartmouth College worked with three California two-spot octopuses. They placed a mirror in front of each octopus, then showed a virtual crab behind them. To get the real crab reward, the octopus had to turn around and find the right spot. And guess what? They got it right 73% of the time — without ever attacking the mirror!",
+  "Here's the mind-blowing part: octopuses and humans haven't shared an ancestor for over 350 million years. That ancestor was a worm! Yet both of us figured out how to use mirrors. This is called convergent evolution — it means intelligence can bloom in totally different branches of the tree of life.",
+  "So next time you see an octopus at an aquarium, give it a little wave. There might be a lot more going on behind those eyes than we ever imagined. This is Pola, reporting from under the sea to the stars above. Stay curious, explorers!"
+];
+
+let voicesLoaded = false;
+
+function loadVoices() {
+  return new Promise((resolve) => {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length > 0) { voicesLoaded = true; resolve(voices); return; }
+    speechSynthesis.onvoiceschanged = () => {
+      voicesLoaded = true;
+      resolve(speechSynthesis.getVoices());
+    };
+  });
+}
+
+function getBestVoice() {
+  const voices = speechSynthesis.getVoices();
+  const priority = ['enhanced', 'daniel', 'alex', 'microsoft mark'];
+  for (const pref of priority) {
+    const found = voices.find(v =>
+      v.lang.startsWith('en') && v.name.toLowerCase().includes(pref) &&
+      (pref === 'enhanced' ? true : !v.name.toLowerCase().includes('female'))
+    );
+    if (found) return found;
+  }
+  const enMale = voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('female'));
+  if (enMale) return enMale;
+  const enAny = voices.find(v => v.lang.startsWith('en'));
+  return enAny || voices[0];
+}
+
+function stopCurrentSpeech() {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  if (currentPlayBtn) {
+    currentPlayBtn.textContent = '▶';
+    currentPlayBtn.classList.remove('playing', 'pulse');
+    currentPlayBtn = null;
+  }
+}
+
+function speak(text, btn) {
+  stopCurrentSpeech();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.voice = getBestVoice();
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  currentUtterance = utterance;
+  currentPlayBtn = btn;
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+  btn.classList.remove('pulse');
+
+  utterance.onend = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    btn.classList.add('pulse');
+    currentUtterance = null;
+    currentPlayBtn = null;
+  };
+
+  utterance.onerror = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    btn.classList.add('pulse');
+    currentUtterance = null;
+    currentPlayBtn = null;
+  };
+
+  speechSynthesis.speak(utterance);
+}
+
+function speakWord(word, btn) {
+  stopCurrentSpeech();
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.voice = getBestVoice();
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  currentUtterance = utterance;
+  currentPlayBtn = btn;
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+
+  utterance.onend = () => {
+    btn.textContent = '🔊';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+    currentPlayBtn = null;
+  };
+
+  utterance.onerror = () => {
+    btn.textContent = '🔊';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+    currentPlayBtn = null;
+  };
+
+  speechSynthesis.speak(utterance);
+}
+
+// Attach segment play buttons
+document.querySelectorAll('.play-btn[data-seg]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const segIdx = parseInt(btn.dataset.seg);
+    if (btn.classList.contains('playing')) {
+      stopCurrentSpeech();
+      return;
+    }
+    speak(segmentTexts[segIdx], btn);
+  });
+});
+
+// Attach vocabulary play buttons (delegated)
+vocabGrid.addEventListener('click', (e) => {
+  const btn = e.target.closest('.vocab-play-btn');
+  if (!btn) return;
+  if (btn.classList.contains('playing')) {
+    stopCurrentSpeech();
+    return;
+  }
+  speakWord(btn.dataset.vocab, btn);
+});
+
+// Load voices on page load
+loadVoices();
+
+// Stop speech when navigating away
+navItems.forEach(item => {
+  item.addEventListener('click', () => stopCurrentSpeech());
+});
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

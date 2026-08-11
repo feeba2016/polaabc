@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pola News - Beavers Return to England | 海狸回归英格兰</title>
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #4CAF50;
+            --secondary: #00897B;
+            --accent: #FFB300;
+            --accent-light: #FFE082;
+            --dark: #1B5E20;
+            --text: #2C3E50;
+            --light: #F1F8E9;
+            --card-bg: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #2E7D32 0%, #00897B 100%);
+            --gradient-2: linear-gradient(135deg, #66BB6A 0%, #26A69A 100%);
+            --gradient-3: linear-gradient(135deg, #81C784 0%, #4DB6AC 100%);
+            --sidebar-width: 280px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 5px;
+            background: rgba(0,0,0,0.08); z-index: 1000;
+        }
+        .progress-bar {
+            height: 100%; background: var(--accent); width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-1); color: white; padding: 22px 20px;
+            text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+        .header h1 { font-size: 1.9em; margin-bottom: 4px; }
+        .header .subtitle { opacity: 0.92; font-size: 0.95em; }
+        .header .date-badge {
+            display: inline-block; background: rgba(255,255,255,0.2);
+            padding: 5px 16px; border-radius: 20px; margin-top: 10px; font-size: 0.85em;
+        }
+
+        /* Layout */
+        .container { display: flex; min-height: calc(100vh - 90px); }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width); background: white;
+            border-right: 1px solid #e0e0e0; position: fixed;
+            height: calc(100vh - 90px); overflow-y: auto; z-index: 100;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 95px;
+        }
+        .sidebar.hidden { transform: translateX(-100%); }
+
+        .nav-item {
+            padding: 14px 20px; cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex; align-items: center; gap: 12px;
+            transition: all 0.3s ease; font-size: 0.95em;
+        }
+        .nav-item:hover { background: #f8f9fa; color: var(--primary); }
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(46,125,50,0.1) 0%, transparent 100%);
+            color: var(--primary); border-left: 4px solid var(--primary); font-weight: 600;
+        }
+        .nav-icon { font-size: 1.25em; width: 30px; text-align: center; }
+
+        .nav-toggle {
+            display: none; position: fixed; top: 100px; left: 10px; z-index: 200;
+            background: var(--primary); color: white; border: none;
+            padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 1.2em;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1; margin-left: var(--sidebar-width);
+            padding: 30px; max-width: 920px;
+        }
+
+        /* Section Styles */
+        .section { display: none; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.8em; color: var(--dark); margin-bottom: 20px;
+            padding-bottom: 10px; border-bottom: 3px solid var(--primary);
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .card {
+            background: var(--card-bg); border-radius: 16px; padding: 25px;
+            margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .card-title {
+            font-size: 1.15em; color: var(--primary); margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* Reading Section */
+        .reading-segment {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            border-radius: 12px; padding: 20px; margin-bottom: 15px; position: relative;
+        }
+        .segment-label {
+            display: inline-block; background: var(--gradient-1); color: white;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.8em; margin-bottom: 10px;
+        }
+        .segment-text { line-height: 1.9; font-size: 1.05em; }
+        .highlight {
+            background: linear-gradient(120deg, #FFE082 0%, #FFE082 100%);
+            background-size: 100% 40%; background-repeat: no-repeat;
+            background-position: 0 90%; padding: 0 2px; border-radius: 2px;
+            cursor: help; position: relative;
+        }
+        .highlight .tooltip-text {
+            visibility: hidden; opacity: 0;
+            position: absolute; bottom: 125%; left: 50%;
+            transform: translateX(-50%); background: var(--dark); color: white;
+            padding: 8px 14px; border-radius: 8px; font-size: 0.85em;
+            white-space: nowrap; z-index: 50;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .highlight .tooltip-text::after {
+            content: ''; position: absolute; top: 100%; left: 50%;
+            transform: translateX(-50%); border: 6px solid transparent;
+            border-top-color: var(--dark);
+        }
+        .highlight:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+        .play-btn {
+            position: absolute; top: 20px; right: 20px;
+            background: var(--primary); color: white; border: none;
+            width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+            font-size: 1.1em; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .play-btn:hover {
+            transform: scale(1.1); box-shadow: 0 4px 15px rgba(46,125,50,0.4);
+        }
+        .play-btn.playing { animation: pulse 1.5s infinite; background: var(--secondary); }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0,137,123,0.4); }
+            50% { box-shadow: 0 0 0 14px rgba(0,137,123,0); }
+        }
+
+        /* Vocabulary Cards */
+        .vocab-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;
+        }
+        .vocab-card {
+            background: white; border-radius: 12px; padding: 18px;
+            border-left: 5px solid var(--secondary);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08); transition: transform 0.3s ease;
+        }
+        .vocab-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+        .vocab-word {
+            font-size: 1.25em; color: var(--text); font-weight: 700; margin-bottom: 5px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .vocab-speaker {
+            background: var(--secondary); color: white; border: none;
+            width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+            font-size: 0.85em; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .vocab-speaker:hover { transform: scale(1.1); background: var(--primary); }
+        .vocab-speaker.playing { animation: pulse 1.2s infinite; background: var(--accent); }
+        .vocab-pos { color: var(--secondary); font-size: 0.85em; font-style: italic; }
+        .vocab-meaning { color: #555; margin: 5px 0; font-size: 0.95em; }
+        .vocab-example {
+            background: #f0f9f0; padding: 8px 12px; border-radius: 8px;
+            font-size: 0.9em; color: #444; font-style: italic; margin-top: 8px;
+        }
+
+        /* Sentence Practice */
+        .sentence-item {
+            background: linear-gradient(135deg, #E8F5E9 0%, #f1f8e9 100%);
+            border-radius: 12px; padding: 18px; margin-bottom: 12px;
+            border-left: 4px solid var(--primary-light);
+        }
+        .sentence-en { font-size: 1.1em; font-weight: 600; margin-bottom: 6px; color: var(--dark); }
+        .sentence-cn { font-size: 0.95em; color: #666; margin-bottom: 8px; }
+        .sentence-explain {
+            font-size: 0.88em; color: var(--secondary); background: rgba(0,137,123,0.08);
+            padding: 6px 10px; border-radius: 6px;
+        }
+        .practice-box {
+            margin-top: 10px; border: 2px dashed #A5D6A7; border-radius: 8px;
+            padding: 12px; min-height: 45px; background: rgba(255,255,255,0.6);
+            cursor: text; font-size: 0.95em; color: #888;
+        }
+        .practice-box:focus { outline: none; border-color: var(--primary); color: var(--text); }
+
+        /* Grammar Section */
+        .grammar-item { margin-bottom: 25px; }
+        .grammar-title {
+            font-size: 1.15em; color: var(--primary); font-weight: 700;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+        }
+        .grammar-explain { margin-bottom: 10px; line-height: 1.7; }
+        .grammar-examples {
+            background: #f0f9f0; padding: 12px 16px; border-radius: 10px;
+            margin: 10px 0; font-size: 0.95em;
+        }
+        .grammar-examples li { margin-bottom: 6px; list-style: none; padding-left: 16px; position: relative; }
+        .grammar-examples li::before { content: '▸'; position: absolute; left: 0; color: var(--primary); }
+
+        /* Quiz */
+        .quiz-item {
+            background: white; border-radius: 14px; padding: 22px;
+            margin-bottom: 18px; box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            border-left: 5px solid var(--accent);
+        }
+        .quiz-question {
+            font-size: 1.05em; font-weight: 600; margin-bottom: 14px; color: var(--text);
+        }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-option {
+            padding: 10px 16px; border: 2px solid #e0e0e0; border-radius: 10px;
+            cursor: pointer; transition: all 0.3s ease; font-size: 0.95em;
+        }
+        .quiz-option:hover { border-color: var(--primary-light); background: #f1f8e9; }
+        .quiz-option.correct { border-color: var(--primary); background: #C8E6C9; color: var(--dark); font-weight: 600; }
+        .quiz-option.wrong { border-color: #EF5350; background: #FFCDD2; color: #C62828; }
+        .quiz-feedback { margin-top: 10px; font-size: 0.9em; font-weight: 600; display: none; }
+        .quiz-score {
+            text-align: center; padding: 20px; font-size: 1.3em; font-weight: 700;
+            color: var(--primary); background: var(--gradient-2);
+            border-radius: 12px; color: white; margin-top: 20px; display: none;
+        }
+
+        /* Knowledge Extension */
+        .knowledge-section {
+            background: linear-gradient(135deg, #E0F2F1 0%, #E8F5E9 100%);
+            border-radius: 14px; padding: 22px; margin-bottom: 18px;
+        }
+        .knowledge-section h3 {
+            color: var(--secondary); margin-bottom: 10px; font-size: 1.1em;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .knowledge-section p, .knowledge-section li {
+            line-height: 1.8; font-size: 0.95em; color: #444;
+        }
+        .knowledge-section ul { padding-left: 20px; margin: 8px 0; }
+        .knowledge-section li { margin-bottom: 6px; }
+
+        /* About Section */
+        .about-goal {
+            display: flex; align-items: flex-start; gap: 12px;
+            background: #f0f9f0; padding: 14px 18px; border-radius: 10px; margin-bottom: 10px;
+        }
+        .about-goal-icon { font-size: 1.4em; flex-shrink: 0; }
+        .about-goal-text { line-height: 1.6; }
+        .print-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--gradient-1); color: white; border: none;
+            padding: 12px 28px; border-radius: 10px; font-size: 1em;
+            cursor: pointer; transition: all 0.3s ease; margin-top: 15px;
+        }
+        .print-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(46,125,50,0.3); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); width: 260px; }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 20px 15px; }
+            .nav-toggle { display: block; }
+            .header h1 { font-size: 1.4em; }
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print */
+        @media print {
+            .sidebar, .nav-toggle, .progress-container, .play-btn, .vocab-speaker, .print-btn { display: none !important; }
+            .main-content { margin-left: 0; padding: 10px; }
+            .header { background: #2E7D32 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .section { display: block !important; page-break-inside: avoid; margin-bottom: 20px; }
+            .section-title { page-break-after: avoid; }
+            .highlight { background: #FFE082 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>🦫 Beavers Return to England</h1>
+        <div class="subtitle">海狸回归英格兰 — 自然界的顶级工程师回来了！</div>
+        <div class="date-badge">📅 May 7, 2026 | Pola News</div>
+    </header>
+
+    <!-- Mobile Nav Toggle -->
+    <button class="nav-toggle" onclick="toggleSidebar()">☰</button>
+
+    <!-- Layout -->
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="nav-item active" onclick="showSection('reading')">
+                <span class="nav-icon">📖</span> 全文阅读
+            </div>
+            <div class="nav-item" onclick="showSection('vocab')">
+                <span class="nav-icon">📝</span> 词汇表
+            </div>
+            <div class="nav-item" onclick="showSection('sentences')">
+                <span class="nav-icon">💬</span> 句型练习
+            </div>
+            <div class="nav-item" onclick="showSection('grammar')">
+                <span class="nav-icon">📐</span> 语法点
+            </div>
+            <div class="nav-item" onclick="showSection('quiz')">
+                <span class="nav-icon">✅</span> 练习测验
+            </div>
+            <div class="nav-item" onclick="showSection('knowledge')">
+                <span class="nav-icon">🌍</span> 知识扩展
+            </div>
+            <div class="nav-item" onclick="showSection('about')">
+                <span class="nav-icon">ℹ️</span> 关于本课
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Section 1: Reading -->
+            <div class="section active" id="reading">
+                <h2 class="section-title">📖 全文阅读 Full Text</h2>
+
+                <div class="reading-segment">
+                    <span class="segment-label">Part 1: Hook</span>
+                    <button class="play-btn" onclick="playSegment(0)">▶</button>
+                    <p class="segment-text">
+                        Hey everyone, Pola here! Imagine an animal so powerful it can build its own house, change rivers, and fight floods — all with its own teeth! Today's story is about nature's ultimate builder making a comeback after being gone for four hundred years. You won't believe what these little <span class="highlight" data-word="engineers">engineers<span class="tooltip-text">工程师</span></span> have been up to!
+                    </p>
+                </div>
+
+                <div class="reading-segment">
+                    <span class="segment-label">Part 2: Story</span>
+                    <button class="play-btn" onclick="playSegment(1)">▶</button>
+                    <p class="segment-text">
+                        European <span class="highlight" data-word="beavers">beavers<span class="tooltip-text">河狸，海狸</span></span> have officially returned to the wild rivers of England! They disappeared about four centuries ago because people hunted them for their fur. But now, thanks to <span class="highlight" data-word="rewilding">rewilding<span class="tooltip-text">野化（恢复自然生态）</span></span> projects, beaver families are being released into rivers in Cornwall, South Downs, and Somerset. <span class="highlight" data-word="Conservationists">Conservationists<span class="tooltip-text">自然保护主义者</span></span> even spotted a wild pair swimming at Blashford Lakes — and nobody told them to go there! They just came back on their own.
+                    </p>
+                </div>
+
+                <div class="reading-segment">
+                    <span class="segment-label">Part 3: Why It Matters</span>
+                    <button class="play-btn" onclick="playSegment(2)">▶</button>
+                    <p class="segment-text">
+                        So why should we care about beavers? Well, they're called "ecosystem <span class="highlight" data-word="engineers">engineers<span class="tooltip-text">工程师</span></span>" because their dams slow down water, which actually prevents <span class="highlight" data-word="flooding">flooding<span class="tooltip-text">洪水，泛滥</span></span> for towns downstream. Their ponds create homes for fish, frogs, and birds. And their <span class="highlight" data-word="wetlands">wetlands<span class="tooltip-text">湿地</span></span> even store carbon, which helps fight climate change! When beavers build, they don't just build for themselves — they build for everyone.
+                    </p>
+                </div>
+
+                <div class="reading-segment">
+                    <span class="segment-label">Part 4: Sign-off</span>
+                    <button class="play-btn" onclick="playSegment(3)">▶</button>
+                    <p class="segment-text">
+                        Nature is pretty amazing when we give it a chance, right? If you could bring back one <span class="highlight" data-word="extinct">extinct<span class="tooltip-text">灭绝的</span></span> animal, what would it be? Tell me next time! This is Pola, signing off. See you tomorrow, and stay curious! Bye-bye!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 2: Vocabulary -->
+            <div class="section" id="vocab">
+                <h2 class="section-title">📝 词汇表 Vocabulary</h2>
+                <div class="vocab-grid" id="vocabGrid">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <!-- Section 3: Sentence Practice -->
+            <div class="section" id="sentences">
+                <h2 class="section-title">💬 句型练习 Sentence Patterns</h2>
+
+                <div class="sentence-item">
+                    <div class="sentence-en">"Imagine an animal so powerful it can build its own house."</div>
+                    <div class="sentence-cn">想象一种动物强大到能自己建房子。</div>
+                    <div class="sentence-explain">📌 <strong>so + adj. + that...</strong> 太…以至于…（这里省略了that，更口语化）</div>
+                    <div class="practice-box" contenteditable="true" data-placeholder="试着用 so...that... 写一个句子："></div>
+                </div>
+
+                <div class="sentence-item">
+                    <div class="sentence-en">"They disappeared about four centuries ago because people hunted them for their fur."</div>
+                    <div class="sentence-cn">它们大约四个世纪前消失了，因为人们为了获取它们的皮毛而猎杀它们。</div>
+                    <div class="sentence-explain">📌 <strong>...ago because...</strong> 表示过去的时间和原因的常用句式</div>
+                    <div class="practice-box" contenteditable="true" data-placeholder="试着用 ...ago because... 写一个句子："></div>
+                </div>
+
+                <div class="sentence-item">
+                    <div class="sentence-en">"Thanks to rewilding projects, beaver families are being released into rivers."</div>
+                    <div class="sentence-cn">多亏了野化项目，海狸家族被释放到河流中。</div>
+                    <div class="sentence-explain">📌 <strong>Thanks to...</strong> 多亏了/由于…（表达积极原因）</div>
+                    <div class="practice-box" contenteditable="true" data-placeholder="试着用 Thanks to... 写一个句子："></div>
+                </div>
+
+                <div class="sentence-item">
+                    <div class="sentence-en">"Their dams slow down water, which actually prevents flooding."</div>
+                    <div class="sentence-cn">它们的水坝减缓了水流，这实际上防止了洪水。</div>
+                    <div class="sentence-explain">📌 <strong>, which...</strong> 非限制性定语从句，补充说明前面的整个句子</div>
+                    <div class="practice-box" contenteditable="true" data-placeholder="试着用 , which... 写一个句子："></div>
+                </div>
+
+                <div class="sentence-item">
+                    <div class="sentence-en">"When beavers build, they don't just build for themselves — they build for everyone."</div>
+                    <div class="sentence-cn">当海狸建造时，它们不只是为自己建造——它们为大家建造。</div>
+                    <div class="sentence-explain">📌 <strong>not just...—they...</strong> 不只是…（破折号后强调递进含义）</div>
+                    <div class="practice-box" contenteditable="true" data-placeholder="试着用 not just...—they... 写一个句子："></div>
+                </div>
+            </div>
+
+            <!-- Section 4: Grammar -->
+            <div class="section" id="grammar">
+                <h2 class="section-title">📐 语法点 Grammar Points</h2>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">1. 一般过去时 Simple Past Tense</div>
+                    <div class="grammar-explain">
+                        描述过去发生的事情。课文中的例子：<br>
+                        海狸在过去消失了（disappeared），人们猎杀了它们（hunted）。
+                    </div>
+                    <div class="grammar-examples">
+                        <ul>
+                            <li>They <strong>disappeared</strong> about four centuries ago.（它们大约四百年前消失了。）</li>
+                            <li>People <strong>hunted</strong> them for their fur.（人们为了皮毛而猎杀它们。）</li>
+                            <li>Nobody <strong>told</strong> them to go there.（没人告诉它们去那里。）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">2. 现在完成时 Present Perfect</div>
+                    <div class="grammar-explain">
+                        描述过去发生但对现在有影响的事情，常与 have/has + 过去分词连用。课文例子：
+                    </div>
+                    <div class="grammar-examples">
+                        <ul>
+                            <li>European beavers <strong>have officially returned</strong> to the wild rivers.（欧洲海狸已经正式回归野生河流。）</li>
+                            <li>They <strong>have been up to</strong> something amazing!（它们一直在做些了不起的事！）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">3. 被动语态 Passive Voice</div>
+                    <div class="grammar-explain">
+                        当动作的承受者比执行者更重要时，使用被动语态（be + 过去分词）。课文例子：
+                    </div>
+                    <div class="grammar-examples">
+                        <ul>
+                            <li>Beaver families <strong>are being released</strong> into rivers.（海狸家族正在被释放到河流中。）</li>
+                            <li>They <strong>were hunted</strong> for their fur.（它们因皮毛而被猎杀。）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">4. 感叹句 Exclamatory Sentences</div>
+                    <div class="grammar-explain">
+                        用 "what" 或 "how" 开头表达强烈感情。Pola 在新闻中经常用感叹句来吸引观众注意：
+                    </div>
+                    <div class="grammar-examples">
+                        <ul>
+                            <li><strong>Imagine</strong> an animal so powerful it can build its own house!（想象一种强大到能自己建房子的动物！）</li>
+                            <li>Nature is <strong>pretty amazing</strong> when we give it a chance!（当我们给自然一个机会时，它是相当令人惊叹的！）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">5. 时间状语从句 Time Clauses</div>
+                    <div class="grammar-explain">
+                        用 when, after, before 等引导时间从句，描述事情发生的时间关系：
+                    </div>
+                    <div class="grammar-examples">
+                        <ul>
+                            <li><strong>When</strong> beavers build, they don't just build for themselves.（当海狸建造时，它们不只是为自己建造。）</li>
+                            <li><strong>After</strong> being gone for four hundred years, they finally came back.（消失四百年后，它们终于回来了。）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Quiz -->
+            <div class="section" id="quiz">
+                <h2 class="section-title">✅ 练习测验 Quiz</h2>
+
+                <div class="quiz-item" data-correct="B">
+                    <div class="quiz-question">1. 海狸从英格兰消失大约多久了？<br><small>(How long were beavers gone from England?)</small></div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'B', 'A')">A. About 100 years (大约100年)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'B', 'B')">B. About 400 years (大约400年) ✅</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'B', 'C')">C. About 1,000 years (大约1000年)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'B', 'D')">D. About 10 years (大约10年)</div>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="A">
+                    <div class="quiz-question">2. 人们为什么要猎杀海狸？<br><small>(Why did people hunt beavers?)</small></div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'A', 'A')">A. For their fur (为了皮毛) ✅</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'A', 'B')">B. For their meat (为了肉)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'A', 'C')">C. Because they were dangerous (因为它们很危险)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'A', 'D')">D. Because they destroyed forests (因为它们破坏森林)</div>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="C">
+                    <div class="quiz-question">3. "Ecosystem engineer" 这个词是什么意思？<br><small>(What does "ecosystem engineer" mean?)</small></div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'C', 'A')">A. A person who designs parks (设计公园的人)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'C', 'B')">B. A machine that cleans rivers (清洁河流的机器)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'C', 'C')">C. An animal that changes its environment (改变环境的动物) ✅</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'C', 'D')">D. A scientist who studies animals (研究动物的科学家)</div>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="B">
+                    <div class="quiz-question">4. 海狸的水坝有什么好处？<br><small>(What is one benefit of beaver dams?)</small></div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'B', 'A')">A. They make rivers wider (它们让河流更宽)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'B', 'B')">B. They slow down water and prevent flooding (减缓水流，防止洪水) ✅</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'B', 'C')">C. They create drinking water (它们创造饮用水)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'B', 'D')">D. They attract tourists (它们吸引游客)</div>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="D">
+                    <div class="quiz-question">5. Blashford Lakes 的海狸有什么特别之处？<br><small>(What is special about the beavers at Blashford Lakes?)</small></div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'D', 'A')">A. They were the first beavers in the world (它们是世界上第一批海狸)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'D', 'B')">B. They were released by the government (它们是政府释放的)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'D', 'C')">C. They can talk (它们会说话)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'D', 'D')">D. They came back on their own (它们自己回来的) ✅</div>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="A">
+                    <div class="quiz-question">6. 海狸的湿地有什么环保作用？<br><small>(What environmental benefit do beaver wetlands provide?)</small></div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'A', 'A')">A. They store carbon and help fight climate change (储存碳，帮助对抗气候变化) ✅</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'A', 'B')">B. They produce oxygen (它们产生氧气)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'A', 'C')">C. They clean the air (它们清洁空气)</div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'A', 'D')">D. They make the weather warmer (它们让天气更暖)</div>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-score" id="quizScore"></div>
+            </div>
+
+            <!-- Section 6: Knowledge Extension -->
+            <div class="section" id="knowledge">
+                <h2 class="section-title">🌍 中文知识扩展 Knowledge Extension</h2>
+
+                <div class="knowledge-section">
+                    <h3>🦫 海狸：自然界的水利工程师</h3>
+                    <p>欧亚海狸（Eurasian Beaver，学名 <em>Castor fiber</em>）是仅次于人类之后最会改变自然环境的动物。它们用锋利的门齿啃倒树木，用树枝和泥巴建造水坝，在水流中创造出池塘和湿地。</p>
+                    <p>一只成年海狸的门齿可以长到 20-25 厘米长！海狸的牙齿含有铁元素，所以呈橙色，而且非常坚硬，能啃倒直径达 30 厘米的树。</p>
+                    <ul>
+                        <li><strong>体重：</strong>成年欧亚海狸重 18-30 公斤，体长约 1 米</li>
+                        <li><strong>寿命：</strong>野外可活 10-15 年</li>
+                        <li><strong>食性：</strong>素食动物，主要吃树皮、水生植物和嫩枝</li>
+                        <li><strong>游泳能力：</strong>可以在水下闭气长达 15 分钟</li>
+                    </ul>
+                </div>
+
+                <div class="knowledge-section">
+                    <h3>📜 海狸在英国的消亡与回归</h3>
+                    <p>海狸曾经遍布整个欧洲，包括英国。但在 <strong>16 世纪</strong>，由于人类大量猎杀海狸获取皮毛和Castoreum（一种用于香水和药物的分泌物），英国的野生海狸彻底灭绝了。</p>
+                    <p>从 2000 年代开始，英国开始试验性地重新引入海狸。苏格兰在 2009 年率先开展了海狸重新引入试验。到 <strong>2025 年</strong>，英国政府正式批准了英格兰地区的海狸野生释放许可证。</p>
+                    <p>2026 年 2 月，英格兰南部的康沃尔郡成为首批合法释放海狸的地区之一。随后，多个保护区开始报告海狸的出现——有些是被释放的，有些竟然是自己迁移过来的！</p>
+                </div>
+
+                <div class="knowledge-section">
+                    <h3>🌊 海狸的生态魔法</h3>
+                    <p>为什么科学家和环保人士都这么支持海狸回归？因为海狸做的事情，相当于免费的"自然基础设施"：</p>
+                    <ul>
+                        <li><strong>防洪：</strong>海狸的水坝像海绵一样吸收雨水，减缓水流速度，减少下游城镇的洪水风险</li>
+                        <li><strong>净水：</strong>湿地中的植物和微生物可以过滤水中的污染物</li>
+                        <li><strong>生物多样性：</strong>一个海狸池塘可以支持多达 50 种以上的鸟类、鱼类、两栖动物和昆虫</li>
+                        <li><strong>抗旱：</strong>水坝蓄积的水在干旱时期缓慢释放，保持河流水位</li>
+                        <li><strong>碳储存：</strong>湿地土壤储存的碳是森林的两倍以上</li>
+                    </ul>
+                </div>
+
+                <div class="knowledge-section">
+                    <h3>🌍 野化运动（Rewilding）</h3>
+                    <p>"野化"是近年来全球兴起的一种新型环保理念。与传统的"保护"不同，野化的核心思想是：<strong>让自然自己修复自己</strong>。</p>
+                    <p>野化运动的典型案例包括：</p>
+                    <ul>
+                        <li>🇺🇸 美国<span style="margin-left:4px;">黄石公园</span>重新引入<span style="margin-left:4px;">狼群</span>，改变了整条河流的生态</li>
+                        <li>🇳🇱 荷兰<span style="margin-left:4px;">Oostvaardersplassen</span> 自然保护区让马和鹿自由奔跑</li>
+                        <li>🇬🇧 英国<span style="margin-left:4px;">多个地区</span>重新引入海狸、野牛等动物</li>
+                    </ul>
+                    <p>科学家发现，当关键物种回到它们原来的栖息地时，整个生态系统都能快速恢复——就像大自然有"自我修复"的能力一样。</p>
+                </div>
+            </div>
+
+            <!-- Section 7: About -->
+            <div class="section" id="about">
+                <h2 class="section-title">ℹ️ 关于本课 About This Lesson</h2>
+
+                <div class="card">
+                    <div class="card-title">🎯 学习目标 Learning Objectives</div>
+                    <div class="about-goal">
+                        <span class="about-goal-icon">1️⃣</span>
+                        <div class="about-goal-text">掌握 8-10 个与动物保护和环境相关的核心英语词汇</div>
+                    </div>
+                    <div class="about-goal">
+                        <span class="about-goal-icon">2️⃣</span>
+                        <div class="about-goal-text">学会使用 so...that、thanks to、which 定语从句等实用句型</div>
+                    </div>
+                    <div class="about-goal">
+                        <span class="about-goal-icon">3️⃣</span>
+                        <div class="about-goal-text">理解一般过去时、现在完成时和被动语态的区别与用法</div>
+                    </div>
+                    <div class="about-goal">
+                        <span class="about-goal-icon">4️⃣</span>
+                        <div class="about-goal-text">了解海狸的生态价值和英国的野化保护运动</div>
+                    </div>
+                    <div class="about-goal">
+                        <span class="about-goal-icon">5️⃣</span>
+                        <div class="about-goal-text">能用英语简单描述动物保护和环境保护的重要性</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">💡 学习建议 Study Tips</div>
+                    <ul style="padding-left: 20px; line-height: 2; color: #555;">
+                        <li>先完整阅读全文，不要查词典，试着理解大意</li>
+                        <li>点击 ▶ 按钮听朗读，跟读模仿语音语调</li>
+                        <li>然后学习词汇表，重点记忆加粗的单词</li>
+                        <li>在句型练习中写下自己的例句</li>
+                        <li>完成测验后检查答案，对错题进行复习</li>
+                        <li>阅读知识扩展部分，了解课文背后的真实故事</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📊 课程信息 Lesson Info</div>
+                    <ul style="padding-left: 20px; line-height: 2; color: #555;">
+                        <li><strong>日期：</strong>May 7, 2026</li>
+                        <li><strong>主播：</strong>Pola（短尾矮袋鼠 Quokka）</li>
+                        <li><strong>英语等级：</strong>B1（适合 10-12 岁学习者）</li>
+                        <li><strong>主题：</strong>Wildlife Conservation & Rewilding</li>
+                        <li><strong>新闻来源：</strong>EnviroLink, English Estates, UK Government</li>
+                    </ul>
+                </div>
+
+                <button class="print-btn" onclick="window.print()">🖨️ 打印本课 Print This Lesson</button>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // === Segment texts for speech synthesis (plain text, no HTML) ===
+        const segmentTexts = [
+            "Hey everyone, Pola here! Imagine an animal so powerful it can build its own house, change rivers, and fight floods — all with its own teeth! Today's story is about nature's ultimate builder making a comeback after being gone for four hundred years. You won't believe what these little engineers have been up to!",
+            "European beavers have officially returned to the wild rivers of England! They disappeared about four centuries ago because people hunted them for their fur. But now, thanks to rewilding projects, beaver families are being released into rivers in Cornwall, South Downs, and Somerset. Conservationists even spotted a wild pair swimming at Blashford Lakes — and nobody told them to go there! They just came back on their own.",
+            "So why should we care about beavers? Well, they're called ecosystem engineers because their dams slow down water, which actually prevents flooding for towns downstream. Their ponds create homes for fish, frogs, and birds. And their wetlands even store carbon, which helps fight climate change! When beavers build, they don't just build for themselves — they build for everyone.",
+            "Nature is pretty amazing when we give it a chance, right? If you could bring back one extinct animal, what would it be? Tell me next time! This is Pola, signing off. See you tomorrow, and stay curious! Bye-bye!"
+        ];
+
+        // === Vocabulary data ===
+        const vocabData = [
+            { word: "beaver", pos: "noun (n.)", meaning: "河狸，海狸 — 一种会筑坝的大型啮齿动物", example: "Beavers are known as nature's engineers because they build dams across rivers." },
+            { word: "engineer", pos: "noun (n.)", meaning: "工程师 — 设计或建造事物的人/动物", example: "Beavers are called ecosystem engineers because they change their environment." },
+            { word: "disappear", pos: "verb (v.)", meaning: "消失 — 从视野中不见；不再存在", example: "The beavers disappeared from England about four centuries ago." },
+            { word: "rewilding", pos: "noun (n.)", meaning: "野化 — 恢复自然生态环境的保护方式", example: "Rewilding projects help bring animals back to their natural habitats." },
+            { word: "conservationist", pos: "noun (n.)", meaning: "自然保护主义者 — 致力于保护自然环境和动物的人", example: "Conservationists are working hard to protect endangered species around the world." },
+            { word: "flooding", pos: "noun (n.)", meaning: "洪水，泛滥 — 水溢出河道淹没土地", example: "The beaver dams help prevent flooding in towns downstream." },
+            { word: "wetland", pos: "noun (n.)", meaning: "湿地 — 土壤被水覆盖的土地生态系统", example: "Wetlands are important because they provide homes for many species." },
+            { word: "extinct", pos: "adjective (adj.)", meaning: "灭绝的 — 物种完全消失，不再存活", example: "Many animals have become extinct because of human activities." },
+            { word: "dam", pos: "noun (n.)", meaning: "水坝 — 横跨河流建造的拦水结构", example: "Beavers build dams using branches, mud, and rocks." },
+            { word: "habitat", pos: "noun (n.)", meaning: "栖息地 — 动植物自然生长和生活的环境", example: "Protecting natural habitats is essential for wildlife survival." }
+        ];
+
+        // === Generate vocabulary cards ===
+        function generateVocabCards() {
+            const grid = document.getElementById('vocabGrid');
+            grid.innerHTML = vocabData.map((v, i) => `
+                <div class="vocab-card">
+                    <div class="vocab-word">
+                        <button class="vocab-speaker" onclick="playVocab(${i})">🔊</button>
+                        ${v.word}
+                    </div>
+                    <div class="vocab-pos">${v.pos}</div>
+                    <div class="vocab-meaning">${v.meaning}</div>
+                    <div class="vocab-example">"${v.example}"</div>
+                </div>
+            `).join('');
+        }
+        generateVocabCards();
+
+        // === Speech synthesis ===
+        let selectedVoice = null;
+        let currentUtterance = null;
+        let currentPlayBtn = null;
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            if (voices.length === 0) return;
+
+            // Priority: Enhanced English male > Daniel > Alex > Microsoft Mark > any English male > any English
+            const preferred = [
+                v => v.name.includes('Enhanced') && v.lang.startsWith('en') && v.name.toLowerCase().includes('male'),
+                v => v.name === 'Daniel',
+                v => v.name === 'Alex',
+                v => v.name.includes('Microsoft Mark'),
+                v => v.lang.startsWith('en-') && v.name.toLowerCase().includes('male'),
+                v => v.lang.startsWith('en')
+            ];
+            for (const test of preferred) {
+                const found = voices.find(test);
+                if (found) { selectedVoice = found; break; }
+            }
+            if (!selectedVoice) selectedVoice = voices.find(v => v.lang.startsWith('en')) || voices[0];
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function speak(text, btn) {
+            speechSynthesis.cancel();
+            if (currentPlayBtn) {
+                currentPlayBtn.classList.remove('playing');
+                currentPlayBtn.textContent = currentPlayBtn.classList.contains('vocab-speaker') ? '🔊' : '▶';
+            }
+
+            const utt = new SpeechSynthesisUtterance(text);
+            utt.rate = 0.97;
+            utt.pitch = 1.0;
+            if (selectedVoice) utt.voice = selectedVoice;
+
+            if (btn) {
+                btn.classList.add('playing');
+                btn.textContent = '⏸';
+                currentPlayBtn = btn;
+            }
+
+            utt.onend = () => {
+                if (btn) {
+                    btn.classList.remove('playing');
+                    btn.textContent = btn.classList.contains('vocab-speaker') ? '🔊' : '▶';
+                    if (currentPlayBtn === btn) currentPlayBtn = null;
+                }
+            };
+            utt.onerror = () => {
+                if (btn) {
+                    btn.classList.remove('playing');
+                    btn.textContent = btn.classList.contains('vocab-speaker') ? '🔊' : '▶';
+                    if (currentPlayBtn === btn) currentPlayBtn = null;
+                }
+            };
+
+            currentUtterance = utt;
+            speechSynthesis.speak(utt);
+        }
+
+        function playSegment(index) {
+            const btns = document.querySelectorAll('.play-btn');
+            speak(segmentTexts[index], btns[index]);
+        }
+
+        function playVocab(index) {
+            const btns = document.querySelectorAll('.vocab-speaker');
+            speak(vocabData[index].word, btns[index]);
+        }
+
+        // === Navigation ===
+        const sectionIds = ['reading','vocab','sentences','grammar','quiz','knowledge','about'];
+
+        function showSection(id) {
+            sectionIds.forEach(sid => {
+                document.getElementById(sid).classList.toggle('active', sid === id);
+            });
+            document.querySelectorAll('.nav-item').forEach((item, i) => {
+                item.classList.toggle('active', sectionIds[i] === id);
+            });
+            // Update progress bar
+            const idx = sectionIds.indexOf(id);
+            document.getElementById('progressBar').style.width = ((idx + 1) / sectionIds.length * 100) + '%';
+            // Close mobile sidebar
+            document.getElementById('sidebar').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // === Quiz ===
+        let quizAnswered = 0;
+        let quizCorrect = 0;
+
+        function checkAnswer(el, correct, chosen) {
+            const item = el.closest('.quiz-item');
+            const options = item.querySelectorAll('.quiz-option');
+            const feedback = item.querySelector('.quiz-feedback');
+            if (item.dataset.answered) return;
+            item.dataset.answered = 'true';
+
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.textContent.includes('✅')) opt.classList.add('correct');
+            });
+
+            if (chosen === correct) {
+                el.classList.add('correct');
+                feedback.textContent = '🎉 正确！Great job!';
+                feedback.style.color = '#2E7D32';
+                quizCorrect++;
+            } else {
+                el.classList.add('wrong');
+                feedback.textContent = '❌ 不对哦，正确答案已标出。';
+                feedback.style.color = '#C62828';
+            }
+            feedback.style.display = 'block';
+            quizAnswered++;
+
+            if (quizAnswered === 6) {
+                const score = document.getElementById('quizScore');
+                score.style.display = 'block';
+                score.innerHTML = `🏆 测验完成！得分：${quizCorrect}/6<br><small>${quizCorrect >= 5 ? '太棒了！你完全理解了这篇新闻！🌟' : quizCorrect >= 3 ? '不错哦！再复习一下知识点吧！💪' : '加油！多读几遍课文再来试试！📚'}</small>`;
+            }
+        }
+
+        // === Practice box placeholder ===
+        document.querySelectorAll('.practice-box').forEach(box => {
+            box.addEventListener('focus', function() {
+                if (this.textContent === this.dataset.placeholder) {
+                    this.textContent = '';
+                    this.style.color = '#2C3E50';
+                }
+            });
+            box.addEventListener('blur', function() {
+                if (this.textContent.trim() === '') {
+                    this.textContent = this.dataset.placeholder;
+                    this.style.color = '#888';
+                }
+            });
+        });
+    </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

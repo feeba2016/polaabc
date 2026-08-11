@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pola News — A Hidden Neighbor in Space | 互动学习页</title>
+    <style>
+        :root {
+            --bg: #0d1b2a;
+            --surface: #1b2838;
+            --surface2: #243447;
+            --accent: #f0a500;
+            --accent2: #e85d04;
+            --text: #e0e1dd;
+            --text2: #9ba4b5;
+            --border: #2d3a4a;
+            --highlight: #f0a500;
+            --highlight-bg: rgba(240,165,0,0.15);
+            --green: #4caf84;
+            --red: #e0556a;
+            --blue: #5b9bd5;
+            --sidebar-w: 260px;
+            --font-main: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b2838 30%, #1a1a2e 70%, #16213e 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* === Progress Bar === */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            z-index: 10000;
+            transition: width 0.1s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* === Sidebar === */
+        nav {
+            width: var(--sidebar-w);
+            min-width: var(--sidebar-w);
+            background: rgba(13,27,42,0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            padding: 28px 0;
+            position: fixed;
+            top: 0; left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        nav .logo {
+            padding: 0 24px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+        nav .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        nav .logo .sub {
+            font-size: 0.75rem;
+            color: var(--text2);
+            margin-top: 2px;
+        }
+
+        nav ul { list-style: none; padding: 0 12px; flex: 1; }
+        nav ul li { margin: 2px 0; }
+        nav ul li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            text-decoration: none;
+            color: var(--text2);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        nav ul li a:hover {
+            background: var(--surface2);
+            color: var(--text);
+        }
+        nav ul li a.active {
+            background: var(--highlight-bg);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        nav .nav-icon {
+            font-size: 1.1rem;
+            width: 22px;
+            text-align: center;
+        }
+
+        /* Mobile nav toggle */
+        #nav-toggle {
+            display: none;
+            position: fixed;
+            top: 12px; left: 12px;
+            z-index: 200;
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.3rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* === Main Content === */
+        main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            padding: 36px 40px 60px;
+            max-width: 900px;
+        }
+
+        section {
+            display: none;
+            animation: fadeSlide 0.4s ease;
+        }
+        section.active { display: block; }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+        }
+        h3 {
+            font-size: 1.15rem;
+            color: var(--text);
+            margin: 24px 0 10px;
+        }
+
+        /* === Full Text Section === */
+        .reading-segment {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--accent);
+            position: relative;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .reading-segment .seg-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .reading-segment .play-btn {
+            position: absolute;
+            top: 16px; right: 16px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            color: #1a1a2e;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .reading-segment .play-btn:hover { transform: scale(1.1); }
+        .reading-segment .play-btn.playing {
+            animation: pulse 1.2s infinite;
+            background: var(--accent2);
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(240,165,0,0.5); }
+            50% { box-shadow: 0 0 0 14px rgba(240,165,0,0); }
+        }
+
+        .vocab-highlight {
+            color: var(--highlight);
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px dotted var(--highlight);
+            transition: all 0.15s;
+            position: relative;
+        }
+        .vocab-highlight:hover {
+            background: var(--highlight-bg);
+            border-radius: 3px;
+        }
+
+        /* Tooltip */
+        .tooltip-popup {
+            position: fixed;
+            background: var(--surface2);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            border: 1px solid var(--accent);
+            max-width: 260px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .tooltip-popup.show { opacity: 1; }
+
+        /* === Vocabulary === */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 14px;
+        }
+        .vocab-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            position: relative;
+        }
+        .vocab-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .vocab-card .word {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .vocab-card .word .speak-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text2);
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .vocab-card .word .speak-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .vocab-card .word .speak-btn.playing {
+            animation: pulse 1.2s infinite;
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        .vocab-card .pos {
+            font-size: 0.75rem;
+            color: var(--text2);
+            margin: 4px 0;
+            font-style: italic;
+        }
+        .vocab-card .zh {
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-bottom: 8px;
+        }
+        .vocab-card .example {
+            font-size: 0.82rem;
+            color: var(--text);
+            background: var(--surface2);
+            padding: 8px 10px;
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+
+        /* === Sentence Patterns === */
+        .pattern-item {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+        .pattern-item .en {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+        .pattern-item .zh {
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-bottom: 10px;
+        }
+        .pattern-item .explain {
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .pattern-item .practice {
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .pattern-item .practice .label {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+        }
+
+        /* === Grammar === */
+        .grammar-item {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+        .grammar-item .title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .grammar-item .explain {
+            font-size: 0.88rem;
+            color: var(--text2);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .grammar-item .examples {
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+        }
+        .grammar-item .examples li {
+            margin-left: 16px;
+            margin-bottom: 4px;
+        }
+        .grammar-item .exercise {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--text2);
+        }
+        .grammar-item .exercise input {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            width: 180px;
+        }
+        .grammar-item .exercise .check-btn {
+            background: var(--accent);
+            color: #1a1a2e;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+        .grammar-item .exercise .feedback {
+            margin-top: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* === Quiz === */
+        .quiz-item {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+        .quiz-item .q {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .quiz-item .q-zh {
+            font-size: 0.8rem;
+            color: var(--text2);
+            margin-bottom: 10px;
+        }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-option {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .quiz-option:hover { border-color: var(--accent); }
+        .quiz-option.correct { background: rgba(76,175,132,0.2); border-color: var(--green); }
+        .quiz-option.wrong { background: rgba(224,85,106,0.2); border-color: var(--red); }
+        .quiz-option.disabled { pointer-events: none; opacity: 0.8; }
+
+        /* === Knowledge Extension === */
+        .knowledge-block {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            line-height: 1.8;
+        }
+        .knowledge-block h3 {
+            margin-top: 0;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+        .knowledge-block p {
+            color: var(--text2);
+            margin: 10px 0;
+        }
+        .knowledge-block .tag {
+            display: inline-block;
+            background: var(--highlight-bg);
+            color: var(--accent);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-right: 6px;
+        }
+
+        /* === About === */
+        .about-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+        .about-card ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        .about-card ul li { color: var(--text2); }
+
+        .print-btn {
+            background: var(--accent);
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+        .print-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* === Responsive === */
+        @media (max-width: 768px) {
+            nav {
+                transform: translateX(-100%);
+            }
+            nav.open { transform: translateX(0); }
+            #nav-toggle { display: flex; }
+            main {
+                margin-left: 0;
+                padding: 60px 16px 40px;
+            }
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* === Print === */
+        @media print {
+            nav, #nav-toggle, #progress-bar, .play-btn, .speak-btn, .print-btn { display: none !important; }
+            main { margin-left: 0; padding: 0; max-width: 100%; }
+            body { background: #fff; color: #000; font-size: 12pt; }
+            h2 { color: #000; border-color: #000; }
+            .reading-segment, .vocab-card, .pattern-item, .grammar-item, .quiz-item, .knowledge-block, .about-card {
+                background: #fff; border: 1px solid #ccc; break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="nav-toggle" onclick="toggleNav()">☰</button>
+
+<!-- Sidebar -->
+<nav id="sidebar">
+    <div class="logo">
+        <h1>🌍 POLA NEWS</h1>
+        <div class="sub">A Hidden Neighbor in Space</div>
+    </div>
+    <ul>
+        <li><a class="active" data-section="reading" onclick="showSection('reading')"><span class="nav-icon">📖</span> 全文阅读</a></li>
+        <li><a data-section="vocabulary" onclick="showSection('vocabulary')"><span class="nav-icon">📝</span> 词汇表</a></li>
+        <li><a data-section="patterns" onclick="showSection('patterns')"><span class="nav-icon">💬</span> 句型练习</a></li>
+        <li><a data-section="grammar" onclick="showSection('grammar')"><span class="nav-icon">📐</span> 语法点</a></li>
+        <li><a data-section="quiz" onclick="showSection('quiz')"><span class="nav-icon">✅</span> 练习测验</a></li>
+        <li><a data-section="knowledge" onclick="showSection('knowledge')"><span class="nav-icon">🔭</span> 中文知识扩展</a></li>
+        <li><a data-section="about" onclick="showSection('about')"><span class="nav-icon">ℹ️</span> 关于本课</a></li>
+    </ul>
+</nav>
+
+<!-- Main Content -->
+<main>
+
+<!-- ===== Section 1: Full Text ===== -->
+<section id="section-reading" class="active">
+    <h2>📖 全文阅读</h2>
+
+    <div class="reading-segment" id="seg1">
+        <div class="seg-label">Segment 1 — Hook</div>
+        <p>
+            Imagine a world just <span class="vocab-highlight" data-word="light-year">28 light-years</span> from Earth — a planet
+            that was hiding right under our noses for over fifteen years!
+            Its name is <span class="vocab-highlight" data-word="super-Earth">Ross 318 b</span>, and it's a super-Earth.
+            That means it's bigger than our planet, but smaller than Neptune.
+            The coolest part? Scientists almost missed it completely!
+        </p>
+        <button class="play-btn" data-seg="0" title="播放">▶</button>
+    </div>
+
+    <div class="reading-segment" id="seg2">
+        <div class="seg-label">Segment 2 — Story</div>
+        <p>
+            The star Ross 318 is a small <span class="vocab-highlight" data-word="red-dwarf">red dwarf</span>, and it's very "noisy."
+            Its strong <span class="vocab-highlight" data-word="magnetic-storm">magnetic storms</span> made the data look messy,
+            so the planet's <span class="vocab-highlight" data-word="signal">signal</span> stayed hidden — like a whisper in a storm.
+            But a team led by <span class="vocab-highlight" data-word="astronomer">astronomer</span> Giuseppe Conzo kept digging.
+            They combined 15 years of data from three powerful instruments,
+            and finally, the planet's tiny <span class="vocab-highlight" data-word="wobble">wobble</span> revealed itself!
+        </p>
+        <button class="play-btn" data-seg="1" title="播放">▶</button>
+    </div>
+
+    <div class="reading-segment" id="seg3">
+        <div class="seg-label">Segment 3 — Why It Matters</div>
+        <p>
+            Here's why Ross 318 b is so exciting — it sits in the star's
+            "<span class="vocab-highlight" data-word="habitable-zone">habitable zone</span>," the perfect distance where water could exist.
+            The planet is about 6 times heavier than Earth, and its temperature
+            is around minus 36 degrees Celsius — cold, but not too cold.
+            If it has a thick <span class="vocab-highlight" data-word="atmosphere">atmosphere</span>, it could trap heat and stay warm.
+            Scientists now want the <span class="vocab-highlight" data-word="telescope">James Webb Space Telescope</span> to take a closer look!
+        </p>
+        <button class="play-btn" data-seg="2" title="播放">▶</button>
+    </div>
+
+    <div class="reading-segment" id="seg4">
+        <div class="seg-label">Segment 4 — Sign-off</div>
+        <p>
+            This discovery teaches us something important: sometimes,
+            the most amazing things are hiding in places we've already looked.
+            Ross 318 b was there all along, waiting to be found.
+            So next time you look up at the stars, remember —
+            our newest neighbor might be hiding in plain sight.
+            This is Pola, signing off. See you next time!
+        </p>
+        <button class="play-btn" data-seg="3" title="播放">▶</button>
+    </div>
+</section>
+
+<!-- ===== Section 2: Vocabulary ===== -->
+<section id="section-vocabulary">
+    <h2>📝 词汇表</h2>
+    <div class="vocab-grid">
+
+        <div class="vocab-card">
+            <div class="word">light-year <button class="speak-btn" data-word="light-year">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">光年 — 光在一年中走过的距离（约9.46万亿公里）</div>
+            <div class="example">📌 Ross 318 b is only 28 light-years away from Earth.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">super-Earth <button class="speak-btn" data-word="super-Earth">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">超级地球 — 比地球大但比海王星小的岩石行星</div>
+            <div class="example">📌 A super-Earth is bigger than our planet but smaller than Neptune.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">red dwarf <button class="speak-btn" data-word="red dwarf">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">红矮星 — 宇宙中最常见、最小、最冷的恒星类型</div>
+            <div class="example">📌 Ross 318 is a small red dwarf star with strong magnetic storms.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">magnetic storm <button class="speak-btn" data-word="magnetic storm">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">磁暴 — 恒星表面磁场剧烈活动的现象</div>
+            <div class="example">📌 The red dwarf's magnetic storms made the data very noisy.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">habitable zone <button class="speak-btn" data-word="habitable zone">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">宜居带 — 恒星周围温度适中、可能存在液态水的区域</div>
+            <div class="example">📌 Ross 318 b sits in the habitable zone where water could exist.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">wobble <button class="speak-btn" data-word="wobble">🔊</button></div>
+            <div class="pos">noun / verb 名词／动词</div>
+            <div class="zh">摇摆、晃动 — 行星引力使恒星产生的微小摆动</div>
+            <div class="example">📌 Scientists detected the planet by watching the star's tiny wobble.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">atmosphere <button class="speak-btn" data-word="atmosphere">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">大气层 — 围绕行星的气体外壳</div>
+            <div class="example">📌 A thick atmosphere could trap heat and keep the planet warm.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">signal <button class="speak-btn" data-word="signal">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">信号 — 传递信息的载体（如无线电波、光、数据等）</div>
+            <div class="example">📌 The planet's signal was hidden like a whisper in a storm.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">telescope <button class="speak-btn" data-word="telescope">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">望远镜 — 观测遥远天体的光学仪器</div>
+            <div class="example">📌 The James Webb Space Telescope will take a closer look at Ross 318 b.</div>
+        </div>
+
+        <div class="vocab-card">
+            <div class="word">astronomer <button class="speak-btn" data-word="astronomer">🔊</button></div>
+            <div class="pos">noun 名词</div>
+            <div class="zh">天文学家 — 研究宇宙和天体的科学家</div>
+            <div class="example">📌 Astronomer Giuseppe Conzo led the team that discovered Ross 318 b.</div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ===== Section 3: Sentence Patterns ===== -->
+<section id="section-patterns">
+    <h2>💬 句型练习</h2>
+
+    <div class="pattern-item">
+        <div class="en">Pattern 1: "Imagine a world just..."</div>
+        <div class="zh">句型：想象一下一个刚刚……的世界</div>
+        <div class="explain">用 "Imagine..." 开头来让听众在脑海中构建画面，非常适合讲故事和描述惊人的事实。</div>
+        <div class="practice">
+            <div class="label">✏️ 练一练 — 完成句子：</div>
+            Imagine a world just ______ from Earth, where ______.<br>
+            <em style="color:#9ba4b5">（参考答案：Imagine a world just 100 light-years from Earth, where it rains diamonds.）</em>
+        </div>
+    </div>
+
+    <div class="pattern-item">
+        <div class="en">Pattern 2: "That means it's... but..."</div>
+        <div class="zh">句型：这意味着它……但……</div>
+        <div class="explain">用 "That means..." 来解释前面提到的概念，再用 "but..." 来补充对比信息，让解释更清晰。</div>
+        <div class="practice">
+            <div class="label">✏️ 练一练 — 完成句子：</div>
+            It's a super-Earth. That means it's ______, but ______.<br>
+            <em style="color:#9ba4b5">（参考答案：That means it's rocky like Earth, but much bigger.）</em>
+        </div>
+    </div>
+
+    <div class="pattern-item">
+        <div class="en">Pattern 3: "like a whisper in a storm"</div>
+        <div class="zh">句型：就像暴风雨中的耳语</div>
+        <div class="explain">使用比喻（simile）"like..." 让抽象的概念变得生动形象，帮助读者理解复杂的事物。</div>
+        <div class="practice">
+            <div class="label">✏️ 练一练 — 完成句子：</div>
+            The sound was so quiet, like ______.<br>
+            <em style="color:#9ba4b5">（参考答案：like a snowflake landing on water.）</em>
+        </div>
+    </div>
+
+    <div class="pattern-item">
+        <div class="en">Pattern 4: "cold, but not too cold"</div>
+        <div class="zh">句型：冷，但又不是太冷</div>
+        <div class="explain">用 "[adjective], but not too [adjective]" 来表达一个折中的状态，常用于科学描述中给出精确范围。</div>
+        <div class="practice">
+            <div class="label">✏️ 练一练 — 完成句子：</div>
+            The water was ______, but not too ______ to swim in.<br>
+            <em style="color:#9ba4b5">（参考答案：The water was cold, but not too cold to swim in.）</em>
+        </div>
+    </div>
+
+    <div class="pattern-item">
+        <div class="en">Pattern 5: "This discovery teaches us..."</div>
+        <div class="zh">句型：这个发现告诉我们……</div>
+        <div class="explain">用 "This teaches us..." 来总结故事的寓意或科学启示，是英语新闻播报中经典的结尾方式。</div>
+        <div class="practice">
+            <div class="label">✏️ 练一练 — 完成句子：</div>
+            This story teaches us that sometimes, ______.<br>
+            <em style="color:#9ba4b5">（参考答案：sometimes the best answers are hiding in places we've already looked.）</em>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Section 4: Grammar ===== -->
+<section id="section-grammar">
+    <h2>📐 语法点</h2>
+
+    <div class="grammar-item">
+        <div class="title">1. Present Perfect — "has been hiding"（现在完成时）</div>
+        <div class="explain">
+            <strong>中文解释：</strong>现在完成时（have/has + 过去分词）表示从过去一直持续到现在的动作或状态。课文中的 "was hiding" 是过去进行时，但这里引申讲解现在完成时的 "has been hiding"（一直在隐藏）。<br>
+            <strong>English:</strong> The present perfect tense links the past to the present. It shows that something started in the past and continues now, or has a result in the present.
+        </div>
+        <div class="examples">
+            <ul>
+                <li>✅ The planet <strong>has been hiding</strong> in the data for over 15 years.</li>
+                <li>✅ Scientists <strong>have searched</strong> for exoplanets since the 1990s.</li>
+                <li>❌ The planet <strong>is hiding</strong> in the data for over 15 years. (wrong tense)</li>
+            </ul>
+        </div>
+        <div class="exercise">
+            <strong>Fill in the blank:</strong> Astronomers ______ (study) this star for many years.
+            <input type="text" id="gram1" placeholder="输入答案">
+            <button class="check-btn" onclick="checkGram('gram1','have studied / has studied')">检查</button>
+            <div class="feedback" id="gram1-fb"></div>
+        </div>
+    </div>
+
+    <div class="grammar-item">
+        <div class="title">2. Comparative Adjectives — "bigger than" / "smaller than"（比较级）</div>
+        <div class="explain">
+            <strong>中文解释：</strong>比较级用于比较两个事物。规则：短形容词 + er + than；长形容词用 more + 形容词 + than。<br>
+            <strong>English:</strong> Use "-er than" for short adjectives and "more ... than" for long adjectives.
+        </div>
+        <div class="examples">
+            <ul>
+                <li>✅ Ross 318 b is <strong>bigger than</strong> Earth but <strong>smaller than</strong> Neptune.</li>
+                <li>✅ The planet is <strong>heavier than</strong> our world — about 6 times heavier!</li>
+            </ul>
+        </div>
+        <div class="exercise">
+            <strong>Fill in the blank:</strong> A super-Earth is ______ (large) than Earth, but ______ (small) than Neptune.
+            <input type="text" id="gram2" placeholder="输入答案">
+            <button class="check-btn" onclick="checkGram('gram2','larger, smaller')">检查</button>
+            <div class="feedback" id="gram2-fb"></div>
+        </div>
+    </div>
+
+    <div class="grammar-item">
+        <div class="title">3. "So...that..." Structure（如此……以至于……）</div>
+        <div class="explain">
+            <strong>中文解释：</strong>"so + 形容词 + that + 从句" 表示程度导致的结果。"The data was so messy that the signal was hidden."<br>
+            <strong>English:</strong> "So...that..." shows cause and effect — the first part describes a high degree, and the second part shows the result.
+        </div>
+        <div class="examples">
+            <ul>
+                <li>✅ The star was <strong>so noisy that</strong> the planet's signal stayed hidden.</li>
+                <li>✅ Ross 318 b is <strong>so exciting that</strong> scientists want JWST to study it.</li>
+            </ul>
+        </div>
+        <div class="exercise">
+            <strong>Fill in the blank:</strong> The magnetic storm was so strong ______ scientists almost missed the planet.
+            <input type="text" id="gram3" placeholder="输入答案">
+            <button class="check-btn" onclick="checkGram('gram3','that')">检查</button>
+            <div class="feedback" id="gram3-fb"></div>
+        </div>
+    </div>
+
+    <div class="grammar-item">
+        <div class="title">4. Conditional "If" — First Conditional（真实条件句）</div>
+        <div class="explain">
+            <strong>中文解释：</strong>第一类条件句 (If + 现在时, will/can/might + 动词原形) 表示未来可能发生的情况。<br>
+            <strong>English:</strong> First conditional = If + present simple, will/can/might + base verb. Used for real possibilities in the future.
+        </div>
+        <div class="examples">
+            <ul>
+                <li>✅ <strong>If</strong> it has a thick atmosphere, it <strong>could trap</strong> heat and stay warm.</li>
+                <li>✅ <strong>If</strong> JWST looks at Ross 318 b, we <strong>might find</strong> signs of water.</li>
+            </ul>
+        </div>
+        <div class="exercise">
+            <strong>Fill in the blank:</strong> If scientists study Ross 318 b, they ______ (discover) more about its atmosphere.
+            <input type="text" id="gram4" placeholder="输入答案">
+            <button class="check-btn" onclick="checkGram('gram4','will discover / might discover / could discover')">检查</button>
+            <div class="feedback" id="gram4-fb"></div>
+        </div>
+    </div>
+
+    <div class="grammar-item">
+        <div class="title">5. Prepositions of Location — "from," "in," "around"（位置介词）</div>
+        <div class="explain">
+            <strong>中文解释：</strong>位置介词帮助描述物体之间的空间关系。"from" = 距离起点；"in" = 在内部；"around" = 在周围。<br>
+            <strong>English:</strong> Prepositions help describe where things are in space.
+        </div>
+        <div class="examples">
+            <ul>
+                <li>✅ A world just 28 light-years <strong>from</strong> Earth.</li>
+                <li>✅ It sits <strong>in</strong> the star's habitable zone.</li>
+                <li>✅ The temperature is <strong>around</strong> minus 36 degrees Celsius.</li>
+            </ul>
+        </div>
+        <div class="exercise">
+            <strong>Fill in the blank:</strong> The exoplanet orbits ______ the habitable zone, about 0.16 AU ______ its star.
+            <input type="text" id="gram5" placeholder="输入答案">
+            <button class="check-btn" onclick="checkGram('gram5','in, from')">检查</button>
+            <div class="feedback" id="gram5-fb"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Section 5: Quiz ===== -->
+<section id="section-quiz">
+    <h2>✅ 练习测验</h2>
+
+    <div class="quiz-item" id="quiz1">
+        <div class="q">1. How far is Ross 318 b from Earth?</div>
+        <div class="q-zh">Ross 318 b 距离地球有多远？</div>
+        <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz('quiz1',0)">A. 15 light-years</div>
+            <div class="quiz-option" data-correct="true" onclick="checkQuiz('quiz1',1)">B. 28 light-years</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz1',2)">C. 100 light-years</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz1',3)">D. 6 light-years</div>
+        </div>
+    </div>
+
+    <div class="quiz-item" id="quiz2">
+        <div class="q">2. What makes Ross 318 b a "super-Earth"?</div>
+        <div class="q-zh">为什么 Ross 318 b 被称为"超级地球"？</div>
+        <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz('quiz2',0)">A. It is covered in super-hot lava</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz2',1)">B. It has super-fast winds</div>
+            <div class="quiz-option" data-correct="true" onclick="checkQuiz('quiz2',2)">C. It is bigger than Earth but smaller than Neptune</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz2',3)">D. It was discovered using a supercomputer</div>
+        </div>
+    </div>
+
+    <div class="quiz-item" id="quiz3">
+        <div class="q">3. Why was Ross 318 b hard to find?</div>
+        <div class="q-zh">为什么 Ross 318 b 很难被发现？</div>
+        <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz('quiz3',0)">A. The planet is too small to see</div>
+            <div class="quiz-option" data-correct="true" onclick="checkQuiz('quiz3',1)">B. The star's magnetic storms made the data noisy</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz3',2)">C. Scientists were looking at the wrong star</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz3',3)">D. The telescope was broken for 15 years</div>
+        </div>
+    </div>
+
+    <div class="quiz-item" id="quiz4">
+        <div class="q">4. What is the "habitable zone"?</div>
+        <div class="q-zh">什么是"宜居带"？</div>
+        <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz('quiz4',0)">A. The hottest part of a star</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz4',1)">B. The area where aliens definitely live</div>
+            <div class="quiz-option" data-correct="true" onclick="checkQuiz('quiz4',2)">C. The perfect distance from a star where water could exist</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz4',3)">D. A zone where only humans can live</div>
+        </div>
+    </div>
+
+    <div class="quiz-item" id="quiz5">
+        <div class="q">5. What telescope do scientists want to use next?</div>
+        <div class="q-zh">科学家接下来想使用哪台望远镜？</div>
+        <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz('quiz5',0)">A. Hubble Space Telescope</div>
+            <div class="quiz-option" data-correct="true" onclick="checkQuiz('quiz5',1)">B. James Webb Space Telescope (JWST)</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz5',2)">C. TESS Space Telescope</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz5',3)">D. Kepler Space Telescope</div>
+        </div>
+    </div>
+
+    <div class="quiz-item" id="quiz6">
+        <div class="q">6. What is the main lesson from this discovery?</div>
+        <div class="q-zh">这个发现主要教会我们什么？</div>
+        <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz('quiz6',0)">A. Space is too far away to study</div>
+            <div class="quiz-option" data-correct="true" onclick="checkQuiz('quiz6',1)">B. Amazing things can be hiding in places we've already looked</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz6',2)">C. Red dwarfs are the best stars</div>
+            <div class="quiz-option" onclick="checkQuiz('quiz6',3)">D. Planets are easy to discover</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Section 6: Chinese Knowledge Extension ===== -->
+<section id="section-knowledge">
+    <h2>🔭 中文知识扩展</h2>
+
+    <div class="knowledge-block">
+        <h3>🪐 什么是"超级地球"（Super-Earth）？</h3>
+        <span class="tag">天文学</span><span class="tag">行星科学</span>
+        <p>"超级地球"并不是指像地球一样适合人类居住的行星，而是天文学上对一类行星的分类名称。它指的是<strong>质量大于地球、但小于海王星（约地球质量的17倍）的岩石行星</strong>。这类行星在太阳系中并不存在——我们太阳系的行星要么很小（类地行星：水星、金星、地球、火星），要么非常大（气态巨行星：木星、土星、天王星、海王星），中间缺了一个"中等大小"的类别。</p>
+        <p>但在其他恒星系统中，超级地球是最常见的行星类型之一！据估计，银河系中可能有数十亿颗超级地球。它们的引力比地球强，如果你站在上面，会感觉"更重"，但同时它们也可能有更厚的大气层和更强的磁场来保护生命。</p>
+    </div>
+
+    <div class="knowledge-block">
+        <h3>⭐ 红矮星（Red Dwarf）— 宇宙中最常见的恒星</h3>
+        <span class="tag">恒星演化</span><span class="tag">天体物理</span>
+        <p>红矮星是宇宙中<strong>最小、最冷、也是最常见</strong>的恒星类型，占银河系所有恒星的约75%。它们的表面温度通常在2,500–4,000 K之间（太阳约为5,780 K），颜色偏红。由于质量小，红矮星的核聚变反应非常缓慢，所以它们的寿命极长——有些可以稳定燃烧<strong>数万亿年</strong>，远远超过宇宙当前的年龄（约138亿年）！</p>
+        <p>红矮星周围的行星是寻找外星生命的热门目标，因为它们的宜居带距离恒星更近，行星的公转周期更短（Ross 318 b 只要39.6天就能绕一圈），更容易被我们发现和研究。但也因为距离近，红矮星的剧烈耀斑和磁暴可能对行星大气造成威胁。</p>
+    </div>
+
+    <div class="knowledge-block">
+        <h3>🔭 詹姆斯·韦伯太空望远镜（JWST）— 人类最强的"宇宙之眼"</h3>
+        <span class="tag">太空科技</span><span class="tag">望远镜</span>
+        <p>詹姆斯·韦伯太空望远镜（James Webb Space Telescope，简称 JWST）于2021年12月25日发射，是目前<strong>人类建造的最大、最强大的太空望远镜</strong>。它的主镜直径6.5米，由18块六边形镀金镜片组成，看起来像一朵巨大的金色向日葵。</p>
+        <p>与哈勃望远镜主要观测可见光不同，JWST 专门观测<strong>红外线</strong>。红外线可以穿透宇宙尘埃，看到恒星和行星诞生的"托儿所"。对于 Ross 318 b 这样的系外行星，JWST 可以分析穿过行星大气层的光谱，检测其中是否含有水蒸气、甲烷、氧气等与生命相关的气体——这种技术叫做<strong>"透射光谱学"</strong>（transmission spectroscopy）。</p>
+    </div>
+
+    <div class="knowledge-block">
+        <h3>🌡️ 宜居带（Habitable Zone）— 寻找"第二个地球"的金标准</h3>
+        <span class="tag">天体生物学</span><span class="tag">行星宜居性</span>
+        <p>宜居带（也叫"金发姑娘区"，Goldilocks Zone）是指恒星周围一个<strong>"不太热也不太冷"</strong>的环形区域，行星在此区域内表面温度可能允许液态水存在。液态水被认为是生命存在的必要条件（至少是以我们已知的碳基生命形式）。</p>
+        <p>但要注意，处在宜居带内<strong>不等于一定有生命</strong>。金星也位于太阳的宜居带边缘，但它因严重的温室效应导致表面温度高达460°C。反过来，木星的卫星木卫二（Europa）虽然不在宜居带内，但在厚厚的冰壳下有液态海洋，也被认为可能孕育生命。Ross 318 b 的平衡温度约-36°C——如果有浓厚的大气产生温室效应，表面温度可能大幅升高。</p>
+    </div>
+
+    <div class="knowledge-block">
+        <h3>📡 我们如何"看见"一颗看不见的行星？</h3>
+        <span class="tag">探测方法</span><span class="tag">径向速度法</span>
+        <p>你有没有想过，科学家是如何"发现"一颗我们根本拍不到照片的行星的？Ross 318 b 就是通过<strong>径向速度法</strong>（radial velocity method，也叫"摆动法"）发现的。</p>
+        <p>原理很简单：虽然行星围绕恒星转动，但根据牛顿第三定律，<strong>恒星也会因为行星的引力而产生微小的摆动</strong>（就像你拉着一个很重的人转圈，你自己也会微微晃动）。科学家通过高精度光谱仪（如 CARMENES 和 HIRES）测量恒星光谱中微小到纳米级别的变化，反推出行星的质量和轨道。</p>
+        <p>但 Ross 318 是一颗"脾气暴躁"的红矮星——它的磁暴会在光谱上产生大量噪音，就像在一场摇滚演唱会中试图听清别人的悄悄话。Conzo 团队用了<strong>超过15年的数据</strong>，结合三种仪器的观测结果，才成功地把行星信号从噪音中提取出来。这就是科学的魅力——<strong>有时候，坚持不懈比聪明才智更重要</strong>。</p>
+    </div>
+</section>
+
+<!-- ===== Section 7: About ===== -->
+<section id="section-about">
+    <h2>ℹ️ 关于本课</h2>
+
+    <div class="about-card">
+        <h3>🎯 学习目标</h3>
+        <ul>
+            <li>了解"超级地球"和"宜居带"等天文学基本概念</li>
+            <li>掌握 10 个核心天文英语词汇（light-year, super-Earth, habitable zone 等）</li>
+            <li>学习 5 个实用英语句型（比喻、比较级、条件句等）</li>
+            <li>理解 5 个语法知识点（现在完成时、比较级、so...that、条件句、位置介词）</li>
+            <li>培养对太空探索和科学发现的兴趣</li>
+            <li>练习英语听、说、读三项技能</li>
+        </ul>
+    </div>
+
+    <div class="about-card">
+        <h3>💡 学习建议</h3>
+        <ul>
+            <li><strong>第一步：</strong>先听一遍全文朗读（点击每段的 ▶ 播放按钮），不要看文字，训练听力</li>
+            <li><strong>第二步：</strong>边看文字边听，点击黄色高亮词查看释义</li>
+            <li><strong>第三步：</strong>学习词汇表，用每个词造一个自己的句子</li>
+            <li><strong>第四步：</strong>完成句型练习和语法练习</li>
+            <li><strong>第五步：</strong>做练习测验检验理解</li>
+            <li><strong>第六步：</strong>阅读"中文知识扩展"，深入了解背后的科学原理</li>
+            <li><strong>第七步：</strong>大声朗读全文，尝试用自己的话复述这个故事</li>
+        </ul>
+    </div>
+
+    <div class="about-card">
+        <h3>📊 本期信息</h3>
+        <ul>
+            <li><strong>期数：</strong>Pola News 第 19 期</li>
+            <li><strong>日期：</strong>2026 年 5 月 25 日</li>
+            <li><strong>主题：</strong>A Hidden Neighbor in Space — Ross 318 b</li>
+            <li><strong>主持人：</strong>Pola（短尾矮袋鼠 Quokka）</li>
+            <li><strong>英语等级：</strong>B1（10-12 岁）</li>
+            <li><strong>新闻来源：</strong>Science News Today / arXiv (DOI: 10.48550/arxiv.2605.11123)</li>
+            <li><strong>发现团队：</strong>Giuseppe Conzo — Gruppo Astrofili Palidoro (GAP)</li>
+        </ul>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+</section>
+
+</main>
+
+<!-- Tooltip -->
+<div class="tooltip-popup" id="tooltip"></div>
+
+<script>
+// ==================== Navigation ====================
+function showSection(name) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    document.querySelector('nav a[data-section="' + name + '"]').classList.add('active');
+    // Close mobile sidebar
+    document.getElementById('sidebar').classList.remove('open');
+}
+
+function toggleNav() {
+    document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ==================== Progress Bar ====================
+window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    document.getElementById('progress-bar').style.width = Math.min(progress, 100) + '%';
+});
+
+// ==================== Tooltips ====================
+const vocabData = {
+    'light-year': '光年（noun）— the distance light travels in one year, about 9.46 trillion km',
+    'super-Earth': '超级地球（noun）— a rocky planet bigger than Earth but smaller than Neptune',
+    'red-dwarf': '红矮星（noun）— the smallest, coolest, and most common type of star in the universe',
+    'magnetic-storm': '磁暴（noun）— a violent burst of magnetic activity on a star\'s surface',
+    'habitable-zone': '宜居带（noun）— the "Goldilocks zone" where it\'s not too hot, not too cold for liquid water',
+    'wobble': '摆动（noun/verb）— a tiny back-and-forth movement; how planets make their stars wiggle',
+    'atmosphere': '大气层（noun）— a layer of gases surrounding a planet',
+    'signal': '信号（noun）— information carried through waves, data, or light',
+    'telescope': '望远镜（noun）— an instrument that makes distant objects appear closer',
+    'astronomer': '天文学家（noun）— a scientist who studies stars, planets, and the universe'
+};
+
+const tooltip = document.getElementById('tooltip');
+document.querySelectorAll('.vocab-highlight').forEach(el => {
+    el.addEventListener('mouseenter', (e) => {
+        const word = el.dataset.word;
+        if (vocabData[word]) {
+            tooltip.textContent = vocabData[word];
+            tooltip.classList.add('show');
+        }
+    });
+    el.addEventListener('mousemove', (e) => {
+        tooltip.style.left = (e.clientX + 16) + 'px';
+        tooltip.style.top = (e.clientY - 40) + 'px';
+    });
+    el.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('show');
+    });
+});
+
+// ==================== Speech API ====================
+let currentUtterance = null;
+let currentPlayBtn = null;
+
+// Segment texts (plain text for speech)
+const segmentTexts = [
+    "Imagine a world just 28 light-years from Earth — a planet that was hiding right under our noses for over fifteen years! Its name is Ross 318 b, and it's a super-Earth. That means it's bigger than our planet, but smaller than Neptune. The coolest part? Scientists almost missed it completely!",
+    "The star Ross 318 is a small red dwarf, and it's very noisy. Its strong magnetic storms made the data look messy, so the planet's signal stayed hidden — like a whisper in a storm. But a team led by astronomer Giuseppe Conzo kept digging. They combined 15 years of data from three powerful instruments, and finally, the planet's tiny wobble revealed itself!",
+    "Here's why Ross 318 b is so exciting — it sits in the star's habitable zone, the perfect distance where water could exist. The planet is about 6 times heavier than Earth, and its temperature is around minus 36 degrees Celsius — cold, but not too cold. If it has a thick atmosphere, it could trap heat and stay warm. Scientists now want the James Webb Space Telescope to take a closer look!",
+    "This discovery teaches us something important: sometimes, the most amazing things are hiding in places we've already looked. Ross 318 b was there all along, waiting to be found. So next time you look up at the stars, remember — our newest neighbor might be hiding in plain sight. This is Pola, signing off. See you next time!"
+];
+
+let voices = [];
+let voicesLoaded = false;
+
+function loadVoices() {
+    return new Promise((resolve) => {
+        voices = speechSynthesis.getVoices();
+        if (voices.length > 0) { voicesLoaded = true; resolve(voices); return; }
+        speechSynthesis.onvoiceschanged = () => {
+            voices = speechSynthesis.getVoices();
+            voicesLoaded = true;
+            resolve(voices);
+        };
+    });
+}
+
+function selectBestVoice() {
+    // Priority: Enhanced English male > Daniel > Alex > Microsoft Mark > any English male > any English voice
+    const priorities = [
+        v => v.lang.startsWith('en') && v.name.includes('Enhanced') && /male|boy/i.test(v.name),
+        v => v.lang.startsWith('en') && v.name === 'Daniel',
+        v => v.lang.startsWith('en') && v.name === 'Alex',
+        v => v.lang.startsWith('en') && /Mark/i.test(v.name),
+        v => v.lang.startsWith('en') && /male|boy/i.test(v.name),
+        v => v.lang.startsWith('en')
+    ];
+    for (const check of priorities) {
+        const found = voices.find(check);
+        if (found) return found;
+    }
+    return voices[0] || null;
+}
+
+async function speak(text, btn) {
+    // Stop any current speech
+    if (currentUtterance) {
+        speechSynthesis.cancel();
+        resetPlayBtn();
+    }
+    if (!voicesLoaded) await loadVoices();
+    const voice = selectBestVoice();
+    if (!voice) { alert('No English voice available on this browser.'); return; }
+
+    currentUtterance = new SpeechSynthesisUtterance(text);
+    currentUtterance.voice = voice;
+    currentUtterance.rate = 0.97;
+    currentUtterance.pitch = 1.0;
+    currentUtterance.lang = 'en-US';
+
+    currentPlayBtn = btn;
+    btn.textContent = '⏸';
+    btn.classList.add('playing');
+
+    currentUtterance.onend = () => { resetPlayBtn(); };
+    currentUtterance.onerror = () => { resetPlayBtn(); };
+    speechSynthesis.speak(currentUtterance);
+}
+
+function resetPlayBtn() {
+    if (currentPlayBtn) {
+        currentPlayBtn.textContent = '▶';
+        currentPlayBtn.classList.remove('playing');
+        currentPlayBtn = null;
+    }
+    currentUtterance = null;
+}
+
+// Segment play buttons
+document.querySelectorAll('.reading-segment .play-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const segIdx = parseInt(this.dataset.seg);
+        // If already playing this segment, stop
+        if (currentPlayBtn === this && currentUtterance) {
+            speechSynthesis.cancel();
+            resetPlayBtn();
+            return;
+        }
+        speak(segmentTexts[segIdx], this);
+    });
+});
+
+// Vocabulary speak buttons
+document.querySelectorAll('.vocab-card .speak-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const word = this.dataset.word;
+        // If already playing, stop
+        if (currentPlayBtn === this && currentUtterance) {
+            speechSynthesis.cancel();
+            resetPlayBtn();
+            return;
+        }
+        // Reset vocab button style
+        if (currentPlayBtn && currentPlayBtn.classList.contains('speak-btn')) {
+            currentPlayBtn.classList.remove('playing');
+            currentPlayBtn.textContent = '🔊';
+        }
+        if (currentUtterance) { speechSynthesis.cancel(); }
+        this.textContent = '⏸';
+        this.classList.add('playing');
+        speak(word, this);
+    });
+});
+
+// Override speak to handle vocab button reset
+const origSpeak = speak;
+speak = function(text, btn) {
+    if (currentPlayBtn && currentPlayBtn !== btn) {
+        if (currentPlayBtn.classList.contains('speak-btn')) {
+            currentPlayBtn.textContent = '🔊';
+            currentPlayBtn.classList.remove('playing');
+        } else {
+            currentPlayBtn.textContent = '▶';
+            currentPlayBtn.classList.remove('playing');
+        }
+    }
+    currentPlayBtn = btn;
+    if (btn.classList.contains('speak-btn')) {
+        btn.textContent = '⏸';
+        btn.classList.add('playing');
+    } else {
+        btn.textContent = '⏸';
+        btn.classList.add('playing');
+    }
+    origSpeak(text, btn);
+};
+
+// Initial voice load
+loadVoices();
+
+// ==================== Quiz ====================
+function checkQuiz(quizId, optIdx) {
+    const quiz = document.getElementById(quizId);
+    const options = quiz.querySelectorAll('.quiz-option');
+    if (options[0].parentElement.classList.contains('disabled')) return;
+
+    options.forEach(opt => opt.classList.add('disabled'));
+
+    const isCorrect = options[optIdx].dataset.correct === 'true';
+    if (isCorrect) {
+        options[optIdx].classList.add('correct');
+    } else {
+        options[optIdx].classList.add('wrong');
+        // Highlight correct answer
+        options.forEach(opt => {
+            if (opt.dataset.correct === 'true') opt.classList.add('correct');
+        });
+    }
+}
+
+// ==================== Grammar Check ====================
+function checkGram(id, correctAnswers) {
+    const input = document.getElementById(id);
+    const fb = document.getElementById(id + '-fb');
+    const userAnswer = input.value.trim().toLowerCase();
+    const accepted = correctAnswers.split('/').map(a => a.trim().toLowerCase());
+
+    if (accepted.some(a => userAnswer === a)) {
+        fb.innerHTML = '<span style="color:#4caf84">✅ Correct! 回答正确！</span>';
+    } else {
+        fb.innerHTML = '<span style="color:#e0556a">❌ Not quite. 正确答案：' + correctAnswers + '</span>';
+    }
+}
+
+// ==================== Init ====================
+// Clicking a nav link in mobile also closes sidebar
+document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('sidebar').classList.remove('open');
+        }
+    });
+});
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

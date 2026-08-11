@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pola News - The Monk Who Saw the Comet</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #2C3E50;
+            --light: #F8F9FA;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--gradient-bg);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+        .progress-bar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+            background: rgba(255,255,255,0.1); z-index: 1000;
+        }
+        .progress-fill {
+            height: 100%; background: var(--gradient-2);
+            width: 0%; transition: width 0.3s ease;
+        }
+        .sidebar {
+            position: fixed; left: 0; top: 0; width: 280px; height: 100vh;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+            padding: 20px; overflow-y: auto; z-index: 100;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+        .sidebar-header {
+            text-align: center; padding-bottom: 20px;
+            border-bottom: 2px solid #eee; margin-bottom: 20px;
+        }
+        .sidebar-header h1 { font-size: 1.2rem; color: var(--primary); margin-bottom: 5px; }
+        .sidebar-header p { font-size: 0.8rem; color: #666; }
+        .nav-item {
+            padding: 12px 15px; margin-bottom: 8px; border-radius: 10px;
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 10px; font-size: 0.95rem;
+        }
+        .nav-item:hover { background: rgba(102, 126, 234, 0.1); transform: translateX(5px); }
+        .nav-item.active { background: var(--gradient-1); color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+        .nav-item .icon { font-size: 1.2rem; }
+        .main-content { margin-left: 280px; padding: 40px; min-height: 100vh; }
+        .section { display: none; animation: fadeIn 0.5s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .card {
+            background: rgba(255,255,255,0.95); border-radius: 20px;
+            padding: 30px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card-title {
+            font-size: 1.8rem;
+            background: var(--gradient-1); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+        }
+        .card-title .icon { -webkit-text-fill-color: initial; }
+        .segment-block {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px; padding: 20px; margin-bottom: 20px;
+            position: relative; border-left: 4px solid var(--primary);
+        }
+        .segment-label {
+            position: absolute; top: -10px; left: 20px;
+            background: var(--primary); color: white; padding: 4px 12px;
+            border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+        }
+        .segment-text { font-size: 1.1rem; line-height: 1.8; color: var(--dark); margin-top: 10px; }
+        .play-btn {
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--gradient-2); border: none; color: white;
+            font-size: 1.2rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+        .play-btn:hover { transform: translateY(-50%) scale(1.1); }
+        .play-btn.playing { background: var(--gradient-3); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(78, 205, 196, 0.4); } 50% { box-shadow: 0 0 0 15px rgba(78, 205, 196, 0); } }
+        .highlight { background: linear-gradient(120deg, #ffe66d 0%, #ffe66d 100%); background-repeat: no-repeat; background-size: 100% 40%; background-position: 0 90%; padding: 0 2px; border-radius: 3px; cursor: help; position: relative; }
+        .highlight:hover::after { content: attr(data-meaning); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; white-space: nowrap; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .vocab-card { background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%); border-radius: 15px; padding: 20px; position: relative; border: 2px solid transparent; transition: all 0.3s ease; }
+        .vocab-card:hover { border-color: var(--secondary); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(78, 205, 196, 0.2); }
+        .vocab-word { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
+        .vocab-pos { display: inline-block; background: var(--gradient-1); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.7rem; margin-bottom: 10px; }
+        .vocab-meaning { font-size: 1.1rem; color: var(--dark); margin-bottom: 10px; }
+        .vocab-example { font-size: 0.9rem; color: #666; font-style: italic; padding-left: 10px; border-left: 3px solid var(--accent); }
+        .vocab-sound { position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; border-radius: 50%; background: var(--gradient-3); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .vocab-sound:hover { transform: scale(1.15); }
+        .pattern-item { background: linear-gradient(135deg, #fff 0%, #f0f4ff 100%); border-radius: 15px; padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--secondary); }
+        .pattern-english { font-size: 1.2rem; font-weight: 600; color: var(--dark); margin-bottom: 8px; }
+        .pattern-chinese { font-size: 1rem; color: #666; margin-bottom: 10px; }
+        .pattern-example { background: #f8f9fa; padding: 10px 15px; border-radius: 10px; font-size: 0.95rem; }
+        .practice-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
+        .practice-area textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.95rem; resize: vertical; min-height: 60px; font-family: inherit; }
+        .practice-area textarea:focus { outline: none; border-color: var(--secondary); }
+        .grammar-item { background: linear-gradient(135deg, #fff 0%, #fff5f5 100%); border-radius: 15px; padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--primary); }
+        .grammar-title { font-size: 1.2rem; font-weight: 600; color: var(--primary); margin-bottom: 10px; }
+        .grammar-explanation { font-size: 1rem; line-height: 1.7; margin-bottom: 15px; }
+        .grammar-example { background: #fff; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; font-size: 0.95rem; }
+        .grammar-example strong { color: var(--primary); }
+        .quiz-item { background: linear-gradient(135deg, #fff 0%, #f0f8ff 100%); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
+        .quiz-question { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: var(--dark); }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+        .quiz-option { padding: 12px 15px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; }
+        .quiz-option:hover { border-color: var(--secondary); background: #f0fffe; }
+        .quiz-option.selected { border-color: var(--secondary); background: rgba(78, 205, 196, 0.1); }
+        .quiz-option.correct { border-color: #4CAF50; background: rgba(76, 175, 80, 0.1); }
+        .quiz-option.incorrect { border-color: #f44336; background: rgba(244, 67, 54, 0.1); }
+        .quiz-result { margin-top: 15px; padding: 12px; border-radius: 10px; font-size: 0.95rem; display: none; }
+        .quiz-result.show { display: block; }
+        .knowledge-content { font-size: 1rem; line-height: 1.9; color: var(--dark); }
+        .knowledge-content h3 { color: var(--primary); margin: 20px 0 10px; font-size: 1.3rem; }
+        .knowledge-content p { margin-bottom: 15px; }
+        .fact-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: 20px 0; }
+        .fact-box h4 { margin-bottom: 10px; font-size: 1.1rem; }
+        .timeline { position: relative; padding-left: 30px; margin: 20px 0; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 3px; background: var(--gradient-1); border-radius: 2px; }
+        .timeline-item { position: relative; margin-bottom: 20px; }
+        .timeline-item::before { content: ''; position: absolute; left: -26px; top: 5px; width: 14px; height: 14px; background: var(--primary); border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .timeline-year { font-weight: 700; color: var(--primary); }
+        .objectives-list { list-style: none; }
+        .objectives-list li { padding: 10px 0; display: flex; align-items: flex-start; gap: 10px; font-size: 1rem; }
+        .objectives-list .check { color: var(--secondary); font-size: 1.2rem; }
+        .tips-card { background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%); border-radius: 15px; padding: 20px; margin-top: 20px; border-left: 4px solid var(--accent); }
+        .tips-card h4 { color: #856404; margin-bottom: 10px; }
+        .print-btn { background: var(--gradient-1); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; transition: all 0.3s ease; }
+        .print-btn:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4); }
+        @media (max-width: 1024px) { .sidebar { width: 220px; } .main-content { margin-left: 220px; } }
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; display: flex; flex-wrap: wrap; justify-content: center; padding: 15px; }
+            .sidebar-header { width: 100%; padding-bottom: 10px; }
+            .nav-container { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+            .nav-item { margin-bottom: 0; padding: 8px 12px; font-size: 0.85rem; }
+            .nav-item span:not(.icon) { display: none; }
+            .main-content { margin-left: 0; padding: 20px; }
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+        @media print {
+            .sidebar, .progress-bar, .play-btn, .vocab-sound, .print-btn, .practice-area textarea { display: none !important; }
+            .main-content { margin-left: 0; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            body { background: white; color: black; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h1>📺 Pola News</h1>
+            <p>The Monk Who Saw the Comet</p>
+        </div>
+        <div class="nav-container">
+            <div class="nav-item active" data-section="reading"><span class="icon">📖</span><span>Reading</span></div>
+            <div class="nav-item" data-section="vocabulary"><span class="icon">📝</span><span>Vocabulary</span></div>
+            <div class="nav-item" data-section="patterns"><span class="icon">💬</span><span>Patterns</span></div>
+            <div class="nav-item" data-section="grammar"><span class="icon">📐</span><span>Grammar</span></div>
+            <div class="nav-item" data-section="quiz"><span class="icon">✅</span><span>Quiz</span></div>
+            <div class="nav-item" data-section="knowledge"><span class="icon">🌟</span><span>Knowledge</span></div>
+            <div class="nav-item" data-section="about"><span class="icon">ℹ️</span><span>About</span></div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Reading Section -->
+        <section class="section active" id="reading">
+            <div class="card">
+                <h2 class="card-title"><span class="icon">📖</span>Full Reading | 全文阅读</h2>
+                <p style="color: #666; margin-bottom: 25px;">Click the play button to listen to each segment. Highlighted words are key vocabulary.</p>
+
+                <div class="segment-block">
+                    <span class="segment-label">Segment 1: Hook</span>
+                    <p class="segment-text">Wow! Have you ever looked up at the night sky and seen a bright <span class="highlight" data-meaning="彗星 - a bright object with a tail in space">comet</span> flying by?<br><br>Today, scientists found something amazing. A <span class="highlight" data-meaning="修道士 - a religious man living in an abbey">monk</span> from England may have made a great <span class="highlight" data-meaning="发现 - finding something new">discovery</span> — seven hundred years before anyone thought!</p>
+                    <button class="play-btn" onclick="playSegment(0)">▶</button>
+                </div>
+
+                <div class="segment-block">
+                    <span class="segment-label">Segment 2: Story</span>
+                    <p class="segment-text">His name was Eilmer. He lived in a big stone building called an <span class="highlight" data-meaning="修道院 - a place where monks live">abbey</span> in Malmesbury, England.<br><br>Eilmer saw a bright comet in the year 989. Then, when he was very old, he saw it again in 1066 — the same comet coming back!<br><br>While most people thought comets were warnings of bad luck, Eilmer realized something important: this comet kept coming back, again and again.</p>
+                    <button class="play-btn" onclick="playSegment(1)">▶</button>
+                </div>
+
+                <div class="segment-block">
+                    <span class="segment-label">Segment 3: Why It Matters</span>
+                    <p class="segment-text">The comet's name today is "Halley's Comet." It's named after Edmond Halley, the <span class="highlight" data-meaning="天文学家 - a scientist who studies space">astronomer</span> who figured out it returns every 76 years.<br><br>But new research from Holland says Eilmer might have figured it out first — seven hundred years earlier!<br><br>The year 1066 was also when the famous Battle of Hastings happened. The comet is even in a famous picture called the <span class="highlight" data-meaning="挂毯 - a cloth with pictures showing history">Bayeux Tapestry</span>. How cool is that?</p>
+                    <button class="play-btn" onclick="playSegment(2)">▶</button>
+                </div>
+
+                <div class="segment-block">
+                    <span class="segment-label">Segment 4: Sign-off</span>
+                    <p class="segment-text">So next time you hear about Halley's Comet, remember Eilmer the monk.<br><br>Maybe the comet should be called something different? What would you name it?<br><br>Thanks for watching Pola News! See you tomorrow with more amazing stories!</p>
+                    <button class="play-btn" onclick="playSegment(3)">▶</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vocabulary Section -->
+        <section class="section" id="vocabulary">
+            <div class="card">
+                <h2 class="card-title"><span class="icon">📝</span>Vocabulary | 词汇表</h2>
+                <div class="vocab-grid">
+                    <div class="vocab-card">
+                        <button class="vocab-sound" onclick="speakWord('comet')">🔊</button>
+                        <div class="vocab-word">comet</div>
+                        <span class="vocab-pos">n.</span>
+                        <div class="vocab-meaning">彗星 - a bright object with a tail that flies through space</div>
+                        <div class="vocab-example">"A bright comet streaked across the night sky."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <button class="vocab-sound" onclick="speakWord('monk')">🔊</button>
+                        <div class="vocab-word">monk</div>
+                        <span class="vocab-pos">n.</span>
+                        <div class="vocab-meaning">修道士 - a man who lives in a religious building and prays</div>
+                        <div class="vocab-example">"The monk lived in a stone abbey."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <button class="vocab-sound" onclick="speakWord('abbey')">🔊</button>
+                        <div class="vocab-word">abbey</div>
+                        <span class="vocab-pos">n.</span>
+                        <div class="vocab-meaning">修道院 - a large church where monks live together</div>
+                        <div class="vocab-example">"Malmesbury Abbey is very old."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <button class="vocab-sound" onclick="speakWord('discovery')">🔊</button>
+                        <div class="vocab-word">discovery</div>
+                        <span class="vocab-pos">n.</span>
+                        <div class="vocab-meaning">发现 - learning or finding something new</div>
+                        <div class="vocab-example">"The discovery changed history."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <button class="vocab-sound" onclick="speakWord('astronomer')">🔊</button>
+                        <div class="vocab-word">astronomer</div>
+                        <span class="vocab-pos">n.</span>
+                        <div class="vocab-meaning">天文学家 - a scientist who studies stars and space</div>
+                        <div class="vocab-example">"Edmond Halley was a famous astronomer."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <button class="vocab-sound" onclick="speakWord('tapestry')">🔊</button>
+                        <div class="vocab-word">tapestry</div>
+                        <span class="vocab-pos">n.</span>
+                        <div class="vocab-meaning">挂毯 - a big cloth picture made with colored threads</div>
+                        <div class="vocab-example">"The Bayeux Tapestry shows the year 1066."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <button class="vocab-sound" onclick="speakWord('century')">🔊</button>
+                        <div class="vocab-word">century</div>
+                        <span class="vocab-pos">n.</span>
+                        <div class="vocab-meaning">世纪 - a period of 100 years</div>
+                        <div class="vocab-example">"Seven hundred years is seven centuries."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <button class="vocab-sound" onclick="speakWord('periodic')">🔊</button>
+                        <div class="vocab-word">periodic</div>
+                        <span class="vocab-pos">adj.</span>
+                        <div class="vocab-meaning">周期的 - happening again and again at regular times</div>
+                        <div class="vocab-example">"Halley's Comet has a periodic return."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Patterns Section -->
+        <section class="section" id="patterns">
+            <div class="card">
+                <h2 class="card-title"><span class="icon">💬</span>Sentence Patterns | 句型练习</h2>
+
+                <div class="pattern-item">
+                    <div class="pattern-english">Have you ever + past participle?</div>
+                    <div class="pattern-chinese">你曾经...过吗？（用于询问经验）</div>
+                    <div class="pattern-example">"Have you ever looked up at the night sky and seen a bright comet?"</div>
+                    <div class="practice-area">
+                        <p>练习 Practice: Write your own question</p>
+                        <textarea placeholder="Have you ever _____________?"></textarea>
+                    </div>
+                </div>
+
+                <div class="pattern-item">
+                    <div class="pattern-english">...may have + past participle</div>
+                    <div class="pattern-chinese">...可能已经...（表示推测）</div>
+                    <div class="pattern-example">"A monk from England may have made a great discovery."</div>
+                    <div class="practice-area">
+                        <p>练习 Practice: Write your own sentence</p>
+                        <textarea placeholder="___________ may have _____________."></textarea>
+                    </div>
+                </div>
+
+                <div class="pattern-item">
+                    <div class="pattern-english">...years before anyone thought</div>
+                    <div class="pattern-chinese">...比任何人想象的都要早...年</div>
+                    <div class="pattern-example">"Seven hundred years before anyone thought!"</div>
+                    <div class="practice-area">
+                        <p>练习 Practice: Write your own sentence</p>
+                        <textarea placeholder="___________ years before anyone _____________."></textarea>
+                    </div>
+                </div>
+
+                <div class="pattern-item">
+                    <div class="pattern-english">The year when + past event</div>
+                    <div class="pattern-chinese">...的那一年（用于谈论历史年份）</div>
+                    <div class="pattern-example">"The year when the famous Battle of Hastings happened."</div>
+                    <div class="practice-area">
+                        <p>练习 Practice: Write your own sentence</p>
+                        <textarea placeholder="The year when _____________ happened was _____________."></textarea>
+                    </div>
+                </div>
+
+                <div class="pattern-item">
+                    <div class="pattern-english">What would you name it?</div>
+                    <div class="pattern-chinese">你会给它起什么名字？（征求建议）</div>
+                    <div class="pattern-example">"Maybe the comet should be called something different? What would you name it?"</div>
+                    <div class="practice-area">
+                        <p>练习 Practice: Write your own question</p>
+                        <textarea placeholder="If you discovered something new, what would you name _____________?"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grammar Section -->
+        <section class="section" id="grammar">
+            <div class="card">
+                <h2 class="card-title"><span class="icon">📐</span>Grammar Points | 语法点</h2>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">1. Present Perfect Tense (现在完成时)</div>
+                    <div class="grammar-explanation">
+                        <strong>结构:</strong> Have/Has + 过去分词<br>
+                        <strong>用法:</strong> 表示过去发生并持续到现在的事，或过去的经验
+                    </div>
+                    <div class="grammar-example"><strong>原句:</strong> "Have you ever looked up at the night sky?"</div>
+                    <div class="grammar-example"><strong>练习:</strong> _____ you ever _____ a comet? (see)</div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">2. Modal Verbs - May/Might (情态动词)</div>
+                    <div class="grammar-explanation">
+                        <strong>用法:</strong> 表示可能性、推测
+                    </div>
+                    <div class="grammar-example"><strong>原句:</strong> "A monk from England <strong>may have made</strong> a great discovery."</div>
+                    <div class="grammar-example"><strong>练习:</strong> Scientists think this comet <strong>may _____</strong> the oldest one. (be)</div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">3. Past Simple Tense (一般过去时)</div>
+                    <div class="grammar-explanation">
+                        <strong>结构:</strong> 主语 + 动词过去式<br>
+                        <strong>用法:</strong> 表示过去发生的动作或状态
+                    </div>
+                    <div class="grammar-example"><strong>原句:</strong> "Eilmer <strong>saw</strong> a bright comet in the year 989."</div>
+                    <div class="grammar-example"><strong>练习:</strong> Edmond Halley <strong>_____</strong> (live) in the 1600s.</div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">4. Time Expressions (时间表达)</div>
+                    <div class="grammar-explanation">
+                        <strong>关键时间词:</strong> in + 年份, when + 从句, every + 时间单位
+                    </div>
+                    <div class="grammar-example"><strong>原句:</strong> "in the year 989", "in 1066", "every 76 years"</div>
+                    <div class="grammar-example"><strong>练习:</strong> The comet returns _____ 76 years.</div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-title">5. Comparative Structures (比较结构)</div>
+                    <div class="grammar-explanation">
+                        <strong>结构:</strong> 比较级 + than<br>
+                        <strong>关键词:</strong> earlier (更早), seven hundred years earlier
+                    </div>
+                    <div class="grammar-example"><strong>原句:</strong> "Eilmer might have figured it out <strong>seven hundred years earlier</strong>!"</div>
+                    <div class="grammar-example"><strong>练习:</strong> The comet was visible <strong>_____</strong> than we expected. (early)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section class="section" id="quiz">
+            <div class="card">
+                <h2 class="card-title"><span class="icon">✅</span>Quiz | 练习测验</h2>
+
+                <div class="quiz-item" data-correct="B">
+                    <div class="quiz-question">1. Who was Eilmer?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-value="A">A) A famous astronomer from Holland</div>
+                        <div class="quiz-option" data-value="B">B) A monk who lived in England</div>
+                        <div class="quiz-option" data-value="C">C) A king who ruled in 1066</div>
+                        <div class="quiz-option" data-value="D">D) A scientist who discovered the comet</div>
+                    </div>
+                    <div class="quiz-result"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="C">
+                    <div class="quiz-question">2. When did Eilmer first see the comet?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-value="A">A) In 1066</div>
+                        <div class="quiz-option" data-value="B">B) In 1682</div>
+                        <div class="quiz-option" data-value="C">C) In 989</div>
+                        <div class="quiz-option" data-value="D">D) In 1600</div>
+                    </div>
+                    <div class="quiz-result"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="A">
+                    <div class="quiz-question">3. How many years earlier might Eilmer have discovered the comet compared to Halley?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-value="A">A) 700 years</div>
+                        <div class="quiz-option" data-value="B">B) 76 years</div>
+                        <div class="quiz-option" data-value="C">C) 100 years</div>
+                        <div class="quiz-option" data-value="D">D) 500 years</div>
+                    </div>
+                    <div class="quiz-result"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="B">
+                    <div class="quiz-question">4. What famous event happened in 1066?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-value="A">A) Eilmer was born</div>
+                        <div class="quiz-option" data-value="B">B) The Battle of Hastings</div>
+                        <div class="quiz-option" data-value="C">C) Edmond Halley was born</div>
+                        <div class="quiz-option" data-value="D">D) The comet was first discovered</div>
+                    </div>
+                    <div class="quiz-result"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="D">
+                    <div class="quiz-question">5. What is the Bayeux Tapestry?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-value="A">A) A type of comet</div>
+                        <div class="quiz-option" data-value="B">B) An abbey in England</div>
+                        <div class="quiz-option" data-value="C">C) A famous book about astronomy</div>
+                        <div class="quiz-option" data-value="D">D) A cloth picture showing historical events</div>
+                    </div>
+                    <div class="quiz-result"></div>
+                </div>
+
+                <div class="quiz-item" data-correct="C">
+                    <div class="quiz-question">6. How often does Halley's Comet return?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-value="A">A) Every year</div>
+                        <div class="quiz-option" data-value="B">B) Every 100 years</div>
+                        <div class="quiz-option" data-value="C">C) Every 76 years</div>
+                        <div class="quiz-option" data-value="D">D) Every 700 years</div>
+                    </div>
+                    <div class="quiz-result"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Knowledge Section -->
+        <section class="section" id="knowledge">
+            <div class="card">
+                <h2 class="card-title"><span class="icon">🌟</span>Knowledge | 中文知识扩展</h2>
+                <div class="knowledge-content">
+                    <h3>🌌 什么是彗星？</h3>
+                    <p>彗星（Comet）是太阳系中的小天体，由冰、尘埃和岩石组成。当它们靠近太阳时，冰会升华（直接变成气体），形成美丽的彗尾。彗星的"尾巴"其实是被太阳风吹出来的气体和尘埃！</p>
+
+                    <div class="fact-box">
+                        <h4>🔍 有趣的事实</h4>
+                        <p>你知道吗？彗星的核（核心）可能只有几公里大小，但它的彗尾可以延伸数百万公里长！</p>
+                    </div>
+
+                    <h3>📅 哈雷彗星的历史</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-year">公元前240年</span> - 中国古代天文学家记录了这颗彗星
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">989年</span> - 修道士Eilmer第一次看到这颗彗星
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">1066年</span> - Eilmer再次看到彗星；诺曼征服英格兰（黑斯廷斯战役）；彗星被绣入巴约挂毯
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">1705年</span> - Edmond Halley计算出这颗彗星的周期
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">1758年</span> - 哈雷预测的彗星返回（他已去世，但预言被证实）
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">1986年</span> - 哈雷彗星下一次返回，人类发射探测器观测
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2061年</span> - 预计下一次可见
+                        </div>
+                    </div>
+
+                    <h3>🕸️ 巴约挂毯（Bayeux Tapestry）</h3>
+                    <p>巴约挂毯是一幅长达70米的刺绣艺术品，大约制作于11世纪。它用拉丁文讲述了1066年诺曼底公爵威廉征服英格兰的故事。这幅挂毯是世界上最重要的中世纪艺术品之一，现保存在法国巴约市。</p>
+                    <p>有趣的是，挂毯中描绘了一颗带有尾巴的彗星，学者们认为这正是1066年的哈雷彗星！这是人类历史上最早记录哈雷彗星的天象图之一。</p>
+
+                    <div class="fact-box">
+                        <h4>🏛️ 荷兰莱顿大学的研究</h4>
+                        <p>2026年，荷兰莱顿大学的天文学家Simon Portegies Zwart教授和历史学家合作，通过分析中世纪文献，发现Eilmer可能在Halley之前700年就认识到了彗星的周期性。这项研究发表在学术著作中，展示了天文学和历史学跨学科合作的力量！</p>
+                    </div>
+
+                    <h3>🌟 为什么这个发现很重要？</h3>
+                    <p>这个故事告诉我们：</p>
+                    <ul style="margin-left: 20px; margin-bottom: 15px;">
+                        <li>科学发现往往来自不同领域的合作（天文学家+历史学家）</li>
+                        <li>古代人的智慧可能被低估了</li>
+                        <li>历史文献中可能隐藏着被遗忘的科学发现</li>
+                        <li>有时我们需要"重新发现"前人已经知道的东西</li>
+                    </ul>
+
+                    <h3>🚀 下一次看到哈雷彗星是什么时候？</h3>
+                    <p>如果你想亲眼看到哈雷彗星，要等到<strong>2061年</strong>！这是一颗一生中能看到两次就很幸运的彗星——上一次大部分人能看到的机会是1986年。好好保养眼睛，到时候一定要看哦！</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="card">
+                <h2 class="card-title"><span class="icon">ℹ️</span>About This Lesson | 关于本课</h2>
+
+                <h3 style="color: var(--secondary); margin-bottom: 15px;">🎯 Learning Objectives | 学习目标</h3>
+                <ul class="objectives-list">
+                    <li><span class="check">✓</span>了解哈雷彗星的历史和中世纪天文学</li>
+                    <li><span class="check">✓</span>掌握8个核心词汇（comet, monk, abbey等）</li>
+                    <li><span class="check">✓</span>学习现在完成时和情态动词may/might的用法</li>
+                    <li><span class="check">✓</span>理解"Have you ever...?"问句的使用</li>
+                    <li><span class="check">✓</span>培养阅读和听力理解能力</li>
+                </ul>
+
+                <div class="tips-card">
+                    <h4>💡 Learning Tips | 学习建议</h4>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>多听几遍</strong>：先听音频，熟悉语速和发音</li>
+                        <li><strong>跟读练习</strong>：模仿Pol的声音，大声朗读</li>
+                        <li><strong>记忆单词</strong>：用单词卡片或APP复习8个核心词汇</li>
+                        <li><strong>做练习题</strong>：完成语法和阅读理解练习</li>
+                        <li><strong>扩展阅读</strong>：搜索更多关于巴约挂毯或哈雷彗星的信息</li>
+                        <li><strong>教给朋友</strong>：用今天学的内容给朋友讲这个故事！</li>
+                    </ul>
+                </div>
+
+                <button class="print-btn" onclick="window.print()">
+                    🖨️ Print This Lesson | 打印本课
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Segment texts for audio playback (no HTML tags)
+        const segmentTexts = [
+            "Wow! Have you ever looked up at the night sky and seen a bright comet flying by? Today, scientists found something amazing. A monk from England may have made a great discovery — seven hundred years before anyone thought!",
+            "His name was Eilmer. He lived in a big stone building called an abbey in Malmesbury, England. Eilmer saw a bright comet in the year 989. Then, when he was very old, he saw it again in 1066 — the same comet coming back! While most people thought comets were warnings of bad luck, Eilmer realized something important: this comet kept coming back, again and again.",
+            "The comet's name today is Halley's Comet. It's named after Edmond Halley, the astronomer who figured out it returns every 76 years. But new research from Holland says Eilmer might have figured it out first — seven hundred years earlier! The year 1066 was also when the famous Battle of Hastings happened. The comet is even in a famous picture called the Bayeux Tapestry. How cool is that?",
+            "So next time you hear about Halley's Comet, remember Eilmer the monk. Maybe the comet should be called something different? What would you name it? Thanks for watching Pola News! See you tomorrow with more amazing stories!"
+        ];
+
+        let currentUtterance = null;
+        let voices = [];
+        let isSpeaking = false;
+
+        // Load voices
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            // Chrome loads voices asynchronously
+            if (voices.length === 0) {
+                speechSynthesis.onvoiceschanged = () => {
+                    voices = speechSynthesis.getVoices();
+                };
+            }
+        }
+
+        // Get best English voice
+        function getBestVoice() {
+            loadVoices();
+            const priorityNames = ['Daniel', 'Alex', 'Mark', 'David', 'George', 'James', 'John', 'Paul', 'Steven', ' Enhanced', 'en-US', 'en-GB'];
+            for (const name of priorityNames) {
+                const voice = voices.find(v => v.lang.includes('en') && (v.name.includes(name) || v.localService));
+                if (voice) return voice;
+            }
+            return voices.find(v => v.lang.includes('en')) || null;
+        }
+
+        // Play segment
+        function playSegment(index) {
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+            }
+
+            const buttons = document.querySelectorAll('.play-btn');
+            buttons.forEach((btn, i) => {
+                btn.classList.remove('playing');
+                btn.innerHTML = '▶';
+            });
+            buttons[index].classList.add('playing');
+            buttons[index].innerHTML = '⏸';
+
+            currentUtterance = new SpeechSynthesisUtterance(segmentTexts[index]);
+            currentUtterance.rate = 0.97;
+            currentUtterance.pitch = 1.0;
+
+            const voice = getBestVoice();
+            if (voice) {
+                currentUtterance.voice = voice;
+            }
+
+            currentUtterance.onend = () => {
+                buttons[index].classList.remove('playing');
+                buttons[index].innerHTML = '▶';
+                isSpeaking = false;
+            };
+
+            isSpeaking = true;
+            speechSynthesis.speak(currentUtterance);
+        }
+
+        // Speak single word
+        function speakWord(word) {
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+            }
+
+            currentUtterance = new SpeechSynthesisUtterance(word);
+            currentUtterance.rate = 0.97;
+            currentUtterance.pitch = 1.0;
+
+            const voice = getBestVoice();
+            if (voice) {
+                currentUtterance.voice = voice;
+            }
+
+            speechSynthesis.speak(currentUtterance);
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const section = item.dataset.section;
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(section).classList.add('active');
+
+                // Update progress
+                const navItems = document.querySelectorAll('.nav-item');
+                const index = Array.from(navItems).indexOf(item);
+                const progress = ((index + 1) / navItems.length) * 100;
+                document.getElementById('progressFill').style.width = progress + '%';
+            });
+        });
+
+        // Quiz functionality
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const quizItem = this.closest('.quiz-item');
+                const options = quizItem.querySelectorAll('.quiz-option');
+                const correct = quizItem.dataset.correct;
+                const result = quizItem.querySelector('.quiz-result');
+
+                options.forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                this.classList.add('selected');
+
+                if (this.dataset.value === correct) {
+                    this.classList.add('correct');
+                    result.textContent = '✓ Correct! Well done! 正确！做得好！';
+                    result.style.background = 'rgba(76, 175, 80, 0.1)';
+                    result.style.color = '#4CAF50';
+                } else {
+                    this.classList.add('incorrect');
+                    options.forEach(opt => {
+                        if (opt.dataset.value === correct) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                    result.textContent = '✗ Try again next time! 再接再厉！';
+                    result.style.background = 'rgba(244, 67, 54, 0.1)';
+                    result.style.color = '#f44336';
+                }
+                result.classList.add('show');
+            });
+        });
+
+        // Initialize
+        window.onload = () => {
+            loadVoices();
+            document.getElementById('progressFill').style.width = '14.28%';
+        };
+    </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

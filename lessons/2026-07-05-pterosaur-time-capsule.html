@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLA NEWS — Pterosaur Time Capsule | 互动学习</title>
+    <style>
+        :root {
+            --deep: #1a0e05;
+            --earth: #2d1a0a;
+            --sand: #4a3520;
+            --clay: #8b6914;
+            --gold: #f0c060;
+            --amber: #e8a030;
+            --coral: #ff7b5a;
+            --text: #f0e8d8;
+            --text-dark: #1a0e05;
+            --card-bg: #2d1f10;
+            --highlight: #ffd54f;
+            --highlight-bg: rgba(255, 213, 79, 0.15);
+            --accent: #7ec8a0;
+            --sky: #5ba0c8;
+            --success: #4caf84;
+            --danger: #ef5350;
+            --sidebar-w: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(160deg, #1a0e05 0%, #2d1a0a 25%, #3a2510 50%, #2d1a0a 75%, #1a0e05 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--clay), var(--amber), var(--gold));
+            z-index: 9999;
+            transition: width 0.15s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .app-container { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: rgba(26, 14, 5, 0.97);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 100;
+            overflow-y: auto;
+            padding: 20px 0;
+            backdrop-filter: blur(20px);
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            padding: 10px 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 10px;
+        }
+        .sidebar-logo .logo-icon { font-size: 36px; display: block; }
+        .sidebar-logo h2 { font-size: 16px; color: var(--gold); margin-top: 4px; letter-spacing: 1px; }
+        .sidebar-logo .episode-title { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+        .sidebar nav { padding: 0 12px; }
+        .sidebar nav a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; margin: 2px 0;
+            border-radius: 8px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none; font-size: 14px;
+            transition: all 0.2s;
+        }
+        .sidebar nav a:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .sidebar nav a.active { background: rgba(240, 192, 96, 0.12); color: var(--gold); font-weight: 600; }
+        .sidebar nav a .nav-icon { font-size: 18px; width: 24px; text-align: center; }
+
+        .sidebar-footer {
+            padding: 16px; margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            text-align: center; font-size: 11px;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            padding: 40px 48px;
+            max-width: 900px;
+        }
+
+        .section { margin-bottom: 60px; padding-top: 20px; }
+
+        .section-header {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 24px; padding-bottom: 12px;
+            border-bottom: 2px solid rgba(240, 192, 96, 0.25);
+        }
+        .section-header .section-icon { font-size: 28px; }
+        .section-header h2 { font-size: 24px; color: var(--gold); }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        /* Passage */
+        .passage-container { position: relative; }
+        .passage-segment {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px 60px 24px 28px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative; font-size: 17px; line-height: 1.9;
+        }
+        .passage-segment .seg-label {
+            font-size: 11px; color: var(--coral);
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 8px; font-weight: 700;
+        }
+        .keyword {
+            background: var(--highlight-bg);
+            color: var(--highlight); padding: 1px 6px;
+            border-radius: 4px; cursor: pointer;
+            border-bottom: 2px dotted var(--highlight);
+            position: relative; font-weight: 600;
+            transition: background 0.2s;
+        }
+        .keyword:hover { background: rgba(255, 213, 79, 0.3); }
+
+        .keyword-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px); left: 50%;
+            transform: translateX(-50%);
+            background: #2d1f10;
+            border: 1px solid var(--gold);
+            border-radius: 8px; padding: 10px 14px;
+            font-size: 13px; color: var(--text);
+            white-space: nowrap; z-index: 200;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .keyword-tooltip .tooltip-zh { color: var(--accent); font-size: 12px; margin-top: 2px; }
+        .keyword:hover .keyword-tooltip { display: block; }
+
+        /* Play button */
+        .play-btn {
+            position: absolute; right: 16px; top: 50%;
+            transform: translateY(-50%);
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 2px solid var(--coral);
+            background: rgba(255, 123, 90, 0.1);
+            color: var(--coral); font-size: 16px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.25s; z-index: 10;
+        }
+        .play-btn:hover {
+            background: rgba(255, 123, 90, 0.25);
+            transform: translateY(-50%) scale(1.08);
+        }
+        .play-btn.playing {
+            background: var(--coral); color: #fff;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 123, 90, 0.6); }
+            50% { box-shadow: 0 0 0 12px rgba(255, 123, 90, 0); }
+        }
+
+        /* Vocab cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        .vocab-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .vocab-card .word {
+            font-size: 20px; font-weight: 700; color: var(--gold);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .vocab-card .pos {
+            font-size: 12px; color: var(--accent);
+            background: rgba(126, 200, 160, 0.15);
+            padding: 2px 8px; border-radius: 4px;
+        }
+        .vocab-card .zh-meaning { color: var(--accent); font-size: 14px; margin: 6px 0; }
+        .vocab-card .example { font-size: 13px; color: rgba(255,255,255,0.55); font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        .vocab-play-btn {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 1.5px solid var(--accent);
+            background: rgba(126, 200, 160, 0.1);
+            color: var(--accent); font-size: 12px;
+            cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: all 0.2s; flex-shrink: 0;
+        }
+        .vocab-play-btn:hover { background: rgba(126, 200, 160, 0.25); }
+        .vocab-play-btn.playing { background: var(--accent); color: var(--deep); animation: pulse-vocab 1.2s ease-in-out infinite; }
+        @keyframes pulse-vocab {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(126, 200, 160, 0.6); }
+            50% { box-shadow: 0 0 0 10px rgba(126, 200, 160, 0); }
+        }
+
+        /* Sentence patterns */
+        .pattern-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .pattern-card .pattern-en { font-size: 18px; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
+        .pattern-card .pattern-zh { color: var(--accent); font-size: 14px; margin-bottom: 12px; }
+        .pattern-card .pattern-explain { font-size: 14px; color: rgba(255,255,255,0.65); margin-bottom: 12px; }
+        .pattern-card .practice-box {
+            background: rgba(0,0,0,0.25); border-radius: 8px; padding: 14px;
+            font-size: 14px; color: rgba(255,255,255,0.45);
+            border: 1px dashed rgba(255,255,255,0.08);
+        }
+
+        /* Grammar */
+        .grammar-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .grammar-card h4 { color: var(--gold); font-size: 17px; margin-bottom: 4px; }
+        .grammar-card .grammar-zh { color: var(--accent); font-size: 13px; margin-bottom: 10px; }
+        .grammar-card .grammar-explain { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 12px; line-height: 1.8; }
+        .grammar-card .grammar-ex {
+            background: rgba(0,0,0,0.25); border-radius: 8px; padding: 12px 16px;
+            font-size: 14px; color: rgba(255,255,255,0.5);
+            border-left: 3px solid var(--amber);
+        }
+
+        /* Quiz */
+        .quiz-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .quiz-card .quiz-q { font-size: 16px; color: #fff; margin-bottom: 12px; }
+        .quiz-card .quiz-q-zh { font-size: 13px; color: var(--accent); margin-bottom: 16px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+        .quiz-option {
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 10px; padding: 12px 16px;
+            color: rgba(255,255,255,0.8); font-size: 15px;
+            cursor: pointer; text-align: left;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); }
+        .quiz-option.correct { background: rgba(76, 175, 132, 0.2); border-color: var(--success); color: var(--success); }
+        .quiz-option.wrong { background: rgba(239, 83, 80, 0.2); border-color: var(--danger); color: var(--danger); }
+        .quiz-option:disabled { pointer-events: none; opacity: 0.7; }
+        .quiz-feedback { font-size: 14px; margin-top: 10px; min-height: 20px; }
+        .quiz-feedback.correct-fb { color: var(--success); }
+        .quiz-feedback.wrong-fb { color: var(--danger); }
+
+        /* Score banner */
+        .quiz-score {
+            text-align: center; padding: 16px; margin-top: 20px;
+            border-radius: 12px; font-size: 18px; font-weight: 700;
+            display: none;
+        }
+        .quiz-score.show { display: block; }
+        .quiz-score.perfect { background: rgba(76, 175, 132, 0.12); color: var(--success); border: 1px solid rgba(76, 175, 132, 0.2); }
+        .quiz-score.good { background: rgba(240, 192, 96, 0.12); color: var(--gold); border: 1px solid rgba(240, 192, 96, 0.2); }
+        .quiz-score.ok { background: rgba(255, 123, 90, 0.12); color: var(--coral); border: 1px solid rgba(255, 123, 90, 0.2); }
+
+        /* Knowledge expansion */
+        .knowledge-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .knowledge-card h4 { color: var(--gold); font-size: 17px; margin-bottom: 10px; }
+        .knowledge-card p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.85; margin-bottom: 10px; }
+        .knowledge-card .fun-fact {
+            background: rgba(240, 192, 96, 0.08);
+            border-left: 3px solid var(--gold);
+            padding: 10px 16px; border-radius: 0 8px 8px 0;
+            font-size: 13px; color: var(--gold); margin-top: 12px;
+        }
+
+        /* About section */
+        .about-card {
+            background: var(--card-bg);
+            border-radius: 14px; padding: 24px; margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .about-card h4 { color: var(--gold); font-size: 17px; margin-bottom: 10px; }
+        .about-card ul { padding-left: 20px; }
+        .about-card ul li { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 8px; line-height: 1.7; }
+        .about-card ul li::marker { color: var(--amber); }
+
+        .print-btn {
+            display: inline-block; margin-top: 16px;
+            background: var(--amber); color: #fff;
+            border: none; border-radius: 8px;
+            padding: 10px 24px; font-size: 14px;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .print-btn:hover { background: #c88020; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%; height: auto; position: relative;
+                padding: 12px; border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
+            }
+            .sidebar nav { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+            .sidebar nav a { font-size: 12px; padding: 6px 10px; }
+            .sidebar-logo { padding: 4px 8px 10px; border: none; margin: 0; }
+            .sidebar-logo .logo-icon { font-size: 24px; }
+            .sidebar-logo h2 { font-size: 14px; }
+            .sidebar-footer { display: none; }
+            .main-content { margin-left: 0; padding: 20px 16px; }
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Print */
+        @media print {
+            .sidebar, #progress-bar, .play-btn, .vocab-play-btn, .print-btn { display: none !important; }
+            .main-content { margin-left: 0; padding: 20px; }
+            body { background: #fff; color: #000; }
+            .card, .passage-segment, .vocab-card, .pattern-card, .grammar-card, .quiz-card, .knowledge-card, .about-card {
+                background: #fff; border: 1px solid #ddd; break-inside: avoid;
+            }
+            .keyword { color: #b8860b; background: #fff8e1; border-color: #b8860b; }
+            .section-header h2 { color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-icon">🦴</span>
+                <h2>POLA NEWS</h2>
+                <div class="episode-title">Pterosaur Time Capsule</div>
+            </div>
+            <nav>
+                <a href="#reading" class="active" data-section="reading"><span class="nav-icon">📖</span> 全文阅读</a>
+                <a href="#vocabulary" data-section="vocabulary"><span class="nav-icon">📝</span> 词汇表</a>
+                <a href="#patterns" data-section="patterns"><span class="nav-icon">💬</span> 句型练习</a>
+                <a href="#grammar" data-section="grammar"><span class="nav-icon">📐</span> 语法点</a>
+                <a href="#quiz" data-section="quiz"><span class="nav-icon">✅</span> 练习测验</a>
+                <a href="#knowledge" data-section="knowledge"><span class="nav-icon">🧠</span> 知识扩展</a>
+                <a href="#about" data-section="about"><span class="nav-icon">ℹ️</span> 关于本课</a>
+            </nav>
+            <div class="sidebar-footer">POLA NEWS · July 5, 2026</div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Section 1: Reading -->
+            <section id="reading" class="section">
+                <div class="section-header">
+                    <span class="section-icon">📖</span>
+                    <h2>全文阅读 Full Reading</h2>
+                </div>
+                <div class="passage-container">
+                    <div class="passage-segment" id="seg1">
+                        <div class="seg-label">🦴 Segment 1 — Hook</div>
+                        <p>
+                            Imagine opening a box that's been sealed for 113 million years. And inside — you find real <span class="keyword">chemical clues<span class="keyword-tooltip">化学线索<span class="tooltip-zh">tiny traces of chemicals that reveal information</span></span></span> from a flying <span class="keyword">reptile<span class="keyword-tooltip">爬行动物<span class="tooltip-zh">a cold-blooded animal with scales</span></span></span>! Scientists just cracked open a <span class="keyword">fossil<span class="keyword-tooltip">化石<span class="tooltip-zh">remains of ancient life preserved in rock</span></span></span> and found something nobody expected: actual <span class="keyword">molecules<span class="keyword-tooltip">分子<span class="tooltip-zh">the smallest unit of a chemical substance</span></span></span> from a creature that soared above the dinosaurs!
+                        </p>
+                        <button class="play-btn" onclick="toggleSegment(0, this)" title="播放段落">▶</button>
+                    </div>
+                    <div class="passage-segment" id="seg2">
+                        <div class="seg-label">🔬 Segment 2 — Story</div>
+                        <p>
+                            This is a <span class="keyword">pterosaur<span class="keyword-tooltip">翼龙<span class="tooltip-zh">a flying reptile from the dinosaur age</span></span></span> — a flying reptile with wings as wide as a small plane. When it died, it sank to the <span class="keyword">ocean floor<span class="keyword-tooltip">海底<span class="tooltip-zh">the bottom of the sea</span></span></span>. But tiny <span class="keyword">bacteria<span class="keyword-tooltip">细菌<span class="tooltip-zh">tiny living things, too small to see</span></span></span> didn't destroy it — they actually <span class="keyword">preserved<span class="keyword-tooltip">保存<span class="tooltip-zh">to keep something from decaying</span></span></span> it! They wrapped the bone in <span class="keyword">minerals<span class="keyword-tooltip">矿物质<span class="tooltip-zh">natural solids found in rocks</span></span></span> like a natural shield. Now, 113 million years later, scientists found steroid molecules inside — proof that this ancient flyer ate fish and squid!
+                        </p>
+                        <button class="play-btn" onclick="toggleSegment(1, this)" title="播放段落">▶</button>
+                    </div>
+                    <div class="passage-segment" id="seg3">
+                        <div class="seg-label">💡 Segment 3 — Why It Matters</div>
+                        <p>
+                            This changes everything we knew about fossils. We used to think <span class="keyword">oxygen<span class="keyword-tooltip">氧气<span class="tooltip-zh">a gas in the air that we breathe</span></span></span> destroys ancient remains — but here, bacteria used oxygen to <em>save</em> them instead. It's like nature's own <span class="keyword">preservation<span class="keyword-tooltip">保存；防腐<span class="tooltip-zh">the act of keeping something in good condition</span></span></span> recipe! And those tiny molecules? They're a <span class="keyword">window<span class="keyword-tooltip">窗口；视角<span class="tooltip-zh">a way to see or understand something</span></span></span> into a world long gone — what animals ate, how they lived. Sometimes the smallest clues tell the biggest stories.
+                        </p>
+                        <button class="play-btn" onclick="toggleSegment(2, this)" title="播放段落">▶</button>
+                    </div>
+                    <div class="passage-segment" id="seg4">
+                        <div class="seg-label">👋 Segment 4 — Sign-off</div>
+                        <p>
+                            A fossil isn't just a rock — it's a <span class="keyword">time machine<span class="keyword-tooltip">时光机<span class="tooltip-zh">something that lets you see the past</span></span></span> waiting to be opened. Who knows what <span class="keyword">secrets<span class="keyword-tooltip">秘密<span class="tooltip-zh">things that are hidden or unknown</span></span></span> are still hiding underground, waiting for YOU to find them? This is Pola, reporting from the age of dinosaurs. See you next time — and keep <span class="keyword">exploring<span class="keyword-tooltip">探索<span class="tooltip-zh">to travel around to discover new things</span></span></span>!
+                        </p>
+                        <button class="play-btn" onclick="toggleSegment(3, this)" title="播放段落">▶</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Vocabulary -->
+            <section id="vocabulary" class="section">
+                <div class="section-header">
+                    <span class="section-icon">📝</span>
+                    <h2>词汇表 Vocabulary</h2>
+                </div>
+                <div class="vocab-grid">
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('pterosaur', this)">🔊</button> pterosaur <span class="pos">n.</span></div>
+                        <div class="zh-meaning">翼龙（与恐龙同时代的飞行爬行动物）</div>
+                        <div class="example">"This is a pterosaur — a flying reptile with wings as wide as a small plane."<br>Pterosaurs were the first vertebrates to fly using powered flight.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('fossil', this)">🔊</button> fossil <span class="pos">n.</span></div>
+                        <div class="zh-meaning">化石</div>
+                        <div class="example">"Scientists just cracked open a fossil and found something nobody expected."<br>We found a fossil of a leaf that was millions of years old.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('molecule', this)">🔊</button> molecule <span class="pos">n.</span></div>
+                        <div class="zh-meaning">分子</div>
+                        <div class="example">"Actual molecules from a creature that soared above the dinosaurs!"<br>A water molecule is made of two hydrogen atoms and one oxygen atom.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('preserve', this)">🔊</button> preserve <span class="pos">v.</span></div>
+                        <div class="zh-meaning">保存；保护（使不腐烂）</div>
+                        <div class="example">"Tiny bacteria didn't destroy it — they actually preserved it!"<br>We use salt to preserve fish so it doesn't go bad.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('bacteria', this)">🔊</button> bacteria <span class="pos">n. (pl.)</span></div>
+                        <div class="zh-meaning">细菌</div>
+                        <div class="example">"Tiny bacteria wrapped the bone in minerals like a natural shield."<br>Some bacteria help us digest food, while others can make us sick.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('mineral', this)">🔊</button> mineral <span class="pos">n.</span></div>
+                        <div class="zh-meaning">矿物；矿物质</div>
+                        <div class="example">"They wrapped the bone in minerals like a natural shield."<br>Calcium is an important mineral for strong bones and teeth.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('reptile', this)">🔊</button> reptile <span class="pos">n.</span></div>
+                        <div class="zh-meaning">爬行动物</div>
+                        <div class="example">"A flying reptile with wings as wide as a small plane."<br>Snakes, lizards, turtles, and crocodiles are all reptiles.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('oxygen', this)">🔊</button> oxygen <span class="pos">n.</span></div>
+                        <div class="zh-meaning">氧气</div>
+                        <div class="example">"We used to think oxygen destroys ancient remains."<br>Plants produce oxygen that animals need to breathe.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('explore', this)">🔊</button> explore <span class="pos">v.</span></div>
+                        <div class="zh-meaning">探索；探险</div>
+                        <div class="example">"Keep exploring!"<br>Scientists explore the deep ocean to find new species of animals.</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="word"><button class="vocab-play-btn" onclick="playWord('steroid', this)">🔊</button> steroid <span class="pos">n.</span></div>
+                        <div class="zh-meaning">类固醇（生物体内天然存在的化学物质）</div>
+                        <div class="example">"Scientists found steroid molecules inside the fossil."<br>Cholesterol is a type of steroid found in all animal cells.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Sentence Patterns -->
+            <section id="patterns" class="section">
+                <div class="section-header">
+                    <span class="section-icon">💬</span>
+                    <h2>句型练习 Sentence Patterns</h2>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">1. "Imagine opening a box that's been sealed for 113 million years!"</div>
+                    <div class="pattern-zh">想象一下，打开一个被密封了1.13亿年的盒子！</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "Imagine + 动词-ing" 是一种吸引听众注意力的开场方式，让人产生画面感。<br><strong>Structure:</strong> "Imagine + verb-ing" is a hook that creates a mental picture and draws the listener in.</div>
+                    <div class="practice-box">💡 试试看 Try it: Imagine <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> on the surface of Mars! (Hint: standing / walking)</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">2. "We used to think oxygen destroys ancient remains — but here, bacteria used oxygen to save them instead!"</div>
+                    <div class="pattern-zh">我们过去以为氧气会破坏远古遗骸 — 但在这里，细菌反而用氧气来拯救它们！</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "We used to think... but..." 用来对比旧观念和新发现，制造"反转"效果。<br><strong>Structure:</strong> "We used to think... but..." contrasts an old belief with a surprising new discovery.</div>
+                    <div class="practice-box">💡 试试看 Try it: We used to think <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>, but now we know <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>. (Hint: the Earth was flat / it's round)</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">3. "It's like nature's own preservation recipe!"</div>
+                    <div class="pattern-zh">这就像大自然自己的保存秘方！</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "It's like..." 用比喻（simile）让复杂的科学概念变得简单易懂。<br><strong>Structure:</strong> "It's like..." uses a simile to make a complex scientific idea easy to understand.</div>
+                    <div class="practice-box">💡 试试看 Try it: The way a chameleon changes color — it's like <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>! (Hint: wearing an invisible cloak)</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">4. "Sometimes the smallest clues tell the biggest stories."</div>
+                    <div class="pattern-zh">有时候，最小的线索讲述着最宏大的故事。</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "Sometimes the + 最高级 + 名词 + 动词 + the + 最高级 + 名词" — 用对比制造深刻印象。<br><strong>Structure:</strong> "Sometimes the + superlative + noun + verb + the + superlative + noun" creates a memorable contrast.</div>
+                    <div class="practice-box">💡 试试看 Try it: Sometimes the <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> ideas lead to the <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> changes. (Hint: simplest / biggest)</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-en">5. "A fossil isn't just a rock — it's a time machine waiting to be opened!"</div>
+                    <div class="pattern-zh">化石不仅仅是石头 — 它是一台等待被打开的时光机！</div>
+                    <div class="pattern-explain"><strong>结构：</strong> "X isn't just Y — it's Z!" 用来重新定义某个熟悉的事物，揭示其更深层的意义。<br><strong>Structure:</strong> "X isn't just Y — it's Z!" redefines something familiar by revealing its deeper meaning.</div>
+                    <div class="practice-box">💡 试试看 Try it: A book isn't just paper — it's <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>! (Hint: a door to another world)</div>
+                </div>
+            </section>
+
+            <!-- Section 4: Grammar -->
+            <section id="grammar" class="section">
+                <div class="section-header">
+                    <span class="section-icon">📐</span>
+                    <h2>语法点 Grammar Points</h2>
+                </div>
+                <div class="grammar-card">
+                    <h4>1. 现在完成时 Present Perfect — "has been sealed"</h4>
+                    <div class="grammar-zh">现在完成时：表示从过去持续到现在的状态或刚刚完成的动作</div>
+                    <div class="grammar-explain">
+                        课文："a box that's been sealed for 113 million years" — 这个盒子<strong>从1.13亿年前到现在</strong>一直处于密封状态。<br>
+                        <strong>形式：</strong> have/has + 过去分词<br>
+                        <strong>用法：</strong> 强调过去开始、持续到现在的状态，常与 "for + 时间段" 连用。
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: Scientists <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (study) this fossil for over ten years, and they <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (just / discover) something amazing!
+                    </div>
+                </div>
+                <div class="grammar-card">
+                    <h4>2. 过去时 vs 现在时 Past Simple vs Present Simple</h4>
+                    <div class="grammar-zh">过去时 vs 现在时：描述过去事件用过去时，描述科学事实用现在时</div>
+                    <div class="grammar-explain">
+                        课文混合使用过去时和现在时："When it <strong>died</strong>（过去事件）, it <strong>sank</strong> to the ocean floor（过去事件）. But tiny bacteria <strong>didn't destroy</strong> it（过去事件）— they actually <strong>preserved</strong> it（过去事件）! A fossil <strong>isn't</strong> just a rock（现在真理）."<br>
+                        <strong>关键：</strong> 历史事件用过去时；普遍真理和科学事实用现在时。
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: The pterosaur <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (live) 113 million years ago, but its molecules <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (tell) us about its diet today.
+                    </div>
+                </div>
+                <div class="grammar-card">
+                    <h4>3. "Actually" 和 "Instead" — 表示转折和对比</h4>
+                    <div class="grammar-zh">"Actually" 和 "Instead"：用来纠正错误认知或表示出乎意料的结果</div>
+                    <div class="grammar-explain">
+                        课文："they <strong>actually</strong> preserved it" 和 "bacteria used oxygen to save them <strong>instead</strong>."<br>
+                        <strong>Actually：</strong> 纠正前面的错误认知（"其实/实际上"）。<br>
+                        <strong>Instead：</strong> 表示替代前面提到的情况（"反而/取而代之"）。<br>
+                        两者经常一起使用来制造"反转"效果。
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: I thought the test would be hard, but it was <strong>actually</strong> quite easy! I didn't fail — I got an A <strong>instead</strong>!<br>
+                        Make your own: I thought <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>, but <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> actually <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>!
+                    </div>
+                </div>
+                <div class="grammar-card">
+                    <h4>4. 不定代词 "Nobody" 和 "Nothing"</h4>
+                    <div class="grammar-zh">不定代词 "Nobody" 和 "Nothing"：用于强调"零"或"没有"的概念</div>
+                    <div class="grammar-explain">
+                        课文："found something <strong>nobody</strong> expected" — 没有一个人预料到。<br>
+                        "a fossil isn't just a rock — it's a time machine waiting to be opened. Who knows what secrets are still hiding underground, waiting for YOU to find them?"<br>
+                        <strong>Nobody</strong> = no person（没有人），<strong>Nothing</strong> = no thing（没有东西）。注意：不定代词本身已含否定含义，谓语动词用单数形式。
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: <strong>Nobody</strong> <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (know) what dinosaurs really sounded like. <strong>Nothing</strong> <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (be) more exciting than discovering a new species!
+                    </div>
+                </div>
+                <div class="grammar-card">
+                    <h4>5. 条件句 Type 1 — "Who knows what... if..."</h4>
+                    <div class="grammar-zh">第一类条件句：表达可能发生的情况及其结果</div>
+                    <div class="grammar-explain">
+                        课文暗示了条件关系："Who knows what secrets are still hiding underground, waiting for YOU to find them?" — 如果你去寻找，你可能会发现。<br>
+                        <strong>结构：</strong> If + 现在时, will + 动词原形<br>
+                        <strong>用法：</strong> 表达真实的、可能发生的情况。这是英语中最常用的条件句类型。
+                    </div>
+                    <div class="grammar-ex">
+                        📌 练习 Practice: If you <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (study) fossils, you <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> (discover) amazing things about the past.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Quiz -->
+            <section id="quiz" class="section">
+                <div class="section-header">
+                    <span class="section-icon">✅</span>
+                    <h2>练习测验 Quiz</h2>
+                </div>
+
+                <div class="quiz-card" id="q1">
+                    <div class="quiz-q">1. How old is the pterosaur fossil in the story?</div>
+                    <div class="quiz-q-zh">故事中的翼龙化石有多少年了？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q1')">A. 1 million years old</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q1')">B. 66 million years old</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q1')">C. 113 million years old</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q1')">D. 250 million years old</button>
+                    </div>
+                    <div class="quiz-feedback" id="q1-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q2">
+                    <div class="quiz-q">2. Where was this pterosaur fossil discovered?</div>
+                    <div class="quiz-q-zh">这个翼龙化石是在哪里发现的？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q2')">A. Australia</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q2')">B. Northeastern Brazil</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q2')">C. China</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q2')">D. Canada</button>
+                    </div>
+                    <div class="quiz-feedback" id="q2-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q3">
+                    <div class="quiz-q">3. What surprising thing did scientists find inside the fossil?</div>
+                    <div class="quiz-q-zh">科学家在化石里发现了什么令人惊讶的东西？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q3')">A. Dinosaur DNA</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q3')">B. Gold and diamonds</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q3')">C. Steroid molecules that reveal what it ate</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q3')">D. A baby pterosaur egg</button>
+                    </div>
+                    <div class="quiz-feedback" id="q3-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q4">
+                    <div class="quiz-q">4. What helped preserve the pterosaur fossil for so long?</div>
+                    <div class="quiz-q-zh">是什么帮助翼龙化石保存了这么久？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q4')">A. Ice and freezing temperatures</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q4')">B. Volcanic ash</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q4')">C. Bacteria that wrapped the bone in minerals</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q4')">D. The pterosaur's own special skin</button>
+                    </div>
+                    <div class="quiz-feedback" id="q4-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q5">
+                    <div class="quiz-q">5. What did the pterosaur likely eat?</div>
+                    <div class="quiz-q-zh">翼龙可能吃什么？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q5')">A. Plants and leaves</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q5')">B. Fish and squid</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q5')">C. Other dinosaurs</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q5')">D. Insects only</button>
+                    </div>
+                    <div class="quiz-feedback" id="q5-fb"></div>
+                </div>
+
+                <div class="quiz-card" id="q6">
+                    <div class="quiz-q">6. Which university led this research?</div>
+                    <div class="quiz-q-zh">哪所大学领导了这项研究？</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q6')">A. Harvard University</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q6')">B. University of Tokyo</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true, 'q6')">C. Curtin University (Australia)</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false, 'q6')">D. University of Cambridge</button>
+                    </div>
+                    <div class="quiz-feedback" id="q6-fb"></div>
+                </div>
+
+                <div class="quiz-score" id="quiz-score"></div>
+            </section>
+
+            <!-- Section 6: Knowledge Expansion -->
+            <section id="knowledge" class="section">
+                <div class="section-header">
+                    <span class="section-icon">🧠</span>
+                    <h2>中文知识扩展 Knowledge Expansion</h2>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🦴 翼龙：不是恐龙，但和恐龙共享天空</h4>
+                    <p>很多人以为翼龙（pterosaur）是"会飞的恐龙"，但实际上翼龙和恐龙是两类不同的爬行动物，它们只是生活在同一个时代。翼龙是<strong>第一种学会主动飞行的脊椎动物</strong>——比鸟类早了大约8000万年！有些翼龙小如麻雀（如树栖翼龙），有些则大如小型飞机（如风神翼龙 Quetzalcoatlus，翼展可达12米）。本期主角的翼龙化石发现于巴西的<strong>阿拉里皮盆地（Araripe Basin）</strong>，这里是世界闻名的化石宝库，出土过大量保存精美的白垩纪化石。</p>
+                    <div class="fun-fact">💡 趣味冷知识：风神翼龙（Quetzalcoatlus）的名字来源于阿兹特克神话中的羽蛇神 Quetzalcoatl。它的翅膀展开后和一架小型喷气式飞机差不多宽，但体重可能只有约 200 公斤——因为它和所有翼龙一样，骨头是中空的！</div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🔬 分子古生物学：在化石中"闻"出1亿年前的味道</h4>
+                    <p>传统古生物学研究化石的<strong>形状和结构</strong>（比如骨头的样子、牙齿的排列），而<strong>分子古生物学（Molecular Paleontology）</strong>更进一步——它研究化石中<strong>残留的化学分子</strong>。本次发现的类固醇分子就像是1.13亿年前的"食物标签"——通过这些分子，科学家可以推断翼龙吃了鱼和鱿鱼（因为只有吃这些海鲜才会在体内积累特定类型的类固醇）。这就像侦探通过案发现场的化学痕迹还原犯罪过程一样酷！</p>
+                    <div class="fun-fact">💡 趣味冷知识：分子古生物学是目前最前沿的古生物学分支之一。1993年电影《侏罗纪公园》中"从琥珀蚊子中提取恐龙DNA"的情节，本质上就是分子古生物学的幻想版本——不过现实中DNA最多只能保存几万年，而类固醇分子可以保存上亿年！</div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🦠 细菌：不是所有细菌都是"坏蛋"</h4>
+                    <p>很多人一听到"细菌"就想到生病，但绝大多数细菌对人类是无害甚至有益的。本期故事中的<strong>硫氧化细菌（sulfur-oxidizing bacteria）</strong>就是一个绝佳的例子——它们利用翼龙尸体分解时产生的硫化物作为能量，同时释放出矿物质包裹骨头，形成了一层"天然保护壳"。没有这些微小生物，翼龙化石早就腐烂消失了。下次你用酸奶（乳酸菌发酵）或吃面包（酵母菌发酵）的时候，别忘了感谢这些看不见的小帮手！</p>
+                    <div class="fun-fact">💡 趣味冷知识：人体内的细菌数量大约是人体细胞数量的1.3倍！你身体里生活着大约 39 万亿个细菌，它们帮助你消化食物、合成维生素、甚至影响你的情绪。</div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🌊 化石形成的"完美风暴"</h4>
+                    <p>要形成一块保存完好的化石，需要非常苛刻的条件，科学家称之为"完美风暴"。翼龙死后需要：① <strong>快速沉入水底</strong>，避免被其他动物吃掉；② <strong>迅速被沉积物覆盖</strong>，隔绝氧气和食腐生物；③ <strong>有合适的化学环境</strong>（如本期发现的硫氧化细菌）；④ <strong>经历矿化过程</strong>，有机物质被矿物质逐渐替换。整个过程就像大自然在做一道极其复杂、耗时千百万年的"化石料理"——任何一个步骤出错，这块化石就永远不会存在了。</p>
+                    <div class="fun-fact">💡 趣味冷知识：科学家估计，地球上曾经存在过的所有物种中，只有不到 1% 变成了化石被我们发现。也就是说，我们看到的恐龙化石只是冰山一角——还有 99% 以上的远古生命我们可能永远无法知道！</div>
+                </div>
+
+                <div class="knowledge-card">
+                    <h4>🇧🇷 巴西阿拉里皮盆地：白垩纪的"时间胶囊工厂"</h4>
+                    <p>巴西东北部的阿拉里皮盆地（Araripe Basin）是全球最重要的化石产地之一。大约1.1亿年前（白垩纪早期），这里是一片巨大的内陆咸水湖，周围是温暖湿润的热带环境。湖水底部缺氧的特殊条件，使得落入湖中的动植物尸体不会被迅速分解，而是被完美保存——甚至软体组织（如鱼鳃、昆虫翅膀、翼龙翼膜）都能保存下来。这里出土过<strong>世界上最著名的翼龙化石之一</strong>，以及大量鱼类、昆虫、龟类和植物化石。可以说，阿拉里皮盆地就是地球自己的"化石博物馆"。</p>
+                    <div class="fun-fact">💡 趣味冷知识：阿拉里皮盆地还出土过一种奇特的化石——一只蜥蜴正在吃一只蜻蜓的瞬间被定格在化石中！这就像一张1亿年前的"快照"，让科学家能直观地看到远古食物链。</div>
+                </div>
+            </section>
+
+            <!-- Section 7: About -->
+            <section id="about" class="section">
+                <div class="section-header">
+                    <span class="section-icon">ℹ️</span>
+                    <h2>关于本课 About This Lesson</h2>
+                </div>
+
+                <div class="about-card">
+                    <h4>🎯 学习目标 Learning Goals</h4>
+                    <ul>
+                        <li>了解翼龙（pterosaur）的基本知识：它们是与恐龙同时代的飞行爬行动物</li>
+                        <li>理解分子古生物学（Molecular Paleontology）的概念——通过化学分子研究远古生物</li>
+                        <li>认识细菌在化石保存中的关键作用，改变"细菌都是坏的"的刻板印象</li>
+                        <li>掌握 10 个核心英语词汇（fossil, molecule, preserve, bacteria, mineral, pterosaur, reptile, oxygen, explore, steroid）</li>
+                        <li>学习 5 个实用英语句型和 5 个语法点</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h4>📚 学习建议 Study Tips</h4>
+                    <ul>
+                        <li><strong>先听后读：</strong>点击每个段落右侧的 ▶ 按钮，先听英文朗读，再跟读模仿发音和语调</li>
+                        <li><strong>词汇卡片：</strong>在词汇表区域点击 🔊 按钮听单词发音，大声跟读 3 遍</li>
+                        <li><strong>句型练习：</strong>遮住答案部分，尝试自己完成句型填空，然后对照检查</li>
+                        <li><strong>语法点：</strong>先读懂中文解释，再做英文练习题，加深理解</li>
+                        <li><strong>知识扩展：</strong>阅读中文扩展部分，尝试用简单的英语向家人或朋友复述你学到的知识</li>
+                        <li><strong>测验检验：</strong>完成 6 道选择题，看看自己掌握了多少</li>
+                    </ul>
+                </div>
+
+                <div class="about-card">
+                    <h4>📰 新闻来源 Source</h4>
+                    <ul>
+                        <li>Curtin University — "Scientists Discover the First-Ever Molecules Preserved Inside a 113-Million-Year-Old Pterosaur Fossil" (July 3, 2026)</li>
+                        <li>研究发表于 <em>iScience</em> (DOI: 10.1016/j.isci.2026.116199)</li>
+                        <li>研究团队：Kliti Grice 教授（科廷大学）及国际合作团队</li>
+                    </ul>
+                </div>
+
+                <button class="print-btn" onclick="window.print()">🖨️ 打印本课 Print This Lesson</button>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // ── Speech Engine ──
+        let currentUtterance = null;
+        let voices = [];
+
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                speechSynthesis.addEventListener('voiceschanged', () => {
+                    voices = speechSynthesis.getVoices();
+                }, { once: true });
+            }
+        }
+        loadVoices();
+
+        function getBestVoice() {
+            const priority = ['Enhanced', 'Daniel', 'Alex', 'Microsoft Mark'];
+            for (const name of priority) {
+                const v = voices.find(v => v.name.includes(name) && v.lang.startsWith('en'));
+                if (v) return v;
+            }
+            const male = voices.find(v => v.lang.startsWith('en') && /male/i.test(v.name));
+            if (male) return male;
+            const anyEn = voices.find(v => v.lang.startsWith('en'));
+            return anyEn || voices[0];
+        }
+
+        function speak(text, btn) {
+            speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = getBestVoice();
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+            currentUtterance = utterance;
+
+            if (btn) {
+                btn.classList.add('playing');
+                btn.textContent = '⏸';
+                utterance.onend = () => {
+                    btn.classList.remove('playing');
+                    btn.textContent = '▶';
+                    currentUtterance = null;
+                };
+                utterance.onerror = () => {
+                    btn.classList.remove('playing');
+                    btn.textContent = '▶';
+                    currentUtterance = null;
+                };
+            }
+            speechSynthesis.speak(utterance);
+        }
+
+        // Segment texts (plain text, no HTML)
+        const segmentTexts = [
+            "Imagine opening a box that's been sealed for 113 million years. And inside — you find real chemical clues from a flying reptile! Scientists just cracked open a fossil and found something nobody expected: actual molecules from a creature that soared above the dinosaurs!",
+            "This is a pterosaur — a flying reptile with wings as wide as a small plane. When it died, it sank to the ocean floor. But tiny bacteria didn't destroy it — they actually preserved it! They wrapped the bone in minerals like a natural shield. Now, 113 million years later, scientists found steroid molecules inside — proof that this ancient flyer ate fish and squid!",
+            "This changes everything we knew about fossils. We used to think oxygen destroys ancient remains — but here, bacteria used oxygen to save them instead. It's like nature's own preservation recipe! And those tiny molecules? They're a window into a world long gone — what animals ate, how they lived. Sometimes the smallest clues tell the biggest stories.",
+            "A fossil isn't just a rock — it's a time machine waiting to be opened. Who knows what secrets are still hiding underground, waiting for YOU to find them? This is Pola, reporting from the age of dinosaurs. See you next time — and keep exploring!"
+        ];
+
+        function toggleSegment(idx, btn) {
+            if (btn.classList.contains('playing')) {
+                speechSynthesis.cancel();
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+                currentUtterance = null;
+            } else {
+                document.querySelectorAll('.play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '▶';
+                });
+                document.querySelectorAll('.vocab-play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '🔊';
+                });
+                speak(segmentTexts[idx], btn);
+            }
+        }
+
+        function playWord(word, btn) {
+            if (btn.classList.contains('playing')) {
+                speechSynthesis.cancel();
+                btn.classList.remove('playing');
+                btn.textContent = '🔊';
+                currentUtterance = null;
+            } else {
+                document.querySelectorAll('.play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '▶';
+                });
+                document.querySelectorAll('.vocab-play-btn.playing').forEach(b => {
+                    b.classList.remove('playing');
+                    b.textContent = '🔊';
+                });
+                speak(word, btn);
+            }
+        }
+
+        // ── Quiz Logic ──
+        const quizState = {};
+        for (let i = 1; i <= 6; i++) quizState['q' + i] = null;
+
+        function checkAnswer(btn, isCorrect, qid) {
+            if (quizState[qid] !== null) return;
+            quizState[qid] = isCorrect;
+
+            const card = btn.closest('.quiz-card');
+            card.querySelectorAll('.quiz-option').forEach(opt => opt.disabled = true);
+
+            const fb = document.getElementById(qid + '-fb');
+            if (isCorrect) {
+                btn.classList.add('correct');
+                fb.textContent = '✅ Correct! 回答正确！做得好！';
+                fb.className = 'quiz-feedback correct-fb';
+            } else {
+                btn.classList.add('wrong');
+                const correctOpt = card.querySelector('.quiz-option[onclick*="true"]');
+                if (correctOpt) correctOpt.classList.add('correct');
+                fb.textContent = '❌ Not quite. 再想想！正确答案已标出。';
+                fb.className = 'quiz-feedback wrong-fb';
+            }
+
+            checkAllAnswered();
+        }
+
+        function checkAllAnswered() {
+            const allAnswered = Object.values(quizState).every(v => v !== null);
+            if (!allAnswered) return;
+
+            const correctCount = Object.values(quizState).filter(v => v === true).length;
+            const scoreDiv = document.getElementById('quiz-score');
+            scoreDiv.classList.add('show');
+
+            if (correctCount === 6) {
+                scoreDiv.className = 'quiz-score show perfect';
+                scoreDiv.textContent = `🏆 Perfect! ${correctCount}/6 — 满分！你真是太棒了！`;
+            } else if (correctCount >= 4) {
+                scoreDiv.className = 'quiz-score show good';
+                scoreDiv.textContent = `👍 Great job! ${correctCount}/6 — 做得很好，继续加油！`;
+            } else {
+                scoreDiv.className = 'quiz-score show ok';
+                scoreDiv.textContent = `📚 ${correctCount}/6 — 再读一遍课文试试看，你可以做得更好！`;
+            }
+        }
+
+        // ── Progress Bar ──
+        function updateProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        // ── Sidebar Active ──
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.sidebar nav a');
+            let currentId = '';
+            sections.forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if (rect.top <= 150) currentId = sec.id;
+            });
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-section') === currentId);
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            updateProgress();
+            updateActiveNav();
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('.sidebar nav a').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Initial call
+        updateProgress();
+        updateActiveNav();
+    </script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
