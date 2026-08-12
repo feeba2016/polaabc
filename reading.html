@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阅读练习 · Pola ABC</title>
+<link rel="icon" href="assets/pola.webp">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top">
+  <a href="index.html" class="logo">
+    <img src="assets/pola.webp" alt="Pola">
+    POLA ABC<small>全学段英语学习平台</small>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">首页</a>
+    <a href="episodes.html">全部课程</a>
+    <a href="match.html" id="navMatch" class="nav-review">🎮 单词消消乐 <span class="review-badge"></span></a>
+    <a href="reading.html" class="active" id="navReading" class="nav-review">📖 阅读练习 <span class="review-badge"></span></a>
+    <a href="about.html">关于Pola</a>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">阅读<span class="em">练习</span></h2>
+    <p class="section-sub">通过游戏化的方式练习句子结构和语境理解。</p>
+
+    <!-- 模式选择 -->
+    <div class="game-tabs">
+      <button class="game-tab active" onclick="switchMode('sb')">📝 连词成句</button>
+      <button class="game-tab" onclick="switchMode('fb')">✏️ 填空练习</button>
+    </div>
+
+    <!-- 连词成句 -->
+    <div id="sbMode" class="game-mode">
+      <div id="sbStart" class="game-start">
+        <div class="game-instructions">
+          <h3>📝 连词成句 玩法</h3>
+          <ul>
+            <li>系统从你选的课程中提取例句，打乱单词顺序</li>
+            <li>点击单词按正确语序排列，组成完整的英语句子</li>
+            <li>点击「检查」验证答案，系统会显示正确结果</li>
+            <li>考察语法、语序和词汇理解能力</li>
+          </ul>
+        </div>
+        <div class="game-stats" id="sbSelectedInfo"></div>
+        <button class="btn btn-primary" onclick="startSentenceBuilder()" style="font-size:18px;padding:16px 36px">🚀 开始练习</button>
+        <a href="episodes.html" class="btn btn-ghost">先去选课 →</a>
+      </div>
+
+      <div id="sbGame" class="game-play" style="display:none">
+        <div class="game-status">
+          <span>进度：<strong id="sbProgress">1 / 1</strong></span>
+          <span id="sbSource" class="game-source"></span>
+        </div>
+        <div class="sb-built" id="sbBuilt"></div>
+        <div class="sb-pool" id="sbPool"></div>
+        <div class="sb-feedback" id="sbFeedback"></div>
+        <div class="game-nav">
+          <button class="btn btn-ghost" onclick="removeLastWord()">⏏ 撤回</button>
+          <button class="btn btn-ghost" onclick="skipSentence()">⏭ 跳过</button>
+          <button class="btn btn-primary" onclick="checkSentence()">✅ 检查</button>
+        </div>
+      </div>
+
+      <div id="sbDone" class="game-result" style="display:none">
+        <div class="result-emoji">👏</div>
+        <h3>全部完成！</h3>
+        <button class="btn btn-primary" onclick="startSentenceBuilder()">再练一次</button>
+        <a href="episodes.html" class="btn btn-ghost">换一批课程</a>
+      </div>
+    </div>
+
+    <!-- 填空练习 -->
+    <div id="fbMode" class="game-mode" style="display:none">
+      <div id="fbStart" class="game-start">
+        <div class="game-instructions">
+          <h3>✏️ 填空练习 玩法</h3>
+          <ul>
+            <li>系统从你选的课程中提取例句，挖空关键词</li>
+            <li>根据上下文和中文提示，输入缺失的单词</li>
+            <li>点击「检查」验证拼写和答案</li>
+            <li>考察语境理解和词汇拼写能力</li>
+          </ul>
+        </div>
+        <div class="game-stats" id="fbSelectedInfo"></div>
+        <button class="btn btn-primary" onclick="startFillBlank()" style="font-size:18px;padding:16px 36px">🚀 开始练习</button>
+        <a href="episodes.html" class="btn btn-ghost">先去选课 →</a>
+      </div>
+
+      <div id="fbGame" class="game-play" style="display:none">
+        <div class="game-status">
+          <span>进度：<strong id="fbProgress">1 / 1</strong></span>
+          <span id="fbSource" class="game-source"></span>
+        </div>
+        <div class="fb-sentence" id="fbSentence"></div>
+        <div class="fb-input-row">
+          <input type="text" id="fbInput" class="fb-input" placeholder="输入缺失的单词..." onkeypress="if(event.key==='Enter')checkFillBlank()">
+          <button class="btn btn-primary" onclick="checkFillBlank()">✅ 检查</button>
+        </div>
+        <div class="fb-hint" id="fbHint"></div>
+        <div class="sb-feedback" id="fbFeedback"></div>
+        <div class="game-nav">
+          <button class="btn btn-ghost" onclick="skipFillBlank()">⏭ 跳过</button>
+        </div>
+      </div>
+
+      <div id="fbDone" class="game-result" style="display:none">
+        <div class="result-emoji">👏</div>
+        <h3>全部完成！</h3>
+        <button class="btn btn-primary" onclick="startFillBlank()">再练一次</button>
+        <a href="episodes.html" class="btn btn-ghost">换一批课程</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">🦘 POLA ABC</div>
+  <p>全学段英语学习平台 · A1 到 C1-C2 全覆盖</p>
+  <p>为每一位英语学习者而做 <span class="heart">♥</span></p>
+</footer>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script>
+updateNavButtons();
+
+(function(){
+  var count = getSelectedCount();
+  var info = document.getElementById('sbSelectedInfo');
+  var info2 = document.getElementById('fbSelectedInfo');
+  var html = count > 0 ? '已选择 <b>'+count+'</b> 课' : '尚未选择课程，请先去「全部课程」勾选';
+  if(info) info.innerHTML = html;
+  if(info2) info2.innerHTML = html;
+})();
+
+function switchMode(mode){
+  document.querySelectorAll('.game-tab').forEach(function(t){t.classList.remove('active')});
+  event.target.classList.add('active');
+  document.getElementById('sbMode').style.display = mode==='sb' ? 'block' : 'none';
+  document.getElementById('fbMode').style.display = mode==='fb' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>

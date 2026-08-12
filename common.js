@@ -1,6 +1,5 @@
 /* ===== Pola ABC 共享脚本 ===== */
 
-/* 级别定义 */
 const LEVELS = {
   "A1": {label:"A1", name:"幼儿启蒙", desc:"3-6岁 · 童话/动物/日常", color:"#f97316", emoji:"🧒"},
   "A2": {label:"A2", name:"小学初级", desc:"7-12岁 · 冒险/科学/文化", color:"#22c55e", emoji:"📚"},
@@ -9,7 +8,6 @@ const LEVELS = {
   "C1": {label:"C1-C2", name:"雅思托福", desc:"备考冲刺 · 学术/政治/法律", color:"#ec4899", emoji:"🏆"},
 };
 
-/* B1 内容分类 */
 const CATS = {
   space:      {label:"太空探索",  emoji:"🚀", grad:"linear-gradient(135deg,#1e3a8a,#0ea5e9)", color:"#0ea5e9"},
   prehistoric:{label:"史前生物",  emoji:"🦕", grad:"linear-gradient(135deg,#92400e,#f59e0b)", color:"#f59e0b"},
@@ -26,6 +24,60 @@ function fmtDate(d){
   return `${y}年${m[+mo-1]}${+da}日`;
 }
 
+/* ===== 课程选择 + localStorage 持久化 ===== */
+var STORAGE_KEY = "pola_selected_lessons";
+
+function saveSelection(){
+  var selected = [];
+  document.querySelectorAll('.vocab-cb:checked').forEach(function(cb){
+    selected.push({slug:cb.dataset.slug, level:cb.dataset.level});
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(selected));
+}
+
+function restoreSelection(){
+  var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  saved.forEach(function(s){
+    var cb = document.querySelector('.vocab-cb[data-slug="'+s.slug+'"][data-level="'+s.level+'"]');
+    if(cb) cb.checked = true;
+  });
+}
+
+function getSelectedWords(){
+  var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  var words = [];
+  saved.forEach(function(s){
+    var ep = EPISODES.find(function(e){return e.slug===s.slug && e.level===s.level;});
+    if(ep && ep.vocab){
+      ep.vocab.forEach(function(v){
+        words.push({word:v.word, zh:v.zh, ex:v.ex||'', from:ep.title, level:ep.level});
+      });
+    }
+  });
+  return words;
+}
+
+function getSelectedCount(){
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').length;
+}
+
+function updateNavButtons(){
+  var count = getSelectedCount();
+  ['navReview','navMatch','navReading'].forEach(function(id){
+    var btn = document.getElementById(id);
+    if(!btn) return;
+    var badge = btn.querySelector('.review-badge');
+    if(count > 0){
+      btn.classList.add('has-selection');
+      if(badge) badge.textContent = count;
+    } else {
+      btn.classList.remove('has-selection');
+      if(badge) badge.textContent = '';
+    }
+  });
+}
+
+/* ===== 卡片渲染 ===== */
 function renderCard(e, showCheckbox){
   var c = CATS[e.category] || CATS.general;
   var lv = LEVELS[e.level] || LEVELS.B1;
@@ -52,18 +104,15 @@ function renderCard(e, showCheckbox){
   '</div>';
 }
 
-/* 按日期倒序 */
 function sortedEpisodes(){
   return EPISODES.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
 }
 
-/* 按级别筛选 */
 function byLevel(level){
   if(level==="all") return sortedEpisodes();
   return sortedEpisodes().filter(function(e){return e.level===level;});
 }
 
-/* 分类统计 */
 function catCounts(level){
   var list = level ? byLevel(level) : EPISODES;
   var counts={};
@@ -71,97 +120,232 @@ function catCounts(level){
   return counts;
 }
 
-/* 级别统计 */
 function levelCounts(){
   var counts={};
   EPISODES.forEach(function(e){counts[e.level]=(counts[e.level]||0)+1;});
   return counts;
 }
 
-/* ===== 单词翻卡复习 ===== */
-var reviewWords = [];
-var reviewIdx = 0;
+/* ===== 单词消消乐 ===== */
+var matchCards = [];
+var matchFlipped = [];
+var matchMatched = 0;
+var matchTotal = 0;
+var matchTimer = null;
+var matchStartTime = 0;
 
-function getSelectedCount(){
-  return document.querySelectorAll('.vocab-cb:checked').length;
-}
-
-function collectReviewWords(){
-  reviewWords = [];
-  document.querySelectorAll('.vocab-cb:checked').forEach(function(cb){
-    var slug = cb.dataset.slug;
-    var level = cb.dataset.level;
-    var ep = EPISODES.find(function(e){return e.slug===slug && e.level===level;});
-    if(ep && ep.vocab){
-      ep.vocab.forEach(function(v){
-        reviewWords.push({word:v.word, zh:v.zh, ex:v.ex, from:ep.title});
-      });
-    }
-  });
-  return reviewWords.length;
-}
-
-function openReview(){
-  var n = collectReviewWords();
-  if(n===0){
-    alert('请先在全部课程页面勾选要复习的课程');
+function startMatch(){
+  var words = getSelectedWords();
+  if(words.length < 3){
+    alert('请先在「全部课程」页面勾选至少 3 个词汇的课程（建议勾选 2-3 课）');
     return;
   }
-  reviewIdx = 0;
-  document.getElementById('reviewModal').classList.add('open');
-  showReviewCard();
-}
-
-function closeReview(){
-  document.getElementById('reviewModal').classList.remove('open');
-}
-
-function showReviewCard(){
-  if(reviewIdx >= reviewWords.length) reviewIdx = 0;
-  if(reviewIdx < 0) reviewIdx = reviewWords.length - 1;
-  var w = reviewWords[reviewIdx];
-  document.getElementById('reviewCount').textContent = (reviewIdx+1) + ' / ' + reviewWords.length;
-  document.getElementById('reviewWord').textContent = w.word;
-  document.getElementById('reviewZh').textContent = w.zh;
-  document.getElementById('reviewEx').textContent = w.ex || '';
-  document.getElementById('reviewFrom').textContent = '来自：' + w.from;
-  document.getElementById('reviewCard').classList.remove('flipped');
-}
-
-function flipCard(){
-  document.getElementById('reviewCard').classList.toggle('flipped');
-}
-
-function nextCard(){
-  reviewIdx++;
-  showReviewCard();
-}
-
-function prevCard(){
-  reviewIdx--;
-  showReviewCard();
-}
-
-function shuffleCards(){
-  for(var i=reviewWords.length-1;i>0;i--){
+  // 取最多 8 对（16 张牌）
+  words = words.slice(0, 8);
+  matchCards = [];
+  words.forEach(function(w, i){
+    matchCards.push({id:i, side:'en', text:w.word, pair:i});
+    matchCards.push({id:i+100, side:'zh', text:w.zh, pair:i});
+  });
+  // 洗牌
+  for(var i=matchCards.length-1;i>0;i--){
     var j = Math.floor(Math.random()*(i+1));
-    var t = reviewWords[i]; reviewWords[i]=reviewWords[j]; reviewWords[j]=t;
+    var t = matchCards[i]; matchCards[i]=matchCards[j]; matchCards[j]=t;
   }
-  reviewIdx = 0;
-  showReviewCard();
+  matchFlipped = [];
+  matchMatched = 0;
+  matchTotal = words.length;
+  matchStartTime = Date.now();
+  if(matchTimer) clearInterval(matchTimer);
+  matchTimer = setInterval(updateMatchTimer, 1000);
+  renderMatchBoard();
+  document.getElementById('matchBoard').style.display = 'grid';
+  document.getElementById('matchStart').style.display = 'none';
+  document.getElementById('matchResult').style.display = 'none';
 }
 
-function updateReviewButton(){
-  var count = getSelectedCount();
-  var btn = document.getElementById('navReview');
-  if(btn){
-    var badge = btn.querySelector('.review-badge');
-    if(count > 0){
-      btn.classList.add('has-selection');
-      if(badge) badge.textContent = count;
-    } else {
-      btn.classList.remove('has-selection');
-      if(badge) badge.textContent = '';
+function renderMatchBoard(){
+  var html = matchCards.map(function(card, idx){
+    var flipped = matchFlipped.indexOf(idx) !== -1 || card.matched;
+    var cls = 'mcard' + (flipped ? ' flipped' : '') + (card.matched ? ' matched' : '');
+    var content = flipped ? card.text : '?';
+    return '<div class="'+cls+'" onclick="flipMatch('+idx+')">'+content+'</div>';
+  }).join('');
+  document.getElementById('matchBoard').innerHTML = html;
+  document.getElementById('matchProgress').textContent = matchMatched + ' / ' + matchTotal;
+}
+
+function flipMatch(idx){
+  if(matchFlipped.length >= 2) return;
+  if(matchFlipped.indexOf(idx) !== -1) return;
+  if(matchCards[idx].matched) return;
+  matchFlipped.push(idx);
+  renderMatchBoard();
+  if(matchFlipped.length === 2){
+    setTimeout(checkMatch, 600);
+  }
+}
+
+function checkMatch(){
+  var a = matchCards[matchFlipped[0]];
+  var b = matchCards[matchFlipped[1]];
+  if(a.pair === b.pair && a.side !== b.side){
+    matchCards[matchFlipped[0]].matched = true;
+    matchCards[matchFlipped[1]].matched = true;
+    matchMatched++;
+    if(matchMatched >= matchTotal){
+      clearInterval(matchTimer);
+      var elapsed = Math.floor((Date.now() - matchStartTime) / 1000);
+      document.getElementById('matchBoard').style.display = 'none';
+      document.getElementById('matchResult').style.display = 'block';
+      document.getElementById('matchTime').textContent = elapsed + ' 秒';
     }
   }
+  matchFlipped = [];
+  renderMatchBoard();
+}
+
+function updateMatchTimer(){
+  var elapsed = Math.floor((Date.now() - matchStartTime) / 1000);
+  var t = document.getElementById('matchTimer');
+  if(t) t.textContent = elapsed + ' 秒';
+}
+
+/* ===== 连词成句 ===== */
+var sbWords = [];
+var sbAnswer = [];
+var sbCurrent = 0;
+var sbSentences = [];
+
+function startSentenceBuilder(){
+  var words = getSelectedWords();
+  var sentences = words.filter(function(w){return w.ex && w.ex.length > 10;}).map(function(w){
+    return {text:w.ex.replace(/["']/g,''), word:w.word, zh:w.zh, from:w.from};
+  });
+  if(sentences.length < 2){
+    alert('请先在「全部课程」页面勾选课程（需含有例句的词汇）');
+    return;
+  }
+  sbSentences = sentences;
+  sbCurrent = 0;
+  showSentence();
+}
+
+function showSentence(){
+  if(sbCurrent >= sbSentences.length){
+    document.getElementById('sbGame').style.display = 'none';
+    document.getElementById('sbDone').style.display = 'block';
+    return;
+  }
+  var s = sbSentences[sbCurrent];
+  var wordList = s.text.split(/\s+/);
+  // 洗牌
+  for(var i=wordList.length-1;i>0;i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t = wordList[i]; wordList[i]=wordList[j]; wordList[j]=t;
+  }
+  sbWords = wordList;
+  sbAnswer = [];
+  document.getElementById('sbGame').style.display = 'block';
+  document.getElementById('sbDone').style.display = 'none';
+  document.getElementById('sbProgress').textContent = (sbCurrent+1) + ' / ' + sbSentences.length;
+  document.getElementById('sbSource').textContent = s.from + ' · ' + s.zh;
+  renderSentenceBuilder();
+}
+
+function renderSentenceBuilder(){
+  var pool = sbWords.map(function(w, i){
+    var used = sbAnswer.indexOf(i) !== -1;
+    return '<span class="sb-word'+(used?' used':'')+'" onclick="addWord('+i+')">'+w+'</span>';
+  }).join('');
+  var built = sbAnswer.map(function(i){
+    return '<span class="sb-picked">'+sbWords[i]+'</span>';
+  }).join(' ');
+  document.getElementById('sbPool').innerHTML = pool;
+  document.getElementById('sbBuilt').innerHTML = built || '<span class="sb-hint">点击下方单词组成句子</span>';
+}
+
+function addWord(idx){
+  if(sbAnswer.indexOf(idx) !== -1) return;
+  sbAnswer.push(idx);
+  renderSentenceBuilder();
+}
+
+function removeLastWord(){
+  sbAnswer.pop();
+  renderSentenceBuilder();
+}
+
+function checkSentence(){
+  var built = sbAnswer.map(function(i){return sbWords[i];}).join(' ');
+  var correct = sbSentences[sbCurrent].text;
+  var feedback = document.getElementById('sbFeedback');
+  if(built.trim() === correct.trim()){
+    feedback.innerHTML = '<span class="sb-correct">✅ 正确！</span>';
+    setTimeout(function(){sbCurrent++; showSentence();}, 1200);
+  } else {
+    feedback.innerHTML = '<span class="sb-wrong">❌ 再试试。正确答案：'+correct+'</span>';
+    setTimeout(function(){sbCurrent++; showSentence();}, 2500);
+  }
+}
+
+function skipSentence(){
+  sbCurrent++;
+  showSentence();
+}
+
+/* ===== 填空练习 ===== */
+var fbCurrent = 0;
+var fbItems = [];
+
+function startFillBlank(){
+  var words = getSelectedWords();
+  var items = words.filter(function(w){return w.ex && w.ex.length > 10 && w.word;}).map(function(w){
+    var ex = w.ex.replace(/["']/g,'');
+    var blanked = ex.replace(new RegExp(w.word, 'gi'), '____');
+    return {sentence:blanked, answer:w.word.toLowerCase(), zh:w.zh, from:w.from};
+  });
+  if(items.length < 2){
+    alert('请先在「全部课程」页面勾选课程');
+    return;
+  }
+  fbItems = items;
+  fbCurrent = 0;
+  showFillBlank();
+}
+
+function showFillBlank(){
+  if(fbCurrent >= fbItems.length){
+    document.getElementById('fbGame').style.display = 'none';
+    document.getElementById('fbDone').style.display = 'block';
+    return;
+  }
+  var item = fbItems[fbCurrent];
+  document.getElementById('fbGame').style.display = 'block';
+  document.getElementById('fbDone').style.display = 'none';
+  document.getElementById('fbProgress').textContent = (fbCurrent+1) + ' / ' + fbItems.length;
+  document.getElementById('fbSentence').textContent = item.sentence;
+  document.getElementById('fbHint').textContent = '提示：' + item.zh;
+  document.getElementById('fbSource').textContent = item.from;
+  document.getElementById('fbInput').value = '';
+  document.getElementById('fbInput').focus();
+  document.getElementById('fbFeedback').innerHTML = '';
+}
+
+function checkFillBlank(){
+  var input = document.getElementById('fbInput').value.trim().toLowerCase();
+  var answer = fbItems[fbCurrent].answer.toLowerCase();
+  var feedback = document.getElementById('fbFeedback');
+  if(input === answer){
+    feedback.innerHTML = '<span class="sb-correct">✅ 正确！</span>';
+    setTimeout(function(){fbCurrent++; showFillBlank();}, 1200);
+  } else {
+    feedback.innerHTML = '<span class="sb-wrong">❌ 正确答案：'+answer+'</span>';
+    setTimeout(function(){fbCurrent++; showFillBlank();}, 2500);
+  }
+}
+
+function skipFillBlank(){
+  fbCurrent++;
+  showFillBlank();
 }
