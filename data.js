@@ -41,7 +41,58 @@ const EPISODES = [
     "desc": "Eurasian beavers return to England after 400 years.",
     "slug": "2026-05-07-beavers-return-to-england",
     "url": "lessons/b1/2026-05-07-beavers-return-to-england.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "beaver",
+        "zh": "河狸，海狸 — 一种会筑坝的大型啮齿动物",
+        "ex": "Beavers are known as nature"
+      },
+      {
+        "word": "engineer",
+        "zh": "工程师 — 设计或建造事物的人/动物",
+        "ex": "Beavers are called ecosystem engineers because they change their environment."
+      },
+      {
+        "word": "disappear",
+        "zh": "消失 — 从视野中不见；不再存在",
+        "ex": "The beavers disappeared from England about four centuries ago."
+      },
+      {
+        "word": "rewilding",
+        "zh": "野化 — 恢复自然生态环境的保护方式",
+        "ex": "Rewilding projects help bring animals back to their natural habitats."
+      },
+      {
+        "word": "conservationist",
+        "zh": "自然保护主义者 — 致力于保护自然环境和动物的人",
+        "ex": "Conservationists are working hard to protect endangered species around the world."
+      },
+      {
+        "word": "flooding",
+        "zh": "洪水，泛滥 — 水溢出河道淹没土地",
+        "ex": "The beaver dams help prevent flooding in towns downstream."
+      },
+      {
+        "word": "wetland",
+        "zh": "湿地 — 土壤被水覆盖的土地生态系统",
+        "ex": "Wetlands are important because they provide homes for many species."
+      },
+      {
+        "word": "extinct",
+        "zh": "灭绝的 — 物种完全消失，不再存活",
+        "ex": "Many animals have become extinct because of human activities."
+      },
+      {
+        "word": "dam",
+        "zh": "水坝 — 横跨河流建造的拦水结构",
+        "ex": "Beavers build dams using branches, mud, and rocks."
+      },
+      {
+        "word": "habitat",
+        "zh": "栖息地 — 动植物自然生长和生活的环境",
+        "ex": "Protecting natural habitats is essential for wildlife survival."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -290,7 +341,58 @@ const EPISODES = [
     "desc": "NASA's DART changes an asteroid's orbit — planetary defense works.",
     "slug": "2026-06-10-darts-asteroid-punch",
     "url": "lessons/b1/2026-06-10-darts-asteroid-punch.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "asteroid",
+        "zh": "小行星",
+        "ex": "The asteroid is about 160 meters wide — as big as a football field!"
+      },
+      {
+        "word": "spacecraft",
+        "zh": "航天器；宇宙飞船",
+        "ex": "The DART spacecraft traveled millions of kilometers to reach its target."
+      },
+      {
+        "word": "orbit",
+        "zh": "绕轨道运行；轨道",
+        "ex": "The moon orbits Earth once every 27 days."
+      },
+      {
+        "word": "impact",
+        "zh": "撞击；冲击",
+        "ex": "The impact created a huge crater and sent debris flying into space."
+      },
+      {
+        "word": "crash",
+        "zh": "撞击；坠毁",
+        "ex": "DART crashed into Dimorphos on purpose — it was part of the plan!"
+      },
+      {
+        "word": "astronomer",
+        "zh": "天文学家",
+        "ex": "Amateur astronomers from around the world helped track the asteroids."
+      },
+      {
+        "word": "deflect",
+        "zh": "使偏转；改变方向",
+        "ex": "If we can deflect an asteroid, we can protect Earth from future threats."
+      },
+      {
+        "word": "debris",
+        "zh": "碎片；残骸",
+        "ex": "The crash blasted tons of rocky debris off the asteroid\\"
+      },
+      {
+        "word": "blink",
+        "zh": "闪烁；（星星）眨",
+        "ex": "The asteroid blinked past a distant star — like a tiny eclipse in space."
+      },
+      {
+        "word": "outback",
+        "zh": "澳大利亚内陆（偏远荒漠地区）",
+        "ex": "One observer drove two days into the Australian outback to get the data."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -301,7 +403,58 @@ const EPISODES = [
     "desc": "An octopus learns to use a mirror to find food.",
     "slug": "2026-06-11-octopus-mirror-genius",
     "url": "lessons/b1/2026-06-11-octopus-mirror-genius.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "octopus",
+        "zh": "章鱼",
+        "ex": "The octopus has eight arms, three hearts, and blue blood!"
+      },
+      {
+        "word": "mirror",
+        "zh": "镜子",
+        "ex": "She looked in the mirror and saw her own reflection."
+      },
+      {
+        "word": "invertebrate",
+        "zh": "无脊椎动物",
+        "ex": "Over 97% of all animals on Earth are invertebrates — including insects, worms, and octopuses."
+      },
+      {
+        "word": "experiment",
+        "zh": "实验",
+        "ex": "The experiment showed that octopuses are much smarter than we thought."
+      },
+      {
+        "word": "virtual",
+        "zh": "虚拟的",
+        "ex": "Scientists used a virtual crab image so the octopus couldn\\"
+      },
+      {
+        "word": "reward",
+        "zh": "奖励；奖赏",
+        "ex": "The octopus got a real crab as a reward for finding the right spot."
+      },
+      {
+        "word": "evolution",
+        "zh": "进化",
+        "ex": "Evolution has shaped octopuses into one of the smartest animals in the ocean."
+      },
+      {
+        "word": "ancestor",
+        "zh": "祖先",
+        "ex": "The last common ancestor of humans and octopuses was a worm-like creature."
+      },
+      {
+        "word": "convergent",
+        "zh": "趋同的",
+        "ex": "Convergent evolution means similar traits appear in very different species."
+      },
+      {
+        "word": "intelligence",
+        "zh": "智力；聪明",
+        "ex": "The octopus shows amazing intelligence — it can open jars and solve puzzles!"
+      }
+    ]
   },
   {
     "level": "B1",
@@ -312,7 +465,58 @@ const EPISODES = [
     "desc": "A whale graveyard found 7,002 metres down in the Indian Ocean.",
     "slug": "2026-06-13-deep-sea-whale-graveyard",
     "url": "lessons/b1/2026-06-13-deep-sea-whale-graveyard.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "submersible",
+        "zh": "潜水器 — 一种可以在水下深处航行的小型船只",
+        "ex": "The submersible Fendouzhe can dive deeper than 10,000 meters."
+      },
+      {
+        "word": "graveyard",
+        "zh": "墓地 — 埋葬逝者的地方；这里比喻大量鲸鱼遗骸聚集之地",
+        "ex": "The scientists found a whale graveyard at the bottom of the ocean."
+      },
+      {
+        "word": "whale fall",
+        "zh": "鲸落 — 鲸鱼死后沉入海底，形成一个独特的深海生态系统",
+        "ex": "A single whale fall can feed thousands of deep-sea creatures for decades."
+      },
+      {
+        "word": "seafloor",
+        "zh": "海底 — 海洋的底部",
+        "ex": "The whale bones lay undisturbed on the seafloor for millions of years."
+      },
+      {
+        "word": "pressure",
+        "zh": "压力 — 物体受到的挤压力量",
+        "ex": "The water pressure at 7,000 meters deep could crush a car."
+      },
+      {
+        "word": "preserved",
+        "zh": "保存 — 保持原有状态，不被破坏",
+        "ex": "The cold water preserved the whale bones perfectly for five million years."
+      },
+      {
+        "word": "species",
+        "zh": "物种 — 生物分类的基本单位",
+        "ex": "The team discovered a brand-new whale species called Pterocetus diamantinae."
+      },
+      {
+        "word": "evolved",
+        "zh": "进化 — 生物在长时间内逐渐变化发展的过程",
+        "ex": "Whales evolved from land animals that lived 50 million years ago."
+      },
+      {
+        "word": "ecosystem",
+        "zh": "生态系统 — 生物与其环境相互作用形成的整体",
+        "ex": "A whale fall creates a unique ecosystem on the deep-sea floor."
+      },
+      {
+        "word": "exploring",
+        "zh": "探索 — 去未知的地方寻找新事物",
+        "ex": "Scientists are still exploring the deepest parts of our ocean."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -444,7 +648,58 @@ const EPISODES = [
     "desc": "The Moon, Mars, Saturn and Uranus line up at dawn.",
     "slug": "2026-07-12-the-dawn-planet-parade",
     "url": "lessons/b1/2026-07-12-the-dawn-planet-parade.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "stargazer",
+        "zh": "观星者；天文爱好者",
+        "ex": "Stargazers around the world woke up early to see the planet parade."
+      },
+      {
+        "word": "eastern",
+        "zh": "东方的；东边的",
+        "ex": "Look toward the eastern sky before sunrise."
+      },
+      {
+        "word": "solar system",
+        "zh": "太阳系",
+        "ex": "There are eight planets in our solar system."
+      },
+      {
+        "word": "lining up",
+        "zh": "排成一排；列队",
+        "ex": "The planets are lining up in the morning sky."
+      },
+      {
+        "word": "planetary alignment",
+        "zh": "行星连珠；行星排列成行",
+        "ex": "A mini planetary alignment happens when three planets gather in the sky."
+      },
+      {
+        "word": "waning crescent",
+        "zh": "残月（月亏阶段的弯月）",
+        "ex": "The waning crescent Moon looks like a thin smile."
+      },
+      {
+        "word": "binoculars",
+        "zh": "双筒望远镜",
+        "ex": "You need binoculars to see Uranus clearly."
+      },
+      {
+        "word": "orbit",
+        "zh": "绕轨道运行；轨道",
+        "ex": "Earth orbits the Sun once every 365 days."
+      },
+      {
+        "word": "plane",
+        "zh": "平面（此处指黄道面）",
+        "ex": "All planets move on nearly the same flat plane."
+      },
+      {
+        "word": "perspective",
+        "zh": "视角；观点",
+        "ex": "From our perspective on Earth, the planets look close together."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -455,7 +710,58 @@ const EPISODES = [
     "desc": "A world-record solar cell you could carry in a backpack.",
     "slug": "2026-07-14-sun-power-in-your-backpack",
     "url": "lessons/b1/2026-07-14-sun-power-in-your-backpack.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "solar panel",
+        "zh": "太阳能电池板",
+        "ex": ""
+      },
+      {
+        "word": "backpack",
+        "zh": "背包",
+        "ex": ""
+      },
+      {
+        "word": "sunlight",
+        "zh": "阳光",
+        "ex": ""
+      },
+      {
+        "word": "clean energy",
+        "zh": "清洁能源",
+        "ex": ""
+      },
+      {
+        "word": "layer",
+        "zh": "层",
+        "ex": ""
+      },
+      {
+        "word": "molecule",
+        "zh": "分子",
+        "ex": ""
+      },
+      {
+        "word": "stable",
+        "zh": "稳定的",
+        "ex": ""
+      },
+      {
+        "word": "efficiency",
+        "zh": "效率",
+        "ex": ""
+      },
+      {
+        "word": "bendable",
+        "zh": "可弯曲的",
+        "ex": ""
+      },
+      {
+        "word": "satellite",
+        "zh": "卫星",
+        "ex": ""
+      }
+    ]
   },
   {
     "level": "B1",
@@ -466,7 +772,58 @@ const EPISODES = [
     "desc": "A smiling spider discovered in the Himalayas.",
     "slug": "2026-07-14-the-spider-that-smiles",
     "url": "lessons/b1/2026-07-14-the-spider-that-smiles.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "Himalayas",
+        "zh": "喜马拉雅山脉",
+        "ex": "The spider was discovered high in the Himalayas."
+      },
+      {
+        "word": "species",
+        "zh": "物种（生物学分类）",
+        "ex": "Scientists discovered a new species of spider."
+      },
+      {
+        "word": "discovered",
+        "zh": "发现（discover的过去式/过去分词）",
+        "ex": "They discovered a tiny spider under a leaf."
+      },
+      {
+        "word": "grin",
+        "zh": "咧嘴笑；笑容",
+        "ex": "The spider has a happy grin on its back."
+      },
+      {
+        "word": "spotted",
+        "zh": "发现；看到（spot的过去式）",
+        "ex": "One scientist spotted the spider hiding under a leaf."
+      },
+      {
+        "word": "patterns",
+        "zh": "图案；花纹（复数）",
+        "ex": "They found thirty-two different color patterns."
+      },
+      {
+        "word": "DNA",
+        "zh": "DNA；遗传物质",
+        "ex": "DNA tests show the two spiders are not related."
+      },
+      {
+        "word": "evolved",
+        "zh": "进化（evolve的过去式）",
+        "ex": "They evolved their smiles independently."
+      },
+      {
+        "word": "independently",
+        "zh": "独立地",
+        "ex": "The two species evolved independently."
+      },
+      {
+        "word": "convergent evolution",
+        "zh": "趋同进化（不同物种独立进化出相似特征）",
+        "ex": "Convergent evolution explains why birds and bats both have wings."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -488,7 +845,58 @@ const EPISODES = [
     "desc": "Astronomers photograph Betelgeuse's hidden companion star.",
     "slug": "2026-07-29-betelgeuses-hidden-buddy",
     "url": "lessons/b1/2026-07-29-betelgeuses-hidden-buddy.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "supergiant",
+        "zh": "超巨星 — 体积和质量都极大的恒星",
+        "ex": "Betelgeuse is a red supergiant star."
+      },
+      {
+        "word": "companion",
+        "zh": "伴星；伙伴 — 围绕另一颗恒星运行的恒星",
+        "ex": "The companion star has been hiding for a century."
+      },
+      {
+        "word": "constellation",
+        "zh": "星座 — 天空中由恒星组成的图案",
+        "ex": "Orion is one of the easiest constellations to find."
+      },
+      {
+        "word": "coronagraph",
+        "zh": "日冕仪 — 遮挡恒星强光的仪器",
+        "ex": "The coronagraph blocked Betelgeuse"
+      },
+      {
+        "word": "flicker",
+        "zh": "闪烁 — 光线忽明忽暗",
+        "ex": "The star"
+      },
+      {
+        "word": "tug",
+        "zh": "拖拽；牵引 — 轻轻地拉",
+        "ex": "Something was tugging on the star."
+      },
+      {
+        "word": "telescope",
+        "zh": "望远镜 — 观测遥远天体的仪器",
+        "ex": "They used the Very Large Telescope in Chile."
+      },
+      {
+        "word": "universe",
+        "zh": "宇宙 — 包含所有空间、时间和物质",
+        "ex": "The universe still has plenty of surprises."
+      },
+      {
+        "word": "cosmic",
+        "zh": "宇宙的 — 与宇宙或太空相关的",
+        "ex": "It has a cosmic dance partner!"
+      },
+      {
+        "word": "detect",
+        "zh": "探测；发现 — 发现原本不易察觉的东西",
+        "ex": "Astronomers finally detected the hidden companion."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -499,7 +907,58 @@ const EPISODES = [
     "desc": "China's LHAASO finds the strongest particle engine in space.",
     "slug": "2026-08-01-the-strongest-engine-in-space",
     "url": "lessons/b1/2026-08-01-the-strongest-engine-in-space.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "universe",
+        "zh": "宇宙 — all of space and everything in it",
+        "ex": "LHAASO is watching the universe."
+      },
+      {
+        "word": "engine",
+        "zh": "引擎 — a machine that produces power",
+        "ex": "It caught the strongest engine in space."
+      },
+      {
+        "word": "particle",
+        "zh": "粒子 — a very small piece of matter",
+        "ex": "The star system shoots tiny particles."
+      },
+      {
+        "word": "constellation",
+        "zh": "星座 — a group of stars forming a pattern",
+        "ex": "Cygnus X-3 is in the Swan constellation."
+      },
+      {
+        "word": "black hole",
+        "zh": "黑洞 — an object with gravity so strong nothing can escape",
+        "ex": "The tiny monster may be a black hole."
+      },
+      {
+        "word": "blast",
+        "zh": "喷射 — to shoot out with force",
+        "ex": "It blasts out super-fast particles."
+      },
+      {
+        "word": "energy",
+        "zh": "能量 — the power to do work",
+        "ex": "These particles carry huge energy."
+      },
+      {
+        "word": "observatory",
+        "zh": "观测站 — a place with telescopes for watching space",
+        "ex": "A Chinese mountain observatory found the answer."
+      },
+      {
+        "word": "petaelectronvolt",
+        "zh": "拍电子伏 — a very large unit of particle energy",
+        "ex": "The particles carry 30 petaelectronvolts."
+      },
+      {
+        "word": "monster",
+        "zh": "怪物 — here, something powerful and amazing",
+        "ex": "The other star is a tiny monster."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -510,7 +969,58 @@ const EPISODES = [
     "desc": "Curiosity finds giant honeycomb cracks on Mars.",
     "slug": "2026-08-03-mars-honeycomb-mystery",
     "url": "lessons/b1/2026-08-03-mars-honeycomb-mystery.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "rover",
+        "zh": "探测车 — a robot vehicle that drives across another planet",
+        "ex": "NASA"
+      },
+      {
+        "word": "polygon",
+        "zh": "多边形 — a flat shape with many straight sides",
+        "ex": "The cameras captured a sea of polygons."
+      },
+      {
+        "word": "honeycomb",
+        "zh": "蜂巢 — the wax structure bees build, made of six-sided cells",
+        "ex": "It looks like a giant honeycomb."
+      },
+      {
+        "word": "horizon",
+        "zh": "地平线 — the line where the land seems to meet the sky",
+        "ex": "The shapes spread all the way to the horizon."
+      },
+      {
+        "word": "panorama",
+        "zh": "全景照片 — a wide picture showing everything around you",
+        "ex": "Its cameras took a 360-degree panorama."
+      },
+      {
+        "word": "valley",
+        "zh": "山谷 — low land between hills or mountains",
+        "ex": "Curiosity is climbing a valley called Valle Grande."
+      },
+      {
+        "word": "crack",
+        "zh": "裂缝／裂开 — a thin line where something has split open",
+        "ex": "Where do these cracks come from?"
+      },
+      {
+        "word": "puddle",
+        "zh": "水洼 — a small pool of water on the ground",
+        "ex": "Mud breaks apart when a puddle dries up."
+      },
+      {
+        "word": "chemistry",
+        "zh": "化学成分 — the substances and reactions that make things work",
+        "ex": "Mars may have had the right chemistry for life."
+      },
+      {
+        "word": "spot",
+        "zh": "发现／看出 — to notice or see something",
+        "ex": "You might spot a little piece of Mars."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -521,7 +1031,58 @@ const EPISODES = [
     "desc": "Tiny bio-inspired robots that change shape.",
     "slug": "2026-08-04-tiny-shape-shifting-robots",
     "url": "lessons/b1/2026-08-04-tiny-shape-shifting-robots.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "robot",
+        "zh": "机器人 — a machine that can move and do jobs by itself",
+        "ex": "Scientists built robots that can change shape."
+      },
+      {
+        "word": "shape",
+        "zh": "形状／塑形 — the form of something; to change form",
+        "ex": "It bends and changes its shape."
+      },
+      {
+        "word": "glide",
+        "zh": "滑翔 — to move smoothly through the air without flapping",
+        "ex": "It can glide on the wind."
+      },
+      {
+        "word": "muscle",
+        "zh": "肌肉 — the soft part of the body that moves your bones",
+        "ex": "Muscles and bones work together."
+      },
+      {
+        "word": "skeleton",
+        "zh": "骨架 — the hard frame (bones) inside the body",
+        "ex": "They built a soft skeleton."
+      },
+      {
+        "word": "weigh",
+        "zh": "重达 — to have a certain weight",
+        "ex": "The smallest robot weighs little."
+      },
+      {
+        "word": "rescue",
+        "zh": "救援 — to save someone from danger",
+        "ex": "Robots could help in rescue missions."
+      },
+      {
+        "word": "mission",
+        "zh": "任务 — an important job or trip",
+        "ex": "They went on a space mission."
+      },
+      {
+        "word": "paperclip",
+        "zh": "回形针 — a small wire clip for holding papers",
+        "ex": "It weighs less than two paperclips."
+      },
+      {
+        "word": "journal",
+        "zh": "期刊 — a serious magazine that publishes science",
+        "ex": "The work appeared in a science journal."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -532,7 +1093,58 @@ const EPISODES = [
     "desc": "Megalodon teeth found inside deep-sea metal nodules.",
     "slug": "2026-08-05-megalodon-teeth-in-the-deep",
     "url": "lessons/b1/2026-08-05-megalodon-teeth-in-the-deep.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "teeth",
+        "zh": "牙齿 — the hard white parts in a mouth used for biting",
+        "ex": "Hidden inside the rocks were giant, pointy teeth."
+      },
+      {
+        "word": "nodule",
+        "zh": "结核／小圆块 — a small round lump, here a metal rock on the sea floor",
+        "ex": "They mapped the metal nodules on the floor."
+      },
+      {
+        "word": "fossil",
+        "zh": "化石 — the remains of a plant or animal turned to stone",
+        "ex": "They found fossils of teeth."
+      },
+      {
+        "word": "megalodon",
+        "zh": "巨齿鲨 — a giant prehistoric shark, the largest that ever lived",
+        "ex": "These teeth belonged to the megalodon."
+      },
+      {
+        "word": "discover",
+        "zh": "发现 — to find something new",
+        "ex": "Scientists discovered teeth in the rocks."
+      },
+      {
+        "word": "discovery",
+        "zh": "发现 — something new that people find or learn",
+        "ex": "Big discoveries can hide anywhere."
+      },
+      {
+        "word": "shark",
+        "zh": "鲨鱼 — a large fish with sharp teeth and a skeleton of cartilage",
+        "ex": "The megalodon was a giant shark."
+      },
+      {
+        "word": "ocean",
+        "zh": "海洋 — the very large sea that covers most of the Earth",
+        "ex": "It swam our oceans millions of years ago."
+      },
+      {
+        "word": "ancient",
+        "zh": "古老的 — very old; from a time long ago",
+        "ex": "They learn about Earth"
+      },
+      {
+        "word": "rot",
+        "zh": "腐烂 — to slowly break down and decay",
+        "ex": "Shark bones rot away in the water."
+      }
+    ]
   },
   {
     "level": "B1",
@@ -543,7 +1155,58 @@ const EPISODES = [
     "desc": "Perseverance photographs Earth from the surface of Mars.",
     "slug": "2026-08-06-earth-seen-from-mars",
     "url": "lessons/b1/2026-08-06-earth-seen-from-mars.html",
-    "vocab": []
+    "vocab": [
+      {
+        "word": "surface",
+        "zh": "表面（星球的外层）",
+        "ex": "Imagine standing on the surface of Mars."
+      },
+      {
+        "word": "distant",
+        "zh": "遥远的",
+        "ex": "You would see our distant home, Earth."
+      },
+      {
+        "word": "dot",
+        "zh": "小点；小圆点",
+        "ex": "Earth is only a tiny dot of light."
+      },
+      {
+        "word": "capture",
+        "zh": "捕捉；拍摄",
+        "ex": "The rover captured a special view."
+      },
+      {
+        "word": "planet",
+        "zh": "行星",
+        "ex": "Our planet, Earth, is very special."
+      },
+      {
+        "word": "rover",
+        "zh": "火星车；探测车",
+        "ex": "NASA"
+      },
+      {
+        "word": "moon",
+        "zh": "卫星；月亮",
+        "ex": "Phobos is Mars"
+      },
+      {
+        "word": "hide",
+        "zh": "藏起来；躲在…后面",
+        "ex": "Earth can hide behind Phobos."
+      },
+      {
+        "word": "rare",
+        "zh": "稀有的；少见的",
+        "ex": "It was a rare and lucky moment."
+      },
+      {
+        "word": "twinkle",
+        "zh": "闪烁（像星星）",
+        "ex": "From Mars you"
+      }
+    ]
   },
   {
     "level": "B1",
