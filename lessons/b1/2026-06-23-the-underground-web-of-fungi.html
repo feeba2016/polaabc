@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS — The Underground Web of Fungi | Interactive Lesson</title>
+<style>
+  :root {
+    --bg-start: #1a2a14;
+    --bg-mid: #2d4520;
+    --bg-end: #0f1a0a;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.12);
+    --text: #e8e8e8;
+    --text-dim: #a4c4a4;
+    --gold: #f0c060;
+    --gold-bright: #ffd700;
+    --accent: #88b870;
+    --accent-bright: #a8d890;
+    --highlight: #ffe680;
+    --highlight-bg: rgba(240,192,96,0.18);
+    --sidebar-bg: rgba(15,26,10,0.95);
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+    --radius: 14px;
+    --transition: 0.25s ease;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
+    background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-mid) 45%, var(--bg-end) 100%);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+    display: flex;
+  }
+
+  /* ── Progress Bar ── */
+  #progress-bar {
+    position: fixed; top:0; left:0; height:3px;
+    background: linear-gradient(90deg, var(--gold), var(--accent-bright));
+    z-index: 9999;
+    transition: width 0.15s linear;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    width: 260px; min-width: 260px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 28px 0;
+    display: flex; flex-direction: column;
+    position: fixed; top:0; left:0; bottom:0;
+    z-index: 100;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+  }
+  #sidebar .logo-area {
+    text-align: center; padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px;
+  }
+  #sidebar .logo-area h1 {
+    font-size: 22px; font-weight:800; color: var(--gold);
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(240,192,96,0.3);
+  }
+  #sidebar .logo-area .subtitle {
+    font-size: 12px; color: var(--text-dim); margin-top: 4px;
+  }
+  #sidebar nav { flex:1; padding: 0 12px; }
+  #sidebar nav a {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--text-dim); text-decoration: none;
+    padding: 11px 14px; border-radius: 10px;
+    font-size: 14px; font-weight: 500;
+    transition: var(--transition);
+    margin-bottom: 3px;
+  }
+  #sidebar nav a:hover,
+  #sidebar nav a.active {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    box-shadow: inset 3px 0 0 var(--gold);
+  }
+  #sidebar nav a .nav-icon { font-size: 17px; width: 24px; text-align: center; }
+
+  /* ── Mobile Toggle ── */
+  #sidebar-toggle {
+    display: none; position: fixed; top: 16px; left: 16px; z-index: 200;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--gold); border: none;
+    font-size: 20px; cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── Main Content ── */
+  #main {
+    margin-left: 260px; flex:1;
+    padding: 40px 48px;
+    max-width: 960px;
+  }
+
+  /* ── Section Headers ── */
+  .section {
+    margin-bottom: 48px; scroll-margin-top: 80px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    box-shadow: var(--shadow);
+  }
+  .section h2 {
+    font-size: 28px; font-weight: 700;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--gold), var(--accent-bright));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(240,192,96,0.2);
+  }
+  .section h3 {
+    font-size: 20px; font-weight: 600; color: var(--accent-bright);
+    margin: 28px 0 14px;
+  }
+  .section h4 {
+    font-size: 17px; font-weight: 600; color: var(--gold);
+    margin: 20px 0 10px;
+  }
+
+  /* ── Full Text Reading ── */
+  .reading-segment {
+    margin-bottom: 24px; padding: 20px 24px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .reading-segment .seg-label {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--accent-bright);
+    margin-bottom: 8px;
+  }
+  .reading-segment .seg-text {
+    font-size: 19px; line-height: 1.8; color: #e0e8d8;
+  }
+  .reading-segment .seg-text .kw {
+    background: var(--highlight-bg); color: var(--highlight);
+    padding: 2px 6px; border-radius: 4px; cursor: pointer;
+    font-weight: 600; transition: var(--transition);
+    position: relative;
+  }
+  .reading-segment .seg-text .kw:hover {
+    background: rgba(240,192,96,0.3);
+  }
+  .reading-segment .seg-text .kw .tooltip {
+    display: none; position: absolute;
+    bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: #1a2a14; color: #fff;
+    padding: 6px 12px; border-radius: 8px;
+    font-size: 13px; white-space: nowrap;
+    border: 1px solid var(--gold);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    z-index: 50;
+  }
+  .reading-segment .seg-text .kw:hover .tooltip { display: block; }
+
+  .play-btn {
+    position: absolute; top: 18px; right: 20px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent); border: none; color: #fff;
+    font-size: 18px; cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 12px rgba(136,184,112,0.3);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .play-btn:hover { background: var(--accent-bright); transform: scale(1.08); }
+  .play-btn.playing {
+    background: var(--gold); animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(240,192,96,0.6); }
+    50% { box-shadow: 0 0 0 14px rgba(240,192,96,0); }
+  }
+
+  /* ── Vocabulary Cards ── */
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+  .vocab-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 20px;
+    transition: var(--transition);
+    position: relative;
+  }
+  .vocab-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+  .vocab-card .word {
+    font-size: 20px; font-weight: 700; color: var(--gold);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .vocab-card .word .pos {
+    font-size: 12px; font-weight: 400; color: var(--text-dim);
+    background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 6px;
+  }
+  .vocab-card .cn-meaning {
+    font-size: 15px; color: var(--text-dim); margin: 8px 0;
+  }
+  .vocab-card .example {
+    font-size: 14px; color: #b0d0a0; font-style: italic;
+    padding-left: 12px; border-left: 2px solid rgba(240,192,96,0.3);
+  }
+  .vocab-card .word-btn {
+    position: absolute; top: 16px; right: 16px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: transparent; border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text-dim); font-size: 15px; cursor: pointer;
+    transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .vocab-card .word-btn:hover { border-color: var(--accent-bright); color: var(--accent-bright); }
+  .vocab-card .word-btn.playing {
+    background: var(--gold); border-color: var(--gold); color: #000;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  /* ── Sentence Patterns ── */
+  .sentence-item {
+    margin-bottom: 22px; padding: 18px 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px; border-left: 3px solid var(--accent);
+  }
+  .sentence-item .pat-en { font-size: 17px; color: var(--gold); font-weight: 600; }
+  .sentence-item .pat-cn { font-size: 14px; color: var(--text-dim); margin: 6px 0 10px; }
+  .sentence-item .pat-ex { font-size: 15px; color: #b0d0a0; }
+  .sentence-item .pat-practice {
+    margin-top: 10px; padding: 12px; background: rgba(255,255,255,0.04);
+    border-radius: 8px; font-size: 14px; color: #8aac8c;
+  }
+
+  /* ── Grammar ── */
+  .grammar-item {
+    margin-bottom: 24px; padding: 18px 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px; border-left: 3px solid var(--gold);
+  }
+  .grammar-item .gram-title { font-size: 18px; font-weight: 600; color: var(--gold); }
+  .grammar-item .gram-cn { font-size: 14px; color: var(--text-dim); margin: 6px 0; }
+  .grammar-item .gram-example { font-size: 15px; color: #b0d0a0; margin: 8px 0; }
+  .grammar-item .gram-practice {
+    margin-top: 10px; padding: 12px; background: rgba(255,255,255,0.04);
+    border-radius: 8px; font-size: 14px; color: #8aac8c;
+  }
+
+  /* ── Quiz ── */
+  .quiz-q {
+    margin-bottom: 26px; padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+  }
+  .quiz-q .q-num {
+    font-size: 13px; font-weight: 700; color: var(--accent-bright);
+    margin-bottom: 8px;
+  }
+  .quiz-q .q-text { font-size: 17px; font-weight: 600; margin-bottom: 12px; }
+  .quiz-q .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-q .q-option {
+    padding: 11px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; cursor: pointer;
+    transition: var(--transition);
+    font-size: 15px;
+  }
+  .quiz-q .q-option:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  .quiz-q .q-option.selected {
+    border-color: var(--accent-bright);
+    background: rgba(136,184,112,0.2);
+  }
+  .quiz-q .q-option.correct {
+    border-color: #4caf50; background: rgba(76,175,80,0.2); color: #81c784;
+  }
+  .quiz-q .q-option.wrong {
+    border-color: #f44336; background: rgba(244,67,54,0.2); color: #e57373;
+  }
+  .quiz-feedback { display: none; margin-top: 10px; font-size: 14px; padding: 10px 14px; border-radius: 8px; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(76,175,80,0.15); color: #81c784; }
+  .quiz-feedback.wrong { background: rgba(244,67,54,0.15); color: #e57373; }
+  #quiz-score { font-size: 18px; font-weight: 700; color: var(--gold); text-align: center; margin: 16px 0; }
+
+  /* ── Knowledge Extension ── */
+  .ext-block {
+    margin-bottom: 24px; padding: 18px 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+  }
+  .ext-block .ext-title { font-size: 18px; font-weight: 600; color: var(--gold); margin-bottom: 8px; }
+  .ext-block p { font-size: 15px; color: #c0d8b8; line-height: 1.8; }
+
+  /* ── About Section ── */
+  .about-list { list-style: none; }
+  .about-list li {
+    padding: 8px 0; padding-left: 24px; position: relative;
+    font-size: 15px; color: #c0d8b8;
+  }
+  .about-list li::before {
+    content: "✦"; position: absolute; left:0; color: var(--gold);
+  }
+  .print-btn {
+    display: inline-block; margin-top: 16px; padding: 12px 28px;
+    background: linear-gradient(135deg, var(--gold), #e0a830);
+    color: #0a1628; font-weight: 700; border: none; border-radius: 10px;
+    cursor: pointer; font-size: 15px;
+    transition: var(--transition);
+  }
+  .print-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(240,192,96,0.4); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    body { flex-direction: column; }
+    #sidebar {
+      transform: translateX(-100%);
+      width: 260px;
+    }
+    #sidebar.open { transform: translateX(0); }
+    #sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+    #main { margin-left: 0; padding: 20px 16px; padding-top: 70px; }
+    .section { padding: 24px 18px; }
+    .reading-segment .seg-text { font-size: 17px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    #main { padding: 16px 10px; padding-top: 64px; }
+    .section h2 { font-size: 22px; }
+    .reading-segment .seg-text { font-size: 16px; }
+    .play-btn { width: 34px; height: 34px; font-size: 16px; top: 14px; right: 14px; }
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; color: #000; }
+    #sidebar, #sidebar-toggle, #progress-bar, .play-btn, .word-btn, .print-btn { display: none !important; }
+    #main { margin-left: 0; padding: 20px; max-width: 100%; }
+    .section {
+      background: #fff; border: 1px solid #ccc; box-shadow: none;
+      break-inside: avoid; margin-bottom: 20px;
+    }
+    .section h2 {
+      color: #333; -webkit-text-fill-color: #333;
+      border-bottom: 1px solid #999;
+    }
+    .reading-segment .seg-text .kw { background: #fff3b0; color: #333; }
+    .vocab-card { border: 1px solid #ccc; }
+    .vocab-card .word { color: #333; }
+    .grammar-item { border-left-color: #666; }
+    .sentence-item { border-left-color: #666; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Mobile Toggle -->
+<button id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+
+<!-- Sidebar -->
+<aside id="sidebar">
+  <div class="logo-area">
+    <h1>🦘 POLA NEWS</h1>
+    <div class="subtitle">Interactive English Lesson</div>
+  </div>
+  <nav>
+    <a href="#sec-reading" class="active" onclick="navTo('sec-reading')">
+      <span class="nav-icon">📖</span> 全文阅读
+    </a>
+    <a href="#sec-vocab" onclick="navTo('sec-vocab')">
+      <span class="nav-icon">📝</span> 词汇表
+    </a>
+    <a href="#sec-sentences" onclick="navTo('sec-sentences')">
+      <span class="nav-icon">✏️</span> 句型练习
+    </a>
+    <a href="#sec-grammar" onclick="navTo('sec-grammar')">
+      <span class="nav-icon">📐</span> 语法点
+    </a>
+    <a href="#sec-quiz" onclick="navTo('sec-quiz')">
+      <span class="nav-icon">🎯</span> 练习测验
+    </a>
+    <a href="#sec-ext" onclick="navTo('sec-ext')">
+      <span class="nav-icon">🔍</span> 知识扩展
+    </a>
+    <a href="#sec-about" onclick="navTo('sec-about')">
+      <span class="nav-icon">ℹ️</span> 关于本课
+    </a>
+  </nav>
+</aside>
+
+<!-- Main Content -->
+<div id="main">
+
+<!-- ═══════════════ SECTION 1: 全文阅读 ═══════════════ -->
+<div class="section" id="sec-reading">
+  <h2>📖 全文阅读 Full Text</h2>
+
+  <div class="reading-segment" id="seg1">
+    <div class="seg-label">◆ Segment 1 — Hook</div>
+    <div class="seg-text">
+      Right <span class="kw">beneath<button class="tooltip">在…下面</button></span> your feet, there's a hidden <span class="kw">network<button class="tooltip">网络</button></span> you cannot see. Tiny threads — thinner than a hair — are <span class="kw">stretching<button class="tooltip">延伸</button></span> out in every direction. And guess what? If you lined them all up, they could reach the sun... 730 million times! What are they? Let's dig in!
+    </div>
+    <button class="play-btn" onclick="toggleSegment(0)" title="播放本段朗读">▶</button>
+  </div>
+
+  <div class="reading-segment" id="seg2">
+    <div class="seg-label">◆ Segment 2 — Story</div>
+    <div class="seg-text">
+      They are <span class="kw">fungi<button class="tooltip">真菌</button></span>! Not plants, not animals — a totally different kind of life. Scientists call them AM <span class="kw">fungi<button class="tooltip">真菌</button></span>. They grow <span class="kw">underground<button class="tooltip">地下的</button></span> and connect to plant <span class="kw">roots<button class="tooltip">根</button></span>. The thin threads, called <span class="kw">hyphae<button class="tooltip">菌丝</button></span>, send water to plants and take <span class="kw">carbon<button class="tooltip">碳</button></span> back into the <span class="kw">soil<button class="tooltip">土壤</button></span>. Over 70% of plants on Earth depend on them!
+    </div>
+    <button class="play-btn" onclick="toggleSegment(1)" title="播放本段朗读">▶</button>
+  </div>
+
+  <div class="reading-segment" id="seg3">
+    <div class="seg-label">◆ Segment 3 — Why It Matters</div>
+    <div class="seg-text">
+      Scientists collected 16,000 <span class="kw">soil<button class="tooltip">土壤</button></span> <span class="kw">samples<button class="tooltip">样本</button></span> from all over the world, then trained an AI computer to <span class="kw">map<button class="tooltip">绘制…地图</button></span> the hidden web. They found that <span class="kw">grasslands<button class="tooltip">草原</button></span> have the densest network — and those grasslands help keep our planet cool. Croplands have only half as much. So if we protect grasslands, we protect the whole Earth!
+    </div>
+    <button class="play-btn" onclick="toggleSegment(2)" title="播放本段朗读">▶</button>
+  </div>
+
+  <div class="reading-segment" id="seg4">
+    <div class="seg-label">◆ Segment 4 — Sign-off</div>
+    <div class="seg-text">
+      The biggest internet in the world is not on your phone — it's under your feet! Every step you take is above a huge living <span class="kw">network<button class="tooltip">网络</button></span>. Take care of the <span class="kw">soil<button class="tooltip">土壤</button></span>, and the soil will take care of you. This is Pola — keep your eyes open, and your feet curious! See you next time!
+    </div>
+    <button class="play-btn" onclick="toggleSegment(3)" title="播放本段朗读">▶</button>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 2: 词汇表 ═══════════════ -->
+<div class="section" id="sec-vocab">
+  <h2>📝 词汇表 Vocabulary</h2>
+  <div class="vocab-grid">
+
+    <div class="vocab-card">
+      <div class="word">fungus <span class="pos">noun (复数: fungi)</span></div>
+      <div class="cn-meaning">真菌 — 一类既非植物也非动物的生物，通过吸收营养生存（如蘑菇、霉菌、酵母）</div>
+      <div class="example">"Mushrooms are a kind of fungus."</div>
+      <button class="word-btn" onclick="speakWord('fungus', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">hypha <span class="pos">noun (复数: hyphae)</span></div>
+      <div class="cn-meaning">菌丝 — 真菌生长出的极细丝状结构，像微型管道一样在土壤中延伸</div>
+      <div class="example">"One teaspoon of soil can hold 10 meters of hyphae!"</div>
+      <button class="word-btn" onclick="speakWord('hypha', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">network <span class="pos">noun</span></div>
+      <div class="cn-meaning">网络 — 相互连接的线路或系统；也可指代错综复杂的关系网</div>
+      <div class="example">"The fungi form a huge underground network."</div>
+      <button class="word-btn" onclick="speakWord('network', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">underground <span class="pos">adverb / adjective</span></div>
+      <div class="cn-meaning">在地下 / 地下的 — 在地表之下的位置或状态</div>
+      <div class="example">"Moles live underground, but they don't build networks like fungi do."</div>
+      <button class="word-btn" onclick="speakWord('underground', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">soil <span class="pos">noun</span></div>
+      <div class="cn-meaning">土壤 — 地表上层由矿物质、有机物和水分混合而成的物质</div>
+      <div class="example">"Plants grow in soil, but they need fungi to help them."</div>
+      <button class="word-btn" onclick="speakWord('soil', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">grassland <span class="pos">noun</span></div>
+      <div class="cn-meaning">草原 / 草地 — 以草本植物为主的广阔区域（如非洲大草原）</div>
+      <div class="example">"Grasslands have the densest fungal networks on Earth."</div>
+      <button class="word-btn" onclick="speakWord('grassland', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">carbon <span class="pos">noun</span></div>
+      <div class="cn-meaning">碳 — 一种化学元素，存在于所有生物中；植物吸收的碳储存在土壤里可调节气候</div>
+      <div class="example">"Fungi take carbon from plants and store it in the soil."</div>
+      <button class="word-btn" onclick="speakWord('carbon', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">root <span class="pos">noun</span></div>
+      <div class="cn-meaning">根 — 植物长在地下、用来吸收水分和养分的部分</div>
+      <div class="example">"The fungi connect to plant roots and help them grow."</div>
+      <button class="word-btn" onclick="speakWord('root', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">sample <span class="pos">noun</span></div>
+      <div class="cn-meaning">样本 — 用于测试或研究的少量物质；这里指从各地采集的土壤标本</div>
+      <div class="example">"Scientists collected 16,000 soil samples from all over the world."</div>
+      <button class="word-btn" onclick="speakWord('sample', this)" title="播放发音">🔊</button>
+    </div>
+
+    <div class="vocab-card">
+      <div class="word">map <span class="pos">verb / noun</span></div>
+      <div class="cn-meaning">绘制…的地图 / 地图 — 表示"绘制、记录"或名词"地图"</div>
+      <div class="example">"They used AI to map the fungal network across the world."</div>
+      <button class="word-btn" onclick="speakWord('map', this)" title="播放发音">🔊</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 3: 句型练习 ═══════════════ -->
+<div class="section" id="sec-sentences">
+  <h2>✏️ 句型练习 Sentence Patterns</h2>
+
+  <div class="sentence-item">
+    <div class="pat-en">1. "Right beneath your feet, there's a hidden world you cannot see."</div>
+    <div class="pat-cn"><strong>Right + 介词短语, ...</strong> — 强调"恰好在某个位置"，引起读者注意</div>
+    <div class="pat-ex">📌 <strong>Right beneath</strong> the school playground, there are thousands of living threads.</div>
+    <div class="pat-practice">💡 练习：用 "Right + 介词短语" 写一个引出某处秘密的句子。<br>例：<em>Right under the ocean waves, there's a world we never see.</em></div>
+  </div>
+
+  <div class="sentence-item">
+    <div class="pat-en">2. "If you lined them all up, they could reach the sun... 730 million times!"</div>
+    <div class="pat-cn"><strong>If + 一般过去时, 主语 + could/would + 动词</strong> — 描述假设情况，用"过去时"表达不可能或想象中的事</div>
+    <div class="pat-ex">📌 <strong>If</strong> you counted all the stars, you <strong>could</strong> never finish in one day.</div>
+    <div class="pat-practice">💡 练习：用 "If...could..." 描述一个想象中的测量或计算。<br>例：<em>If you added up all the leaves on a tree, you could fill a hundred bags.</em></div>
+  </div>
+
+  <div class="sentence-item">
+    <div class="pat-en">3. "Not plants, not animals — a totally different kind of life."</div>
+    <div class="pat-cn"><strong>Not X, not Y — Z!</strong> — 先否定常见选项，再揭示真相，制造戏剧性</div>
+    <div class="pat-ex">📌 It's <strong>not</strong> a plant, <strong>not</strong> an animal — it's a <strong>fungus</strong>!</div>
+    <div class="pat-practice">💡 练习：用 "Not..., not..., but..." 描述一个"非此非彼"的事物。<br>例：<em>Not a bird, not a plane — it's a bat! Bats are mammals, not birds.</em></div>
+  </div>
+
+  <div class="sentence-item">
+    <div class="pat-en">4. "Over 70% of plants on Earth depend on them!"</div>
+    <div class="pat-cn"><strong>Over/More than + 数字 + of + 名词</strong> — 表达"超过……的比例"，强调数量之大</div>
+    <div class="pat-ex">📌 <strong>Over 70%</strong> of plants on Earth depend on AM fungi to grow well.</div>
+    <div class="pat-practice">💡 练习：用 "Over/More than + 数字" 写一个关于自然世界的事实。<br>例：<em>More than 80% of the ocean is still unexplored.</em></div>
+  </div>
+
+  <div class="sentence-item">
+    <div class="pat-en">5. "If we protect grasslands, we protect the whole Earth!"</div>
+    <div class="pat-cn"><strong>If + 一般现在时, 主语 + will/can + 动词</strong> — 描述"如果…就会…"的现实条件（主将从现）</div>
+    <div class="pat-ex">📌 <strong>If</strong> we plant more trees, we <strong>can</strong> clean the air.</div>
+    <div class="pat-practice">💡 练习：用 "If...will/can..." 写一个关于环保的句子。<br>例：<em>If we save water, we can help the planet stay healthy.</em></div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 4: 语法点 ═══════════════ -->
+<div class="section" id="sec-grammar">
+  <h2>📐 语法点 Grammar Points</h2>
+
+  <div class="grammar-item">
+    <div class="gram-title">1. Present Simple（一般现在时）</div>
+    <div class="gram-cn">描述客观事实、普遍真理或经常性动作。本期大量用一般现在时讲解科学事实。</div>
+    <div class="gram-example">📌 "Fungi <strong>grow</strong> underground and <strong>connect</strong> to plant roots."</div>
+    <div class="gram-practice">✏️ 填空：<em>"The threads ________ (stretch) out in every direction underground."</em><br>答案：stretch</div>
+  </div>
+
+  <div class="grammar-item">
+    <div class="gram-title">2. Past Simple（一般过去时）</div>
+    <div class="gram-cn">描述过去发生并已结束的动作。用于讲述科学家过去的研究活动。</div>
+    <div class="gram-example">📌 "Scientists <strong>collected</strong> 16,000 soil samples from all over the world."</div>
+    <div class="gram-practice">✏️ 改写句子：<em>"They train an AI computer."</em> → <em>"They ________ an AI computer last year."</em><br>答案：trained</div>
+  </div>
+
+  <div class="grammar-item">
+    <div class="gram-title">3. Conditional Sentences — Type 1 & 2（条件句：第一类与第二类）</div>
+    <div class="gram-cn">第一类条件句（真实可能）：If + 一般现在时, 主语 + will/can。 第二类条件句（假设）：If + 一般过去时, 主语 + could/would。</div>
+    <div class="gram-example">📌 "If we <strong>protect</strong> grasslands, we <strong>protect</strong> the whole Earth."（Type 1）<br>"If you <strong>lined</strong> them up, they <strong>could</strong> reach the sun."（Type 2）</div>
+    <div class="gram-practice">✏️ 选择正确的条件句：<em>"If we ________ (recycle) more, we can help the planet. / If you ________ (count) all stars, you could never finish."</em><br>答案：recycle（Type 1 现在时）；counted（Type 2 过去时）</div>
+  </div>
+
+  <div class="grammar-item">
+    <div class="gram-title">4. Comparatives（比较级）</div>
+    <div class="gram-cn">用于两者之间的比较，常用 "more + 形容词" 或 "-er" 形式。</div>
+    <div class="gram-example">📌 "Croplands have only <strong>half as much</strong> [as grasslands do]."</div>
+    <div class="gram-practice">✏️ 填空：<em>"Grasslands have a ________ (dense) network than croplands."</em><br>答案：denser</div>
+  </div>
+
+  <div class="grammar-item">
+    <div class="gram-title">5. Imperative Mood（祈使语气）</div>
+    <div class="gram-cn">用于发出指令、邀请或鼓励，主语"you"通常省略。本期结尾的鼓励性语句使用了祈使句。</div>
+    <div class="gram-example">📌 "<strong>Take care of</strong> the soil, and the soil <strong>will take care of</strong> you."<br>"<strong>Keep</strong> your eyes open, and your feet curious!"</div>
+    <div class="gram-practice">✏️ 完成祈使句：<em>"________ (protect) the planet, and the planet will protect you."</em><br>答案：Protect</div>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 5: 练习测验 ═══════════════ -->
+<div class="section" id="sec-quiz">
+  <h2>🎯 练习测验 Quiz</h2>
+  <p style="color:var(--text-dim);margin-bottom:20px;">选择正确答案，每题点击后即可查看对错。</p>
+
+  <div class="quiz-q" id="q1">
+    <div class="q-num">Question 1 of 6</div>
+    <div class="q-text">第1题 / Q1: What kind of life are AM fungi?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="checkAnswer(1, 'C', this)">A. Plants</div>
+      <div class="q-option" onclick="checkAnswer(1, 'C', this)">B. Animals</div>
+      <div class="q-option" onclick="checkAnswer(1, 'C', this)">C. Neither plants nor animals — a different kind of life</div>
+      <div class="q-option" onclick="checkAnswer(1, 'C', this)">D. Tiny insects</div>
+    </div>
+    <div class="quiz-feedback" id="fb1"></div>
+  </div>
+
+  <div class="quiz-q" id="q2">
+    <div class="q-num">Question 2 of 6</div>
+    <div class="q-text">第2题 / Q2: How many soil samples did scientists collect from around the world?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="checkAnswer(2, 'B', this)">A. 1,600</div>
+      <div class="q-option" onclick="checkAnswer(2, 'B', this)">B. 16,000</div>
+      <div class="q-option" onclick="checkAnswer(2, 'B', this)">C. 160,000</div>
+      <div class="q-option" onclick="checkAnswer(2, 'B', this)">D. 1,600,000</div>
+    </div>
+    <div class="quiz-feedback" id="fb2"></div>
+  </div>
+
+  <div class="quiz-q" id="q3">
+    <div class="q-num">Question 3 of 6</div>
+    <div class="q-text">第3题 / Q3: If you lined up all the world's hyphae, how many times could they reach the sun?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="checkAnswer(3, 'D', this)">A. 7.3 million times</div>
+      <div class="q-option" onclick="checkAnswer(3, 'D', this)">B. 73 million times</div>
+      <div class="q-option" onclick="checkAnswer(3, 'D', this)">C. 7.3 billion times</div>
+      <div class="q-option" onclick="checkAnswer(3, 'D', this)">D. 730 million times</div>
+    </div>
+    <div class="quiz-feedback" id="fb3"></div>
+  </div>
+
+  <div class="quiz-q" id="q4">
+    <div class="q-num">Question 4 of 6</div>
+    <div class="q-text">第4题 / Q4: Where is the densest fungal network found?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="checkAnswer(4, 'A', this)">A. In grasslands</div>
+      <div class="q-option" onclick="checkAnswer(4, 'A', this)">B. In deserts</div>
+      <div class="q-option" onclick="checkAnswer(4, 'A', this)">C. In oceans</div>
+      <div class="q-option" onclick="checkAnswer(4, 'A', this)">D. In cities</div>
+    </div>
+    <div class="quiz-feedback" id="fb4"></div>
+  </div>
+
+  <div class="quiz-q" id="q5">
+    <div class="q-num">Question 5 of 6</div>
+    <div class="q-text">第5题 / Q5: What percentage of plants on Earth depend on AM fungi?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="checkAnswer(5, 'B', this)">A. 7%</div>
+      <div class="q-option" onclick="checkAnswer(5, 'B', this)">B. Over 70%</div>
+      <div class="q-option" onclick="checkAnswer(5, 'B', this)">C. 17%</div>
+      <div class="q-option" onclick="checkAnswer(5, 'B', this)">D. 100%</div>
+    </div>
+    <div class="quiz-feedback" id="fb5"></div>
+  </div>
+
+  <div class="quiz-q" id="q6">
+    <div class="q-num">Question 6 of 6</div>
+    <div class="q-text">第6题 / Q6: What is the main lesson of this story?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="checkAnswer(6, 'C', this)">A. Fungi are dangerous and we should avoid them</div>
+      <div class="q-option" onclick="checkAnswer(6, 'C', this)">B. The internet is the most important network</div>
+      <div class="q-option" onclick="checkAnswer(6, 'C', this)">C. The biggest living network is under our feet — we should protect the soil</div>
+      <div class="q-option" onclick="checkAnswer(6, 'C', this)">D. Grasslands are useless</div>
+    </div>
+    <div class="quiz-feedback" id="fb6"></div>
+  </div>
+
+  <div id="quiz-score" style="display:none;"></div>
+</div>
+
+<!-- ═══════════════ SECTION 6: 知识扩展 ═══════════════ -->
+<div class="section" id="sec-ext">
+  <h2>🔍 中文知识扩展 Knowledge Extension</h2>
+
+  <div class="ext-block">
+    <div class="ext-title">🍄 AM 真菌：植物的"地下互联网"</div>
+    <p>AM 真菌（Arbuscular Mycorrhizal Fungi，丛枝菌根真菌）是一类极其古老的真菌，科学家估计它们已经存在了 <b>4.5 亿年</b>——比恐龙出现还要早 2 亿年！<br><br>
+    它们之所以叫"丛枝菌根"，是因为它们的菌丝会钻进植物根部的细胞内，形成像树枝一样分叉的"丛枝"结构（arbuscules）。这种结构极大地增加了植物根部与土壤接触的表面积，让植物能更高效地吸收水分和矿物质（如磷、锌、铜）。<br><br>
+    作为交换，植物会把光合作用产生的糖分（碳水化合物）分给真菌。这种互惠互利的关系被称为"共生"（symbiosis）——是自然界最成功的合作模式之一。</p>
+  </div>
+
+  <div class="ext-block">
+    <div class="ext-title">📏 一茶匙土壤 = 10 米菌丝</div>
+    <p>这是一个令人难以置信的事实：仅仅 <b>1 茶匙（5 毫升）</b> 健康的土壤里，可以包含长达 <b>10 米</b> 的菌丝！<br><br>
+    科学家通过显微镜观察发现，土壤中菌丝的总长度取决于地理位置和植被类型。热带雨林和温带草原的土壤中菌丝最多，每克土壤可达 100 米以上；而农田、沙漠或污染严重的地区则少得多。<br><br>
+    这就是为什么健康的土壤摸起来是松软、有弹性的——因为里面充满了看不见的、由真菌编织的"生命网络"。</p>
+  </div>
+
+  <div class="ext-block">
+    <div class="ext-title">🌍 70% 植物的"生命线"</div>
+    <p>全球超过 <b>70% 的陆生植物</b> 与 AM 真菌有共生关系。这意味着：<b>没有真菌，就没有我们看到的绝大多数植物</b>。<br><br>
+    想象一下：当你吃下一口小麦面包、喝下一杯橙汁、或者走在公园里看到一棵树——这些植物之所以能生长，几乎都依赖着地下的真菌网络。<br><br>
+    一些植物甚至 <b>完全依赖</b> 真菌才能生存。比如兰花（Orchid）种子在没有真菌"喂养"的情况下根本无法发芽。还有一些没有叶绿素的植物（如水晶兰 Monotropa），它们不能进行光合作用，只能通过"偷取"真菌从其他树木那里得到的糖分来生存——相当于"蹭网"！</p>
+  </div>
+
+  <div class="ext-block">
+    <div class="ext-title">🌱 草原：地球的"碳银行"</div>
+    <p>这次研究发现，<b>草原拥有最密集的真菌网络</b>，这是为什么呢？<br><br>
+    草原的草本植物虽然矮小，但它们的根系却异常发达——一株草的根可以延伸数米远，深入土壤。这些根系为 AM 真菌提供了完美的"住所"。<br><br>
+    菌丝把植物从大气中吸收的碳 <b>储存在土壤里</b>。科学家估计，全球 AM 真菌网络储存了大约 <b>3 亿吨碳</b>——相当于 <b>50 亿人</b> 体内的总碳含量！<br><br>
+    这就是为什么保护草原对应对气候变化如此重要：草原不只生产粮食、养牧牛羊，它还是地球的"巨型碳仓库"。当草原被开垦成农田时，这种碳储存能力会下降约 <b>50%</b>，导致部分碳被释放到大气中，加剧全球变暖。</p>
+  </div>
+
+  <div class="ext-block">
+    <div class="ext-title">🤖 16,000 份土壤样本 + AI 的人工智能地图</div>
+    <p>这次"真菌地图"是由一个叫 <b>SPUN（Society for the Protection of Underground Networks，地下网络保护协会）</b> 的国际科学组织完成的。<br><br>
+    他们没有亲自去每个国家挖土——而是收集了来自世界各地数百项研究的 <b>16,000 多份土壤样本数据</b>。然后，他们训练了一个 <b>AI 计算机模型</b>，根据这些已知数据"预测"世界上尚未取样地区的真菌密度。<br><br>
+    这种方法类似于"已知一个城市的一些气象站数据，然后预测整个城市每个街区的天气"。AI 让科学家能够以前所未有的速度绘制全球生态地图。<br><br>
+    通过这些研究，科学家还发现：<b>气候变化、土地利用变化（如砍伐森林、改种单一作物）正在使全球真菌网络快速退化</b>。这提醒我们：保护地下世界和保护地上世界一样重要！</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SECTION 7: 关于本课 ═══════════════ -->
+<div class="section" id="sec-about">
+  <h2>ℹ️ 关于本课 About This Lesson</h2>
+
+  <h3>🎯 学习目标 Learning Goals</h3>
+  <ul class="about-list">
+    <li>理解一篇关于地下真菌网络发现的B1级别英语新闻</li>
+    <li>掌握10个核心科学词汇，包括<span style="color:var(--gold)">fungus, hyphae, network, grassland, carbon</span>等</li>
+    <li>学会使用5个实用句型，特别是 "If...could..." 和 "If...will/can..." 两种条件句</li>
+    <li>巩固一般现在时、一般过去时、比较级、祈使句等语法点</li>
+    <li>了解"地下的食物网络"概念，认识 AM 真菌在生态系统中的关键作用</li>
+    <li>理解科学家如何用 AI 和全球样本数据绘制生物分布地图</li>
+  </ul>
+
+  <h3>📋 学习建议 Study Tips</h3>
+  <ul class="about-list">
+    <li><strong>先听后读：</strong>点击每段的 ▶ 按钮先听一遍英语朗读，再自己跟读</li>
+    <li><strong>词汇卡片：</strong>看到不认识的词，点击 🔊 听发音，跟读三遍加深记忆</li>
+    <li><strong>句型练习：</strong>每学完一个句型，用自己的话造一个类似的句子</li>
+    <li><strong>条件句区别：</strong>注意 "If + 现在时, will..."（真实可能）和 "If + 过去时, could..."（假设/想象）的区别</li>
+    <li><strong>测验检查：</strong>完成6道选择题，看看自己掌握了多少</li>
+    <li><strong>扩展阅读：</strong>阅读中文知识扩展部分，了解更多关于真菌和生态系统的知识</li>
+    <li><strong>户外实践：</strong>到草地上蹲下来观察土壤——你脚下就有一个巨大的生命网络！</li>
+  </ul>
+
+  <h3>📊 难度信息</h3>
+  <ul class="about-list">
+    <li><strong>英语等级：</strong>CEFR B1（中级水平）</li>
+    <li><strong>适合年龄：</strong>10-12岁</li>
+    <li><strong>核心词汇量：</strong>10个</li>
+    <li><strong>语法重点：</strong>一般现在时、一般过去时、条件句（一类与二类）、比较级、祈使句</li>
+    <li><strong>文章来源：</strong>NewsForKids.net (June 17, 2026) / SPUN.Earth / New York Times / The Guardian</li>
+    <li><strong>发布日期：</strong>2026年6月23日</li>
+  </ul>
+
+  <button class="print-btn" onclick="window.print()">🖨️ 打印本课内容（打印友好版）</button>
+</div>
+
+</div><!-- /#main -->
+
+<script>
+// ═══════════ Web Speech API — Voice Management ═══════════
+let synth = window.speechSynthesis;
+let voices = [];
+let currentUtterance = null;
+
+const segmentTexts = [
+  "Right beneath your feet, there's a hidden network you cannot see. Tiny threads — thinner than a hair — are stretching out in every direction. And guess what? If you lined them all up, they could reach the sun... 730 million times! What are they? Let's dig in!",
+  "They are fungi! Not plants, not animals — a totally different kind of life. Scientists call them AM fungi. They grow underground and connect to plant roots. The thin threads, called hyphae, send water to plants and take carbon back into the soil. Over 70% of plants on Earth depend on them!",
+  "Scientists collected 16,000 soil samples from all over the world, then trained an AI computer to map the hidden web. They found that grasslands have the densest network — and those grasslands help keep our planet cool. Croplands have only half as much. So if we protect grasslands, we protect the whole Earth!",
+  "The biggest internet in the world is not on your phone — it's under your feet! Every step you take is above a huge living network. Take care of the soil, and the soil will take care of you. This is Pola — keep your eyes open, and your feet curious! See you next time!"
+];
+
+function loadVoices() {
+  voices = synth.getVoices();
+}
+loadVoices();
+if (synth.onvoiceschanged !== undefined) {
+  synth.onvoiceschanged = loadVoices;
+}
+
+function pickVoice() {
+  const maleEnhanced = voices.find(v => v.name.includes('Enhanced') && /en[-_]US|en[-_]GB/.test(v.lang));
+  if (maleEnhanced) return maleEnhanced;
+
+  const priority = ['Daniel', 'Alex', 'Microsoft Mark', 'Google UK English Male', 'Google US English'];
+  for (const name of priority) {
+    const v = voices.find(v => v.name.includes(name));
+    if (v) return v;
+  }
+
+  const anyMale = voices.find(v => /en[-_]US|en[-_]GB/.test(v.lang) && v.name.toLowerCase().includes('male'));
+  if (anyMale) return anyMale;
+
+  const anyEnglish = voices.find(v => /en[-_]US|en[-_]GB/.test(v.lang));
+  return anyEnglish || voices[0];
+}
+
+function stopCurrent() {
+  if (currentUtterance) {
+    currentUtterance.onend = null;
+    synth.cancel();
+    currentUtterance = null;
+  }
+  resetAllButtons();
+}
+
+function resetAllButtons() {
+  document.querySelectorAll('.play-btn.playing, .word-btn.playing').forEach(btn => {
+    btn.classList.remove('playing');
+    if (btn.classList.contains('play-btn')) btn.textContent = '▶';
+  });
+}
+
+// ── Segment Playback ──
+function toggleSegment(idx) {
+  const btn = document.querySelectorAll('.play-btn')[idx];
+  const isPlaying = btn.classList.contains('playing');
+
+  if (isPlaying) {
+    stopCurrent();
+    return;
+  }
+
+  stopCurrent();
+
+  const utterance = new SpeechSynthesisUtterance(segmentTexts[idx]);
+  utterance.voice = pickVoice();
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+
+  utterance.onend = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+    currentUtterance = null;
+  };
+
+  utterance.onerror = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  synth.speak(utterance);
+}
+
+// ── Word Playback ──
+function speakWord(word, btn) {
+  stopCurrent();
+
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.voice = pickVoice();
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+
+  btn.classList.add('playing');
+
+  utterance.onend = () => {
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+
+  utterance.onerror = () => {
+    btn.classList.remove('playing');
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  synth.speak(utterance);
+}
+
+// ═══════════ Quiz Logic ═══════════
+const answers = {1:'C',2:'B',3:'D',4:'A',5:'B',6:'C'};
+const correctExplanations = {
+  1: '✅ 正确！AM 真菌既不是植物也不是动物，而是一种独立的生物类别——真菌界！',
+  2: '✅ 正确！科学家从世界各地收集了 16,000 多份土壤样本，然后训练 AI 模型来预测全球的真菌分布。',
+  3: '✅ 正确！如果把全球的菌丝连成一条线，它们可以往返太阳 7.3 亿次——一个令人难以置信的数字！',
+  4: '✅ 正确！草原拥有最密集的真菌网络，这对储存碳和对抗气候变化至关重要。',
+  5: '✅ 正确！全球超过 70% 的陆生植物都依赖 AM 真菌生存，真菌就是它们的"地下互联网"！',
+  6: '✅ 正确！这个故事的核心信息是：地球上最大的生命网络就在我们脚下——保护土壤，就是保护地球！'
+};
+const wrongExplanations = {
+  1: '❌ 不对哦。AM 真菌既不是植物也不是动物——它们属于真菌界，是独立于动植物之外的第三大类生命。',
+  2: '❌ 不对哦。科学家收集了 16,000 多份土壤样本（不是 1,600 也不是 160,000），这是一个非常庞大的全球数据集。',
+  3: '❌ 不对哦。答案是 7.3 亿次（730 million）！这说明地下的生命网络比我们想象的还要庞大得多。',
+  4: '❌ 不对哦。沙漠、海洋和城市的菌丝都很少。草原的根系最发达，菌丝网络也最密集——这就是为什么保护草原如此重要。',
+  5: '❌ 不对哦。答案是 70% 以上。注意"over"意思是"超过"——所以不是 7%，而是 70% 以上。',
+  6: '❌ 不对哦。这个故事告诉我们：地球上最大的"互联网"是地下的真菌网络，而保护土壤就是保护地球的未来。'
+};
+
+let answeredCount = 0;
+let correctCount = 0;
+const answered = {};
+
+function checkAnswer(qNum, correctAnswer, clickedEl) {
+  if (answered[qNum]) return;
+  answered[qNum] = true;
+  answeredCount++;
+
+  const container = document.getElementById('q' + qNum);
+  const fb = document.getElementById('fb' + qNum);
+  const allOptions = container.querySelectorAll('.q-option');
+
+  allOptions.forEach(opt => opt.style.pointerEvents = 'none');
+
+  const clickedAnswer = clickedEl.textContent.trim().charAt(0);
+  const isCorrect = clickedAnswer === correctAnswer;
+
+  if (isCorrect) {
+    correctCount++;
+    clickedEl.classList.add('correct');
+    fb.className = 'quiz-feedback correct show';
+    fb.textContent = correctExplanations[qNum];
+  } else {
+    clickedEl.classList.add('wrong');
+    fb.className = 'quiz-feedback wrong show';
+    fb.textContent = wrongExplanations[qNum];
+    allOptions.forEach(opt => {
+      if (opt.textContent.trim().charAt(0) === correctAnswer) opt.classList.add('correct');
+    });
+  }
+
+  if (answeredCount === 6) {
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.style.display = 'block';
+    const emoji = correctCount === 6 ? '🏆' : correctCount >= 4 ? '🌟' : correctCount >= 2 ? '📚' : '💪';
+    scoreEl.textContent = emoji + ' Your Score: ' + correctCount + ' / 6  ' + (correctCount === 6 ? 'Perfect! You are a fungi expert!' : correctCount >= 4 ? 'Great job! Keep exploring!' : 'Good try! Read the story again and retry!');
+  }
+}
+
+// ═══════════ Sidebar Navigation ═══════════
+function navTo(sectionId) {
+  document.querySelectorAll('#sidebar nav a').forEach(a => a.classList.remove('active'));
+  const link = document.querySelector(`#sidebar nav a[href="#${sectionId}"]`);
+  if (link) link.classList.add('active');
+
+  document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (window.innerWidth <= 900) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ═══════════ Scroll Spy ═══════════
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('#sidebar nav a');
+
+function updateActiveNav() {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.getBoundingClientRect().top;
+    if (top <= 120) current = section.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+}
+
+// ═══════════ Progress Bar ═══════════
+function updateProgressBar() {
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+  document.getElementById('progress-bar').style.width = progress + '%';
+}
+
+window.addEventListener('scroll', () => {
+  updateActiveNav();
+  updateProgressBar();
+});
+
+// ═══════════ Close sidebar on outside click (mobile) ═══════════
+document.getElementById('main').addEventListener('click', () => {
+  if (window.innerWidth <= 900) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+});
+
+// ═══════════ Initial setup ═══════════
+updateProgressBar();
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

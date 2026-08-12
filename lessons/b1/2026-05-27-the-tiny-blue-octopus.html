@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News — The Tiny Blue Octopus | Interactive Lesson</title>
+<style>
+  :root {
+    --primary: #0077b6;
+    --secondary: #00b4d8;
+    --accent: #90e0ef;
+    --dark: #03045e;
+    --light: #caf0f8;
+    --bg-gradient: linear-gradient(135deg, #03045e 0%, #0077b6 40%, #00b4d8 80%, #90e0ef 100%);
+    --card-bg: rgba(255,255,255,0.93);
+    --shadow: 0 4px 24px rgba(0,100,180,0.15);
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    color: #1a1a2e;
+  }
+
+  /* Layout */
+  .app-wrapper { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px;
+    min-width: 200px;
+    background: rgba(3,4,94,0.92);
+    backdrop-filter: blur(12px);
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-logo {
+    text-align: center;
+    padding: 0 16px 20px;
+    border-bottom: 1px solid rgba(144,224,239,0.2);
+    margin-bottom: 12px;
+  }
+  .sidebar-logo .emoji { font-size: 2.4rem; }
+  .sidebar-logo h2 { color: #90e0ef; font-size: 1rem; margin-top: 6px; line-height: 1.3; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.9rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-item:hover, .nav-item.active {
+    background: rgba(144,224,239,0.12);
+    color: #90e0ef;
+    border-left-color: #00b4d8;
+  }
+  .nav-item .nav-icon { font-size: 1.1rem; width: 22px; text-align: center; }
+
+  /* Main content */
+  .main-content {
+    flex: 1;
+    padding: 32px 36px;
+    overflow-y: auto;
+    max-width: 900px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(0,77,130,0.85);
+    backdrop-filter: blur(8px);
+    padding: 6px 0 0;
+    margin: -32px -36px 24px;
+  }
+  .progress-bar {
+    height: 4px;
+    background: linear-gradient(90deg, #00b4d8, #90e0ef);
+    transition: width 0.3s;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0,180,216,0.15);
+  }
+  .card h2 {
+    color: var(--dark);
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title {
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  /* Segment reader */
+  .segment-block {
+    background: #f0f8ff;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    border-left: 4px solid var(--secondary);
+    position: relative;
+  }
+  .segment-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .segment-text { line-height: 1.85; font-size: 1rem; color: #1a1a2e; }
+  .highlight {
+    background: linear-gradient(120deg,#ffe05a 0%,#ffef9f 100%);
+    border-radius: 4px;
+    padding: 1px 3px;
+    cursor: pointer;
+    position: relative;
+    font-weight: 600;
+  }
+  .highlight:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #03045e;
+    color: #90e0ef;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    font-weight: 400;
+  }
+
+  /* Play button */
+  .play-btn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,120,200,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .play-btn:hover { transform: scale(1.1); box-shadow: 0 4px 14px rgba(0,120,200,0.45); }
+  .play-btn.playing { animation: pulse 1.2s infinite; }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(0,180,216,0.55); }
+    50% { box-shadow: 0 0 0 10px rgba(0,180,216,0); }
+  }
+  @media print { .play-btn, .sound-btn { display: none !important; } }
+
+  /* Vocabulary cards */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .vocab-card {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    border-radius: 14px;
+    padding: 16px 18px;
+    border: 1px solid #81d4fa;
+    position: relative;
+  }
+  .vocab-word {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .vocab-pos {
+    font-size: 0.72rem;
+    background: var(--primary);
+    color: white;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .vocab-cn { font-size: 0.9rem; color: #0077b6; margin: 4px 0 6px; font-weight: 600; }
+  .vocab-def { font-size: 0.85rem; color: #333; margin-bottom: 6px; }
+  .vocab-example { font-size: 0.82rem; color: #555; font-style: italic; border-left: 3px solid #00b4d8; padding-left: 8px; }
+  .sound-btn {
+    background: transparent;
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    position: absolute;
+    top: 12px; right: 12px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .sound-btn:hover { background: var(--primary); color: white; }
+  .sound-btn.playing { animation: pulse 1.2s infinite; background: var(--secondary); color: white; border-color: var(--secondary); }
+
+  /* Sentence patterns */
+  .pattern-block {
+    background: #fff9f0;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    border-left: 4px solid #ffb347;
+  }
+  .pattern-block h3 { color: #e07b00; font-size: 0.95rem; margin-bottom: 10px; }
+  .pattern-en { font-size: 1rem; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .pattern-cn { font-size: 0.88rem; color: #777; margin-bottom: 10px; }
+  .pattern-practice {
+    background: white;
+    border: 1.5px dashed #ffd180;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: #555;
+    min-height: 44px;
+  }
+
+  /* Grammar */
+  .grammar-block {
+    background: #f3f0ff;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    border-left: 4px solid #9c27b0;
+  }
+  .grammar-block h3 { color: #7b1fa2; font-size: 0.95rem; margin-bottom: 8px; }
+  .grammar-example { background: white; border-radius: 8px; padding: 10px 14px; margin: 8px 0; font-size: 0.9rem; font-style: italic; color: #333; }
+  .grammar-cn { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .grammar-quiz {
+    margin-top: 12px;
+    background: white;
+    border: 1.5px dashed #ce93d8;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+  }
+  .grammar-quiz p { color: #6a1b9a; margin-bottom: 6px; font-weight: 600; }
+
+  /* Quiz */
+  .quiz-item {
+    background: white;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0,100,180,0.07);
+  }
+  .quiz-q { font-size: 0.95rem; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; }
+  .quiz-q-cn { font-size: 0.82rem; color: #888; margin-bottom: 12px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option {
+    padding: 9px 14px;
+    border-radius: 8px;
+    border: 1.5px solid #e0e0e0;
+    background: #fafafa;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .quiz-option:hover { border-color: var(--secondary); background: #e0f7fa; }
+  .quiz-option.correct { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; font-weight: 600; }
+  .quiz-option.wrong { background: #fce4ec; border-color: #f44336; color: #c62828; }
+  .quiz-feedback { font-size: 0.82rem; margin-top: 8px; padding: 6px 10px; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #e8f5e9; color: #2e7d32; }
+  .quiz-feedback.wrong { background: #fce4ec; color: #c62828; }
+
+  /* Knowledge expansion */
+  .know-section { margin-bottom: 22px; }
+  .know-section h3 { color: var(--dark); font-size: 1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .know-section p { font-size: 0.92rem; line-height: 1.8; color: #333; }
+  .know-fact {
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+    color: #2e7d32;
+    border-left: 4px solid #4caf50;
+  }
+
+  /* About */
+  .goal-list { list-style: none; }
+  .goal-list li {
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    background: #f0f8ff;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .goal-list li::before { content: "✅"; flex-shrink: 0; }
+  .print-btn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 16px;
+    box-shadow: 0 4px 12px rgba(0,120,200,0.3);
+    transition: transform 0.2s;
+  }
+  .print-btn:hover { transform: translateY(-2px); }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .app-wrapper { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: relative; padding: 12px 0; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 4px; }
+    .sidebar-logo { display: none; }
+    .nav-item { padding: 8px 12px; border-left: none; border-bottom: 3px solid transparent; font-size: 0.8rem; }
+    .nav-item.active, .nav-item:hover { border-bottom-color: #00b4d8; border-left-color: transparent; }
+    .main-content { padding: 20px 16px; }
+    .progress-bar-wrap { margin: -20px -16px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="emoji">🐙</div>
+    <h2>Pola News<br><span style="color:#caf0f8;font-size:0.78rem;">The Tiny Blue Octopus</span></h2>
+  </div>
+  <div class="nav-item active" onclick="showSection('reading')">
+    <span class="nav-icon">📖</span> Full Text
+  </div>
+  <div class="nav-item" onclick="showSection('vocab')">
+    <span class="nav-icon">📚</span> Vocabulary
+  </div>
+  <div class="nav-item" onclick="showSection('patterns')">
+    <span class="nav-icon">🔤</span> Sentence Patterns
+  </div>
+  <div class="nav-item" onclick="showSection('grammar')">
+    <span class="nav-icon">✏️</span> Grammar Points
+  </div>
+  <div class="nav-item" onclick="showSection('quiz')">
+    <span class="nav-icon">🧠</span> Practice Quiz
+  </div>
+  <div class="nav-item" onclick="showSection('knowledge')">
+    <span class="nav-icon">🌊</span> Learn More
+  </div>
+  <div class="nav-item" onclick="showSection('about')">
+    <span class="nav-icon">⭐</span> About This Lesson
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+  </div>
+
+  <!-- SECTION 1: Full Reading -->
+  <div class="section active" id="section-reading">
+    <div class="section-title">📖 Full Text — The Tiny Blue Octopus</div>
+
+    <div class="segment-block">
+      <div class="segment-label">Segment 1 — Hook</div>
+      <button class="play-btn" onclick="playSegment(0, this)" title="Play this segment">▶</button>
+      <div class="segment-text">
+        Hi, I'm Pola, reporting from the edge of the deep, dark ocean!
+        Scientists just found something <span class="highlight" data-tip="incredible: 令人难以置信的，非常棒的">incredible</span> — a brand-new octopus,
+        no bigger than a golf ball, glowing bright blue
+        nearly six thousand feet <span class="highlight" data-tip="underwater: 在水下">underwater</span>!
+        When the robot camera spotted it, researchers actually shouted out loud —
+        <em>"It's so tiny! It's blue!"</em>
+      </div>
+    </div>
+
+    <div class="segment-block">
+      <div class="segment-label">Segment 2 — Story</div>
+      <button class="play-btn" onclick="playSegment(1, this)" title="Play this segment">▶</button>
+      <div class="segment-text">
+        The little octopus was <span class="highlight" data-tip="discovered: 被发现的（discover的被动式）">discovered</span> near the Galápagos Islands in Ecuador.
+        Its name is <em>Microeledone galapagensis</em> — "micro" means tiny, and yes, it really is!
+        Scientists couldn't cut it open because there's only one <span class="highlight" data-tip="specimen: 标本，样本">specimen</span>.
+        Instead, they used a special <span class="highlight" data-tip="CT scanner: 电脑断层扫描仪">CT scanner</span> to take thousands of X-ray pictures
+        and build a 3D model inside!
+      </div>
+    </div>
+
+    <div class="segment-block">
+      <div class="segment-label">Segment 3 — Why It Matters</div>
+      <button class="play-btn" onclick="playSegment(2, this)" title="Play this segment">▶</button>
+      <div class="segment-text">
+        This tiny creature shows us that our oceans are still full of <span class="highlight" data-tip="secrets: 秘密，未知的事物">secrets</span>.
+        Even today, <span class="highlight" data-tip="explorers: 探险家，探索者">explorers</span> are finding animals that no one has ever seen before.
+        If you love the sea, you might one day <span class="highlight" data-tip="discover: 发现，探索到">discover</span> something amazing, too —
+        because the deep ocean is bigger than all the land on Earth put together!
+      </div>
+    </div>
+
+    <div class="segment-block">
+      <div class="segment-label">Segment 4 — Sign-off</div>
+      <button class="play-btn" onclick="playSegment(3, this)" title="Play this segment">▶</button>
+      <div class="segment-text">
+        So next time you look at the ocean, remember — somewhere far below the <span class="highlight" data-tip="waves: 海浪">waves</span>,
+        a tiny blue octopus is hiding in the dark, waiting to be found!
+        This is Pola, your ocean reporter — stay <span class="highlight" data-tip="curious: 好奇的，求知欲强的">curious</span>, stay brave,
+        and I'll see you next time!
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Vocabulary -->
+  <div class="section" id="section-vocab">
+    <div class="section-title">📚 Vocabulary — Key Words</div>
+    <div class="vocab-grid">
+
+      <div class="vocab-card">
+        <div class="vocab-word">incredible <span class="vocab-pos">adj.</span></div>
+        <button class="sound-btn" onclick="speakWord('incredible', this)">🔊</button>
+        <div class="vocab-cn">令人难以置信的；极好的</div>
+        <div class="vocab-def">Too extraordinary to believe; amazing</div>
+        <div class="vocab-example">"Scientists made an incredible discovery in the deep sea."</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">specimen <span class="vocab-pos">n.</span></div>
+        <button class="sound-btn" onclick="speakWord('specimen', this)">🔊</button>
+        <div class="vocab-cn">标本；样本</div>
+        <div class="vocab-def">A single example of something, used for study or display</div>
+        <div class="vocab-example">"There is only one specimen of this rare octopus."</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">underwater <span class="vocab-pos">adv./adj.</span></div>
+        <button class="sound-btn" onclick="speakWord('underwater', this)">🔊</button>
+        <div class="vocab-cn">在水下；水下的</div>
+        <div class="vocab-def">Beneath the surface of the water</div>
+        <div class="vocab-example">"The tiny blue octopus lives nearly 6,000 feet underwater."</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">explorer <span class="vocab-pos">n.</span></div>
+        <button class="sound-btn" onclick="speakWord('explorer', this)">🔊</button>
+        <div class="vocab-cn">探险家；探索者</div>
+        <div class="vocab-def">A person who travels to unknown or little-known places</div>
+        <div class="vocab-example">"Deep-sea explorers use ROVs to study the ocean floor."</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">discover <span class="vocab-pos">v.</span></div>
+        <button class="sound-btn" onclick="speakWord('discover', this)">🔊</button>
+        <div class="vocab-cn">发现；找到（新事物）</div>
+        <div class="vocab-def">To find or learn something for the first time</div>
+        <div class="vocab-example">"Scientists discovered a brand-new species near the Galápagos Islands."</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">species <span class="vocab-pos">n.</span></div>
+        <button class="sound-btn" onclick="speakWord('species', this)">🔊</button>
+        <div class="vocab-cn">物种</div>
+        <div class="vocab-def">A group of living things that share the same features and can reproduce together</div>
+        <div class="vocab-example">"The golf-ball octopus is a completely new species."</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">curious <span class="vocab-pos">adj.</span></div>
+        <button class="sound-btn" onclick="speakWord('curious', this)">🔊</button>
+        <div class="vocab-cn">好奇的；求知欲强的</div>
+        <div class="vocab-def">Eager to know or learn about something</div>
+        <div class="vocab-example">"Be curious — that's how great discoveries happen!"</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">scanner <span class="vocab-pos">n.</span></div>
+        <button class="sound-btn" onclick="speakWord('scanner', this)">🔊</button>
+        <div class="vocab-cn">扫描仪</div>
+        <div class="vocab-def">A machine that uses rays or signals to create images of the inside of objects</div>
+        <div class="vocab-example">"A CT scanner took thousands of X-ray images of the tiny octopus."</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">ROV <span class="vocab-pos">n.</span></div>
+        <button class="sound-btn" onclick="speakWord('ROV', this)">🔊</button>
+        <div class="vocab-cn">遥控深海潜水器（机器人摄像机）</div>
+        <div class="vocab-def">Remotely Operated Vehicle — an underwater robot controlled from above the water</div>
+        <div class="vocab-example">"An ROV spotted the tiny blue octopus near the seafloor."</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">glow <span class="vocab-pos">v./n.</span></div>
+        <button class="sound-btn" onclick="speakWord('glow', this)">🔊</button>
+        <div class="vocab-cn">发光；光亮</div>
+        <div class="vocab-def">To give off a soft, steady light</div>
+        <div class="vocab-example">"The octopus glowed bright blue in the dark water."</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 3: Sentence Patterns -->
+  <div class="section" id="section-patterns">
+    <div class="section-title">🔤 Sentence Patterns</div>
+
+    <div class="pattern-block">
+      <h3>Pattern 1 — Reporting with "just"</h3>
+      <div class="pattern-en">"Scientists just found something incredible."</div>
+      <div class="pattern-cn">🇨🇳 用 <strong>just</strong> 表示"刚刚"（强调事情很新鲜）</div>
+      <div class="pattern-practice">
+        ✏️ Your turn: "Pola just _____________ a new friend near the ocean."
+        <br><small style="color:#aaa">(discovered / spotted / made)</small>
+      </div>
+    </div>
+
+    <div class="pattern-block">
+      <h3>Pattern 2 — Size comparison with "no bigger than"</h3>
+      <div class="pattern-en">"...no bigger than a golf ball..."</div>
+      <div class="pattern-cn">🇨🇳 <strong>no bigger than + 熟悉的物体</strong> = 用来形象地说明大小</div>
+      <div class="pattern-practice">
+        ✏️ Your turn: "The tiny frog was no bigger than ____________."
+        <br><small style="color:#aaa">(a coin / a grape / your thumb)</small>
+      </div>
+    </div>
+
+    <div class="pattern-block">
+      <h3>Pattern 3 — Passive voice "was discovered"</h3>
+      <div class="pattern-en">"The little octopus was discovered near the Galápagos Islands."</div>
+      <div class="pattern-cn">🇨🇳 <strong>was/were + 过去分词</strong> = 被动语态，强调"谁被发现"</div>
+      <div class="pattern-practice">
+        ✏️ Your turn: "A new dinosaur _____________ in the desert last year."
+        <br><small style="color:#aaa">(was discovered / was found)</small>
+      </div>
+    </div>
+
+    <div class="pattern-block">
+      <h3>Pattern 4 — Instead, they used...</h3>
+      <div class="pattern-en">"Instead, they used a special CT scanner to take thousands of X-ray pictures."</div>
+      <div class="pattern-cn">🇨🇳 <strong>Instead, + 主语 + 动词</strong> = "反而…；换了一种方法…"</div>
+      <div class="pattern-practice">
+        ✏️ Your turn: "I couldn't find my pen. Instead, I _____________ a pencil."
+        <br><small style="color:#aaa">(used / picked up / found)</small>
+      </div>
+    </div>
+
+    <div class="pattern-block">
+      <h3>Pattern 5 — Conditional "you might one day"</h3>
+      <div class="pattern-en">"If you love the sea, you might one day discover something amazing."</div>
+      <div class="pattern-cn">🇨🇳 <strong>If + 现在时, 主语 + might + 动词原形</strong> = 表达可能性的条件句</div>
+      <div class="pattern-practice">
+        ✏️ Your turn: "If you study hard, you might one day _____________."
+        <br><small style="color:#aaa">(become a scientist / travel to space / make a discovery)</small>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 4: Grammar Points -->
+  <div class="section" id="section-grammar">
+    <div class="section-title">✏️ Grammar Points</div>
+
+    <div class="grammar-block">
+      <h3>Grammar 1 — Past Simple Passive Voice</h3>
+      <p style="font-size:0.88rem;margin-bottom:8px;">We use <strong>was/were + past participle</strong> when the action happened to the subject.</p>
+      <div class="grammar-example">"The octopus was <em>discovered</em> near the Galápagos."<br>
+        "The specimen was <em>kept</em> in alcohol and formaldehyde."</div>
+      <div class="grammar-cn">🇨🇳 被动语态（过去式）：主语 + was/were + 动词过去分词</div>
+      <div class="grammar-quiz">
+        <p>Fill in the blank:</p>
+        "The new species ______ (find) in very deep water."
+        <br><small style="color:#7b1fa2">Answer: was found</small>
+      </div>
+    </div>
+
+    <div class="grammar-block">
+      <h3>Grammar 2 — Present Continuous for Ongoing Actions</h3>
+      <p style="font-size:0.88rem;margin-bottom:8px;">We use <strong>is/are + verb-ing</strong> to describe actions happening now or over a period of time.</p>
+      <div class="grammar-example">"Explorers <em>are finding</em> animals that no one has ever seen before."<br>
+        "Scientists <em>are studying</em> the deep ocean every day."</div>
+      <div class="grammar-cn">🇨🇳 现在进行时：表示正在进行的或持续发生的动作</div>
+      <div class="grammar-quiz">
+        <p>Make a sentence:</p>
+        "Pola / report / from the ocean edge" → ______________________________
+        <br><small style="color:#7b1fa2">Answer: Pola is reporting from the ocean edge.</small>
+      </div>
+    </div>
+
+    <div class="grammar-block">
+      <h3>Grammar 3 — Using "Instead" as a Linking Word</h3>
+      <p style="font-size:0.88rem;margin-bottom:8px;"><strong>Instead</strong> connects two sentences to show a different action was chosen.</p>
+      <div class="grammar-example">"Scientists couldn't cut it open. Instead, they used a CT scanner."</div>
+      <div class="grammar-cn">🇨🇳 Instead (代之以；换一种方法) — 连接两个句子，表达"没做A，而是做了B"</div>
+      <div class="grammar-quiz">
+        <p>Connect the sentences using "instead":</p>
+        "She didn't run. She walked slowly." → ______________________________
+        <br><small style="color:#7b1fa2">Answer: She didn't run. Instead, she walked slowly.</small>
+      </div>
+    </div>
+
+    <div class="grammar-block">
+      <h3>Grammar 4 — Present Perfect "has ever seen"</h3>
+      <p style="font-size:0.88rem;margin-bottom:8px;">We use <strong>have/has + past participle</strong> with "ever/never" for experiences up to now.</p>
+      <div class="grammar-example">"Animals that <em>no one has ever seen</em> before."<br>
+        "This is the most amazing thing I <em>have ever found</em>."</div>
+      <div class="grammar-cn">🇨🇳 现在完成时（经历/经验）：have/has + 过去分词，常与 ever/never 搭配</div>
+      <div class="grammar-quiz">
+        <p>Fill in the blank:</p>
+        "Have you ever ______ (see) an octopus at the aquarium?"
+        <br><small style="color:#7b1fa2">Answer: seen</small>
+      </div>
+    </div>
+
+    <div class="grammar-block">
+      <h3>Grammar 5 — Comparatives with "bigger than"</h3>
+      <p style="font-size:0.88rem;margin-bottom:8px;">We use <strong>adjective + -er + than</strong> OR <strong>more + adjective + than</strong> to compare two things.</p>
+      <div class="grammar-example">"The deep ocean is <em>bigger than</em> all the land on Earth put together."<br>
+        "A whale is much <em>larger than</em> a dolphin."</div>
+      <div class="grammar-cn">🇨🇳 比较级：形容词 + er + than（短词）或 more + 形容词 + than（长词）</div>
+      <div class="grammar-quiz">
+        <p>Fill in the blank:</p>
+        "The Pacific Ocean is ______ (big) than the Atlantic Ocean."
+        <br><small style="color:#7b1fa2">Answer: bigger</small>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 5: Quiz -->
+  <div class="section" id="section-quiz">
+    <div class="section-title">🧠 Practice Quiz</div>
+
+    <div class="quiz-item">
+      <div class="quiz-q">1. Where was the tiny blue octopus discovered?</div>
+      <div class="quiz-q-cn">这只蓝色小章鱼是在哪里被发现的？</div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A. Near the coast of Japan</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">B. Near the Galápagos Islands in Ecuador</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">C. In the Arctic Ocean</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D. Near Australia's Great Barrier Reef</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-item">
+      <div class="quiz-q">2. How big is the newly discovered octopus?</div>
+      <div class="quiz-q-cn">这只新发现的章鱼有多大？</div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A. About the size of a football</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">B. About the size of a basketball</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">C. About the size of a golf ball</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D. About the size of a watermelon</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-item">
+      <div class="quiz-q">3. Why did scientists use a CT scanner instead of cutting the octopus open?</div>
+      <div class="quiz-q-cn">科学家为什么用CT扫描仪而不是解剖章鱼？</div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A. CT scanners are faster than surgery</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">B. There was only one specimen, so they needed to protect it</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">C. The octopus was too big to cut</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D. CT scanners make the octopus glow</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-item">
+      <div class="quiz-q">4. What colour is the newly discovered octopus?</div>
+      <div class="quiz-q-cn">这只新发现的章鱼是什么颜色的？</div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A. Red</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">B. Blue</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">C. Green</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D. Transparent / See-through</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-item">
+      <div class="quiz-q">5. According to Pola, how does the deep ocean compare to all land on Earth?</div>
+      <div class="quiz-q-cn">根据Pola的说法，深海与地球上所有陆地相比如何？</div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A. The deep ocean is smaller than all land on Earth</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">B. The deep ocean is exactly the same size as all land</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">C. The deep ocean is bigger than all the land on Earth put together</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D. There is no comparison between the ocean and land</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-item">
+      <div class="quiz-q">6. What is the scientific name of the newly discovered octopus?</div>
+      <div class="quiz-q-cn">这只新发现章鱼的学名是什么？</div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkAnswer(this, false)">A. Octopus ecuadorensis</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">B. Architeuthis dux</div>
+        <div class="quiz-option" onclick="checkAnswer(this, true)">C. Microeledone galapagensis</div>
+        <div class="quiz-option" onclick="checkAnswer(this, false)">D. Cephalopoda darwini</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 6: Knowledge -->
+  <div class="section" id="section-knowledge">
+    <div class="section-title">🌊 中文知识扩展</div>
+
+    <div class="card">
+      <div class="know-section">
+        <h3>🐙 章鱼是什么样的动物？</h3>
+        <p>章鱼（Octopus）属于软体动物门头足纲，是地球上最聪明的无脊椎动物之一。它们有8条灵活的触手，每条触手上布满吸盘，可以感知气味和味道。章鱼没有骨骼，能够挤进几乎任何能通过喙（嘴）的空间。它们能变色、变形，是海洋中的"变形大师"。</p>
+        <div class="know-fact">🐙 科学小知识：章鱼有三颗心脏和蓝色的血液！两颗心脏负责给鳃输血，一颗心脏负责全身循环。它们的血液是蓝色的，因为用含铜的血蓝蛋白来运输氧气，而不是像人类一样用含铁的血红蛋白。</div>
+      </div>
+
+      <div class="know-section">
+        <h3>🏝️ 加拉帕戈斯群岛——生物多样性的宝库</h3>
+        <p>加拉帕戈斯群岛（Galápagos Islands）位于太平洋东部，属于厄瓜多尔。这里是著名科学家查尔斯·达尔文的"灵感来源地"——他在1835年的考察之旅中，通过观察岛上独特的动植物，提出了进化论。如今，加拉帕戈斯群岛是联合国教科文组织世界遗产地，以独特的动植物种类闻名于世，包括加拉帕戈斯象龟、海鬣蜥和蓝脚鲣鸟。</p>
+        <div class="know-fact">🌍 加拉帕戈斯群岛深海（水下1000-5000米）至今仍有大量未被发现的物种！新发现的蓝色小章鱼就生活在水下约1773米深处。</div>
+      </div>
+
+      <div class="know-section">
+        <h3>🔬 什么是CT扫描？</h3>
+        <p>CT（Computed Tomography，电脑断层扫描）是一种医学和科研成像技术。它从多个角度拍摄X射线图像，再由电脑合成出精细的3D立体模型。CT扫描是"非破坏性"的——不需要切开物体，就能看到内部结构。</p>
+        <p>科学家用CT扫描这只唯一的蓝色小章鱼标本，拍摄了数千张X射线截面图像，再重建成3D模型，清晰地看到了它的内脏器官和口部结构。这样，珍贵的标本被完整保存了下来！</p>
+        <div class="know-fact">🏥 医学应用：CT扫描在医院也很常见——医生用它来检查骨折、肿瘤等，无需手术就能看清楚人体内部。</div>
+      </div>
+
+      <div class="know-section">
+        <h3>🤖 ROV——深海探索的"机器人眼睛"</h3>
+        <p>ROV（Remotely Operated Vehicle，遥控水下机器人）是一种由水面船只远程操控的深海机器人。它通过粗壮的缆线与船只相连，配备摄像头、机械臂和各种传感器，能够潜入人类无法到达的极深海域。正是ROV发现了这只蓝色小章鱼，并在视频中记录下研究人员的惊叫声："它好小！它是蓝色的！"</p>
+        <div class="know-fact">🚢 本次发现使用的是探索船 E/V Nautilus（鹦鹉螺号），由Ocean Exploration Trust运营，专门用于深海科学探索。</div>
+      </div>
+
+      <div class="know-section">
+        <h3>🌊 深海——地球上最后的未探索领地</h3>
+        <p>人类对月球表面的了解，远远超过对深海海底的了解。地球上超过80%的海洋至今仍未被探索！太平洋的面积比所有大陆面积的总和还要大。深海（水下200米以下）中估计还有数百万未被发现的物种，等待科学家的探索。</p>
+        <div class="know-fact">💡 职业启发：海洋生物学家、深海探索家、海洋工程师……如果你对海洋充满好奇，这些都可能成为你未来的职业！最重要的工具是什么？保持好奇心（Stay curious!）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: About -->
+  <div class="section" id="section-about">
+    <div class="section-title">⭐ About This Lesson</div>
+    <div class="card">
+      <h2>🎯 Learning Goals</h2>
+      <ul class="goal-list">
+        <li>Read and understand a B1 English news report about a real scientific discovery</li>
+        <li>Learn 10 key vocabulary words related to ocean exploration and science</li>
+        <li>Practice 5 useful sentence patterns (passive voice, comparatives, conditionals)</li>
+        <li>Review 5 grammar points (past passive, present continuous, present perfect, etc.)</li>
+        <li>Answer 6 comprehension questions about the news story</li>
+        <li>Learn about octopuses, the Galápagos Islands, CT scanning, and deep-sea exploration in Chinese</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>💡 Study Tips</h2>
+      <ul class="goal-list">
+        <li>Start with the Full Text — listen and read at the same time using the ▶ buttons</li>
+        <li>Click the yellow highlighted words to see their meaning while reading</li>
+        <li>Use the 🔊 buttons in Vocabulary to practise pronunciation</li>
+        <li>Try writing your own sentences using the Sentence Patterns</li>
+        <li>Do the Quiz last to check how much you understood</li>
+        <li>Read the Chinese Knowledge section to learn the background science</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>📋 Episode Info</h2>
+      <p style="font-size:0.9rem;line-height:1.8;color:#555;">
+        <strong>Date:</strong> May 27, 2026<br>
+        <strong>Episode:</strong> The Tiny Blue Octopus<br>
+        <strong>Level:</strong> B1 (Ages 10–12)<br>
+        <strong>Host:</strong> Pola the Quokka<br>
+        <strong>Source:</strong> ScienceDaily / Field Museum Chicago / <em>Zootaxa</em> (Vol. 5814, 2026)<br>
+        <strong>Species:</strong> <em>Microeledone galapagensis</em> — newly described May 2026
+      </p>
+      <button class="print-btn" onclick="window.print()">🖨️ Print This Lesson</button>
+    </div>
+  </div>
+
+</div><!-- /main-content -->
+</div><!-- /app-wrapper -->
+
+<script>
+// ── Voice Setup ──────────────────────────────────────────────────
+let voices = [];
+let currentUtterance = null;
+let currentBtn = null;
+
+function loadVoices() {
+  voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) {
+    setTimeout(loadVoices, 200);
+  }
+}
+loadVoices();
+if (window.speechSynthesis.onvoiceschanged !== undefined) {
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function getBestVoice() {
+  const preferred = ['Daniel', 'Alex', 'Google UK English Male', 'Microsoft Mark', 'Google US English'];
+  for (const name of preferred) {
+    const v = voices.find(v => v.name.includes(name) && v.lang.startsWith('en'));
+    if (v) return v;
+  }
+  // Enhanced male English
+  const enhanced = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('enhanced') && !v.name.toLowerCase().includes('female'));
+  if (enhanced) return enhanced;
+  // Any English voice
+  return voices.find(v => v.lang.startsWith('en')) || null;
+}
+
+function stopCurrent() {
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+  }
+  if (currentBtn) {
+    currentBtn.textContent = currentBtn.classList.contains('play-btn') ? '▶' : '🔊';
+    currentBtn.classList.remove('playing');
+    currentBtn = null;
+  }
+  currentUtterance = null;
+}
+
+// ── Segment Texts ────────────────────────────────────────────────
+const segmentTexts = [
+  "Hi, I'm Pola, reporting from the edge of the deep, dark ocean! Scientists just found something incredible — a brand-new octopus, no bigger than a golf ball, glowing bright blue nearly six thousand feet underwater! When the robot camera spotted it, researchers actually shouted out loud — It's so tiny! It's blue!",
+  "The little octopus was discovered near the Galápagos Islands in Ecuador. Its name is Microeledone galapagensis — micro means tiny, and yes, it really is! Scientists couldn't cut it open because there's only one specimen. Instead, they used a special CT scanner to take thousands of X-ray pictures and build a 3D model inside!",
+  "This tiny creature shows us that our oceans are still full of secrets. Even today, explorers are finding animals that no one has ever seen before. If you love the sea, you might one day discover something amazing, too — because the deep ocean is bigger than all the land on Earth put together!",
+  "So next time you look at the ocean, remember — somewhere far below the waves, a tiny blue octopus is hiding in the dark, waiting to be found! This is Pola, your ocean reporter — stay curious, stay brave, and I'll see you next time!"
+];
+
+function playSegment(index, btn) {
+  if (currentBtn === btn) { stopCurrent(); return; }
+  stopCurrent();
+  const u = new SpeechSynthesisUtterance(segmentTexts[index]);
+  u.rate = 0.97; u.pitch = 1.0;
+  const v = getBestVoice();
+  if (v) u.voice = v;
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+  currentBtn = btn;
+  currentUtterance = u;
+  u.onend = u.onerror = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    if (currentBtn === btn) { currentBtn = null; currentUtterance = null; }
+  };
+  window.speechSynthesis.speak(u);
+}
+
+function speakWord(word, btn) {
+  if (currentBtn === btn) { stopCurrent(); return; }
+  stopCurrent();
+  const u = new SpeechSynthesisUtterance(word);
+  u.rate = 0.85; u.pitch = 1.0;
+  const v = getBestVoice();
+  if (v) u.voice = v;
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+  currentBtn = btn;
+  u.onend = u.onerror = () => {
+    btn.textContent = '🔊';
+    btn.classList.remove('playing');
+    if (currentBtn === btn) { currentBtn = null; }
+  };
+  window.speechSynthesis.speak(u);
+}
+
+// ── Navigation ───────────────────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  const navItems = document.querySelectorAll('.nav-item');
+  const sectionMap = ['reading','vocab','patterns','grammar','quiz','knowledge','about'];
+  const idx = sectionMap.indexOf(id);
+  if (idx >= 0) navItems[idx].classList.add('active');
+  stopCurrent();
+  updateProgress(id);
+  document.getElementById('mainContent').scrollTop = 0;
+}
+
+// ── Progress ─────────────────────────────────────────────────────
+const visited = new Set(['reading']);
+function updateProgress(id) {
+  visited.add(id);
+  const total = 7;
+  document.getElementById('progressBar').style.width = (visited.size / total * 100) + '%';
+}
+
+// Scroll progress
+document.getElementById('mainContent').addEventListener('scroll', function() {
+  const el = this;
+  const scrollable = el.scrollHeight - el.clientHeight;
+  if (scrollable <= 0) return;
+  const pct = el.scrollTop / scrollable;
+  document.getElementById('progressBar').style.width = Math.max(
+    (visited.size / 7 * 100),
+    pct * 100
+  ) + '%';
+});
+
+// ── Quiz ─────────────────────────────────────────────────────────
+function checkAnswer(btn, isCorrect) {
+  const quizItem = btn.closest('.quiz-item');
+  if (quizItem.dataset.answered) return;
+  quizItem.dataset.answered = '1';
+  const options = quizItem.querySelectorAll('.quiz-option');
+  const feedback = quizItem.querySelector('.quiz-feedback');
+  options.forEach(o => { o.style.pointerEvents = 'none'; });
+  if (isCorrect) {
+    btn.classList.add('correct');
+    feedback.textContent = '✅ Correct! Well done!';
+    feedback.className = 'quiz-feedback show correct';
+  } else {
+    btn.classList.add('wrong');
+    options.forEach(o => { if (o.getAttribute('onclick').includes('true')) o.classList.add('correct'); });
+    feedback.textContent = '❌ Not quite! The highlighted answer is correct.';
+    feedback.className = 'quiz-feedback show wrong';
+  }
+}
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

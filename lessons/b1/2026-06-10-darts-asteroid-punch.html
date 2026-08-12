@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS — DART's Asteroid Punch | 互动英语学习</title>
+<style>
+  :root {
+    --bg-start: #0a0a2e;
+    --bg-mid: #1a1a4e;
+    --bg-end: #16213e;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.12);
+    --text: #e8e8f0;
+    --text-secondary: #b0b0c8;
+    --accent: #ffb347;
+    --accent-glow: rgba(255,179,71,0.3);
+    --highlight: #ffd700;
+    --highlight-bg: rgba(255,215,0,0.15);
+    --btn-play: #4fc3f7;
+    --btn-play-hover: #29b6f6;
+    --correct: #66bb6a;
+    --wrong: #ef5350;
+    --nav-width: 240px;
+    --progress-height: 4px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+  /* ── Progress Bar ── */
+  #progress-bar {
+    position: fixed; top:0; left:0; height:var(--progress-height);
+    background: linear-gradient(90deg, var(--accent), #ff6b6b);
+    z-index: 1000; transition: width 0.15s ease-out;
+  }
+  /* ── Layout ── */
+  .app-container {
+    display: flex; min-height: 100vh;
+  }
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--nav-width); background: rgba(10,10,46,0.95);
+    backdrop-filter: blur(12px); position: fixed; top:0; left:0;
+    height: 100vh; overflow-y: auto; z-index: 100;
+    border-right: 1px solid var(--card-border);
+    padding: 24px 0; flex-shrink: 0;
+  }
+  .sidebar-header {
+    padding: 0 20px 20px; border-bottom: 1px solid var(--card-border);
+    margin-bottom: 8px;
+  }
+  .sidebar-header h2 { font-size: 1.1rem; color: var(--accent); margin-bottom: 4px; }
+  .sidebar-header .date { font-size: 0.78rem; color: var(--text-secondary); }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px; cursor: pointer; transition: all 0.2s;
+    font-size: 0.9rem; color: var(--text-secondary);
+    border-left: 3px solid transparent; text-decoration: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+  .nav-item.active {
+    background: rgba(255,179,71,0.1); color: var(--accent);
+    border-left-color: var(--accent);
+  }
+  .nav-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+  /* ── Main Content ── */
+  .main-content {
+    margin-left: var(--nav-width); flex:1; padding: 40px 48px;
+    max-width: 900px;
+  }
+  .section {
+    display: none; margin-bottom: 48px; scroll-margin-top: 48px;
+    animation: fadeSlideIn 0.4s ease;
+  }
+  .section.active { display: block; }
+  @keyframes fadeSlideIn {
+    from { opacity:0; transform:translateY(16px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .section-title {
+    font-size: 1.6rem; font-weight: 700; margin-bottom: 24px;
+    color: var(--accent); display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .emoji { font-size: 1.4rem; }
+  /* ── Cards ── */
+  .card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 24px; margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .card:hover { border-color: rgba(255,255,255,0.2); }
+  /* ── Reading Section ── */
+  .reading-paragraph {
+    position: relative; padding: 16px 56px 16px 20px;
+    margin-bottom: 16px; border-radius: 12px;
+    background: rgba(255,255,255,0.04); border-left: 3px solid var(--accent);
+    font-size: 1.05rem; line-height: 1.9;
+  }
+  .keyword {
+    color: var(--highlight); font-weight: 600; cursor: pointer;
+    border-bottom: 1px dashed var(--highlight);
+    position: relative; transition: all 0.2s;
+  }
+  .keyword:hover { background: var(--highlight-bg); border-radius: 3px; }
+  .keyword .tooltip {
+    display: none; position: absolute; bottom: calc(100% + 8px);
+    left: 50%; transform: translateX(-50%); background: #1a1a3e;
+    border: 1px solid var(--accent); border-radius: 8px;
+    padding: 8px 14px; font-size: 0.82rem; white-space: nowrap;
+    z-index: 50; color: var(--text); font-weight: 400;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  }
+  .keyword:hover .tooltip { display: block; }
+  /* ── Play Buttons ── */
+  .play-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--btn-play); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; transition: all 0.25s; color: #0a0a2e;
+  }
+  .play-btn:hover { background: var(--btn-play-hover); transform: translateY(-50%) scale(1.08); }
+  .play-btn.playing { background: var(--accent); }
+  .play-btn.pulse { animation: pulse 1.5s infinite; }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.5); }
+    50% { box-shadow: 0 0 0 12px rgba(79,195,247,0); }
+  }
+  .vocab-play-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(79,195,247,0.2); border: 1px solid var(--btn-play);
+    cursor: pointer; font-size: 0.8rem; color: var(--btn-play);
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .vocab-play-btn:hover { background: rgba(79,195,247,0.4); }
+  .vocab-play-btn.playing { background: var(--accent); color: #0a0a2e; border-color: var(--accent); }
+  /* ── Vocabulary Cards ── */
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .vocab-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 18px; transition: all 0.25s;
+  }
+  .vocab-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .vocab-word {
+    font-size: 1.2rem; font-weight: 700; color: var(--highlight);
+    margin-bottom: 4px; display: flex; align-items: center; gap: 10px;
+  }
+  .vocab-pos {
+    font-size: 0.72rem; color: var(--accent); font-style: italic;
+    background: rgba(255,179,71,0.15); padding: 2px 8px; border-radius: 4px;
+  }
+  .vocab-zh { font-size: 0.88rem; color: var(--text-secondary); margin: 6px 0; }
+  .vocab-example {
+    font-size: 0.85rem; color: #c0c0d8; font-style: italic;
+    padding: 8px; background: rgba(255,255,255,0.03); border-radius: 6px;
+    margin-top: 8px;
+  }
+  /* ── Grammar & Sentence Patterns ── */
+  .pattern-item, .grammar-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  }
+  .pattern-en { font-size: 1.05rem; color: var(--highlight); font-weight: 600; margin-bottom: 6px; }
+  .pattern-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px; }
+  .pattern-practice {
+    background: rgba(255,255,255,0.03); border-radius: 8px;
+    padding: 12px; font-size: 0.88rem; color: #a0a0c0;
+    border-left: 3px solid var(--accent);
+  }
+  .grammar-title { font-size: 1rem; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+  .grammar-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
+  .grammar-example {
+    background: rgba(255,255,255,0.03); border-radius: 8px;
+    padding: 12px; font-size: 0.88rem; margin-bottom: 8px;
+  }
+  .grammar-example .en { color: var(--highlight); }
+  .grammar-exercise {
+    background: rgba(79,195,247,0.08); border-radius: 8px;
+    padding: 12px; font-size: 0.85rem; color: var(--text-secondary);
+  }
+  /* ── Quiz ── */
+  .quiz-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  }
+  .quiz-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option {
+    padding: 10px 16px; border-radius: 8px; cursor: pointer;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s; font-size: 0.88rem;
+  }
+  .quiz-option:hover { background: rgba(255,255,255,0.08); }
+  .quiz-option.selected { border-color: var(--btn-play); background: rgba(79,195,247,0.15); }
+  .quiz-option.correct { border-color: var(--correct); background: rgba(102,187,106,0.2); }
+  .quiz-option.wrong { border-color: var(--wrong); background: rgba(239,83,80,0.15); }
+  .quiz-feedback { margin-top: 10px; font-size: 0.85rem; display: none; padding: 8px 12px; border-radius: 8px; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(102,187,106,0.12); color: var(--correct); }
+  .quiz-feedback.wrong { background: rgba(239,83,80,0.12); color: var(--wrong); }
+  .quiz-score { text-align: center; padding: 20px; font-size: 1.2rem; margin-top: 16px; }
+  /* ── Chinese Knowledge Section ── */
+  .knowledge-block {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 24px; margin-bottom: 20px;
+  }
+  .knowledge-block h3 {
+    font-size: 1.1rem; color: var(--accent); margin-bottom: 12px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--card-border);
+  }
+  .knowledge-block p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.9; margin-bottom: 10px; }
+  .knowledge-block .fact-box {
+    background: rgba(255,179,71,0.08); border-left: 3px solid var(--accent);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 0.88rem;
+  }
+  /* ── About Section ── */
+  .about-list { list-style: none; }
+  .about-list li {
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem;
+  }
+  .about-list li::before { content: '✦'; color: var(--accent); flex-shrink: 0; }
+  .print-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 24px; background: var(--accent); color: #0a0a2e;
+    border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; margin-top: 16px; transition: all 0.2s;
+  }
+  .print-btn:hover { background: #ffc966; transform: translateY(-1px); }
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%; height: auto; position: relative;
+      border-right: none; border-bottom: 1px solid var(--card-border);
+      padding: 12px 0; display: flex; overflow-x: auto; flex-wrap: nowrap;
+    }
+    .sidebar-header { display: none; }
+    .nav-item { flex-shrink: 0; padding: 8px 14px; font-size: 0.8rem; border-left: none; border-bottom: 2px solid transparent; }
+    .nav-item.active { border-left: none; border-bottom-color: var(--accent); }
+    .main-content { margin-left: 0; padding: 20px 16px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .reading-paragraph { padding-right: 50px; font-size: 0.95rem; }
+  }
+  @media (max-width: 480px) {
+    .section-title { font-size: 1.3rem; }
+    .main-content { padding: 16px 12px; }
+  }
+  /* ── Print ── */
+  @media print {
+    body { background: white; color: #222; }
+    .sidebar, #progress-bar, .play-btn, .vocab-play-btn, .print-btn { display: none !important; }
+    .main-content { margin-left: 0; padding: 0; max-width: 100%; }
+    .card, .vocab-card, .pattern-item, .grammar-item, .quiz-item, .knowledge-block {
+      background: white; border: 1px solid #ddd; break-inside: avoid;
+    }
+    .keyword { color: #b8860b; border-bottom: none; }
+    .section { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar" style="width:0%"></div>
+
+<div class="app-container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <h2>🚀 POLA NEWS</h2>
+      <div class="date">2026.06.10 — DART's Asteroid Punch</div>
+    </div>
+    <a class="nav-item active" data-section="reading">
+      <span class="nav-icon">📖</span> 全文阅读
+    </a>
+    <a class="nav-item" data-section="vocabulary">
+      <span class="nav-icon">📝</span> 词汇表
+    </a>
+    <a class="nav-item" data-section="patterns">
+      <span class="nav-icon">💬</span> 句型练习
+    </a>
+    <a class="nav-item" data-section="grammar">
+      <span class="nav-icon">📐</span> 语法点
+    </a>
+    <a class="nav-item" data-section="quiz">
+      <span class="nav-icon">🎯</span> 练习测验
+    </a>
+    <a class="nav-item" data-section="knowledge">
+      <span class="nav-icon">🔭</span> 知识扩展
+    </a>
+    <a class="nav-item" data-section="about">
+      <span class="nav-icon">📋</span> 关于本课
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ═══════════ SECTION 1: 全文阅读 ═══════════ -->
+    <section class="section active" id="section-reading">
+      <div class="section-title"><span class="emoji">📖</span> 全文阅读</div>
+
+      <div class="reading-paragraph" id="seg1">
+        <span class="keyword" data-def="小行星 — a rocky object orbiting the sun">asteroid</span>
+        What if I told you — humans just punched an 
+        <span class="keyword" data-def="小行星 — a rocky object orbiting the sun">asteroid</span>… and changed its path around the sun? NASA sent a 
+        <span class="keyword" data-def="航天器 — a vehicle for travel in space">spacecraft</span> called DART to 
+        <span class="keyword" data-def="撞击 — to hit something violently">crash</span> into a space rock on purpose. And guess what? It worked better than anyone expected!
+        <button class="play-btn pulse" data-seg="0" title="播放">▶</button>
+      </div>
+
+      <div class="reading-paragraph" id="seg2">
+        The target was Dimorphos, a small 
+        <span class="keyword" data-def="小行星 — a rocky object orbiting the sun">asteroid</span> that 
+        <span class="keyword" data-def="绕轨道运行 — to move around something in a curved path">orbits</span> a bigger one called Didymos. DART smashed into it at full speed — over 22,000 kilometers per hour! Scientists watched from Earth as the 
+        <span class="keyword" data-def="撞击 — the forceful striking of one object against another">impact</span> sent rocks flying everywhere. Now here's the surprise: the 
+        <span class="keyword" data-def="撞击 — the forceful striking of one object against another">impact</span> didn't just move one 
+        <span class="keyword" data-def="小行星 — a rocky object orbiting the sun">asteroid</span>… it shifted BOTH 
+        <span class="keyword" data-def="小行星 — a rocky object orbiting the sun">asteroids</span>' path around the sun. That's a first in human history!
+        <button class="play-btn pulse" data-seg="1" title="播放">▶</button>
+      </div>
+
+      <div class="reading-paragraph" id="seg3">
+        Why does this matter? Because one day, a big 
+        <span class="keyword" data-def="小行星 — a rocky object orbiting the sun">asteroid</span> might head toward Earth. Now we know we can actually 
+        <span class="keyword" data-def="使偏转 — to change the direction of something">deflect</span> it away. Amateur 
+        <span class="keyword" data-def="天文学家 — scientists who study stars and space">astronomers</span> helped track the tiny change — one even drove two days into the Australian 
+        <span class="keyword" data-def="澳大利亚内陆 — the remote inland region of Australia">outback</span> just to watch the asteroids blink past a star. Science isn't just for big space agencies. It's for everyone!
+        <button class="play-btn pulse" data-seg="2" title="播放">▶</button>
+      </div>
+
+      <div class="reading-paragraph" id="seg4">
+        So next time you look up at the night sky, remember — there are rocks up there, and we've already shown we can move them. This is Pola, reporting from the edge of space and the heart of Earth. See you next time, explorers!
+        <button class="play-btn pulse" data-seg="3" title="播放">▶</button>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 2: 词汇表 ═══════════ -->
+    <section class="section" id="section-vocabulary">
+      <div class="section-title"><span class="emoji">📝</span> 词汇表</div>
+      <div class="vocab-grid" id="vocab-grid"></div>
+    </section>
+
+    <!-- ═══════════ SECTION 3: 句型练习 ═══════════ -->
+    <section class="section" id="section-patterns">
+      <div class="section-title"><span class="emoji">💬</span> 句型练习</div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"What if I told you…?"</div>
+        <div class="pattern-desc">假设性开场 — 用来吸引听众注意力的反问句，意思是"如果我告诉你……会怎么样？"</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> What if I told you ______?
+          <br><em>（例如：What if I told you fish can climb waterfalls?）</em>
+        </div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"It worked better than anyone expected!"</div>
+        <div class="pattern-desc">超出预期 — 用比较级强调结果比所有人的预期都好。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> The experiment worked better than anyone ______!
+          <br><em>（例如：The cake turned out better than anyone imagined!）</em>
+        </div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"Now here's the surprise…"</div>
+        <div class="pattern-desc">引出惊喜 — 制造悬念后揭示最令人惊讶的事实，用于转换语气。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> Now here's the surprise: ______ actually ______!
+          <br><em>（例如：Now here's the surprise: the cat actually likes swimming!）</em>
+        </div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"Why does this matter? Because…"</div>
+        <div class="pattern-desc">自问自答 — 先提问再回答，让听众思考后再给出答案，增强说服力。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> Why does this matter? Because ______.
+          <br><em>（例如：Why does recycling matter? Because our planet needs us.）</em>
+        </div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-en">"Science isn't just for… It's for everyone!"</div>
+        <div class="pattern-desc">对比强调 — 否定一个常见的误解，然后用肯定句强调真正的含义。</div>
+        <div class="pattern-practice">
+          ✏️ <strong>Try it:</strong> ______ isn't just for ______. It's for everyone!
+          <br><em>（例如：Music isn't just for professionals. It's for everyone!）</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 4: 语法点 ═══════════ -->
+    <section class="section" id="section-grammar">
+      <div class="section-title"><span class="emoji">📐</span> 语法点</div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">1. 一般过去时 — 叙述已发生的事件</div>
+        <div class="grammar-desc">新闻报道中用过去时描述已发生的动作和事件。</div>
+        <div class="grammar-example">
+          <span class="en">"NASA <strong>sent</strong> a spacecraft called DART…"</span><br>
+          <span class="en">"DART <strong>smashed</strong> into it at full speed."</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ 动词变为过去式：send → sent, smash → smashed</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 将下列句子改为过去时："The spacecraft ______ (crash) into the asteroid. Scientists ______ (watch) from Earth."
+        </div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">2. might + 动词原形 — 表示未来的可能性</div>
+        <div class="grammar-desc">"might" 表示不确定的将来可能发生的事，比 "will" 更委婉。</div>
+        <div class="grammar-example">
+          <span class="en">"One day, a big asteroid <strong>might head</strong> toward Earth."</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ might + 动词原形，表示"可能……"</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 用 might 填空："It ______ (might / rain) tomorrow, so take an umbrella."
+        </div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">3. 现在完成时 — "We've already shown…"</div>
+        <div class="grammar-desc">现在完成时（have/has + 过去分词）连接过去动作与现在的结果。</div>
+        <div class="grammar-example">
+          <span class="en">"We<strong>'ve</strong> already <strong>shown</strong> we can move them."</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ have + shown（过去分词），强调"已经做过"且结果持续到现在</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 用现在完成时完成："Scientists ______ (discover) that the asteroids' orbit changed."
+        </div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">4. 比较级 + than — 表示"比……更"</div>
+        <div class="grammar-desc">用 "better/faster/more + than" 比较两个事物。</div>
+        <div class="grammar-example">
+          <span class="en">"It worked <strong>better than</strong> anyone expected!"</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ better 是 good 的比较级（不规则变化）</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> "The new rocket is ______ (fast) than the old one."
+        </div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">5. 感叹句 — "That's a first in human history!"</div>
+        <div class="grammar-desc">用感叹句表达强烈的情感，强调事件的重要性。</div>
+        <div class="grammar-example">
+          <span class="en">"<strong>That's a first</strong> in human history!"</span><br>
+          <span style="color:var(--text-secondary);font-size:0.82rem;">→ "a first" 表示"第一次/首次"，语气比 "the first time" 更口语化、更激动</span>
+        </div>
+        <div class="grammar-exercise">
+          🖊️ <strong>练习：</strong> 仿写："That's a first for our school — we ______!"
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 5: 练习测验 ═══════════ -->
+    <section class="section" id="section-quiz">
+      <div class="section-title"><span class="emoji">🎯</span> 练习测验</div>
+      <div id="quiz-container"></div>
+      <div class="quiz-score" id="quiz-score" style="display:none;"></div>
+    </section>
+
+    <!-- ═══════════ SECTION 6: 中文知识扩展 ═══════════ -->
+    <section class="section" id="section-knowledge">
+      <div class="section-title"><span class="emoji">🔭</span> 中文知识扩展</div>
+
+      <div class="knowledge-block">
+        <h3>🚀 DART 任务详解：人类第一次"行星防御演习"</h3>
+        <p>DART 是 <strong>Double Asteroid Redirection Test</strong>（双小行星改道测试）的缩写。2021年11月，NASA 发射了这艘航天器。2022年9月26日，DART 以约每小时22,530公里的速度（比子弹快10倍以上！）撞向小行星 Dimorphos。这是人类历史上第一次有意识地改变天体的运动轨道。</p>
+        <div class="fact-box">
+          💡 <strong>你知道吗？</strong> Dimorphos 直径约160米（相当于一个足球场大小），而它围绕的 Didymos 直径约780米。DART 航天器本身只有一台自动贩卖机那么大！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🦕 小行星与地球：恐龙灭绝的教训</h3>
+        <p>大约6600万年前，一颗直径约10公里的小行星撞击了今天墨西哥的尤卡坦半岛，引发全球性灾难，导致恐龙和地球上约75%的物种灭绝。这就是为什么科学家如此重视行星防御——我们不希望同样的事情再次发生！好消息是，像那样巨大的小行星非常罕见，而且我们现在已经有能力探测和追踪近地天体。</p>
+        <div class="fact-box">
+          💡 <strong>你知道吗？</strong> 每年有数千吨的微小太空尘埃和陨石落入地球大气层，但绝大多数在大气中就烧毁了。能到达地面的大型撞击平均每几百万年才发生一次。
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🛡️ 行星防御系统：地球的"保护伞"</h3>
+        <p>全球科学家正在建立一套完整的行星防御体系：<strong>发现 → 追踪 → 评估 → 应对</strong>。NASA 的行星防御协调办公室（PDCO）和国际小行星预警网络（IAWN）负责协调全球观测资源。DART 任务证明了"动能撞击"（kinetic impact）是一种可行的防御手段——简单说就是，如果我们提前发现一颗危险的小行星，就有时间派航天器去"推"它一把！</p>
+        <div class="fact-box">
+          💡 <strong>你知道吗？</strong> 欧洲航天局（ESA）的 Hera 航天器将于2026年底抵达 Didymos 系统，近距离研究 DART 撞击后留下的陨石坑，确认小行星轨道的精确变化！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🌌 业余天文学家的贡献</h3>
+        <p>在这项研究中，业余天文学家发挥了关键作用。他们分布在世界各地，可以在专业天文台无法覆盖的时间和地点进行观测。一位观测者甚至开车两天深入澳大利亚内陆，只为捕捉小行星经过恒星前方的瞬间（这种现象叫"掩星"occultation）。正是因为这些天文爱好者的数据，科学家才能精确计算出 DART 撞击后小行星轨道的变化。</p>
+        <div class="fact-box">
+          💡 <strong>你知道吗？</strong> 掩星观测其实很简单——你只需要一台望远镜、一个摄像头和精确的计时设备。许多业余天文学家通过观测掩星为科学研究做贡献，你也可以尝试！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <h3>🔬 这次新发现的意义</h3>
+        <p>此前我们只知道 DART 撞击缩短了 Dimorphos 绕 Didymos 的轨道（从约12小时缩短了32分钟）。但2026年3月发表于《Science Advances》的新研究首次证明：撞击还改变了<strong>两颗小行星一起绕太阳运行的轨道</strong>！这个变化极其微小——轨道周期只延长了约150毫秒（0.15秒），速度只减慢了每秒10微米——但能被测量到本身就证明我们的技术已经非常精确。这就像你能感觉到一只蚂蚁推了你一下一样不可思议！</p>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 7: 关于本课 ═══════════ -->
+    <section class="section" id="section-about">
+      <div class="section-title"><span class="emoji">📋</span> 关于本课</div>
+
+      <div class="card">
+        <h3 style="color:var(--accent);margin-bottom:16px;">🎯 学习目标</h3>
+        <ul class="about-list">
+          <li>了解 NASA DART 任务及其科学意义</li>
+          <li>掌握8个太空探索相关的核心英语词汇</li>
+          <li>学习5个实用的英语表达句型</li>
+          <li>理解一般过去时、现在完成时、比较级等语法点</li>
+          <li>了解行星防御和小行星科学的中文背景知识</li>
+        </ul>
+
+        <h3 style="color:var(--accent);margin:24px 0 16px;">💡 学习建议</h3>
+        <ul class="about-list">
+          <li>先听一遍全文朗读（点击每段右侧的 ▶ 按钮），感受语音语调</li>
+          <li>阅读时点击黄色关键词查看中文释义</li>
+          <li>对照词汇表学习核心单词，每个词都有发音按钮 🔊</li>
+          <li>完成句型练习和语法练习，试着仿写自己的句子</li>
+          <li>做完6道测验题检验理解程度</li>
+          <li>阅读中文知识扩展，深入了解行星防御科学</li>
+        </ul>
+
+        <h3 style="color:var(--accent);margin:24px 0 16px;">📚 内容来源</h3>
+        <ul class="about-list">
+          <li>Science News Explores — "NASA's DART spacecraft changed 2 asteroids' orbit around the sun" (June 8, 2026)</li>
+          <li>Science Advances — R. Makadia et al., "Direct detection of an asteroid's heliocentric deflection" (March 6, 2026)</li>
+          <li>NASA Official Website — DART Mission Page</li>
+        </ul>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ═══════════ Navigation ═══════════
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('.section');
+
+navItems.forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    const sectionId = item.dataset.section;
+    // Update nav
+    navItems.forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    // Show section
+    sections.forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + sectionId).classList.add('active');
+    // Scroll to top
+    document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ═══════════ Progress Bar ═══════════
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = progress + '%';
+});
+
+// ═══════════ Vocabulary Data ═══════════
+const vocabulary = [
+  { word: 'asteroid', pos: 'noun', zh: '小行星', example: 'The asteroid is about 160 meters wide — as big as a football field!' },
+  { word: 'spacecraft', pos: 'noun', zh: '航天器；宇宙飞船', example: 'The DART spacecraft traveled millions of kilometers to reach its target.' },
+  { word: 'orbit', pos: 'verb / noun', zh: '绕轨道运行；轨道', example: 'The moon orbits Earth once every 27 days.' },
+  { word: 'impact', pos: 'noun', zh: '撞击；冲击', example: 'The impact created a huge crater and sent debris flying into space.' },
+  { word: 'crash', pos: 'verb', zh: '撞击；坠毁', example: 'DART crashed into Dimorphos on purpose — it was part of the plan!' },
+  { word: 'astronomer', pos: 'noun', zh: '天文学家', example: 'Amateur astronomers from around the world helped track the asteroids.' },
+  { word: 'deflect', pos: 'verb', zh: '使偏转；改变方向', example: 'If we can deflect an asteroid, we can protect Earth from future threats.' },
+  { word: 'debris', pos: 'noun', zh: '碎片；残骸', example: 'The crash blasted tons of rocky debris off the asteroid\'s surface.' },
+  { word: 'blink', pos: 'verb', zh: '闪烁；（星星）眨', example: 'The asteroid blinked past a distant star — like a tiny eclipse in space.' },
+  { word: 'outback', pos: 'noun', zh: '澳大利亚内陆（偏远荒漠地区）', example: 'One observer drove two days into the Australian outback to get the data.' }
+];
+
+// Build vocab cards
+const vocabGrid = document.getElementById('vocab-grid');
+vocabulary.forEach((v, i) => {
+  const card = document.createElement('div');
+  card.className = 'vocab-card';
+  card.innerHTML = `
+    <div class="vocab-word">
+      <button class="vocab-play-btn" data-vocab="${v.word}" title="发音">🔊</button>
+      ${v.word}
+      <span class="vocab-pos">${v.pos}</span>
+    </div>
+    <div class="vocab-zh">${v.zh}</div>
+    <div class="vocab-example">📖 ${v.example}</div>
+  `;
+  vocabGrid.appendChild(card);
+});
+
+// ═══════════ Quiz Data ═══════════
+const quizData = [
+  {
+    q: '1. What does DART stand for?',
+    options: ['Dangerous Asteroid Response Team', 'Double Asteroid Redirection Test', 'Deep Asteroid Recovery Tool', 'Direct Asteroid Research Telescope'],
+    answer: 1,
+    explanation: 'DART = Double Asteroid Redirection Test（双小行星改道测试）。"Redirection" 意思是"改变方向"。'
+  },
+  {
+    q: '2. What was the name of the asteroid DART crashed into?',
+    options: ['Didymos', 'Dimorphos', 'Hera', 'Apophis'],
+    answer: 1,
+    explanation: 'DART 撞向的是 Dimorphos（直径约160米），它围绕更大的 Didymos（直径约780米）运行。'
+  },
+  {
+    q: '3. How fast was DART traveling when it hit the asteroid?',
+    options: ['About 5,000 km/h', 'About 10,000 km/h', 'Over 22,000 km/h', 'Over 100,000 km/h'],
+    answer: 2,
+    explanation: 'DART 以超过每小时22,000公里的速度撞击——比子弹快10倍以上！💨'
+  },
+  {
+    q: '4. What was the NEW discovery announced in 2026?',
+    options: ['DART found water on the asteroid', 'DART changed BOTH asteroids\' orbit around the sun', 'DART discovered a new moon', 'DART landed safely on the asteroid'],
+    answer: 1,
+    explanation: '新发现：撞击不仅改变了 Dimorphos 绕 Didymos 的轨道，还改变了两颗小行星一起绕太阳运行的轨道！🌞'
+  },
+  {
+    q: '5. Who helped scientists track the asteroids\' movement?',
+    options: ['Only NASA engineers', 'Amateur astronomers around the world', 'Astronauts on the ISS', 'Robot telescopes only'],
+    answer: 1,
+    explanation: '全世界的业余天文学家提供了关键数据，有一位甚至开车两天深入澳大利亚内陆去观测！🔭'
+  },
+  {
+    q: '6. Why is the DART mission important for the future?',
+    options: ['It helps us mine asteroids for gold', 'It proves we can defend Earth from dangerous asteroids', 'It helps us build space hotels', 'It discovered alien life'],
+    answer: 1,
+    explanation: 'DART 证明了"动能撞击"是一种可行的行星防御手段——如果未来有危险小行星飞向地球，我们知道可以撞击它来改变轨道！🛡️'
+  }
+];
+
+// Build quiz
+const quizContainer = document.getElementById('quiz-container');
+const quizScore = document.getElementById('quiz-score');
+let answeredCount = 0;
+let correctCount = 0;
+
+quizData.forEach((item, qi) => {
+  const qDiv = document.createElement('div');
+  qDiv.className = 'quiz-item';
+  let optionsHTML = item.options.map((opt, oi) =>
+    `<div class="quiz-option" data-q="${qi}" data-o="${oi}">${String.fromCharCode(65+oi)}. ${opt}</div>`
+  ).join('');
+
+  qDiv.innerHTML = `
+    <div class="quiz-q">${item.q}</div>
+    <div class="quiz-options">${optionsHTML}</div>
+    <div class="quiz-feedback" id="fb-${qi}"></div>
+  `;
+  quizContainer.appendChild(qDiv);
+});
+
+// Quiz click handler
+quizContainer.addEventListener('click', (e) => {
+  const opt = e.target.closest('.quiz-option');
+  if (!opt || opt.classList.contains('correct') || opt.classList.contains('wrong')) return;
+
+  const qi = parseInt(opt.dataset.q);
+  const oi = parseInt(opt.dataset.o);
+  const item = quizData[qi];
+  const feedback = document.getElementById('fb-' + qi);
+  const options = quizContainer.querySelectorAll(`[data-q="${qi}"]`);
+
+  // Mark all options as unselectable
+  options.forEach(o => {
+    if (parseInt(o.dataset.o) === item.answer) o.classList.add('correct');
+    if (parseInt(o.dataset.o) === oi && oi !== item.answer) o.classList.add('wrong');
+  });
+
+  if (oi === item.answer) {
+    feedback.textContent = '✅ 正确！' + item.explanation;
+    feedback.className = 'quiz-feedback correct show';
+    correctCount++;
+  } else {
+    feedback.textContent = '❌ 不对哦。' + item.explanation;
+    feedback.className = 'quiz-feedback wrong show';
+  }
+
+  answeredCount++;
+  if (answeredCount === quizData.length) {
+    quizScore.style.display = 'block';
+    quizScore.innerHTML = `🎉 你的得分：<strong>${correctCount} / ${quizData.length}</strong> ` +
+      (correctCount === quizData.length ? '🏆 满分！太棒了！' :
+       correctCount >= 4 ? '👏 很好！继续加油！' :
+       correctCount >= 2 ? '📚 还不错，再复习一下词汇表吧！' :
+       '💪 再试一次，你可以做得更好！');
+  }
+});
+
+// ═══════════ Web Speech API ═══════════
+let currentUtterance = null;
+let currentPlayBtn = null;
+
+// Segment texts (plain text for speech)
+const segmentTexts = [
+  "What if I told you — humans just punched an asteroid and changed its path around the sun? NASA sent a spacecraft called DART to crash into a space rock on purpose. And guess what? It worked better than anyone expected!",
+  "The target was Dimorphos, a small asteroid that orbits a bigger one called Didymos. DART smashed into it at full speed — over 22,000 kilometers per hour! Scientists watched from Earth as the impact sent rocks flying everywhere. Now here's the surprise: the impact didn't just move one asteroid… it shifted BOTH asteroids' path around the sun. That's a first in human history!",
+  "Why does this matter? Because one day, a big asteroid might head toward Earth. Now we know we can actually deflect it away. Amateur astronomers helped track the tiny change — one even drove two days into the Australian outback just to watch the asteroids blink past a star. Science isn't just for big space agencies. It's for everyone!",
+  "So next time you look up at the night sky, remember — there are rocks up there, and we've already shown we can move them. This is Pola, reporting from the edge of space and the heart of Earth. See you next time, explorers!"
+];
+
+let voicesLoaded = false;
+
+function loadVoices() {
+  return new Promise((resolve) => {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length > 0) { voicesLoaded = true; resolve(voices); return; }
+    speechSynthesis.onvoiceschanged = () => {
+      voicesLoaded = true;
+      resolve(speechSynthesis.getVoices());
+    };
+  });
+}
+
+function getBestVoice() {
+  const voices = speechSynthesis.getVoices();
+  // Priority: Enhanced English male > Daniel > Alex > Microsoft Mark > any English male > any English
+  const priority = ['enhanced', 'daniel', 'alex', 'microsoft mark'];
+  for (const pref of priority) {
+    const found = voices.find(v =>
+      v.lang.startsWith('en') && v.name.toLowerCase().includes(pref) &&
+      (pref === 'enhanced' ? true : !v.name.toLowerCase().includes('female'))
+    );
+    if (found) return found;
+  }
+  // Any English male voice
+  const enMale = voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('female'));
+  if (enMale) return enMale;
+  // Any English voice
+  const enAny = voices.find(v => v.lang.startsWith('en'));
+  return enAny || voices[0];
+}
+
+function stopCurrentSpeech() {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  if (currentPlayBtn) {
+    currentPlayBtn.textContent = '▶';
+    currentPlayBtn.classList.remove('playing', 'pulse');
+    currentPlayBtn = null;
+  }
+}
+
+function speak(text, btn) {
+  stopCurrentSpeech();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.voice = getBestVoice();
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  currentUtterance = utterance;
+  currentPlayBtn = btn;
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+  btn.classList.remove('pulse');
+
+  utterance.onend = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    btn.classList.add('pulse');
+    currentUtterance = null;
+    currentPlayBtn = null;
+  };
+
+  utterance.onerror = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    btn.classList.add('pulse');
+    currentUtterance = null;
+    currentPlayBtn = null;
+  };
+
+  speechSynthesis.speak(utterance);
+}
+
+function speakWord(word, btn) {
+  stopCurrentSpeech();
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.voice = getBestVoice();
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  currentUtterance = utterance;
+  currentPlayBtn = btn;
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+
+  utterance.onend = () => {
+    btn.textContent = '🔊';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+    currentPlayBtn = null;
+  };
+
+  utterance.onerror = () => {
+    btn.textContent = '🔊';
+    btn.classList.remove('playing');
+    currentUtterance = null;
+    currentPlayBtn = null;
+  };
+
+  speechSynthesis.speak(utterance);
+}
+
+// Attach segment play buttons
+document.querySelectorAll('.play-btn[data-seg]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const segIdx = parseInt(btn.dataset.seg);
+    if (btn.classList.contains('playing')) {
+      stopCurrentSpeech();
+      return;
+    }
+    speak(segmentTexts[segIdx], btn);
+  });
+});
+
+// Attach vocabulary play buttons (delegated)
+vocabGrid.addEventListener('click', (e) => {
+  const btn = e.target.closest('.vocab-play-btn');
+  if (!btn) return;
+  if (btn.classList.contains('playing')) {
+    stopCurrentSpeech();
+    return;
+  }
+  speakWord(btn.dataset.vocab, btn);
+});
+
+// Load voices on page load
+loadVoices();
+
+// Stop speech when navigating away
+navItems.forEach(item => {
+  item.addEventListener('click', () => stopCurrentSpeech());
+});
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

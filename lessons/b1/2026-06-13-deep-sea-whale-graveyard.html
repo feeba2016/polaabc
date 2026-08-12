@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS — Deep-Sea Whale Graveyard | 互动英语学习</title>
+<style>
+  :root {
+    --bg-start: #0a1628;
+    --bg-mid: #0d2847;
+    --bg-end: #0a1628;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.12);
+    --text: #e8e8f0;
+    --text-secondary: #b0b0c8;
+    --accent: #00bcd4;
+    --accent-glow: rgba(0,188,212,0.3);
+    --highlight: #ffd700;
+    --highlight-bg: rgba(255,215,0,0.15);
+    --btn-play: #4fc3f7;
+    --btn-play-hover: #29b6f6;
+    --correct: #66bb6a;
+    --wrong: #ef5350;
+    --nav-width: 240px;
+    --progress-height: 4px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+  #progress-bar {
+    position: fixed; top:0; left:0; height:var(--progress-height);
+    background: linear-gradient(90deg, var(--accent), #4fc3f7);
+    z-index: 1000; transition: width 0.15s ease-out;
+  }
+  .app-container { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: var(--nav-width); background: rgba(10,22,40,0.97);
+    backdrop-filter: blur(12px); position: fixed; top:0; left:0;
+    height: 100vh; overflow-y: auto; z-index: 100;
+    border-right: 1px solid rgba(0,188,212,0.15);
+    padding: 24px 0;
+  }
+  .sidebar-header {
+    text-align: center; padding: 0 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px;
+  }
+  .sidebar-header .logo {
+    font-size: 18px; font-weight: 800; color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .sidebar-header .episode {
+    font-size: 11px; color: var(--text-secondary); margin-top: 4px;
+  }
+  .sidebar nav { padding: 0 12px; }
+  .sidebar nav a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 14px; border-radius: 10px;
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 14px; transition: all 0.25s; margin-bottom: 2px;
+  }
+  .sidebar nav a:hover, .sidebar nav a.active {
+    background: rgba(0,188,212,0.12); color: var(--accent);
+  }
+  .sidebar nav a .nav-icon { font-size: 16px; width: 22px; text-align: center; }
+  .main-content {
+    margin-left: var(--nav-width); flex:1; padding: 40px 48px 80px;
+    max-width: 900px;
+  }
+  .section {
+    margin-bottom: 56px; scroll-margin-top: 20px;
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 32px;
+    backdrop-filter: blur(8px);
+  }
+  .section h2 {
+    font-size: 22px; color: var(--accent); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 12px; border-bottom: 1px solid rgba(0,188,212,0.2);
+  }
+  .section h2 .sec-num {
+    font-size: 13px; background: rgba(0,188,212,0.2);
+    padding: 3px 10px; border-radius: 12px; font-weight: 500;
+  }
+  .keyword {
+    color: var(--highlight); background: var(--highlight-bg);
+    padding: 2px 6px; border-radius: 4px; cursor: pointer;
+    position: relative; font-weight: 600; transition: background 0.2s;
+  }
+  .keyword:hover { background: rgba(255,215,0,0.28); }
+  .keyword-tooltip {
+    display: none; position: absolute; bottom: calc(100% + 8px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a2a3a; border: 1px solid rgba(255,215,0,0.3);
+    color: #fff; padding: 8px 14px; border-radius: 8px;
+    font-size: 13px; white-space: nowrap; z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    font-weight: 400;
+  }
+  .keyword:hover .keyword-tooltip { display: block; }
+  .reading-segment {
+    position: relative; margin-bottom: 20px; padding: 16px;
+    background: rgba(255,255,255,0.03); border-radius: 12px;
+    border-left: 3px solid rgba(0,188,212,0.3);
+    line-height: 1.9;
+  }
+  .play-btn {
+    position: absolute; top: 12px; right: 12px;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--btn-play); background: rgba(79,195,247,0.1);
+    color: var(--btn-play); font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s; z-index: 10;
+  }
+  .play-btn:hover { background: rgba(79,195,247,0.25); transform: scale(1.1); }
+  .play-btn.playing {
+    background: var(--btn-play); color: #fff;
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.5); }
+    50% { box-shadow: 0 0 0 12px rgba(79,195,247,0); }
+  }
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .vocab-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 18px; transition: all 0.3s; position: relative;
+  }
+  .vocab-card:hover {
+    border-color: rgba(0,188,212,0.3);
+    box-shadow: 0 4px 20px rgba(0,188,212,0.1);
+  }
+  .vocab-card .word {
+    font-size: 18px; font-weight: 700; color: var(--highlight);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .vocab-card .pos {
+    font-size: 12px; color: var(--accent); font-style: italic; font-weight: 400;
+  }
+  .vocab-card .def { color: var(--text-secondary); font-size: 13px; margin: 6px 0; }
+  .vocab-card .example {
+    font-size: 13px; color: var(--text); font-style: italic;
+    border-left: 2px solid rgba(0,188,212,0.3); padding-left: 10px; margin-top: 8px;
+  }
+  .vocab-play {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1px solid var(--btn-play); background: rgba(79,195,247,0.08);
+    color: var(--btn-play); font-size: 11px; cursor: pointer;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .vocab-play:hover { background: rgba(79,195,247,0.2); }
+  .vocab-play.playing { background: var(--btn-play); color:#fff; }
+  .sentence-item {
+    background: rgba(255,255,255,0.03); border-radius: 10px; padding: 18px;
+    margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .sentence-item .en { font-size: 16px; font-weight: 600; color: #fff; }
+  .sentence-item .cn { font-size: 13px; color: var(--text-secondary); margin: 4px 0 8px; }
+  .sentence-item .explain { font-size: 13px; color: var(--accent); }
+  .sentence-item .practice {
+    width: 100%; margin-top: 10px; padding: 10px 14px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; color: var(--text); font-size: 14px; resize: vertical;
+    font-family: inherit;
+  }
+  .grammar-item {
+    background: rgba(255,255,255,0.03); border-radius: 10px; padding: 18px;
+    margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .grammar-item .grammar-title {
+    font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 6px;
+  }
+  .grammar-item .grammar-expl { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
+  .grammar-item .grammar-example {
+    font-size: 14px; color: #fff; font-style: italic;
+    background: rgba(0,188,212,0.08); padding: 8px 14px;
+    border-radius: 6px; margin-bottom: 10px;
+  }
+  .grammar-practice {
+    width: 100%; padding: 8px 14px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit;
+  }
+  .quiz-item {
+    background: rgba(255,255,255,0.03); border-radius: 10px; padding: 20px;
+    margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .quiz-item .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .quiz-item .q-text .q-cn { display: block; font-size: 13px; color: var(--text-secondary); font-weight: 400; margin-top: 2px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt {
+    padding: 10px 16px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03);
+    cursor: pointer; transition: all 0.2s; font-size: 14px; color: var(--text);
+    text-align: left;
+  }
+  .quiz-opt:hover { border-color: var(--accent); background: rgba(0,188,212,0.08); }
+  .quiz-opt.correct { border-color: var(--correct); background: rgba(102,187,106,0.15); color: var(--correct); font-weight: 600; }
+  .quiz-opt.wrong { border-color: var(--wrong); background: rgba(239,83,80,0.15); color: var(--wrong); }
+  .quiz-feedback { margin-top: 10px; font-size: 13px; color: var(--accent); display: none; }
+  .knowledge-block {
+    background: rgba(255,255,255,0.03); border-radius: 10px; padding: 20px;
+    margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .knowledge-block h3 {
+    font-size: 17px; color: var(--highlight); margin-bottom: 10px;
+  }
+  .knowledge-block p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+  .about-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .about-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; padding: 18px; text-align: center;
+  }
+  .about-card .about-icon { font-size: 28px; margin-bottom: 8px; }
+  .about-card h4 { font-size: 14px; color: var(--accent); margin-bottom: 6px; }
+  .about-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .print-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 8px;
+    border: 1px solid var(--accent); background: rgba(0,188,212,0.1);
+    color: var(--accent); cursor: pointer; font-size: 14px; transition: all 0.25s;
+    margin-top: 16px;
+  }
+  .print-btn:hover { background: rgba(0,188,212,0.25); }
+  .page-header {
+    text-align: center; margin-bottom: 32px; padding: 32px;
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px;
+  }
+  .page-header h1 { font-size: 28px; color: var(--accent); margin-bottom: 8px; }
+  .page-header .meta { font-size: 13px; color: var(--text-secondary); }
+  /* mobile */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%; height: auto; position: relative;
+      padding: 12px; border-right: none; border-bottom: 1px solid rgba(0,188,212,0.15);
+    }
+    .sidebar nav { display: flex; flex-wrap: wrap; gap: 4px; padding:0; }
+    .sidebar nav a { font-size: 12px; padding: 8px 10px; }
+    .sidebar-header { padding-bottom: 10px; }
+    .main-content { margin-left:0; padding: 16px; }
+    .section { padding: 20px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr 1fr; }
+    .page-header { padding: 20px; }
+    .page-header h1 { font-size: 22px; }
+  }
+  @media print {
+    .sidebar, #progress-bar, .play-btn, .vocab-play, .print-btn { display: none !important; }
+    .main-content { margin-left:0; padding:0; }
+    body { background: #fff; color: #000; }
+    .section { background: #fff; border: 1px solid #ddd; break-inside: avoid; }
+    .keyword { color: #005; background: #ff0; }
+    .app-container { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<div class="app-container">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">🐨 POLA NEWS</div>
+    <div class="episode">Ep. 22 · June 13, 2026</div>
+  </div>
+  <nav>
+    <a href="#reading" class="active"><span class="nav-icon">📖</span> 全文阅读</a>
+    <a href="#vocabulary"><span class="nav-icon">📝</span> 词汇表</a>
+    <a href="#sentences"><span class="nav-icon">💬</span> 句型练习</a>
+    <a href="#grammar"><span class="nav-icon">📚</span> 语法点</a>
+    <a href="#quiz"><span class="nav-icon">✅</span> 练习测验</a>
+    <a href="#knowledge"><span class="nav-icon">🌊</span> 知识扩展</a>
+    <a href="#about"><span class="nav-icon">ℹ️</span> 关于本课</a>
+  </nav>
+</aside>
+
+<!-- Main -->
+<main class="main-content">
+
+<div class="page-header">
+  <h1>🐋 Deep-Sea Whale Graveyard</h1>
+  <p class="meta">深海鲸鱼墓地 · 奋斗者号在印度洋7002米深海的惊人发现</p>
+  <p class="meta" style="margin-top:6px;">POLA NEWS · June 13, 2026 · B1 English</p>
+</div>
+
+<!-- ── 1. Full Reading ── -->
+<section id="reading" class="section">
+  <h2><span class="sec-num">1</span> 📖 全文阅读 Full Reading</h2>
+
+  <div class="reading-segment" id="seg1">
+    <button class="play-btn" onclick="toggleSegment(0, this)" title="播放段落">▶</button>
+    <p>Imagine diving seven kilometers down into the ocean — <span class="keyword" data-def="adj. 比...更深">deeper</span> than Mount Everest is tall. It's <span class="keyword" data-def="adj. 漆黑的">pitch black</span>, <span class="keyword" data-def="adj. 冰冷的">freezing cold</span>, and the <span class="keyword" data-def="n. 压力">pressure</span> could crush a car. But what Chinese scientists found down there made their hearts race: a giant whale <span class="keyword" data-def="n. 墓地">graveyard</span>, hidden in the darkness for millions of years!</p>
+  </div>
+
+  <div class="reading-segment" id="seg2">
+    <button class="play-btn" onclick="toggleSegment(1, this)" title="播放段落">▶</button>
+    <p>The crewed <span class="keyword" data-def="n. 潜水器">submersible</span> <em>Fendouzhe</em> made 32 dives into the Diamantina Zone of the Indian Ocean. They <span class="keyword" data-def="v. 发现（过去式）">discovered</span> 485 places where whales had fallen to the <span class="keyword" data-def="n. 海底">seafloor</span> — some bones are over five million years old! The cold, high-pressure water <span class="keyword" data-def="v. 保存">preserved</span> them perfectly. They even found a brand-new whale <span class="keyword" data-def="n. 物种">species</span>: <em>Pterocetus diamantinae</em>!</p>
+  </div>
+
+  <div class="reading-segment" id="seg3">
+    <button class="play-btn" onclick="toggleSegment(2, this)" title="播放段落">▶</button>
+    <p>This isn't just about old bones. When a whale dies and sinks, it creates a whole new world on the seafloor — a "<span class="keyword" data-def="n. 鲸落 — 鲸鱼死后沉入海底形成的生态系统">whale fall</span>" that feeds thousands of deep-sea creatures for decades. This graveyard is like a five-million-year <span class="keyword" data-def="n. 图书馆；资料库">library</span> of ocean life, telling us how whales <span class="keyword" data-def="v. 进化">evolved</span> and how deep-sea <span class="keyword" data-def="n. 生态系统">ecosystems</span> work.</p>
+  </div>
+
+  <div class="reading-segment" id="seg4">
+    <button class="play-btn" onclick="toggleSegment(3, this)" title="播放段落">▶</button>
+    <p>Isn't it amazing? The deepest, darkest corners of our planet still hold <span class="keyword" data-def="n. 秘密">secrets</span> waiting to be discovered. Who knows what else is down there? This is Pola, reporting from the edge of the deep blue. See you next time — and keep <span class="keyword" data-def="v. 探索">exploring</span>!</p>
+  </div>
+</section>
+
+<!-- ── 2. Vocabulary ── -->
+<section id="vocabulary" class="section">
+  <h2><span class="sec-num">2</span> 📝 词汇表 Vocabulary</h2>
+  <div class="vocab-grid" id="vocabGrid"></div>
+</section>
+
+<!-- ── 3. Sentence Patterns ── -->
+<section id="sentences" class="section">
+  <h2><span class="sec-num">3</span> 💬 句型练习 Sentence Patterns</h2>
+
+  <div class="sentence-item">
+    <div class="en">"deeper than Mount Everest is tall"</div>
+    <div class="cn">比珠穆朗玛峰的高度还要深</div>
+    <div class="explain">📌 <strong>比较级 + than</strong> — 用熟悉的事物来形象化描述大小、深度、高度等。这是英语中非常常见的"形象比喻"手法。</div>
+    <textarea class="practice" placeholder="Try writing your own comparison: 'The blue whale is heavier than...' (蓝鲸比...还要重)" rows="2"></textarea>
+  </div>
+
+  <div class="sentence-item">
+    <div class="en">"When a whale dies and sinks, it creates a whole new world."</div>
+    <div class="cn">当一头鲸鱼死去并沉入海底时，它会创造一个全新的世界。</div>
+    <div class="explain">📌 <strong>When + 条件 + 结果</strong> — 描述因果关系。When 后面接条件，主句接结果。这是科学解释中最常用的句型之一。</div>
+    <textarea class="practice" placeholder="Try: 'When the sun sets, the deep-sea creatures...' (当太阳落山时，深海生物...)" rows="2"></textarea>
+  </div>
+
+  <div class="sentence-item">
+    <div class="en">"This isn't just about old bones."</div>
+    <div class="cn">这不仅仅是关于古老的骨头。</div>
+    <div class="explain">📌 <strong>Not just... but also...</strong> — 强调某事物的重要性远不止表面看起来那么简单。后面通常会跟着更深层的意义。</div>
+    <textarea class="practice" placeholder="Try: 'The ocean isn't just about water... it's also...'" rows="2"></textarea>
+  </div>
+
+  <div class="sentence-item">
+    <div class="en">"Who knows what else is down there?"</div>
+    <div class="cn">谁知道下面还有什么呢？</div>
+    <div class="explain">📌 <strong>反问句 (Rhetorical Question)</strong> — 用问题来激发好奇，不需要回答。这种表达让故事更有悬念和趣味性。</div>
+    <textarea class="practice" placeholder="Try your own rhetorical question about space or the ocean..." rows="2"></textarea>
+  </div>
+
+  <div class="sentence-item">
+    <div class="en">"This graveyard is like a five-million-year library of ocean life."</div>
+    <div class="cn">这个墓地就像一座五百万年的海洋生命图书馆。</div>
+    <div class="explain">📌 <strong>Simile (明喻) — "like a..."</strong> — 用 "like" 或 "as" 进行比喻，帮助听众通过熟悉的图像理解抽象的概念。</div>
+    <textarea class="practice" placeholder="Try: 'A whale's song is like...' (鲸鱼之歌就像...)" rows="2"></textarea>
+  </div>
+</section>
+
+<!-- ── 4. Grammar ── -->
+<section id="grammar" class="section">
+  <h2><span class="sec-num">4</span> 📚 语法点 Grammar Points</h2>
+
+  <div class="grammar-item">
+    <div class="grammar-title">1. Comparative Adjectives 比较级形容词</div>
+    <div class="grammar-expl">用 "形容词 + -er + than" 对比两个事物。单音节和部分双音节词加 -er，多音节词前面加 more。</div>
+    <div class="grammar-example">"deeper than Mount Everest" / "colder than ice" / "older than your grandparents"</div>
+    <input class="grammar-practice" placeholder="练习：The Mariana Trench is ______ (deep) than the Indian Ocean.">
+  </div>
+
+  <div class="grammar-item">
+    <div class="grammar-title">2. Present Perfect 现在完成时</div>
+    <div class="grammar-expl">"have / has + 过去分词" — 描述已经完成的动作，强调结果对现在的影响。</div>
+    <div class="grammar-example">"Scientists have discovered 485 whale-fall sites." / "They have found a new species."</div>
+    <input class="grammar-practice" placeholder="练习：The team ______ (make) 32 dives so far.">
+  </div>
+
+  <div class="grammar-item">
+    <div class="grammar-title">3. Passive Voice 被动语态</div>
+    <div class="grammar-expl">"be + 过去分词" — 当动作的执行者不重要时，用被动语态强调动作的承受者。</div>
+    <div class="grammar-example">"The bones were preserved by the cold water." / "The new species was named Pterocetus diamantinae."</div>
+    <input class="grammar-practice" placeholder="练习：The fossils ______ (find) at 7,002 meters deep.">
+  </div>
+
+  <div class="grammar-item">
+    <div class="grammar-title">4. Modal Verbs of Possibility 情态动词·可能性</div>
+    <div class="grammar-expl">"could" 和 "might" 用来表达可能但不确定的事情。"could" 表示能力或可能性，"could crush a car" 表示"能压碎一辆车"。</div>
+    <div class="grammar-example">"The pressure could crush a car." / "Who knows what else might be down there?"</div>
+    <input class="grammar-practice" placeholder="练习：There ______ (可能) be more new species in the deep sea.">
+  </div>
+
+  <div class="grammar-item">
+    <div class="grammar-title">5. Time Expressions with "Over" 时间表达</div>
+    <div class="grammar-expl">"over + 数字" 表示"超过……"，强调数量之多。可以用来修饰时间、年龄、数量等。</div>
+    <div class="grammar-example">"over five million years old" / "over 485 whale-fall sites" / "the submersible dove over 7,000 meters"</div>
+    <input class="grammar-practice" placeholder="练习：Some whale fossils are ______ (超过) 5 million years old.">
+  </div>
+</section>
+
+<!-- ── 5. Quiz ── -->
+<section id="quiz" class="section">
+  <h2><span class="sec-num">5</span> ✅ 练习测验 Quiz</h2>
+  <p style="color:var(--text-secondary); font-size:13px; margin-bottom:20px;">点击选项查看答案 ✓</p>
+  <div id="quizContainer"></div>
+</section>
+
+<!-- ── 6. Knowledge Extension ── -->
+<section id="knowledge" class="section">
+  <h2><span class="sec-num">6</span> 🌊 中文知识扩展 Knowledge Extension</h2>
+
+  <div class="knowledge-block">
+    <h3>🐋 什么是"鲸落"（Whale Fall）？</h3>
+    <p>当一头鲸鱼在海洋中死去，它的身体会缓缓沉入海底。这个过程被称为"鲸落"（Whale Fall）。一头40吨重的鲸鱼尸体沉到海底后，可以养活数万个深海生物，形成一个独特的生态系统，持续数十年甚至上百年。科学家将鲸落分为四个阶段：<strong>移动清道夫阶段</strong>（鲨鱼、盲鳗吃掉软组织，约1-2年）、<strong>机会主义者阶段</strong>（蠕虫、甲壳类吃掉残余，约2年）、<strong>化能自养阶段</strong>（细菌分解骨骼中的脂质，释放硫化氢，供养特殊生物群落，可达50-100年）、<strong>礁石阶段</strong>（剩下的骨骼变成硬质基底，供滤食性生物附着）。海洋中已发现的天然鲸落不足100处，而这次在印度洋一次就发现了485处！</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🚢 "奋斗者"号 — 中国载人深潜的骄傲</h3>
+    <p>"奋斗者"号（Fendouzhe）是中国自主研发的万米级载人潜水器。2020年11月10日，它在马里亚纳海沟成功坐底10,909米，创造了中国载人深潜新纪录。这次在印度洋的任务是"全球深渊探索计划"（Global Hadal Exploration Programme）的一部分，目标是探索地球上所有6000-11000米深的海沟。"深渊带"（Hadal Zone）是海洋最深的一层，水压超过600个大气压——相当于每平方厘米承受600公斤的重量！在那里，没有任何阳光，温度接近冰点，但生命依然存在。</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🦴 为什么鲸骨能保存500万年？</h3>
+    <p>正常情况下，骨头掉进海里会很快被微生物分解或被食骨生物啃食。但在这个印度洋的"深海墓地"，三样东西完美配合：<strong>① 极深的海水</strong>（7002米）让温度接近0°C，微生物活动极为缓慢；<strong>② 铁锰氧化物涂层</strong>在骨骼表面形成了一层"铠甲"，密封了骨骼与外界环境的接触；<strong>③ 极慢的沉积速率</strong>（每千年仅0.05-0.55毫米），意味着500万年来几乎没有新的沉积物覆盖它们。此外，大多数化石是喙鲸的喙部——这部分骨骼密度极高，像骨甲一样坚硬，连食骨蠕虫都啃不动！</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🌏 鲸鱼的演化简史</h3>
+    <p>鲸鱼不是鱼——它们是哺乳动物，和我们人类一样用肺呼吸、是温血动物！大约5000万年前，鲸鱼的祖先（一种叫做<strong>巴基斯坦鲸 Pakicetus</strong>的四足哺乳动物）在陆地上行走。随着时间推移，它们逐渐适应了水中生活：前肢变成鳍状肢，后肢退化消失，鼻孔移到了头顶（成为喷气孔），身体变成了流线型。现存的鲸类分为两大类：<strong>须鲸</strong>（如蓝鲸、座头鲸，用鲸须过滤食物）和<strong>齿鲸</strong>（如抹香鲸、虎鲸，用牙齿捕食）。这次发现的化石中，大多数是喙鲸——一种神秘的深海齿鲸，它们能下潜到比任何其他呼吸空气的动物都深的地方！</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🔬 "深海化石超级遗址"的科学意义</h3>
+    <p>这个发现被科学家称为"深海化石超级遗址"（deep-sea fossil megasite）。它的重要性在于：<strong>① 时间跨度极长</strong>——化石覆盖了12万到526万年的历史，提供了一部完整的进化档案；<strong>② 生态系统完整</strong>——不仅仅是骨头，还有围绕鲸落生活的各种生物（食骨蠕虫、海蛇尾等），密度高达每平方米2800个无脊椎动物；<strong>③ 新物种宝库</strong>——已确认一个新种喙鲸 <em>Pterocetus diamantinae</em>，还有更多新物种等待研究；<strong>④ 气候记录</strong>——通过分析化石的化学成分，科学家可以还原过去500万年印度洋的气候变化。首席科学家周鹏说："我们在观看数百万头鲸鱼的最终安息地——这是一部关于进化和深海生命的深邃时间档案，令人谦卑和敬畏。"</p>
+  </div>
+</section>
+
+<!-- ── 7. About ── -->
+<section id="about" class="section">
+  <h2><span class="sec-num">7</span> ℹ️ 关于本课 About This Lesson</h2>
+
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="about-icon">🎯</div>
+      <h4>学习目标</h4>
+      <p>理解深海鲸鱼墓地的科学发现；掌握10个海洋科学核心词汇；学会用比较级和比喻描述科学概念。</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">📊</div>
+      <h4>英语等级</h4>
+      <p>B1（中级）<br>适合10-12岁<br>英语学习者</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">⏱️</div>
+      <h4>建议时间</h4>
+      <p>全文阅读：5 分钟<br>词汇句型：10 分钟<br>测验拓展：15 分钟</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">💡</div>
+      <h4>学习建议</h4>
+      <p>先听一遍完整朗读，再逐段精读。标记不认识的词，完成练习后查漏补缺。</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">📰</div>
+      <h4>新闻来源</h4>
+      <p>Nature 期刊<br>2026年6月10日发表<br>中国科学院主导研究</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">🐨</div>
+      <h4>主持人</h4>
+      <p>Pola the Quokka<br>短尾矮袋鼠<br>POLA NEWS 记者</p>
+    </div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Lesson）</button>
+</section>
+
+</main>
+</div>
+
+<script>
+// ── Vocabulary Data ──
+const vocabList = [
+  { word: "submersible", pos: "n.", def: "潜水器 — 一种可以在水下深处航行的小型船只", ex: "The submersible Fendouzhe can dive deeper than 10,000 meters.", audio: "submersible" },
+  { word: "graveyard", pos: "n.", def: "墓地 — 埋葬逝者的地方；这里比喻大量鲸鱼遗骸聚集之地", ex: "The scientists found a whale graveyard at the bottom of the ocean.", audio: "graveyard" },
+  { word: "whale fall", pos: "n.", def: "鲸落 — 鲸鱼死后沉入海底，形成一个独特的深海生态系统", ex: "A single whale fall can feed thousands of deep-sea creatures for decades.", audio: "whale fall" },
+  { word: "seafloor", pos: "n.", def: "海底 — 海洋的底部", ex: "The whale bones lay undisturbed on the seafloor for millions of years.", audio: "seafloor" },
+  { word: "pressure", pos: "n.", def: "压力 — 物体受到的挤压力量", ex: "The water pressure at 7,000 meters deep could crush a car.", audio: "pressure" },
+  { word: "preserved", pos: "v.", def: "保存 — 保持原有状态，不被破坏", ex: "The cold water preserved the whale bones perfectly for five million years.", audio: "preserved" },
+  { word: "species", pos: "n.", def: "物种 — 生物分类的基本单位", ex: "The team discovered a brand-new whale species called Pterocetus diamantinae.", audio: "species" },
+  { word: "evolved", pos: "v.", def: "进化 — 生物在长时间内逐渐变化发展的过程", ex: "Whales evolved from land animals that lived 50 million years ago.", audio: "evolved" },
+  { word: "ecosystem", pos: "n.", def: "生态系统 — 生物与其环境相互作用形成的整体", ex: "A whale fall creates a unique ecosystem on the deep-sea floor.", audio: "ecosystem" },
+  { word: "exploring", pos: "v.", def: "探索 — 去未知的地方寻找新事物", ex: "Scientists are still exploring the deepest parts of our ocean.", audio: "exploring" }
+];
+
+// ── Quiz Data ──
+const quizData = [
+  {
+    q: "1. How deep did the submersible Fendouzhe dive during this discovery?",
+    qcn: "奋斗者号在这次发现中下潜了多深？",
+    opts: ["A) 700 meters", "B) 7,002 meters", "C) 702 meters", "D) 70,000 meters"],
+    ans: 1,
+    explain: "奋斗者号下潜到Diamantina区域最深7,002米处。这比珠穆朗玛峰的高度（8,849米）稍浅一些，但已经是非常惊人的深度了！"
+  },
+  {
+    q: "2. How many whale-fall sites did scientists find?",
+    qcn: "科学家发现了多少个鲸落地点？",
+    opts: ["A) 32", "B) 43", "C) 485", "D) 7,002"],
+    ans: 2,
+    explain: "科学家发现了485个鲸落地点。正常情况下全球发现的天然鲸落不到100处，这次一次就发现了485处，密度惊人！"
+  },
+  {
+    q: "3. How old are the oldest whale fossils found there?",
+    qcn: "发现的最古老的鲸鱼化石有多少年历史？",
+    opts: ["A) 1,000 years", "B) 100,000 years", "C) 1 million years", "D) Over 5 million years"],
+    ans: 3,
+    explain: "最古老的化石超过526万年（five million years）。那时人类还没有出现！"
+  },
+  {
+    q: "4. What new whale species did scientists discover?",
+    qcn: "科学家发现了什么新的鲸鱼物种？",
+    opts: ["A) Blue whale", "B) Pterocetus diamantinae", "C) Humpback whale", "D) Pakicetus"],
+    ans: 1,
+    explain: "新物种被命名为 Pterocetus diamantinae，以发现地 Diamantina Zone 命名。Pterocetus 意为"翼鲸"——一种已经灭绝的喙鲸。"
+  },
+  {
+    q: "5. Why were the bones so well preserved?",
+    qcn: "为什么这些骨头保存得这么好？",
+    opts: ["A) Because whales have strong bones", "B) Because of the cold water, high pressure, and mineral coating", "C) Because they were buried under sand", "D) Because no animals live that deep"],
+    ans: 1,
+    explain: "三个因素共同作用：极冷的水温减缓了分解、铁锰氧化物涂层密封了骨骼、极高的水压抑制了微生物活动。"
+  },
+  {
+    q: "6. What happens when a whale dies and sinks to the seafloor?",
+    qcn: "当一头鲸鱼死去并沉入海底时，会发生什么？",
+    opts: ["A) Nothing special", "B) It disappears quickly", "C) It creates a 'whale fall' that feeds deep-sea creatures for decades", "D) It floats back to the surface"],
+    ans: 2,
+    explain: "这就是'鲸落'（whale fall）！一头鲸鱼的尸体可以养活数万个深海生物，形成一个持续数十年甚至上百年的独特生态系统。"
+  }
+];
+
+// ── Render Vocabulary ──
+const vocabGrid = document.getElementById('vocabGrid');
+vocabList.forEach((v, i) => {
+  vocabGrid.innerHTML += `
+    <div class="vocab-card">
+      <div class="word">
+        <button class="vocab-play" data-word="${v.audio}" data-idx="${i}" onclick="speakWord('${v.audio}', this)" title="播放发音">🔊</button>
+        ${v.word} <span class="pos">${v.pos}</span>
+      </div>
+      <div class="def">${v.def}</div>
+      <div class="example">${v.ex}</div>
+    </div>`;
+});
+
+// ── Render Quiz ──
+const quizContainer = document.getElementById('quizContainer');
+quizData.forEach((qz, qi) => {
+  let optsHTML = qz.opts.map((o, oi) =>
+    `<button class="quiz-opt" data-q="${qi}" data-o="${oi}">${o}</button>`
+  ).join('');
+  quizContainer.innerHTML += `
+    <div class="quiz-item">
+      <div class="q-text">${qz.q}<span class="q-cn">${qz.qcn}</span></div>
+      <div class="quiz-options">${optsHTML}</div>
+      <div class="quiz-feedback" id="fb-${qi}"></div>
+    </div>`;
+});
+
+// ── Quiz interaction ──
+document.querySelectorAll('.quiz-opt').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const qi = parseInt(this.dataset.q);
+    const oi = parseInt(this.dataset.o);
+    const correct = quizData[qi].ans;
+    const siblings = this.parentElement.querySelectorAll('.quiz-opt');
+    // Reset all options for this question
+    siblings.forEach(s => { s.classList.remove('correct', 'wrong'); s.disabled = false; });
+    // Mark
+    siblings.forEach((s, idx) => {
+      s.disabled = true;
+      if (idx === correct) s.classList.add('correct');
+      if (idx === oi && oi !== correct) s.classList.add('wrong');
+    });
+    const fb = document.getElementById('fb-' + qi);
+    fb.style.display = 'block';
+    fb.innerHTML = oi === correct
+      ? '✅ 正确！' + quizData[qi].explain
+      : '❌ 不太对哦。正确答案是 ' + quizData[qi].opts[correct].charAt(0) + '。' + quizData[qi].explain;
+  });
+});
+
+// ── Voice ──
+let currentUtterance = null;
+const segmentTexts = [
+  "Imagine diving seven kilometers down into the ocean — deeper than Mount Everest is tall. It's pitch black, freezing cold, and the pressure could crush a car. But what Chinese scientists found down there made their hearts race: a giant whale graveyard, hidden in the darkness for millions of years!",
+  "The crewed submersible Fendouzhe made 32 dives into the Diamantina Zone of the Indian Ocean. They discovered 485 places where whales had fallen to the seafloor — some bones are over five million years old! The cold, high-pressure water preserved them perfectly. They even found a brand-new whale species: Pterocetus diamantinae!",
+  "This isn't just about old bones. When a whale dies and sinks, it creates a whole new world on the seafloor — a 'whale fall' that feeds thousands of deep-sea creatures for decades. This graveyard is like a five-million-year library of ocean life, telling us how whales evolved and how deep-sea ecosystems work.",
+  "Isn't it amazing? The deepest, darkest corners of our planet still hold secrets waiting to be discovered. Who knows what else is down there? This is Pola, reporting from the edge of the deep blue. See you next time — and keep exploring!"
+];
+
+function getVoice() {
+  const voices = speechSynthesis.getVoices();
+  // Priority: enhanced male English > Daniel > Alex > Microsoft Mark > any male English
+  const priority = ['enhanced', 'daniel', 'alex', 'microsoft mark'];
+  for (const p of priority) {
+    const found = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes(p));
+    if (found) return found;
+  }
+  // any English male
+  const male = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('male'));
+  if (male) return male;
+  // any English
+  return voices.find(v => v.lang.startsWith('en')) || voices[0];
+}
+
+function speak(text, btn) {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  // Reset all buttons
+  document.querySelectorAll('.play-btn.playing, .vocab-play.playing').forEach(b => {
+    b.classList.remove('playing');
+    b.textContent = b.classList.contains('play-btn') ? '▶' : '🔊';
+  });
+  if (!text) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.voice = getVoice();
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.lang = 'en-US';
+  currentUtterance = u;
+  if (btn) {
+    btn.classList.add('playing');
+    btn.textContent = '⏸';
+  }
+  u.onend = () => {
+    if (btn) { btn.classList.remove('playing'); btn.textContent = btn.classList.contains('play-btn') ? '▶' : '🔊'; }
+    currentUtterance = null;
+  };
+  speechSynthesis.speak(u);
+}
+
+function toggleSegment(idx, btn) {
+  if (btn.classList.contains('playing')) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+  } else {
+    speak(segmentTexts[idx], btn);
+  }
+}
+
+function speakWord(word, btn) {
+  if (btn.classList.contains('playing')) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+    btn.classList.remove('playing');
+    btn.textContent = '🔊';
+  } else {
+    speak(word, btn);
+  }
+}
+
+// Preload voices (Chrome async fix)
+function loadVoices() {
+  speechSynthesis.getVoices();
+}
+loadVoices();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+// ── Progress bar ──
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('progress-bar').style.width = Math.min(progress, 100) + '%';
+});
+
+// ── Sidebar active highlight ──
+const sidebarLinks = document.querySelectorAll('.sidebar nav a');
+const sections = document.querySelectorAll('.section, .page-header');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    const top = sec.offsetTop - 100;
+    if (window.scrollY >= top) current = sec.getAttribute('id') || '';
+  });
+  sidebarLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+</script>
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

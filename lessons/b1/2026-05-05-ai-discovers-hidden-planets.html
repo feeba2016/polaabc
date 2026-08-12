@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News - AI Discovers Hidden Planets | 互动学习</title>
+<style>
+  :root {
+    --primary: #6C5CE7;
+    --primary-light: #A29BFE;
+    --secondary: #00CEC9;
+    --accent: #FDCB6E;
+    --accent-dark: #F39C12;
+    --bg-dark: #0C0C1E;
+    --bg-card: #1A1A2E;
+    --bg-card-hover: #222244;
+    --text: #EAEAEA;
+    --text-dim: #A0A0B8;
+    --success: #00B894;
+    --error: #E17055;
+    --highlight: #FDCB6E;
+    --nav-width: 260px;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Progress Bar */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 4px;
+    background: linear-gradient(90deg, var(--secondary), var(--primary), var(--accent));
+    z-index: 1000; width: 0%; transition: width 0.3s;
+  }
+
+  /* Sidebar */
+  #sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--nav-width); height: 100vh;
+    background: linear-gradient(180deg, #16163a 0%, #0f0f2d 100%);
+    border-right: 1px solid rgba(108,92,231,0.2);
+    z-index: 100; overflow-y: auto;
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+
+  #sidebar-toggle {
+    position: fixed; top: 12px; z-index: 150;
+    left: calc(var(--nav-width) + 12px);
+    background: var(--bg-card); color: var(--text);
+    border: 1px solid rgba(108,92,231,0.3);
+    width: 36px; height: 36px; border-radius: 8px;
+    font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: left 0.3s ease, background 0.2s, border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  #sidebar-toggle:hover {
+    background: rgba(108,92,231,0.2);
+    border-color: var(--primary-light);
+  }
+  #sidebar-toggle.shifted {
+    left: 12px;
+  }
+
+  #main-content {
+    margin-left: var(--nav-width);
+    padding: 32px 40px 60px;
+    max-width: 960px;
+    transition: margin-left 0.3s ease;
+  }
+  #main-content.expanded {
+    margin-left: 0;
+  }
+
+  .sidebar-header {
+    padding: 24px 20px 16px;
+    text-align: center;
+    border-bottom: 1px solid rgba(108,92,231,0.15);
+  }
+
+  .sidebar-header .emoji { font-size: 48px; display: block; margin-bottom: 8px; }
+  .sidebar-header h2 { font-size: 16px; color: var(--accent); font-weight: 600; }
+  .sidebar-header p { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+  .nav-list { list-style: none; padding: 12px 0; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px; cursor: pointer;
+    color: var(--text-dim); font-size: 14px;
+    transition: all 0.2s; border-left: 3px solid transparent;
+  }
+  .nav-item:hover { background: rgba(108,92,231,0.1); color: var(--text); }
+  .nav-item.active {
+    background: rgba(108,92,231,0.15);
+    color: #fff; border-left-color: var(--accent);
+    font-weight: 600;
+  }
+  .nav-icon { font-size: 18px; width: 24px; text-align: center; }
+
+  /* Main Content */
+  #main-content {
+    margin-left: var(--nav-width);
+    margin-right: auto;
+    padding: 32px 40px 60px;
+    max-width: 960px;
+    transition: margin-left 0.3s ease;
+  }
+  #main-content.expanded {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .section { display: none; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-title {
+    font-size: 28px; font-weight: 700; margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--primary-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-subtitle { color: var(--text-dim); margin-bottom: 28px; font-size: 15px; }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,92,231,0.15);
+    border-radius: var(--radius);
+    padding: 24px; margin-bottom: 20px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); border-color: rgba(108,92,231,0.35); }
+
+  /* Highlight */
+  .kw {
+    background: rgba(253,203,110,0.2);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 4px;
+    cursor: help;
+    position: relative;
+    font-weight: 600;
+    border-bottom: 2px dashed var(--accent-dark);
+    transition: background 0.2s;
+  }
+  .kw:hover { background: rgba(253,203,110,0.35); }
+
+  /* Tooltip */
+  .tooltip {
+    display: none;
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: #2d2d5e; color: #fff;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; font-weight: 400; color: #ddd;
+    white-space: nowrap; z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    border: 1px solid rgba(108,92,231,0.3);
+  }
+  .tooltip::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: #2d2d5e;
+  }
+  .kw:hover .tooltip { display: block; }
+
+  /* Reading text */
+  .reading-text {
+    font-size: 17px; line-height: 2; color: var(--text);
+  }
+  .reading-text .seg-label {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(108,92,231,0.2);
+    color: var(--primary-light);
+    padding: 2px 10px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+    margin-bottom: 8px; margin-top: 24px;
+    cursor: default;
+  }
+  .reading-text .seg-label:first-child { margin-top: 0; }
+
+  /* Play audio button for segments */
+  .audio-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(108,92,231,0.25); border: 1px solid rgba(108,92,231,0.4);
+    color: var(--primary-light); font-size: 13px;
+    cursor: pointer; transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .audio-btn:hover { background: rgba(108,92,231,0.4); transform: scale(1.1); }
+  .audio-btn.playing {
+    background: rgba(0,206,201,0.3); border-color: var(--secondary);
+    color: var(--secondary);
+    animation: audioPulse 1s ease infinite;
+  }
+  @keyframes audioPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,206,201,0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(0,206,201,0); }
+  }
+
+  /* Vocab play button */
+  .vocab-card .word {
+    font-size: 20px; font-weight: 700; color: var(--accent);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .vocab-play {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(253,203,110,0.15); border: 1px solid rgba(253,203,110,0.3);
+    color: var(--accent); font-size: 12px;
+    cursor: pointer; transition: all 0.2s;
+    flex-shrink: 0; margin-left: auto;
+  }
+  .vocab-play:hover { background: rgba(253,203,110,0.3); transform: scale(1.1); }
+  .vocab-play.playing {
+    background: rgba(0,206,201,0.3); border-color: var(--secondary);
+    color: var(--secondary);
+  }
+  .vocab-card .pos {
+    font-size: 12px; color: var(--secondary);
+    background: rgba(0,206,201,0.15); padding: 2px 8px; border-radius: 10px;
+    font-weight: 600;
+  }
+  .vocab-card .meaning { color: var(--text-dim); margin-top: 6px; font-size: 14px; }
+  .vocab-card .example {
+    margin-top: 10px; padding: 10px 14px;
+    background: rgba(0,0,0,0.2); border-radius: 8px;
+    font-style: italic; font-size: 14px; color: #ccc;
+    border-left: 3px solid var(--primary);
+  }
+
+  /* Sentence patterns */
+  .pattern-item { margin-bottom: 24px; }
+  .pattern-en {
+    font-size: 18px; font-weight: 600; color: var(--text);
+    padding: 14px 18px; background: rgba(108,92,231,0.1);
+    border-radius: 10px; border-left: 4px solid var(--primary);
+  }
+  .pattern-en em { color: var(--accent); font-style: normal; font-weight: 700; }
+  .pattern-cn { color: var(--text-dim); font-size: 14px; margin: 8px 0 0 18px; }
+  .pattern-note {
+    margin: 8px 0 0 18px; padding: 10px 14px;
+    background: rgba(0,206,201,0.08); border-radius: 8px;
+    font-size: 13px; color: var(--secondary);
+  }
+  .pattern-practice {
+    margin: 8px 0 0 18px; font-size: 14px; color: var(--text-dim);
+  }
+  .pattern-practice input {
+    background: rgba(0,0,0,0.3); border: 1px solid rgba(108,92,231,0.3);
+    color: var(--text); padding: 8px 12px; border-radius: 8px;
+    width: 100%; margin-top: 6px; font-size: 14px;
+  }
+  .pattern-practice input:focus { outline: none; border-color: var(--primary-light); }
+
+  /* Grammar */
+  .grammar-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,206,201,0.2);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+  }
+  .grammar-card h4 { color: var(--secondary); font-size: 16px; margin-bottom: 8px; }
+  .grammar-card .rule { color: var(--text-dim); font-size: 14px; margin-bottom: 10px; }
+  .grammar-card .rule em { color: var(--accent); font-style: normal; }
+  .grammar-card .example-sentence {
+    padding: 8px 12px; background: rgba(0,0,0,0.2);
+    border-radius: 6px; font-size: 14px; margin: 4px 0;
+    color: #ccc;
+  }
+  .grammar-card .quiz-q {
+    margin-top: 12px; font-size: 14px; color: var(--text);
+  }
+  .grammar-card .quiz-q .options { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .grammar-card .quiz-q .opt-btn {
+    background: rgba(108,92,231,0.15); border: 1px solid rgba(108,92,231,0.3);
+    color: var(--text); padding: 6px 16px; border-radius: 8px;
+    cursor: pointer; font-size: 14px; transition: all 0.2s;
+  }
+  .grammar-card .quiz-q .opt-btn:hover { background: rgba(108,92,231,0.3); }
+  .grammar-card .quiz-q .opt-btn.correct {
+    background: rgba(0,184,148,0.3); border-color: var(--success); color: var(--success);
+  }
+  .grammar-card .quiz-q .opt-btn.wrong {
+    background: rgba(225,112,85,0.3); border-color: var(--error); color: var(--error);
+  }
+  .quiz-feedback { font-size: 13px; margin-top: 6px; font-weight: 600; }
+
+  /* Quiz */
+  .quiz-item {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,92,231,0.15);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+  }
+  .quiz-item .q-num {
+    font-size: 12px; color: var(--primary-light); font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .quiz-item .q-text { font-size: 16px; margin-bottom: 12px; line-height: 1.6; }
+  .quiz-item .q-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-item .q-opt {
+    background: rgba(0,0,0,0.2); border: 1px solid rgba(108,92,231,0.2);
+    padding: 10px 16px; border-radius: 8px; cursor: pointer;
+    font-size: 14px; transition: all 0.2s; color: var(--text);
+  }
+  .quiz-item .q-opt:hover { background: rgba(108,92,231,0.15); border-color: var(--primary); }
+  .quiz-item .q-opt.selected { border-color: var(--primary-light); background: rgba(108,92,231,0.2); }
+  .quiz-item .q-opt.correct { border-color: var(--success); background: rgba(0,184,148,0.15); color: var(--success); }
+  .quiz-item .q-opt.wrong { border-color: var(--error); background: rgba(225,112,85,0.15); color: var(--error); }
+  .quiz-result { font-size: 14px; margin-top: 10px; font-weight: 600; }
+  .score-display {
+    background: linear-gradient(135deg, rgba(108,92,231,0.2), rgba(0,206,201,0.15));
+    border: 1px solid var(--primary); border-radius: var(--radius);
+    padding: 20px; text-align: center; font-size: 22px; font-weight: 700;
+    color: var(--accent); margin-bottom: 20px; display: none;
+  }
+
+  /* Knowledge expansion */
+  .knowledge-section { margin-bottom: 24px; }
+  .knowledge-section h3 {
+    color: var(--secondary); font-size: 18px; margin-bottom: 10px;
+    padding-left: 12px; border-left: 3px solid var(--secondary);
+  }
+  .knowledge-section p { color: var(--text-dim); font-size: 15px; line-height: 1.8; margin-bottom: 10px; }
+  .knowledge-section .fun-fact {
+    background: rgba(253,203,110,0.08); border-left: 3px solid var(--accent);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14px; color: var(--accent);
+  }
+
+  /* About */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .about-card {
+    background: var(--bg-card); border-radius: var(--radius);
+    padding: 20px; border: 1px solid rgba(108,92,231,0.15);
+  }
+  .about-card h4 { color: var(--primary-light); font-size: 15px; margin-bottom: 10px; }
+  .about-card ul { list-style: none; padding: 0; }
+  .about-card li { font-size: 14px; color: var(--text-dim); padding: 4px 0; padding-left: 16px; position: relative; }
+  .about-card li::before { content: ''; position: absolute; left: 0; top: 12px; width: 6px; height: 6px; border-radius: 50%; background: var(--secondary); }
+
+  .print-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, var(--primary), #5A4BD1);
+    color: #fff; border: none; padding: 12px 24px;
+    border-radius: 10px; font-size: 15px; cursor: pointer;
+    margin-top: 16px; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .print-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(108,92,231,0.4); }
+
+  /* Mobile menu */
+  #menu-toggle {
+    display: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    :root { --nav-width: 260px; }
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #sidebar.collapsed { transform: translateX(-100%); }
+    #main-content { margin-left: 0; padding: 60px 16px 40px; }
+    #sidebar-toggle {
+      left: 12px;
+    }
+    #sidebar-toggle.shifted {
+      left: calc(260px + 12px);
+    }
+    #sidebar-toggle::after { display: none; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 22px; }
+  }
+
+  /* Print */
+  @media print {
+    #sidebar, #progress-bar, #sidebar-toggle, .print-btn, .pattern-practice, .grammar-card .quiz-q, .audio-btn, .vocab-play { display: none !important; }
+    #main-content { margin-left: 0; padding: 20px; }
+    body { background: #fff; color: #222; }
+    .card, .vocab-card, .grammar-card, .quiz-item { background: #fff; border: 1px solid #ddd; }
+    .kw { color: #c0392b; background: #ffeaa7; }
+    .section { display: block !important; page-break-before: always; }
+    .section:first-child { page-break-before: auto; }
+    .section-title { -webkit-text-fill-color: #6C5CE7; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Sidebar Toggle Button -->
+<button id="sidebar-toggle" onclick="toggleSidebar()" title="收起/展开导航栏">◂</button>
+
+<!-- Sidebar -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <span class="emoji">🐨</span>
+    <h2>Pola News</h2>
+    <p>May 5, 2026</p>
+  </div>
+  <ul class="nav-list">
+    <li class="nav-item active" onclick="showSection('reading', this)">
+      <span class="nav-icon">📖</span> 全文阅读
+    </li>
+    <li class="nav-item" onclick="showSection('vocabulary', this)">
+      <span class="nav-icon">📝</span> 词汇表
+    </li>
+    <li class="nav-item" onclick="showSection('patterns', this)">
+      <span class="nav-icon">💬</span> 句型练习
+    </li>
+    <li class="nav-item" onclick="showSection('grammar', this)">
+      <span class="nav-icon">📐</span> 语法点
+    </li>
+    <li class="nav-item" onclick="showSection('quiz', this)">
+      <span class="nav-icon">🎯</span> 练习测验
+    </li>
+    <li class="nav-item" onclick="showSection('knowledge', this)">
+      <span class="nav-icon">🌍</span> 知识扩展
+    </li>
+    <li class="nav-item" onclick="showSection('about', this)">
+      <span class="nav-icon">ℹ️</span> 关于本课
+    </li>
+  </ul>
+</nav>
+
+<!-- Main Content -->
+<div id="main-content">
+
+  <!-- ========== Section 1: Reading ========== -->
+  <div id="reading" class="section active">
+    <h1 class="section-title">📖 全文阅读</h1>
+    <p class="section-subtitle">点击高亮词汇查看释义 | Full Reading with Key Vocabulary Highlighted</p>
+
+    <div class="card">
+      <div class="reading-text">
+        <div class="seg-label">Segment 1 · Hook <span class="audio-btn" onclick="speakSegment(this, 0)" title="播放朗读">▶</span></div>
+        <p>Hey everyone! What if I told you that a <span class="kw">computer program<span class="tooltip">电脑程序 — 给电脑下达指令的一组代码</span></span> just found over one hundred new <span class="kw">planets<span class="tooltip">行星 — 围绕恒星运行的天体，比如地球围绕太阳</span></span> — all by <span class="kw">itself<span class="tooltip">独自地 — 没有别人帮忙</span></span>? It's true! Scientists built a super-smart AI called RAVEN, and it went <span class="kw">digging through<span class="tooltip">翻找 — 在大量数据中搜索</span></span> NASA's <span class="kw">telescope<span class="tooltip">望远镜 — 用来观察远处天体的工具</span></span> data. And guess what it found? A whole <span class="kw">treasure chest<span class="tooltip">宝箱 — 装满宝贝的箱子</span></span> of <span class="kw">hidden<span class="tooltip">隐藏的 — 不容易被发现的</span></span> worlds!</p>
+
+        <div class="seg-label">Segment 2 · Story <span class="audio-btn" onclick="speakSegment(this, 1)" title="播放朗读">▶</span></div>
+        <p>So here's how it works. NASA has a telescope called TESS that <span class="kw">stares at<span class="tooltip">凝视 — 长时间盯着看</span></span> millions of stars, night after night. When a planet crosses in front of a star, the star gets a tiny bit <span class="kw">dimmer<span class="tooltip">变暗 — 光线变得更弱</span></span> — like someone <span class="kw">flicking<span class="tooltip">轻按/拨动 — 快速开关</span></span> a light switch on and off. RAVEN is an AI that learned to <span class="kw">spot<span class="tooltip">发现/识别 — 注意到某个东西</span></span> those tiny <span class="kw">flickers<span class="tooltip">闪烁 — 光线的快速明暗变化</span></span> from over two million stars! It found one hundred and eighteen <span class="kw">confirmed<span class="tooltip">确认的 — 经过验证的</span></span> planets, including thirty-one <span class="kw">brand-new<span class="tooltip">全新的 — 以前从未有过的</span></span> worlds no one had ever seen before!</p>
+
+        <div class="seg-label">Segment 3 · Why It Matters <span class="audio-btn" onclick="speakSegment(this, 2)" title="播放朗读">▶</span></div>
+        <p>Now here's the really cool part. Some of these planets <span class="kw">zip around<span class="tooltip">飞速运转 — 快速绕圈运动</span></span> their stars in less than twenty-four hours — that means a year on those planets is shorter than one day on Earth! Imagine having a birthday every single day! And RAVEN even found planets in a zone scientists call the "Neptunian Desert," a place where they thought almost no planets could <span class="kw">survive<span class="tooltip">存活 — 继续活着</span></span>. This tells us our <span class="kw">galaxy<span class="tooltip">银河系 — 包含太阳和数十亿颗恒星的星系</span></span> is packed with more worlds than we ever imagined!</p>
+
+        <div class="seg-label">Segment 4 · Sign-off <span class="audio-btn" onclick="speakSegment(this, 3)" title="播放朗读">▶</span></div>
+        <p>So remember — every time you look up at the night sky, there are thousands of planets out there waiting to be <span class="kw">discovered<span class="tooltip">被发现 — 首次找到或认识</span></span>. And the next big <span class="kw">discovery<span class="tooltip">发现 — 找到新事物的过程</span></span> might come not from a telescope, but from an AI brain! This is Pola, signing off! See you next time!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Section 2: Vocabulary ========== -->
+  <div id="vocabulary" class="section">
+    <h1 class="section-title">📝 词汇表</h1>
+    <p class="section-subtitle">核心词汇 · Key Vocabulary — 点击例句中的高亮词复习</p>
+
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <div class="word">planet <span class="pos">n.</span> <span class="vocab-play" onclick="speakWord(this, 'planet')" title="播放发音">🔊</span></div>
+        <div class="meaning">行星 — 围绕恒星运行的天体</div>
+        <div class="example">Earth is the third <span class="kw">planet</span> from the Sun.<br>地球是离太阳第三近的行星。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">telescope <span class="pos">n.</span> <span class="vocab-play" onclick="speakWord(this, 'telescope')" title="播放发音">🔊</span></div>
+        <div class="meaning">望远镜 — 观察远处物体的光学工具</div>
+        <div class="example">NASA uses the TESS <span class="kw">telescope</span> to find new planets.<br>NASA用TESS望远镜来发现新行星。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">dim <span class="pos">adj./v.</span> <span class="vocab-play" onclick="speakWord(this, 'dim')" title="播放发音">🔊</span></div>
+        <div class="meaning">暗淡的；变暗 — 光线变弱</div>
+        <div class="example">The star becomes <span class="kw">dimmer</span> when a planet passes in front of it.<br>当行星经过恒星前方时，星光会变暗。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">flicker <span class="pos">n./v.</span> <span class="vocab-play" onclick="speakWord(this, 'flicker')" title="播放发音">🔊</span></div>
+        <div class="meaning">闪烁，明暗变化 — 光的快速跳动</div>
+        <div class="example">RAVEN learned to detect tiny <span class="kw">flickers</span> in starlight.<br>RAVEN学会了检测星光的微弱闪烁。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">confirm <span class="pos">v.</span> <span class="vocab-play" onclick="speakWord(this, 'confirm')" title="播放发音">🔊</span></div>
+        <div class="meaning">确认，证实 — 验证某事是真的</div>
+        <div class="example">Scientists <span class="kw">confirmed</span> 118 new planets.<br>科学家确认了118颗新行星。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">survive <span class="pos">v.</span> <span class="vocab-play" onclick="speakWord(this, 'survive')" title="播放发音">🔊</span></div>
+        <div class="meaning">存活，幸存 — 在困难条件下继续存在</div>
+        <div class="example">No one thought planets could <span class="kw">survive</span> in the Neptunian Desert.<br>没人认为行星能在海王星沙漠中存活。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">galaxy <span class="pos">n.</span> <span class="vocab-play" onclick="speakWord(this, 'galaxy')" title="播放发音">🔊</span></div>
+        <div class="meaning">银河系，星系 — 由数十亿颗恒星组成的巨大系统</div>
+        <div class="example">Our <span class="kw">galaxy</span> is full of planets waiting to be found.<br>我们的银河系充满了等待被发现的新行星。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">treasure <span class="pos">n.</span> <span class="vocab-play" onclick="speakWord(this, 'treasure')" title="播放发音">🔊</span></div>
+        <div class="meaning">宝藏，珍宝 — 非常有价值的东西</div>
+        <div class="example">The new planets are like a <span class="kw">treasure</span> chest of hidden worlds.<br>这些新行星就像一座隐藏世界的宝箱。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">data <span class="pos">n.</span> <span class="vocab-play" onclick="speakWord(this, 'data')" title="播放发音">🔊</span></div>
+        <div class="meaning">数据 — 收集到的信息或数字</div>
+        <div class="example">RAVEN analyzed <span class="kw">data</span> from over two million stars.<br>RAVEN分析了超过两百万颗恒星的数据。</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">discover <span class="pos">v.</span> <span class="vocab-play" onclick="speakWord(this, 'discover')" title="播放发音">🔊</span></div>
+        <div class="meaning">发现 — 第一次找到或认识到某物</div>
+        <div class="example">AI is helping us <span class="kw">discover</span> planets we never knew existed.<br>AI正在帮助我们发现我们从未知道存在的行星。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Section 3: Sentence Patterns ========== -->
+  <div id="patterns" class="section">
+    <h1 class="section-title">💬 句型练习</h1>
+    <p class="section-subtitle">实用句型 · Useful Sentence Patterns — 试着用这些句型造句！</p>
+
+    <div class="card">
+      <!-- Pattern 1 -->
+      <div class="pattern-item">
+        <div class="pattern-en">What if I told you that <em>...</em> ?</div>
+        <div class="pattern-cn">如果我告诉你……你会怎么想？（用假设引出令人惊讶的事实）</div>
+        <div class="pattern-note">💡 这是一个很酷的开场句型！用假设的方式引入一个令人惊讶的事实，能立刻抓住听众的注意力。</div>
+        <div class="pattern-practice">
+          ✏️ 试着造句：
+          <input type="text" placeholder="What if I told you that dolphins sleep with one eye open?">
+        </div>
+      </div>
+
+      <!-- Pattern 2 -->
+      <div class="pattern-item">
+        <div class="pattern-en"><em>Someone</em> went <em>digging through</em> <em>something</em>.</div>
+        <div class="pattern-cn">某人去翻找某物。（描述在大量信息中搜索的动作）</div>
+        <div class="pattern-note">💡 "dig through" 不只是"挖"，在这里是比喻用法，表示在大量数据或信息中仔细搜索。</div>
+        <div class="pattern-practice">
+          ✏️ 试着造句：
+          <input type="text" placeholder="I went digging through my old photo albums yesterday.">
+        </div>
+      </div>
+
+      <!-- Pattern 3 -->
+      <div class="pattern-en">... like someone <em>flicking</em> a light switch on and off.</div>
+        <div class="pattern-cn">就像有人反复开关灯一样。（用比喻解释复杂概念）</div>
+        <div class="pattern-note">💡 用 "like + 动名词" 来做比喻，这是英语中解释复杂概念最常用的技巧！</div>
+        <div class="pattern-practice">
+          ✏️ 试着造句：
+          <input type="text" placeholder="Stars twinkle like someone flicking a light switch.">
+        </div>
+      </div>
+
+      <!-- Pattern 4 -->
+      <div class="pattern-en">... that means <em>...</em></div>
+        <div class="pattern-cn">这意味着……（解释因果关系）</div>
+        <div class="pattern-note">💡 讲完一个事实后，用 "that means" 来帮助听众理解这个事实的含义和后果。</div>
+        <div class="pattern-practice">
+          ✏️ 试着造句：
+          <input type="text" placeholder="Some planets orbit their stars in 10 hours — that means a year is shorter than a school day!">
+        </div>
+      </div>
+
+      <!-- Pattern 5 -->
+      <div class="pattern-en">Imagine <em>doing</em> <em>...</em></div>
+        <div class="pattern-cn">想象一下做……（用想象让听众参与进来）</div>
+        <div class="pattern-note">💡 "Imagine + 动名词" 让听众在脑海中构建画面，这是播报中非常有效的互动技巧。</div>
+        <div class="pattern-practice">
+          ✏️ 试着造句：
+          <input type="text" placeholder="Imagine having your birthday every single day!">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Section 4: Grammar ========== -->
+  <div id="grammar" class="section">
+    <h1 class="section-title">📐 语法点</h1>
+    <p class="section-subtitle">Grammar Points — 点击选项检查答案</p>
+
+    <!-- Grammar 1 -->
+    <div class="grammar-card">
+      <h4>1. 一般现在时 (Simple Present) — 描述科学事实</h4>
+      <div class="rule">
+        用于描述普遍真理和科学事实。主语第三人称单数时，动词加 <em>-s</em> 或 <em>-es</em>。<br>
+        例：RAVEN <em>scans</em> data. / A planet <em>crosses</em> in front of a star.
+      </div>
+      <div class="example-sentence">✅ When a planet crosses in front of a star, the star gets dimmer.</div>
+      <div class="example-sentence">✅ RAVEN spots tiny flickers from over two million stars.</div>
+      <div class="quiz-q">
+        选择正确的动词形式：
+        <div class="options">
+          <button class="opt-btn" onclick="checkGrammar(this, true)">RAVEN ___ millions of stars. (scans / scan)</button>
+          <button class="opt-btn" onclick="checkGrammar(this, false)">RAVEN ___ millions of stars. (scan / scans)</button>
+        </div>
+        <div class="quiz-feedback" id="g-fb-1"></div>
+      </div>
+    </div>
+
+    <!-- Grammar 2 -->
+    <div class="grammar-card">
+      <h4>2. 一般过去时 (Simple Past) — 描述已完成的动作</h4>
+      <div class="rule">
+        描述已经发生的事情。规则动词加 <em>-ed</em>，不规则动词需单独记忆。<br>
+        例：Scientists <em>built</em> RAVEN. / It <em>found</em> 118 planets.
+      </div>
+      <div class="example-sentence">✅ Scientists built a super-smart AI called RAVEN.</div>
+      <div class="example-sentence">✅ RAVEN found one hundred and eighteen confirmed planets.</div>
+      <div class="quiz-q">
+        选择正确的过去式：
+        <div class="options">
+          <button class="opt-btn" onclick="checkGrammar(this, true)">Scientists ___ RAVEN. (built)</button>
+          <button class="opt-btn" onclick="checkGrammar(this, false)">Scientists ___ RAVEN. (builded)</button>
+        </div>
+        <div class="quiz-feedback" id="g-fb-2"></div>
+      </div>
+    </div>
+
+    <!-- Grammar 3 -->
+    <div class="grammar-card">
+      <h4>3. 现在完成时 (Present Perfect) — 强调"已发现"的结果</h4>
+      <div class="rule">
+        结构：<em>have/has + 过去分词</em>。表示过去发生的事对现在有影响。<br>
+        例：RAVEN <em>has found</em> 118 planets. (强调现在我们知道这些行星存在)
+      </div>
+      <div class="example-sentence">✅ RAVEN has found one hundred and eighteen confirmed planets.</div>
+      <div class="example-sentence">✅ Scientists have confirmed thirty-one brand-new worlds.</div>
+      <div class="quiz-q">
+        选择正确形式：
+        <div class="options">
+          <button class="opt-btn" onclick="checkGrammar(this, true)">RAVEN ___ 118 planets. (has found)</button>
+          <button class="opt-btn" onclick="checkGrammar(this, false)">RAVEN ___ 118 planets. (have found)</button>
+        </div>
+        <div class="quiz-feedback" id="g-fb-3"></div>
+      </div>
+    </div>
+
+    <!-- Grammar 4 -->
+    <div class="grammar-card">
+      <h4>4. 比较级 (Comparatives) — 描述速度和数量</h4>
+      <div class="rule">
+        短形容词 + <em>-er</em> / 长形容词 + <em>more</em>。<br>
+        例：A year on these planets is <em>shorter</em> than one day on Earth.
+      </div>
+      <div class="example-sentence">✅ A year on those planets is shorter than one day on Earth.</div>
+      <div class="example-sentence">✅ Our galaxy has more worlds than we ever imagined.</div>
+      <div class="quiz-q">
+        选择正确的比较级：
+        <div class="options">
+          <button class="opt-btn" onclick="checkGrammar(this, true)">Planets in the desert are ___ than others. (rarer)</button>
+          <button class="opt-btn" onclick="checkGrammar(this, false)">Planets in the desert are ___ than others. (more rarer)</button>
+        </div>
+        <div class="quiz-feedback" id="g-fb-4"></div>
+      </div>
+    </div>
+
+    <!-- Grammar 5 -->
+    <div class="grammar-card">
+      <h4>5. "That" 从句 (That Clauses) — 引导宾语从句</h4>
+      <div class="rule">
+        用 <em>that</em> 引导一个完整的句子作为另一个动词的宾语。<br>
+        例：What if I told you <em>that</em> a computer found new planets?
+      </div>
+      <div class="example-sentence">✅ This tells us that our galaxy is packed with more worlds.</div>
+      <div class="example-sentence">✅ No one had ever seen these worlds before — that means they're brand-new!</div>
+      <div class="quiz-q">
+        哪个句子使用了 that 从句？
+        <div class="options">
+          <button class="opt-btn" onclick="checkGrammar(this, true)">"Scientists confirmed that RAVEN found 118 planets."</button>
+          <button class="opt-btn" onclick="checkGrammar(this, false)">"RAVEN found 118 planets."</button>
+        </div>
+        <div class="quiz-feedback" id="g-fb-5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Section 5: Quiz ========== -->
+  <div id="quiz" class="section">
+    <h1 class="section-title">🎯 练习测验</h1>
+    <p class="section-subtitle">Comprehension Quiz — 检验你对课文的理解！</p>
+
+    <div class="score-display" id="score-display"></div>
+
+    <!-- Q1 -->
+    <div class="quiz-item">
+      <div class="q-num">Question 1 / 6</div>
+      <div class="q-text">🤖 What is RAVEN?</div>
+      <div class="q-options">
+        <button class="q-opt" onclick="checkQuiz(this, 0, 'A')">A) A new NASA telescope</button>
+        <button class="q-opt" onclick="checkQuiz(this, 0, 'B')">B) A super-smart AI tool built by scientists</button>
+        <button class="q-opt" onclick="checkQuiz(this, 0, 'C')">C) A newly discovered planet</button>
+        <button class="q-opt" onclick="checkQuiz(this, 0, 'D')">D) A type of star in the galaxy</button>
+      </div>
+      <div class="quiz-result" id="qr-0"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-item">
+      <div class="q-num">Question 2 / 6</div>
+      <div class="q-text">🔭 What does TESS do?</div>
+      <div class="q-options">
+        <button class="q-opt" onclick="checkQuiz(this, 1, 'A')">A) It takes photos of planets</button>
+        <button class="q-opt" onclick="checkQuiz(this, 1, 'B')">B) It sends robots to space</button>
+        <button class="q-opt" onclick="checkQuiz(this, 1, 'C')">C) It watches millions of stars to detect planet signals</button>
+        <button class="q-opt" onclick="checkQuiz(this, 1, 'D')">D) It creates new telescopes</button>
+      </div>
+      <div class="quiz-result" id="qr-1"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-item">
+      <div class="q-num">Question 3 / 6</div>
+      <div class="q-text">🔢 How many confirmed planets did RAVEN find?</div>
+      <div class="q-options">
+        <button class="q-opt" onclick="checkQuiz(this, 2, 'A')">A) 31</button>
+        <button class="q-opt" onclick="checkQuiz(this, 2, 'B')">B) 2 million</button>
+        <button class="q-opt" onclick="checkQuiz(this, 2, 'C')">C) About 50</button>
+        <button class="q-opt" onclick="checkQuiz(this, 2, 'D')">D) 118</button>
+      </div>
+      <div class="quiz-result" id="qr-2"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-item">
+      <div class="q-num">Question 4 / 6</div>
+      <div class="q-text">🌟 What is special about some of the planets RAVEN found?</div>
+      <div class="q-options">
+        <button class="q-opt" onclick="checkQuiz(this, 3, 'A')">A) They are bigger than Earth</button>
+        <button class="q-opt" onclick="checkQuiz(this, 3, 'B')">B) They orbit their stars in less than 24 hours</button>
+        <button class="q-opt" onclick="checkQuiz(this, 3, 'C')">C) They have water on them</button>
+        <button class="q-opt" onclick="checkQuiz(this, 3, 'D')">D) They are made of gold</button>
+      </div>
+      <div class="quiz-result" id="qr-3"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-item">
+      <div class="q-num">Question 5 / 6</div>
+      <div class="q-text">🏜️ What is the "Neptunian Desert"?</div>
+      <div class="q-options">
+        <button class="q-opt" onclick="checkQuiz(this, 4, 'A')">A) A dry area on Neptune</button>
+        <button class="q-opt" onclick="checkQuiz(this, 4, 'B')">B) A place where almost no planets could survive</button>
+        <button class="q-opt" onclick="checkQuiz(this, 4, 'C')">C) A NASA research center</button>
+        <button class="q-opt" onclick="checkQuiz(this, 4, 'D')">D) A desert on Earth where scientists work</button>
+      </div>
+      <div class="quiz-result" id="qr-4"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-item">
+      <div class="q-num">Question 6 / 6</div>
+      <div class="q-text">🧠 How does RAVEN detect planets?</div>
+      <div class="q-options">
+        <button class="q-opt" onclick="checkQuiz(this, 5, 'A')">A) By listening to sounds from space</button>
+        <button class="q-opt" onclick="checkQuiz(this, 5, 'B')">B) By spotting tiny dips in starlight when planets pass in front of stars</button>
+        <button class="q-opt" onclick="checkQuiz(this, 5, 'C')">C) By taking pictures of every planet</button>
+        <button class="q-opt" onclick="checkQuiz(this, 5, 'D')">D) By sending signals to planets</button>
+      </div>
+      <div class="quiz-result" id="qr-5"></div>
+    </div>
+  </div>
+
+  <!-- ========== Section 6: Knowledge ========== -->
+  <div id="knowledge" class="section">
+    <h1 class="section-title">🌍 中文知识扩展</h1>
+    <p class="section-subtitle">Background Knowledge — 深入了解今天的主题</p>
+
+    <div class="card">
+      <div class="knowledge-section">
+        <h3>🔭 TESS — 凌日系外行星巡天卫星</h3>
+        <p>TESS（Transiting Exoplanet Survey Satellite）是NASA在2018年发射的太空望远镜。它不像哈勃望远镜那样观察遥远星系，而是专门"盯着"离我们较近的恒星，寻找围绕它们运行的行星。</p>
+        <p>TESS使用的探测方法叫做<strong>"凌日法"</strong>：当一颗行星从它的恒星前方经过时，会遮挡住恒星一小部分的光线，导致恒星看起来稍微暗了一点。TESS就像一个超级耐心的守望者，持续监测数十万颗恒星的亮度变化。</p>
+        <div class="fun-fact">🌟 截止2026年初，人类已确认发现超过6,200颗系外行星！而银河系中可能存在数百亿甚至数千亿颗行星。</div>
+      </div>
+
+      <div class="knowledge-section">
+        <h3>🤖 AI在天文学中的应用</h3>
+        <p>RAVEN（RAnking and Validation of ExoplaNets）是由英国华威大学开发的AI系统。它的工作原理是：</p>
+        <p><strong>第一步：检测</strong> — 扫描TESS拍摄的200多万颗恒星的亮度数据，找出所有"变暗"的事件。</p>
+        <p><strong>第二步：过滤</strong> — 区分哪些变暗是真的行星造成的，哪些是其他原因（比如双星系统互相遮挡）。这是最关键也是最难的一步！</p>
+        <p><strong>第三步：确认</strong> — 用统计学方法验证候选行星的真实性。</p>
+        <div class="fun-fact">🧠 RAVEN通过分析超过10万个模拟数据进行了训练。它不是"猜"行星在哪里，而是学会了识别行星信号的"指纹"。</div>
+      </div>
+
+      <div class="knowledge-section">
+        <h3>🏜️ 海王星沙漠之谜</h3>
+        <p>"海王星沙漠"是天文学中一个非常有趣的谜题。科学家发现，在某些大小和距离范围内的行星极其稀少——就像沙漠中几乎没有绿洲一样。</p>
+        <p>这些"沙漠行星"的大小通常在海王星的2-6倍之间，距离恒星非常近。科学家认为，这些行星可能被恒星的强烈辐射"吹走"了大气层，或者它们从一开始就很难在那个区域形成。</p>
+        <div class="fun-fact">🌍 在太阳系中，只有0.08%的类太阳恒星拥有海王星沙漠区域的行星。RAVEN的发现帮助科学家更精确地测量了这个概率。</div>
+      </div>
+
+      <div class="knowledge-section">
+        <h3>🪐 不到24小时就能绕恒星转一圈的行星？</h3>
+        <p>在我们的太阳系中，离太阳最近的水星绕太阳一圈需要88天。但是在TESS和RAVEN发现的一些行星系统中，行星离它们的恒星非常近——近到只需要几个小时就能完成一圈！</p>
+        <p>这些"超短周期行星"的表面温度极高，可能超过1000°C。它们不是适合生命居住的地方，但它们的存在帮助科学家理解行星系统是如何形成和演化的。</p>
+        <div class="fun-fact">🎂 如果住在这些行星上，你的年龄增长速度会比地球上快365倍！在地球上1年，这些行星上已经过了365年。</div>
+      </div>
+
+      <div class="knowledge-section">
+        <h3>🚀 未来：更多行星等待发现</h3>
+        <p>RAVEN的成功只是开始。欧洲空间局（ESA）计划在2026年发射<strong>PLATO望远镜</strong>，它将能发现更多类似地球的岩石行星，特别是在适合生命存在的"宜居带"中。</p>
+        <p>随着AI技术的进步，我们可能在未来10年内发现数以万计的新行星。谁知道呢——也许有一天，AI会帮我们找到另一个"地球"！</p>
+        <div class="fun-fact">🔭 天文学家估计，仅银河系中就有大约1000亿颗行星。即使我们已经发现了6000多颗，那也只占银河系行星总数的不到百万分之一！</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Section 7: About ========== -->
+  <div id="about" class="section">
+    <h1 class="section-title">ℹ️ 关于本课</h1>
+    <p class="section-subtitle">About This Lesson</p>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <h4>🎯 学习目标</h4>
+        <ul>
+          <li>掌握10个核心天文和科学词汇</li>
+          <li>学会5个实用英语播报句型</li>
+          <li>理解5个关键语法点</li>
+          <li>了解AI在天文发现中的实际应用</li>
+          <li>认识TESS望远镜和凌日法探测原理</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h4>📊 难度信息</h4>
+        <ul>
+          <li>英语等级：B1（中级）</li>
+          <li>目标年龄：10-12岁</li>
+          <li>建议用时：25-35分钟</li>
+          <li>主题领域：天文学 · 人工智能</li>
+          <li>日期：May 5, 2026</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h4>💡 学习建议</h4>
+        <ul>
+          <li>先读全文，理解大意</li>
+          <li>学习词汇表，点击高亮词复习</li>
+          <li>用句型练习造自己的句子</li>
+          <li>完成语法练习，巩固知识点</li>
+          <li>最后做测验，检验理解程度</li>
+          <li>阅读知识扩展，拓展视野</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h4>🐨 关于 Pola News</h4>
+        <ul>
+          <li>主持人：Pola（短尾矮袋鼠 Quokka）</li>
+          <li>风格：实景记者播报</li>
+          <li>时长：约60秒 / 每期</li>
+          <li>频率：每日更新</li>
+          <li>适合：正在学英语的小朋友</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">
+      🖨️ 打印本课内容
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // Section Navigation
+  const sections = ['reading','vocabulary','patterns','grammar','quiz','knowledge','about'];
+
+  function showSection(id, el) {
+    sections.forEach(s => {
+      document.getElementById(s).classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if (el) el.classList.add('active');
+
+    updateProgress();
+    // Close sidebar on mobile after clicking a nav item
+    if (window.innerWidth <= 768) {
+      const sidebar = document.getElementById('sidebar');
+      const main = document.getElementById('main-content');
+      const btn = document.getElementById('sidebar-toggle');
+      sidebar.classList.remove('open', 'collapsed');
+      main.classList.remove('expanded');
+      btn.classList.remove('shifted');
+      btn.textContent = '▸';
+      btn.title = '展开导航栏';
+    }
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const main = document.getElementById('main-content');
+    const btn = document.getElementById('sidebar-toggle');
+
+    sidebar.classList.toggle('collapsed');
+    main.classList.toggle('expanded');
+    btn.classList.toggle('shifted');
+
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    btn.textContent = isCollapsed ? '▸' : '◂';
+    btn.title = isCollapsed ? '展开导航栏' : '收起导航栏';
+  }
+
+  // Progress bar
+  function updateProgress() {
+    const idx = sections.findIndex(s => document.getElementById(s).classList.contains('active'));
+    const pct = ((idx + 1) / sections.length) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  // Grammar quiz
+  function checkGrammar(btn, isCorrect) {
+    const parent = btn.parentElement;
+    const fb = parent.nextElementSibling;
+    parent.querySelectorAll('.opt-btn').forEach(b => { b.disabled = true; b.style.opacity = '0.6'; });
+    btn.style.opacity = '1';
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.textContent = '✅ 正确！Great job!';
+      fb.style.color = 'var(--success)';
+    } else {
+      btn.classList.add('wrong');
+      fb.textContent = '❌ 再想想哦～';
+      fb.style.color = 'var(--error)';
+    }
+  }
+
+  // Main Quiz
+  const answers = ['B','C','D','B','B','B'];
+  const explanations = [
+    'RAVEN是一个由科学家开发的AI工具，用来分析望远镜数据。',
+    'TESS观测数百万颗恒星，检测行星经过恒星前方时的亮度变化。',
+    'RAVEN确认了118颗新行星，其中31颗是全新的发现。',
+    '一些行星绕恒星一圈不到24小时——意味着一年比地球上的一天还短！',
+    '海王星沙漠是一个被认为几乎没有行星能存活的空间区域。',
+    'RAVEN通过检测行星经过恒星前方时造成的光线微小变暗来发现行星。'
+  ];
+
+  let quizScore = 0;
+  let answered = new Array(6).fill(false);
+
+  function checkQuiz(btn, qIdx, chosen) {
+    if (answered[qIdx]) return;
+    answered[qIdx] = true;
+
+    const parent = btn.parentElement;
+    const result = document.getElementById('qr-' + qIdx);
+    parent.querySelectorAll('.q-opt').forEach(o => {
+      o.classList.remove('selected');
+      if (o.textContent.charAt(0) === answers[qIdx]) o.classList.add('correct');
+    });
+
+    if (chosen === answers[qIdx]) {
+      btn.classList.add('correct');
+      quizScore++;
+      result.innerHTML = '✅ 正确！' + explanations[qIdx];
+      result.style.color = 'var(--success)';
+    } else {
+      btn.classList.add('wrong');
+      result.innerHTML = '❌ 正确答案是 ' + answers[qIdx] + '。' + explanations[qIdx];
+      result.style.color = 'var(--error)';
+    }
+
+    // Check if all answered
+    if (answered.every(a => a)) {
+      const sd = document.getElementById('score-display');
+      sd.style.display = 'block';
+      const emoji = quizScore >= 5 ? '🌟' : quizScore >= 3 ? '👍' : '💪';
+      sd.textContent = emoji + ' 你的得分：' + quizScore + ' / 6';
+    }
+  }
+
+  // ========== Audio Playback (Optimized Web Speech API) ==========
+  let currentUtterance = null;
+  let voicesLoaded = false;
+  let cachedVoices = [];
+
+  // Segment texts (plain English, no HTML tags)
+  const segmentTexts = [
+    "Hey everyone! What if I told you that a computer program just found over one hundred new planets — all by itself? It's true! Scientists built a super-smart AI called RAVEN, and it went digging through NASA's telescope data. And guess what it found? A whole treasure chest of hidden worlds!",
+    "So here's how it works. NASA has a telescope called TESS that stares at millions of stars, night after night. When a planet crosses in front of a star, the star gets a tiny bit dimmer — like someone flicking a light switch on and off. RAVEN is an AI that learned to spot those tiny flickers from over two million stars! It found one hundred and eighteen confirmed planets, including thirty-one brand-new worlds no one had ever seen before!",
+    "Now here's the really cool part. Some of these planets zip around their stars in less than twenty-four hours — that means a year on those planets is shorter than one day on Earth! Imagine having a birthday every single day! And RAVEN even found planets in a zone scientists call the Neptunian Desert, a place where they thought almost no planets could survive. This tells us our galaxy is packed with more worlds than we ever imagined!",
+    "So remember — every time you look up at the night sky, there are thousands of planets out there waiting to be discovered. And the next big discovery might come not from a telescope, but from an AI brain! This is Pola, signing off! See you next time!"
+  ];
+
+  // Preload voices, retry until available (fixes Chrome async load issue)
+  function loadVoices() {
+    return new Promise(resolve => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        cachedVoices = voices;
+        voicesLoaded = true;
+        resolve(voices);
+      } else {
+        // Voice list not ready yet, wait for event
+        window.speechSynthesis.onvoiceschanged = () => {
+          cachedVoices = window.speechSynthesis.getVoices();
+          voicesLoaded = true;
+          resolve(cachedVoices);
+        };
+      }
+    });
+  }
+
+  // Pick the best available English male voice
+  function pickBestVoice() {
+    const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
+    if (!voices.length) return null;
+
+    // Priority order: enhanced/premium voices first, then known male voices
+    const preferred = [
+      // macOS enhanced voices (highest quality)
+      v => v.name.includes('Enhanced') && v.name.includes('English') && v.name.match(/Male|Daniel|Arthur|Alex|Fred/),
+      // iOS/macOS built-in quality male voices
+      v => v.name.includes('Daniel'),
+      v => v.name.includes('Arthur'),
+      v => v.name.includes('Alex') && v.lang.startsWith('en'),
+      v => v.name.includes('Fred') && v.lang.startsWith('en'),
+      // Microsoft male voices
+      v => v.name.includes('Microsoft Mark'),
+      v => v.name.includes('Microsoft David'),
+      v => v.name.includes('Microsoft George'),
+      // Google male voices (Android/Chrome)
+      v => v.name.includes('English (US)') && v.name.includes('Male'),
+      v => v.name.includes('UK English Male'),
+    ];
+
+    for (const fn of preferred) {
+      const found = voices.find(fn);
+      if (found) return found;
+    }
+
+    // Fallback: any English male voice
+    const anyMale = voices.find(v => v.lang.startsWith('en') && /male/i.test(v.name));
+    if (anyMale) return anyMale;
+
+    // Last resort: any English voice
+    return voices.find(v => v.lang.startsWith('en')) || voices[0];
+  }
+
+  function speakSegment(btn, idx) {
+    window.speechSynthesis.cancel();
+
+    document.querySelectorAll('.audio-btn').forEach(b => {
+      b.classList.remove('playing');
+      b.textContent = '▶';
+    });
+
+    if (btn.dataset.playing === 'true') {
+      btn.dataset.playing = 'false';
+      currentUtterance = null;
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(segmentTexts[idx]);
+    utterance.lang = 'en-US';
+    // Use normal rate — 0.85 was too slow and sounded robotic
+    utterance.rate = 0.97;
+    utterance.pitch = 1.0;
+
+    const voice = pickBestVoice();
+    if (voice) {
+      utterance.voice = voice;
+      console.log('Using voice:', voice.name);
+    }
+
+    btn.classList.add('playing');
+    btn.textContent = '⏸';
+    btn.dataset.playing = 'true';
+    currentUtterance = utterance;
+
+    utterance.onend = () => {
+      btn.classList.remove('playing');
+      btn.textContent = '▶';
+      btn.dataset.playing = 'false';
+      currentUtterance = null;
+    };
+    utterance.onerror = () => {
+      btn.classList.remove('playing');
+      btn.textContent = '▶';
+      btn.dataset.playing = 'false';
+      currentUtterance = null;
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function speakWord(btn, word) {
+    window.speechSynthesis.cancel();
+
+    document.querySelectorAll('.vocab-play').forEach(b => b.classList.remove('playing'));
+    document.querySelectorAll('.audio-btn').forEach(b => {
+      b.classList.remove('playing');
+      b.textContent = '▶';
+      b.dataset.playing = 'false';
+    });
+
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;   // slightly slower for vocabulary
+    utterance.pitch = 1.0;
+
+    const voice = pickBestVoice();
+    if (voice) utterance.voice = voice;
+
+    btn.classList.add('playing');
+
+    utterance.onend = () => btn.classList.remove('playing');
+    utterance.onerror = () => btn.classList.remove('playing');
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Kick off voice preload
+  loadVoices();
+
+  // Init
+  updateProgress();
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

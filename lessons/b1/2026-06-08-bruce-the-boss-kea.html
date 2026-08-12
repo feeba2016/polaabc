@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bruce the Boss Kea — Pola's English Lesson</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{font-family:'Nunito','Noto Sans SC',sans-serif;background:linear-gradient(135deg,#e8f5e9,#fff3e0,#e3f2fd);min-height:100vh;display:flex;}
+
+/* Sidebar */
+.sidebar{width:220px;background:linear-gradient(180deg,#2e7d32,#1b5e20);color:#fff;position:fixed;top:0;left:0;height:100vh;padding:20px 0;overflow-y:auto;z-index:100;transition:transform .3s;}
+.sidebar .logo{padding:10px 20px 20px;font-size:1.3rem;font-weight:800;border-bottom:1px solid rgba(255,255,255,.2);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sidebar .logo span{font-size:1.6rem;}
+.sidebar .logo small{display:block;font-size:.65rem;font-weight:400;opacity:.8;margin-top:2px;}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:rgba(255,255,255,.85);text-decoration:none;font-size:.88rem;font-weight:600;transition:all .2s;border-left:3px solid transparent;}
+.sidebar nav a:hover,.sidebar nav a.active{background:rgba(255,255,255,.15);color:#fff;border-left-color:#ffeb3b;}
+.sidebar nav a .icon{font-size:1.1rem;width:24px;text-align:center;}
+
+/* Main Content */
+.main{margin-left:220px;flex:1;padding:30px 40px 60px;max-width:900px;}
+
+/* Progress Bar */
+.progress-bar{position:fixed;top:0;left:220px;right:0;height:4px;background:#e0e0e0;z-index:200;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4caf50,#ffeb3b);width:0%;transition:width .3s;}
+
+/* Section */
+.section{display:none;animation:fadeIn .4s;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+h1{font-size:1.9rem;font-weight:800;background:linear-gradient(90deg,#2e7d32,#e65100);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.subtitle{font-size:.95rem;color:#666;margin-bottom:25px;}
+h2{font-size:1.35rem;font-weight:700;color:#2e7d32;margin:28px 0 14px;display:flex;align-items:center;gap:8px;}
+h3{font-size:1.1rem;font-weight:700;color:#37474f;margin:18px 0 10px;}
+
+/* Cards */
+.card{background:#fff;border-radius:16px;padding:24px;margin-bottom:18px;box-shadow:0 4px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.04);}
+.card.highlight{border-left:4px solid #4caf50;background:linear-gradient(90deg,#f1f8e9,#fff);}
+
+/* Segment with play button */
+.segment{position:relative;padding:18px 20px 18px 18px;margin-bottom:14px;border-radius:12px;background:#f9fbe7;border:1px solid #dcedc8;line-height:1.75;font-size:1.02rem;}
+.segment .seg-label{font-size:.75rem;font-weight:700;color:#827717;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.play-btn{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:none;background:linear-gradient(135deg,#66bb6a,#43a047);color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s;box-shadow:0 2px 8px rgba(76,175,80,.3);}
+.play-btn:hover{transform:scale(1.1);}
+.play-btn.playing{animation:pulse 1s infinite;background:linear-gradient(135deg,#ef5350,#e53935);}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+
+/* Highlight keyword */
+.hl{background:#fff9c4;border-radius:3px;padding:0 2px;cursor:help;position:relative;}
+.hl:hover .tip{display:block;}
+.tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:6px 12px;border-radius:8px;font-size:.78rem;white-space:nowrap;z-index:50;pointer-events:none;}
+.tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#333;}
+
+/* Vocab cards */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.vocab-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 3px 14px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.04);transition:transform .2s;}
+.vocab-card:hover{transform:translateY(-3px);box-shadow:0 6px 24px rgba(0,0,0,.1);}
+.vocab-word{font-size:1.2rem;font-weight:800;color:#2e7d32;display:flex;align-items:center;gap:8px;}
+.vocab-word .pos{font-size:.7rem;font-weight:600;color:#fff;background:#ff8f00;border-radius:4px;padding:2px 6px;}
+.vocab-pron{font-size:.8rem;color:#999;margin:4px 0;}
+.vocab-def{font-size:.95rem;color:#555;margin:6px 0;}
+.vocab-example{font-size:.88rem;color:#78909c;font-style:italic;background:#fafafa;padding:8px 12px;border-radius:8px;margin-top:8px;border-left:3px solid #a5d6a7;}
+.speak-btn{width:30px;height:30px;border-radius:50%;border:none;background:#e8f5e9;color:#2e7d32;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;}
+.speak-btn:hover{background:#c8e6c9;transform:scale(1.1);}
+.speak-btn.speaking{animation:pulse 1s infinite;background:#fff9c4;}
+
+/* Sentence pattern */
+.pattern-item{background:#f3e5f5;border-left:4px solid #ab47bc;padding:16px 20px;border-radius:0 12px 12px 0;margin-bottom:14px;}
+.pattern-en{font-size:1.02rem;font-weight:700;color:#4a148c;}
+.pattern-cn{font-size:.9rem;color:#666;margin:4px 0 10px;}
+.pattern-note{font-size:.85rem;color:#888;background:rgba(255,255,255,.7);padding:8px 12px;border-radius:8px;}
+.pattern-practice{margin-top:10px;background:#fff;padding:10px 14px;border-radius:8px;border:1px dashed #ce93d8;font-size:.88rem;color:#7b1fa2;}
+
+/* Grammar */
+.grammar-item{background:#e3f2fd;border-left:4px solid #1976d2;padding:16px 20px;border-radius:0 12px 12px 0;margin-bottom:14px;}
+.grammar-title{font-weight:700;color:#0d47a1;font-size:1rem;}
+.grammar-explain{font-size:.9rem;color:#444;margin:8px 0;}
+.grammar-examples{font-size:.88rem;color:#666;margin:8px 0;}
+.grammar-examples div{padding:4px 0;}
+.grammar-examples .highlight-example{color:#1565c0;font-weight:600;}
+.grammar-quiz{margin-top:10px;background:#fff;padding:10px 14px;border-radius:8px;border:1px dashed #90caf9;font-size:.88rem;}
+.grammar-quiz label{display:block;margin:6px 0;cursor:pointer;}
+.grammar-quiz input[type="radio"]{margin-right:6px;}
+.grammar-quiz .check-btn{margin-top:8px;padding:6px 16px;border:none;background:#1976d2;color:#fff;border-radius:8px;cursor:pointer;font-size:.82rem;}
+.grammar-quiz .result{margin-top:6px;font-weight:600;font-size:.85rem;}
+
+/* Quiz */
+.quiz-item{background:#fff3e0;border-left:4px solid #e65100;padding:16px 20px;border-radius:0 12px 12px 0;margin-bottom:14px;}
+.quiz-q{font-size:.95rem;font-weight:600;color:#bf360c;margin-bottom:10px;}
+.quiz-q .q-num{display:inline-block;background:#e65100;color:#fff;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-size:.75rem;margin-right:8px;}
+.quiz-option{display:block;padding:8px 14px;margin:6px 0;border-radius:8px;background:#fff;border:1px solid #ffcc80;cursor:pointer;transition:all .2s;font-size:.9rem;}
+.quiz-option:hover{background:#ffe0b2;}
+.quiz-option.correct{background:#c8e6c9 !important;border-color:#4caf50 !important;}
+.quiz-option.wrong{background:#ffcdd2 !important;border-color:#e53935 !important;}
+.quiz-feedback{margin-top:8px;padding:8px 12px;border-radius:8px;font-size:.85rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct-fb{background:#e8f5e9;color:#2e7d32;}
+.quiz-feedback.wrong-fb{background:#ffebee;color:#c62828;}
+.quiz-check{margin-top:10px;padding:6px 16px;border:none;background:#e65100;color:#fff;border-radius:8px;cursor:pointer;font-size:.82rem;}
+
+/* Knowledge expansion */
+.knowledge-section{background:#fff;border-radius:14px;padding:24px;margin-bottom:16px;box-shadow:0 3px 14px rgba(0,0,0,.06);}
+.knowledge-section h3{color:#1565c0;margin-bottom:12px;}
+.knowledge-section p{font-size:.92rem;line-height:1.8;color:#444;margin-bottom:12px;}
+.knowledge-section .fun-fact{background:#e8f5e9;border-radius:10px;padding:14px 18px;margin:12px 0;border-left:4px solid #66bb6a;}
+.knowledge-section .fun-fact strong{color:#2e7d32;}
+
+/* About */
+.about-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #eee;}
+.about-item:last-child{border-bottom:none;}
+.about-icon{font-size:1.5rem;width:36px;text-align:center;flex-shrink:0;}
+.about-text{font-size:.92rem;color:#555;line-height:1.6;}
+.about-text strong{color:#333;}
+.print-btn{margin-top:20px;padding:10px 24px;border:none;background:linear-gradient(135deg,#2e7d32,#43a047);color:#fff;border-radius:10px;cursor:pointer;font-size:.95rem;font-weight:600;transition:transform .2s;}
+.print-btn:hover{transform:scale(1.05);}
+
+/* Score display */
+.score-display{text-align:center;padding:20px;background:#e8f5e9;border-radius:14px;margin-top:20px;display:none;}
+.score-display .score-num{font-size:2.5rem;font-weight:800;color:#2e7d32;}
+
+/* Mobile hamburger */
+.menu-toggle{display:none;position:fixed;top:10px;left:10px;z-index:300;width:42px;height:42px;border-radius:12px;border:none;background:#2e7d32;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.2);}
+
+/* Print styles */
+@media print{
+  .sidebar,.progress-bar,.menu-toggle,.play-btn,.speak-btn{display:none!important;}
+  .main{margin-left:0!important;padding:15px!important;}
+  .section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff!important;}
+  .tip{display:none!important;}
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .menu-toggle{display:flex;align-items:center;justify-content:center;}
+  .main{margin-left:0;padding:20px 16px 60px;}
+  .progress-bar{left:0;}
+  .vocab-grid{grid-template-columns:1fr;}
+  h1{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- Mobile Toggle -->
+<button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">&#9776;</button>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo"><span>&#129421;</span> POLA ENGLISH<small>Learn with Pola News</small></div>
+  <nav>
+    <a href="#" class="active" data-section="reading" onclick="showSection('reading')"><span class="icon">&#128214;</span> Full Text</a>
+    <a href="#" data-section="vocabulary" onclick="showSection('vocabulary')"><span class="icon">&#128218;</span> Vocabulary</a>
+    <a href="#" data-section="sentences" onclick="showSection('sentences')"><span class="icon">&#128172;</span> Sentences</a>
+    <a href="#" data-section="grammar" onclick="showSection('grammar')"><span class="icon">&#128290;</span> Grammar</a>
+    <a href="#" data-section="quiz" onclick="showSection('quiz')"><span class="icon">&#9999;</span> Quiz</a>
+    <a href="#" data-section="knowledge" onclick="showSection('knowledge')"><span class="icon">&#127793;</span> Knowledge</a>
+    <a href="#" data-section="about" onclick="showSection('about')"><span class="icon">&#128083;</span> About</a>
+  </nav>
+</aside>
+
+<!-- Main Content -->
+<div class="main">
+
+<!-- Section 1: Reading -->
+<div class="section active" id="reading">
+  <h1>Bruce the Boss Kea</h1>
+  <p class="subtitle">&#129421; Pola News — June 8, 2026 | A Bird With No Upper Beak Who Became Leader of the Flock</p>
+
+  <div class="card highlight">
+    <h3>&#128266; Listen &amp; Read Along</h3>
+    <p style="font-size:.9rem;color:#666;margin-bottom:16px;">Click &#9654; on each paragraph to hear Pola read it aloud. <span class="hl">Yellow words<span class="tip">Click for Chinese meaning</span></span> are key vocabulary.</p>
+  </div>
+
+  <div class="segment" id="seg1">
+    <div class="seg-label">Segment 1 — Hook</div>
+    Imagine losing half your face — and then becoming the <span class="hl">boss<span class="tip">老板 / 领导者</span></span> of everyone around you. That's exactly what a parrot named Bruce did in New Zealand. Bruce is a <span class="hl">kea<span class="tip">啄羊鹦鹉（新西兰的一种聪明鹦鹉）</span></span>, one of the <span class="hl">smartest<span class="tip">最聪明的</span></span> birds on Earth. But he has no upper <span class="hl">beak<span class="tip">鸟喙 / 嘴巴</span></span>. And somehow, he rules his whole <span class="hl">flock<span class="tip">（鸟）群</span></span>. How? Let me tell you!
+    <button class="play-btn" onclick="playSegment(0)">&#9654;</button>
+  </div>
+
+  <div class="segment" id="seg2">
+    <div class="seg-label">Segment 2 — Story</div>
+    Bruce lost his upper beak when he was just a baby, probably in a <span class="hl">trap<span class="tip">陷阱</span></span>. Scientists at a <span class="hl">wildlife center<span class="tip">野生动物保护中心</span></span> in New Zealand watched him do something no kea had ever done before. He picked up a small <span class="hl">stone<span class="tip">石头</span></span> in his beak and used it to clean his <span class="hl">feathers<span class="tip">羽毛</span></span> — like using a comb when you have no fingers! Later, they discovered something even wilder. In a group of nine male keas, Bruce was the <span class="hl">leader<span class="tip">领袖 / 首领</span></span>. And get this — he won thirty-six fights. Zero <span class="hl">losses<span class="tip">失败 / 输</span></span>!
+    <button class="play-btn" onclick="playSegment(1)">&#9654;</button>
+  </div>
+
+  <div class="segment" id="seg3">
+    <div class="seg-label">Segment 3 — Why It Matters</div>
+    Here's why scientists are so <span class="hl">amazed<span class="tip">惊讶的</span></span>. Usually, the biggest and strongest bird becomes the leader. But Bruce is smaller and missing half his beak. He can't <span class="hl">bite<span class="tip">咬</span></span> the way other keas fight. Instead, he uses his lower beak like a <span class="hl">sword<span class="tip">剑</span></span>, <span class="hl">slamming<span class="tip">猛击</span></span> into his <span class="hl">rivals<span class="tip">对手 / 竞争者</span></span>. Scientists say this shows that <span class="hl">intelligence<span class="tip">智力 / 聪明</span></span> and personality can matter more than <span class="hl">strength<span class="tip">力量</span></span>. And his tool use? That was a <span class="hl">world first<span class="tip">世界第一 / 首次发现</span></span> for keas.
+    <button class="play-btn" onclick="playSegment(2)">&#9654;</button>
+  </div>
+
+  <div class="segment" id="seg4">
+    <div class="seg-label">Segment 4 — Sign-off</div>
+    So the next time life gives you a tough <span class="hl">challenge<span class="tip">挑战</span></span>, think of Bruce. No upper beak, no <span class="hl">problem<span class="tip">问题</span></span>. He turned a stone into a tool, a <span class="hl">weakness<span class="tip">弱点</span></span> into strength, and became the king of his flock. What a bird! I'm Pola, and this has been POLA NEWS. See you tomorrow!
+    <button class="play-btn" onclick="playSegment(3)">&#9654;</button>
+  </div>
+</div>
+
+<!-- Section 2: Vocabulary -->
+<div class="section" id="vocabulary">
+  <h1>&#128218; Vocabulary</h1>
+  <p class="subtitle">Key words from today's story — click &#128266; to hear each word</p>
+
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="vocab-word">beak <span class="pos">noun</span> <button class="speak-btn" onclick="speakWord('beak',this)">&#128266;</button></div>
+      <div class="vocab-def">鸟喙；鸟嘴</div>
+      <div class="vocab-example">Bruce lost his upper <strong>beak</strong> when he was just a baby.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">kea <span class="pos">noun</span> <button class="speak-btn" onclick="speakWord('kea',this)">&#128266;</button></div>
+      <div class="vocab-def">啄羊鹦鹉（新西兰特有的大型鹦鹉，以聪明著称）</div>
+      <div class="vocab-example">The <strong>kea</strong> is one of the smartest birds on Earth.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">flock <span class="pos">noun</span> <button class="speak-btn" onclick="speakWord('flock',this)">&#128266;</button></div>
+      <div class="vocab-def">（鸟、羊等的）群</div>
+      <div class="vocab-example">Bruce rules his whole <strong>flock</strong> of nine keas.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">feather <span class="pos">noun</span> <button class="speak-btn" onclick="speakWord('feather',this)">&#128266;</button></div>
+      <div class="vocab-def">羽毛</div>
+      <div class="vocab-example">He used a stone to clean his <strong>feathers</strong>.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">rival <span class="pos">noun</span> <button class="speak-btn" onclick="speakWord('rival',this)">&#128266;</button></div>
+      <div class="vocab-def">对手；竞争者</div>
+      <div class="vocab-example">He slams his lower beak into his <strong>rivals</strong> during fights.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">amazed <span class="pos">adj.</span> <button class="speak-btn" onclick="speakWord('amazed',this)">&#128266;</button></div>
+      <div class="vocab-def">感到惊讶的；大为惊叹的</div>
+      <div class="vocab-example">Scientists are <strong>amazed</strong> that a bird with no upper beak became the leader.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">intelligence <span class="pos">noun</span> <button class="speak-btn" onclick="speakWord('intelligence',this)">&#128266;</button></div>
+      <div class="vocab-def">智力；聪明才智</div>
+      <div class="vocab-example">Bruce's <strong>intelligence</strong> helped him become the leader.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">slamming <span class="pos">verb</span> <button class="speak-btn" onclick="speakWord('slamming',this)">&#128266;</button></div>
+      <div class="vocab-def">猛击；猛烈撞击（slam 的现在分词）</div>
+      <div class="vocab-example">He fights by <strong>slamming</strong> his lower beak into rivals.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">weakness <span class="pos">noun</span> <button class="speak-btn" onclick="speakWord('weakness',this)">&#128266;</button></div>
+      <div class="vocab-def">弱点；不足之处</div>
+      <div class="vocab-example">Bruce turned his <strong>weakness</strong> into strength.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-word">challenge <span class="pos">noun</span> <button class="speak-btn" onclick="speakWord('challenge',this)">&#128266;</button></div>
+      <div class="vocab-def">挑战；难题</div>
+      <div class="vocab-example">The next time life gives you a tough <strong>challenge</strong>, think of Bruce.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Sentences -->
+<div class="section" id="sentences">
+  <h1>&#128172; Sentence Patterns</h1>
+  <p class="subtitle">Useful sentence patterns from today's story</p>
+
+  <div class="pattern-item">
+    <div class="pattern-en">"Imagine [doing something] — and then [unexpected result]."</div>
+    <div class="pattern-cn">想象[做某事]——然后[意想不到的结果]。用于吸引读者注意力的开头句式。</div>
+    <div class="pattern-note">&#128161; <strong>Usage:</strong> "Imagine losing half your face — and then becoming the boss of everyone around you."</div>
+    <div class="pattern-practice">&#9999; Try it: Imagine ___________ — and then ___________.</div>
+  </div>
+
+  <div class="pattern-item">
+    <div class="pattern-en">"That's exactly what [subject] did [in place]."</div>
+    <div class="pattern-cn">这正是[某人]在[某地]所做的事。用于引出具体故事的句式。</div>
+    <div class="pattern-note">&#128161; <strong>Usage:</strong> "That's exactly what a parrot named Bruce did in New Zealand."</div>
+    <div class="pattern-practice">&#9999; Try it: That's exactly what ___________ did ___________.</div>
+  </div>
+
+  <div class="pattern-item">
+    <div class="pattern-en">"[Subject] had never done [something] before."</div>
+    <div class="pattern-cn">[主语]以前从未做过[某事]。用于描述首次发现或突破的句式。</div>
+    <div class="pattern-note">&#128161; <strong>Usage:</strong> "Scientists watched him do something no kea had ever done before."</div>
+    <div class="pattern-practice">&#9999; Try it: ___________ had never ___________ before.</div>
+  </div>
+
+  <div class="pattern-item">
+    <div class="pattern-en">"And get this — [surprising fact]."</div>
+    <div class="pattern-cn">告诉你更厉害的——[令人惊讶的事实]。用于在讲述中制造高潮的口语表达。</div>
+    <div class="pattern-note">&#128161; <strong>Usage:</strong> "And get this — he won thirty-six fights. Zero losses!"</div>
+    <div class="pattern-practice">&#9999; Try it: And get this — ___________!</div>
+  </div>
+
+  <div class="pattern-item">
+    <div class="pattern-en">"[Subject] turned [something negative] into [something positive]."</div>
+    <div class="pattern-cn">[主语]把[消极的事物]变成了[积极的事物]。用于描述逆境翻盘的经典句式。</div>
+    <div class="pattern-note">&#128161; <strong>Usage:</strong> "He turned a stone into a tool, a weakness into strength."</div>
+    <div class="pattern-practice">&#9999; Try it: ___________ turned ___________ into ___________.</div>
+  </div>
+</div>
+
+<!-- Section 4: Grammar -->
+<div class="section" id="grammar">
+  <h1>&#128290; Grammar Points</h1>
+  <p class="subtitle">Key grammar from today's lesson</p>
+
+  <div class="grammar-item">
+    <div class="grammar-title">1. Past Simple Tense (一般过去时)</div>
+    <div class="grammar-explain">用于描述过去已经发生的事情。 Bruce 的故事全部用过去时讲述。</div>
+    <div class="grammar-examples">
+      <div>&#10003; Bruce <span class="highlight-example">lost</span> his upper beak when he <span class="highlight-example">was</span> just a baby.</div>
+      <div>&#10003; He <span class="highlight-example">picked</span> up a small stone and <span class="highlight-example">used</span> it to clean his feathers.</div>
+      <div>&#10003; He <span class="highlight-example">won</span> thirty-six fights.</div>
+    </div>
+    <div class="grammar-quiz">
+      <strong>Practice:</strong> Fill in the past tense:<br>
+      <label><input type="radio" name="g1" value="a"> lose &rarr; <strong>losed</strong></label>
+      <label><input type="radio" name="g1" value="b"> lose &rarr; <strong>lost</strong></label>
+      <label><input type="radio" name="g1" value="c"> lose &rarr; <strong>loosed</strong></label>
+      <button class="check-btn" onclick="checkGrammar('g1','b',this)">Check</button>
+      <div class="result" id="g1-result"></div>
+    </div>
+  </div>
+
+  <div class="grammar-item">
+    <div class="grammar-title">2. Present Simple Tense (一般现在时)</div>
+    <div class="grammar-explain">用于描述普遍真理或当前状态。故事结尾部分切换到现在时来总结人生道理。</div>
+    <div class="grammar-examples">
+      <div>&#10003; Usually, the biggest and strongest bird <span class="highlight-example">becomes</span> the leader.</div>
+      <div>&#10003; Intelligence and personality <span class="highlight-example">can matter</span> more than strength.</div>
+      <div>&#10003; The next time life <span class="highlight-example">gives</span> you a tough challenge, think of Bruce.</div>
+    </div>
+    <div class="grammar-quiz">
+      <strong>Practice:</strong> Choose the correct form:<br>
+      <label><input type="radio" name="g2" value="a"> Bruce <strong>is</strong> a kea.</label>
+      <label><input type="radio" name="g2" value="b"> Bruce <strong>was</strong> a kea.</label>
+      <button class="check-btn" onclick="checkGrammar('g2','a',this)">Check</button>
+      <div class="result" id="g2-result"></div>
+    </div>
+  </div>
+
+  <div class="grammar-item">
+    <div class="grammar-title">3. Imperative Mood (祈使句)</div>
+    <div class="grammar-explain">以动词原形开头，表示建议、请求或指令。"Think of Bruce" 是典型的祈使句。</div>
+    <div class="grammar-examples">
+      <div>&#10003; <span class="highlight-example">Think</span> of Bruce.</div>
+      <div>&#10003; <span class="highlight-example">Imagine</span> losing half your face.</div>
+      <div>&#10003; <span class="highlight-example">Let</span> me tell you!</div>
+    </div>
+    <div class="grammar-quiz">
+      <strong>Practice:</strong> Which is an imperative sentence?<br>
+      <label><input type="radio" name="g3" value="a"> He thinks of Bruce.</label>
+      <label><input type="radio" name="g3" value="b"> Think of Bruce.</label>
+      <button class="check-btn" onclick="checkGrammar('g3','b',this)">Check</button>
+      <div class="result" id="g3-result"></div>
+    </div>
+  </div>
+
+  <div class="grammar-item">
+    <div class="grammar-title">4. Adverbial Clause of Time (时间状语从句)</div>
+    <div class="grammar-explain">用 "when" 或 "the next time" 引导时间从句，描述在特定时间发生的事。</div>
+    <div class="grammar-examples">
+      <div>&#10003; <span class="highlight-example">When</span> he was just a baby, Bruce lost his upper beak.</div>
+      <div>&#10003; <span class="highlight-example">The next time</span> life gives you a tough challenge, think of Bruce.</div>
+    </div>
+    <div class="grammar-quiz">
+      <strong>Practice:</strong> Complete: ________ he was a baby, he lost his beak.<br>
+      <label><input type="radio" name="g4" value="a"> <strong>When</strong></label>
+      <label><input type="radio" name="g4" value="b"> <strong>Because</strong></label>
+      <button class="check-btn" onclick="checkGrammar('g4','a',this)">Check</button>
+      <div class="result" id="g4-result"></div>
+    </div>
+  </div>
+
+  <div class="grammar-item">
+    <div class="grammar-title">5. Comparative Structures (比较结构)</div>
+    <div class="grammar-explain">用 "more than" 或 "-er" 进行比较，表示"比...更重要/更..."。</div>
+    <div class="grammar-examples">
+      <div>&#10003; Intelligence and personality <span class="highlight-example">can matter more than</span> strength.</div>
+      <div>&#10003; He is one of the <span class="highlight-example">smartest</span> birds on Earth.</div>
+      <div>&#10003; Something <span class="highlight-example">even wilder</span> was discovered later.</div>
+    </div>
+    <div class="grammar-quiz">
+      <strong>Practice:</strong> Which sentence uses a comparison correctly?<br>
+      <label><input type="radio" name="g5" value="a"> Bruce is <strong>more smarter</strong> than other birds.</label>
+      <label><input type="radio" name="g5" value="b"> Bruce is <strong>smarter</strong> than other birds.</label>
+      <button class="check-btn" onclick="checkGrammar('g5','b',this)">Check</button>
+      <div class="result" id="g5-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 5: Quiz -->
+<div class="section" id="quiz">
+  <h1>&#9999; Comprehension Quiz</h1>
+  <p class="subtitle">Test your understanding of today's story!</p>
+
+  <div class="quiz-item" id="q1">
+    <div class="quiz-q"><span class="q-num">1</span> What kind of animal is Bruce?<br><span style="font-size:.85rem;color:#888;">Bruce 是什么动物？</span></div>
+    <label class="quiz-option" onclick="selectOption('q1','a')">A. A penguin / 企鹅</label>
+    <label class="quiz-option" onclick="selectOption('q1','b')">B. A kea (parrot) / 啄羊鹦鹉</label>
+    <label class="quiz-option" onclick="selectOption('q1','c')">C. An owl / 猫头鹰</label>
+    <label class="quiz-option" onclick="selectOption('q1','d')">D. A seagull / 海鸥</label>
+    <button class="quiz-check" onclick="checkQuiz('q1','b')">Check Answer</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <div class="quiz-item" id="q2">
+    <div class="quiz-q"><span class="q-num">2</span> What happened to Bruce's upper beak?<br><span style="font-size:.85rem;color:#888;">Bruce 的上喙怎么了？</span></div>
+    <label class="quiz-option" onclick="selectOption('q2','a')">A. It was bitten off by another bird / 被其他鸟咬掉了</label>
+    <label class="quiz-option" onclick="selectOption('q2','b')">B. It fell off when he was sick / 生病时掉落的</label>
+    <label class="quiz-option" onclick="selectOption('q2','c')">C. He lost it when he was a baby, probably in a trap / 幼年时可能因陷阱失去的</label>
+    <label class="quiz-option" onclick="selectOption('q2','d')">D. He was born without it / 天生就没有</label>
+    <button class="quiz-check" onclick="checkQuiz('q2','c')">Check Answer</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <div class="quiz-item" id="q3">
+    <div class="quiz-q"><span class="q-num">3</span> How does Bruce clean his feathers?<br><span style="font-size:.85rem;color:#888;">Bruce 怎么清理自己的羽毛？</span></div>
+    <label class="quiz-option" onclick="selectOption('q3','a')">A. He rubs against tree branches / 在树枝上蹭</label>
+    <label class="quiz-option" onclick="selectOption('q3','b')">B. He uses a small stone like a comb / 用小石头当梳子</label>
+    <label class="quiz-option" onclick="selectOption('q3','c')">C. Other birds clean him for him / 其他鸟帮他清理</label>
+    <label class="quiz-option" onclick="selectOption('q3','d')">D. He uses his lower beak only / 只用下喙</label>
+    <button class="quiz-check" onclick="checkQuiz('q3','b')">Check Answer</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <div class="quiz-item" id="q4">
+    <div class="quiz-q"><span class="q-num">4</span> How many fights did Bruce win?<br><span style="font-size:.85rem;color:#888;">Bruce 赢了多少场战斗？</span></div>
+    <label class="quiz-option" onclick="selectOption('q4','a')">A. 26</label>
+    <label class="quiz-option" onclick="selectOption('q4','b')">B. 36</label>
+    <label class="quiz-option" onclick="selectOption('q4','c')">C. 46</label>
+    <label class="quiz-option" onclick="selectOption('q4','d')">D. 16</label>
+    <button class="quiz-check" onclick="checkQuiz('q4','b')">Check Answer</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+
+  <div class="quiz-item" id="q5">
+    <div class="quiz-q"><span class="q-num">5</span> What does Bruce's story teach us?<br><span style="font-size:.85rem;color:#888;">Bruce 的故事告诉我们什么？</span></div>
+    <label class="quiz-option" onclick="selectOption('q5','a')">A. Being the biggest is the only way to lead / 体型最大是成为首领的唯一方式</label>
+    <label class="quiz-option" onclick="selectOption('q5','b')">B. Intelligence and personality can matter more than strength / 智力和性格可能比力量更重要</label>
+    <label class="quiz-option" onclick="selectOption('q5','c')">C. You should always fight to win / 你应该为了赢而战斗</label>
+    <label class="quiz-option" onclick="selectOption('q5','d')">D. Birds cannot survive without a full beak / 没有完整的喙鸟类无法生存</label>
+    <button class="quiz-check" onclick="checkQuiz('q5','b')">Check Answer</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+
+  <div class="quiz-item" id="q6">
+    <div class="quiz-q"><span class="q-num">6</span> What was "a world first" about Bruce's behavior?<br><span style="font-size:.85rem;color:#888;">Bruce 的什么行为是"世界第一"的发现？</span></div>
+    <label class="quiz-option" onclick="selectOption('q6','a')">A. Fighting with his lower beak / 用下喙战斗</label>
+    <label class="quiz-option" onclick="selectOption('q6','b')">B. Becoming leader with a disability / 带残疾成为首领</label>
+    <label class="quiz-option" onclick="selectOption('q6','c')">C. Using a tool (a stone) to groom feathers / 使用工具（石头）来梳理羽毛</label>
+    <label class="quiz-option" onclick="selectOption('q6','d')">D. Living at a wildlife center / 住在野生动物中心</label>
+    <button class="quiz-check" onclick="checkQuiz('q6','c')">Check Answer</button>
+    <div class="quiz-feedback" id="q6-fb"></div>
+  </div>
+
+  <div class="score-display" id="scoreDisplay">
+    <div class="score-num" id="scoreNum">0/6</div>
+    <p style="color:#555;margin-top:4px;">Great effort! Keep learning with Pola!</p>
+  </div>
+</div>
+
+<!-- Section 6: Knowledge -->
+<div class="section" id="knowledge">
+  <h1>&#127793; Knowledge Extension</h1>
+  <p class="subtitle">中文知识扩展 — 深入了解今天的故事背景</p>
+
+  <div class="knowledge-section">
+    <h3>&#129421; 什么是啄羊鹦鹉 (Kea)？</h3>
+    <p>啄羊鹦鹉（Kea，学名 <em>Nestor notabilis</em>）是新西兰南岛特有的大型鹦鹉，也是世界上唯一的高山鹦鹉。它们的羽毛主要是橄榄绿色，翅膀内侧有亮丽的橙红色。</p>
+    <p>啄羊鹦鹉以"爱捣蛋"闻名——它们会拆游客的汽车雨刮器、啃咬皮靴、打开背包翻找食物。但这种"调皮"其实源于极高的智商。科学家发现，啄羊鹦鹉的解决问题的能力可以媲美一些灵长类动物。</p>
+    <div class="fun-fact">
+      <strong>&#127881; 你知道吗？</strong>啄羊鹦鹉的名字 "Kea" 来自毛利语，是模仿它们叫声的拟声词。它们发出的声音非常丰富，有至少 20 种不同的叫声！
+    </div>
+  </div>
+
+  <div class="knowledge-section">
+    <h3>&#129504; 动物使用工具：不只是灵长类的专利</h3>
+    <p>过去科学家认为只有灵长类（猴子、猩猩）和乌鸦等少数动物会使用工具。但近年来，越来越多"出人意料"的工具使用者被发现了：</p>
+    <p><strong>海獭</strong>——用石头砸开贝壳；<strong>埃及秃鹫</strong>——用石头砸鸵鸟蛋；<strong>射水鱼</strong>——用水柱击落昆虫（"活体水枪"也是一种工具）；<strong>章鱼</strong>——用椰子壳当盔甲。</p>
+    <p>Bruce 的工具使用特别令人震惊，因为他是 <strong>在受伤后自己发明</strong>了这种方法，而不是从其他鸟那里学来的。这种"自创工具"的能力在鸟类中极为罕见。</p>
+    <div class="fun-fact">
+      <strong>&#127881; 你知道吗？</strong>在 Bruce 之前，科学家已经知道啄羊鹦鹉很聪明，但从未观察到它们使用工具。Bruce 让啄羊鹦鹉加入了"会使用工具的动物"俱乐部！
+    </div>
+  </div>
+
+  <div class="knowledge-section">
+    <h3>&#128081; 动物社会的"首领"是怎么选出来的？</h3>
+    <p>在大多数动物社会中，首领通常是最强壮、体型最大的个体。比如狼群的首领是最强的"阿尔法狼"，象群的首领是最年长、经验最丰富的母象。</p>
+    <p>但 Bruce 打破了这条规则。他体型较小、还缺少上喙，却凭借 <strong>战略性的战斗方式</strong>（用下喙猛击对手）和 <strong>社交智慧</strong>（让其他鸟帮他清理羽毛）赢得了首领地位。</p>
+    <p>这告诉我们：在自然界中，<strong>脑力可以胜过体力</strong>。这和人类社会中的道理非常相似！</p>
+    <div class="fun-fact">
+      <strong>&#127881; 你知道吗？</strong>Bruce 所在的群体有 9 只雄性啄羊鹦鹉。作为首领，他享有"特权"——总是第一个吃东西，而且其他鸟会主动帮他整理羽毛！
+    </div>
+  </div>
+
+  <div class="knowledge-section">
+    <h3>&#127995;&#65039; 新西兰：神奇鸟类之国</h3>
+    <p>新西兰因为与大陆隔绝了数千万年，进化出了许多独特的鸟类。可惜的是，在人类到达后，许多物种已经灭绝。</p>
+    <p><strong>几维鸟 (Kiwi)</strong>——不会飞的国鸟，像一只长着羽毛的毛茸茸的小球；<strong>鸮鹦鹉 (Kakapo)</strong>——世界上唯一的不会飞的鹦鹉，也是最重的鹦鹉，现存不到 250 只；<strong>恐鸟 (Moa)</strong>——曾经高达 3.6 米的巨鸟，可惜在约 600 年前灭绝了。</p>
+    <p>啄羊鹦鹉目前是 <strong>濒危物种</strong>，野外数量估计只有 3,000-7,000 只。保护 Bruce 和他的同伴们非常重要！</p>
+  </div>
+</div>
+
+<!-- Section 7: About -->
+<div class="section" id="about">
+  <h1>&#128083; About This Lesson</h1>
+  <p class="subtitle">Learning goals and tips for today's lesson</p>
+
+  <div class="card">
+    <h3>&#127919; Learning Goals</h3>
+    <div class="about-item">
+      <span class="about-icon">&#128218;</span>
+      <div class="about-text"><strong>Master 10 key vocabulary words</strong> including beak, flock, rival, intelligence, weakness, and more.</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#128172;</span>
+      <div class="about-text"><strong>Learn 5 practical sentence patterns</strong> that you can use in daily conversation and writing.</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#128290;</span>
+      <div class="about-text"><strong>Understand 5 grammar points</strong> including past simple, present simple, imperatives, and comparatives.</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#127793;</span>
+      <div class="about-text"><strong>Gain knowledge about New Zealand wildlife</strong>, animal intelligence, and how animals use tools.</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#128150;</span>
+      <div class="about-text"><strong>Be inspired by Bruce's story</strong> — turning challenges into strengths through creativity and determination.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#128161; Study Tips</h3>
+    <div class="about-item">
+      <span class="about-icon">&#127911;</span>
+      <div class="about-text"><strong>Listen first, read second.</strong> Play each segment's audio first, then read along. This helps train your ear.</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#128221;</span>
+      <div class="about-text"><strong>Write your own sentences.</strong> Try using today's sentence patterns to write about your own experiences.</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#128065;</span>
+      <div class="about-text"><strong>Watch kea videos online.</strong> Search for "kea parrot New Zealand" to see these amazing birds in action!</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#128200;</span>
+      <div class="about-text"><strong>Retell the story.</strong> Try telling Bruce's story in your own words, in English, to a friend or family member.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#128214; Lesson Info</h3>
+    <div class="about-item">
+      <span class="about-icon">&#128197;</span>
+      <div class="about-text"><strong>Date:</strong> June 8, 2026</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#129421;</span>
+      <div class="about-text"><strong>Host:</strong> Pola (Quokka)</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#127760;</span>
+      <div class="about-text"><strong>English Level:</strong> B1 (CEFR)</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#9201;</span>
+      <div class="about-text"><strong>Duration:</strong> ~60 seconds</div>
+    </div>
+    <div class="about-item">
+      <span class="about-icon">&#128209;</span>
+      <div class="about-text"><strong>Source:</strong> NewsForKids.net / Dr. Alexander Grabham team, Willowbank Wildlife Reserve, New Zealand</div>
+    </div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">&#128424; Print This Lesson</button>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ===================== Navigation =====================
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sidebar nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`[data-section="${id}"]`).classList.add('active');
+  // Close sidebar on mobile
+  document.getElementById('sidebar').classList.remove('open');
+  updateProgress(id);
+}
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+const sectionOrder=['reading','vocabulary','sentences','grammar','quiz','knowledge','about'];
+function updateProgress(id){
+  let idx=sectionOrder.indexOf(id);
+  document.getElementById('progressFill').style.width=((idx+1)/sectionOrder.length*100)+'%';
+}
+
+// ===================== Speech =====================
+let voices=[];
+let currentUtterance=null;
+
+function loadVoices(){
+  voices=speechSynthesis.getVoices();
+}
+speechSynthesis.onvoiceschanged=loadVoices;
+loadVoices();
+
+function getBestVoice(){
+  if(!voices.length) voices=speechSynthesis.getVoices();
+  // Priority: Enhanced English male > Daniel > Alex > Microsoft Mark > any English male > any English
+  let v=voices.find(v=>v.name.includes('Enhanced')&&v.lang.startsWith('en')&&v.name.toLowerCase().includes('male'));
+  if(!v) v=voices.find(v=>v.name==='Daniel');
+  if(!v) v=voices.find(v=>v.name==='Alex');
+  if(!v) v=voices.find(v=>v.name.includes('Mark')&&v.lang.startsWith('en'));
+  if(!v) v=voices.find(v=>v.lang.startsWith('en')&&v.name.toLowerCase().includes('male'));
+  if(!v) v=voices.find(v=>v.lang.startsWith('en'));
+  return v||null;
+}
+
+const segmentTexts=[
+  "Imagine losing half your face — and then becoming the boss of everyone around you. That's exactly what a parrot named Bruce did in New Zealand. Bruce is a kea, one of the smartest birds on Earth. But he has no upper beak. And somehow, he rules his whole flock. How? Let me tell you!",
+  "Bruce lost his upper beak when he was just a baby, probably in a trap. Scientists at a wildlife center in New Zealand watched him do something no kea had ever done before. He picked up a small stone in his beak and used it to clean his feathers — like using a comb when you have no fingers! Later, they discovered something even wilder. In a group of nine male keas, Bruce was the leader. And get this — he won thirty-six fights. Zero losses!",
+  "Here's why scientists are so amazed. Usually, the biggest and strongest bird becomes the leader. But Bruce is smaller and missing half his beak. He can't bite the way other keas fight. Instead, he uses his lower beak like a sword, slamming into his rivals. Scientists say this shows that intelligence and personality can matter more than strength. And his tool use? That was a world first for keas. It tells us these birds are even smarter than we thought.",
+  "So the next time life gives you a tough challenge, think of Bruce. No upper beak, no problem. He turned a stone into a tool, a weakness into strength, and became the king of his flock. What a bird! I'm Pola, and this has been POLA NEWS. See you tomorrow!"
+];
+
+function playSegment(idx){
+  stopSpeech();
+  let btns=document.querySelectorAll('.play-btn');
+  btns.forEach(b=>{b.textContent='\u25B6';b.classList.remove('playing');});
+  let btn=btns[idx];
+  btn.textContent='\u23F8';
+  btn.classList.add('playing');
+  let u=new SpeechSynthesisUtterance(segmentTexts[idx]);
+  u.rate=0.97;
+  u.pitch=1.0;
+  let v=getBestVoice();
+  if(v) u.voice=v;
+  u.onend=()=>{btn.textContent='\u25B6';btn.classList.remove('playing');};
+  currentUtterance=u;
+  speechSynthesis.speak(u);
+}
+
+function speakWord(word,btn){
+  stopSpeech();
+  btn.classList.add('speaking');
+  let u=new SpeechSynthesisUtterance(word);
+  u.rate=0.9;
+  u.pitch=1.0;
+  let v=getBestVoice();
+  if(v) u.voice=v;
+  u.onend=()=>{btn.classList.remove('speaking');};
+  currentUtterance=u;
+  speechSynthesis.speak(u);
+}
+
+function stopSpeech(){
+  speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b=>{b.textContent='\u25B6';b.classList.remove('playing');});
+  document.querySelectorAll('.speak-btn').forEach(b=>b.classList.remove('speaking'));
+}
+
+// ===================== Grammar Quiz =====================
+function checkGrammar(name,correct,btn){
+  let sel=document.querySelector(`input[name="${name}"]:checked`);
+  let res=document.getElementById(name+'-result');
+  if(!sel){res.textContent='Please select an answer first!';res.style.color='#e65100';return;}
+  if(sel.value===correct){
+    res.textContent='\u2705 Correct! Well done!';
+    res.style.color='#2e7d32';
+  }else{
+    res.textContent='\u274C Not quite. Try again!';
+    res.style.color='#c62828';
+  }
+}
+
+// ===================== Comprehension Quiz =====================
+let quizSelections={};
+let quizScore=0;
+let quizAnswered={};
+
+function selectOption(qid,val){
+  quizSelections[qid]=val;
+  let item=document.getElementById(qid);
+  item.querySelectorAll('.quiz-option').forEach(o=>o.classList.remove('correct','wrong'));
+}
+
+function checkQuiz(qid,correct){
+  if(quizAnswered[qid])return;
+  quizAnswered[qid]=true;
+  let fb=document.getElementById(qid+'-fb');
+  let item=document.getElementById(qid);
+  let opts=item.querySelectorAll('.quiz-option');
+
+  opts.forEach(o=>{
+    if(o.onclick&&o.getAttribute('onclick').includes(`'${correct}'`)){
+      o.classList.add('correct');
+    }
+  });
+
+  if(quizSelections[qid]===correct){
+    fb.textContent='\u2705 \u6b63\u786e\uff01\u592a\u68d2\u4e86\uff01 (Correct! Great job!)';
+    fb.className='quiz-feedback show correct-fb';
+    quizScore++;
+  }else{
+    fb.textContent='\u274c \u4e0d\u592a\u5bf9\u54e6\uff0c\u6b63\u786e\u7b54\u6848\u662f '+correct.toUpperCase()+'.';
+    fb.className='quiz-feedback show wrong-fb';
+    if(quizSelections[qid]){
+      opts.forEach(o=>{
+        if(o.getAttribute('onclick').includes(`'${quizSelections[qid]}'`)){
+          o.classList.add('wrong');
+        }
+      });
+    }
+  }
+
+  // Show score if all answered
+  let total=document.querySelectorAll('.quiz-item').length;
+  let answered=Object.keys(quizAnswered).length;
+  if(answered>=total){
+    let sd=document.getElementById('scoreDisplay');
+    sd.style.display='block';
+    document.getElementById('scoreNum').textContent=quizScore+'/'+total;
+  }
+}
+
+// Init progress
+updateProgress('reading');
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

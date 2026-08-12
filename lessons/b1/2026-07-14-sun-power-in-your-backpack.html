@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sun Power in Your Backpack | Pola学英语</title>
+  <style>
+    :root {
+      --primary: #f59e0b;
+      --primary-dark: #d97706;
+      --secondary: #0ea5e9;
+      --accent: #8b5cf6;
+      --bg-light: #fffbeb;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      --radius: 18px;
+      --font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%, #e0f2fe 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.2s ease;
+    }
+
+    /* Layout */
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      gap: 24px;
+    }
+
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 24px;
+      height: fit-content;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .sidebar h2 {
+      margin: 0 0 20px 0;
+      font-size: 22px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+
+    .sidebar a {
+      display: block;
+      text-decoration: none;
+      color: var(--text-dark);
+      padding: 10px 14px;
+      border-radius: 12px;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      transform: translateX(4px);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 1001;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(14, 165, 233, 0.15));
+      border-radius: var(--radius);
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '☀';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      font-size: 140px;
+      opacity: 0.12;
+    }
+
+    header h1 {
+      margin: 0 0 12px 0;
+      font-size: 42px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header .subtitle {
+      margin: 0;
+      font-size: 20px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    section {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 24px;
+    }
+
+    section h2 {
+      margin: 0 0 24px 0;
+      font-size: 28px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    section h2::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 32px;
+      background: linear-gradient(180deg, var(--primary), var(--secondary));
+      border-radius: 4px;
+    }
+
+    /* Segment reading */
+    .segment {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 14px;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .segment p {
+      flex: 1;
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .play-btn {
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border: none;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: pulse 2s infinite;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    }
+
+    .play-btn.playing {
+      animation: none;
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5); }
+      70% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    .keyword {
+      background: linear-gradient(120deg, #fef08a 0%, #fde047 100%);
+      padding: 2px 6px;
+      border-radius: 6px;
+      cursor: help;
+      font-weight: 600;
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .keyword:hover {
+      background: linear-gradient(120deg, #fde047 0%, #facc15 100%);
+    }
+
+    .tooltip {
+      position: fixed;
+      background: var(--text-dark);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      max-width: 260px;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    .tooltip.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 6px 0;
+      border-style: solid;
+      border-color: var(--text-dark) transparent transparent transparent;
+    }
+
+    /* Vocabulary cards */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .vocab-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border-top: 4px solid var(--secondary);
+      transition: transform 0.2s;
+    }
+
+    .vocab-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .vocab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .vocab-word {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 0;
+    }
+
+    .vocab-pos {
+      font-size: 13px;
+      color: var(--text-light);
+      font-style: italic;
+      margin: 0;
+    }
+
+    .vocab-sound {
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      color: white;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+    }
+
+    .vocab-sound:hover {
+      transform: scale(1.1);
+    }
+
+    .vocab-meaning {
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .vocab-example {
+      color: var(--text-light);
+      font-size: 15px;
+      font-style: italic;
+      border-left: 3px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    /* Pattern and grammar cards */
+    .pattern-card, .grammar-card, .quiz-item, .knowledge-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .pattern-en {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 6px;
+    }
+
+    .pattern-cn {
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+
+    .pattern-practice {
+      border-top: 1px dashed #e5e7eb;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .pattern-practice textarea {
+      width: 100%;
+      min-height: 60px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      resize: vertical;
+    }
+
+    .grammar-title {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .grammar-ex {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Quiz */
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--secondary);
+      background: #f0f9ff;
+    }
+
+    .quiz-option input {
+      cursor: pointer;
+    }
+
+    .quiz-option.correct {
+      border-color: #22c55e;
+      background: #f0fdf4;
+    }
+
+    .quiz-option.incorrect {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .check-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: transform 0.2s;
+    }
+
+    .check-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .score-display {
+      margin-top: 16px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* Knowledge section */
+    .knowledge-card h3 {
+      margin: 0 0 12px 0;
+      color: var(--primary-dark);
+    }
+
+    .knowledge-card p {
+      margin: 0 0 10px 0;
+    }
+
+    /* About section */
+    .about-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .about-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .about-list li:last-child {
+      border-bottom: none;
+    }
+
+    .print-btn {
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: transform 0.2s;
+    }
+
+    .print-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        width: 260px;
+        height: 100vh;
+        z-index: 999;
+        border-radius: 0 20px 20px 0;
+        transition: left 0.3s ease;
+        overflow-y: auto;
+      }
+      .sidebar.open {
+        left: 0;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+      header {
+        padding: 40px 20px;
+      }
+      header h1 {
+        font-size: 32px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      section {
+        padding: 20px;
+      }
+      .segment {
+        flex-direction: column;
+      }
+      .vocab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: white;
+      }
+      .progress-container,
+      .sidebar,
+      .mobile-menu-btn,
+      .play-btn,
+      .vocab-sound,
+      .check-btn,
+      .print-btn,
+      .quiz-option input,
+      .pattern-practice textarea {
+        display: none !important;
+      }
+      .container {
+        display: block;
+        padding: 0;
+      }
+      .content {
+        width: 100%;
+      }
+      section {
+        box-shadow: none;
+        break-inside: avoid;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+      }
+      header {
+        box-shadow: none;
+        background: white;
+      }
+      header::before {
+        display: none;
+      }
+      .keyword {
+        background: none;
+        border-bottom: 2px solid #000;
+      }
+      .segment {
+        border-left: 2px solid #000;
+      }
+      .vocab-card, .pattern-card, .grammar-card, .quiz-item, .knowledge-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="打开菜单">☰</button>
+
+  <div class="container">
+    <aside class="sidebar" id="sidebar">
+      <nav>
+        <h2>☀ Pola NEWS</h2>
+        <ul>
+          <li><a href="#reading" onclick="closeMenu()">1. 全文阅读</a></li>
+          <li><a href="#vocab" onclick="closeMenu()">2. 词汇表</a></li>
+          <li><a href="#patterns" onclick="closeMenu()">3. 句型练习</a></li>
+          <li><a href="#grammar" onclick="closeMenu()">4. 语法点</a></li>
+          <li><a href="#quiz" onclick="closeMenu()">5. 练习测验</a></li>
+          <li><a href="#knowledge" onclick="closeMenu()">6. 知识扩展</a></li>
+          <li><a href="#about" onclick="closeMenu()">7. 关于本课</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header>
+        <h1>Sun Power in Your Backpack</h1>
+        <p class="subtitle">中国科学家研发出可折叠的世界纪录太阳能电池</p>
+      </header>
+
+      <section id="reading">
+        <h2>全文阅读</h2>
+        <div class="segment">
+          <p id="segment0">
+            Imagine a <span class="keyword" data-definition="solar panel: a flat device that uses sunlight to make electricity" data-translation="太阳能电池板">solar panel</span> you can fold like a map and slide into your <span class="keyword" data-definition="backpack: a bag carried on your back" data-translation="背包">backpack</span>. Scientists in China just built one — and it catches more <span class="keyword" data-definition="sunlight: the light from the sun" data-translation="阳光">sunlight</span> than any panel of its kind before. Welcome to the future of <span class="keyword" data-definition="clean energy: power made without pollution" data-translation="清洁能源">clean energy</span>!
+          </p>
+          <button class="play-btn" id="btn0" onclick="playSegment(0)" aria-label="播放第一段">▶</button>
+        </div>
+
+        <div class="segment">
+          <p id="segment1">
+            At the Chinese Academy of Sciences, researchers stacked two light-catchers. The top <span class="keyword" data-definition="layer: a thin sheet or level of material" data-translation="层">layer</span> grabs blue light, and the bottom layer grabs red light. A special <span class="keyword" data-definition="molecule: a very small group of atoms that make up a substance" data-translation="分子">molecule</span> called TDB keeps everything <span class="keyword" data-definition="stable: not changing or breaking down easily" data-translation="稳定的">stable</span>. The result: a world-record <span class="keyword" data-definition="efficiency: how well something turns energy into useful power" data-translation="效率">efficiency</span> of 28.04 percent!
+          </p>
+          <button class="play-btn" id="btn1" onclick="playSegment(1)" aria-label="播放第二段">▶</button>
+        </div>
+
+        <div class="segment">
+          <p id="segment2">
+            Why does this matter? These <span class="keyword" data-definition="solar panel: a flat device that uses sunlight to make electricity" data-translation="太阳能电池板">solar cells</span> are thin, light, and <span class="keyword" data-definition="bendable: able to be bent or curved without breaking" data-translation="可弯曲的">bendable</span>. You could stick one on a backpack, a drone, or even a jacket. In the future, they may also power <span class="keyword" data-definition="satellite: a machine that travels around Earth or another planet in space" data-translation="卫星">satellites</span> and space stations. The sun is becoming our pocket-sized power plant!
+          </p>
+          <button class="play-btn" id="btn2" onclick="playSegment(2)" aria-label="播放第三段">▶</button>
+        </div>
+
+        <div class="segment">
+          <p id="segment3">
+            So next time you step outside, look up. That bright <span class="keyword" data-definition="sunlight: the light from the sun" data-translation="阳光">sun</span> could soon charge your phone, your backpack, or even a spaceship. This is Pola from POLA NEWS. Keep chasing the light — and I'll see you tomorrow!
+          </p>
+          <button class="play-btn" id="btn3" onclick="playSegment(3)" aria-label="播放第四段">▶</button>
+        </div>
+      </section>
+
+      <section id="vocab">
+        <h2>词汇表</h2>
+        <div class="vocab-grid">
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">solar panel</p>
+                <p class="vocab-pos">noun</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('solar panel')" aria-label="播放 solar panel">🔊</button>
+            </div>
+            <p class="vocab-meaning">太阳能电池板 — a flat device that turns sunlight into electricity</p>
+            <p class="vocab-example">"My house has a solar panel on the roof."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">backpack</p>
+                <p class="vocab-pos">noun</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('backpack')" aria-label="播放 backpack">🔊</button>
+            </div>
+            <p class="vocab-meaning">背包 — a bag you carry on your back</p>
+            <p class="vocab-example">"I put my books and lunch in my backpack."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">sunlight</p>
+                <p class="vocab-pos">noun</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('sunlight')" aria-label="播放 sunlight">🔊</button>
+            </div>
+            <p class="vocab-meaning">阳光 — the natural light from the sun</p>
+            <p class="vocab-example">"Plants need sunlight to grow."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">clean energy</p>
+                <p class="vocab-pos">noun</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('clean energy')" aria-label="播放 clean energy">🔊</button>
+            </div>
+            <p class="vocab-meaning">清洁能源 — power made without polluting the air or water</p>
+            <p class="vocab-example">"Wind and solar power are kinds of clean energy."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">layer</p>
+                <p class="vocab-pos">noun</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('layer')" aria-label="播放 layer">🔊</button>
+            </div>
+            <p class="vocab-meaning">层 — a thin sheet or level of something</p>
+            <p class="vocab-example">"This cake has three delicious layers."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">molecule</p>
+                <p class="vocab-pos">noun</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('molecule')" aria-label="播放 molecule">🔊</button>
+            </div>
+            <p class="vocab-meaning">分子 — a very small group of atoms that make up a substance</p>
+            <p class="vocab-example">"A water molecule is made of two hydrogen atoms and one oxygen atom."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">stable</p>
+                <p class="vocab-pos">adjective</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('stable')" aria-label="播放 stable">🔊</button>
+            </div>
+            <p class="vocab-meaning">稳定的 — not easily changed or broken</p>
+            <p class="vocab-example">"This table is stable because it has four strong legs."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">efficiency</p>
+                <p class="vocab-pos">noun</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('efficiency')" aria-label="播放 efficiency">🔊</button>
+            </div>
+            <p class="vocab-meaning">效率 — how well something uses energy or time</p>
+            <p class="vocab-example">"This new engine has much better fuel efficiency."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">bendable</p>
+                <p class="vocab-pos">adjective</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('bendable')" aria-label="播放 bendable">🔊</button>
+            </div>
+            <p class="vocab-meaning">可弯曲的 — able to bend without breaking</p>
+            <p class="vocab-example">"This plastic ruler is thin and bendable."</p>
+          </div>
+
+          <div class="vocab-card">
+            <div class="vocab-header">
+              <div>
+                <p class="vocab-word">satellite</p>
+                <p class="vocab-pos">noun</p>
+              </div>
+              <button class="vocab-sound" onclick="playWord('satellite')" aria-label="播放 satellite">🔊</button>
+            </div>
+            <p class="vocab-meaning">卫星 — a machine that travels around Earth or another planet</p>
+            <p class="vocab-example">"The satellite sends photos of weather back to Earth."</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="patterns">
+        <h2>句型练习</h2>
+
+        <div class="pattern-card">
+          <p class="pattern-en">Imagine a/an [noun] you can [verb]...</p>
+          <p class="pattern-cn">想象一个你可以……的……</p>
+          <p>Used to invite the listener to picture something amazing.</p>
+          <div class="pattern-practice">
+            <p><strong>Practice:</strong> Write your own sentence.</p>
+            <textarea placeholder="Example: Imagine a robot you can fold like a towel."></textarea>
+          </div>
+        </div>
+
+        <div class="pattern-card">
+          <p class="pattern-en">The result is/was [a number or description].</p>
+          <p class="pattern-cn">结果是……</p>
+          <p>Used to tell what happened after an experiment or action.</p>
+          <div class="pattern-practice">
+            <p><strong>Practice:</strong> Write your own sentence.</p>
+            <textarea placeholder="Example: The result was a new school record of 12 seconds."></textarea>
+          </div>
+        </div>
+
+        <div class="pattern-card">
+          <p class="pattern-en">Why does this matter? Because...</p>
+          <p class="pattern-cn">为什么这很重要？因为……</p>
+          <p>Used to explain the importance of something.</p>
+          <div class="pattern-practice">
+            <p><strong>Practice:</strong> Write your own sentence.</p>
+            <textarea placeholder="Example: Why does this matter? Because clean air keeps us healthy."></textarea>
+          </div>
+        </div>
+
+        <div class="pattern-card">
+          <p class="pattern-en">[Subject] could [verb]...</p>
+          <p class="pattern-cn">……可以……（表示可能性）</p>
+          <p>Used to talk about future possibilities.</p>
+          <div class="pattern-practice">
+            <p><strong>Practice:</strong> Write your own sentence.</p>
+            <textarea placeholder="Example: Solar cars could help reduce air pollution."></textarea>
+          </div>
+        </div>
+
+        <div class="pattern-card">
+          <p class="pattern-en">Next time you [verb], [sentence].</p>
+          <p class="pattern-cn">下次你……的时候，……</p>
+          <p>Used to give advice or connect an action to a thought.</p>
+          <div class="pattern-practice">
+            <p><strong>Practice:</strong> Write your own sentence.</p>
+            <textarea placeholder="Example: Next time you drink water, remember how precious it is."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section id="grammar">
+        <h2>语法点</h2>
+
+        <div class="grammar-card">
+          <p class="grammar-title">1. 比较级：more... than...（比……更……）</p>
+          <p>用来比较两个事物，说明一个比另一个在某方面更多或更强。</p>
+          <div class="grammar-ex">"...it catches <strong>more</strong> sunlight <strong>than</strong> any panel of its kind before."</div>
+        </div>
+
+        <div class="grammar-card">
+          <p class="grammar-title">2. 现在完成时：have/has + 过去分词</p>
+          <p>表示过去发生的动作对现在有影响，或动作刚刚完成。</p>
+          <div class="grammar-ex">"Scientists in China <strong>just built</strong> one."（也可以用 "have just built"）<br>"Researchers <strong>have stacked</strong> two light-catchers."</div>
+        </div>
+
+        <div class="grammar-card">
+          <p class="grammar-title">3. 一般现在时：描述事实或习惯</p>
+          <p>用于陈述客观事实、科学真理或反复发生的动作。</p>
+          <div class="grammar-ex">"The top layer <strong>grabs</strong> blue light, and the bottom layer <strong>grabs</strong> red light."<br>"Plants <strong>need</strong> sunlight to grow."</div>
+        </div>
+
+        <div class="grammar-card">
+          <p class="grammar-title">4. 情态动词 may / could 表示可能性</p>
+          <p>may 和 could 都表示“可能”，用于谈论未来的不确定性。</p>
+          <div class="grammar-ex">"They <strong>may</strong> also power satellites and space stations."<br>"The sun <strong>could</strong> soon charge your phone."</div>
+        </div>
+
+        <div class="grammar-card">
+          <p class="grammar-title">5. 原因状语从句：because 引导</p>
+          <p>because 用来解释原因，回答 why 提出的问题。</p>
+          <div class="grammar-ex">"Why does this matter? <strong>Because</strong> these solar cells are thin, light, and bendable."</div>
+        </div>
+      </section>
+
+      <section id="quiz">
+        <h2>练习测验</h2>
+
+        <div class="quiz-item" data-answer="b">
+          <p><strong>1. What is the world-record efficiency of the new solar cell?</strong><br>新型太阳能电池的世界纪录效率是多少？</p>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q1" value="a"> 18.04%</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="b"> 28.04%</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="c"> 38.04%</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="d"> 48.04%</label>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="a">
+          <p><strong>2. Where was this solar cell developed?</strong><br>这种太阳能电池是在哪里研发的？</p>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q2" value="a"> Chinese Academy of Sciences</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="b"> NASA</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="c"> Oxford University</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="d"> MIT</label>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="b">
+          <p><strong>3. What light does the top layer absorb?</strong><br>上层吸收什么光？</p>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q3" value="a"> Red light</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="b"> Blue light</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="c"> Green light</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="d"> Infrared light</label>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="a">
+          <p><strong>4. What is the special molecule called?</strong><br>这种特殊分子叫什么？</p>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q4" value="a"> TDB</label>
+            <label class="quiz-option"><input type="radio" name="q4" value="b"> DNA</label>
+            <label class="quiz-option"><input type="radio" name="q4" value="c"> H2O</label>
+            <label class="quiz-option"><input type="radio" name="q4" value="d"> ATP</label>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="c">
+          <p><strong>5. Which of the following is NOT mentioned as a future use?</strong><br>以下哪一项没有作为未来用途被提到？</p>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q5" value="a"> Backpacks</label>
+            <label class="quiz-option"><input type="radio" name="q5" value="b"> Satellites</label>
+            <label class="quiz-option"><input type="radio" name="q5" value="c"> Cars</label>
+            <label class="quiz-option"><input type="radio" name="q5" value="d"> Jackets</label>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="d">
+          <p><strong>6. What makes the new solar cell special besides efficiency?</strong><br>除了高效率，这种新型太阳能电池还有什么特别之处？</p>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="q6" value="a"> It is very heavy.</label>
+            <label class="quiz-option"><input type="radio" name="q6" value="b"> It can only be used in space.</label>
+            <label class="quiz-option"><input type="radio" name="q6" value="c"> It is made of gold.</label>
+            <label class="quiz-option"><input type="radio" name="q6" value="d"> It is thin, light, and bendable.</label>
+          </div>
+        </div>
+
+        <button class="check-btn" onclick="checkQuiz()">检查答案</button>
+        <p class="score-display" id="scoreDisplay"></p>
+      </section>
+
+      <section id="knowledge">
+        <h2>中文知识扩展</h2>
+
+        <div class="knowledge-card">
+          <h3>☀ 什么是太阳能电池？</h3>
+          <p>太阳能电池是一种能把太阳光直接变成电能的装置。最常见的太阳能电池是硅太阳能电池，通常安装在屋顶或太阳能电站里。但传统的硅电池又厚又硬，只能铺在平面上，使用场景有限。</p>
+          <p>新型钙钛矿-有机叠层太阳能电池则像一张薄薄的塑料纸，可以弯曲、折叠，甚至放进背包里。它轻巧便携，未来有望贴在窗户、衣服、无人机甚至航天器上。</p>
+        </div>
+
+        <div class="knowledge-card">
+          <h3>🔬 为什么是“叠层”电池？</h3>
+          <p>太阳光其实由许多不同颜色的光组成，就像彩虹一样。普通单层电池只能“抓住”一部分光，其他光就浪费掉了。</p>
+          <p>中国科学家把两种材料叠在一起：上层钙钛矿材料专门吸收高能量的蓝紫光，下层有机材料专门吸收低能量的红光和红外线。两层分工合作，就像用两张不同网眼的渔网捕鱼，把太阳光“一网打尽”，所以效率更高。</p>
+        </div>
+
+        <div class="knowledge-card">
+          <h3>🧪 “TDB”是什么？</h3>
+          <p>TDB 是一种“光致可转化添加剂分子”。科学家们把它添加到钙钛矿材料中，就像给电池加了一层“智能稳定器”。</p>
+          <p>过去，钙钛矿电池里的碘和溴离子容易“闹分家”，聚集成群，导致电池性能下降。TDB 分子能在制备和光照过程中分阶段发挥作用，阻止这种“相分离”，让电池又高效又稳定。</p>
+        </div>
+
+        <div class="knowledge-card">
+          <h3>🚀 清洁能源与太空探索</h3>
+          <p>这种新型太阳能电池不仅可以用在地面上，还特别适合太空。它重量轻、可折叠，发射到太空时占用空间小，可以为卫星、空间站和深空探测器提供能源。</p>
+          <p>中国国家航天局的天问二号、天宫空间站等任务都需要高效能源。未来，这样的新型太阳能电池或许能帮助人类飞得更远，去探索月球、火星甚至更遥远的星球。</p>
+        </div>
+
+        <div class="knowledge-card">
+          <h3>🌱 为什么要发展清洁能源？</h3>
+          <p>我们日常使用的煤、石油等化石燃料在燃烧时会产生二氧化碳，导致地球变暖。太阳能是取之不尽的清洁能源，不会产生污染。</p>
+          <p>如果未来的太阳能板可以像纸一样薄、像布一样软，那么家家户户、甚至每件衣服都可能成为“小型发电厂”。这将大大减少污染，让地球变得更干净、更凉爽。</p>
+        </div>
+      </section>
+
+      <section id="about">
+        <h2>关于本课</h2>
+        <ul class="about-list">
+          <li>
+            <span>🎯</span>
+            <div><strong>学习目标：</strong>了解中国科学家在太阳能电池领域的最新突破，掌握与太阳能、科技相关的核心词汇和句型。</div>
+          </li>
+          <li>
+            <span>📚</span>
+            <div><strong>学习建议：</strong>先听全文朗读，再重点学习词汇，最后完成句型练习和测验。尝试用英文向家人介绍这项发明。</div>
+          </li>
+          <li>
+            <span>🎧</span>
+            <div><strong>听力练习：</strong>点击段落右侧的播放按钮，模仿 Pola 的语速和语调。注意比较级、情态动词 may/could 的用法。</div>
+          </li>
+          <li>
+            <span>✍️</span>
+            <div><strong>拓展写作：</strong>写一段 3-5 句话的英文短文，描述你心目中未来的太阳能应用。</div>
+          </li>
+          <li>
+            <span>🌍</span>
+            <div><strong>跨学科连接：</strong>本课涉及物理（光能转化）、化学（材料科学）、环境科学（清洁能源）和工程（太空应用）。</div>
+          </li>
+        </ul>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+      </section>
+    </main>
+  </div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+    const segmentTexts = [
+      "Imagine a solar panel you can fold like a map and slide into your backpack. Scientists in China just built one — and it catches more sunlight than any panel of its kind before. Welcome to the future of clean energy!",
+      "At the Chinese Academy of Sciences, researchers stacked two light-catchers. The top layer grabs blue light, and the bottom layer grabs red light. A special molecule called TDB keeps everything stable. The result: a world-record efficiency of 28.04 percent!",
+      "Why does this matter? These solar cells are thin, light, and bendable. You could stick one on a backpack, a drone, or even a jacket. In the future, they may also power satellites and space stations. The sun is becoming our pocket-sized power plant!",
+      "So next time you step outside, look up. That bright sun could soon charge your phone, your backpack, or even a spaceship. This is Pola from POLA NEWS. Keep chasing the light — and I'll see you tomorrow!"
+    ];
+
+    const vocabList = [
+      { word: "solar panel", meaning: "太阳能电池板" },
+      { word: "backpack", meaning: "背包" },
+      { word: "sunlight", meaning: "阳光" },
+      { word: "clean energy", meaning: "清洁能源" },
+      { word: "layer", meaning: "层" },
+      { word: "molecule", meaning: "分子" },
+      { word: "stable", meaning: "稳定的" },
+      { word: "efficiency", meaning: "效率" },
+      { word: "bendable", meaning: "可弯曲的" },
+      { word: "satellite", meaning: "卫星" }
+    ];
+
+    let synth = window.speechSynthesis;
+    let currentUtterance = null;
+    let currentBtn = null;
+
+    function loadVoices() {
+      if (synth.getVoices().length === 0) {
+        synth.onvoiceschanged = () => {
+          getBestVoice();
+        };
+      } else {
+        getBestVoice();
+      }
+    }
+
+    function getBestVoice() {
+      const voices = synth.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+      if (voices.length === 0) return null;
+
+      const isMaleName = (name) => {
+        const maleNames = ['Daniel', 'Alex', 'Mark', 'David', 'Fred', 'Bruce', 'Arthur', 'Thomas', 'Graham', 'Tony', 'James', 'Paul', 'George', 'John', 'Michael', 'William', 'Henry', 'Richard'];
+        return maleNames.some(n => name.toLowerCase().includes(n.toLowerCase()));
+      };
+
+      let voice = voices.find(v => v.name.includes('Enhanced') && isMaleName(v.name));
+      if (!voice) voice = voices.find(v => v.name.includes('Daniel'));
+      if (!voice) voice = voices.find(v => v.name.includes('Alex'));
+      if (!voice) voice = voices.find(v => v.name.includes('Microsoft Mark'));
+      if (!voice) voice = voices.find(v => isMaleName(v.name));
+      if (!voice) voice = voices[0];
+
+      return voice;
+    }
+
+    function stopSpeech() {
+      if (synth.speaking) {
+        synth.cancel();
+      }
+      if (currentBtn) {
+        currentBtn.textContent = '▶';
+        currentBtn.classList.remove('playing');
+        currentBtn = null;
+      }
+      currentUtterance = null;
+    }
+
+    function speakText(text, btn) {
+      stopSpeech();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voice = getBestVoice();
+      if (voice) utterance.voice = voice;
+      utterance.rate = 0.97;
+      utterance.pitch = 1.0;
+      utterance.lang = 'en-US';
+
+      utterance.onstart = () => {
+        if (btn) {
+          btn.textContent = '⏸';
+          btn.classList.add('playing');
+          currentBtn = btn;
+        }
+      };
+
+      utterance.onend = () => {
+        if (btn) {
+          btn.textContent = '▶';
+          btn.classList.remove('playing');
+        }
+        currentBtn = null;
+        currentUtterance = null;
+      };
+
+      utterance.onerror = () => {
+        if (btn) {
+          btn.textContent = '▶';
+          btn.classList.remove('playing');
+        }
+        currentBtn = null;
+        currentUtterance = null;
+      };
+
+      currentUtterance = utterance;
+      synth.speak(utterance);
+    }
+
+    function playSegment(index) {
+      const btn = document.getElementById('btn' + index);
+      if (currentBtn === btn && synth.speaking) {
+        stopSpeech();
+        return;
+      }
+      speakText(segmentTexts[index], btn);
+    }
+
+    function playWord(word) {
+      const btn = event.currentTarget;
+      speakText(word, btn);
+    }
+
+    // Tooltip logic
+    const tooltip = document.getElementById('tooltip');
+    const keywords = document.querySelectorAll('.keyword');
+
+    keywords.forEach(kw => {
+      kw.addEventListener('mouseenter', (e) => {
+        const def = e.target.getAttribute('data-definition');
+        const trans = e.target.getAttribute('data-translation');
+        tooltip.innerHTML = `<strong>${trans}</strong><br>${def}`;
+        tooltip.classList.add('show');
+        positionTooltip(e.target);
+      });
+
+      kw.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('show');
+      });
+
+      kw.addEventListener('click', (e) => {
+        const word = e.target.getAttribute('data-definition').split(':')[0].trim();
+        speakText(word, null);
+      });
+    });
+
+    function positionTooltip(target) {
+      const rect = target.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+      let top = rect.top - tooltipRect.height - 10;
+      let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+
+      if (left < 10) left = 10;
+      if (left + tooltipRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - tooltipRect.width - 10;
+      }
+      if (top < 10) top = rect.bottom + 10;
+
+      tooltip.style.top = top + 'px';
+      tooltip.style.left = left + 'px';
+    }
+
+    // Progress bar
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('resize', updateProgress);
+
+    // Active nav link
+    function updateActiveNav() {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.sidebar a');
+      let current = '';
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveNav);
+
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    function closeMenu() {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+
+    // Quiz
+    function checkQuiz() {
+      const items = document.querySelectorAll('.quiz-item');
+      let correct = 0;
+      let total = items.length;
+
+      items.forEach(item => {
+        const answer = item.getAttribute('data-answer');
+        const selected = item.querySelector('input[type="radio"]:checked');
+        const options = item.querySelectorAll('.quiz-option');
+
+        options.forEach(opt => {
+          opt.classList.remove('correct', 'incorrect');
+        });
+
+        if (selected) {
+          const selectedLabel = selected.closest('.quiz-option');
+          if (selected.value === answer) {
+            selectedLabel.classList.add('correct');
+            correct++;
+          } else {
+            selectedLabel.classList.add('incorrect');
+            items.forEach(o => {
+              if (o !== item && o.querySelector('input[value="' + answer + '"]:checked')) {
+                // no-op
+              }
+            });
+            const correctOption = Array.from(options).find(o => {
+              const input = o.querySelector('input');
+              return input && input.value === answer;
+            });
+            if (correctOption) correctOption.classList.add('correct');
+          }
+        } else {
+          const correctOption = Array.from(options).find(o => {
+            const input = o.querySelector('input');
+            return input && input.value === answer;
+          });
+          if (correctOption) correctOption.classList.add('correct');
+        }
+      });
+
+      const scoreDisplay = document.getElementById('scoreDisplay');
+      scoreDisplay.textContent = `你的得分：${correct} / ${total}`;
+      if (correct === total) {
+        scoreDisplay.textContent += ' 🌟 太棒了！';
+      } else if (correct >= 4) {
+        scoreDisplay.textContent += ' 👍 继续加油！';
+      } else {
+        scoreDisplay.textContent += ' 📖 再复习一下吧！';
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      loadVoices();
+      updateProgress();
+      updateActiveNav();
+    });
+  </script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

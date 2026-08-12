@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pola News - Timmy the Whale Rescue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #4CAF50;
+            --primary-dark: #1B5E20;
+            --secondary: #0277BD;
+            --secondary-light: #03A9F4;
+            --accent: #FF6F00;
+            --accent-light: #FFA726;
+            --bg-gradient-start: #E8F5E9;
+            --bg-gradient-end: #E3F2FD;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #1a1a2e;
+            --text-light: #555;
+            --highlight: #FFEB3B;
+            --shadow: 0 10px 40px rgba(0,0,0,0.1);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Comic Neue', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        /* Reading Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary-light));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px 40px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .header .date {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
+        }
+
+        .nav-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .nav-item:last-child {
+            border-bottom: none;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(90deg, rgba(46,125,50,0.1), transparent);
+            padding-left: 25px;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-right: 12px;
+            width: 30px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Reading Section */
+        .reading-segment {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+            position: relative;
+        }
+
+        .segment-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .segment-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .highlight-word {
+            background: linear-gradient(120deg, var(--highlight) 0%, #ffd54f 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: help;
+            position: relative;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46,125,50,0.3);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(46,125,50,0.4);
+        }
+
+        .play-btn.playing {
+            animation: pulse 1.5s infinite;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,111,0,0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(255,111,0,0); }
+        }
+
+        /* Vocabulary Cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .vocab-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            border-radius: 12px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .vocab-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .vocab-word {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .vocab-sound-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            vertical-align: middle;
+            transition: all 0.3s ease;
+        }
+
+        .vocab-sound-btn:hover {
+            background: var(--secondary-light);
+            transform: scale(1.1);
+        }
+
+        .vocab-sound-btn.playing {
+            animation: pulse 1.5s infinite;
+        }
+
+        .vocab-pos {
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .vocab-meaning {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .vocab-example {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-style: italic;
+            padding: 8px;
+            background: rgba(46,125,50,0.1);
+            border-radius: 8px;
+        }
+
+        /* Sentence Patterns */
+        .pattern-card {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--accent);
+        }
+
+        .pattern-english {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .pattern-chinese {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .pattern-example {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        /* Grammar Section */
+        .grammar-card {
+            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .grammar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .grammar-explain {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .grammar-example {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        .grammar-quiz {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(2,119,189,0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #7b1fa2;
+        }
+
+        .quiz-number {
+            display: inline-block;
+            background: #7b1fa2;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .quiz-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 8px;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quiz-option:hover {
+            border-color: #7b1fa2;
+        }
+
+        .quiz-option.selected {
+            border-color: #7b1fa2;
+            background: #f3e5f5;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--primary);
+            background: #e8f5e9;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #d32f2f;
+            background: #ffebee;
+        }
+
+        .option-letter {
+            font-weight: 700;
+            color: #7b1fa2;
+            margin-right: 10px;
+        }
+
+        /* Knowledge Section */
+        .knowledge-card {
+            background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #00695c;
+        }
+
+        .knowledge-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #00695c;
+            margin-bottom: 10px;
+        }
+
+        .knowledge-content {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        /* About Section */
+        .about-goals {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .about-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .about-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .about-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .about-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 20px auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(2,119,189,0.3);
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2,119,189,0.4);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: var(--text-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            z-index: 1000;
+            max-width: 200px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
+
+        /* Tooltip arrow */
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--text-dark);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            z-index: 1001;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                display: none;
+            }
+
+            .sidebar.show {
+                display: block;
+            }
+
+            .mobile-nav-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .vocab-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .progress-container,
+            .play-btn,
+            .vocab-sound-btn,
+            .nav-card,
+            .mobile-nav-toggle,
+            .print-btn,
+            .tooltip {
+                display: none !important;
+            }
+
+            .container {
+                display: block;
+            }
+
+            .content-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
+
+            body {
+                background: white;
+            }
+
+            .header {
+                background: white;
+                color: black;
+                border-bottom: 3px solid var(--primary);
+            }
+        }
+
+        /* Section visibility */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>🦘 Pola News - English Learning</h1>
+        <div class="subtitle">Timmy the Whale Rescue | 座头鲸Timmy的救援故事</div>
+        <div class="date">May 8, 2026 | 2026年5月8日</div>
+    </header>
+
+    <!-- Mobile Nav Toggle -->
+    <button class="mobile-nav-toggle" onclick="toggleNav()">📚</button>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-card">
+                <div class="nav-header">📖 Learning Menu</div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-section="reading">
+                            <span class="nav-icon">📖</span>
+                            全文阅读
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="vocabulary">
+                            <span class="nav-icon">📝</span>
+                            词汇表
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="patterns">
+                            <span class="nav-icon">💬</span>
+                            句型练习
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="grammar">
+                            <span class="nav-icon">📐</span>
+                            语法点
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="quiz">
+                            <span class="nav-icon">✏️</span>
+                            练习测验
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="knowledge">
+                            <span class="nav-icon">🌍</span>
+                            中文知识扩展
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="about">
+                            <span class="nav-icon">ℹ️</span>
+                            关于本课
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Reading Section -->
+            <section class="section active" id="reading">
+                <div class="content-card">
+                    <h2 class="section-title">📖 全文阅读</h2>
+                    
+                    <div class="reading-segment">
+                        <div class="segment-label">🎬 Segment 1: Hook</div>
+                        <div class="segment-text">
+                            Hi, everyone! I'm Pola, and I have an amazing animal story today. A whale got stuck in the ocean. But here's the amazing part — people saved it! Its name is Timmy. Let's find out what happened.
+                        </div>
+                        <button class="play-btn" onclick="playSegment(0)" id="playBtn0">▶</button>
+                    </div>
+
+                    <div class="reading-segment">
+                        <div class="segment-label">🎬 Segment 2: Story</div>
+                        <div class="segment-text">
+                            Timmy is a young <span class="highlight-word" data-meaning="座头鲸">humpback whale</span> — about 10 meters long! That's as long as a school bus! Scientists found Timmy stuck on a <span class="highlight-word" data-meaning="浅滩">sandbank</span> near Germany. He couldn't move. Teams from many countries worked together for weeks. They built a special plan to help him. Finally, on May 2nd, they brought Timmy to a boat and carried him far from shore.
+                        </div>
+                        <button class="play-btn" onclick="playSegment(1)" id="playBtn1">▶</button>
+                    </div>
+
+                    <div class="reading-segment">
+                        <div class="segment-label">🎬 Segment 3: Why It Matters</div>
+                        <div class="segment-text">
+                            But here's the surprising part. Not everything went as planned. The scientists were worried because Timmy looked very <span class="highlight-word" data-meaning="虚弱的">weak</span> and tired. Now, people around the world are watching the ocean. They want to know if Timmy is okay. This teaches us something important — we must take care of our ocean friends.
+                        </div>
+                        <button class="play-btn" onclick="playSegment(2)" id="playBtn2">▶</button>
+                    </div>
+
+                    <div class="reading-segment">
+                        <div class="segment-label">🎬 Segment 4: Sign-off</div>
+                        <div class="segment-text">
+                            <span class="highlight-word" data-meaning="座头鲸">Humpback whales</span> can <span class="highlight-word" data-meaning="旅行">travel</span> very far — up to 25,000 <span class="highlight-word" data-meaning="公里">kilometers</span> every year! So next time you see the ocean, remember Timmy. Thanks for watching Pola News! I'll see you tomorrow with more exciting stories. Take care, everyone! Bye!
+                        </div>
+                        <button class="play-btn" onclick="playSegment(3)" id="playBtn3">▶</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vocabulary Section -->
+            <section class="section" id="vocabulary">
+                <div class="content-card">
+                    <h2 class="section-title">📝 词汇表</h2>
+                    
+                    <div class="vocab-grid">
+                        <div class="vocab-card">
+                            <div class="vocab-word">rescue <button class="vocab-sound-btn" onclick="playWord('rescue')">🔊</button></div>
+                            <div class="vocab-pos">v. / n. 救援</div>
+                            <div class="vocab-meaning">To save someone or something from danger or trouble</div>
+                            <div class="vocab-example">"People saved Timmy!" 人们救了Timmy！</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">humpback whale <button class="vocab-sound-btn" onclick="playWord('humpback whale')">🔊</button></div>
+                            <div class="vocab-pos">n. 座头鲸</div>
+                            <div class="vocab-meaning">A large whale with a curved back</div>
+                            <div class="vocab-example">"Timmy is a humpback whale." Timmy是一头座头鲸。</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">sandbank <button class="vocab-sound-btn" onclick="playWord('sandbank')">🔊</button></div>
+                            <div class="vocab-pos">n. 浅滩，沙洲</div>
+                            <div class="vocab-meaning">A raised area of sand in a river or sea</div>
+                            <div class="vocab-example">"The whale got stuck on a sandbank." 鲸鱼在浅滩搁浅了。</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">scientist <button class="vocab-sound-btn" onclick="playWord('scientist')">🔊</button></div>
+                            <div class="vocab-pos">n. 科学家</div>
+                            <div class="vocab-meaning">A person who studies science</div>
+                            <div class="vocab-example">"Scientists helped save Timmy." 科学家们帮助救了Timmy。</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">ocean <button class="vocab-sound-btn" onclick="playWord('ocean')">🔊</button></div>
+                            <div class="vocab-pos">n. 海洋</div>
+                            <div class="vocab-meaning">A large body of salt water</div>
+                            <div class="vocab-example">"Let's protect our oceans!" 让我们保护海洋！</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">weak <button class="vocab-sound-btn" onclick="playWord('weak')">🔊</button></div>
+                            <div class="vocab-pos">adj. 虚弱的</div>
+                            <div class="vocab-meaning">Not strong; not able to do hard things</div>
+                            <div class="vocab-example">"Timmy looked very weak." Timmy看起来很虚弱。</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">travel <button class="vocab-sound-btn" onclick="playWord('travel')">🔊</button></div>
+                            <div class="vocab-pos">v. 旅行</div>
+                            <div class="vocab-meaning">To go from one place to another</div>
+                            <div class="vocab-example">"Whales travel very far." 鲸鱼能游很远。</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">kilometer <button class="vocab-sound-btn" onclick="playWord('kilometer')">🔊</button></div>
+                            <div class="vocab-pos">n. 公里</div>
+                            <div class="vocab-meaning">A unit of distance (1000 meters)</div>
+                            <div class="vocab-example">"25,000 kilometers per year!" 每年25000公里！</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">Germany <button class="vocab-sound-btn" onclick="playWord('Germany')">🔊</button></div>
+                            <div class="vocab-pos">n. 德国</div>
+                            <div class="vocab-meaning">A country in Europe</div>
+                            <div class="vocab-example">"Timmy was found near Germany." Timmy在德国附近被发现。</div>
+                        </div>
+
+                        <div class="vocab-card">
+                            <div class="vocab-word">boat <button class="vocab-sound-btn" onclick="playWord('boat')">🔊</button></div>
+                            <div class="vocab-pos">n. 船</div>
+                            <div class="vocab-meaning">A vehicle that floats on water</div>
+                            <div class="vocab-example">"They put Timmy on a boat." 他们把Timmy放到了船上。</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sentence Patterns Section -->
+            <section class="section" id="patterns">
+                <div class="content-card">
+                    <h2 class="section-title">💬 句型练习</h2>
+
+                    <div class="pattern-card">
+                        <div class="pattern-english">"Here's the amazing part..."</div>
+                        <div class="pattern-chinese">"最神奇的部分是..." 用来引出令人惊讶的信息</div>
+                        <div class="pattern-example">"Here's the amazing part — people saved the whale!" 最神奇的是，人们救了这头鲸鱼！</div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <div class="pattern-english">"Something is as long as..."</div>
+                        <div class="pattern-chinese">"某物有...那么长" 用来比较长度</div>
+                        <div class="pattern-example">"The whale is about 10 meters long. That's as long as a school bus!" 鲸鱼大约10米长，相当于一辆校车！</div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <div class="pattern-english">"Let's find out what happened."</div>
+                        <div class="pattern-chinese">"让我们看看发生了什么" 用来引导听众进入故事</div>
+                        <div class="pattern-example">"Its name is Timmy. Let's find out what happened." 它的名字叫Timmy。让我们看看发生了什么。</div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <div class="pattern-english">"This teaches us something important..."</div>
+                        <div class="pattern-chinese">"这教会我们一个重要的事..." 用来表达教训或启示</div>
+                        <div class="pattern-example">"This teaches us something important — we must take care of our ocean friends." 这教会我们重要的事——我们必须照顾海洋朋友。</div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <div class="pattern-english">"Thanks for watching..."</div>
+                        <div class="pattern-chinese">"感谢观看..." 用来结束播报并感谢观众</div>
+                        <div class="pattern-example">"Thanks for watching Pola News! I'll see you tomorrow with more exciting stories." 感谢观看Pola新闻！明天见，带来更多精彩故事。</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Grammar Section -->
+            <section class="section" id="grammar">
+                <div class="content-card">
+                    <h2 class="section-title">📐 语法点</h2>
+
+                    <div class="grammar-card">
+                        <div class="grammar-title">1. 一般过去时 (Simple Past Tense)</div>
+                        <div class="grammar-explain">描述过去发生的动作或状态。动词变为过去式。</div>
+                        <div class="grammar-example">Scientists **found** Timmy stuck on a sandbank. (find → found)<br>
+                        Teams from many countries **worked** together for weeks. (work → worked)</div>
+                        <div class="grammar-quiz">🧠 练习：把 "Scientists see Timmy." 改成过去式</div>
+                    </div>
+
+                    <div class="grammar-card">
+                        <div class="grammar-title">2. 不定代词 (Indefinite Pronouns)</div>
+                        <div class="grammar-explain">用 "someone/someone" 等表示不具体指代的人或物。</div>
+                        <div class="grammar-example">"**Someone** saved the whale!" (有人救了鲸鱼！)<br>
+                        "**Everything** went well." (一切都很顺利。)</div>
+                        <div class="grammar-quiz">🧠 练习：用 "something" 造句</div>
+                    </div>
+
+                    <div class="grammar-card">
+                        <div class="grammar-title">3. 数量表达 (Expressions of Quantity)</div>
+                        <div class="grammar-explain">用具体数字和单位描述大小、距离等。</div>
+                        <div class="grammar-example">"about 10 meters long" (大约10米长)<br>
+                        "up to 25,000 kilometers" (多达25000公里)</div>
+                        <div class="grammar-quiz">🧠 练习：用 "about" 描述一个长度</div>
+                    </div>
+
+                    <div class="grammar-card">
+                        <div class="grammar-title">4. 副词 (Adverbs: very, too, so)</div>
+                        <div class="grammar-explain">用副词修饰形容词，强调程度。</div>
+                        <div class="grammar-example">"Timmy looked **very** tired." (Timmy看起来很累。)<br>
+                        "He was **too** weak to swim." (他太虚弱了无法游泳。)</div>
+                        <div class="grammar-quiz">🧠 练习：用 "very" 形容一个形容词</div>
+                    </div>
+
+                    <div class="grammar-card">
+                        <div class="grammar-title">5. 让步状语从句 (Contrast with "but")</div>
+                        <div class="grammar-explain">用 "but" 连接两个意思相反的句子。</div>
+                        <div class="grammar-example">"A whale got stuck in the ocean. **But** people saved it!" (鲸鱼搁浅了，但是人们救了它！)</div>
+                        <div class="grammar-quiz">🧠 练习：用 "but" 连接两个句子</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section class="section" id="quiz">
+                <div class="content-card">
+                    <h2 class="section-title">✏️ 练习测验</h2>
+
+                    <div class="quiz-question">
+                        <div class="quiz-text"><span class="quiz-number">1</span> What is the name of the whale in this story?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">A.</span> Tommy
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)">
+                                <span class="option-letter">B.</span> Timmy
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">C.</span> Tiny
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">D.</span> Tummy
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="quiz-text"><span class="quiz-number">2</span> What kind of animal is Timmy?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">A.</span> A dolphin
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">B.</span> A shark
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)">
+                                <span class="option-letter">C.</span> A humpback whale
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">D.</span> A seal
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="quiz-text"><span class="quiz-number">3</span> How long is Timmy the whale?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">A.</span> About 5 meters
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)">
+                                <span class="option-letter">B.</span> About 10 meters
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">C.</span> About 20 meters
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">D.</span> About 50 meters
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="quiz-text"><span class="quiz-number">4</span> Where did scientists find Timmy?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, true)">
+                                <span class="option-letter">A.</span> Near Germany
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">B.</span> Near France
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">C.</span> Near Spain
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">D.</span> Near Italy
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="quiz-text"><span class="quiz-number">5</span> When was Timmy released into the ocean?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">A.</span> May 1st
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)">
+                                <span class="option-letter">B.</span> May 2nd
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">C.</span> May 3rd
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">D.</span> May 4th
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="quiz-text"><span class="quiz-number">6</span> How far can humpback whales travel in one year?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">A.</span> Up to 5,000 kilometers
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">B.</span> Up to 10,000 kilometers
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                <span class="option-letter">C.</span> Up to 15,000 kilometers
+                            </div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)">
+                                <span class="option-letter">D.</span> Up to 25,000 kilometers
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Knowledge Section -->
+            <section class="section" id="knowledge">
+                <div class="content-card">
+                    <h2 class="section-title">🌍 中文知识扩展</h2>
+
+                    <div class="knowledge-card">
+                        <div class="knowledge-title">🐋 关于座头鲸</div>
+                        <div class="knowledge-content">
+                            座头鲸（Humpback Whale）是一种大型海洋哺乳动物，成年个体体长可达12-16米，体重约25-30吨。它们以跃出水面、挥动鳍状肢而闻名，这种行为被称为"跃身击浪"。座头鲸的歌声尤其著名——雄性座头鲸能发出复杂的声音，持续10-20分钟，甚至更久。它们的迁徙距离是所有哺乳动物中最长的，每年可在南极洲附近觅食区和热带繁殖区之间往返，行程可达25,000公里！
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <div class="knowledge-title">🚢 鲸鱼搁浅的原因</div>
+                        <div class="knowledge-content">
+                            鲸鱼搁浅是一个复杂的问题，可能由多种因素引起：
+                            <br><br>
+                            <strong>1. 地形因素：</strong>浅海滩、泻湖或沙洲地区容易让鲸鱼搁浅，尤其是退潮时。
+                            <br><br>
+                            <strong>2. 导航系统问题：</strong>鲸鱼使用声波导航（回声定位），但如果地形复杂或生病，它们的导航系统可能出错。
+                            <br><br>
+                            <strong>3. 疾病或受伤：</strong>生病的鲸鱼可能无法游回深水区。
+                            <br><br>
+                            <strong>4. 海洋污染：</strong>噪音污染可能干扰鲸鱼的导航能力。
+                            <br><br>
+                            <strong>5. 追随猎物：</strong>有时鲸鱼为了追捕猎物会游入浅水区，结果无法返回。
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <div class="knowledge-title">🛟 鲸鱼救援的挑战</div>
+                        <div class="knowledge-content">
+                            救援大型鲸鱼是极其复杂的工作：
+                            <br><br>
+                            <strong>体重问题：</strong>成年座头鲸体重可达25-30吨，普通的起重设备根本无法使用。救援人员需要使用特殊的吊网和水下浮力气囊。
+                            <br><br>
+                            <strong>应激反应：</strong>被人类触碰会让鲸鱼非常紧张，可能导致应激反应甚至心脏骤停。
+                            <br><br>
+                            <strong>时间紧迫：</strong>鲸鱼皮肤干燥、体温调节能力有限，离开海水时间过长会危及生命。
+                            <br><br>
+                            <strong>放归地点：</strong>选择正确的放归地点非常重要——需要水流方向正确、远离海岸、有足够的食物资源。
+                            <br><br>
+                            <strong>国际合作：</strong>像Timmy这样的救援行动通常需要多国科学家、兽医、海洋生物学家和救援团队的协作。
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <div class="knowledge-title">🌍 欧洲的海洋保护</div>
+                        <div class="knowledge-content">
+                            Timmy的故事发生在欧洲北海/波罗的海附近，这个区域是多种鲸类的重要栖息地：
+                            <br><br>
+                            <strong>北海：</strong>位于英国和欧洲大陆之间，是座头鲸、小须鲸、鼠海豚等物种的家园。
+                            <br><br>
+                            <strong>德国：</strong>虽然德国不是传统意义上的"观鲸圣地"，但随着海洋环境改善，鲸鱼目击事件正在增加。
+                            <br><br>
+                            <strong>丹麦：</strong>Timmy被释放的地点在丹麦北部斯凯恩（Skagen）附近，这里是北海和波罗的海交汇处，海洋生物丰富。
+                            <br><br>
+                            <strong>保护努力：</strong>欧洲各国正在加强海洋保护区的建设，限制捕鱼活动对鲸类的威胁，并研究如何减少海洋噪音污染。
+                        </div>
+                    </div>
+
+                    <div class="knowledge-card">
+                        <div class="knowledge-title">💡 我们能做什么</div>
+                        <div class="knowledge-content">
+                            虽然我们可能没有机会参与实际的鲸鱼救援，但每个人都可以为海洋保护做出贡献：
+                            <br><br>
+                            <strong>减少塑料：</strong>塑料垃圾每年导致超过10万只海洋哺乳动物死亡。使用可重复使用的水瓶和购物袋。
+                            <br><br>
+                            <strong>保护海洋清洁：</strong>不乱扔垃圾，参加海滩清洁活动。
+                            <br><br>
+                            <strong>选择可持续海产品：</strong>了解鱼类来源，选择可持续捕捞的海鲜。
+                            <br><br>
+                            <strong>减少噪音污染：</strong>船只经过时减速，减少引擎噪音。
+                            <br><br>
+                            <strong>学习海洋知识：</strong>了解更多关于海洋生物的知识，成为海洋保护的小使者！
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="section" id="about">
+                <div class="content-card">
+                    <h2 class="section-title">ℹ️ 关于本课</h2>
+
+                    <div class="about-goals">
+                        <div class="about-title">🎯 学习目标</div>
+                        <ul class="about-list">
+                            <li>理解并复述Timmy鲸鱼救援的故事</li>
+                            <li>掌握10个与动物和海洋相关的新词汇</li>
+                            <li>学会使用5个实用句型进行英语表达</li>
+                            <li>了解一般过去时、不定代词等语法概念</li>
+                            <li>了解座头鲸和海洋保护的基本知识</li>
+                            <li>能够用英语简单讲述一个动物救援故事</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-goals">
+                        <div class="about-title">💡 学习建议</div>
+                        <ul class="about-list">
+                            <li><strong>先听再看：</strong>先点击播放按钮听音频，再阅读英文原文</li>
+                            <li><strong>跟读练习：</strong>尝试跟读每个段落，模仿语音语调</li>
+                            <li><strong>词汇卡片：</strong>点击词汇的🔊按钮，反复听发音</li>
+                            <li><strong>做测验：</strong>完成练习测验，检验理解程度</li>
+                            <li><strong>知识扩展：</strong>阅读中文知识扩展，加深对主题的理解</li>
+                            <li><strong>分享故事：</strong>试着用英语向朋友或家人讲述这个故事</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-goals">
+                        <div class="about-title">📚 相关词汇</div>
+                        <ul class="about-list">
+                            <li><strong>海洋类：</strong>ocean, sea, beach, shore, wave</li>
+                            <li><strong>动物类：</strong>whale, dolphin, shark, fish, bird</li>
+                            <li><strong>动作类：</strong>swim, rescue, save, help, travel</li>
+                            <li><strong>形容词：</strong>big, small, weak, strong, young, old</li>
+                        </ul>
+                    </div>
+
+                    <button class="print-btn" onclick="window.print()">
+                        🖨️ 打印本课内容
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Speech synthesis variables
+        let voices = [];
+        let currentUtterance = null;
+        let isPlaying = false;
+
+        // Segment texts for reading
+        const segmentTexts = [
+            "Hi, everyone! I'm Pola, and I have an amazing animal story today. A whale got stuck in the ocean. But here's the amazing part — people saved it! Its name is Timmy. Let's find out what happened.",
+            "Timmy is a young humpback whale — about 10 meters long! That's as long as a school bus! Scientists found Timmy stuck on a sandbank near Germany. He couldn't move. Teams from many countries worked together for weeks. They built a special plan to help him. Finally, on May 2nd, they brought Timmy to a boat and carried him far from shore.",
+            "But here's the surprising part. Not everything went as planned. The scientists were worried because Timmy looked very weak and tired. Now, people around the world are watching the ocean. They want to know if Timmy is okay. This teaches us something important — we must take care of our ocean friends.",
+            "Humpback whales can travel very far — up to 25,000 kilometers every year! So next time you see the ocean, remember Timmy. Thanks for watching Pola News! I'll see you tomorrow with more exciting stories. Take care, everyone! Bye!"
+        ];
+
+        // Load voices
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            // Try to find best English voice
+            if (voices.length === 0) {
+                speechSynthesis.onvoiceschanged = () => {
+                    voices = speechSynthesis.getVoices();
+                };
+            }
+        }
+
+        // Get best English voice
+        function getBestEnglishVoice() {
+            const priorityNames = ['Enhanced', 'Daniel', 'Alex', 'Mark', 'David', 'James', 'John', 'Paul'];
+            
+            // First try to find a high-quality English voice
+            for (const name of priorityNames) {
+                const voice = voices.find(v => 
+                    v.lang.startsWith('en') && 
+                    (v.name.includes(name) || v.name.includes('English'))
+                );
+                if (voice) return voice;
+            }
+            
+            // Fall back to any male English voice
+            const maleVoice = voices.find(v => 
+                v.lang.startsWith('en') && 
+                (v.name.toLowerCase().includes('male') || 
+                 v.name.includes('Guy') || 
+                 v.name.includes('Senior'))
+            );
+            if (maleVoice) return maleVoice;
+            
+            // Fall back to any English voice
+            return voices.find(v => v.lang.startsWith('en'));
+        }
+
+        // Load voices on page load
+        loadVoices();
+        speechSynthesis.onvoiceschanged = loadVoices;
+
+        // Play segment
+        function playSegment(index) {
+            // Stop any current speech
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+                isPlaying = false;
+                updatePlayButtons();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(segmentTexts[index]);
+            utterance.rate = 0.97;
+            utterance.pitch = 1.0;
+            utterance.voice = getBestEnglishVoice();
+            
+            const btn = document.getElementById('playBtn' + index);
+            
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                btn.textContent = '⏸';
+            };
+            
+            utterance.onend = () => {
+                isPlaying = false;
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+            };
+            
+            utterance.onerror = () => {
+                isPlaying = false;
+                btn.classList.remove('playing');
+                btn.textContent = '▶';
+            };
+            
+            currentUtterance = utterance;
+            speechSynthesis.speak(utterance);
+        }
+
+        // Play word
+        function playWord(word) {
+            // Stop any current speech
+            if (currentUtterance) {
+                speechSynthesis.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.rate = 0.8;
+            utterance.pitch = 1.0;
+            utterance.voice = getBestEnglishVoice();
+            
+            speechSynthesis.speak(utterance);
+        }
+
+        // Update play buttons state
+        function updatePlayButtons() {
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById('playBtn' + i);
+                if (btn) {
+                    btn.classList.remove('playing');
+                    btn.textContent = '▶';
+                }
+            }
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.getAttribute('data-section');
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show corresponding section
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Close mobile nav
+                document.getElementById('sidebar').classList.remove('show');
+            });
+        });
+
+        // Mobile nav toggle
+        function toggleNav() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // Reading progress
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Tooltip for highlighted words
+        const tooltip = document.getElementById('tooltip');
+        document.querySelectorAll('.highlight-word').forEach(word => {
+            word.addEventListener('mouseenter', (e) => {
+                tooltip.textContent = word.getAttribute('data-meaning');
+                tooltip.classList.add('visible');
+                const rect = word.getBoundingClientRect();
+                tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+                tooltip.style.top = (rect.top - tooltip.offsetHeight - 10 + window.scrollY) + 'px';
+            });
+            
+            word.addEventListener('mouseleave', () => {
+                tooltip.classList.remove('visible');
+            });
+        });
+
+        // Quiz answer selection
+        function selectAnswer(element, isCorrect) {
+            // Remove previous selections in this question
+            const options = element.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected
+            element.classList.add('selected');
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+    </script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News — Mars Honeycomb Mystery | Interactive English Lesson</title>
+<style>
+  :root {
+    --bg-start: #140a06;
+    --bg-end: #331408;
+    --card-bg: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.1);
+    --text: #f2e9e2;
+    --text-secondary: #c4b1a4;
+    --accent: #ff9147;
+    --accent2: #ffc26b;
+    --highlight: #ffd166;
+    --highlight-bg: rgba(255,209,102,0.18);
+    --nav-bg: rgba(28,13,7,0.95);
+    --btn-bg: rgba(255,145,71,0.15);
+    --btn-hover: rgba(255,145,71,0.3);
+    --correct: #4ecdc4;
+    --wrong: #ff6b6b;
+    --tooltip-bg: #3a1a0d;
+    --progress-fill: linear-gradient(90deg, #ff9147, #ffc26b);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+  /* Progress Bar */
+  #progress-bar {
+    position: fixed; top:0; left:0; height:3px;
+    background: var(--progress-fill);
+    z-index: 1000;
+    transition: width 0.3s ease;
+    border-radius: 0 2px 2px 0;
+  }
+  /* Nav */
+  #sidebar {
+    position: fixed; left:0; top:0; bottom:0; width: 240px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    padding: 24px 16px;
+    overflow-y: auto;
+    z-index: 900;
+    border-right: 1px solid var(--card-border);
+    transition: transform 0.3s ease;
+  }
+  #sidebar h2 {
+    font-size: 1.1rem; margin-bottom: 20px; color: var(--accent);
+    display: flex; align-items: center; gap: 8px;
+  }
+  #sidebar nav a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; border-radius: 10px;
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 0.9rem; margin-bottom: 4px;
+    transition: all 0.2s ease;
+  }
+  #sidebar nav a:hover, #sidebar nav a.active {
+    background: var(--btn-bg); color: var(--text);
+  }
+  #sidebar nav a .icon { font-size: 1.1rem; width: 22px; text-align: center; }
+  /* Mobile menu toggle */
+  #menu-toggle {
+    display: none; position: fixed; top: 12px; left: 12px; z-index: 950;
+    background: var(--nav-bg); border: 1px solid var(--card-border);
+    color: var(--text); font-size: 1.3rem; padding: 8px 12px;
+    border-radius: 8px; cursor: pointer;
+  }
+  /* Main */
+  #main {
+    margin-left: 240px; padding: 40px 48px; max-width: 900px;
+  }
+  .section {
+    display: none; margin-bottom: 40px;
+    scroll-margin-top: 60px;
+  }
+  .section.active { display: block; }
+  .section h2 {
+    font-size: 1.6rem; margin-bottom: 20px;
+    color: var(--accent); border-bottom: 2px solid var(--card-border);
+    padding-bottom: 10px;
+  }
+  .section h3 {
+    font-size: 1.2rem; color: var(--accent2); margin: 24px 0 10px;
+  }
+  /* Typography */
+  p { margin-bottom: 12px; color: var(--text-secondary); }
+  .highlight {
+    color: var(--highlight); font-weight: 600;
+    background: var(--highlight-bg); padding: 1px 6px;
+    border-radius: 4px; cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .highlight:hover { background: rgba(255,209,102,0.35); }
+  /* Tooltip */
+  .tooltip {
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--tooltip-bg); color: var(--text);
+    padding: 8px 14px; border-radius: 8px; font-size: 0.85rem;
+    white-space: nowrap; pointer-events: none; opacity: 0;
+    transition: opacity 0.2s; z-index: 10;
+    border: 1px solid var(--card-border);
+    font-weight: 400;
+  }
+  .highlight:hover .tooltip { opacity: 1; }
+  /* Reading Segment */
+  .reading-segment {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 20px 24px; margin-bottom: 16px;
+    position: relative;
+  }
+  .reading-segment .seg-label {
+    font-size: 0.75rem; text-transform: uppercase;
+    color: var(--accent); letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .reading-segment .seg-text {
+    font-size: 1.05rem; line-height: 1.8; padding-right: 48px;
+  }
+  .play-btn {
+    position: absolute; top: 20px; right: 20px;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--btn-bg); border: 2px solid var(--accent);
+    color: var(--accent); font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; animation: pulse 2s infinite;
+  }
+  .play-btn:hover { background: var(--btn-hover); }
+  .play-btn.playing { animation: none; background: var(--accent); color: #140a06; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,145,71,0.5); }
+    50% { box-shadow: 0 0 0 10px rgba(255,145,71,0); }
+  }
+  /* Vocab Cards */
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px; margin-top: 16px;
+  }
+  .vocab-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 18px; position: relative;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .vocab-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .vocab-card .word {
+    font-size: 1.15rem; font-weight: 700; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .vocab-card .word .pos {
+    font-size: 0.7rem; color: var(--accent); font-weight: 400;
+    background: rgba(255,145,71,0.15); padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .vocab-card .def { color: var(--text-secondary); margin: 6px 0; font-size: 0.92rem; }
+  .vocab-card .example {
+    color: var(--accent2); font-size: 0.85rem; font-style: italic;
+  }
+  .vocab-play {
+    position: absolute; top: 14px; right: 14px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: transparent; border: 1.5px solid var(--accent2);
+    color: var(--accent2); font-size: 0.75rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .vocab-play:hover { background: rgba(255,194,107,0.2); }
+  .vocab-play.playing { background: var(--accent2); color: #140a06; }
+  /* Practice */
+  .pattern-item, .grammar-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 20px; margin-bottom: 14px;
+  }
+  .pattern-item h4, .grammar-item h4 {
+    color: var(--text); font-size: 1.05rem; margin-bottom: 6px;
+  }
+  .pattern-item .en, .grammar-item .en {
+    color: var(--accent); font-weight: 500; margin-bottom: 4px;
+  }
+  .pattern-item .zh, .grammar-item .zh {
+    color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px;
+  }
+  textarea.practice {
+    width: 100%; min-height: 60px; background: rgba(0,0,0,0.3);
+    border: 1px solid var(--card-border); border-radius: 8px;
+    color: var(--text); padding: 10px; font-family: inherit;
+    font-size: 0.92rem; resize: vertical; margin-top: 8px;
+  }
+  textarea.practice:focus { outline: none; border-color: var(--accent); }
+  /* Quiz */
+  .quiz-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 22px; margin-bottom: 14px;
+  }
+  .quiz-item .q { font-weight: 600; margin-bottom: 12px; font-size: 1rem; }
+  .quiz-item .q .qzh { font-size: 0.85rem; color: var(--text-secondary); display: block; margin-top: 2px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 6px; }
+  .quiz-options label {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: rgba(0,0,0,0.2); border-radius: 8px;
+    cursor: pointer; transition: background 0.2s; font-size: 0.92rem;
+  }
+  .quiz-options label:hover { background: rgba(0,0,0,0.35); }
+  .quiz-options input[type="radio"] { accent-color: var(--accent); }
+  .quiz-feedback { margin-top: 10px; font-weight: 600; font-size: 0.9rem; display: none; }
+  .quiz-feedback.correct { color: var(--correct); display: block; }
+  .quiz-feedback.wrong { color: var(--wrong); display: block; }
+  .quiz-options label.correct-choice { background: rgba(78,205,196,0.15); border: 1px solid var(--correct); }
+  .quiz-options label.wrong-choice { background: rgba(255,107,107,0.15); border: 1px solid var(--wrong); }
+  .check-btn {
+    padding: 8px 20px; background: var(--btn-bg); border: 1px solid var(--accent);
+    color: var(--accent); border-radius: 8px; cursor: pointer;
+    font-size: 0.85rem; margin-top: 10px; transition: all 0.2s;
+  }
+  .check-btn:hover { background: var(--btn-hover); }
+  /* Knowledge Expansion */
+  .knowledge-block {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 22px; margin-bottom: 16px;
+  }
+  .knowledge-block h3 { margin-top: 0; }
+  .knowledge-block p { font-size: 0.95rem; }
+  /* About */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .about-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 20px;
+  }
+  .about-card h4 { color: var(--accent); margin-bottom: 8px; }
+  .about-card ul { padding-left: 20px; color: var(--text-secondary); font-size: 0.92rem; }
+  .about-card ul li { margin-bottom: 4px; }
+  .print-btn {
+    padding: 10px 24px; background: var(--accent); color: #140a06;
+    border: none; border-radius: 8px; cursor: pointer;
+    font-weight: 600; font-size: 0.9rem; margin-top: 16px;
+    transition: opacity 0.2s;
+  }
+  .print-btn:hover { opacity: 0.85; }
+  /* Responsive */
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #menu-toggle { display: block; }
+    #main { margin-left: 0; padding: 20px 16px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .reading-segment .seg-text { padding-right: 0; }
+    .play-btn { position: static; margin-top: 12px; }
+  }
+  /* Print */
+  @media print {
+    #sidebar, #menu-toggle, #progress-bar, .play-btn, .vocab-play,
+    .check-btn, .print-btn, textarea.practice { display: none !important; }
+    body { background: white; color: black; }
+    #main { margin-left: 0; padding: 0; max-width: 100%; }
+    .section { display: block !important; margin-bottom: 20px; break-inside: avoid; }
+    .reading-segment, .vocab-card, .pattern-item, .grammar-item,
+    .quiz-item, .knowledge-block, .about-card {
+      background: white; border: 1px solid #ccc; box-shadow: none;
+    }
+    .highlight { color: #d4a017; background: #fff8e1; }
+    .section h2 { color: #333; border-bottom-color: #999; }
+    p, .def, .zh { color: #555; }
+    .en, .word { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar" style="width:0%"></div>
+
+<button id="menu-toggle" onclick="toggleMenu()">☰</button>
+
+<aside id="sidebar">
+  <h2>🔴 Pola News</h2>
+  <nav>
+    <a href="#reading" class="active" onclick="showSection('reading')"><span class="icon">📖</span> 全文阅读</a>
+    <a href="#vocab" onclick="showSection('vocab')"><span class="icon">📝</span> 词汇表</a>
+    <a href="#patterns" onclick="showSection('patterns')"><span class="icon">💬</span> 句型练习</a>
+    <a href="#grammar" onclick="showSection('grammar')"><span class="icon">📐</span> 语法点</a>
+    <a href="#quiz" onclick="showSection('quiz')"><span class="icon">✅</span> 练习测验</a>
+    <a href="#knowledge" onclick="showSection('knowledge')"><span class="icon">🔭</span> 知识扩展</a>
+    <a href="#about" onclick="showSection('about')"><span class="icon">ℹ️</span> 关于本课</a>
+  </nav>
+</aside>
+
+<main id="main">
+
+<!-- ==================== 1. READING ==================== -->
+<section id="section-reading" class="section active">
+  <h2>📖 全文阅读 — Mars Honeycomb Mystery</h2>
+  <p style="color:var(--text-secondary);margin-bottom:20px;">
+    点击高亮词汇查看释义。点击每段右侧的 ▶ 按钮听取朗读。
+  </p>
+
+  <div class="reading-segment">
+    <div class="seg-label">🔴 Segment 1 — Hook</div>
+    <div class="seg-text">
+      <span class="highlight">Imagine<span class="tooltip">想象 — to form a picture of something in your mind</span></span>
+      standing on Mars and looking down at the ground. Instead of plain red
+      <span class="highlight">dust<span class="tooltip">尘土 — very fine dry powder on the ground</span></span>,
+      you see thousands of shapes — like a giant
+      <span class="highlight">honeycomb<span class="tooltip">蜂巢 — the wax structure bees build, made of six-sided cells</span></span>
+      spreading all the way to the
+      <span class="highlight">horizon<span class="tooltip">地平线 — the line where the land seems to meet the sky</span></span>.
+      That is exactly what NASA's Curiosity
+      <span class="highlight">rover<span class="tooltip">探测车 — a robot vehicle that drives across another planet</span></span>
+      just found!
+    </div>
+    <button class="play-btn" onclick="toggleSegmentPlay(this, 0)" title="Play">▶</button>
+  </div>
+
+  <div class="reading-segment">
+    <div class="seg-label">🟠 Segment 2 — Story</div>
+    <div class="seg-text">
+      Curiosity is climbing a
+      <span class="highlight">valley<span class="tooltip">山谷 — low land between hills or mountains</span></span>
+      called Valle Grande on Mount Sharp. Its cameras took a full 360-degree
+      <span class="highlight">panorama<span class="tooltip">全景照片 — a wide picture showing everything around you</span></span>
+      and
+      <span class="highlight">captured<span class="tooltip">拍摄到 — recorded in a photo or video</span></span>
+      a sea of
+      <span class="highlight">polygons<span class="tooltip">多边形 — flat shapes with many straight sides</span></span>.
+      Each shape is only four to eight centimetres wide, but together they cover everything the rover can see.
+    </div>
+    <button class="play-btn" onclick="toggleSegmentPlay(this, 1)" title="Play">▶</button>
+  </div>
+
+  <div class="reading-segment">
+    <div class="seg-label">🟣 Segment 3 — Why It Matters</div>
+    <div class="seg-text">
+      So where do these
+      <span class="highlight">cracks<span class="tooltip">裂缝 — thin lines where something has split open</span></span>
+      come from? Here on Earth,
+      <span class="highlight">mud<span class="tooltip">泥浆 — wet, soft earth</span></span>
+      breaks into shapes like this when a
+      <span class="highlight">puddle<span class="tooltip">水洼 — a small pool of water on the ground</span></span>
+      slowly dries up. That means Mars once had lakes and rivers — and maybe even the right
+      <span class="highlight">chemistry<span class="tooltip">化学成分 — the substances and reactions that make things work</span></span>
+      for tiny life to begin.
+    </div>
+    <button class="play-btn" onclick="toggleSegmentPlay(this, 2)" title="Play">▶</button>
+  </div>
+
+  <div class="reading-segment">
+    <div class="seg-label">🌟 Segment 4 — Sign-off</div>
+    <div class="seg-text">
+      Curiosity
+      <span class="highlight">landed<span class="tooltip">着陆 — came down onto the ground from the sky</span></span>
+      on Mars fourteen years ago this week, and it is still surprising us. So next time you walk past a dried-up puddle, look closely — you might spot a little piece of Mars right at your feet. Bye-bye!
+    </div>
+    <button class="play-btn" onclick="toggleSegmentPlay(this, 3)" title="Play">▶</button>
+  </div>
+</section>
+
+<!-- ==================== 2. VOCABULARY ==================== -->
+<section id="section-vocab" class="section">
+  <h2>📝 词汇表 — Vocabulary</h2>
+  <p style="color:var(--text-secondary);margin-bottom:16px;">点击 🔊 按钮听取单词发音</p>
+  <div class="vocab-grid" id="vocab-grid"></div>
+</section>
+
+<!-- ==================== 3. SENTENCE PATTERNS ==================== -->
+<section id="section-patterns" class="section">
+  <h2>💬 句型练习 — Sentence Patterns</h2>
+
+  <div class="pattern-item">
+    <h4>1. "Imagine + V-ing" — 想象做某事</h4>
+    <div class="en">"<strong>Imagine standing</strong> on Mars and looking down at the ground."</div>
+    <div class="zh">想象你站在火星上，低头看着地面。<br>用法：imagine 后面接动名词（V-ing），不能接不定式 to do。</div>
+    <textarea class="practice" placeholder="模仿造句：Imagine ________ (fly) over the ocean at sunset."></textarea>
+  </div>
+
+  <div class="pattern-item">
+    <h4>2. "Instead of" — 而不是</h4>
+    <div class="en">"<strong>Instead of</strong> plain red dust, you see thousands of shapes."</div>
+    <div class="zh">你看到的不是单调的红色尘土，而是成千上万的形状。<br>用法：instead of + 名词 / 动名词，表示"代替、而不是"。</div>
+    <textarea class="practice" placeholder="模仿造句：Instead of ________, we went to the museum."></textarea>
+  </div>
+
+  <div class="pattern-item">
+    <h4>3. "Like a…" for Comparison — 像……一样</h4>
+    <div class="en">"…thousands of shapes — <strong>like a</strong> giant honeycomb spreading to the horizon."</div>
+    <div class="zh">成千上万的形状——像一个巨大的蜂巢一直延伸到地平线。<br>用法：like + 名词，用熟悉的事物来描述陌生的事物，让描述更生动。</div>
+    <textarea class="practice" placeholder="模仿造句：The clouds looked like ________."></textarea>
+  </div>
+
+  <div class="pattern-item">
+    <h4>4. "That means…" — 这意味着</h4>
+    <div class="en">"<strong>That means</strong> Mars once had lakes and rivers."</div>
+    <div class="zh">这意味着火星曾经有湖泊和河流。<br>用法：用来解释前面事实的意义，是科学推理中非常有用的连接句。</div>
+    <textarea class="practice" placeholder="模仿造句：The ground is wet. That means ________."></textarea>
+  </div>
+
+  <div class="pattern-item">
+    <h4>5. "Next time you…, you might…" — 下次你……，你可能会……</h4>
+    <div class="en">"<strong>Next time you</strong> walk past a dried-up puddle, <strong>you might</strong> spot a little piece of Mars."</div>
+    <div class="zh">下次你走过一个干涸的水洼时，可能会发现一小块"火星"。<br>用法：next time 引导时间状语从句用一般现在时，主句用 will / might 表示未来。</div>
+    <textarea class="practice" placeholder="模仿造句：Next time you visit the beach, you might ________."></textarea>
+  </div>
+</section>
+
+<!-- ==================== 4. GRAMMAR ==================== -->
+<section id="section-grammar" class="section">
+  <h2>📐 语法点 — Grammar Points</h2>
+
+  <div class="grammar-item">
+    <h4>1. Present Continuous 现在进行时</h4>
+    <div class="en">"Curiosity <strong>is climbing</strong> a valley called Valle Grande."</div>
+    <div class="zh">结构：am/is/are + V-ing，表示此刻正在进行、尚未结束的动作。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>练习：</strong>改为现在进行时：<br>The rover takes photos. → The rover ________ photos. <em>(is taking)</em></p>
+  </div>
+
+  <div class="grammar-item">
+    <h4>2. Simple Past 一般过去时</h4>
+    <div class="en">"Its cameras <strong>took</strong> a full 360-degree panorama and <strong>captured</strong> a sea of polygons."</div>
+    <div class="zh">表示过去发生并已经结束的动作。注意不规则动词：take → took，find → found，see → saw。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>练习：</strong>填入过去式：<br>Curiosity ________ (land) on Mars in 2012. <em>(landed)</em></p>
+  </div>
+
+  <div class="grammar-item">
+    <h4>3. "Once" as "in the past" — 副词 once 表示"曾经"</h4>
+    <div class="en">"Mars <strong>once</strong> had lakes and rivers."</div>
+    <div class="zh">once 放在动词前，表示"曾经、以前有过"，常与一般过去时连用。注意它和"once = 一次"意思不同。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>练习：</strong>翻译：<br>这个地方曾经是一片森林。 → This place ________ ________ a forest. <em>(once was)</em></p>
+  </div>
+
+  <div class="grammar-item">
+    <h4>4. Time Expressions with "ago" — "……之前"的时间表达</h4>
+    <div class="en">"Curiosity landed on Mars fourteen years <strong>ago</strong> this week."</div>
+    <div class="zh">结构：一段时间 + ago，放在句末，必须搭配一般过去时使用（不能用现在完成时）。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>练习：</strong>改写：<br>He arrived in 2020. (now 2026) → He arrived six years ________. <em>(ago)</em></p>
+  </div>
+
+  <div class="grammar-item">
+    <h4>5. "Might" for Possibility 情态动词 might 表推测</h4>
+    <div class="en">"You <strong>might</strong> spot a little piece of Mars right at your feet."</div>
+    <div class="zh">might + 动词原形，表示"可能会"，语气比 may 更不确定，比 will 弱得多。</div>
+    <p style="margin-top:8px;font-size:0.9rem;">🔍 <strong>练习：</strong>用 might 改写：<br>Perhaps it will rain tomorrow. → It ________ tomorrow. <em>(might rain)</em></p>
+  </div>
+</section>
+
+<!-- ==================== 5. QUIZ ==================== -->
+<section id="section-quiz" class="section">
+  <h2>✅ 练习测验 — Comprehension Quiz</h2>
+  <p style="color:var(--text-secondary);margin-bottom:16px;">选择正确答案后点击"检查"按钮。</p>
+
+  <div class="quiz-item" id="q1">
+    <div class="q">1. What did NASA's Curiosity rover find?<span class="qzh">NASA的好奇号探测车发现了什么？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q1" value="A"> A. A giant honeycomb field of polygon cracks</label>
+      <label><input type="radio" name="q1" value="B"> B. A living bee colony on Mars</label>
+      <label><input type="radio" name="q1" value="C"> C. A frozen lake full of fish</label>
+      <label><input type="radio" name="q1" value="D"> D. A crashed alien spaceship</label>
+    </div>
+    <div class="quiz-feedback" id="fb1"></div>
+    <button class="check-btn" onclick="checkQuiz(1, 'A')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q2">
+    <div class="q">2. Where exactly did Curiosity make this discovery?<span class="qzh">好奇号是在哪里做出这个发现的？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q2" value="A"> A. Inside a deep Martian cave</label>
+      <label><input type="radio" name="q2" value="B"> B. In a valley called Valle Grande on Mount Sharp</label>
+      <label><input type="radio" name="q2" value="C"> C. At the north pole of Mars</label>
+      <label><input type="radio" name="q2" value="D"> D. On one of Mars' two moons</label>
+    </div>
+    <div class="quiz-feedback" id="fb2"></div>
+    <button class="check-btn" onclick="checkQuiz(2, 'B')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q3">
+    <div class="q">3. How big is each polygon shape?<span class="qzh">每个多边形有多大？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q3" value="A"> A. About 4 to 8 metres wide</label>
+      <label><input type="radio" name="q3" value="B"> B. About the size of a football field</label>
+      <label><input type="radio" name="q3" value="C"> C. About 4 to 8 centimetres wide</label>
+      <label><input type="radio" name="q3" value="D"> D. Too small to see without a microscope</label>
+    </div>
+    <div class="quiz-feedback" id="fb3"></div>
+    <button class="check-btn" onclick="checkQuiz(3, 'C')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q4">
+    <div class="q">4. On Earth, what makes mud crack into these shapes?<span class="qzh">在地球上，是什么让泥土裂成这样的形状？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q4" value="A"> A. Strong wind blowing over sand</label>
+      <label><input type="radio" name="q4" value="B"> B. A puddle slowly drying up</label>
+      <label><input type="radio" name="q4" value="C"> C. Animals walking over it</label>
+      <label><input type="radio" name="q4" value="D"> D. Volcanoes erupting nearby</label>
+    </div>
+    <div class="quiz-feedback" id="fb4"></div>
+    <button class="check-btn" onclick="checkQuiz(4, 'B')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q5">
+    <div class="q">5. Why is this discovery important to scientists?<span class="qzh">这个发现为什么对科学家很重要？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q5" value="A"> A. It proves Mars is warmer than Earth</label>
+      <label><input type="radio" name="q5" value="B"> B. It shows Mars is made of honey</label>
+      <label><input type="radio" name="q5" value="C"> C. It suggests Mars once had lakes and rivers</label>
+      <label><input type="radio" name="q5" value="D"> D. It means humans can breathe on Mars</label>
+    </div>
+    <div class="quiz-feedback" id="fb5"></div>
+    <button class="check-btn" onclick="checkQuiz(5, 'C')">检查 ✓</button>
+  </div>
+
+  <div class="quiz-item" id="q6">
+    <div class="q">6. How long has Curiosity been working on Mars?<span class="qzh">好奇号在火星上工作了多久？</span></div>
+    <div class="quiz-options">
+      <label><input type="radio" name="q6" value="A"> A. Fourteen years</label>
+      <label><input type="radio" name="q6" value="B"> B. Four months</label>
+      <label><input type="radio" name="q6" value="C"> C. Forty years</label>
+      <label><input type="radio" name="q6" value="D"> D. It only just arrived this year</label>
+    </div>
+    <div class="quiz-feedback" id="fb6"></div>
+    <button class="check-btn" onclick="checkQuiz(6, 'A')">检查 ✓</button>
+  </div>
+</section>
+
+<!-- ==================== 6. KNOWLEDGE ==================== -->
+<section id="section-knowledge" class="section">
+  <h2>🔭 中文知识扩展 — Explore More</h2>
+
+  <div class="knowledge-block">
+    <h3>🚙 好奇号：在火星上跑了14年的"越野车"</h3>
+    <p>好奇号（Curiosity）是NASA的火星科学实验室探测车，2011年11月发射，<strong>2012年8月5日</strong>成功降落在火星的盖尔撞击坑（Gale Crater）。它有一辆小汽车那么大，重约900公斤，靠核电池（放射性同位素热电发生器）供电，所以不怕沙尘暴遮挡阳光。</p>
+    <p>好奇号的着陆过程被称为"恐怖七分钟"——它先用降落伞减速，再由一个"空中吊车"（Sky Crane）悬停在半空，用缆绳把探测车缓缓吊放到地面。这套方案当时看起来像科幻电影，却一次成功。</p>
+    <p>从2014年开始，好奇号一直在攀登<strong>夏普山</strong>（Mount Sharp），这座山高约5公里，相当于把泰山叠两遍还要多。山体一层一层的岩石就像一本"火星地质史书"，越往上爬，读到的年代就越近。</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🍯 什么是"多边形裂缝"？为什么长得像蜂巢？</h3>
+    <p>这次发现的地貌叫<strong>多边形裂缝</strong>（polygonal fractures）。每个多边形只有4到8厘米宽，但它们密密麻麻铺满整个山谷，一直延伸到相机视野的尽头，还爬上了旁边一座约6米高、顶部盖着厚沙的小丘"米拉弗洛雷斯"（Miraflores）。</p>
+    <p>这张震撼的360度全景图是好奇号在<strong>2026年6月19日至20日</strong>（火星任务第4930、4931个火星日）用桅杆相机拍摄340张照片拼接而成的。项目科学家阿什温·瓦萨瓦达（Ashwin Vasavada）说："我们通过好奇号的眼睛看过很多迷人的风景，但这片多边形之海让我们屏住了呼吸。"</p>
+    <p>为什么会形成六边形为主的图案？这其实是<strong>自然界最省力的裂法</strong>。当一层泥浆均匀收缩时，裂缝会从许多点同时开始，向外扩展直到彼此相遇。数学上，用最短的总裂缝长度把一个平面分成面积相等的小块，最优解正是六边形——这也是蜜蜂造蜂巢、玄武岩柱（如中国香港的粮船湾、北爱尔兰的巨人堤道）形成六棱柱的同一个原理。</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>💧 三种可能的成因，科学家还在"破案"</h3>
+    <p>NASA目前列出了三种可能的机制，也可能是它们共同作用的结果：</p>
+    <p><strong>① 干涸泥裂</strong>：湖泊或水洼中的泥浆失水收缩，就像我们在干涸的池塘底看到的一样。好奇号此前发现的一些多边形已被确认属于这一类。</p>
+    <p><strong>② 冷热循环</strong>：火星昼夜温差极大，地表白天可能接近0℃，夜里骤降到零下80℃。反复的热胀冷缩会把地面撕裂成规则几何形状——地球的西伯利亚和南极冻土带上也有类似的"冰楔多边形"。</p>
+    <p><strong>③ 埋藏压实</strong>：沉积物被上层物质掩埋后受到挤压，水分被慢慢挤出，也会留下类似纹路。</p>
+    <p>科学家正在分析这些裂缝的形状和化学成分，希望找出到底是哪一种（或哪几种）造就了这片"多边形之海"。<strong>这正是科学有趣的地方——发现一个现象，往往是提问的开始，而不是结束。</strong></p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🌊 火星曾经是一颗"蓝色星球"吗？</h3>
+    <p>几十亿年前，好奇号如今攀爬的夏普山山脚下，曾经湖泊与溪流交错。好奇号在岩石中找到了那段湿润历史留下的化学证据，其中包括含碳分子——它们被认为是<strong>RNA和DNA的前体物质</strong>，而这两种核酸正是地球上所有生命储存遗传信息的关键。</p>
+    <p>需要注意的是：科学家目前<strong>还无法判断</strong>这些有机分子是由生命活动产生的，还是纯粹的地质化学过程形成的，两种可能都存在。但至少可以确认——远古的火星同时拥有水、化学原料和养分，具备孕育微生物所需的基本条件。</p>
+    <p>那水去哪儿了？主流观点认为，火星质量只有地球的约十分之一，引力较弱，加上很早就失去了全球性磁场保护，太阳风逐渐把大气剥离，水分蒸发逃逸到太空，或者冻结在地下和两极冰盖中。这片多边形之海，正是那段"湿润时代"留给今天的印记。</p>
+  </div>
+
+  <div class="knowledge-block">
+    <h3>🔬 在家就能做的小实验：造一片你自己的"火星地貌"</h3>
+    <p>你完全可以在自家阳台上复现这次的科学发现：</p>
+    <p><strong>材料：</strong>一个浅盘子、一些细泥土或黏土粉、水。</p>
+    <p><strong>步骤：</strong>把泥土和水调成稀糊状（像酸奶那样的稠度），倒进盘子铺平约1厘米厚，然后放在太阳下或通风处静置1–3天。</p>
+    <p><strong>观察：</strong>随着水分蒸发，泥层会开始收缩、开裂，最终形成一张多边形网格——和好奇号在3亿公里外拍到的图案，遵循完全相同的物理规律。</p>
+    <p>试着调整泥层厚度再做一次，你会发现：<strong>泥层越厚，裂开的多边形块就越大</strong>。这也正是行星科学家用来推断火星古代泥层深度的思路之一。这就是科学最迷人的地方——同一条规律，既适用于你阳台上的盘子，也适用于另一颗行星。</p>
+  </div>
+</section>
+
+<!-- ==================== 7. ABOUT ==================== -->
+<section id="section-about" class="section">
+  <h2>ℹ️ 关于本课 — About This Lesson</h2>
+  <div class="about-grid">
+    <div class="about-card">
+      <h4>🎯 学习目标</h4>
+      <ul>
+        <li>阅读并理解一篇关于NASA好奇号火星新发现的英语新闻</li>
+        <li>掌握 10 个天文、地质与形状相关的核心词汇</li>
+        <li>学习现在进行时、一般过去时、"ago"时间表达和 might 推测用法</li>
+        <li>了解火星探测、多边形裂缝成因与古代火星水环境</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h4>📋 课程内容</h4>
+      <ul>
+        <li>主题：Mars Honeycomb Mystery</li>
+        <li>英语水平：B1（10-12岁）</li>
+        <li>来源：NASA JPL / ScienceDaily / SciTechDaily，2026.8.1</li>
+        <li>时长：约30-45分钟</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h4>💡 学习建议</h4>
+      <ul>
+        <li>先通读全文，利用高亮提示理解生词</li>
+        <li>使用语音按钮跟读练习发音，注意 polygon、horizon 的重音</li>
+        <li>完成句型练习中的造句任务</li>
+        <li>做完测验后对照答案，复习错误题目</li>
+        <li>阅读知识扩展，并动手完成"泥裂小实验"</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h4>🔗 延伸探索</h4>
+      <ul>
+        <li>在NASA官网搜索 "Curiosity Valle Grande panorama" 看原图</li>
+        <li>观察雨后干涸的水洼，拍下你找到的多边形裂缝</li>
+        <li>了解北爱尔兰"巨人堤道"的六棱石柱是怎么形成的</li>
+        <li>思考：为什么六边形在自然界中如此常见？</li>
+      </ul>
+    </div>
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+</section>
+
+</main>
+
+<script>
+// ==================== VOCABULARY DATA ====================
+const vocabData = [
+  { word: "rover", pos: "n.", def: "探测车 — a robot vehicle that drives across another planet", example: "NASA's Curiosity rover just found something amazing.", pronounce: "rover" },
+  { word: "polygon", pos: "n.", def: "多边形 — a flat shape with many straight sides", example: "The cameras captured a sea of polygons.", pronounce: "polygon" },
+  { word: "honeycomb", pos: "n.", def: "蜂巢 — the wax structure bees build, made of six-sided cells", example: "It looks like a giant honeycomb.", pronounce: "honeycomb" },
+  { word: "horizon", pos: "n.", def: "地平线 — the line where the land seems to meet the sky", example: "The shapes spread all the way to the horizon.", pronounce: "horizon" },
+  { word: "panorama", pos: "n.", def: "全景照片 — a wide picture showing everything around you", example: "Its cameras took a 360-degree panorama.", pronounce: "panorama" },
+  { word: "valley", pos: "n.", def: "山谷 — low land between hills or mountains", example: "Curiosity is climbing a valley called Valle Grande.", pronounce: "valley" },
+  { word: "crack", pos: "n./v.", def: "裂缝／裂开 — a thin line where something has split open", example: "Where do these cracks come from?", pronounce: "crack" },
+  { word: "puddle", pos: "n.", def: "水洼 — a small pool of water on the ground", example: "Mud breaks apart when a puddle dries up.", pronounce: "puddle" },
+  { word: "chemistry", pos: "n.", def: "化学成分 — the substances and reactions that make things work", example: "Mars may have had the right chemistry for life.", pronounce: "chemistry" },
+  { word: "spot", pos: "v.", def: "发现／看出 — to notice or see something", example: "You might spot a little piece of Mars.", pronounce: "spot" }
+];
+
+function buildVocabGrid() {
+  const grid = document.getElementById('vocab-grid');
+  grid.innerHTML = vocabData.map((v, i) => `
+    <div class="vocab-card">
+      <div class="word">${v.word} <span class="pos">${v.pos}</span></div>
+      <div class="def">${v.def}</div>
+      <div class="example">"${v.example}"</div>
+      <button class="vocab-play" onclick="toggleVocabPlay(this, '${v.pronounce}', event)" title="Listen">🔊</button>
+    </div>
+  `).join('');
+}
+buildVocabGrid();
+
+// ==================== NAVIGATION ====================
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const section = document.getElementById('section-' + name);
+  if (section) section.classList.add('active');
+  document.querySelectorAll('#sidebar nav a').forEach(a => a.classList.remove('active'));
+  const link = document.querySelector(`#sidebar nav a[href="#${name}"]`);
+  if (link) link.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('main').scrollTop = 0;
+  window.scrollTo(0,0);
+  updateProgress();
+}
+
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Progress bar
+function updateProgress() {
+  const main = document.getElementById('main');
+  const scrollTop = main.scrollTop || window.scrollY;
+  const scrollHeight = (main.scrollHeight || document.body.scrollHeight) - (main.clientHeight || window.innerHeight);
+  const progress = scrollHeight > 0 ? Math.min(100, (scrollTop / scrollHeight) * 100) : 0;
+  document.getElementById('progress-bar').style.width = progress + '%';
+}
+
+window.addEventListener('scroll', updateProgress);
+window.addEventListener('resize', updateProgress);
+
+// ==================== VOICE PLAYBACK ====================
+let currentUtterance = null;
+let voicesLoaded = false;
+let availableVoices = [];
+
+// Segment texts (plain text, no HTML)
+const segmentTexts = [
+  "Imagine standing on Mars and looking down at the ground. Instead of plain red dust, you see thousands of shapes — like a giant honeycomb spreading all the way to the horizon. That is exactly what NASA's Curiosity rover just found!",
+  "Curiosity is climbing a valley called Valle Grande on Mount Sharp. Its cameras took a full 360-degree panorama and captured a sea of polygons. Each shape is only four to eight centimetres wide, but together they cover everything the rover can see.",
+  "So where do these cracks come from? Here on Earth, mud breaks into shapes like this when a puddle slowly dries up. That means Mars once had lakes and rivers — and maybe even the right chemistry for tiny life to begin.",
+  "Curiosity landed on Mars fourteen years ago this week, and it is still surprising us. So next time you walk past a dried-up puddle, look closely — you might spot a little piece of Mars right at your feet. Bye-bye!"
+];
+
+function loadVoices() {
+  return new Promise((resolve) => {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      availableVoices = voices;
+      voicesLoaded = true;
+      resolve();
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        availableVoices = speechSynthesis.getVoices();
+        voicesLoaded = true;
+        resolve();
+      };
+    }
+  });
+}
+
+function getBestVoice() {
+  const enhanced = availableVoices.find(v => v.name.includes('Enhanced') && v.lang.startsWith('en') && !v.name.includes('Female'));
+  if (enhanced) return enhanced;
+  const daniel = availableVoices.find(v => v.name === 'Daniel' && v.lang.startsWith('en'));
+  if (daniel) return daniel;
+  const alex = availableVoices.find(v => v.name === 'Alex' && v.lang.startsWith('en'));
+  if (alex) return alex;
+  const mark = availableVoices.find(v => v.name.includes('Mark') && v.lang.startsWith('en'));
+  if (mark) return mark;
+  const englishMale = availableVoices.find(v => v.lang.startsWith('en') && !v.name.includes('Female'));
+  if (englishMale) return englishMale;
+  const english = availableVoices.find(v => v.lang.startsWith('en'));
+  return english || availableVoices[0];
+}
+
+function stopCurrentSpeech() {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  document.querySelectorAll('.play-btn.playing').forEach(b => {
+    b.classList.remove('playing');
+    b.textContent = '▶';
+  });
+  document.querySelectorAll('.vocab-play.playing').forEach(b => {
+    b.classList.remove('playing');
+    b.textContent = '🔊';
+  });
+}
+
+async function toggleSegmentPlay(btn, index) {
+  if (btn.classList.contains('playing')) {
+    stopCurrentSpeech();
+    return;
+  }
+  stopCurrentSpeech();
+  if (!voicesLoaded) await loadVoices();
+
+  const voice = getBestVoice();
+  const utterance = new SpeechSynthesisUtterance(segmentTexts[index]);
+  utterance.voice = voice;
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+
+  utterance.onend = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+    currentUtterance = null;
+  };
+  utterance.onerror = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+async function toggleVocabPlay(btn, word, event) {
+  event.stopPropagation();
+  if (btn.classList.contains('playing')) {
+    stopCurrentSpeech();
+    return;
+  }
+  stopCurrentSpeech();
+  if (!voicesLoaded) await loadVoices();
+
+  const voice = getBestVoice();
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.voice = voice;
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+
+  utterance.onend = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '🔊';
+    currentUtterance = null;
+  };
+  utterance.onerror = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '🔊';
+    currentUtterance = null;
+  };
+
+  currentUtterance = utterance;
+  speechSynthesis.speak(utterance);
+}
+
+// Preload voices
+loadVoices();
+
+// ==================== QUIZ ====================
+function checkQuiz(num, correctAnswer) {
+  const qDiv = document.getElementById('q' + num);
+  const fb = document.getElementById('fb' + num);
+  const selected = qDiv.querySelector('input[type="radio"]:checked');
+
+  qDiv.querySelectorAll('.quiz-options label').forEach(l => {
+    l.classList.remove('correct-choice', 'wrong-choice');
+  });
+
+  if (!selected) {
+    fb.textContent = '⚠️ 请先选择一个答案！/ Please select an answer first!';
+    fb.className = 'quiz-feedback wrong';
+    return;
+  }
+
+  const selectedLabel = selected.parentElement;
+  if (selected.value === correctAnswer) {
+    fb.textContent = '✅ 正确！/ Correct! Great job! 🌟';
+    fb.className = 'quiz-feedback correct';
+    selectedLabel.classList.add('correct-choice');
+  } else {
+    fb.textContent = '❌ 再试一次！/ Try again! 正确答案是 ' + correctAnswer;
+    fb.className = 'quiz-feedback wrong';
+    selectedLabel.classList.add('wrong-choice');
+    const correctLabel = qDiv.querySelector(`input[value="${correctAnswer}"]`).parentElement;
+    correctLabel.classList.add('correct-choice');
+  }
+}
+
+// ==================== INIT ====================
+updateProgress();
+</script>
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News | The Crater That Gave Earth Its Breath</title>
+<style>
+:root {
+  --primary: #2980b9;
+  --primary-dark: #1a5276;
+  --accent: #1abc9c;
+  --bg-gradient-1: #dfe6e9;
+  --bg-gradient-2: #a8d8ea;
+  --sidebar-bg: #2c3e50;
+  --sidebar-hover: #34495e;
+  --sidebar-active: #1abc9c;
+  --card-bg: rgba(255,255,255,0.95);
+  --text-dark: #2c3e50;
+  --text-light: #ecf0f1;
+  --highlight: #fff3cd;
+  --correct: #27ae60;
+  --wrong: #e74c3c;
+  --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(135deg,var(--bg-gradient-1),var(--bg-gradient-2));min-height:100vh;color:var(--text-dark);display:flex;}
+.progress-bar{position:fixed;top:0;left:0;width:100%;height:4px;background:rgba(0,0,0,0.1);z-index:1000;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width 0.3s;}
+.sidebar{width:260px;min-height:100vh;background:var(--sidebar-bg);color:var(--text-light);padding:20px 0;position:fixed;left:0;top:0;z-index:100;overflow-y:auto;transition:transform 0.3s;}
+.sidebar-header{text-align:center;padding:20px 15px 25px;border-bottom:1px solid rgba(255,255,255,0.1);}
+.sidebar-header .logo{font-size:1.6em;font-weight:800;color:var(--accent);letter-spacing:1px;}
+.sidebar-header .subtitle{font-size:0.8em;color:rgba(255,255,255,0.6);margin-top:4px;}
+.nav-item{padding:14px 20px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;display:flex;align-items:center;gap:10px;font-size:0.95em;}
+.nav-item:hover{background:var(--sidebar-hover);border-left-color:var(--accent);}
+.nav-item.active{background:var(--sidebar-hover);border-left-color:var(--sidebar-active);color:var(--accent);font-weight:600;}
+.nav-icon{font-size:1.2em;width:28px;text-align:center;}
+.main-content{margin-left:260px;flex:1;padding:30px 40px 60px;max-width:900px;min-height:100vh;}
+.section{display:none;animation:fadeIn 0.4s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.section-title{font-size:1.8em;font-weight:700;margin-bottom:8px;color:var(--primary-dark);}
+.section-subtitle{font-size:1em;color:#7f8c8d;margin-bottom:25px;}
+.card{background:var(--card-bg);border-radius:16px;padding:28px;margin-bottom:20px;box-shadow:var(--shadow);line-height:1.8;}
+.card h3{color:var(--primary-dark);margin-bottom:12px;font-size:1.15em;}
+.highlight-word{background:#fff3cd;padding:2px 6px;border-radius:4px;cursor:pointer;position:relative;font-weight:600;border-bottom:2px solid var(--accent);transition:background 0.2s;}
+.highlight-word:hover{background:#ffeaa7;}
+.tooltip{display:none;position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:var(--sidebar-bg);color:#fff;padding:8px 14px;border-radius:8px;font-size:0.85em;white-space:nowrap;z-index:50;line-height:1.4;font-weight:400;}
+.highlight-word:hover .tooltip{display:block;}
+.segment-block{margin-bottom:18px;padding:16px 20px;background:linear-gradient(135deg,#fff,#f0f8ff);border-left:4px solid var(--primary);border-radius:0 12px 12px 0;position:relative;}
+.segment-label{font-size:0.75em;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.play-btn{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:2px solid var(--primary);background:rgba(41,128,185,0.1);color:var(--primary);font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.play-btn:hover{background:var(--primary);color:#fff;}
+.play-btn.playing{background:var(--primary);color:#fff;animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(41,128,185,0.4);}50%{box-shadow:0 0 0 10px rgba(41,128,185,0);}}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.vocab-card{background:var(--card-bg);border-radius:14px;padding:22px;box-shadow:var(--shadow);border-top:4px solid var(--primary);transition:transform 0.2s;}
+.vocab-card:hover{transform:translateY(-3px);}
+.vocab-word{font-size:1.3em;font-weight:700;color:var(--primary-dark);display:flex;align-items:center;gap:8px;}
+.vocab-pos{font-size:0.8em;color:#999;font-style:italic;font-weight:400;}
+.vocab-zh{font-size:0.95em;color:#555;margin:6px 0;}
+.vocab-example{font-size:0.88em;color:#777;font-style:italic;border-left:3px solid var(--accent);padding-left:10px;margin-top:8px;}
+.speak-btn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--primary);background:rgba(41,128,185,0.08);color:var(--primary);font-size:0.9em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;}
+.speak-btn:hover{background:var(--primary);color:#fff;}
+.pattern-card{background:var(--card-bg);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow);border-left:5px solid var(--accent);}
+.pattern-en{font-size:1.1em;font-weight:600;color:var(--primary-dark);margin-bottom:4px;}
+.pattern-zh{font-size:0.9em;color:#666;margin-bottom:10px;}
+.pattern-example{font-size:0.92em;color:#555;background:#f0f8ff;padding:10px 14px;border-radius:8px;margin:8px 0;}
+.grammar-card{background:var(--card-bg);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow);}
+.grammar-title{font-size:1.1em;font-weight:700;color:var(--primary-dark);margin-bottom:6px;}
+.grammar-rule{font-size:0.95em;color:#555;margin-bottom:10px;line-height:1.7;}
+.grammar-examples{background:#f0f8ff;padding:12px 16px;border-radius:8px;font-size:0.9em;color:#666;}
+.quiz-card{background:var(--card-bg);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow);}
+.quiz-q{font-weight:600;margin-bottom:12px;font-size:1em;line-height:1.6;}
+.quiz-q .q-zh{font-size:0.85em;color:#888;font-weight:400;display:block;margin-top:2px;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{padding:10px 16px;border:2px solid #e0e0e0;border-radius:10px;cursor:pointer;transition:all 0.2s;font-size:0.93em;}
+.quiz-opt:hover{border-color:var(--primary);background:rgba(41,128,185,0.05);}
+.quiz-opt.correct{border-color:var(--correct);background:rgba(39,174,96,0.1);color:var(--correct);}
+.quiz-opt.wrong{border-color:var(--wrong);background:rgba(231,76,60,0.1);color:var(--wrong);}
+.quiz-opt.disabled{pointer-events:none;}
+.quiz-feedback{margin-top:10px;font-size:0.9em;font-weight:600;padding:8px 12px;border-radius:8px;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct-fb{background:rgba(39,174,96,0.1);color:var(--correct);}
+.quiz-feedback.wrong-fb{background:rgba(231,76,60,0.1);color:var(--wrong);}
+.ext-card{background:var(--card-bg);border-radius:14px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow);}
+.ext-card h3{color:var(--primary-dark);margin-bottom:10px;font-size:1.15em;}
+.ext-card p{color:#555;line-height:1.8;font-size:0.95em;}
+.ext-card ul{padding-left:20px;margin-top:8px;}
+.ext-card li{color:#555;line-height:2;font-size:0.93em;}
+.about-card{background:var(--card-bg);border-radius:14px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow);}
+.about-card h3{color:var(--primary-dark);margin-bottom:10px;}
+.about-card ul{padding-left:20px;}
+.about-card li{color:#555;line-height:2;font-size:0.93em;}
+.print-btn{display:inline-block;padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:1em;cursor:pointer;margin-top:10px;transition:background 0.2s;}
+.print-btn:hover{background:var(--primary-dark);}
+.menu-toggle{display:none;position:fixed;top:15px;left:15px;z-index:200;width:44px;height:44px;border-radius:10px;background:var(--sidebar-bg);color:#fff;border:none;font-size:1.4em;cursor:pointer;align-items:center;justify-content:center;}
+.score-box{text-align:center;margin-top:20px;padding:20px;background:linear-gradient(135deg,#dfe6e9,#a8d8ea);border-radius:14px;font-size:1.1em;font-weight:600;color:var(--primary-dark);}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main-content{margin-left:0;padding:20px 16px 60px;}
+  .menu-toggle{display:flex;}
+  .vocab-grid{grid-template-columns:1fr;}
+}
+@media print{
+  .sidebar,.menu-toggle,.progress-bar,.play-btn,.speak-btn{display:none!important;}
+  .main-content{margin-left:0;padding:10px;}
+  .section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab-card,.pattern-card,.grammar-card,.quiz-card,.ext-card,.about-card{box-shadow:none;border:1px solid #ddd;}
+  body{background:#fff;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">&#9776;</button>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">POLA NEWS</div>
+    <div class="subtitle">The Crater That Gave Earth Its Breath</div>
+  </div>
+  <div class="nav-item active" data-section="reading" onclick="showSection('reading',this)">
+    <span class="nav-icon">📖</span> 全文阅读
+  </div>
+  <div class="nav-item" data-section="vocab" onclick="showSection('vocab',this)">
+    <span class="nav-icon">🔤</span> 词汇表
+  </div>
+  <div class="nav-item" data-section="patterns" onclick="showSection('patterns',this)">
+    <span class="nav-icon">💬</span> 句型练习
+  </div>
+  <div class="nav-item" data-section="grammar" onclick="showSection('grammar',this)">
+    <span class="nav-icon">📐</span> 语法点
+  </div>
+  <div class="nav-item" data-section="quiz" onclick="showSection('quiz',this)">
+    <span class="nav-icon">✅</span> 练习测验
+  </div>
+  <div class="nav-item" data-section="extend" onclick="showSection('extend',this)">
+    <span class="nav-icon">🔬</span> 知识扩展
+  </div>
+  <div class="nav-item" data-section="about" onclick="showSection('about',this)">
+    <span class="nav-icon">ℹ️</span> 关于本课
+  </div>
+</nav>
+
+<div class="main-content">
+
+<!-- ============ 1. 全文阅读 ============ -->
+<div class="section active" id="reading">
+  <div class="section-title">📖 Full Text Reading</div>
+  <div class="section-subtitle">全文阅读 — 点击高亮词汇查看释义，点击 ▶ 收听朗读</div>
+
+  <div class="segment-block">
+    <div class="segment-label">Segment 1 — Hook</div>
+    <button class="play-btn" onclick="playSegment(0,this)" title="播放">▶</button>
+    What if I told you that a <span class="highlight-word">giant<span class="tooltip">巨大的 — extremely large</span></span> rock from space helped you breathe right now? Sounds <span class="highlight-word">crazy<span class="tooltip">疯狂的 — very surprising or hard to believe</span></span>, right? Well, scientists in South Korea just found something <span class="highlight-word">amazing<span class="tooltip">令人惊叹的 — very surprising and wonderful</span></span> inside a real asteroid <span class="highlight-word">crater<span class="tooltip">陨石坑 — a large hole in the ground made by a space rock hitting Earth</span></span> — and it might change everything we know about how <span class="highlight-word">oxygen<span class="tooltip">氧气 — the gas in the air that we need to breathe</span></span> appeared on Earth!
+  </div>
+
+  <div class="segment-block">
+    <div class="segment-label">Segment 2 — Story</div>
+    <button class="play-btn" onclick="playSegment(1,this)" title="播放">▶</button>
+    Inside the Hapcheon <span class="highlight-word">crater<span class="tooltip">陨石坑 — a large hole in the ground made by a space rock hitting Earth</span></span>, researchers <span class="highlight-word">discovered<span class="tooltip">发现了 — found something for the first time</span></span> <span class="highlight-word">stromatolites<span class="tooltip">叠层石 — layered rocks built by ancient microbes over billions of years</span></span> — strange rocky layers built by tiny living <span class="highlight-word">microbes<span class="tooltip">微生物 — very small living things that can only be seen under a microscope</span></span> billions of years ago. These little creatures were some of the first organisms ever to produce oxygen! The asteroid <span class="highlight-word">impact<span class="tooltip">撞击 — when one object hits another with great force</span></span> created a warm, mineral-rich lake — the <span class="highlight-word">perfect<span class="tooltip">完美的 — exactly right for a purpose</span></span> home for these <span class="highlight-word">ancient<span class="tooltip">古老的 — very old, from a long time ago</span></span> oxygen factories to grow and <span class="highlight-word">thrive<span class="tooltip">茁壮成长 — to grow well and be healthy</span></span>.
+  </div>
+
+  <div class="segment-block">
+    <div class="segment-label">Segment 3 — Why It Matters</div>
+    <button class="play-btn" onclick="playSegment(2,this)" title="播放">▶</button>
+    This <span class="highlight-word">discovery<span class="tooltip">发现 — finding something new</span></span> tells us that asteroid impacts weren't just <span class="highlight-word">destructive<span class="tooltip">破坏性的 — causing damage or destruction</span></span> — they could have created special "oxygen oases" where life could <span class="highlight-word">flourish<span class="tooltip">繁荣 — to grow well and be successful</span></span>. And here's the coolest part: scientists think the same kind of craters might exist on <span class="highlight-word">Mars<span class="tooltip">火星 — the fourth planet from the Sun, also called the Red Planet</span></span> right now, hiding secrets about whether life ever existed there too!
+  </div>
+
+  <div class="segment-block">
+    <div class="segment-label">Segment 4 — Sign-off</div>
+    <button class="play-btn" onclick="playSegment(3,this)" title="播放">▶</button>
+    So next time you take a deep breath, remember — you might have an ancient space rock to thank for it! That's all for today's Pola News. Stay curious, stay awesome, and I'll see you next time! Bye!
+  </div>
+</div>
+
+<!-- ============ 2. 词汇表 ============ -->
+<div class="section" id="vocab">
+  <div class="section-title">🔤 Vocabulary</div>
+  <div class="section-subtitle">核心词汇 — 点击 🔊 收听发音</div>
+  <div class="vocab-grid">
+
+    <div class="vocab-card">
+      <div class="vocab-word">crater <button class="speak-btn" onclick="speakWord('crater',this)">🔊</button></div>
+      <div class="vocab-pos">noun /ˈkreɪtər/</div>
+      <div class="vocab-zh">陨石坑 — 太空岩石撞击地球形成的巨大凹坑</div>
+      <div class="vocab-example">The asteroid left a huge crater in the ground.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">oxygen <button class="speak-btn" onclick="speakWord('oxygen',this)">🔊</button></div>
+      <div class="vocab-pos">noun /ˈɒksɪdʒən/</div>
+      <div class="vocab-zh">氧气 — 空气中让我们能够呼吸的气体</div>
+      <div class="vocab-example">We need oxygen to survive and live.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">stromatolite <button class="speak-btn" onclick="speakWord('stromatolite',this)">🔊</button></div>
+      <div class="vocab-pos">noun /ˈstrəʊmətəlaɪt/</div>
+      <div class="vocab-zh">叠层石 — 由远古微生物层层建造的岩石结构</div>
+      <div class="vocab-example">Stromatolites are some of the oldest evidence of life on Earth.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">microbe <button class="speak-btn" onclick="speakWord('microbe',this)">🔊</button></div>
+      <div class="vocab-pos">noun /ˈmaɪkrəʊb/</div>
+      <div class="vocab-zh">微生物 — 只有在显微镜下才能看到的极小生物</div>
+      <div class="vocab-example">These tiny microbes produced oxygen billions of years ago.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">impact <button class="speak-btn" onclick="speakWord('impact',this)">🔊</button></div>
+      <div class="vocab-pos">noun /ˈɪmpækt/</div>
+      <div class="vocab-zh">撞击 — 一个物体以巨大力量撞击另一个物体</div>
+      <div class="vocab-example">The asteroid impact created a warm lake inside the crater.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">thrive <button class="speak-btn" onclick="speakWord('thrive',this)">🔊</button></div>
+      <div class="vocab-pos">verb /θraɪv/</div>
+      <div class="vocab-zh">茁壮成长 — 生长得很好、很健康</div>
+      <div class="vocab-example">The microbes thrived in the warm, mineral-rich water.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">flourish <button class="speak-btn" onclick="speakWord('flourish',this)">🔊</button></div>
+      <div class="vocab-pos">verb /ˈflʌrɪʃ/</div>
+      <div class="vocab-zh">繁荣 — 生长得很好、很成功</div>
+      <div class="vocab-example">Life flourished in these special "oxygen oases."</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">destructive <button class="speak-btn" onclick="speakWord('destructive',this)">🔊</button></div>
+      <div class="vocab-pos">adjective /dɪˈstrʌktɪv/</div>
+      <div class="vocab-zh">破坏性的 — 造成损害或毁灭的</div>
+      <div class="vocab-example">Asteroid impacts are often destructive, but not always!</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">ancient <button class="speak-btn" onclick="speakWord('ancient',this)">🔊</button></div>
+      <div class="vocab-pos">adjective /ˈeɪnʃənt/</div>
+      <div class="vocab-zh">古老的 — 非常古老的、很久以前的</div>
+      <div class="vocab-example">These ancient microbes lived billions of years ago.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-word">discovery <button class="speak-btn" onclick="speakWord('discovery',this)">🔊</button></div>
+      <div class="vocab-pos">noun /dɪˈskʌvəri/</div>
+      <div class="vocab-zh">发现 — 找到新事物的过程或结果</div>
+      <div class="vocab-example">This discovery changes what we know about early Earth.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 3. 句型练习 ============ -->
+<div class="section" id="patterns">
+  <div class="section-title">💬 Sentence Patterns</div>
+  <div class="section-subtitle">实用句型 — 从课文中学习重要的英语表达</div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">"What if I told you that...?"</div>
+    <div class="pattern-zh">如果我告诉你……你会怎么想？（用来引出一个令人惊讶的事实）</div>
+    <div class="pattern-example">
+      <strong>课文例句：</strong>What if I told you that a giant rock from space helped you breathe right now?<br>
+      <strong>你的练习：</strong>What if I told you that dinosaurs once lived in your city?
+    </div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">"It might change everything we know about..."</div>
+    <div class="pattern-zh">这可能改变我们对……的全部认知</div>
+    <div class="pattern-example">
+      <strong>课文例句：</strong>It might change everything we know about how oxygen appeared on Earth!<br>
+      <strong>你的练习：</strong>This discovery might change everything we know about the ocean.
+    </div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">"These [名词] were some of the first to..."</div>
+    <div class="pattern-zh">这些……是最早做某事的……（用来描述开创性的事物）</div>
+    <div class="pattern-example">
+      <strong>课文例句：</strong>These little creatures were some of the first organisms ever to produce oxygen!<br>
+      <strong>你的练习：</strong>These plants were some of the first to grow on land.
+    </div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">"Something wasn't just [形容词] — it could have [过去分词]..."</div>
+    <div class="pattern-zh">某事不仅仅是……，它可能还……（用来纠正一个片面的看法）</div>
+    <div class="pattern-example">
+      <strong>课文例句：</strong>Asteroid impacts weren't just destructive — they could have created special "oxygen oases."<br>
+      <strong>你的练习：</strong>Rain isn't just annoying — it could have helped life begin!
+    </div>
+  </div>
+
+  <div class="pattern-card">
+    <div class="pattern-en">"Here's the coolest part: ..."</div>
+    <div class="pattern-zh">最酷的部分来了：……（口语中用来引出最精彩的信息）</div>
+    <div class="pattern-example">
+      <strong>课文例句：</strong>And here's the coolest part: scientists think the same kind of craters might exist on Mars!<br>
+      <strong>你的练习：</strong>Here's the coolest part: you can see this from your own backyard!
+    </div>
+  </div>
+</div>
+
+<!-- ============ 4. 语法点 ============ -->
+<div class="section" id="grammar">
+  <div class="section-title">📐 Grammar Points</div>
+  <div class="section-subtitle">语法讲解 — 学习课文中的关键语法结构</div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">1. 被动语态 (Passive Voice) — "was/were + 过去分词"</div>
+    <div class="grammar-rule">
+      当我们不知道或不想说明动作的执行者时，用被动语态。课文中的 stromatolites "were built by tiny living microbes"，强调的是"被谁建造"，而不是"谁建造了"。<br><br>
+      <strong>结构：</strong>主语 + was/were + 过去分词 (+ by + 执行者)
+    </div>
+    <div class="grammar-examples">
+      ✅ The stromatolites <strong>were built</strong> by tiny microbes. (叠层石是由微小微生物建造的。)<br>
+      ✅ The crater <strong>was created</strong> by an asteroid. (陨石坑是由小行星撞击形成的。)<br>
+      ✅ Oxygen <strong>was produced</strong> by ancient organisms. (氧气是由古老生物产生的。)<br>
+      ❌ Tiny microbes built the stromatolites. (这是主动语态，意思一样但侧重点不同)
+    </div>
+  </div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">2. "might have + 过去分词" — 对过去的推测</div>
+    <div class="grammar-rule">
+      "might have + 过去分词" 表示对过去发生的事情的不确定推测，意思是"可能已经……了"。课文中的 "they could have created special oxygen oases" 表示科学家认为过去可能发生的事情。<br><br>
+      <strong>结构：</strong>主语 + might/could have + 过去分词
+    </div>
+    <div class="grammar-examples">
+      ✅ Asteroid impacts <strong>might have created</strong> oxygen oases. (小行星撞击可能创造了氧气绿洲。)<br>
+      ✅ Life <strong>could have started</strong> in these warm lakes. (生命可能在这些温暖的湖泊中起源。)<br>
+      ✅ Mars <strong>might have had</strong> similar craters. (火星可能也有类似的陨石坑。)
+    </div>
+  </div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">3. "some of the first + 复数名词 + to + 动词" — 最早的……之一</div>
+    <div class="grammar-rule">
+      这个结构用来描述某物在某个类别中属于最早的。"some of" 表示"其中一些"，后面跟最高级（the first）和一个不定式短语。<br><br>
+      <strong>结构：</strong>some of the + 最高级 + 名词 + to + 动词原形
+    </div>
+    <div class="grammar-examples">
+      ✅ They were <strong>some of the first organisms to</strong> produce oxygen. (它们是最早产生氧气的生物之一。)<br>
+      ✅ She is <strong>one of the first scientists to</strong> study this crater. (她是研究这个陨石坑的首批科学家之一。)<br>
+      ✅ It was <strong>one of the first animals to</strong> live on land. (它是首批在陆地上生活的动物之一。)
+    </div>
+  </div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">4. "What if I told you that..." — 假设性提问</div>
+    <div class="grammar-rule">
+      "What if" 意思是"如果……会怎样？"，常用来提出一个假设来引起对方注意。后面的从句用过去时态（told），这是一种虚拟语气的用法，表示当前并不真实的情况。<br><br>
+      <strong>结构：</strong>What if + 主语 + 过去式 + that从句?
+    </div>
+    <div class="grammar-examples">
+      ✅ <strong>What if I told you</strong> that a rock from space helped you breathe? (如果我告诉你太空中的石头帮助了你呼吸呢？)<br>
+      ✅ <strong>What if we said</strong> that dinosaurs are still alive? (如果我们说恐龙还活着呢？)<br>
+      ✅ <strong>What if they found</strong> life on Mars? (如果他们在火星上发现了生命呢？)
+    </div>
+  </div>
+
+  <div class="grammar-card">
+    <div class="grammar-title">5. "next time + 从句" — 下次……的时候</div>
+    <div class="grammar-rule">
+      "next time" 可以直接引导一个时间状语从句，表示"下次做某事的时候"。注意从句用一般现在时表示将来。<br><br>
+      <strong>结构：</strong>Next time + 主语 + 一般现在时, 主句...
+    </div>
+    <div class="grammar-examples">
+      ✅ <strong>Next time</strong> you take a deep breath, remember this. (下次你深呼吸时，记住这件事。)<br>
+      ✅ <strong>Next time</strong> you look at the sky, think about asteroids. (下次你看天空时，想想小行星。)<br>
+      ✅ <strong>Next time</strong> you visit a museum, look for stromatolites! (下次参观博物馆时，找找叠层石！)
+    </div>
+  </div>
+</div>
+
+<!-- ============ 5. 练习测验 ============ -->
+<div class="section" id="quiz">
+  <div class="section-title">✅ Comprehension Quiz</div>
+  <div class="section-subtitle">练习测验 — 检验你对课文的理解，选择正确答案</div>
+
+  <div class="quiz-card" id="q1">
+    <div class="quiz-q">
+      1. Where did scientists find the stromatolites?
+      <span class="q-zh">科学家在哪里发现了叠层石？</span>
+    </div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q1',this,false)">A) Inside a volcanic mountain in Japan<br><span style="font-size:0.85em;color:#999">日本的火山里</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q1',this,true)">B) Inside an asteroid crater in South Korea<br><span style="font-size:0.85em;color:#999">韩国的一个小行星陨石坑里 ✅</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q1',this,false)">C) At the bottom of the Pacific Ocean<br><span style="font-size:0.85em;color:#999">太平洋底部</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q1',this,false)">D) In a cave in Australia<br><span style="font-size:0.85em;color:#999">澳大利亚的洞穴中</span></div>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q2">
+    <div class="quiz-q">
+      2. What are stromatolites?
+      <span class="q-zh">什么是叠层石？</span>
+    </div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q2',this,true)">A) Layered rocks built by ancient microbes<br><span style="font-size:0.85em;color:#999">由远古微生物建造的层状岩石 ✅</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q2',this,false)">B) A type of crystal found in deep caves<br><span style="font-size:0.85em;color:#999">在深层洞穴中发现的晶体</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q2',this,false)">C) Ancient dinosaur bones<br><span style="font-size:0.85em;color:#999">古代恐龙骨骼</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q2',this,false)">D) Pieces of an asteroid<br><span style="font-size:0.85em;color:#999">小行星的碎片</span></div>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q3">
+    <div class="quiz-q">
+      3. Why was the asteroid crater a good home for early microbes?
+      <span class="q-zh">为什么陨石坑是早期微生物的好家？</span>
+    </div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q3',this,false)">A) It was very cold and dark<br><span style="font-size:0.85em;color:#999">那里非常寒冷黑暗</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q3',this,true)">B) It created a warm, mineral-rich lake<br><span style="font-size:0.85em;color:#999">它形成了一个温暖、富含矿物的湖泊 ✅</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q3',this,false)">C) It was full of salt water<br><span style="font-size:0.85em;color:#999">那里充满盐水</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q3',this,false)">D) It had no other living things<br><span style="font-size:0.85em;color:#999">那里没有其他生物</span></div>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q4">
+    <div class="quiz-q">
+      4. What does "oxygen oases" mean in this story?
+      <span class="q-zh">故事中的"oxygen oases"是什么意思？</span>
+    </div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q4',this,false)">A) Deserts with lots of plants<br><span style="font-size:0.85em;color:#999">有很多植物的沙漠</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q4',this,true)">B) Special places where oxygen-producing microbes could grow<br><span style="font-size:0.85em;color:#999">产氧微生物可以生长的特殊场所 ✅</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q4',this,false)">C) Swimming pools filled with oxygen<br><span style="font-size:0.85em;color:#999">充满氧气的游泳池</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q4',this,false)">D) Islands with clean air<br><span style="font-size:0.85em;color:#999">空气干净的岛屿</span></div>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q5">
+    <div class="quiz-q">
+      5. Why does this discovery matter for Mars exploration?
+      <span class="q-zh">为什么这个发现对火星探索很重要？</span>
+    </div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q5',this,false)">A) Mars has the same kind of animals as Earth<br><span style="font-size:0.85em;color:#999">火星有和地球一样的动物</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q5',this,true)">B) Similar craters on Mars might hide evidence of past life<br><span style="font-size:0.85em;color:#999">火星上类似的陨石坑可能隐藏着过去生命的证据 ✅</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q5',this,false)">C) Scientists want to move to Mars<br><span style="font-size:0.85em;color:#999">科学家想搬到火星上去</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q5',this,false)">D) Mars has more oxygen than Earth<br><span style="font-size:0.85em;color:#999">火星比地球有更多氧气</span></div>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q6">
+    <div class="quiz-q">
+      6. What does Pola want us to remember the next time we breathe?
+      <span class="q-zh">Pola希望我们下次呼吸时记住什么？</span>
+    </div>
+    <div class="quiz-options">
+      <div class="quiz-opt" onclick="checkAnswer('q6',this,false)">A) To breathe more slowly<br><span style="font-size:0.85em;color:#999">呼吸得更慢一些</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q6',this,true)">B) An ancient space rock might have helped make oxygen possible<br><span style="font-size:0.85em;color:#999">一块古老的太空岩石可能帮助了氧气的产生 ✅</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q6',this,false)">C) To hold our breath for a long time<br><span style="font-size:0.85em;color:#999">长时间屏住呼吸</span></div>
+      <div class="quiz-opt" onclick="checkAnswer('q6',this,false)">D) That air pollution is getting worse<br><span style="font-size:0.85em;color:#999">空气污染越来越严重</span></div>
+    </div>
+    <div class="quiz-feedback" id="q6-fb"></div>
+  </div>
+
+  <div class="score-box" id="scoreBox" style="display:none;">
+    Your score: <span id="scoreText">0</span> / 6
+  </div>
+</div>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<div class="section" id="extend">
+  <div class="section-title">🔬 Knowledge Extension</div>
+  <div class="section-subtitle">中文知识扩展 — 深入了解今天的科学话题</div>
+
+  <div class="ext-card">
+    <h3>🌋 什么是陨石坑？</h3>
+    <p>陨石坑（Impact Crater）是小行星、彗星或陨石高速撞击行星或卫星表面时形成的圆形凹坑。地球上已确认的陨石坑大约有190个，但许多已被侵蚀或隐藏在海洋之下。最大的已知陨石坑是位于南非的弗里德堡陨石坑（Vredefort Crater），直径约300公里，形成于约20亿年前！</p>
+    <p>本期新闻中的陕川陨石坑（Hapcheon Crater）是朝鲜半岛上第一个被确认的陨石坑，于2021年由韩国地质资源研究院（KIGAM）的科学家正式确认。</p>
+  </div>
+
+  <div class="ext-card">
+    <h3>🦠 叠层石：地球上最古老的生物化石</h3>
+    <p>叠层石（Stromatolites）是地球上已知最古老的生命证据，其化石记录可以追溯到至少<strong>35亿年前</strong>！它们是由蓝藻（Cyanobacteria）等微生物在浅水环境中逐层生长、沉积矿物而形成的层状岩石结构。</p>
+    <p>有趣的是，活着的叠层石至今仍然存在于地球上！澳大利亚西部的鲨鱼湾（Shark Bay）是世界上最大的活叠层石群落所在地，被列入联合国教科文组织世界遗产名录。</p>
+  </div>
+
+  <div class="ext-card">
+    <h3>💨 大氧化事件：地球的"呼吸革命"</h3>
+    <p>大约<strong>24亿年前</strong>，地球大气中的氧气含量从几乎为零急剧上升。这一重大事件被称为"大氧化事件"（Great Oxidation Event, GOE），是地球生命历史上最重要的转折点之一。</p>
+    <p>蓝藻是第一批通过光合作用大规模产生游离氧气的生物。大氧化事件之前，地球大气主要由氮气、二氧化碳和甲烷组成——对大多数现代生物来说是致命的！氧气的出现彻底改变了地球的环境，也为后来复杂生命（包括我们人类）的演化铺平了道路。</p>
+  </div>
+
+  <div class="ext-card">
+    <h3>🔴 火星上的陨石坑：搜寻生命的宝库？</h3>
+    <p>科学家们认为，火星在数十亿年前拥有温暖、湿润的气候，表面有河流、湖泊甚至海洋。那时火星上的环境可能与早期地球的陨石坑湖泊非常相似。</p>
+    <p>如果生命曾在火星上出现，那么陨石坑中的热液湖泊可能保留了微生物存在的化学或化石证据。NASA的"毅力号"火星车目前正在火星上的耶泽罗陨石坑（Jezero Crater）中工作——那里曾经是一个古老的湖泊三角洲，正是搜寻火星远古生命遗迹的理想地点！</p>
+  </div>
+
+  <div class="ext-card">
+    <h3>🇰🇷 韩国地质资源研究院（KIGAM）</h3>
+    <p>韩国地质资源研究院（Korea Institute of Geoscience and Mineral Resources，简称KIGAM）是韩国政府资助的地球科学研究机构，专注于地质学、矿产资源和地球系统科学。本次研究的首席科学家林在秀博士（Dr. Jaesoo Lim）及其团队的研究成果发表在《Communications Earth & Environment》期刊上，这是Nature Portfolio旗下的权威地球科学期刊。</p>
+  </div>
+</div>
+
+<!-- ============ 7. 关于本课 ============ -->
+<div class="section" id="about">
+  <div class="section-title">ℹ️ About This Lesson</div>
+  <div class="section-subtitle">关于本课 — 学习目标与建议</div>
+
+  <div class="about-card">
+    <h3>📚 学习目标</h3>
+    <ul>
+      <li>掌握10个核心科学词汇（crater, oxygen, stromatolite, microbe, impact, thrive, flourish, destructive, ancient, discovery）</li>
+      <li>学会5个实用句型，包括"What if I told you..."和"Here's the coolest part"等口语表达</li>
+      <li>理解5个语法点：被动语态、"might have + 过去分词"、最高级用法、假设性提问和"next time"从句</li>
+      <li>了解陨石坑、叠层石、大氧化事件以及火星生命探索等科学知识</li>
+      <li>能够用自己的话复述本期新闻的主要内容</li>
+    </ul>
+  </div>
+
+  <div class="about-card">
+    <h3>💡 学习建议</h3>
+    <ul>
+      <li><strong>第一步：</strong>阅读全文，点击高亮词汇查看释义，尝试理解每个段落的大意</li>
+      <li><strong>第二步：</strong>使用 ▶ 按钮逐段播放朗读，跟读模仿语调和节奏</li>
+      <li><strong>第三步：</strong>学习词汇表，点击 🔊 聆听每个单词的发音，大声跟读</li>
+      <li><strong>第四步：</strong>学习句型和语法点，尝试用这些结构造自己的句子</li>
+      <li><strong>第五步：</strong>完成练习测验，检验理解程度</li>
+      <li><strong>第六步：</strong>阅读知识扩展部分，激发对科学的兴趣和好奇心</li>
+    </ul>
+  </div>
+
+  <div class="about-card">
+    <h3>🎯 难度说明</h3>
+    <ul>
+      <li><strong>英语水平：</strong>B1（中等水平，适合10-12岁学习者）</li>
+      <li><strong>话题领域：</strong>地球科学、天文学、古生物学</li>
+      <li><strong>预计学习时间：</strong>20-30分钟</li>
+      <li><strong>音频功能：</strong>使用浏览器内置语音合成（Web Speech API），无需联网</li>
+    </ul>
+  </div>
+
+  <div class="about-card">
+    <h3>🖨️ 打印版本</h3>
+    <p style="color:#555;line-height:1.8;">点击下方按钮可打印本课内容。打印版本会自动隐藏侧边栏和播放按钮，方便作为纸质学习材料使用。</p>
+    <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+  </div>
+</div>
+
+</div><!-- end main-content -->
+
+<script>
+// ========== Navigation ==========
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo(0, 0);
+  updateProgress();
+  // Close sidebar on mobile
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ========== Progress Bar ==========
+function updateProgress() {
+  const sections = ['reading','vocab','patterns','grammar','quiz','extend','about'];
+  const active = document.querySelector('.section.active');
+  const idx = sections.indexOf(active.id);
+  const pct = ((idx + 1) / sections.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+window.addEventListener('scroll', () => {
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+});
+
+// ========== Quiz ==========
+let score = 0;
+const answered = {};
+
+function checkAnswer(qId, el, isCorrect) {
+  if (answered[qId]) return;
+  answered[qId] = true;
+
+  const options = el.parentElement.querySelectorAll('.quiz-opt');
+  options.forEach(o => o.classList.add('disabled'));
+
+  const fb = document.getElementById(qId + '-fb');
+  fb.classList.add('show');
+
+  if (isCorrect) {
+    el.classList.add('correct');
+    fb.classList.add('correct-fb');
+    fb.textContent = '✅ 正确！太棒了！Great job!';
+    score++;
+  } else {
+    el.classList.add('wrong');
+    fb.classList.add('wrong-fb');
+    fb.textContent = '❌ 再想想哦！Try again — review the text above for clues.';
+    // Highlight the correct answer
+    options.forEach(o => {
+      if (o.getAttribute('onclick').includes('true')) {
+        o.classList.add('correct');
+      }
+    });
+  }
+
+  // Update score display
+  const totalAnswered = Object.keys(answered).length;
+  if (totalAnswered === 6) {
+    const box = document.getElementById('scoreBox');
+    box.style.display = 'block';
+    document.getElementById('scoreText').textContent = score;
+  }
+}
+
+// ========== Web Speech API ==========
+let currentUtterance = null;
+let currentPlayBtn = null;
+let currentSpeakBtn = null;
+let selectedVoice = null;
+
+const segmentTexts = [
+  "What if I told you that a giant rock from space helped you breathe right now? Sounds crazy, right? Well, scientists in South Korea just found something amazing inside a real asteroid crater — and it might change everything we know about how oxygen appeared on Earth!",
+  "Inside the Hapcheon crater, researchers discovered stromatolites — strange rocky layers built by tiny living microbes billions of years ago. These little creatures were some of the first organisms ever to produce oxygen! The asteroid impact created a warm, mineral-rich lake — the perfect home for these ancient oxygen factories to grow and thrive.",
+  "This discovery tells us that asteroid impacts weren't just destructive — they could have created special oxygen oases where life could flourish. And here's the coolest part: scientists think the same kind of craters might exist on Mars right now, hiding secrets about whether life ever existed there too!",
+  "So next time you take a deep breath, remember — you might have an ancient space rock to thank for it! That's all for today's Pola News. Stay curious, stay awesome, and I'll see you next time! Bye!"
+];
+
+function loadVoices() {
+  const voices = speechSynthesis.getVoices();
+  if (voices.length === 0) return;
+
+  // Priority: Enhanced English male > Daniel > Alex > Microsoft Mark > any English male > any English
+  const priorities = [
+    v => v.name.includes('Enhanced') && v.lang.startsWith('en') && v.name.toLowerCase().includes('male'),
+    v => v.name === 'Daniel',
+    v => v.name === 'Alex',
+    v => v.name === 'Microsoft Mark',
+    v => v.lang.startsWith('en') && v.name.toLowerCase().includes('male'),
+    v => v.lang.startsWith('en')
+  ];
+
+  for (const test of priorities) {
+    const found = voices.find(test);
+    if (found) { selectedVoice = found; break; }
+  }
+}
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+function stopCurrent() {
+  if (currentUtterance) {
+    speechSynthesis.cancel();
+    currentUtterance = null;
+  }
+  if (currentPlayBtn) {
+    currentPlayBtn.textContent = '▶';
+    currentPlayBtn.classList.remove('playing');
+    currentPlayBtn = null;
+  }
+  if (currentSpeakBtn) {
+    currentSpeakBtn.textContent = '🔊';
+    currentSpeakBtn.classList.remove('playing');
+    currentSpeakBtn = null;
+  }
+}
+
+function playSegment(idx, btn) {
+  stopCurrent();
+  const text = segmentTexts[idx];
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  if (selectedVoice) utterance.voice = selectedVoice;
+
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+  currentPlayBtn = btn;
+  currentUtterance = utterance;
+
+  utterance.onend = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    currentPlayBtn = null;
+    currentUtterance = null;
+  };
+  speechSynthesis.speak(utterance);
+}
+
+function speakWord(word, btn) {
+  stopCurrent();
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = 'en-US';
+  utterance.rate = 0.97;
+  utterance.pitch = 1.0;
+  if (selectedVoice) utterance.voice = selectedVoice;
+
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+  currentSpeakBtn = btn;
+  currentUtterance = utterance;
+
+  utterance.onend = () => {
+    btn.textContent = '🔊';
+    btn.classList.remove('playing');
+    currentSpeakBtn = null;
+    currentUtterance = null;
+  };
+  speechSynthesis.speak(utterance);
+}
+
+// Initialize progress
+updateProgress();
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

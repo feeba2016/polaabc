@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pola News — A Grapefruit in Space | 互动英语学习</title>
+  <style>
+    :root {
+      --primary: #FF7043;
+      --primary-dark: #E64A19;
+      --primary-light: #FFCCBC;
+      --accent: #FFD54F;
+      --accent-dark: #FFC107;
+      --bg-start: #1a1a2e;
+      --bg-mid: #16213e;
+      --bg-end: #0f3460;
+      --sidebar-bg: rgba(255,255,255,0.06);
+      --sidebar-active: rgba(255,112,67,0.25);
+      --card-bg: rgba(255,255,255,0.08);
+      --card-border: rgba(255,255,255,0.12);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255,255,255,0.72);
+      --text-muted: rgba(255,255,255,0.45);
+      --highlight: #FFD54F;
+      --highlight-bg: rgba(255,213,79,0.25);
+      --success: #66BB6A;
+      --error: #ef5350;
+      --sidebar-width: 260px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-mid) 50%, var(--bg-end) 100%);
+      min-height: 100vh;
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    /* ── Progress Bar ── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      z-index: 1000;
+      transition: width 0.3s ease;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--sidebar-bg);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--card-border);
+      overflow-y: auto;
+      z-index: 900;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-emoji {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .episode-tag {
+      margin-top: 12px;
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 12px 0;
+    }
+
+    .nav-item {
+      padding: 13px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--sidebar-active);
+      color: var(--primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Main Content ── */
+    #main {
+      margin-left: var(--sidebar-width);
+      padding: 32px 40px;
+      min-height: 100vh;
+      max-width: 900px;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── Reading Section ── */
+    .segment-block {
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .segment-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .segment-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .segment-text {
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--text-primary);
+    }
+
+    .highlight-word {
+      background: var(--highlight-bg);
+      color: var(--highlight);
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: help;
+      position: relative;
+      border-bottom: 2px dashed var(--accent);
+    }
+
+    .highlight-word:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.92);
+      color: white;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      z-index: 100;
+      max-width: 260px;
+      white-space: normal;
+      pointer-events: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    /* Audio Button */
+    .audio-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      background: var(--primary);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: 12px;
+      vertical-align: middle;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .audio-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.1);
+    }
+
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(255,112,67,0.6); }
+      70% { box-shadow: 0 0 0 10px rgba(255,112,67,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,112,67,0); }
+    }
+
+    .audio-btn.playing {
+      animation: pulse-ring 1.2s ease-out infinite;
+      background: var(--accent-dark);
+    }
+
+    /* ── Vocabulary Cards ── */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .vocab-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+      transition: all 0.2s;
+    }
+
+    .vocab-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .vocab-word {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vocab-sound {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .vocab-pos {
+      display: inline-block;
+      font-size: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .vocab-meaning {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .vocab-example {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      border-left: 3px solid var(--primary);
+      padding-left: 10px;
+      line-height: 1.5;
+    }
+
+    .vocab-speak-btn {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 5px 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .vocab-speak-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* ── Sentence Patterns ── */
+    .pattern-item {
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px;
+      border: 1px solid var(--card-border);
+    }
+
+    .pattern-english {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 6px;
+      font-family: 'Georgia', serif;
+    }
+
+    .pattern-chinese {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .pattern-practice {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      line-height: 1.6;
+    }
+
+    /* ── Grammar Points ── */
+    .grammar-item {
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .grammar-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .grammar-en {
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .grammar-zh {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .grammar-example {
+      font-size: 13px;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      font-family: 'Georgia', serif;
+    }
+
+    .grammar-quiz {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Quiz ── */
+    .quiz-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-q {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .quiz-option:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--primary);
+      color: var(--text-primary);
+    }
+
+    .quiz-option.selected {
+      background: rgba(255,112,67,0.2);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .quiz-option.correct {
+      background: rgba(102,187,106,0.2);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .quiz-option.wrong {
+      background: rgba(239,83,80,0.2);
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .quiz-letter {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .quiz-option.selected .quiz-letter,
+    .quiz-option.correct .quiz-letter,
+    .quiz-option.wrong .quiz-letter {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.correct-fb {
+      background: rgba(102,187,106,0.15);
+      color: var(--success);
+    }
+    .quiz-feedback.wrong-fb {
+      background: rgba(239,83,80,0.15);
+      color: var(--error);
+    }
+
+    .quiz-check-btn {
+      margin-top: 10px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 20px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .quiz-check-btn:hover { background: var(--primary-dark); }
+
+    /* ── Chinese Extension ── */
+    .knowledge-block {
+      margin-bottom: 24px;
+    }
+
+    .knowledge-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .knowledge-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.9;
+    }
+
+    .fact-box {
+      background: rgba(255,213,79,0.1);
+      border: 1px solid rgba(255,213,79,0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 14px 0;
+    }
+
+    .fact-box-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .fact-box-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ── About Section ── */
+    .about-section {
+      margin-bottom: 24px;
+    }
+
+    .about-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-light);
+      margin-bottom: 10px;
+    }
+
+    .goal-list {
+      list-style: none;
+    }
+
+    .goal-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .goal-list li::before {
+      content: "✦";
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .print-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 10px 24px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .print-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* ── Mobile Toggle ── */
+    #sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 1100;
+      background: var(--primary);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    #sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 850;
+    }
+
+    /* ── Mobile Styles ── */
+    @media (max-width: 768px) {
+      #sidebar {
+        transform: translateX(-100%);
+      }
+
+      #sidebar.open {
+        transform: translateX(0);
+      }
+
+      #sidebar-toggle {
+        display: block;
+      }
+
+      #main {
+        margin-left: 0;
+        padding: 70px 20px 32px;
+      }
+    }
+
+    /* ── Print Styles ── */
+    @media print {
+      #sidebar, #sidebar-toggle, #sidebar-overlay,
+      .audio-btn, .vocab-speak-btn, .quiz-check-btn,
+      #progress-bar { display: none !important; }
+
+      body {
+        background: white !important;
+        color: #222 !important;
+      }
+
+      #main {
+        margin-left: 0 !important;
+        padding: 0 !important;
+      }
+
+      .card {
+        background: white !important;
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+      }
+
+      .highlight-word {
+        background: #fff9c4 !important;
+        color: #333 !important;
+        border-bottom: 2px dashed #f9a825 !important;
+      }
+
+      .quiz-item { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- Mobile Toggle -->
+<button id="sidebar-toggle" onclick="toggleSidebar()">☰ Pola</button>
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <a class="sidebar-logo" href="#">
+      <span class="logo-emoji">🦘</span>
+      <div>
+        <div class="logo-text">Pola News</div>
+        <div class="logo-sub">Pola学英语</div>
+      </div>
+    </a>
+    <div class="episode-tag">Episode · 2026-05-12</div>
+  </div>
+  <ul class="nav-list">
+    <li class="nav-item active" data-section="reading">
+      <span class="nav-icon">📖</span> 全文阅读
+    </li>
+    <li class="nav-item" data-section="vocabulary">
+      <span class="nav-icon">📝</span> 词汇表
+    </li>
+    <li class="nav-item" data-section="sentences">
+      <span class="nav-icon">🗣️</span> 句型练习
+    </li>
+    <li class="nav-item" data-section="grammar">
+      <span class="nav-icon">🔧</span> 语法点
+    </li>
+    <li class="nav-item" data-section="quiz">
+      <span class="nav-icon">❓</span> 练习测验
+    </li>
+    <li class="nav-item" data-section="knowledge">
+      <span class="nav-icon">🌏</span> 中文知识扩展
+    </li>
+    <li class="nav-item" data-section="about">
+      <span class="nav-icon">ℹ️</span> 关于本课
+    </li>
+  </ul>
+</nav>
+
+<!-- Main Content -->
+<main id="main">
+
+  <!-- ── Section 1: Reading ── -->
+  <div id="reading" class="section active">
+    <div class="card">
+      <div class="card-title">📖 全文阅读 — A Grapefruit in Space</div>
+      <div class="card-subtitle">点击播放按钮 🔊 听 Pola 朗读全文</div>
+
+      <!-- Segment 1 -->
+      <div class="segment-block">
+        <div class="segment-label">🎬 Segment 1 — Hook</div>
+        <div class="segment-text">
+          Hey there, space explorers! Want to hear something amazing? A team of university students — just like you — just built a tiny tool and sent it to the International Space Station. It's about the size of a <span class="highlight-word" data-tip="grapefruit 葡萄柚，一种圆圆的水果，用来形容大小">grapefruit</span>. And it can do something incredible!
+          <button class="audio-btn" onclick="playSegment(0, this)">▶</button>
+        </div>
+      </div>
+
+      <!-- Segment 2 -->
+      <div class="segment-block">
+        <div class="segment-label">🎬 Segment 2 — Story</div>
+        <div class="segment-text">
+          This little device is called <span class="highlight-word" data-tip="OSCAR-QUBE 钻石传感器项目的名称">OSCAR-QUBE</span>. University students in <span class="highlight-word" data-tip="Belgium 比利时，欧洲西北部国家">Belgium</span> built it. It has a tiny <span class="highlight-word" data-tip="diamond 钻石，一种非常硬的宝石">diamond</span> inside — smaller than a <span class="highlight-word" data-tip="lentil 扁豆，一种很小的豆子">lentil</span>! The diamond glows differently when it's near a <span class="highlight-word" data-tip="magnet 磁铁">magnet</span>. Scientists use that glow to draw a map of Earth's <span class="highlight-word" data-tip="magnetic field 磁场，看不见但能保护地球">invisible magnetic field</span>. The tool worked in space for ten whole months!
+          <button class="audio-btn" onclick="playSegment(1, this)">▶</button>
+        </div>
+      </div>
+
+      <!-- Segment 3 -->
+      <div class="segment-block">
+        <div class="segment-label">🎬 Segment 3 — Why It Matters</div>
+        <div class="segment-text">
+          Why does this matter? Earth's <span class="highlight-word" data-tip="magnetic field 磁场，像地球的保护盾">magnetic field</span> is like an <span class="highlight-word" data-tip="invisible shield 看不见的盾牌，保护我们">invisible shield</span>. It protects us from <span class="highlight-word" data-tip="dangerous particles 危险粒子，来自太阳">dangerous particles</span> from the Sun. It helps <span class="highlight-word" data-tip="compasses 指南针，帮助我们辨别方向">compasses</span> point north. And it keeps our <span class="highlight-word" data-tip="satellites 人造卫星，帮助通讯和导航">satellites</span> safe. Now, this little grapefruit-sized tool is helping scientists understand our planet better — all thanks to students!
+          <button class="audio-btn" onclick="playSegment(2, this)">▶</button>
+        </div>
+      </div>
+
+      <!-- Segment 4 -->
+      <div class="segment-block">
+        <div class="segment-label">🎬 Segment 4 — Sign-off</div>
+        <div class="segment-text">
+          Pretty cool, right? A tiny diamond, a team of students, and one giant step for science. I'm Pola, and this is Pola News. Keep looking up — you never know what amazing thing you'll discover next! See you tomorrow!
+          <button class="audio-btn" onclick="playSegment(3, this)">▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 2: Vocabulary ── -->
+  <div id="vocabulary" class="section">
+    <div class="card">
+      <div class="card-title">📝 词汇表 — Vocabulary</div>
+      <div class="card-subtitle">共10个核心词汇，点击 🔊 听发音</div>
+
+      <div class="vocab-grid">
+
+        <div class="vocab-card">
+          <div class="vocab-word">quantum <span class="vocab-sound">/ˈkwɒn.təm/</span></div>
+          <div class="vocab-pos">adj. / n.</div>
+          <div class="vocab-meaning">量子的；量子（物理学中最小的能量单位）</div>
+          <div class="vocab-example">"A tiny quantum sensor mapped Earth's magnetic field."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('quantum', this)">🔊 quantum</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">magnetic field <span class="vocab-sound">/mæɡˈnet.ɪk fiːld/</span></div>
+          <div class="vocab-pos">n.</div>
+          <div class="vocab-meaning">磁场；地球周围看不见的磁力区域</div>
+          <div class="vocab-example">"The diamond glows near a magnetic field."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('magnetic field', this)">🔊 magnetic field</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">diamond <span class="vocab-sound">/ˈdaɪə.mənd/</span></div>
+          <div class="vocab-pos">n.</div>
+          <div class="vocab-meaning">钻石；已知最硬的天然宝石</div>
+          <div class="vocab-example">"A tiny diamond the size of a lentil glows in space."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('diamond', this)">🔊 diamond</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">compass <span class="vocab-sound">/ˈkʌm.pəs/</span></div>
+          <div class="vocab-pos">n.</div>
+          <div class="vocab-meaning">指南针；利用磁场辨别方向的工具</div>
+          <div class="vocab-example">"Compasses point north because of Earth's magnetic field."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('compass', this)">🔊 compass</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">satellite <span class="vocab-sound">/ˈsæt.əl.aɪt/</span></div>
+          <div class="vocab-pos">n.</div>
+          <div class="vocab-meaning">人造卫星；绕行星运行的人类制造物体</div>
+          <div class="vocab-example">"The ISS is a space station and also a satellite."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('satellite', this)">🔊 satellite</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">sensor <span class="vocab-sound">/ˈsen.sɔːr/</span></div>
+          <div class="vocab-pos">n.</div>
+          <div class="vocab-meaning">传感器；探测并测量某种事物的设备</div>
+          <div class="vocab-example">"The quantum sensor worked in space for ten months."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('sensor', this)">🔊 sensor</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">shield <span class="vocab-sound">/ʃiːld/</span></div>
+          <div class="vocab-pos">n. / v.</div>
+          <div class="vocab-meaning">盾牌；保护……免受伤害</div>
+          <div class="vocab-example">"Earth's magnetic field acts like an invisible shield."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('shield', this)">🔊 shield</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">glow <span class="vocab-sound">/ɡləʊ/</span></div>
+          <div class="vocab-pos">v.</div>
+          <div class="vocab-meaning">发光；发出柔和的光</div>
+          <div class="vocab-example">"The diamond glows differently near a magnet."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('glow', this)">🔊 glow</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">particle <span class="vocab-sound">/ˈpɑː.tɪ.kəl/</span></div>
+          <div class="vocab-pos">n.</div>
+          <div class="vocab-meaning">粒子；极小的物质单元</div>
+          <div class="vocab-example">"The Sun sends dangerous particles toward Earth."</div>
+          <button class="vocab-speak-btn" onclick="speakWord('particle', this)">🔊 particle</button>
+        </div>
+
+        <div class="vocab-card">
+          <div class="vocab-word">incredible <span class="vocab-sound">/ɪnˈkred.ɪ.bəl/</span></div>
+          <div class="vocab-pos">adj.</div>
+          <div class="vocab-meaning">难以置信的；惊人的</div>
+          <div class="vocab-example">"Want to hear something incredible? A tiny tool in space!"</div>
+          <button class="vocab-speak-btn" onclick="speakWord('incredible', this)">🔊 incredible</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 3: Sentences ── -->
+  <div id="sentences" class="section">
+    <div class="card">
+      <div class="card-title">🗣️ 句型练习 — Useful Sentence Patterns</div>
+      <div class="card-subtitle">从课文中提取的5个实用句型，试着模仿造句</div>
+
+      <div class="pattern-item">
+        <div class="pattern-english">Want to hear something amazing?</div>
+        <div class="pattern-chinese">想听一个惊人的消息吗？— 用于引出有趣话题，引起听众兴趣</div>
+        <div class="pattern-practice">Try it: "Want to hear something <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>?" — 填入形容词（incredible / funny / cool）</div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-english">A team of students built it.</div>
+        <div class="pattern-chinese">一群学生建造了它 — 介绍做某事的人群身份，简洁有力</div>
+        <div class="pattern-practice">Try it: "A team of scientists <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> a robot." — 填入动词（built / made / created）</div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-english">It's about the size of a grapefruit.</div>
+        <div class="pattern-chinese">大约有葡萄柚那么大 — 用熟悉事物来比喻大小，适合儿童理解</div>
+        <div class="pattern-practice">Try it: "The phone is about the size of <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>." — 填入熟悉物品（a book / your hand / a cookie）</div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-english">It has a tiny diamond inside — smaller than a lentil!</div>
+        <div class="pattern-chinese">里面有一颗比扁豆还小的钻石 — 先说整体，再强调对比，层次分明</div>
+        <div class="pattern-practice">Try it: "It has a big engine inside — faster than <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>!" — 填入对比物（a rocket / a plane / a bird）</div>
+      </div>
+
+      <div class="pattern-item">
+        <div class="pattern-english">It protects us from dangerous particles from the Sun.</div>
+        <div class="pattern-chinese">它保护我们免受太阳危险粒子的伤害 — 解释功能原因，有理有据</div>
+        <div class="pattern-practice">Try it: "The umbrella protects us from <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>." — 填入事物（rain / sun / snow）</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Section 4: Grammar ── -->
+  <div id="grammar" class="section">
+    <div class="card">
+      <div class="card-title">🔧 语法点 — Grammar Points</div>
+      <div class="card-subtitle">本课涉及的5个重要语法点</div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">① 一般过去时 (Simple Past Tense)</div>
+        <div class="grammar-en">Subject + Verb(past) + ...</div>
+        <div class="grammar-zh">描述已经发生的事。句中：students built it / Scientists used that glow</div>
+        <div class="grammar-example">A team of university students in Belgium <strong>built</strong> it.<br>Scientists <strong>used</strong> that glow to draw a map.</div>
+        <div class="grammar-quiz">练习：用一般过去时改写 "The sensor works for 10 months." → The sensor <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">② 一般现在时 (Simple Present Tense)</div>
+        <div class="grammar-en">Subject + Verb(base/infinitive) + s/es + ...</div>
+        <div class="grammar-zh">描述普遍事实、常态现象。句中：It protects us / It helps compasses point north</div>
+        <div class="grammar-example">Earth's magnetic field <strong>protects</strong> us from dangerous particles.<br>It <strong>helps</strong> compasses point north.</div>
+        <div class="grammar-quiz">练习：The Sun (send) ________ dangerous particles every day. → sends</div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">③ 定语从句 (Relative Clause)</div>
+        <div class="grammar-en">Noun + who/which/that + clause</div>
+        <div class="grammar-zh">用 who 或 that 修饰名词，提供更多信息</div>
+        <div class="grammar-example">A team of students <strong>who</strong> are from Belgium built it.<br>A tool <strong>that</strong> is the size of a grapefruit went to space.</div>
+        <div class="grammar-quiz">练习：The tool (which / who) is called OSCAR-QUBE worked in space.</div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">④ 形容词比较级 (Comparative Adjectives)</div>
+        <div class="grammar-en">adj. + -er / more + adj. + than</div>
+        <div class="grammar-zh">两者比较，大小、高低、多少的对比</div>
+        <div class="grammar-example">The diamond is <strong>smaller than</strong> a lentil!<br>This is <strong>more exciting than</strong> a regular science class.</div>
+        <div class="grammar-quiz">练习：The ISS is (big) ________ than a normal plane. → bigger</div>
+      </div>
+
+      <div class="grammar-item">
+        <div class="grammar-title">⑤ 介词 in/at/on 表示时间 (Prepositions of Time)</div>
+        <div class="grammar-en">in + 月份/年份/时间段；at + 具体时刻；on + 具体日期</div>
+        <div class="grammar-zh">in space, in Belgium, at dawn, on the table 等不同用法</div>
+        <div class="grammar-example">The tool worked <strong>in</strong> space for ten months.<br>A compass lies <strong>on</strong> a rock.</div>
+        <div class="grammar-quiz">练习：The experiment started ________ 2021. (in / on / at) → in</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Section 5: Quiz ── -->
+  <div id="quiz" class="section">
+    <div class="card">
+      <div class="card-title">❓ 练习测验 — Comprehension Quiz</div>
+      <div class="card-subtitle">6道选择题，检验你对课文的理解</div>
+
+      <div id="quiz-container"></div>
+
+      <button class="quiz-check-btn" onclick="checkQuiz()">📋 检查答案</button>
+      <div id="quiz-result" style="margin-top:16px;font-size:15px;font-weight:700;"></div>
+    </div>
+  </div>
+
+  <!-- ── Section 6: Chinese Knowledge ── -->
+  <div id="knowledge" class="section">
+    <div class="card">
+      <div class="card-title">🌏 中文知识扩展 — Background Knowledge</div>
+      <div class="card-subtitle">深入了解课文中涉及的知识点</div>
+
+      <div class="knowledge-block">
+        <div class="knowledge-title">🔭 什么是量子传感器？</div>
+        <div class="knowledge-text">
+          量子传感器是一种利用量子力学原理（物质在极小尺度下的行为规律）来精确测量物理量的设备。本课中的传感器使用了"氮空位钻石"（Nitrogen-Vacancy Diamond）——一种人工制造的"不完美"钻石，里面有微小的缺陷。当激光照射这些缺陷时，它们会发出荧光（发出光来），而荧光的亮度会随着附近磁场的变化而改变。科学家通过测量这种亮度变化，就能精确计算出磁场强度！
+        </div>
+      </div>
+
+      <div class="fact-box">
+        <div class="fact-box-title">💎 有趣事实：钻石除了闪闪发光还能做什么？</div>
+        <div class="fact-box-text">
+          钻石是已知最硬的天然材料（摩氏硬度10级）。但这节课告诉我们，钻石还能当"磁场探测器"！科学家把钻石切成比扁豆还小的薄片，里面包含一个氮原子和相邻的"空位"——这两个"缺陷"就像微型的天线，能感知周围的磁场。这项技术在医学成像、地下矿藏探测、导航系统等领域都有巨大潜力。
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <div class="knowledge-title">🌍 地球磁场的三个重要作用</div>
+        <div class="knowledge-text">
+          <strong>1. 保护盾：</strong>太阳不断向外喷射"太阳风"——一种带电粒子流。如果没有地球磁场，这些粒子会直接撞击大气层，甚至影响地面的人和建筑。<br><br>
+          <strong>2. 指南针的秘密：</strong>指南针里有一根小磁针，磁针的北极会被地球磁场的北极吸引，所以它总是指向北方。这个原理让人类航海、探险了几千年。<br><br>
+          <strong>3. 保护卫星和电网：</strong>强烈的太阳风暴会引发"地磁暴"，可能干扰卫星通讯、GPS定位，甚至导致大面积停电。测量磁场能帮助科学家提前预警！
+        </div>
+      </div>
+
+      <div class="fact-box">
+        <div class="fact-box-title">🚀 ISS：太空里的科学实验室</div>
+        <div class="fact-box-text">
+          国际空间站（International Space Station, ISS）是一个由16个国家合作建造的大型太空实验室，距离地面约400公里。它每90分钟绕地球一圈，宇航员们在里面生活和工作，进行各种科学实验。本课中的量子传感器就安装在 ISS 内部，收集了10个月的地球磁场数据。这是学生项目第一次在太空站进行如此长时间的量子传感实验！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <div class="knowledge-title">🇧🇪 比利时大学生的小大梦想</div>
+        <div class="knowledge-text">
+          建造这个量子传感器的是比利时哈塞尔特大学（Hasselt University）的硕士和博士生团队。他们的项目叫 OSCAR-QUBE（全称：Optical Sensors Based on CARbon materials, QUantum BElgium）。这个项目在欧洲航天局（ESA）的"Orbit Your Thesis！"计划支持下，于2021年8月搭乘 SpaceX 货运火箭发射升空，送到 ISS 做实验。项目团队还在2021年获得了著名的"Hans von Muldau 奖"！这说明：只要你敢想敢做，年轻学生也能参与太空科学！
+        </div>
+      </div>
+
+      <div class="knowledge-block">
+        <div class="knowledge-title">🎯 未来展望：量子传感的无限可能</div>
+        <div class="knowledge-text">
+          这只是第一步！下一步，科学家计划把这个传感器放到空间站外部（避免站内电子设备的干扰），获得更精确的测量。未来，这项技术可以：<br>
+          ✦ 帮助月球车在月球表面无 GPS 环境下导航<br>
+          ✦ 从轨道上探测地下矿藏和水资源<br>
+          ✦ 监测地震和火山活动前的磁场异常<br>
+          ✦ 建造更小、更便宜的卫星，组成"卫星网络"监测全球磁场
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Section 7: About ── -->
+  <div id="about" class="section">
+    <div class="card">
+      <div class="card-title">ℹ️ 关于本课 — About This Lesson</div>
+      <div class="card-subtitle">学习目标与建议</div>
+
+      <div class="about-section">
+        <div class="about-title">🎯 学习目标</div>
+        <ul class="goal-list">
+          <li>理解一篇英语科普新闻的结构（Hook → Story → Why it matters → Sign-off）</li>
+          <li>掌握10个与太空科学相关的核心词汇</li>
+          <li>学会使用5个实用句型进行英语表达</li>
+          <li>理解一般过去时、一般现在时、定语从句等B1水平语法</li>
+          <li>了解量子传感器和地球磁场的基本概念</li>
+          <li>能够用英语简单描述一项科学发现</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <div class="about-title">💡 学习建议</div>
+        <ul class="goal-list">
+          <li><strong>先听后读：</strong>点击播放按钮，听 Pola 朗读，然后自己跟读，模仿语调和节奏</li>
+          <li><strong>词汇卡片：</strong>每天学习3-4个新单词，尝试用每个单词造一个句子</li>
+          <li><strong>句型模仿：</strong>选择1-2个句型，用自己的话题替换，练习口语表达</li>
+          <li><strong>知识扩展：</strong>阅读中文知识部分，了解更多背后的科学原理</li>
+          <li><strong>做测验：</strong>完成6道理解题，检验学习效果</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <div class="about-title">📊 本课信息</div>
+        <ul class="goal-list">
+          <li><strong>日期：</strong>2026年5月12日</li>
+          <li><strong>主播：</strong>Pola（短尾矮袋鼠 / Quokka）</li>
+          <li><strong>主题：</strong>A Grapefruit in Space（太空中的葡萄柚）</li>
+          <li><strong>英语等级：</strong>B1（中级，CEFR标准）</li>
+          <li><strong>总词数：</strong>约200词</li>
+          <li><strong>时长：</strong>约60秒朗读</li>
+        </ul>
+      </div>
+
+      <button class="print-btn" onclick="window.print()">🖨️ 打印本课内容</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // ── Navigation ──
+  const navItems = document.querySelectorAll('.nav-item');
+  const sections = document.querySelectorAll('.section');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.section;
+
+      navItems.forEach(n => n.classList.remove('active'));
+      item.classList.add('active');
+
+      sections.forEach(s => s.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+
+      // Close sidebar on mobile
+      if (window.innerWidth <= 768) {
+        closeSidebar();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // ── Sidebar Toggle ──
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    sidebar.classList.toggle('open');
+    overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+  }
+
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').style.display = 'none';
+  }
+
+  // ── Progress Bar ──
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('progress-bar').style.width = progress + '%';
+  });
+
+  // ── Web Speech API ──
+  let currentUtterance = null;
+  let currentBtn = null;
+  let voices = [];
+  let voicesLoaded = false;
+
+  function loadVoices() {
+    if ('speechSynthesis' in window) {
+      voices = window.speechSynthesis.getVoices();
+      voicesLoaded = voices.length > 0;
+      if (!voicesLoaded) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          voices = window.speechSynthesis.getVoices();
+          voicesLoaded = voices.length > 0;
+        };
+      }
+    }
+  }
+
+  function findBestVoice(langPref) {
+    if (!voicesLoaded || voices.length === 0) return null;
+
+    const prefs = [
+      'en-US', 'en-GB', 'en-AU', 'en-CA', 'en-IE', 'en-IN', 'en'
+    ];
+    const targetLang = langPref || 'en';
+
+    // Prefer exact match
+    let best = voices.find(v => v.lang === targetLang && v.name.includes('Enhanced'));
+    if (best) return best;
+
+    // Try other English variants
+    for (const lang of prefs) {
+      const found = voices.find(v => v.lang === lang && (v.name.includes('Daniel') || v.name.includes('Enhanced') || v.name.includes('Google')));
+      if (found) return found;
+    }
+
+    // Fall back to any English voice with preferred names
+    const names = ['Daniel', 'Alex', 'David', 'Mark', 'James', 'Enhanced'];
+    for (const name of names) {
+      const found = voices.find(v => v.lang.startsWith('en') && v.name.includes(name));
+      if (found) return found;
+    }
+
+    // Any English male voice
+    return voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('male') || !v.name.toLowerCase().includes('female')))
+        || voices.find(v => v.lang.startsWith('en'));
+  }
+
+  function stopSpeech() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (currentBtn) {
+      currentBtn.textContent = '▶';
+      currentBtn.classList.remove('playing');
+      currentBtn = null;
+    }
+    currentUtterance = null;
+  }
+
+  function playSegment(index, btn) {
+    const segmentTexts = [
+      "Hey there, space explorers! Want to hear something amazing? A team of university students — just like you — just built a tiny tool and sent it to the International Space Station. It's about the size of a grapefruit. And it can do something incredible!",
+      "This little device is called OSCAR-QUBE. University students in Belgium built it. It has a tiny diamond inside — smaller than a lentil! The diamond glows differently when it's near a magnet. Scientists use that glow to draw a map of Earth's invisible magnetic field. The tool worked in space for ten whole months!",
+      "Why does this matter? Earth's magnetic field is like an invisible shield. It protects us from dangerous particles from the Sun. It helps compasses point north. And it keeps our satellites safe. Now, this little grapefruit-sized tool is helping scientists understand our planet better — all thanks to students!",
+      "Pretty cool, right? A tiny diamond, a team of students, and one giant step for science. I'm Pola, and this is Pola News. Keep looking up — you never know what amazing thing you'll discover next! See you tomorrow!"
+    ];
+
+    stopSpeech();
+
+    if (!voicesLoaded) loadVoices();
+
+    const text = segmentTexts[index];
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.97;
+    utterance.pitch = 1.0;
+
+    const voice = findBestVoice('en-US');
+    if (voice) utterance.voice = voice;
+
+    utterance.onstart = () => {
+      btn.textContent = '⏸';
+      btn.classList.add('playing');
+      currentBtn = btn;
+    };
+
+    utterance.onend = () => {
+      btn.textContent = '▶';
+      btn.classList.remove('playing');
+      if (currentBtn === btn) currentBtn = null;
+    };
+
+    utterance.onerror = () => {
+      btn.textContent = '▶';
+      btn.classList.remove('playing');
+    };
+
+    currentUtterance = utterance;
+    currentBtn = btn;
+    speechSynthesis.speak(utterance);
+  }
+
+  function speakWord(word, btn) {
+    stopSpeech();
+
+    if (!voicesLoaded) loadVoices();
+
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.97;
+    utterance.pitch = 1.0;
+
+    const voice = findBestVoice('en-US');
+    if (voice) utterance.voice = voice;
+
+    utterance.onstart = () => {
+      btn.textContent = '⏸ 播放中';
+      btn.classList.add('playing');
+      currentBtn = null; // vocab btn
+    };
+
+    utterance.onend = () => {
+      btn.textContent = '🔊 ' + word;
+      btn.classList.remove('playing');
+    };
+
+    utterance.onerror = () => {
+      btn.textContent = '🔊 ' + word;
+      btn.classList.remove('playing');
+    };
+
+    speechSynthesis.speak(utterance);
+  }
+
+  // Pre-load voices
+  loadVoices();
+
+  // ── Quiz Data ──
+  const quizData = [
+    {
+      q_zh: "1. 这个量子传感器是谁建造的？",
+      q_en: "Who built the quantum sensor?",
+      options_zh: ["职业科学家", "比利时大学生", "美国宇航员", "日本工程师"],
+      correct: 1
+    },
+    {
+      q_zh: "2. 传感器里用来探测磁场的关键材料是什么？",
+      q_en: "What material inside the sensor detects the magnetic field?",
+      options_zh: ["黄金", "水晶", "钻石", "铁"],
+      correct: 2
+    },
+    {
+      q_zh: "3. 传感器的尺寸大约是多大？",
+      q_en: "About how big is the sensor?",
+      options_zh: ["一个足球那么大", "一个葡萄柚那么大", "一栋房子那么大", "一粒沙子那么大"],
+      correct: 1
+    },
+    {
+      q_zh: "4. 传感器在哪里工作了10个月？",
+      q_en: "Where did the sensor work for ten months?",
+      options_zh: ["月球上", "地球上", "火星上", "国际空间站"],
+      correct: 3
+    },
+    {
+      q_zh: "5. 地球磁场像什么？",
+      q_en: "What is Earth's magnetic field compared to?",
+      options_zh: ["一把雨伞", "一面看不见的盾牌", "一盏灯", "一面镜子"],
+      correct: 1
+    },
+    {
+      q_zh: "6. 指南针为什么总是指向北方？",
+      q_en: "Why do compasses always point north?",
+      options_zh: ["因为地球的磁场", "因为风的方向", "因为太阳的引力", "因为月亮的光"],
+      correct: 0
+    }
+  ];
+
+  function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = quizData.map((item, i) => `
+      <div class="quiz-item" id="quiz-item-${i}">
+        <div class="quiz-q">${item.q_zh}<br><span style="font-size:13px;color:var(--text-muted);">${item.q_en}</span></div>
+        <div class="quiz-options">
+          ${item.options_zh.map((opt, j) => `
+            <div class="quiz-option" data-q="${i}" data-choice="${j}" onclick="selectOption(${i}, ${j})">
+              <span class="quiz-letter">${String.fromCharCode(65 + j)}</span>
+              ${opt}
+            </div>
+          `).join('')}
+        </div>
+        <div class="quiz-feedback" id="fb-${i}"></div>
+      </div>
+    `).join('');
+  }
+
+  function selectOption(q, choice) {
+    const options = document.querySelectorAll(`[data-q="${q}"]`);
+    options.forEach(opt => opt.classList.remove('selected'));
+    document.querySelector(`[data-q="${q}"][data-choice="${choice}"]`).classList.add('selected');
+  }
+
+  function checkQuiz() {
+    let score = 0;
+    quizData.forEach((item, i) => {
+      const selected = document.querySelector(`[data-q="${i}"].selected`);
+      const fb = document.getElementById(`fb-${i}`);
+      const correctIdx = item.correct;
+
+      document.querySelectorAll(`[data-q="${i}"]`).forEach(opt => {
+        opt.classList.remove('correct', 'wrong');
+      });
+
+      if (selected) {
+        const choice = parseInt(selected.dataset.choice);
+        if (choice === correctIdx) {
+          selected.classList.add('correct');
+          fb.textContent = '✅ 正确！';
+          fb.className = 'quiz-feedback show correct-fb';
+          score++;
+        } else {
+          selected.classList.add('wrong');
+          document.querySelector(`[data-q="${i}"][data-choice="${correctIdx}"]`).classList.add('correct');
+          fb.textContent = '❌ 正确答案：' + item.options_zh[correctIdx];
+          fb.className = 'quiz-feedback show wrong-fb';
+        }
+      } else {
+        document.querySelector(`[data-q="${i}"][data-choice="${correctIdx}"]`).classList.add('correct');
+        fb.textContent = '⚠️ 你没有选择！正确答案：' + item.options_zh[correctIdx];
+        fb.className = 'quiz-feedback show wrong-fb';
+      }
+    });
+
+    const result = document.getElementById('quiz-result');
+    result.textContent = `🎯 得分：${score} / ${quizData.length}`;
+    result.style.color = score === quizData.length ? 'var(--success)' : score >= 4 ? 'var(--accent)' : 'var(--error)';
+  }
+
+  renderQuiz();
+</script>
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

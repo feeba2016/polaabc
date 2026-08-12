@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News — Snuffy the Hairy Ghost Pipefish</title>
+<style>
+:root {
+  --bg-start: #E8F4FD;
+  --bg-end: #D0EBFF;
+  --card-bg: rgba(255,255,255,0.92);
+  --primary: #0077B6;
+  --primary-light: #90E0EF;
+  --accent: #F77F00;
+  --accent2: #D62828;
+  --text-dark: #1A1A2E;
+  --text-mid: #333366;
+  --text-light: #555;
+  --highlight: #FFF176;
+  --highlight2: #B3E5FC;
+  --sidebar-w: 240px;
+  --border-radius: 16px;
+  --shadow: 0 8px 32px rgba(0,119,182,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+  min-height: 100vh;
+  color: var(--text-dark);
+}
+
+/* Reading Progress Bar */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  z-index: 9999;
+  transition: width 0.3s ease;
+}
+
+/* Sidebar */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(0,119,182,0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 24px 16px 16px;
+  border-bottom: 1px solid rgba(0,119,182,0.1);
+  text-align: center;
+}
+
+.sidebar-logo {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.sidebar-title {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-mid);
+  font-weight: 500;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.nav-item:hover {
+  background: rgba(0,119,182,0.06);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(0,119,182,0.1), rgba(0,180,216,0.1));
+  color: var(--primary);
+  border-color: rgba(0,119,182,0.2);
+  font-weight: 700;
+}
+
+.nav-icon {
+  font-size: 18px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(0,119,182,0.1);
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+}
+
+/* Mobile hamburger */
+#menu-toggle {
+  display: none;
+  position: fixed;
+  top: 16px; left: 16px;
+  z-index: 200;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  width: 44px; height: 44px;
+  font-size: 22px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+
+/* Main Content */
+#main {
+  margin-left: var(--sidebar-w);
+  padding: 32px 40px;
+  max-width: 860px;
+}
+
+.section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero Banner */
+.hero-banner {
+  background: linear-gradient(135deg, var(--primary) 0%, #00B4D8 50%, #90E0EF 100%);
+  border-radius: var(--border-radius);
+  padding: 32px 36px;
+  color: white;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.hero-banner::before {
+  content: '🐟';
+  position: absolute;
+  right: 24px; top: 16px;
+  font-size: 64px;
+  opacity: 0.3;
+}
+
+.hero-banner h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.hero-banner p {
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+.card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Script Section */
+.script-segment {
+  border-left: 4px solid var(--primary);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  background: rgba(0,119,182,0.04);
+  border-radius: 0 12px 12px 0;
+  position: relative;
+}
+
+.segment-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.segment-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-dark);
+}
+
+.play-btn {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 38px; height: 38px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  animation: pulse-glow 2s infinite;
+}
+
+.play-btn:hover {
+  background: var(--accent);
+  transform: scale(1.1);
+}
+
+.play-btn.playing {
+  animation: none;
+  background: var(--accent2);
+}
+
+/* Vocabulary Cards */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.vocab-card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px 18px;
+  border: 2px solid var(--primary-light);
+  transition: all 0.2s;
+  position: relative;
+}
+
+.vocab-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 16px rgba(0,119,182,0.15);
+  transform: translateY(-2px);
+}
+
+.vocab-word {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vocab-sound-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px; height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  animation: pulse-glow 2.5s infinite;
+  flex-shrink: 0;
+}
+
+.vocab-sound-btn:hover {
+  background: var(--accent);
+  transform: scale(1.15);
+}
+
+.vocab-pos {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.vocab-meaning {
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.vocab-example {
+  font-size: 13px;
+  color: var(--text-light);
+  font-style: italic;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+  line-height: 1.5;
+}
+
+.vocab-example::before {
+  content: '💬 ';
+}
+
+/* Sentence Patterns */
+.pattern-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s;
+}
+
+.pattern-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 2px 10px rgba(0,119,182,0.1);
+}
+
+.pattern-english {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.pattern-chinese {
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.pattern-practice {
+  font-size: 13px;
+  color: var(--text-light);
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 8px 12px;
+  line-height: 1.5;
+}
+
+.pattern-practice strong {
+  color: var(--accent);
+}
+
+/* Grammar */
+.grammar-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  border-left: 4px solid var(--accent);
+}
+
+.grammar-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.grammar-english {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.grammar-chinese {
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.grammar-example {
+  font-size: 13px;
+  color: var(--text-light);
+  font-style: italic;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+}
+
+.grammar-quiz {
+  font-size: 13px;
+  color: var(--text-dark);
+  background: rgba(247,127,0,0.08);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.grammar-quiz strong {
+  color: var(--accent);
+}
+
+/* Quiz */
+.quiz-item {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s;
+}
+
+.quiz-item:hover {
+  border-color: var(--primary-light);
+}
+
+.quiz-number {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.quiz-question {
+  font-size: 14px;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.quiz-option:hover {
+  border-color: var(--primary);
+  background: rgba(0,119,182,0.04);
+}
+
+.quiz-option.selected {
+  border-color: var(--primary);
+  background: rgba(0,119,182,0.1);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.quiz-option.correct {
+  border-color: #2E7D32;
+  background: rgba(46,125,50,0.1);
+  color: #2E7D32;
+}
+
+.quiz-option.incorrect {
+  border-color: var(--accent2);
+  background: rgba(214,40,40,0.08);
+  color: var(--accent2);
+}
+
+.quiz-feedback {
+  font-size: 12px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: none;
+  line-height: 1.4;
+}
+
+.quiz-feedback.show {
+  display: block;
+}
+
+.quiz-feedback.right {
+  background: rgba(46,125,50,0.08);
+  color: #2E7D32;
+}
+
+.quiz-feedback.wrong {
+  background: rgba(214,40,40,0.08);
+  color: var(--accent2);
+}
+
+#quiz-submit {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+
+#quiz-submit:hover {
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* Knowledge Section */
+.knowledge-block {
+  background: white;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  border: 1px solid #e0e0e0;
+}
+
+.knowledge-block h3 {
+  font-size: 15px;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.knowledge-block p {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.knowledge-block p:last-child {
+  margin-bottom: 0;
+}
+
+.knowledge-block strong {
+  color: var(--primary);
+}
+
+/* About Section */
+.about-info {
+  background: white;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+
+.about-info h3 {
+  font-size: 15px;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.about-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.about-info li {
+  font-size: 13px;
+  color: var(--text-mid);
+  padding: 6px 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.about-info li:last-child {
+  border-bottom: none;
+}
+
+.about-info li::before {
+  content: '✓';
+  color: var(--primary);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+#print-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#print-btn:hover {
+  background: var(--accent);
+}
+
+/* Highlight */
+.highlight-word {
+  background: linear-gradient(120deg, #FFF176 0%, #FFF176 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 50%;
+  background-position: 0 90%;
+  padding: 0 2px;
+  border-radius: 2px;
+  cursor: help;
+  position: relative;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  background: var(--text-dark);
+  color: white;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-weight: 500;
+}
+
+.highlight-word:hover .tooltip {
+  opacity: 1;
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,119,182,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(0,119,182,0); }
+}
+
+@keyframes scan-progress {
+  from { width: 0; }
+  to { width: var(--progress); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  :root { --sidebar-w: 0px; }
+
+  #sidebar {
+    width: 240px;
+    transform: translateX(-100%);
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+  }
+
+  #menu-toggle {
+    display: flex;
+  }
+
+  #main {
+    margin-left: 0;
+    padding: 72px 20px 32px;
+  }
+
+  .vocab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-banner {
+    padding: 22px 20px;
+  }
+
+  .hero-banner::before {
+    font-size: 40px;
+    right: 12px;
+  }
+}
+
+/* Print */
+@media print {
+  #sidebar, #menu-toggle, #progress-bar, .play-btn, .vocab-sound-btn, #quiz-submit, #print-btn {
+    display: none !important;
+  }
+
+  body { background: white; }
+  #main {
+    margin-left: 0;
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .card, .hero-banner, .vocab-card, .pattern-card, .grammar-card, .quiz-item, .knowledge-block, .about-info {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+
+  .section { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<button id="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<!-- Sidebar -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">🐨</div>
+    <div class="sidebar-title">Pola News</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-item active" onclick="showSection('reading', this)">
+      <span class="nav-icon">📖</span>全文阅读
+    </div>
+    <div class="nav-item" onclick="showSection('vocabulary', this)">
+      <span class="nav-icon">📝</span>词汇表
+    </div>
+    <div class="nav-item" onclick="showSection('sentences', this)">
+      <span class="nav-icon">💬</span>句型练习
+    </div>
+    <div class="nav-item" onclick="showSection('grammar', this)">
+      <span class="nav-icon">📐</span>语法点
+    </div>
+    <div class="nav-item" onclick="showSection('quiz', this)">
+      <span class="nav-icon">🧠</span>练习测验
+    </div>
+    <div class="nav-item" onclick="showSection('knowledge', this)">
+      <span class="nav-icon">🌏</span>中文知识扩展
+    </div>
+    <div class="nav-item" onclick="showSection('about', this)">
+      <span class="nav-icon">ℹ️</span>关于本课
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    2026-05-17<br>B1 Level · Pola News
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main id="main">
+
+  <!-- Reading Section -->
+  <div id="reading" class="section active">
+    <div class="hero-banner">
+      <div class="hero-badge">🐟 Episode · May 17, 2026</div>
+      <h1>Snuffy the Hairy Ghost Pipefish</h1>
+      <p>大堡礁发现"毛绒大象鱼"！科学家以芝麻街角色命名新物种，这种小鱼究竟有什么神奇的本领？一起来看看吧！</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📖 全文阅读 | Full Script</div>
+
+      <div class="script-segment" id="seg1">
+        <div class="segment-label">🎬 Segment 1 — Hook</div>
+        <div class="segment-text">
+          Hey friends! Do you know what Mr. Snuffleupagus from Sesame Street has in common with a tiny fish in Australia? They're both covered in fur — sort of! Scientists just discovered a brand-new fish, and they named it after the famous big, fluffy elephant from Sesame Street!
+        </div>
+        <button class="play-btn" onclick="playSegment(0, this)" title="Play Segment 1">▶</button>
+      </div>
+
+      <div class="script-segment" id="seg2">
+        <div class="segment-label">🎬 Segment 2 — Story</div>
+        <div class="segment-text">
+          The new fish is called the <span class="highlight-word">hairy<span class="tooltip">hairy: 毛茸茸的，多毛的</span></span> <span class="highlight-word">ghost pipefish<span class="tooltip">ghost pipefish: 鬼影海龙，一种善于伪装的鱼类</span></span> — <em>Solenostomus snuffleupagus</em>. It lives deep in the Great Barrier Reef in Australia, hidden among bright red <span class="highlight-word">algae<span class="tooltip">algae: 藻类，水中植物</span></span>. The fish is only about as long as your thumb — just 34 millimeters! It has long, hair-like fins that make it look exactly like a piece of seaweed. So <span class="highlight-word">predators<span class="tooltip">predators: 捕食者，猎食其他动物的动物</span></span> swim right past it! And get this — scientists were shocked to find it also eats small fish, even though its cousins only eat tiny sea creatures.
+        </div>
+        <button class="play-btn" onclick="playSegment(1, this)" title="Play Segment 2">▶</button>
+      </div>
+
+      <div class="script-segment" id="seg3">
+        <div class="segment-label">🎬 Segment 3 — Why It Matters</div>
+        <div class="segment-text">
+          This little fish was hiding in plain sight for over 20 years — divers saw it but thought it was another <span class="highlight-word">species<span class="tooltip">species: 物种，生物的种类</span></span>! This shows us that even in one of the most studied oceans in the world, there are still amazing creatures we haven't found yet. It reminds us to keep exploring and caring about our oceans, because there are always new wonders waiting to be discovered.
+        </div>
+        <button class="play-btn" onclick="playSegment(2, this)" title="Play Segment 3">▶</button>
+      </div>
+
+      <div class="script-segment" id="seg4">
+        <div class="segment-label">🎬 Segment 4 — Sign-off</div>
+        <div class="segment-text">
+          That's all for today, friends! I'm Pola, reporting from the bottom of the sea — well, almost! Remember: every creek, every reef, and every forest is full of secrets just waiting for curious scientists like YOU. See you next time on Pola News! Bye!
+        </div>
+        <button class="play-btn" onclick="playSegment(3, this)" title="Play Segment 4">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vocabulary Section -->
+  <div id="vocabulary" class="section">
+    <div class="hero-banner">
+      <div class="hero-badge">📝 Vocabulary</div>
+      <h1>核心词汇表</h1>
+      <p>点击每个词右侧的 🔊 按钮，听单词发音。Hover over highlighted words to see meanings!</p>
+    </div>
+
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <div class="vocab-word">hairy <button class="vocab-sound-btn" onclick="speakWord('hairy')">🔊</button></div>
+        <div class="vocab-pos">adj.</div>
+        <div class="vocab-meaning">毛茸茸的，多毛的</div>
+        <div class="vocab-example">The new fish looks hairy because it has long, thin fins.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">ghost pipefish <button class="vocab-sound-btn" onclick="speakWord('ghost pipefish')">🔊</button></div>
+        <div class="vocab-pos">n.</div>
+        <div class="vocab-meaning">鬼影海龙（善于伪装的海洋鱼类）</div>
+        <div class="vocab-example">Ghost pipefish are masters of disguise in the ocean.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">algae <button class="vocab-sound-btn" onclick="speakWord('algae')">🔊</button></div>
+        <div class="vocab-pos">n.</div>
+        <div class="vocab-meaning">藻类（水中的微小植物）</div>
+        <div class="vocab-example">The hairy ghost pipefish hides among red algae in the reef.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">predator <button class="vocab-sound-btn" onclick="speakWord('predator')">🔊</button></div>
+        <div class="vocab-pos">n.</div>
+        <div class="vocab-meaning">捕食者（猎食其他动物的动物）</div>
+        <div class="vocab-example">Sharks and big fish are predators in the ocean.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">species <button class="vocab-sound-btn" onclick="speakWord('species')">🔊</button></div>
+        <div class="vocab-pos">n.</div>
+        <div class="vocab-meaning">物种（生物的基本分类单位）</div>
+        <div class="vocab-example">Scientists confirmed it was a completely new species.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">discover <button class="vocab-sound-btn" onclick="speakWord('discover')">🔊</button></div>
+        <div class="vocab-pos">v.</div>
+        <div class="vocab-meaning">发现（找到以前不知道的东西）</div>
+        <div class="vocab-example">Scientists discovered a brand-new fish in the Great Barrier Reef.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">camouflage <button class="vocab-sound-btn" onclick="speakWord('camouflage')">🔊</button></div>
+        <div class="vocab-pos">n./v.</div>
+        <div class="vocab-meaning">伪装（用外表隐藏自己）</div>
+        <div class="vocab-example">The fish uses camouflage to hide from predators.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">reef <button class="vocab-sound-btn" onclick="speakWord('reef')">🔊</button></div>
+        <div class="vocab-pos">n.</div>
+        <div class="vocab-meaning">礁石；珊瑚礁</div>
+        <div class="vocab-example">The Great Barrier Reef is the world's largest coral reef system.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">scientist <button class="vocab-sound-btn" onclick="speakWord('scientist')">🔊</button></div>
+        <div class="vocab-pos">n.</div>
+        <div class="vocab-meaning">科学家</div>
+        <div class="vocab-example">Australian scientists named the fish after a Sesame Street character.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="vocab-word">explore <button class="vocab-sound-btn" onclick="speakWord('explore')">🔊</button></div>
+        <div class="vocab-pos">v.</div>
+        <div class="vocab-meaning">探索（去发现和研究新事物）</div>
+        <div class="vocab-example">There are always new wonders waiting to be explored.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sentence Patterns Section -->
+  <div id="sentences" class="section">
+    <div class="hero-banner">
+      <div class="hero-badge">💬 Sentences</div>
+      <h1>实用句型练习</h1>
+      <p>These are useful sentence patterns from today's episode. Try making your own sentences!</p>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-english">Do you know what X has in common with Y?</div>
+      <div class="pattern-chinese">你知道X和Y有什么共同点吗？用来引出两个事物的比较。</div>
+      <div class="pattern-practice"><strong>练习:</strong> Do you know what a dolphin has in common with a shark? (Try to name 2 things!)</div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-english">Scientists were shocked to find / that...</div>
+      <div class="pattern-chinese">科学家惊讶地发现…… 用于表达出乎意料的发现。</div>
+      <div class="pattern-practice"><strong>练习:</strong> Scientists were shocked to find that the fish could change its color.</div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-english">X was hiding in plain sight for over Y years.</div>
+      <div class="pattern-chinese">X在众目睽睽下隐藏了Y多年。表达某物一直存在却未被注意。</div>
+      <div class="pattern-practice"><strong>练习:</strong> This tiny creature was hiding in plain sight for over 20 years.</div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-english">This shows us that...</div>
+      <div class="pattern-chinese">这告诉我们…… 用来引出从故事中学到的道理或启示。</div>
+      <div class="pattern-practice"><strong>练习:</strong> This shows us that there are still amazing creatures we haven't found.</div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="pattern-english">There are always new wonders waiting to be discovered.</div>
+      <div class="pattern-chinese">总会有新的奇迹等待被发现。鼓励探索精神的金句。</div>
+      <div class="pattern-practice"><strong>练习:</strong> In every forest, there are always new wonders waiting to be discovered.</div>
+    </div>
+  </div>
+
+  <!-- Grammar Section -->
+  <div id="grammar" class="section">
+    <div class="hero-banner">
+      <div class="hero-badge">📐 Grammar</div>
+      <h1>语法知识点</h1>
+      <p>Today's episode uses several important grammar structures. Let's learn them!</p>
+    </div>
+
+    <div class="grammar-card">
+      <div class="grammar-title">1. 一般过去时 (Simple Past Tense)</div>
+      <div class="grammar-english">Scientists just discovered a brand-new fish.</div>
+      <div class="grammar-chinese">用一般过去时描述过去发生的动作或事件。常见时间标志词：just, yesterday, last year, in 2026.</div>
+      <div class="grammar-example">Scientists discovered → Scientists didn't discover</div>
+      <div class="grammar-quiz"><strong>练习:</strong> The fish (hide) in plain sight for over 20 years. — 答案：hid</div>
+    </div>
+
+    <div class="grammar-card">
+      <div class="grammar-title">2. 副词修饰形容词 (Adverbs + Adjectives)</div>
+      <div class="grammar-english">The fish is only about as long as your thumb.</div>
+      <div class="grammar-chinese">副词（如only）修饰形容词（long），表示程度或限制。</div>
+      <div class="grammar-example">very small, completely new, quite surprising</div>
+      <div class="grammar-quiz"><strong>练习:</strong> Scientists were ___ shocked by the discovery. — 答案：completely / very</div>
+    </div>
+
+    <div class="grammar-card">
+      <div class="grammar-title">3. 不定式作宾语补足语 (Verb + Object + to-infinitive)</div>
+      <div class="grammar-english">They named it after the famous elephant.</div>
+      <div class="grammar-chinese">动词name/ call后接"宾语 + after/to be"结构。</div>
+      <div class="grammar-example">We call it Snuffy. → We named it after Snuffy.</div>
+      <div class="grammar-quiz"><strong>练习:</strong> They ___ the fish after a Sesame Street character. (name) — 答案：named</div>
+    </div>
+
+    <div class="grammar-card">
+      <div class="grammar-title">4. even though 引导的让步状语从句</div>
+      <div class="grammar-english">...even though its cousins only eat tiny sea creatures.</div>
+      <div class="grammar-chinese">even though = "尽管"，引导让步状语从句，从句用陈述语气。</div>
+      <div class="grammar-example">Even though she was tired, she kept running.</div>
+      <div class="grammar-quiz"><strong>练习:</strong> ___ it was raining, the scientists kept working. — 答案：Even though</div>
+    </div>
+
+    <div class="grammar-card">
+      <div class="grammar-title">5. There be 句型 + 进行时</div>
+      <div class="grammar-english">There are always new wonders waiting to be discovered.</div>
+      <div class="grammar-chinese">There be + 名词 + 现在分词（doing）结构，表示"有……正在……"。</div>
+      <div class="grammar-example">There are fish hiding in the reef.</div>
+      <div class="grammar-quiz"><strong>练习:</strong> There ___ amazing creatures ___ everywhere. (be, wait) — 答案：are, waiting</div>
+    </div>
+  </div>
+
+  <!-- Quiz Section -->
+  <div id="quiz" class="section">
+    <div class="hero-banner">
+      <div class="hero-badge">🧠 Quiz</div>
+      <h1>理解测验</h1>
+      <p>Test your understanding of today's episode! Click the correct answers.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 选择题 | Multiple Choice</div>
+
+      <div class="quiz-item" id="q1">
+        <div class="quiz-number">Question 1</div>
+        <div class="quiz-question">What is the new fish named after?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectAnswer(1, 'A', false)">A) A famous shark from a movie</div>
+          <div class="quiz-option" onclick="selectAnswer(1, 'B', false)">B) Mr. Snuffleupagus from Sesame Street</div>
+          <div class="quiz-option" onclick="selectAnswer(1, 'C', false)">C) A famous Australian swimmer</div>
+          <div class="quiz-option" onclick="selectAnswer(1, 'D', false)">D) The Great Barrier Reef</div>
+        </div>
+        <div class="quiz-feedback" id="f1"></div>
+      </div>
+
+      <div class="quiz-item" id="q2">
+        <div class="quiz-number">Question 2</div>
+        <div class="quiz-question">How long is the hairy ghost pipefish?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectAnswer(2, 'A', false)">A) About the size of a big shark</div>
+          <div class="quiz-option" onclick="selectAnswer(2, 'B', false)">B) About 34 millimeters — like a thumb</div>
+          <div class="quiz-option" onclick="selectAnswer(2, 'C', false)">C) About one meter long</div>
+          <div class="quiz-option" onclick="selectAnswer(2, 'D', false)">D) About 10 centimeters</div>
+        </div>
+        <div class="quiz-feedback" id="f2"></div>
+      </div>
+
+      <div class="quiz-item" id="q3">
+        <div class="quiz-number">Question 3</div>
+        <div class="quiz-question">Why can predators not see the fish easily?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectAnswer(3, 'A', false)">A) It swims very fast</div>
+          <div class="quiz-option" onclick="selectAnswer(3, 'B', false)">B) It hides in a dark cave</div>
+          <div class="quiz-option" onclick="selectAnswer(3, 'C', false)">C) It looks exactly like a piece of seaweed or algae</div>
+          <div class="quiz-option" onclick="selectAnswer(3, 'D', false)">D) It lives very deep underwater</div>
+        </div>
+        <div class="quiz-feedback" id="f3"></div>
+      </div>
+
+      <div class="quiz-item" id="q4">
+        <div class="quiz-number">Question 4</div>
+        <div class="quiz-question">What surprised scientists about the fish's diet?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectAnswer(4, 'A', false)">A) It doesn't eat anything</div>
+          <div class="quiz-option" onclick="selectAnswer(4, 'B', false)">B) It eats only red algae</div>
+          <div class="quiz-option" onclick="selectAnswer(4, 'C', false)">C) It eats small fish, even though its relatives only eat tiny creatures</div>
+          <div class="quiz-option" onclick="selectAnswer(4, 'D', false)">D) It eats other ghost pipefish</div>
+        </div>
+        <div class="quiz-feedback" id="f4"></div>
+      </div>
+
+      <div class="quiz-item" id="q5">
+        <div class="quiz-number">Question 5</div>
+        <div class="quiz-question">Where does the hairy ghost pipefish live?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectAnswer(5, 'A', false)">A) In rivers in Africa</div>
+          <div class="quiz-option" onclick="selectAnswer(5, 'B', false)">B) In caves in the Atlantic Ocean</div>
+          <div class="quiz-option" onclick="selectAnswer(5, 'C', false)">C) In the Great Barrier Reef, Australia</div>
+          <div class="quiz-option" onclick="selectAnswer(5, 'D', false)">D) In frozen lakes in Canada</div>
+        </div>
+        <div class="quiz-feedback" id="f5"></div>
+      </div>
+
+      <div class="quiz-item" id="q6">
+        <div class="quiz-number">Question 6</div>
+        <div class="quiz-question">How many years was the fish hiding in plain sight before being discovered?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="selectAnswer(6, 'A', false)">A) About 5 years</div>
+          <div class="quiz-option" onclick="selectAnswer(6, 'B', false)">B) About 50 years</div>
+          <div class="quiz-option" onclick="selectAnswer(6, 'C', false)">C) Over 20 years</div>
+          <div class="quiz-option" onclick="selectAnswer(6, 'D', false)">D) More than 100 years</div>
+        </div>
+        <div class="quiz-feedback" id="f6"></div>
+      </div>
+
+      <button id="quiz-submit" onclick="checkQuiz()">✅ 检查答案 | Check Answers</button>
+    </div>
+  </div>
+
+  <!-- Knowledge Section -->
+  <div id="knowledge" class="section">
+    <div class="hero-banner">
+      <div class="hero-badge">🌏 Knowledge</div>
+      <h1>中文知识扩展</h1>
+      <p>Learn more about the science and history behind today's episode!</p>
+    </div>
+
+    <div class="knowledge-block">
+      <h3>🐟 什么是鬼影海龙？</h3>
+      <p>鬼影海龙（Ghost Pipefish，学名 Solenostomidae）是一类生活在印度洋-太平洋海域的鱼类，属于海龙科（Syngnathidae），和海马是远房亲戚！它们最厉害的本领就是<b>完美伪装</b>——它们可以改变身体颜色，模仿周围的海藻、珊瑚或海草，静静等待猎物游过，然后一口吞掉。</p>
+      <p>鬼影海龙还有个特别之处：<b>是妈妈负责"怀孕"</b>！雌性鬼影海龙的腹鳍会连在一起，形成一个"育儿袋"，卵就在里面孵化，直到小宝宝出生。这和海马爸爸"怀孕"正好相反！</p>
+    </div>
+
+    <div class="knowledge-block">
+      <h3>🏝️ 大堡礁——世界上最大的活体建筑</h3>
+      <p>大堡礁（Great Barrier Reef）位于澳大利亚东北部，是地球上最大的珊瑚礁系统，由约2,900个独立礁石和900多个岛屿组成，绵延约2,300公里，相当于从北京到广州的距离！</p>
+      <p>大堡礁是<b>世界上最大的活体结构</b>——是由数以百万计的小珊瑚虫（珊瑚虫是一种微小的海洋动物）历经数千年建造而成的。它也是地球上生物多样性最丰富的生态系统之一，容纳了1,500多种鱼类、400多种珊瑚、以及无数海龟、海豚和鲨鱼。</p>
+      <p>但大堡礁也面临威胁：<b>海洋变暖导致珊瑚白化</b>（珊瑚排出共生的藻类而变白），科学家们正在努力保护这片珍贵的海洋家园。</p>
+    </div>
+
+    <div class="knowledge-block">
+      <h3>🧬 物种命名和学名的秘密</h3>
+      <p>每一种被正式确认的生物都有一个<b>科学名称</b>（学名），遵循林奈双名法：由属名（genus）+ 种名（species）组成，用拉丁文或拉丁化的文字表示。比如今天的"毛绒鬼影海龙"学名是 <em>Solenostomus snuffleupagus</em>。</p>
+      <p>科学家可以以<b>任何东西</b>命名新物种——形状特征、发现地点、著名人物，甚至流行文化！把鱼命名为"Snuffleupagus"是因为它的"毛发"状鳍和芝麻街的大象形象非常相似，科学也可以很 fun！</p>
+    </div>
+
+    <div class="knowledge-block">
+      <h3>🕵️ 科学家如何发现新物种？</h3>
+      <p>发现新物种通常需要三个步骤：<b>①发现</b>（有人发现了看似不同的生物）、<b>②描述</b>（科学家详细记录其特征，与已知物种对比）、<b>③命名</b>（在科学期刊上发表，正式命名）。</p>
+      <p>这次发现毛绒鬼影海龙的过程中，科学家使用了<b>微米级CT扫描</b>（Micro-CT）——一种不破坏标本就能看清内部结构的高科技工具。通过扫描鱼骨，科学家发现了它与其他物种的骨骼差异：它的脊椎骨数量、头部骨骼形状都与近亲不同，这才确认它是一个全新物种！</p>
+    </div>
+
+    <div class="knowledge-block">
+      <h3>📺 芝麻街与科学——流行文化的跨界合作</h3>
+      <p>芝麻街（Sesame Street）是美国PBS电视台的经典儿童教育节目，自1969年播出至今，影响了全世界无数孩子的成长。它的主角之一是<b>大鸟 Big Bird</b>——一只巨大的黄色鸟类。而Mr. Snuffleupagus（绰号"Snuffy"）是 Big Bird 最好的朋友，是一只体型巨大、毛发蓬松的蓝色大象玩偶（后来设定改为真实生物）。</p>
+      <p>用流行文化角色命名新物种，这在国际科学界很常见——比如有种蜘蛛被命名为"吐彩虹的毛毛虫"（Spiderman），有种青蛙被命名为达斯·维德（Darth Vader）。这样命名能让大众对科学产生兴趣，也让科学发现更有趣味性！</p>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div id="about" class="section">
+    <div class="hero-banner">
+      <div class="hero-badge">ℹ️ About</div>
+      <h1>关于本课</h1>
+      <p>Learning goals, tips, and info about Pola News.</p>
+    </div>
+
+    <div class="about-info">
+      <h3>🎯 学习目标 | Learning Goals</h3>
+      <ul>
+        <li>认识一种新发现的海洋生物——毛绒鬼影海龙</li>
+        <li>掌握10个核心英语词汇（hairy, ghost pipefish, algae 等）</li>
+        <li>学会使用5个实用英语句型进行表达</li>
+        <li>理解并运用一般过去时、让步从句等语法结构</li>
+        <li>了解大堡礁生态系统和物种命名的科学知识</li>
+      </ul>
+    </div>
+
+    <div class="about-info">
+      <h3>💡 学习建议 | Study Tips</h3>
+      <ul>
+        <li><strong>Step 1:</strong> 先通读全文，理解大意（不必每个词都查）</li>
+        <li><strong>Step 2:</strong> 听音频（点击 ▶ 按钮），感受英语节奏和发音</li>
+        <li><strong>Step 3:</strong> 学习词汇表，记住核心词的发音和意思</li>
+        <li><strong>Step 4:</strong> 用句型练习造句，写下自己的句子</li>
+        <li><strong>Step 5:</strong> 完成测验题，检查理解程度</li>
+        <li><strong>Step 6:</strong> 阅读中文知识扩展，深入了解背后的科学故事</li>
+      </ul>
+    </div>
+
+    <div class="about-info">
+      <h3>🐨 Pola News 小档案 | Pola Profile</h3>
+      <ul>
+        <li><strong>名字:</strong> Pola 波拉</li>
+        <li><strong>物种:</strong> 短尾矮袋鼠 (Quokka)，世界上最快乐的动物</li>
+        <li><strong>来自:</strong> 澳大利亚罗特尼斯岛 (Rottnest Island)</li>
+        <li><strong>节目:</strong> Pola News — 每日英语科学新闻播报</li>
+        <li><strong>风格:</strong> 实景记者播报，像真正的野外科学家一样！</li>
+        <li><strong>座右铭:</strong> "Every reef and forest is full of secrets!"</li>
+      </ul>
+    </div>
+
+    <div class="about-info">
+      <button id="print-btn" onclick="window.print()">
+        🖨️ 打印本课 | Print This Lesson
+      </button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ====== Speech Synthesis ======
+let currentUtterance = null;
+let currentBtn = null;
+let voices = [];
+let voicesLoaded = false;
+
+function loadVoices() {
+  voices = window.speechSynthesis.getVoices();
+  voicesLoaded = true;
+}
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+function findBestVoice(lang) {
+  const priority = ['Enhanced', 'Daniel', 'Alex', 'Microsoft David', 'Google US English', 'Samantha'];
+  for (const p of priority) {
+    const v = voices.find(vo => vo.lang.startsWith('en') && (vo.name.includes(p) || vo.voiceURI.includes(p)));
+    if (v) return v;
+  }
+  return voices.find(vo => vo.lang.startsWith('en')) || null;
+}
+
+function stopSpeech() {
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+  }
+  if (currentBtn) {
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '▶';
+  }
+  currentUtterance = null;
+  currentBtn = null;
+}
+
+function speakText(text, btn) {
+  stopSpeech();
+  currentBtn = btn;
+  btn.classList.add('playing');
+  btn.textContent = '⏸';
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 0.97;
+  utter.pitch = 1.0;
+
+  const bestVoice = findBestVoice('en');
+  if (bestVoice) utter.voice = bestVoice;
+
+  utter.onend = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+    currentUtterance = null;
+    currentBtn = null;
+  };
+  utter.onerror = () => {
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+  };
+
+  currentUtterance = utter;
+  speechSynthesis.speak(utter);
+}
+
+const segmentTexts = [
+  "Hey friends! Do you know what Mr. Snuffleupagus from Sesame Street has in common with a tiny fish in Australia? They're both covered in fur — sort of! Scientists just discovered a brand-new fish, and they named it after the famous big, fluffy elephant from Sesame Street!",
+  "The new fish is called the hairy ghost pipefish — Solenostomus snuffleupagus. It lives deep in the Great Barrier Reef in Australia, hidden among bright red algae. The fish is only about as long as your thumb — just 34 millimeters! It has long, hair-like fins that make it look exactly like a piece of seaweed. So predators swim right past it! And get this — scientists were shocked to find it also eats small fish, even though its cousins only eat tiny sea creatures.",
+  "This little fish was hiding in plain sight for over 20 years — divers saw it but thought it was another species! This shows us that even in one of the most studied oceans in the world, there are still amazing creatures we haven't found yet. It reminds us to keep exploring and caring about our oceans, because there are always new wonders waiting to be discovered.",
+  "That's all for today, friends! I'm Pola, reporting from the bottom of the sea — well, almost! Remember: every creek, every reef, and every forest is full of secrets just waiting for curious scientists like YOU. See you next time on Pola News! Bye!"
+];
+
+function playSegment(index, btn) {
+  speakText(segmentTexts[index], btn);
+}
+
+function speakWord(word) {
+  stopSpeech();
+  const utter = new SpeechSynthesisUtterance(word);
+  utter.rate = 0.97;
+  utter.pitch = 1.0;
+  const bestVoice = findBestVoice('en');
+  if (bestVoice) utter.voice = bestVoice;
+  speechSynthesis.speak(utter);
+}
+
+// ====== Navigation ======
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  updateProgress();
+}
+
+// ====== Progress Bar ======
+function updateProgress() {
+  const sections = ['reading', 'vocabulary', 'sentences', 'grammar', 'quiz', 'knowledge', 'about'];
+  const idx = sections.indexOf([...document.querySelectorAll('.section')].find(s => s.classList.contains('active'))?.id);
+  const pct = Math.round(((idx + 1) / sections.length) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+// ====== Quiz ======
+const answers = { 1: 'B', 2: 'B', 3: 'C', 4: 'C', 5: 'C', 6: 'C' };
+const selected = {};
+const answered = {};
+
+function selectAnswer(q, opt, isCorrect) {
+  if (answered[q]) return;
+  selected[q] = opt;
+  const options = document.querySelectorAll(`#q${q} .quiz-option`);
+  options.forEach(o => o.classList.remove('selected'));
+  event.target.closest('.quiz-option').classList.add('selected');
+}
+
+function checkQuiz() {
+  let score = 0;
+  for (let q = 1; q <= 6; q++) {
+    answered[q] = true;
+    const feedback = document.getElementById(`f${q}`);
+    const options = document.querySelectorAll(`#q${q} .quiz-option`);
+    options.forEach(o => o.style.pointerEvents = 'none');
+
+    if (selected[q] === answers[q]) {
+      score++;
+      feedback.textContent = '✅ Correct! Well done!';
+      feedback.className = 'quiz-feedback show right';
+      options.forEach(o => {
+        if (o.textContent.trim().startsWith(answers[q])) o.classList.add('correct');
+      });
+    } else {
+      const correctText = options[[...options].findIndex(o => o.textContent.trim().startsWith(answers[q]))];
+      feedback.textContent = `❌ Not quite! The correct answer is ${answers[q]}: ${correctText ? correctText.textContent : ''}`;
+      feedback.className = 'quiz-feedback show wrong';
+      options.forEach(o => {
+        if (o.textContent.trim().startsWith(selected[q])) o.classList.add('incorrect');
+        if (o.textContent.trim().startsWith(answers[q])) o.classList.add('correct');
+      });
+    }
+  }
+  document.getElementById('quiz-submit').textContent = `✅ 完成！得分：${score}/6 | Score: ${score}/6`;
+  document.getElementById('quiz-submit').disabled = true;
+}
+
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  document.getElementById('progress-bar').style.width = Math.min(100, scrolled * 100) + '%';
+});
+</script>
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

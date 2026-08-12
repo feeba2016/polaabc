@@ -12,7 +12,7 @@
 <nav class="top">
   <a href="index.html" class="logo">
     <img src="assets/pola.webp" alt="Pola">
-    POLA NEWS<small>少儿英语科学新闻</small>
+    POLA NEWS<small>少儿英语学习平台</small>
   </a>
   <div class="nav-links">
     <a href="index.html">首页</a>
@@ -25,8 +25,12 @@
 <section class="section">
   <div class="wrap">
     <h2 class="section-title">全部<span class="em">课程</span></h2>
-    <p class="section-sub">共 <strong id="totalCount"></strong> 期课程，按更新时间倒序排列。选择一节课，开始你的英语科学之旅吧！</p>
+    <p class="section-sub">共 <strong id="totalCount"></strong> 期课程。选择级别浏览，勾选课程后可翻卡复习单词。</p>
 
+    <!-- 级别标签 -->
+    <div class="level-tabs" id="levelTabs"></div>
+
+    <!-- 搜索 + 分类 -->
     <div class="controls">
       <div class="search-box">
         <span class="ic">🔍</span>
@@ -41,61 +45,126 @@
 
 <footer>
   <div class="flogo">🦘 POLA NEWS</div>
-  <p>少儿英语科学新闻 · B1 英语水平</p>
+  <p>少儿英语学习平台 · A1 到 C1-C2 全级别覆盖</p>
   <p>为充满好奇心的小朋友而做 <span class="heart">♥</span></p>
 </footer>
+
+<!-- 翻卡复习浮窗 -->
+<div id="reviewFloat" class="review-float" onclick="openReview()">
+  📇 复习单词 <span class="review-count">0</span>
+</div>
+
+<!-- 翻卡复习弹窗 -->
+<div id="reviewModal" class="review-modal">
+  <div class="review-backdrop" onclick="closeReview()"></div>
+  <div class="review-dialog">
+    <div class="review-header">
+      <span id="reviewCount">1 / 1</span>
+      <button onclick="closeReview()" class="review-close">✕</button>
+    </div>
+    <div id="reviewCard" class="review-card" onclick="flipCard()">
+      <div class="review-front">
+        <div id="reviewWord" class="review-word"></div>
+        <div class="review-hint">点击翻卡看释义</div>
+      </div>
+      <div class="review-back">
+        <div id="reviewZh" class="review-zh"></div>
+        <div id="reviewEx" class="review-ex"></div>
+        <div id="reviewFrom" class="review-from"></div>
+      </div>
+    </div>
+    <div class="review-nav">
+      <button onclick="prevCard()" class="btn btn-ghost">← 上一个</button>
+      <button onclick="shuffleCards()" class="btn btn-ghost">🔀 随机</button>
+      <button onclick="nextCard()" class="btn btn-primary">下一个 →</button>
+    </div>
+  </div>
+</div>
 
 <script src="data.js"></script>
 <script src="common.js"></script>
 <script>
-let activeCat = "all";
-let query = "";
+var activeLevel = "all";
+var activeCat = "all";
+var query = "";
 
-// 读取 URL 参数 ?cat=xxx
+// URL 参数
 (function(){
-  const params = new URLSearchParams(location.search);
-  const c = params.get("cat");
-  if(c && CATS[c]) activeCat = c;
+  var params = new URLSearchParams(location.search);
+  var lv = params.get("level");
+  if(lv && LEVELS[lv]) activeLevel = lv;
+  var cat = params.get("cat");
+  if(cat) activeCat = cat;
 })();
 
-// 总数
 document.getElementById("totalCount").textContent = EPISODES.length;
 
-// 筛选 chips
+// 级别标签
 (function(){
-  const f = document.getElementById("filters");
-  const c = catCounts();
-  let html = `<button class="chip ${activeCat==='all'?'active':''}" data-cat="all">全部 <span class="cnt">${EPISODES.length}</span></button>`;
-  Object.entries(CATS).forEach(([k,v])=>{
-    html += `<button class="chip ${activeCat===k?'active':''}" data-cat="${k}">${v.emoji} ${v.label} <span class="cnt">${c[k]||0}</span></button>`;
+  var lc = levelCounts();
+  var html = '<button class="level-tab '+(activeLevel==="all"?"active":"")+'" data-level="all">全部 ('+EPISODES.length+')</button>';
+  Object.entries(LEVELS).forEach(function(entry){
+    var k=entry[0], v=entry[1];
+    html += '<button class="level-tab '+(activeLevel===k?"active":"")+'" data-level="'+k+'" style="--tab-color:'+v.color+'">'+v.emoji+' '+v.label+' ('+(lc[k]||0)+')</button>';
   });
-  f.innerHTML = html;
-  f.addEventListener("click", e=>{
-    const b = e.target.closest(".chip");
+  document.getElementById("levelTabs").innerHTML = html;
+  document.getElementById("levelTabs").addEventListener("click", function(e){
+    var b = e.target.closest(".level-tab");
     if(!b) return;
-    f.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+    document.querySelectorAll(".level-tab").forEach(function(t){t.classList.remove("active")});
     b.classList.add("active");
-    activeCat = b.dataset.cat;
+    activeLevel = b.dataset.level;
+    renderFilters();
     render();
   });
 })();
 
+// 分类筛选
+function renderFilters(){
+  var f = document.getElementById("filters");
+  var list = byLevel(activeLevel);
+  var counts = {};
+  list.forEach(function(e){counts[e.category]=(counts[e.category]||0)+1;});
+  var html = '<button class="chip '+(activeCat==="all"?"active":"")+'" data-cat="all">全部 <span class="cnt">'+list.length+'</span></button>';
+  Object.entries(CATS).forEach(function(entry){
+    var k=entry[0], v=entry[1];
+    if(counts[k]){
+      html += '<button class="chip '+(activeCat===k?"active":"")+'" data-cat="'+k+'">'+v.emoji+' '+v.label+' <span class="cnt">'+counts[k]+'</span></button>';
+    }
+  });
+  f.innerHTML = html;
+  f.addEventListener("click", function(e){
+    var b = e.target.closest(".chip");
+    if(!b) return;
+    f.querySelectorAll(".chip").forEach(function(c){c.classList.remove("active")});
+    b.classList.add("active");
+    activeCat = b.dataset.cat;
+    render();
+  });
+}
+renderFilters();
+
 // 搜索
-document.getElementById("search").addEventListener("input", e=>{
+document.getElementById("search").addEventListener("input", function(e){
   query = e.target.value.toLowerCase().trim();
   render();
 });
 
 function render(){
-  const grid = document.getElementById("grid");
-  let list = sortedEpisodes();
-  if(activeCat !== "all") list = list.filter(e=> e.category === activeCat);
-  if(query) list = list.filter(e => (e.title+" "+e.desc).toLowerCase().includes(query));
+  var grid = document.getElementById("grid");
+  var list = byLevel(activeLevel);
+  if(activeCat !== "all") list = list.filter(function(e){return e.category === activeCat});
+  if(query) list = list.filter(function(e){return (e.title+" "+e.desc).toLowerCase().includes(query)});
   if(!list.length){
-    grid.innerHTML = `<div class="no-results"><div class="big">🔭</div><h3>没有找到相关课程</h3><p>试试其他关键词或分类吧</p></div>`;
-    return;
+    grid.innerHTML = '<div class="no-results"><div class="big">🔭</div><h3>没有找到相关课程</h3><p>试试其他级别或关键词</p></div>';
+  } else {
+    grid.innerHTML = list.map(function(e){return renderCard(e, true)}).join("");
   }
-  grid.innerHTML = list.map(renderCard).join("");
+  // 绑定复选框事件
+  document.querySelectorAll('.vocab-cb').forEach(function(cb){
+    cb.addEventListener('change', updateReviewButton);
+  });
+  updateReviewButton();
 }
 render();
 </script>

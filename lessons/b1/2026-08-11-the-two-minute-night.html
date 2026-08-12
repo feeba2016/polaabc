@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Two-Minute Night — Interactive Lesson</title>
+<style>
+:root{
+  --accent:#c2620a;
+  --accent2:#4f46e5;
+  --bg:#fbf7f0;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#ffe9a8;
+  --border:#ece3d6;
+  --soft:#fdf2e0;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#f0b429);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(194,98,10,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #f3e3c8;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(194,98,10,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(194,98,10,.55);}70%{box-shadow:0 0 0 12px rgba(194,98,10,0);}100%{box-shadow:0 0 0 0 rgba(194,98,10,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #d97706;transition:.15s;}
+.kw:hover{background:#ffd866;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#fff4e5;border:2px solid #f59e0b;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#b45309;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(194,98,10,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ffe9a8;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Science Broadcast</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Two-Minute Night</h1>
+      <p class="subtitle">2026年8月12日欧洲全日食 —— 白天变黑夜的两分钟｜全文阅读（点黄色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Get ready, everyone — tomorrow the Sun goes dark! On August the twelfth, the Moon will <span class="kw" data-def="滑动、平滑地移动过去">slide</span> right in front of the Sun. For about two minutes, day will turn into night. It is called a total solar <span class="kw" data-def="食：一个天体挡住另一个天体的光">eclipse</span>!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>The Moon's <span class="kw" data-def="影子。月亮的影子落在地球上，就形成日食">shadow</span> will race across Greenland, Iceland and northern Spain. Inside that <span class="kw" data-def="狭窄的。全食带只有约290公里宽">narrow</span> <span class="kw" data-def="路径。这里指'全食带'——影子扫过的那条带子">path</span>, the sky fades, the air cools, and birds stop singing. Around the black Moon you can see the Sun's glowing crown — the <span class="kw" data-def="日冕：太阳最外层的大气，只有全食时肉眼可见">corona</span>. Spain has been waiting for this since 1905!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>Here is the amazing part. The Sun is 400 times wider than the Moon, but it is also 400 times farther away — so they look the same size! But remember: never look at the Sun without special <span class="kw" data-def="日食眼镜：一种特制的深色滤光眼镜，普通墨镜绝对不行">eclipse glasses</span>. A tiny <span class="kw" data-def="针孔。小孔可以把太阳投影成一个小小的月牙">pinhole</span> in a card is <span class="kw" data-def="安全的">safe</span>, easy and free.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>If you miss it, don't worry — NASA and ESA will <span class="kw" data-def="在线直播">stream</span> it live online. And on the very same night, the Perseid <span class="kw" data-def="流星雨：大量流星在同一晚出现">meteor shower</span> reaches its <span class="kw" data-def="顶峰、极大值">peak</span>! This is Pola, signing off from POLA NEWS. Keep looking up — safely! Bye for now!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>⚠️ 观测安全第一 Safety First</h3>
+        <p style="margin:0;font-size:14.5px;">除了全食那短短几十秒之外，<b>任何时候都不可以用肉眼直视太阳</b>。普通墨镜、曝光胶片、没装滤镜的望远镜或相机都<b>不安全</b>。最安全又免费的方法：<b>针孔投影</b>——在卡纸上扎一个小孔，让阳光穿过投在地面上，就能看到一个小小的月牙形太阳。厨房漏勺也可以！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="eclipse">🔊</button><div class="word">eclipse<span class="pos">n.</span></div><div class="zh">食（日食／月食）：一个天体挡住另一个天体的光</div><div class="ex">"It is called a total solar eclipse."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="shadow">🔊</button><div class="word">shadow<span class="pos">n.</span></div><div class="zh">影子。月亮的影子落到地球上，就出现日食</div><div class="ex">"The Moon's shadow will race across Iceland."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="totality">🔊</button><div class="word">totality<span class="pos">n.</span></div><div class="zh">全食阶段：太阳被完全遮住的那几十秒</div><div class="ex">"Totality lasts up to two minutes."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="corona">🔊</button><div class="word">corona<span class="pos">n.</span></div><div class="zh">日冕：太阳最外层的大气，像一顶发光的王冠</div><div class="ex">"You can see the Sun's corona."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="path">🔊</button><div class="word">path<span class="pos">n.</span></div><div class="zh">路径。这里指"全食带"——影子扫过的那条窄带</div><div class="ex">"Spain sits inside the path of totality."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="narrow">🔊</button><div class="word">narrow<span class="pos">adj.</span></div><div class="zh">狭窄的。全食带只有约 290 公里宽</div><div class="ex">"It is a very narrow path."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rare">🔊</button><div class="word">rare<span class="pos">adj.</span></div><div class="zh">罕见的、稀少的</div><div class="ex">"A total eclipse is a rare event."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pinhole">🔊</button><div class="word">pinhole<span class="pos">n.</span></div><div class="zh">针孔。小孔能把太阳投影成小小的月牙形</div><div class="ex">"A pinhole in a card is safe and free."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="stream">🔊</button><div class="word">stream<span class="pos">v.</span></div><div class="zh">在线直播（也可作名词"溪流"）</div><div class="ex">"NASA will stream it live online."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="meteor shower">🔊</button><div class="word">meteor shower<span class="pos">n.</span></div><div class="zh">流星雨：同一晚出现大量流星</div><div class="ex">"The Perseid meteor shower reaches its peak."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. It is called a [total solar eclipse].</h3>
+          <div class="zh">它被称作[……]。用来给一个现象或事物命名。</div>
+          <div class="eg">It is called a total solar eclipse.</div>
+          <div class="practice">练习：用 "rainbow" 造句 → It is called a <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. The Sun is [400 times wider] than the Moon.</h3>
+          <div class="zh">太阳比月亮宽[400 倍]。"倍数 + 比较级 + than" 表示相差多少倍。</div>
+          <div class="eg">The Sun is 400 times wider than the Moon.</div>
+          <div class="practice">练习：用 "ten times bigger / my room" → The hall is <input placeholder="your answer"> than my room.</div>
+        </div>
+        <div class="item">
+          <h3>3. Never [look at the Sun] without [eclipse glasses].</h3>
+          <div class="zh">没有[……]时，千万不要[做某事]。用于强烈的安全提醒。</div>
+          <div class="eg">Never look at the Sun without special eclipse glasses.</div>
+          <div class="practice">练习：用 "swim / a life jacket" → Never <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. If you [miss it], you can [watch it online].</h3>
+          <div class="zh">如果你[……]，你可以[……]。真实条件句，给出备选方案。</div>
+          <div class="eg">If you miss it, you can watch it online.</div>
+          <div class="practice">练习：用 "feel tired / take a short rest" → If you <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. For about [two minutes], day will turn into night.</h3>
+          <div class="zh">在大约[两分钟]里，白天将变成黑夜。"turn into" = 变成。</div>
+          <div class="eg">For about two minutes, day will turn into night.</div>
+          <div class="practice">练习：用 "water / ice" → In winter, water will turn into <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般将来时 will + 动词原形</h3>
+          <div class="zh">表示将来会发生的事。日食是可以精确预测的，所以整篇课文大量使用 will。</div>
+          <div class="eg">The Moon <b>will slide</b> in front of the Sun. / Day <b>will turn</b> into night. / NASA <b>will stream</b> it live.</div>
+        </div>
+        <div class="item">
+          <h3>2. 倍数比较：X times + 比较级 + than</h3>
+          <div class="zh">表示"是……的几倍"。注意倍数放在比较级<b>前面</b>。</div>
+          <div class="eg">The Sun is <b>400 times wider than</b> the Moon. / He is <b>three times faster than</b> me.</div>
+        </div>
+        <div class="item">
+          <h3>3. 祈使句（含否定祈使句 Never…）</h3>
+          <div class="zh">祈使句用动词原形开头，不要主语，用来提出建议、命令或警告。Never 开头语气最强。</div>
+          <div class="eg"><b>Get</b> ready! / <b>Remember</b>: … / <b>Never look</b> at the Sun without glasses.</div>
+        </div>
+        <div class="item">
+          <h3>4. 时间介词 on / in / at</h3>
+          <div class="zh"><b>on</b> + 具体某一天（日期、星期）；<b>in</b> + 月份、年份、较长时段；<b>at</b> + 具体钟点。</div>
+          <div class="eg"><b>on</b> August the twelfth / <b>on</b> the very same night / <b>in</b> 1905 / <b>at</b> 8:28 p.m.</div>
+        </div>
+        <div class="item">
+          <h3>5. 现在完成时 + since（have been waiting since 1905）</h3>
+          <div class="zh">"have / has + 过去分词" 表示从过去持续到现在。since + 时间点（起点），for + 时间段（长度）。</div>
+          <div class="eg">Spain <b>has been waiting</b> for this <b>since</b> 1905. / We <b>have waited for</b> 121 years.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>日食是怎么发生的？</h3>
+        <p>月亮绕着地球转，地球绕着太阳转。当<b>太阳、月亮、地球恰好排成一条直线</b>，而月亮正好夹在中间时，月亮的影子就会投到地球表面——这就是日食。站在影子最深处（本影）里的人，会看到太阳被完全遮住，这叫<b>日全食</b>；站在影子边缘（半影）里的人，只能看到太阳被"咬"掉一块，这叫<b>日偏食</b>。</p>
+        <p>那为什么不是每个月都有日食呢？因为月亮的公转轨道相对地球公转轨道倾斜了约 5 度。大多数新月时，月影都从地球上方或下方擦过去了，只有偶尔才会正好命中。</p>
+
+        <h3>宇宙中最美的巧合：400 与 400</h3>
+        <p>太阳的直径约是月亮的 <b>400 倍</b>，而太阳到地球的距离，也恰好约是月亮到地球距离的 <b>400 倍</b>。这两个"400"互相抵消，让太阳和月亮在我们的天空中看起来<b>几乎一样大</b>。正因为如此，月亮才能不多不少地刚好盖住太阳，露出外面那圈日冕。</p>
+        <p>这在整个太阳系里是独一无二的。而且它还是"限时优惠"——月亮每年正以约 3.8 厘米的速度远离地球。大约 6 亿年后，月亮就会显得太小，再也遮不住整个太阳，地球上将不再有日全食。我们正好生活在能看到它的年代。</p>
+
+        <h3>日冕：只有全食时才现身的王冠</h3>
+        <p>日冕（corona，拉丁语意为"王冠"）是太阳最外层的大气，温度高达上百万摄氏度，比太阳表面还热得多——这个"日冕加热之谜"至今没有完全解开。平时它被明亮的太阳圆面完全盖住，肉眼根本看不见。只有在日全食那短短几十秒，天空暗下来，日冕才会像一圈珍珠白的光晕突然浮现。历史上许多重要的太阳物理发现，都是在日全食期间完成的。</p>
+
+        <h3>2026年8月12日：这一次为什么特别？</h3>
+        <ul>
+          <li><b>欧洲大陆自 1999 年以来的第一次日全食</b>，西班牙本土更是自 <b>1905 年</b>以来的第一次。</li>
+          <li>全食带宽约 290 公里，从西伯利亚北部出发，越过北极，掠过格陵兰东部、冰岛西部、大西洋，最后扫过葡萄牙东北一角和西班牙北部。</li>
+          <li>最长全食时间 <b>2 分 18 秒</b>（出现在冰岛以西的洋面上）；雷克雅未克约 60 秒，西班牙莱昂约 1 分 45 秒。</li>
+          <li>西班牙的这次全食发生在<b>日落前不久</b>，太阳低垂在地平线附近，日冕会带上一层温暖的橙红色调，画面极为罕见。</li>
+          <li>马德里差一点点就进入全食带——那里的太阳会被遮住 99.99%，但仍然看不到全食。<b>全食带的边界是一条硬邦邦的线，差一步就是两个世界。</b></li>
+          <li>同一晚，<b>英仙座流星雨</b>正好达到极大。看完日食等天黑，还能接着看流星雨。</li>
+        </ul>
+
+        <h3>动物们的反应</h3>
+        <p>日全食时最有意思的不只是天空。光线在几分钟内急速变暗，气温可能下降好几摄氏度，动物们会以为夜晚提前到了：鸟儿突然安静下来回巢，蟋蟀开始鸣叫，牛羊往圈里走。等太阳重新露脸，鸟群又会像清晨一样爆发出一阵"黎明合唱"——尽管当时可能才下午。科学家会趁这几分钟专门研究动物行为。</p>
+
+        <h3>中国能看到吗？下一次呢？</h3>
+        <p>很遗憾，这次日食发生时中国正值深夜，完全看不到。不过 <b>NASA 和 ESA（欧洲空间局）都会免费在线直播</b>，ESA 的主机位设在西班牙特鲁埃尔的哈瓦兰布雷天文台。</p>
+        <p>好消息是：<b>2035 年 9 月 2 日</b>，一次日全食的全食带将扫过中国北方，北京、河北、辽宁等地都在带内。对今天 10 岁的小朋友来说，那时你大概 19 岁——完全来得及为它做准备。</p>
+
+        <h3>动手做：自己造一台"日食投影仪"</h3>
+        <p>不需要任何专业设备，找一张硬卡纸，用针在中间扎一个小孔，背对太阳举起来，让阳光穿过小孔投到地面或另一张白纸上——你会看到一个太阳的小影像。日食期间，这个影像会变成一个小月牙。</p>
+        <p>更好玩的是：厨房的<b>漏勺</b>、树叶之间的缝隙，其实都是天然的针孔。日食时走到树下，你会看到地面上铺满了成百上千个小月牙。这不是魔法，这是光沿直线传播的必然结果——小孔成像，中国战国时期的《墨经》里就已经记载过了。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>理解日食的成因，认识全食带、日冕、本影等天文概念。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般将来时（will）、倍数比较（400 times wider than）、祈使句与条件句。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 10 个天文与观测主题核心词汇，并能听懂、跟读。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会用英语给出安全提醒（Never … without …）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>记住最重要的一条：观测太阳必须使用认证日食眼镜或针孔投影。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿播报的语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🖐️</span><div>动手做一个针孔投影板，晴天时在院子里试一试小孔成像。</div></div>
+        <div class="goal"><span class="ic">📺</span><div>8月12日晚，和家人一起看 NASA 或 ESA 的官方直播（中国时间为8月13日凌晨）。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Two-Minute Night · 2026-08-11 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.97; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Get ready, everyone! Tomorrow the Sun goes dark. On August the twelfth, the Moon will slide right in front of the Sun. For about two minutes, day will turn into night. It is called a total solar eclipse!",
+  "The Moon's shadow will race across Greenland, Iceland and northern Spain. Inside that narrow path, the sky fades, the air cools, and birds stop singing. Around the black Moon you can see the Sun's glowing crown, the corona. Spain has been waiting for this since nineteen oh five!",
+  "Here is the amazing part. The Sun is four hundred times wider than the Moon, but it is also four hundred times farther away, so they look the same size! But remember: never look at the Sun without special eclipse glasses. A tiny pinhole in a card is safe, easy and free.",
+  "If you miss it, don't worry. NASA and E.S.A. will stream it live online. And on the very same night, the Perseid meteor shower reaches its peak! This is Pola, signing off from POLA NEWS. Keep looking up, safely! Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"When will the total solar eclipse happen? 这次日全食发生在什么时候？",opts:["On August 12, 2026","On August 20, 2026","On September 2, 2026"],ans:0,
+   fb:"Correct! 就在 2026 年 8 月 12 日 —— 播出的第二天。"},
+  {q:"What passes in front of the Sun during a solar eclipse? 日食时是什么挡在太阳前面？",opts:["The Moon","The Earth","A big cloud"],ans:0,
+   fb:"Yes! 是月亮滑到太阳前面，把影子投在地球上。"},
+  {q:"Which places are inside the path of totality? 哪些地方在全食带内？",opts:["Greenland, Iceland and northern Spain","China and Japan","Australia and New Zealand"],ans:0,
+   fb:"Right! 全食带扫过格陵兰东部、冰岛西部和西班牙北部。"},
+  {q:"What is the Sun's glowing crown called? 太阳那圈发光的'王冠'叫什么？",opts:["The corona","The shadow","The comet"],ans:0,
+   fb:"Correct! 日冕（corona）只有在全食那几十秒才看得见。"},
+  {q:"Why do the Sun and the Moon look the same size? 为什么太阳和月亮看起来一样大？",opts:["The Sun is 400 times wider but also 400 times farther away","They really are the same size","The Moon is closer to the Sun"],ans:0,
+   fb:"Yes! 两个'400 倍'刚好抵消，这是宇宙中一个美妙的巧合。"},
+  {q:"What is a safe and free way to watch? 什么是既安全又免费的观测方法？",opts:["A pinhole in a card","Sunglasses","Looking quickly with bare eyes"],ans:0,
+   fb:"Right! 针孔投影最安全。墨镜和肉眼直视都非常危险！"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

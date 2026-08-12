@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swift Space Rescue | Pola News 互动课堂</title>
+  <style>
+    :root {
+      --primary: #1a237e;
+      --secondary: #3949ab;
+      --accent: #c5cae9;
+      --highlight: #fff3cd;
+      --highlight-border: #ffc107;
+      --bg: #e8eaf6;
+      --card: #ffffff;
+      --text: #1b262c;
+      --muted: #5f6f7a;
+      --success: #2e7d32;
+      --shadow: rgba(26, 35, 126, 0.15);
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 50%, #9fa8da 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: rgba(255,255,255,0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, var(--primary), #0d1442);
+      color: white;
+      padding: 24px 16px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 4px 0 20px var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand small {
+      font-size: 0.75rem;
+      opacity: 0.85;
+      font-weight: 500;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 0;
+    }
+
+    .nav-list li {
+      margin-bottom: 6px;
+    }
+
+    .nav-list a {
+      display: block;
+      padding: 12px 14px;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .nav-list a:hover, .nav-list a.active {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      transform: translateX(4px);
+    }
+
+    .nav-list a .num {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      margin-right: 8px;
+      font-size: 0.8rem;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+      margin-top: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #64b5f6, #42a5f5);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-label {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* Mobile menu */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 200;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 99;
+    }
+
+    /* Main content */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 32px;
+      max-width: calc(100% - 260px);
+    }
+
+    .section {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 30px var(--shadow);
+      scroll-margin-top: 24px;
+    }
+
+    .section h2 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section h2 .icon {
+      font-size: 1.5rem;
+    }
+
+    /* Reading section */
+    .intro-banner {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .intro-banner h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+    }
+
+    .intro-banner p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 1.05rem;
+    }
+
+    .segment {
+      position: relative;
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 24px 24px 24px 56px;
+      margin-bottom: 18px;
+      border-left: 5px solid var(--secondary);
+      transition: transform 0.2s ease;
+    }
+
+    .segment:hover { transform: translateY(-2px); }
+
+    .segment-num {
+      position: absolute;
+      left: 18px;
+      top: 22px;
+      width: 28px;
+      height: 28px;
+      background: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .segment p {
+      margin: 0;
+      line-height: 1.8;
+      font-size: 1.15rem;
+    }
+
+    .segment-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .play-btn:hover {
+      background: var(--primary);
+      transform: scale(1.05);
+    }
+
+    .play-btn.playing {
+      background: var(--success);
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.5); }
+      70% { box-shadow: 0 0 0 12px rgba(46, 125, 50, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); }
+    }
+
+    .segment-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* Vocabulary */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .vocab-card {
+      background: linear-gradient(180deg, #ffffff, #e8eaf6);
+      border: 2px solid #c5cae9;
+      border-radius: 16px;
+      padding: 20px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .vocab-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px var(--shadow);
+    }
+
+    .vocab-word {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .vocab-pronounce {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--secondary);
+      transition: transform 0.2s ease;
+      padding: 4px;
+    }
+
+    .vocab-pronounce:hover { transform: scale(1.2); }
+
+    .vocab-pronounce.playing { animation: pulse 1.2s infinite; color: var(--success); }
+
+    .vocab-pos {
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: #e8eaf6;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .vocab-meaning {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .vocab-example {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-style: italic;
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
+    }
+
+    /* Sentence patterns & grammar */
+    .pattern-list, .grammar-list, .quiz-list, .extend-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .pattern-item, .grammar-item, .quiz-item, .extend-item {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--secondary);
+    }
+
+    .pattern-en {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .pattern-zh {
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .pattern-example {
+      background: white;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px dashed #c5cae9;
+    }
+
+    .pattern-practice {
+      width: 100%;
+      border: 2px solid #c5cae9;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .pattern-practice:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    /* Grammar */
+    .grammar-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .grammar-explanation {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+
+    .grammar-example {
+      background: white;
+      border-radius: 8px;
+      padding: 10px 14px;
+      border-left: 4px solid var(--accent);
+      font-style: italic;
+    }
+
+    /* Quiz */
+    .quiz-question {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
+
+    .quiz-options label {
+      display: block;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      background: white;
+      border: 2px solid #c5cae9;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quiz-options label:hover { border-color: var(--secondary); }
+
+    .quiz-options input { margin-right: 10px; }
+
+    .quiz-options .correct {
+      border-color: var(--success);
+      background: #e8f5e9;
+    }
+
+    .quiz-options .wrong {
+      border-color: #c62828;
+      background: #ffebee;
+    }
+
+    .quiz-feedback {
+      margin-top: 10px;
+      font-weight: 600;
+      min-height: 24px;
+    }
+
+    .check-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      margin-top: 20px;
+      transition: background 0.2s ease;
+    }
+
+    .check-btn:hover { background: var(--secondary); }
+
+    .score-box {
+      margin-top: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: none;
+    }
+
+    /* Knowledge extension */
+    .extend-item h4 {
+      margin: 0 0 8px;
+      color: var(--primary);
+    }
+
+    .extend-item p {
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .fun-fact {
+      background: linear-gradient(135deg, #fff8e1, #ffecb3);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 20px;
+      border-left: 5px solid #ffb300;
+    }
+
+    .fun-fact h4 {
+      margin: 0 0 10px;
+      color: #e65100;
+    }
+
+    /* About */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .about-card {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .about-card h4 {
+      margin: 0 0 8px;
+      color: var(--primary);
+    }
+
+    .about-card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .about-card li { margin-bottom: 6px; }
+
+    .print-btn {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s ease;
+    }
+
+    .print-btn:hover { background: var(--primary); }
+
+    /* Tooltip */
+    .keyword {
+      background: var(--highlight);
+      border-bottom: 2px dashed var(--highlight-border);
+      cursor: help;
+      position: relative;
+      padding: 0 3px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    }
+
+    .keyword:hover {
+      background: #ffe8a1;
+    }
+
+    .tooltip {
+      position: fixed;
+      background: var(--primary);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      max-width: 220px;
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: var(--primary) transparent transparent transparent;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .menu-toggle { display: block; }
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .overlay.open { display: block; }
+      .main {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 70px 20px 24px;
+      }
+      .vocab-grid { grid-template-columns: 1fr; }
+      .intro-banner h1 { font-size: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .section { padding: 20px; }
+      .segment { padding: 18px 18px 18px 50px; }
+      .segment p { font-size: 1rem; }
+      .section h2 { font-size: 1.4rem; }
+    }
+
+    /* Print styles */
+    @media print {
+      body { background: white; }
+      .sidebar, .menu-toggle, .play-btn, .vocab-pronounce, .check-btn, .print-btn, .pattern-practice, .segment-actions, .quiz-options input {
+        display: none !important;
+      }
+      .main {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 20px;
+      }
+      .section {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+      }
+      .keyword {
+        background: none !important;
+        border-bottom: 1px solid #999;
+      }
+      .tooltip { display: none !important; }
+      .pattern-practice { display: none; }
+      .quiz-options label { border: 1px solid #999; }
+    }
+  </style>
+</head>
+<body>
+  <button class="menu-toggle" id="menuToggle" aria-label="打开菜单">☰ 菜单</button>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        🎙️ Pola News
+        <small>每日英语科普新闻</small>
+      </div>
+      <ul class="nav-list">
+        <li><a href="#reading" class="active"><span class="num">1</span>全文阅读</a></li>
+        <li><a href="#vocab"><span class="num">2</span>词汇表</a></li>
+        <li><a href="#patterns"><span class="num">3</span>句型练习</a></li>
+        <li><a href="#grammar"><span class="num">4</span>语法点</a></li>
+        <li><a href="#quiz"><span class="num">5</span>练习测验</a></li>
+        <li><a href="#extend"><span class="num">6</span>知识扩展</a></li>
+        <li><a href="#about"><span class="num">7</span>关于本课</a></li>
+      </ul>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-label" id="progressLabel">阅读进度 0%</div>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="intro-banner">
+        <h1>Swift Space Rescue</h1>
+        <p>今天的主题：NASA 的太空救援行动 —— 派机器人飞船去拯救一颗正在坠落的老旧太空望远镜。主持人：Pola the Quokka</p>
+      </div>
+
+      <section class="section" id="reading">
+        <h2><span class="icon">📖</span>全文阅读</h2>
+        <p style="color: var(--muted); margin-bottom: 20px;">点击黄色高亮词汇查看中文释义；点击 ▶ 播放段落朗读。</p>
+
+        <div class="segment" data-index="0">
+          <span class="segment-num">1</span>
+          <p>
+            High above the <span class="keyword" data-zh="太平洋">Pacific Ocean</span>, a <span class="keyword" data-zh="太空救援">space rescue</span> is underway! A special <span class="keyword" data-zh="机器人飞船">robot spaceship</span> called Link just blasted into <span class="keyword" data-zh="轨道">orbit</span> — not from the ground, but dropped from a giant airplane at <span class="keyword" data-zh="40000英尺（约12公里）">40,000 feet</span>! Its mission? Catch an old, falling <span class="keyword" data-zh="望远镜">telescope</span> before it burns up in Earth's <span class="keyword" data-zh="大气层">atmosphere</span>.
+          </p>
+          <div class="segment-actions">
+            <button class="play-btn" data-index="0">▶ 播放段落</button>
+            <span class="segment-label">Segment 1: Hook</span>
+          </div>
+        </div>
+
+        <div class="segment" data-index="1">
+          <span class="segment-num">2</span>
+          <p>
+            The telescope is called <span class="keyword" data-zh="斯威夫特望远镜">Swift</span>, and it's been watching <span class="keyword" data-zh="爆炸的恒星">exploding stars</span> for 21 years. But now it's slowly <span class="keyword" data-zh="坠落">falling</span> toward Earth. NASA built a <span class="keyword" data-zh="冰箱大小的">refrigerator-sized</span> robot — Link — with THREE <span class="keyword" data-zh="机械臂">robotic arms</span> and special <span class="keyword" data-zh="引擎；推进器">thrusters</span>. In a few weeks, Link will <span class="keyword" data-zh="悄悄靠近">sneak up on</span> Swift, <span class="keyword" data-zh="抓住">grab</span> it tight, and push it to a <span class="keyword" data-zh="更安全的；更高的">safer, higher</span> orbit.
+          </p>
+          <div class="segment-actions">
+            <button class="play-btn" data-index="1">▶ 播放段落</button>
+            <span class="segment-label">Segment 2: Story</span>
+          </div>
+        </div>
+
+        <div class="segment" data-index="2">
+          <span class="segment-num">3</span>
+          <p>
+            This mission is more than just saving one telescope. It could <span class="keyword" data-zh="改变">change</span> how we think about <span class="keyword" data-zh="太空">space</span> forever! Instead of throwing old <span class="keyword" data-zh="卫星">satellites</span> away like trash, we can <span class="keyword" data-zh="修理">fix</span> them, move them, and keep using them. Imagine a <span class="keyword" data-zh="未来">future</span> where no satellite is ever wasted — just <span class="keyword" data-zh="修理">repaired</span> and <span class="keyword" data-zh="重复使用">reused</span>!
+          </p>
+          <div class="segment-actions">
+            <button class="play-btn" data-index="2">▶ 播放段落</button>
+            <span class="segment-label">Segment 3: Why It Matters</span>
+          </div>
+        </div>
+
+        <div class="segment" data-index="3">
+          <span class="segment-num">4</span>
+          <p>
+            The rescue has to be finished by <span class="keyword" data-zh="十月">October</span>, or Swift will be lost. The whole world is watching! I'm Pola, reporting from the <span class="keyword" data-zh="太空边缘">edge of space</span>. Keep looking up, explorers — the <span class="keyword" data-zh="宇宙">universe</span> is full of <span class="keyword" data-zh="第二次机会">second chances</span>!
+          </p>
+          <div class="segment-actions">
+            <button class="play-btn" data-index="3">▶ 播放段落</button>
+            <span class="segment-label">Segment 4: Sign-off</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="vocab">
+        <h2><span class="icon">📝</span>词汇表</h2>
+        <div class="vocab-grid">
+          <div class="vocab-card">
+            <div class="vocab-word">orbit <button class="vocab-pronounce" data-word="orbit">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">轨道（天体或航天器绕行的路径）</div>
+            <div class="vocab-example">Link will push Swift to a higher orbit around Earth.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">telescope <button class="vocab-pronounce" data-word="telescope">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">望远镜</div>
+            <div class="vocab-example">The Swift telescope has watched exploding stars for 21 years.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">atmosphere <button class="vocab-pronounce" data-word="atmosphere">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">大气层</div>
+            <div class="vocab-example">The satellite will burn up in Earth's atmosphere if not rescued.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">satellite <button class="vocab-pronounce" data-word="satellite">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">卫星（人造卫星）</div>
+            <div class="vocab-example">Instead of throwing old satellites away, we can fix and reuse them.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">robotic <button class="vocab-pronounce" data-word="robotic">🔊</button></div>
+            <span class="vocab-pos">adj. 形容词</span>
+            <div class="vocab-meaning">机器人的；自动化的</div>
+            <div class="vocab-example">Link has three robotic arms to grab the falling telescope.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">thruster <button class="vocab-pronounce" data-word="thruster">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">推进器（航天器上用于移动的小引擎）</div>
+            <div class="vocab-example">Link uses its thrusters to push both spacecraft higher into space.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">universe <button class="vocab-pronounce" data-word="universe">🔊</button></div>
+            <span class="vocab-pos">n. 名词</span>
+            <div class="vocab-meaning">宇宙</div>
+            <div class="vocab-example">The universe is full of second chances!</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">exploding <button class="vocab-pronounce" data-word="exploding">🔊</button></div>
+            <span class="vocab-pos">adj. 形容词 / v. 动词</span>
+            <div class="vocab-meaning">爆炸的；正在爆炸的</div>
+            <div class="vocab-example">Swift has been watching exploding stars in deep space.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">repair <button class="vocab-pronounce" data-word="repair">🔊</button></div>
+            <span class="vocab-pos">v. 动词</span>
+            <div class="vocab-meaning">修理；修复</div>
+            <div class="vocab-example">In the future, we can repair satellites instead of throwing them away.</div>
+          </div>
+          <div class="vocab-card">
+            <div class="vocab-word">rescue <button class="vocab-pronounce" data-word="rescue">🔊</button></div>
+            <span class="vocab-pos">n. / v. 名词/动词</span>
+            <div class="vocab-meaning">救援；营救</div>
+            <div class="vocab-example">A daring space rescue is underway high above the Pacific Ocean.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="patterns">
+        <h2><span class="icon">🔧</span>句型练习</h2>
+        <p style="color: var(--muted); margin-bottom: 20px;">从课文中提取的实用句型，先读例句，再尝试自己造句。</p>
+        <ul class="pattern-list">
+          <li class="pattern-item">
+            <div class="pattern-en">1. Its mission? ...</div>
+            <div class="pattern-zh">它的任务是什么？……（用简短问句引出任务描述）</div>
+            <div class="pattern-example">Its mission? Catch an old, falling telescope before it burns up!</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：Its mission? ..."></textarea>
+          </li>
+          <li class="pattern-item">
+            <div class="pattern-en">2. ... has been watching ... for ... years.</div>
+            <div class="pattern-zh">……已经观察……达……年了（现在完成进行时）</div>
+            <div class="pattern-example">Swift has been watching exploding stars for 21 years.</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：... has been ... for ... years."></textarea>
+          </li>
+          <li class="pattern-item">
+            <div class="pattern-en">3. This mission is more than just ...</div>
+            <div class="pattern-zh">这次任务不仅仅是……（强调更深层的意义）</div>
+            <div class="pattern-example">This mission is more than just saving one telescope.</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：... is more than just ..."></textarea>
+          </li>
+          <li class="pattern-item">
+            <div class="pattern-en">4. Instead of ... , we can ...</div>
+            <div class="pattern-zh">与其……（做某事），我们可以……（提出更好的替代方案）</div>
+            <div class="pattern-example">Instead of throwing old satellites away like trash, we can fix them and keep using them.</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：Instead of ... , we can ..."></textarea>
+          </li>
+          <li class="pattern-item">
+            <div class="pattern-en">5. Imagine a future where ...</div>
+            <div class="pattern-zh">想象一个……的未来（用于描述愿景）</div>
+            <div class="pattern-example">Imagine a future where no satellite is ever wasted — just repaired and reused!</div>
+            <textarea class="pattern-practice" placeholder="试着写一句：Imagine a future where ..."></textarea>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section" id="grammar">
+        <h2><span class="icon">📐</span>语法点</h2>
+        <ul class="grammar-list">
+          <li class="grammar-item">
+            <div class="grammar-title">1. 现在进行时 — 描述正在发生的事</div>
+            <div class="grammar-explanation">用 be + v-ing 形式表达正在进行的动作。本课中有多处使用现在进行时来制造紧张感和即时感。</div>
+            <div class="grammar-example">A space rescue is underway! / It's slowly falling toward Earth. / The whole world is watching!</div>
+          </li>
+          <li class="grammar-item">
+            <div class="grammar-title">2. 现在完成进行时 — 从过去延续到现在的动作</div>
+            <div class="grammar-explanation">用 have/has + been + v-ing 表示从过去开始并持续到现在的动作，强调持续性。</div>
+            <div class="grammar-example">It's been watching exploding stars for 21 years.</div>
+          </li>
+          <li class="grammar-item">
+            <div class="grammar-title">3. 情态动词 could — 表达可能性</div>
+            <div class="grammar-explanation">could 用于表达可能性或潜在的结果，语气比 can 更不确定但更有说服力。</div>
+            <div class="grammar-example">It could change how we think about space forever! / It could allow Swift to work for another 10 years.</div>
+          </li>
+          <li class="grammar-item">
+            <div class="grammar-title">4. 被动语态 — 强调动作承受者</div>
+            <div class="grammar-explanation">当不清楚或不重要说明动作执行者时，用 be + 过去分词。本课中用于表达最终期限和紧迫感。</div>
+            <div class="grammar-example">The rescue has to be finished by October. / Swift will be lost.</div>
+          </li>
+          <li class="grammar-item">
+            <div class="grammar-title">5. 祈使句 — 发出指令或号召</div>
+            <div class="grammar-explanation">祈使句以动词原形开头，用于发出指令、建议或号召。在新闻播报的结尾段，Pola 用祈使句鼓励小观众。</div>
+            <div class="grammar-example">Keep looking up, explorers! / Catch an old, falling telescope before it burns up!</div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section" id="quiz">
+        <h2><span class="icon">✅</span>练习测验</h2>
+        <p style="color: var(--muted); margin-bottom: 20px;">选择正确答案，检验你对课文的理解。</p>
+        <ul class="quiz-list" id="quizList">
+          <li class="quiz-item" data-correct="C">
+            <div class="quiz-question">1. What is the name of the rescue spacecraft?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q1" value="A"> A) Swift</label>
+              <label><input type="radio" name="q1" value="B"> B) Pegasus</label>
+              <label><input type="radio" name="q1" value="C"> C) Link</label>
+              <label><input type="radio" name="q1" value="D"> D) NASA One</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="B">
+            <div class="quiz-question">2. How long has the Swift telescope been working?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q2" value="A"> A) 10 years</label>
+              <label><input type="radio" name="q2" value="B"> B) 21 years</label>
+              <label><input type="radio" name="q2" value="C"> C) 5 years</label>
+              <label><input type="radio" name="q2" value="D"> D) 50 years</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="A">
+            <div class="quiz-question">3. How was Link launched into space?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q3" value="A"> A) Dropped from a giant airplane, then rocket blasted off</label>
+              <label><input type="radio" name="q3" value="B"> B) Launched from a ground pad like a normal rocket</label>
+              <label><input type="radio" name="q3" value="C"> C) Carried into space by astronauts</label>
+              <label><input type="radio" name="q3" value="D"> D) Sent up in pieces and assembled in space</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="D">
+            <div class="quiz-question">4. How many robotic arms does Link have?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q4" value="A"> A) One</label>
+              <label><input type="radio" name="q4" value="B"> B) Two</label>
+              <label><input type="radio" name="q4" value="C"> C) Four</label>
+              <label><input type="radio" name="q4" value="D"> D) Three</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="C">
+            <div class="quiz-question">5. By when must the rescue be completed?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q5" value="A"> A) December</label>
+              <label><input type="radio" name="q5" value="B"> B) Next year</label>
+              <label><input type="radio" name="q5" value="C"> C) October</label>
+              <label><input type="radio" name="q5" value="D"> D) Next month</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+          <li class="quiz-item" data-correct="B">
+            <div class="quiz-question">6. What is the bigger lesson of this mission?</div>
+            <div class="quiz-options">
+              <label><input type="radio" name="q6" value="A"> A) Rockets are cool</label>
+              <label><input type="radio" name="q6" value="B"> B) We can repair and reuse satellites instead of throwing them away</label>
+              <label><input type="radio" name="q6" value="C"> C) Telescopes will always fall down</label>
+              <label><input type="radio" name="q6" value="D"> D) Space is too dangerous to explore</label>
+            </div>
+            <div class="quiz-feedback"></div>
+          </li>
+        </ul>
+        <button class="check-btn" id="checkBtn">检查答案</button>
+        <div class="score-box" id="scoreBox"></div>
+      </section>
+
+      <section class="section" id="extend">
+        <h2><span class="icon">🌏</span>中文知识扩展</h2>
+        <ul class="extend-list">
+          <li class="extend-item">
+            <h4>🛰️ Swift 望远镜 —— 太空中服役最久的天文台之一</h4>
+            <p>Swift 全称 Neil Gehrels Swift Observatory（尼尔·格雷尔斯·斯威夫特天文台），于 2004 年发射升空，耗资约 5 亿美元。它的主要任务是探测伽马射线暴（gamma-ray bursts）—— 宇宙中最剧烈的爆炸事件，通常发生在两颗中子星相撞或大质量恒星坍缩时。Swift 的一项重要能力是：一旦探测到伽马射线暴，它会在几秒内自动转向，用 X 射线和紫外线/可见光望远镜进行后续观测。21 年来，它已观测了数千次伽马射线暴，远超 NASA 最初预计的 2 年寿命！</p>
+          </li>
+          <li class="extend-item">
+            <h4>✈️ 空中发射 —— 不用发射台也能去太空</h4>
+            <p>Link 飞船的发射方式非常特别 —— 不是从地面火箭发射台升空，而是由一架巨大的运输机（改装过的 L-1011 客机）载到约 12 公里的高空后投放。飞机释放飞马座（Pegasus XL）火箭后，火箭在半空中点火，将 Link 送入轨道。这种方式叫做"空中发射"，优点是灵活（几乎可以在赤道附近的任何海域发射）且节省燃料（因为已经越过了最浓密的大气层）。</p>
+          </li>
+          <li class="extend-item">
+            <h4>🤖 太空机器人 —— 在轨服务的新时代</h4>
+            <p>Link 飞船重约 425 公斤，大小相当于一台冰箱，配备了三只机械臂和三个推进器。它需要在太空中自主找到 Swift，用摄像头和传感器精确定位，然后用机械臂抓住这颗从未被设计成能被"抓住"的卫星。这就像在高速公路上用意想不到的方式对接两辆车！这项技术如果成功，将开启"在轨服务"的新时代 —— 未来我们可以在太空中修理、升级、加注燃料甚至回收卫星，而不是把它们变成太空垃圾。</p>
+          </li>
+          <li class="extend-item">
+            <h4>♻️ 太空可持续发展</h4>
+            <p>目前地球轨道上约有超过 3000 颗活跃卫星和数万块太空碎片。过去的做法是：卫星寿命到了就变成太空垃圾，或者坠入大气层烧毁。Katalyst Space Technologies 的目标是改变这种"一次性"文化，让太空变得更加可持续。如果 Link 成功救回 Swift，它将证明：即使是为期 21 年的老卫星，也可以通过机器人技术在太空中延续寿命。这对未来所有卫星的运营方式都将产生深远影响。</p>
+          </li>
+        </ul>
+        <div class="fun-fact">
+          <h4>💡 趣味冷知识</h4>
+          <p>Swift 的名字其实有双重含义：一方面它确实"迅捷"（Swift 在英文中意为"快速的"）—— 可以在几秒内转向宇宙中的任何方向；另一方面它也是为了纪念美国著名歌手兼词曲作家 Taylor Swift（？）—— 其实不是啦！它是为了纪念 Neil Gehrels，一位在 2017 年去世的伟大天体物理学家。而"Swift"这个名字只是一个巧合，但确实很酷！</p>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <h2><span class="icon">🎓</span>关于本课</h2>
+        <div class="about-grid">
+          <div class="about-card">
+            <h4>学习目标</h4>
+            <ul>
+              <li>掌握 10 个航天相关核心词汇</li>
+              <li>理解太空救援与卫星可持续利用理念</li>
+              <li>学会用英文表达"任务/救援/想象未来"</li>
+              <li>复习现在进行时、完成进行时和被动语态</li>
+            </ul>
+          </div>
+          <div class="about-card">
+            <h4>学习建议</h4>
+            <ul>
+              <li>先完整听一遍课文朗读</li>
+              <li>跟读每个段落，模仿语音语调</li>
+              <li>用句型练习自己造句</li>
+              <li>完成测验并复习错题</li>
+              <li>想一想：如果你能设计一颗卫星，它应该做什么？</li>
+            </ul>
+          </div>
+          <div class="about-card">
+            <h4>课程信息</h4>
+            <ul>
+              <li>日期：2026-07-09</li>
+              <li>主题：Swift Space Rescue</li>
+              <li>英语等级：B1（10-12岁）</li>
+              <li>主持人：Pola the Quokka</li>
+              <li>来源：NewsForKids.net / NASA</li>
+            </ul>
+          </div>
+        </div>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本课</button>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Segment texts for speech (plain text, no HTML)
+    const segmentTexts = [
+      "High above the Pacific Ocean, a space rescue is underway! A special robot spaceship called Link just blasted into orbit — not from the ground, but dropped from a giant airplane at 40,000 feet! Its mission? Catch an old, falling telescope before it burns up in Earth's atmosphere.",
+      "The telescope is called Swift, and it's been watching exploding stars for 21 years. But now it's slowly falling toward Earth. NASA built a refrigerator-sized robot — Link — with THREE robotic arms and special thrusters. In a few weeks, Link will sneak up on Swift, grab it tight, and push it to a safer, higher orbit.",
+      "This mission is more than just saving one telescope. It could change how we think about space forever! Instead of throwing old satellites away like trash, we can fix them, move them, and keep using them. Imagine a future where no satellite is ever wasted — just repaired and reused!",
+      "The rescue has to be finished by October, or Swift will be lost. The whole world is watching! I'm Pola, reporting from the edge of space. Keep looking up, explorers — the universe is full of second chances!"
+    ];
+
+    let voices = [];
+    let currentUtterance = null;
+    let currentPlayingBtn = null;
+
+    function loadVoices() {
+      voices = window.speechSynthesis.getVoices();
+      if (voices.length === 0) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          voices = window.speechSynthesis.getVoices();
+        };
+      }
+    }
+
+    function selectBestVoice() {
+      const englishVoices = voices.filter(v => v.lang && v.lang.startsWith('en'));
+      if (englishVoices.length === 0) return voices[0] || null;
+
+      const preferred = [
+        v => v.name.includes('Enhanced') && v.name.toLowerCase().includes('male'),
+        v => v.name.includes('Daniel'),
+        v => v.name.includes('Alex'),
+        v => v.name.includes('Microsoft Mark'),
+        v => v.name.toLowerCase().includes('male'),
+        v => true
+      ];
+
+      for (const check of preferred) {
+        const found = englishVoices.find(check);
+        if (found) return found;
+      }
+      return englishVoices[0];
+    }
+
+    function stopSpeech() {
+      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        window.speechSynthesis.cancel();
+      }
+      if (currentPlayingBtn) {
+        currentPlayingBtn.classList.remove('playing');
+        currentPlayingBtn.textContent = currentPlayingBtn.dataset.originalText || '▶ 播放';
+        currentPlayingBtn = null;
+      }
+      currentUtterance = null;
+    }
+
+    function speak(text, button) {
+      if (currentPlayingBtn === button) {
+        stopSpeech();
+        return;
+      }
+      stopSpeech();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voice = selectBestVoice();
+      if (voice) utterance.voice = voice;
+      utterance.rate = 0.97;
+      utterance.pitch = 1.0;
+      utterance.lang = 'en-US';
+
+      utterance.onend = () => {
+        if (currentPlayingBtn) {
+          currentPlayingBtn.classList.remove('playing');
+          currentPlayingBtn.textContent = currentPlayingBtn.dataset.originalText || '▶ 播放';
+        }
+        currentPlayingBtn = null;
+        currentUtterance = null;
+      };
+
+      utterance.onerror = () => {
+        if (currentPlayingBtn) {
+          currentPlayingBtn.classList.remove('playing');
+          currentPlayingBtn.textContent = currentPlayingBtn.dataset.originalText || '▶ 播放';
+        }
+        currentPlayingBtn = null;
+        currentUtterance = null;
+      };
+
+      currentUtterance = utterance;
+      currentPlayingBtn = button;
+      button.dataset.originalText = button.textContent;
+      button.classList.add('playing');
+      button.textContent = '⏸ 播放中';
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Segment play buttons
+    document.querySelectorAll('.play-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const index = parseInt(btn.dataset.index, 10);
+        speak(segmentTexts[index], btn);
+      });
+    });
+
+    // Vocabulary pronunciation buttons
+    document.querySelectorAll('.vocab-pronounce').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const word = btn.dataset.word;
+        speak(word, btn);
+      });
+    });
+
+    // Tooltip for keywords
+    const tooltip = document.getElementById('tooltip');
+    document.querySelectorAll('.keyword').forEach(el => {
+      el.addEventListener('mouseenter', (e) => {
+        tooltip.textContent = el.dataset.zh;
+        tooltip.classList.add('visible');
+        positionTooltip(e.target);
+      });
+      el.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('visible');
+      });
+      el.addEventListener('mousemove', (e) => {
+        positionTooltip(e.target);
+      });
+    });
+
+    function positionTooltip(target) {
+      const rect = target.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+      let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+      let top = rect.top - tooltipRect.height - 10;
+      if (left < 10) left = 10;
+      if (left + tooltipRect.width > window.innerWidth - 10) left = window.innerWidth - tooltipRect.width - 10;
+      if (top < 10) top = rect.bottom + 10;
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = top + 'px';
+    }
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function toggleMenu() {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+    document.querySelectorAll('.nav-list a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 900) toggleMenu();
+      });
+    });
+
+    // Active nav + progress
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-list a');
+    const progressFill = document.getElementById('progressFill');
+    const progressLabel = document.getElementById('progressLabel');
+
+    function updateActiveNav() {
+      let current = '';
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 120) current = sec.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = window.scrollY;
+      const pct = Math.min(100, Math.round((scrolled / docHeight) * 100));
+      progressFill.style.width = pct + '%';
+      progressLabel.textContent = '阅读进度 ' + pct + '%';
+    }
+
+    window.addEventListener('scroll', updateActiveNav);
+    window.addEventListener('resize', updateActiveNav);
+
+    // Quiz
+    const checkBtn = document.getElementById('checkBtn');
+    const scoreBox = document.getElementById('scoreBox');
+
+    checkBtn.addEventListener('click', () => {
+      let score = 0;
+      document.querySelectorAll('.quiz-item').forEach(item => {
+        const correct = item.dataset.correct;
+        const selected = item.querySelector('input[type="radio"]:checked');
+        const feedback = item.querySelector('.quiz-feedback');
+        const labels = item.querySelectorAll('label');
+
+        labels.forEach(label => label.classList.remove('correct', 'wrong'));
+
+        if (!selected) {
+          feedback.textContent = '请先选择一个答案。';
+          feedback.style.color = '#c62828';
+          return;
+        }
+
+        const value = selected.value;
+        if (value === correct) {
+          score++;
+          feedback.textContent = '✅ 正确！';
+          feedback.style.color = 'var(--success)';
+          selected.parentElement.classList.add('correct');
+        } else {
+          feedback.textContent = '❌ 不正确，正确答案：' + correct;
+          feedback.style.color = '#c62828';
+          selected.parentElement.classList.add('wrong');
+          item.querySelector('input[value="' + correct + '"]').parentElement.classList.add('correct');
+        }
+      });
+
+      scoreBox.style.display = 'block';
+      scoreBox.textContent = '🎉 你的得分：' + score + ' / 6';
+    });
+
+    // Initialize
+    loadVoices();
+    updateActiveNav();
+  </script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
