@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>全部课程 · Pola News</title>
+<title>全部课程 · Pola ABC</title>
 <link rel="icon" href="assets/pola.webp">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -12,11 +12,12 @@
 <nav class="top">
   <a href="index.html" class="logo">
     <img src="assets/pola.webp" alt="Pola">
-    POLA NEWS<small>少儿英语学习平台</small>
+    POLA ABC<small>全级别英语学习平台</small>
   </a>
   <div class="nav-links">
     <a href="index.html">首页</a>
     <a href="episodes.html" class="active">全部课程</a>
+    <button id="navReview" class="nav-review" onclick="openReview()">📇 复习单词 <span class="review-badge"></span></button>
     <a href="about.html">关于Pola</a>
     <a href="#grid" class="btn-cta">开始学习</a>
   </div>
@@ -25,12 +26,10 @@
 <section class="section">
   <div class="wrap">
     <h2 class="section-title">全部<span class="em">课程</span></h2>
-    <p class="section-sub">共 <strong id="totalCount"></strong> 期课程。选择级别浏览，勾选课程后可翻卡复习单词。</p>
+    <p class="section-sub">共 <strong id="totalCount"></strong> 期课程。勾选课程卡片左侧的「复习」复选框，然后点击导航栏的「复习单词」即可翻卡复习。</p>
 
-    <!-- 级别标签 -->
     <div class="level-tabs" id="levelTabs"></div>
 
-    <!-- 搜索 + 分类 -->
     <div class="controls">
       <div class="search-box">
         <span class="ic">🔍</span>
@@ -44,15 +43,10 @@
 </section>
 
 <footer>
-  <div class="flogo">🦘 POLA NEWS</div>
-  <p>少儿英语学习平台 · A1 到 C1-C2 全级别覆盖</p>
-  <p>为充满好奇心的小朋友而做 <span class="heart">♥</span></p>
+  <div class="flogo">🦘 POLA ABC</div>
+  <p>全级别英语学习平台 · A1 到 C1-C2 全覆盖</p>
+  <p>为每一位英语学习者而做 <span class="heart">♥</span></p>
 </footer>
-
-<!-- 翻卡复习浮窗 -->
-<div id="reviewFloat" class="review-float" onclick="openReview()">
-  📇 复习单词 <span class="review-count">0</span>
-</div>
 
 <!-- 翻卡复习弹窗 -->
 <div id="reviewModal" class="review-modal">
@@ -88,7 +82,6 @@ var activeLevel = "all";
 var activeCat = "all";
 var query = "";
 
-// URL 参数
 (function(){
   var params = new URLSearchParams(location.search);
   var lv = params.get("level");
@@ -99,7 +92,6 @@ var query = "";
 
 document.getElementById("totalCount").textContent = EPISODES.length;
 
-// 级别标签
 (function(){
   var lc = levelCounts();
   var html = '<button class="level-tab '+(activeLevel==="all"?"active":"")+'" data-level="all">全部 ('+EPISODES.length+')</button>';
@@ -119,7 +111,6 @@ document.getElementById("totalCount").textContent = EPISODES.length;
   });
 })();
 
-// 分类筛选
 function renderFilters(){
   var f = document.getElementById("filters");
   var list = byLevel(activeLevel);
@@ -144,7 +135,6 @@ function renderFilters(){
 }
 renderFilters();
 
-// 搜索
 document.getElementById("search").addEventListener("input", function(e){
   query = e.target.value.toLowerCase().trim();
   render();
@@ -160,7 +150,6 @@ function render(){
   } else {
     grid.innerHTML = list.map(function(e){return renderCard(e, true)}).join("");
   }
-  // 绑定复选框事件
   document.querySelectorAll('.vocab-cb').forEach(function(cb){
     cb.addEventListener('change', updateReviewButton);
   });

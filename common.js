@@ -1,4 +1,4 @@
-/* ===== Pola News 共享脚本 ===== */
+/* ===== Pola ABC 共享脚本 ===== */
 
 /* 级别定义 */
 const LEVELS = {
@@ -29,25 +29,27 @@ function fmtDate(d){
 function renderCard(e, showCheckbox){
   var c = CATS[e.category] || CATS.general;
   var lv = LEVELS[e.level] || LEVELS.B1;
-  var cb = showCheckbox ? '<label class="card-check" onclick="event.stopPropagation()"><input type="checkbox" class="vocab-cb" data-slug="'+e.slug+'" data-level="'+e.level+'"></label>' : '';
-  return '<a class="card" href="'+e.url+'">'+
+  var cb = showCheckbox ? '<label class="card-select"><input type="checkbox" class="vocab-cb" data-slug="'+e.slug+'" data-level="'+e.level+'"><span>复习</span></label>' : '';
+  return '<div class="card-item">'+
     cb+
-    '<div class="card-banner">'+
-      '<div class="bg" style="background:'+c.grad+'"></div>'+
-      '<span class="emoji">'+e.emoji+'</span>'+
-      '<span class="level-badge" style="background:'+lv.color+'">'+lv.label+'</span>'+
-      '<span class="cat-tag" style="color:'+c.color+'">'+c.label+'</span>'+
-    '</div>'+
-    '<div class="card-body">'+
-      '<div class="card-date">📅 '+fmtDate(e.date)+'</div>'+
-      '<div class="card-title">'+e.title+'</div>'+
-      '<div class="card-desc">'+e.desc+'</div>'+
-      '<div class="card-foot">'+
-        '<span class="go">开始学习 →</span>'+
-        '<span class="lvl">'+e.level+' · 英语</span>'+
+    '<a class="card" href="'+e.url+'">'+
+      '<div class="card-banner">'+
+        '<div class="bg" style="background:'+c.grad+'"></div>'+
+        '<span class="emoji">'+e.emoji+'</span>'+
+        '<span class="level-badge" style="background:'+lv.color+'">'+lv.label+'</span>'+
+        '<span class="cat-tag" style="color:'+c.color+'">'+c.label+'</span>'+
       '</div>'+
-    '</div>'+
-  '</a>';
+      '<div class="card-body">'+
+        '<div class="card-date">📅 '+fmtDate(e.date)+'</div>'+
+        '<div class="card-title">'+e.title+'</div>'+
+        '<div class="card-desc">'+e.desc+'</div>'+
+        '<div class="card-foot">'+
+          '<span class="go">开始学习 →</span>'+
+          '<span class="lvl">'+e.level+' · 英语</span>'+
+        '</div>'+
+      '</div>'+
+    '</a>'+
+  '</div>';
 }
 
 /* 按日期倒序 */
@@ -79,7 +81,10 @@ function levelCounts(){
 /* ===== 单词翻卡复习 ===== */
 var reviewWords = [];
 var reviewIdx = 0;
-var reviewShuffled = false;
+
+function getSelectedCount(){
+  return document.querySelectorAll('.vocab-cb:checked').length;
+}
 
 function collectReviewWords(){
   reviewWords = [];
@@ -99,11 +104,10 @@ function collectReviewWords(){
 function openReview(){
   var n = collectReviewWords();
   if(n===0){
-    alert('请先选择至少一节课（勾选卡片左上角的复选框）');
+    alert('请先在全部课程页面勾选要复习的课程');
     return;
   }
   reviewIdx = 0;
-  reviewShuffled = false;
   document.getElementById('reviewModal').classList.add('open');
   showReviewCard();
 }
@@ -144,17 +148,20 @@ function shuffleCards(){
     var t = reviewWords[i]; reviewWords[i]=reviewWords[j]; reviewWords[j]=t;
   }
   reviewIdx = 0;
-  reviewShuffled = true;
   showReviewCard();
 }
 
 function updateReviewButton(){
-  var checked = document.querySelectorAll('.vocab-cb:checked').length;
-  var btn = document.getElementById('reviewFloat');
-  if(checked > 0){
-    btn.classList.add('show');
-    btn.querySelector('.review-count').textContent = checked;
-  } else {
-    btn.classList.remove('show');
+  var count = getSelectedCount();
+  var btn = document.getElementById('navReview');
+  if(btn){
+    var badge = btn.querySelector('.review-badge');
+    if(count > 0){
+      btn.classList.add('has-selection');
+      if(badge) badge.textContent = count;
+    } else {
+      btn.classList.remove('has-selection');
+      if(badge) badge.textContent = '';
+    }
   }
 }
