@@ -732,6 +732,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-08-12",
+    "title": "Where Rain Comes From",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-12-where-rain-comes-from",
+    "url": "lessons/a1/2026-08-12-where-rain-comes-from.html",
+    "vocab": [
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "\"The sun is hot.\""
+      },
+      {
+        "word": "water",
+        "zh": "水",
+        "ex": "\"Water goes up.\""
+      },
+      {
+        "word": "cloud",
+        "zh": "云",
+        "ex": "\"The cloud is grey.\""
+      },
+      {
+        "word": "rain",
+        "zh": "雨",
+        "ex": "\"Rain falls down.\""
+      },
+      {
+        "word": "sky",
+        "zh": "天空",
+        "ex": "\"Water goes to the sky.\""
+      },
+      {
+        "word": "fall",
+        "zh": "落下",
+        "ex": "\"Rain falls down.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -780,6 +822,130 @@ const EPISODES = [
         "word": "glow",
         "zh": "发光、发亮",
         "ex": "\"The summer nights glow.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-12",
+    "title": "Beyond Lithium The Rise of Solid-State Batteries",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-12-beyond-lithium-the-rise-of-solid-state-batteries",
+    "url": "lessons/b2/2026-08-12-beyond-lithium-the-rise-of-solid-state-batteries.html",
+    "vocab": [
+      {
+        "word": "fundamental",
+        "zh": "基本的；根本的",
+        "ex": "\"This small change is, in fact, fundamental.\""
+      },
+      {
+        "word": "consequently",
+        "zh": "因此；所以",
+        "ex": "\"Consequently, engineers have searched for a safer alternative.\""
+      },
+      {
+        "word": "alternative",
+        "zh": "替代物；备选方案",
+        "ex": "\"They need an alternative to the flammable liquid.\""
+      },
+      {
+        "word": "conventional",
+        "zh": "传统的；常规的",
+        "ex": "\"Unlike conventional cells, it uses a solid medium.\""
+      },
+      {
+        "word": "electrolyte",
+        "zh": "电解质（电池中传导离子的介质）",
+        "ex": "\"The solid electrolyte is non-flammable.\""
+      },
+      {
+        "word": "non-flammable",
+        "zh": "不易燃的",
+        "ex": "\"A non-flammable material greatly improves safety.\""
+      },
+      {
+        "word": "eliminate",
+        "zh": "消除；排除",
+        "ex": "\"This could eliminate range anxiety.\""
+      },
+      {
+        "word": "obstacle",
+        "zh": "障碍；阻碍",
+        "ex": "\"Significant obstacles remain before mass production.\""
+      },
+      {
+        "word": "flawless",
+        "zh": "无瑕疵的；完美的",
+        "ex": "\"The layers must be thin and flawless.\""
+      },
+      {
+        "word": "demonstrate",
+        "zh": "证明；表明",
+        "ex": "\"Tests demonstrate far higher energy density.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-12",
+    "title": "When Algorithms Author Life",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-12-when-algorithms-author-life",
+    "url": "lessons/c1/2026-08-12-when-algorithms-author-life.html",
+    "vocab": [
+      {
+        "word": "genome",
+        "zh": "基因组：生物体全部遗传信息的总和",
+        "ex": "\"Biologists treated the genome as a text to be read.\""
+      },
+      {
+        "word": "generative",
+        "zh": "生成式的：能创造全新内容（而非仅分析）的",
+        "ex": "\"They used generative artificial intelligence to design genomes.\""
+      },
+      {
+        "word": "self-replicating",
+        "zh": "自我复制的：能自行繁殖的",
+        "ex": "\"Sixteen proved viable, self-replicating bacteriophages.\""
+      },
+      {
+        "word": "synthesize",
+        "zh": "合成：在实验室中人工制造（DNA、化合物等）",
+        "ex": "\"They synthesized a few hundred candidate genomes.\""
+      },
+      {
+        "word": "viable",
+        "zh": "可存活的；切实可行的",
+        "ex": "\"Sixteen proved viable, self-replicating bacteriophages.\""
+      },
+      {
+        "word": "bacteriophage",
+        "zh": "噬菌体：一类专门感染并裂解细菌的病毒",
+        "ex": "\"Designed bacteriophages can kill resistant bacteria.\""
+      },
+      {
+        "word": "repertoire",
+        "zh": "（全部的）储备；可调动的资源库",
+        "ex": "\"A diverse repertoire of candidate viruses.\""
+      },
+      {
+        "word": "unprecedented",
+        "zh": "前所未有的；空前的",
+        "ex": "\"This raises an unprecedented ethical quandary.\""
+      },
+      {
+        "word": "quandary",
+        "zh": "困境；左右为难的处境",
+        "ex": "\"An unprecedented ethical quandary demands governance.\""
+      },
+      {
+        "word": "govern",
+        "zh": "治理；管控；约束",
+        "ex": "\"The question is whether humans can govern them.\""
       }
     ]
   }

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — Beyond Lithium: The Rise of Solid-State Batteries</title>
+<style>
+:root{
+  --accent:#0d9488;
+  --accent2:#2563eb;
+  --bg:#f5f7f9;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#d7f0ec;
+  --border:#e2e8f0;
+  --soft:#eef4f5;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#22d3ee);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(13,148,136,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #cfe9e4;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(13,148,136,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(13,148,136,.55);}70%{box-shadow:0 0 0 12px rgba(13,148,136,0);}100%{box-shadow:0 0 0 0 rgba(13,148,136,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #0d9488;transition:.15s;}
+.kw:hover{background:#bfe6e0;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#5eead4;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(13,148,136,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#d7f0ec;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Tech Frontier</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Beyond Lithium: The Rise of Solid-State Batteries</h1>
+      <p class="subtitle">固态电池能否取代锂离子电池？｜全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Hook</div>
+            <p>For decades, the <span class="kw" data-def="锂离子电池，目前手机、电脑、电动车常用的充电电池">lithium-ion battery</span> has powered our phones, laptops, and cars. Yet it has a hidden weakness: a flammable liquid <span class="kw" data-def="电解质，电池中让离子在两极间移动的介质（液态或固态）">electrolyte</span> that can overheat, leak, or even catch fire. Consequently, engineers have searched for a safer, denser alternative.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · How it works</div>
+            <p>The answer may lie in the <span class="kw" data-def="固态电池，用固体电解质取代液体电解质的下一代电池">solid-state battery</span>. Unlike <span class="kw" data-def="传统电池（这里指现在的锂离子电池）">conventional cells</span>, it replaces the liquid <span class="kw" data-def="电解质，电池中让离子在两极间移动的介质">electrolyte</span> with a thin solid material — often ceramic, sulfide, or polymer. During charging, <span class="kw" data-def="锂离子，电池充放电时携带电荷、在两极间移动的粒子">lithium ions</span> still travel between the two <span class="kw" data-def="电极，电池中发生化学反应的正负两极">electrodes</span>; however, they now move through a solid medium. This small change is, in fact, fundamental.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Why it matters</div>
+            <p>Because the <span class="kw" data-def="固态电解质，不燃、热稳定的固体离子导体">solid electrolyte</span> is <span class="kw" data-def="不易燃的">non-flammable</span>, the risk of <span class="kw" data-def="热失控，电池因过热而连锁升温、可能起火的危险现象">thermal runaway</span> drops dramatically. Moreover, it permits a <span class="kw" data-def="金属锂负极，比石墨负极储能高得多的负极材料">lithium-metal anode</span>, which stores roughly ten times more energy than <span class="kw" data-def="石墨，目前锂离子电池常用的负极材料">graphite</span>. Were such batteries mass-produced, electric cars could travel 800 kilometres per charge and refuel in under ten minutes, eliminating <span class="kw" data-def="续航焦虑，担心电动车电量不够、半路没电的心理">range anxiety</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Challenges</div>
+            <p>Nevertheless, significant <span class="kw" data-def="障碍，阻碍进展的困难">obstacles</span> remain. Manufacturing solid layers thin, <span class="kw" data-def="无瑕疵的；完美的">flawless</span>, and cheap enough for cars is extraordinarily difficult, and early cells still cost several times more than today's batteries. Had scientists solved these problems a decade ago, the technology would already be universal. For now, it remains a promise on the <span class="kw" data-def="地平线；（喻）即将到来却尚未实现的境地">horizon</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fundamental">🔊</button><div class="word">fundamental<span class="pos">adj.</span></div><div class="zh">基本的；根本的</div><div class="ex">"This small change is, in fact, fundamental."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="consequently">🔊</button><div class="word">consequently<span class="pos">adv.</span></div><div class="zh">因此；所以</div><div class="ex">"Consequently, engineers have searched for a safer alternative."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="alternative">🔊</button><div class="word">alternative<span class="pos">n.</span></div><div class="zh">替代物；备选方案</div><div class="ex">"They need an alternative to the flammable liquid."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="conventional">🔊</button><div class="word">conventional<span class="pos">adj.</span></div><div class="zh">传统的；常规的</div><div class="ex">"Unlike conventional cells, it uses a solid medium."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="electrolyte">🔊</button><div class="word">electrolyte<span class="pos">n.</span></div><div class="zh">电解质（电池中传导离子的介质）</div><div class="ex">"The solid electrolyte is non-flammable."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="non-flammable">🔊</button><div class="word">non-flammable<span class="pos">adj.</span></div><div class="zh">不易燃的</div><div class="ex">"A non-flammable material greatly improves safety."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="eliminate">🔊</button><div class="word">eliminate<span class="pos">v.</span></div><div class="zh">消除；排除</div><div class="ex">"This could eliminate range anxiety."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="obstacle">🔊</button><div class="word">obstacle<span class="pos">n.</span></div><div class="zh">障碍；阻碍</div><div class="ex">"Significant obstacles remain before mass production."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="flawless">🔊</button><div class="word">flawless<span class="pos">adj.</span></div><div class="zh">无瑕疵的；完美的</div><div class="ex">"The layers must be thin and flawless."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="demonstrate">🔊</button><div class="word">demonstrate<span class="pos">v.</span></div><div class="zh">证明；表明</div><div class="ex">"Tests demonstrate far higher energy density."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Were such batteries mass-produced, [main clause with could/would].</h3>
+          <div class="zh">虚拟语气倒装（省去 if）：把 were / had / should 提到句首。相当于 "If such batteries were mass-produced..."。</div>
+          <div class="eg">Were such batteries mass-produced, electric cars could travel 800 km per charge.</div>
+          <div class="practice">练习：用 "the cost fall / EVs become cheaper" → <input placeholder="your answer">, electric cars would become cheaper.</div>
+        </div>
+        <div class="item">
+          <h3>2. Had [subject] + past participle, [main clause with would have].</h3>
+          <div class="zh">过去虚拟语气倒装：相当于 "If scientists had solved..."，表示与过去事实相反的假设。</div>
+          <div class="eg">Had scientists solved these problems a decade ago, the technology would already be universal.</div>
+          <div class="practice">练习：用 "we invest earlier / it would be common" → <input placeholder="your answer">, the battery would already be common.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Gerund phrase] + is + adjective.</h3>
+          <div class="zh">动名词（非谓语动词）作主语，表示一件"事"。Manufacturing ... 整体作主语，谓语用单数。</div>
+          <div class="eg">Manufacturing solid layers thin, flawless, and cheap enough for cars is extraordinarily difficult.</div>
+          <div class="practice">练习：用 "charging in ten minutes / is attractive" → <input placeholder="your answer"> is attractive to drivers.</div>
+        </div>
+        <div class="item">
+          <h3>4. [A] stores roughly ten times more energy than [B].</h3>
+          <div class="zh">倍数比较级："(roughly) N times more + 名词 + than" 表示"A 比 B 多 N 倍"。</div>
+          <div class="eg">A lithium-metal anode stores roughly ten times more energy than graphite.</div>
+          <div class="practice">练习：用 "the new cell / three times safer / the old one" → The new cell is <input placeholder="your answer"> than the old one.</div>
+        </div>
+        <div class="item">
+          <h3>5. Nevertheless, [contrasting statement].</h3>
+          <div class="zh">衔接副词（sentence connector）：Nevertheless / Yet / However 用于引出转折，使语篇连贯、富有逻辑。</div>
+          <div class="eg">Nevertheless, significant obstacles remain before mass production.</div>
+          <div class="practice">练习：用 "the science is clear / the cost is still high" → The science is clear; <input placeholder="your answer">, the cost is still high.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气倒装（Inverted subjunctive）</h3>
+          <div class="zh">当 if 条件句中含有 were / had / should 时，可省略 if 并把动词提到主语前，语气更正式、书面化，是 B2 高级写法。</div>
+          <div class="eg">Were such batteries mass-produced, ... / Had scientists solved these problems, ...</div>
+        </div>
+        <div class="item">
+          <h3>2. 被动语态（Passive voice）</h3>
+          <div class="zh">当动作的承受者更重要、或主语无需点明时，用 "be + 过去分词"。科技说明文中大量使用被动，突出事实而非人。</div>
+          <div class="eg">The liquid electrolyte <b>is replaced</b> with a solid material. / The risk <b>is reduced</b> dramatically.</div>
+        </div>
+        <div class="item">
+          <h3>3. 定语从句（Relative clauses）</h3>
+          <div class="zh">用 which / that / who 引导，修饰前面的名词。非限制性定语从句（逗号 + which）补充说明，去掉不影响主句意思。</div>
+          <div class="eg">...a lithium-metal anode, <b>which stores</b> roughly ten times more energy than graphite.</div>
+        </div>
+        <div class="item">
+          <h3>4. 非谓语动词 · 动名词作主语（Gerund as subject）</h3>
+          <div class="zh">动词加 -ing 可作名词用，放在句首充当主语，表示一种活动或事实，谓语用单数。</div>
+          <div class="eg"><b>Manufacturing</b> solid layers ... <b>is</b> extraordinarily difficult. / <b>During charging</b>, lithium ions travel ...</div>
+        </div>
+        <div class="item">
+          <h3>5. 语篇衔接词（Linking adverbs）</h3>
+          <div class="zh">Consequently（因此）、Moreover（此外）、Nevertheless（然而）等衔接副词让句子之间的因果、递进、转折关系清晰，是学术写作的关键。</div>
+          <div class="eg">Consequently, engineers searched... / Moreover, it permits... / Nevertheless, obstacles remain.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一块电池里，到底发生了什么？</h3>
+        <p>无论手机还是电动车，现在的锂离子电池（Lithium-ion）都靠一种<strong>液态电解质</strong>工作：充电时，带正电的锂离子从正极（阴极）穿过液体，跑到负极（阳极）；放电时再跑回去，电子则走外电路，形成电流。问题在于，这种液体通常是有机溶剂，<strong>易燃</strong>。一旦被刺穿、过充或过热，就可能发生"<strong>热失控</strong>"——温度连锁上升、起火甚至爆炸。这就是电动车自燃新闻背后的化学原因。</p>
+
+        <h3>固态电池改了哪一步？</h3>
+        <p>固态电池的"革命"听起来很小：把那层<strong>液体换成固体</strong>，材料可以是氧化物陶瓷、硫化物或聚合物。离子依然要在两极之间穿梭，只是改走固态通道。这一步带来三个质变：</p>
+        <ul>
+          <li><strong>更安全</strong>：固体不燃、热稳定，从根源上掐断了热失控的火苗。</li>
+          <li><strong>能量密度更高</strong>：固态电解质让工程师能用<strong>金属锂做负极</strong>。石墨负极的理论储锂能力约 372 mAh/g，而金属锂高达约 3860 mAh/g——差不多是<strong>十倍</strong>。这意味着同样重量/体积能存更多电。</li>
+          <li><strong>充电更快、寿命更长</strong>：固态电解质耐受更大电流，也不易随循环退化。</li>
+        </ul>
+
+        <h3>"能量密度"到底怎么比？</h3>
+        <p>业内用 Wh/kg（每公斤瓦时）衡量。高端锂离子电池约 250–300 Wh/kg，而成熟后的固态电池目标在 <strong>400–500 Wh/kg</strong> 甚至更高。换算成电动车：理论上单次充电续航可冲到 800 公里以上，10%→80% 快充压缩到 10 分钟上下——和加油差不多，彻底消灭"续航焦虑"。</p>
+
+        <h3>既然这么好，为什么还没用上？</h3>
+        <p>核心技术几十年前就懂，真正的难点在<strong>制造</strong>：</p>
+        <ul>
+          <li><strong>固-固界面电阻</strong>：液体能紧贴电极，固体与固体接触却容易留下缝隙、产生高电阻，循环后性能下滑。</li>
+          <li><strong>枝晶（dendrite）</strong>：锂金属在充放电时会长出针状结晶，可能刺穿电解质短路。很多设计（如 QuantumScape 的陶瓷隔膜）正是为了"挡住"枝晶。</li>
+          <li><strong>成本与良率</strong>：固态电解质要做成微米级、无缺陷的薄层，当前原型成本约为锂离子电池的 <strong>3–5 倍</strong>。</li>
+        </ul>
+
+        <h3>2026 年的真实进度（截至年中）</h3>
+        <p>这一年是"从实验室走向工厂验证"的转折点，但<strong>尚无任何一款真正量产的纯固态电池上市</strong>。主要玩家的状态：</p>
+        <ul>
+          <li><strong>Toyota（丰田）</strong>：硫化物路线，目标 2027–2028 年推首款固态电动车，2030 年规模量产。</li>
+          <li><strong>Samsung SDI（三星 SDI）</strong>：2026 年一季度试产线良率突破 80%，目标 2027–2028 年供货。</li>
+          <li><strong>QuantumScape（硅谷创业公司，大众投资）</strong>：无负极（anode-free）陶瓷设计，样品已送车企测试，2026 年初在圣何塞开试产线。</li>
+          <li><strong>CATL（宁德时代）</strong>：2026 年初披露"天行"项目，样品能量密度达 500 Wh/kg，目标 2027 年限量商用、2030 年上量。</li>
+          <li><strong>Solid Power / BMW（宝马）</strong>：硫化物电芯已在原型车中道路测试。</li>
+        </ul>
+        <p>注意：厂商公布的"目标年"不等于"交付年"。历史上固态电池的时间表被多次推迟，所以主流共识是——<strong>2026–2027 小范围试点，2028 年后逐步普及，但短期仍贵于锂离子电池</strong>。</p>
+
+        <h3>延伸思考：它是不是被过度炒作？</h3>
+        <p>支持者说它能让电动车续航翻倍、告别自燃；质疑者指出成本、良率和真实碰撞测试都还没经受过规模考验。比较中立的看法是：固态电池方向确定、潜力巨大，但它更像一场"十年马拉松"而非"明年就普及"的奇迹。对学习者而言，理解它的<strong>科学原理</strong>比追逐新闻标题更重要——这也是本课选择讲"原理"而非某个具体"突破"的原因。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标（B2 中高级）</h3>
+        <div class="goal"><span class="ic">🌟</span><div>理解固态电池的基本原理，能对比它与传统锂离子电池的异同。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 CEFR B2 核心学术词汇（fundamental, consequently, alternative, conventional, electrolyte, non-flammable, eliminate, obstacle, flawless, demonstrate）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会虚拟语气倒装（Were... / Had...）、动名词作主语、倍数比较级等高级句型。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>辨析被动语态、定语从句、非谓语动词与语篇衔接词在科技说明文中的作用。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立批判性视角：区分"科学原理"与"商业宣传"，理性看待技术突破。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读英文朗读，模仿学术英语的语调与停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，并用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>仿写两个虚拟语气倒装句（Were... / Had...），体会正式书面语感。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div>读"中文知识扩展"，再用自己的话用英文概括固态电池的三大优势。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English · Beyond Lithium: The Rise of Solid-State Batteries · 2026-08-12</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "For decades, the lithium-ion battery has powered our phones, laptops, and cars. Yet it has a hidden weakness: a flammable liquid electrolyte that can overheat, leak, or even catch fire. Consequently, engineers have searched for a safer, denser alternative.",
+  "The answer may lie in the solid-state battery. Unlike conventional cells, it replaces the liquid electrolyte with a thin solid material — often ceramic, sulfide, or polymer. During charging, lithium ions still travel between the two electrodes; however, they now move through a solid medium. This small change is, in fact, fundamental.",
+  "Because the solid electrolyte is non-flammable, the risk of thermal runaway drops dramatically. Moreover, it permits a lithium-metal anode, which stores roughly ten times more energy than graphite. Were such batteries mass-produced, electric cars could travel 800 kilometres per charge and refuel in under ten minutes, eliminating range anxiety.",
+  "Nevertheless, significant obstacles remain. Manufacturing solid layers thin, flawless, and cheap enough for cars is extraordinarily difficult, and early cells still cost several times more than today's batteries. Had scientists solved these problems a decade ago, the technology would already be universal. For now, it remains a promise on the horizon."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What does a solid-state battery replace from a traditional lithium-ion cell? 固态电池取代了传统锂离子电池里的什么？",opts:["The liquid electrolyte 液态电解质","The metal casing 金属外壳","The electric motor 电动机","The screen 屏幕"],ans:0,
+   fb:"Correct! 固态电池用固体电解质取代了易燃的液态电解质。"},
+  {q:"Why is a solid electrolyte considered much safer? 为什么说固态电解质更安全？",opts:["It is non-flammable and avoids thermal runaway 不易燃、避免热失控","It makes the car fly 能让车飞","It is cheaper to produce 生产成本更低","It stores no energy 不储能"],ans:0,
+   fb:"Right! 固态电解质不燃、热稳定，从根源上降低了起火风险。"},
+  {q:"What advantage does a lithium-metal anode give? 金属锂负极带来什么优势？",opts:["It stores roughly ten times more energy than graphite 比石墨多存约十倍能量","It makes the battery heavier 让电池更重","It requires no charging 无需充电","It works only in cold weather 只在寒冷时工作"],ans:0,
+   fb:"Yes! 金属锂负极的理论储能约为石墨的十倍，是能量密度提升的关键。"},
+  {q:"'Were such batteries mass-produced...' is an example of: “Were such batteries mass-produced...” 属于哪种语法？",opts:["Inverted subjunctive (虚拟语气倒装)","Simple past tense 一般过去时","Imperative 祈使句","Present continuous 现在进行时"],ans:0,
+   fb:"Correct! 这是省略 if 的虚拟语气倒装，相当于 If such batteries were mass-produced..."},
+  {q:"According to the text, what is the main remaining obstacle? 文中说目前主要的障碍是什么？",opts:["High cost and difficult mass manufacturing 成本高、难以规模制造","Too much energy 能量太多","Lack of lithium 缺锂","Too many supporters 支持者太多"],ans:0,
+   fb:"Right! 制造成本高、良率难、规模量产困难，是固态电池落地的主要拦路虎。"},
+  {q:"What is the text's overall conclusion about solid-state batteries? 本文对固态电池的总体结论是？",opts:["Promising but not yet mass-produced 前景广阔，但尚未量产","Already in every car 已装在每辆车里","A complete failure 彻底失败","Banished by law 被法律禁止"],ans:0,
+   fb:"Yes! 原理明确、潜力巨大，但截至文中所述，它仍是'地平线上的承诺'，尚未大规模商用。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
