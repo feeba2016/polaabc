@@ -349,3 +349,73 @@ function skipFillBlank(){
   fbCurrent++;
   showFillBlank();
 }
+
+/* ===== 背景音乐生成器 (Web Audio API) ===== */
+var GameMusic = {
+  ctx: null,
+  oscillator: null,
+  gainNode: null,
+  timeoutId: null,
+  playing: false,
+  melodies: [
+    // 5首欢快的8-bit旋律 [频率Hz, 持续拍数]
+    [[523,1],[659,1],[784,1],[659,1],[523,1],[659,1],[784,2],[880,1],[784,1],[659,1],[523,2]],
+    [[440,1],[554,1],[659,1],[554,1],[440,1],[554,1],[659,2],[740,1],[659,1],[554,1],[440,2]],
+    [[349,1],[440,1],[523,1],[440,1],[349,1],[440,1],[523,2],[587,1],[523,1],[440,1],[349,2]],
+    [[587,1],[740,1],[880,1],[740,1],[587,1],[740,1],[880,2],[988,1],[880,1],[740,1],[587,2]],
+    [[392,1],[494,1],[587,1],[494,1],[392,1],[494,1],[587,2],[698,1],[587,1],[494,1],[392,2]]
+  ],
+  currentMelody: 0,
+  noteIdx: 0,
+  bpm: 140,
+
+  start: function(){
+    if(this.playing) return;
+    try {
+      this.ctx = this.ctx || new (window.AudioContext || window.webkitAudioContext)();
+      this.gainNode = this.ctx.createGain();
+      this.gainNode.gain.value = 0.08;
+      this.gainNode.connect(this.ctx.destination);
+      this.currentMelody = Math.floor(Math.random() * this.melodies.length);
+      this.noteIdx = 0;
+      this.playing = true;
+      this.playNext();
+    } catch(e){ console.warn('Music init failed:', e); }
+  },
+
+  playNext: function(){
+    if(!this.playing) return;
+    var melody = this.melodies[this.currentMelody];
+    var note = melody[this.noteIdx % melody.length];
+    var freq = note[0];
+    var beats = note[1];
+    var duration = (60 / this.bpm) * beats * 1000;
+
+    var osc = this.ctx.createOscillator();
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+    var env = this.ctx.createGain();
+    env.gain.setValueAtTime(0, this.ctx.currentTime);
+    env.gain.linearRampToValueAtTime(0.08, this.ctx.currentTime + 0.02);
+    env.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + beats * (60/this.bpm));
+    osc.connect(env);
+    env.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + beats * (60/this.bpm) + 0.05);
+
+    this.noteIdx++;
+    var self = this;
+    this.timeoutId = setTimeout(function(){ self.playNext(); }, duration * 0.9);
+  },
+
+  stop: function(){
+    this.playing = false;
+    if(this.timeoutId) clearTimeout(this.timeoutId);
+    if(this.gainNode) this.gainNode.gain.value = 0;
+  },
+
+  toggle: function(){
+    if(this.playing){ this.stop(); return false; }
+    else { this.start(); return true; }
+  }
+};

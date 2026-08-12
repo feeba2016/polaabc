@@ -25,8 +25,8 @@
 
 <section class="section">
   <div class="wrap">
-    <h2 class="section-title">单词<span class="em">消消乐</span></h2>
-    <p class="section-sub">翻牌配对英文与中文，计时挑战记忆力！</p>
+    <h2 class="section-title">单词<span class="em">消消乐</span> <button id="musicToggle" class="music-btn" onclick="toggleMusic()">🎵 音乐关</button></h2>
+    <p class="section-sub">翻牌配对英文与中文，计时挑战记忆力！每次开始随机播放一首背景音乐。</p>
 
     <div id="matchStart" class="game-start">
       <div class="game-instructions">
@@ -79,6 +79,30 @@ updateNavButtons();
     document.getElementById('matchStatus').style.display = 'flex';
   }
 })();
+
+function toggleMusic(){
+  var on = GameMusic.toggle();
+  document.getElementById('musicToggle').textContent = on ? '🎵 音乐开' : '🎵 音乐关';
+  document.getElementById('musicToggle').classList.toggle('music-on', on);
+}
+
+// 游戏开始时自动播放音乐
+var origStartMatch = startMatch;
+startMatch = function(){
+  origStartMatch();
+  GameMusic.start();
+  document.getElementById('musicToggle').textContent = '🎵 音乐开';
+  document.getElementById('musicToggle').classList.add('music-on');
+};
+
+// 游戏结束时停止音乐
+var origCheckMatch = checkMatch;
+checkMatch = function(){
+  origCheckMatch();
+  if(matchMatched >= matchTotal){
+    setTimeout(function(){ GameMusic.stop(); }, 1000);
+  }
+};
 </script>
 </body>
 </html>
