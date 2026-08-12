@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Japan's Lantern Festival — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#c0392b;
+  --accent2:#c9962b;
+  --bg:#fbf7f0;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#ffe9a8;
+  --border:#ece3d6;
+  --soft:#fdf2e0;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#f0b429);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(192,57,43,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #f3e3c8;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(192,57,43,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.55);}70%{box-shadow:0 0 0 12px rgba(192,57,43,0);}100%{box-shadow:0 0 0 0 rgba(192,57,43,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #d97706;transition:.15s;}
+.kw:hover{background:#ffd866;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#fff4e5;border:2px solid #f59e0b;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#b45309;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(192,57,43,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ffe9a8;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Culture Broadcast</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Japan's Lantern Festival</h1>
+      <p class="subtitle">2026年8月12日 · 世界文化｜日本的灯笼节 Obon —— 全文阅读（点黄色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>In August, something magical happens in Japan. The summer nights <span class="kw" data-def="发光、发亮（柔和地亮起来）">glow</span> with soft, warm light. Thousands of paper <span class="kw" data-def="灯笼：用纸做的小灯，里面点着小蜡烛">lanterns</span> float on rivers and shine in the dark sky. It is a special time called Obon.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>Obon is an old <span class="kw" data-def="节日">festival</span>. Families come <span class="kw" data-def="一起、共同">together</span> to <span class="kw" data-def="记住、怀念">remember</span> their grandparents and <span class="kw" data-def="祖先：很久以前的家人，比如曾祖父母">ancestors</span>. They clean their homes, visit graves, and dance in the streets. The dances are slow and happy.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>At the end of Obon, people send lanterns onto the water. Each lantern carries a <span class="kw" data-def="愿望、希望">wish</span> and a memory. The little lights <span class="kw" data-def="漂流、缓缓漂走">drift</span> away like stars. It is beautiful because it teaches us about family.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>Would you like to make a lantern? You can draw your family on it. This is Pola, signing off from POLA NEWS. Keep your loved ones close to your heart. Bye for now!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>💡 动手做灯笼的小提示 Tips</h3>
+        <p style="margin:0;font-size:14.5px;">课文里说的是日本的传统灯笼（里面点小蜡烛）。如果你自己做一个<b>纸灯笼</b>，请让大人帮忙，用<b>小电池灯</b>代替明火，安全又漂亮！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="festival">🔊</button><div class="word">festival<span class="pos">n.</span></div><div class="zh">节日</div><div class="ex">"Obon is an old festival."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="lantern">🔊</button><div class="word">lantern<span class="pos">n.</span></div><div class="zh">灯笼：纸做的小灯</div><div class="ex">"Thousands of paper lanterns float."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ancestor">🔊</button><div class="word">ancestor<span class="pos">n.</span></div><div class="zh">祖先：很久以前的家人</div><div class="ex">"They remember their ancestors."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="remember">🔊</button><div class="word">remember<span class="pos">v.</span></div><div class="zh">记住、怀念</div><div class="ex">"Families come together to remember."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="together">🔊</button><div class="word">together<span class="pos">adv.</span></div><div class="zh">一起、共同</div><div class="ex">"Families come together."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="wish">🔊</button><div class="word">wish<span class="pos">n.</span></div><div class="zh">愿望、希望</div><div class="ex">"Each lantern carries a wish."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="drift">🔊</button><div class="word">drift<span class="pos">v.</span></div><div class="zh">漂流、缓缓漂走</div><div class="ex">"The little lights drift away."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="glow">🔊</button><div class="word">glow<span class="pos">v.</span></div><div class="zh">发光、发亮</div><div class="ex">"The summer nights glow."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. It is a special time called [Obon].</h3>
+          <div class="zh">它被称为[……]的特殊时刻。用来给一个节日或事物命名。</div>
+          <div class="eg">It is a special time called Obon.</div>
+          <div class="practice">练习：用 "the Lantern Festival" 造句 → It is a special time called <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Families come together to [remember their ancestors].</h3>
+          <div class="zh">家人们聚在一起[做……]。"come together to + 动词" 表示为了某个目的团聚。</div>
+          <div class="eg">Families come together to remember their ancestors.</div>
+          <div class="practice">练习：用 "eat dinner" → Families come together to <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. It is beautiful because [it teaches us about family].</h3>
+          <div class="zh">因为[……]，所以很美。because 用来说明原因。</div>
+          <div class="eg">It is beautiful because it teaches us about family.</div>
+          <div class="practice">练习：用 "it is fun" → The dance is happy because <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. Would you like to [make a lantern]?</h3>
+          <div class="zh">你想[做……]吗？Would you like to + 动词，是非常礼貌的提议或邀请。</div>
+          <div class="eg">Would you like to make a lantern?</div>
+          <div class="practice">练习：用 "draw a picture" → Would you like to <input placeholder="your answer">?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般现在时（Simple Present）</h3>
+          <div class="zh">描述经常发生的事、事实或习惯。课文讲 Obon 的传统，所以用一般现在时。</div>
+          <div class="eg">Obon <b>is</b> an old festival. / Families <b>come</b> together. / They <b>clean</b> their homes.</div>
+        </div>
+        <div class="item">
+          <h3>2. 连词 because（表示原因）</h3>
+          <div class="zh">because 的意思是"因为"，用来回答"为什么"。它连接两个句子：结果 + because + 原因。</div>
+          <div class="eg">It is beautiful <b>because</b> it teaches us about family.</div>
+        </div>
+        <div class="item">
+          <h3>3. 情态动词 would like to（礼貌提议）</h3>
+          <div class="zh">"Would you like to + 动词?" 比 "Do you want to?" 更客气、更友好，常用来邀请或建议。</div>
+          <div class="eg"><b>Would you like</b> to make a lantern? / I <b>would like</b> to dance.</div>
+        </div>
+        <div class="item">
+          <h3>4. 时间介词 on / in / at</h3>
+          <div class="zh"><b>in</b> + 月份或较长时段；<b>at</b> + 具体时刻或短语；<b>on</b> + 具体某一天。</div>
+          <div class="eg"><b>in</b> August / <b>at</b> the end of Obon / <b>on</b> the water</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>什么是 Obon（お盆）？</h3>
+        <p><b>Obon（孟兰盆节，也写作"盆"）</b>是日本一个悠久的佛教传统节日，用来<b>怀念已经离开的家人（祖先）</b>。日本人相信，每年夏天，祖先的灵魂会回到家里看望亲人。节日通常在<b>八月的中旬</b>（也有些地方在七月），大约从 8 月 13 日到 16 日。</p>
+
+        <h3>Obon 有哪些传统？</h3>
+        <ul>
+          <li><b>打扫与扫墓</b>：家人会清扫祖坟、献上鲜花和食物，表达敬意与思念。</li>
+          <li><b>点灯笼（chochin）</b>：家家户户门口挂起纸灯笼，柔和的光像是在给回家的祖先"引路"。</li>
+          <li><b>盆舞（Bon Odori）</b>：这是 Obon 最热闹的部分！大家穿着夏天的和服（浴衣 yukata），围着高高的木台，跟着太鼓的鼓声一起跳舞。有些舞步缓慢优美，有些欢快热闹，各地都不一样。</li>
+          <li><b>放流灯笼（Toro Nagashi）</b>：在 Obon 最后一晚，人们把一只只小小的纸灯笼放上河面、湖面或大海。烛光随水漂远，像是把祖先温柔地送回另一个世界。成千上万盏灯笼静静漂在水上，是非常美丽的画面。</li>
+        </ul>
+
+        <h3>最大的"送别之火"</h3>
+        <p>在日本京都，Obon 尾声（8 月 16 日）会举行名叫 <b>五山送火（Gozan no Okuribi）</b> 的仪式。人们在城市周围五座山的山坡上点燃巨大的篝火，其中最有名的一座山会烧出汉字"大"的形状，整座城市都能看见。这是 Obon 最壮观的景象之一。</p>
+
+        <h3>家人团聚的日子</h3>
+        <p>和中国的春节有些相似，Obon 也是日本人<b>回家探亲</b>的高峰期。每年这时，城市里工作的人会大批回到乡下老家，和父母、祖父母团聚——所以交通会非常繁忙，这被称为"盆归省（Obon rush）"。</p>
+
+        <h3>怀念祖先：许多文化共同的温柔</h3>
+        <p>尊敬和怀念祖先，是世界许多地方都有的美好传统。在中国，也有<b>中元节（盂兰盆会）</b>等节日，同样是在夏天表达对先人的思念。不同国家的名字和做法不一样，但心意是相通的：记住爱过我们的人，珍惜身边的家人。</p>
+
+        <h3>动手做：自己的小纸灯笼</h3>
+        <p>找一个干净的纸杯或小纸盒，在侧面画上你和家人的笑脸，写下一句想对家人说的话。让大人帮忙在里面放一个<b>小电池灯（千万不要用明火！）</b>，关上灯，就能看到温暖的微光啦。你也可以折几只小纸船，把"灯笼"轻轻放在一盆水里，看它慢慢漂动。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>了解日本 Obon（灯笼节）的文化传统：扫墓、盆舞、放流灯笼。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般现在时、连词 because、礼貌提议 would you like to。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个文化主题核心词汇（festival, lantern, ancestor, remember, together, wish, drift, glow）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会用英语介绍一个节日，并表达对家人的爱。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得尊重不同国家的文化，也珍惜自己的家庭传统。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🏮</span><div>和爸爸妈妈一起做一个小纸灯笼（用电池灯，注意安全）。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>用 "Would you like to …?" 邀请家人做一件有趣的事。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Japan's Lantern Festival · 2026-08-12 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In August, something magical happens in Japan. The summer nights glow with soft, warm light. Thousands of paper lanterns float on rivers and shine in the dark sky. It is a special time called Obon.",
+  "Obon is an old festival. Families come together to remember their grandparents and ancestors. They clean their homes, visit graves, and dance in the streets. The dances are slow and happy.",
+  "At the end of Obon, people send lanterns onto the water. Each lantern carries a wish and a memory. The little lights drift away like stars. It is beautiful because it teaches us about family.",
+  "Would you like to make a lantern? You can draw your family on it. This is Pola, signing off from POLA NEWS. Keep your loved ones close to your heart. Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"When is Obon in most of Japan? Obon 在日本大多数地方是什么时候？",opts:["In August","In December","In March"],ans:0,
+   fb:"Correct! 大多数地方在八月的中旬（大约 8 月 13-16 日）。"},
+  {q:"What do people float on the river at the end of Obon? 在 Obon 结束时，人们把什么放到河上？",opts:["Toy boats","Paper lanterns","Balloons"],ans:1,
+   fb:"Yes! 人们放流纸灯笼（Toro Nagashi），像星星一样漂走。"},
+  {q:"Why do families come together at Obon? 家人们为什么在 Obon 团聚？",opts:["To watch a movie","To eat pizza","To remember their ancestors"],ans:2,
+   fb:"Right! 他们聚在一起怀念祖先、打扫祖坟。"},
+  {q:"What does each lantern carry? 每盏灯笼带着什么？",opts:["A flower","A toy","A wish and a memory"],ans:2,
+   fb:"Correct! 每盏灯笼都载着一个愿望和一段回忆。"},
+  {q:"What does Pola invite you to do? Pola 邀请你做什么？",opts:["Make a lantern with your family","Go to Japan alone","Buy a lantern online"],ans:0,
+   fb:"Yes! Pola 邀请你和家人一起做一个小纸灯笼。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

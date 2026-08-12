@@ -730,5 +730,57 @@ const EPISODES = [
         "ex": "\"a giant, rippling galaxy\""
       }
     ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-12",
+    "title": "Japan Lantern Festival",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-12-japan-lantern-festival",
+    "url": "lessons/a2/2026-08-12-japan-lantern-festival.html",
+    "vocab": [
+      {
+        "word": "festival",
+        "zh": "节日",
+        "ex": "\"Obon is an old festival.\""
+      },
+      {
+        "word": "lantern",
+        "zh": "灯笼：纸做的小灯",
+        "ex": "\"Thousands of paper lanterns float.\""
+      },
+      {
+        "word": "ancestor",
+        "zh": "祖先：很久以前的家人",
+        "ex": "\"They remember their ancestors.\""
+      },
+      {
+        "word": "remember",
+        "zh": "记住、怀念",
+        "ex": "\"Families come together to remember.\""
+      },
+      {
+        "word": "together",
+        "zh": "一起、共同",
+        "ex": "\"Families come together.\""
+      },
+      {
+        "word": "wish",
+        "zh": "愿望、希望",
+        "ex": "\"Each lantern carries a wish.\""
+      },
+      {
+        "word": "drift",
+        "zh": "漂流、缓缓漂走",
+        "ex": "\"The little lights drift away.\""
+      },
+      {
+        "word": "glow",
+        "zh": "发光、发亮",
+        "ex": "\"The summer nights glow.\""
+      }
+    ]
   }
 ];
