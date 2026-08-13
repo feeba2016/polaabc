@@ -1395,6 +1395,68 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-13",
+    "title": "The Black Hole in Disguise",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-13-the-black-hole-in-disguise",
+    "url": "lessons/b1/2026-08-13-the-black-hole-in-disguise.html",
+    "vocab": [
+      {
+        "word": "black hole",
+        "zh": "黑洞：引力极强、连光也逃不出的天体",
+        "ex": "\"the earliest black hole in the universe\""
+      },
+      {
+        "word": "disguise",
+        "zh": "伪装（这里指\"伪装成恒星的黑洞\"）",
+        "ex": "\"a black hole in disguise\""
+      },
+      {
+        "word": "telescope",
+        "zh": "望远镜（这里指太空望远镜）",
+        "ex": "\"the James Webb Space Telescope\""
+      },
+      {
+        "word": "hydrogen",
+        "zh": "氢气：宇宙中最轻、最多的元素",
+        "ex": "\"Thick hydrogen gas wraps around it\""
+      },
+      {
+        "word": "universe",
+        "zh": "宇宙",
+        "ex": "\"across the young universe\""
+      },
+      {
+        "word": "Big Bang",
+        "zh": "宇宙大爆炸：宇宙诞生的起点",
+        "ex": "\"after the Big Bang\""
+      },
+      {
+        "word": "solar system",
+        "zh": "太阳系：太阳和围绕它运行的行星等",
+        "ex": "\"as big as our solar system\""
+      },
+      {
+        "word": "mystery",
+        "zh": "谜团、未解之谜",
+        "ex": "\"Black holes this big are a great mystery\""
+      },
+      {
+        "word": "red dot",
+        "zh": "小红点：早期宇宙中神秘的红色光点",
+        "ex": "\"the strange little red dots\""
+      },
+      {
+        "word": "dawn",
+        "zh": "黎明（这里指\"宇宙黎明\"——最早恒星与黑洞出现的时期）",
+        "ex": "\"a point of red light from the dawn of time\""
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -1433,6 +1495,48 @@ const EPISODES = [
         "word": "fall",
         "zh": "落下",
         "ex": "\"Rain falls down.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-13",
+    "title": "At the Supermarket",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-13-at-the-supermarket",
+    "url": "lessons/a1/2026-08-13-at-the-supermarket.html",
+    "vocab": [
+      {
+        "word": "apple",
+        "zh": "苹果",
+        "ex": "\"The apple is red.\""
+      },
+      {
+        "word": "banana",
+        "zh": "香蕉",
+        "ex": "\"The banana is yellow.\""
+      },
+      {
+        "word": "milk",
+        "zh": "牛奶",
+        "ex": "\"We buy milk.\""
+      },
+      {
+        "word": "bread",
+        "zh": "面包",
+        "ex": "\"We eat bread.\""
+      },
+      {
+        "word": "cart",
+        "zh": "购物车",
+        "ex": "\"The cart is big.\""
+      },
+      {
+        "word": "buy",
+        "zh": "买",
+        "ex": "\"We buy milk.\""
       }
     ]
   },
@@ -1609,6 +1713,68 @@ const EPISODES = [
         "word": "govern",
         "zh": "治理；管控；约束",
         "ex": "\"The question is whether humans can govern them.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-13",
+    "title": "The Twilight of Multilateralism",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-13-the-twilight-of-multilateralism",
+    "url": "lessons/c1/2026-08-13-the-twilight-of-multilateralism.html",
+    "vocab": [
+      {
+        "word": "multilateralism",
+        "zh": "多边主义：通过普遍性国际机构共同治理全球问题",
+        "ex": "\"The world treated multilateralism as the default architecture of order.\""
+      },
+      {
+        "word": "gridlock",
+        "zh": "僵局；决策机构无法行动（尤指政治/法律）",
+        "ex": "\"The WTO remains gridlocked without a dispute-settlement body.\""
+      },
+      {
+        "word": "preclude",
+        "zh": "排除；阻止；使……不可能发生",
+        "ex": "\"The veto framework precludes decisive action.\""
+      },
+      {
+        "word": "reconfigure",
+        "zh": "重构；重新配置（体系、结构）",
+        "ex": "\"Rather than collapse, the system is reconfiguring.\""
+      },
+      {
+        "word": "minilateralism",
+        "zh": "小多边主义：围绕具体议题、由少数国家组成的联盟",
+        "ex": "\"States are pivoting toward minilateralism.\""
+      },
+      {
+        "word": "legitimacy",
+        "zh": "合法性；正当性（权力被认可的基础）",
+        "ex": "\"Institutions derive their legitimacy from neutrality.\""
+      },
+      {
+        "word": "entrench",
+        "zh": "使（观念、问题）根深蒂固、难以改变",
+        "ex": "\"That neutrality erodes, entrenching us-versus-them dynamics.\""
+      },
+      {
+        "word": "hegemony",
+        "zh": "霸权；支配性的主导地位",
+        "ex": "\"Rather than entrench any single state's hegemony.\""
+      },
+      {
+        "word": "interdependence",
+        "zh": "相互依存（各国利益交织）",
+        "ex": "\"A tool built to manage interdependence.\""
+      },
+      {
+        "word": "fragmentation",
+        "zh": "碎片化；分裂为松散碎片",
+        "ex": "\"A tool built to manage interdependence may deepen fragmentation.\""
       }
     ]
   }

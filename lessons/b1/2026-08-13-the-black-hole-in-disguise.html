@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Black Hole in Disguise — Interactive Lesson</title>
+<style>
+:root{
+  --accent:#e0457b;
+  --accent2:#e8943a;
+  --bg:#fbf6f9;
+  --card:#ffffff;
+  --text:#241b22;
+  --muted:#7a6b73;
+  --highlight:#fce4ee;
+  --border:#f2dde7;
+  --soft:#fdf3f8;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#f6b453);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(224,69,123,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #f6dde8;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(224,69,123,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,69,123,.55);}70%{box-shadow:0 0 0 12px rgba(224,69,123,0);}100%{box-shadow:0 0 0 0 rgba(224,69,123,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #e0457b;transition:.15s;}
+.kw:hover{background:#f8cfe0;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbb6d3;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .reddot{color:var(--accent);font-weight:800;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(224,69,123,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fce4ee;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Science Broadcast</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Black Hole in Disguise</h1>
+      <p class="subtitle">宇宙最早的"黑洞星" MoM-BH*-1 —— 一个伪装成巨星的最早黑洞｜全文阅读（点粉色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Get ready — the earliest <span class="kw" data-def="黑洞。引力极强、连光也逃不出的天体">black hole</span> in the <span class="kw" data-def="宇宙。我们所在的浩瀚星空整体">universe</span> was hiding in plain sight! Scientists using the James Webb Space <span class="kw" data-def="望远镜">telescope</span> found something strange: a point of red light from the dawn of time. At first, it looked like a giant star. But it was not a star at all — it was a black hole in <span class="kw" data-def="伪装。这里指'伪装成恒星的黑洞'">disguise</span>!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>The object is named MoM-BH*-1. It lived just 660 million years after the <span class="kw" data-def="宇宙大爆炸。宇宙诞生的起点">Big Bang</span>. It is only as big as our <span class="kw" data-def="太阳系。太阳和围绕它运行的行星等">solar system</span>, but its center holds a black hole about 100,000 times heavier than our Sun. Thick <span class="kw" data-def="氢气。宇宙中最轻、最多的元素">hydrogen</span> gas wraps around it, glowing like a giant red star.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>Why is this important? Black holes this big, this early, are a great <span class="kw" data-def="谜团、未解之谜">mystery</span>. This "black hole star" may help explain the strange "little red dots" that Webb keeps finding across the young <span class="kw" data-def="宇宙">universe</span>. They are tiny, bright, red points that puzzled scientists for years.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>So the next time you see a tiny <span class="kw" data-def="小红点。这里指早期宇宙中神秘的红色光点">red dot</span> in the sky, remember: it might be a hidden giant! This is Pola, signing off from POLA NEWS. Keep looking up — and keep wondering! Bye for now!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="black hole">🔊</button><div class="word">black hole<span class="pos">n.</span></div><div class="zh">黑洞：引力极强、连光也逃不出的天体</div><div class="ex">"the earliest black hole in the universe"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="disguise">🔊</button><div class="word">disguise<span class="pos">n./v.</span></div><div class="zh">伪装（这里指"伪装成恒星的黑洞"）</div><div class="ex">"a black hole in disguise"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="telescope">🔊</button><div class="word">telescope<span class="pos">n.</span></div><div class="zh">望远镜（这里指太空望远镜）</div><div class="ex">"the James Webb Space Telescope"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hydrogen">🔊</button><div class="word">hydrogen<span class="pos">n.</span></div><div class="zh">氢气：宇宙中最轻、最多的元素</div><div class="ex">"Thick hydrogen gas wraps around it"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="universe">🔊</button><div class="word">universe<span class="pos">n.</span></div><div class="zh">宇宙</div><div class="ex">"across the young universe"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="Big Bang">🔊</button><div class="word">Big Bang<span class="pos">n.</span></div><div class="zh">宇宙大爆炸：宇宙诞生的起点</div><div class="ex">"after the Big Bang"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="solar system">🔊</button><div class="word">solar system<span class="pos">n.</span></div><div class="zh">太阳系：太阳和围绕它运行的行星等</div><div class="ex">"as big as our solar system"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="mystery">🔊</button><div class="word">mystery<span class="pos">n.</span></div><div class="zh">谜团、未解之谜</div><div class="ex">"Black holes this big are a great mystery"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="red dot">🔊</button><div class="word">red dot<span class="pos">n.</span></div><div class="zh">小红点：早期宇宙中神秘的红色光点</div><div class="ex">"the strange little red dots"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="dawn">🔊</button><div class="word">dawn<span class="pos">n.</span></div><div class="zh">黎明（这里指"宇宙黎明"——最早恒星与黑洞出现的时期）</div><div class="ex">"a point of red light from the dawn of time"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Scientists found [something strange] using [the James Webb Space Telescope].</h3>
+          <div class="zh">科学家用[……]发现了[……]。"using + 工具" 表示使用的工具或手段。</div>
+          <div class="eg">Scientists found something strange using the James Webb Space Telescope.</div>
+          <div class="practice">练习：用 "they / a new star / a big radio telescope" → They found <input placeholder="your answer"> using a big radio telescope.</div>
+        </div>
+        <div class="item">
+          <h3>2. At first, it looked like [a giant star].</h3>
+          <div class="zh">起初，它看起来像[……]。"look like + 名词" = 看起来像。</div>
+          <div class="eg">At first, it looked like a giant star.</div>
+          <div class="practice">练习：用 "a small red light" → At first, it looked like <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. It lived just [660 million years] after [the Big Bang].</h3>
+          <div class="zh">它在[……]之后仅仅[……]就存在了。after + 时间点 表示"在……之后"。</div>
+          <div class="eg">It lived just 660 million years after the Big Bang.</div>
+          <div class="practice">练习：用 "two days / the holiday" → It lived just two days after <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. This may help explain [the strange little red dots].</h3>
+          <div class="zh">这可能有助于解释[……]。"may + 动词原形" 表示"可能"，用于不太确定的推测。</div>
+          <div class="eg">This may help explain the strange little red dots.</div>
+          <div class="practice">练习：用 "the mystery" → This may help explain <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. The next time you see [a tiny red dot], remember: [it might be a hidden giant]!</h3>
+          <div class="zh">下次你[……]时，记住：[……]！"the next time + 从句" 引导时间状语从句。</div>
+          <div class="eg">The next time you see a tiny red dot, remember: it might be a hidden giant!</div>
+          <div class="practice">练习：用 "you look at the sky / wonder" → The next time you look at the sky, remember: <input placeholder="your answer">!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般过去时 vs 一般现在时</h3>
+          <div class="zh">描述已经发生的发现用一般过去时（found, lived, named, puzzled）；描述常态或普遍事实用一般现在时（looks like, helps, is, keeps finding）。</div>
+          <div class="eg">Scientists <b>found</b> something strange. / It <b>looks</b> like a giant star. / This <b>helps</b> explain the dots.</div>
+        </div>
+        <div class="item">
+          <h3>2. 情态动词 may + 动词原形（表推测）</h3>
+          <div class="zh">may 在这里不是"可以"，而是"可能、也许"，用来表示一种不太确定的科学推测。</div>
+          <div class="eg">This "black hole star" <b>may help</b> explain the little red dots. / It <b>may rain</b> later.</div>
+        </div>
+        <div class="item">
+          <h3>3. 名词 / 分词短语作定语（修饰名词）</h3>
+          <div class="zh">名词或 -ing 形式可以像形容词一样修饰名词：hydrogen gas（氢气）、red light（红光）、little red dots（小红点）、black hole in disguise（伪装中的黑洞）。</div>
+          <div class="eg">thick <b>hydrogen</b> gas / a point of <b>red</b> light / a black hole <b>in disguise</b></div>
+        </div>
+        <div class="item">
+          <h3>4. the next time / after 引导的时间状语从句</h3>
+          <div class="zh">从属连词 the next time（下次……时）、after（在……之后）带一个完整的小句子，作主句的时间背景。</div>
+          <div class="eg"><b>The next time</b> you see a red dot, remember... / <b>After</b> the Big Bang, stars began to shine.</div>
+        </div>
+        <div class="item">
+          <h3>5. 比较级：倍数 / 形容词比较级 + than</h3>
+          <div class="zh">用 "...times + 比较级 + than" 表示倍数比较；多音节形容词用 "more + 原级 + than"。</div>
+          <div class="eg">100,000 times <b>heavier than</b> our Sun / <b>bigger than</b> a star / <b>more</b> mysterious <b>than</b> we thought</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>什么是"黑洞"？</h3>
+        <p>黑洞是宇宙中最神秘的天体之一。它的引力强到连光都无法逃脱，所以看起来像一个"黑的洞"。黑洞本身不发光，但如果有气体、尘埃被它吸引着旋转下落，这些物质在掉进去之前会摩擦发热、发出明亮的光——这就是黑洞"露馅"的方式。</p>
+
+        <h3>这个"黑洞星"到底特别在哪？</h3>
+        <p>科学家用詹姆斯·韦布空间望远镜（JWST，人类最强大的太空望远镜之一）观测到宇宙诞生后约 <b>6.6 亿年</b>的"宇宙黎明"时期，发现了一个异常明亮、偏红的光点，命名为 <b>MoM-BH*-1</b>。</p>
+        <ul>
+          <li>它只有<b>太阳系大小</b>，却异常明亮——能量输出远超普通恒星的上限。</li>
+          <li>它的中心藏着一个约 <b>10 万倍太阳质量</b> 的黑洞。</li>
+          <li>黑洞"吞噬"周围物质时释放巨大能量，外层包裹的<b>致密氢气</b>被点亮，让它看起来像一颗巨大的红色恒星——所以叫它"黑洞星"。</li>
+        </ul>
+
+        <h3>为什么"小红点"是个大谜题？</h3>
+        <p>近年来，JWST 在早期宇宙中频繁拍到一些<b>紧凑、明亮、偏红</b>的天体，科学家叫它们 <span class="reddot">"小红点"（little red dots）</span>。它们在今天的宇宙里几乎消失了，却塞满了早期宇宙。没人确定它们到底是什么。现在，像 MoM-BH*-1 这样的"黑洞星"给了我们一条线索：那些小红点，很可能就是<b>早期宇宙里被气体包裹、伪装成恒星的幼年期黑洞</b>。</p>
+
+        <h3>黑洞怎么会"长得这么快"？</h3>
+        <p>按过去的想法，黑洞应该从小慢慢长大，需要很久才能变得巨大。可 MoM-BH*-1 在宇宙才 6.6 亿岁时就已经是"10 万倍太阳质量"的大家伙了。它告诉我们：<b>早期宇宙的黑洞，可能比想象中形成得更快、更猛</b>。这正是天文学家最想解开的谜题之一。</p>
+
+        <h3>詹姆斯·韦布空间望远镜是什么？</h3>
+        <p>它是 NASA、欧洲和加拿大航天机构联合建造的红外线太空望远镜，2021 年底发射，在距离地球约 150 万公里的太空中工作。因为它能看到红外线（宇宙中古老光线到达我们今天多数已经"变红"），所以特别擅长回望宇宙最早的时光。</p>
+
+        <h3>动手做：你的"小红点星系"</h3>
+        <p>拿一张黑卡纸当"早期宇宙"，用红色和橘色荧光笔点上许多大小不一的<b>红点</b>。再拿放大镜（当"韦布望远镜"）凑近看：哪些红点其实可能是"藏起来的黑洞"？给其中几个画上一圈淡淡的红色光晕，代表包裹它们的气体。边玩边想：今天宇宙里的小红点为什么几乎看不见了？</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>了解宇宙最早的"黑洞星" MoM-BH*-1，认识黑洞、宇宙黎明、小红点等天文概念。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般过去时与一般现在时的区别、may 表推测、名词/分词作定语、比较级。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 10 个宇宙与天文主题核心词汇，并能听懂、跟读。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会用英语描述"用……发现了……"和"下次你……时，记住……"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立"宇宙里藏着许多'伪装'的惊喜"的好奇心，保持对星空的想象。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿播报的语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🔭</span><div>和家人用黑卡纸做一张"小红点星系"，聊聊哪些红点可能是藏起来的黑洞。</div></div>
+        <div class="goal"><span class="ic">🌌</span><div>挑一个晴朗无月的夜晚，到郊外看看横贯天际的银河，想象宇宙黎明。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Black Hole in Disguise · 2026-08-13 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.97; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Get ready, the earliest black hole in the universe was hiding in plain sight! Scientists using the James Webb Space Telescope found something strange: a point of red light from the dawn of time. At first, it looked like a giant star. But it was not a star at all, it was a black hole in disguise!",
+  "The object is named MoM-BH*-1. It lived just 660 million years after the Big Bang. It is only as big as our solar system, but its center holds a black hole about 100,000 times heavier than our Sun. Thick hydrogen gas wraps around it, glowing like a giant red star.",
+  "Why is this important? Black holes this big, this early, are a great mystery. This black hole star may help explain the strange little red dots that Webb keeps finding across the young universe. They are tiny, bright, red points that puzzled scientists for years.",
+  "So the next time you see a tiny red dot in the sky, remember: it might be a hidden giant! This is Pola, signing off from POLA NEWS. Keep looking up, and keep wondering! Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What did scientists find that looked like a giant star? 科学家发现、看起来像巨星的是什么？",opts:["An early black hole (MoM-BH*-1)","A new planet","A comet"],ans:0,
+   fb:"Correct! 那是一个伪装成恒星的早期黑洞 MoM-BH*-1。"},
+  {q:"Which telescope was used to find it? 是用哪台望远镜发现的？",opts:["The James Webb Space Telescope","A pair of binoculars","A submarine"],ans:0,
+   fb:"Yes! 是詹姆斯·韦布空间望远镜（JWST）。"},
+  {q:"How long after the Big Bang did MoM-BH*-1 live? MoM-BH*-1 存在于宇宙大爆炸之后多久？",opts:["About 660 million years","About 6 years","About 660 billion years"],ans:0,
+   fb:"Right! 大约在大爆炸之后 6.6 亿年的'宇宙黎明'时期。"},
+  {q:"How heavy is the black hole at its center? 它中心的黑洞有多重？",opts:["About 100,000 times the Sun's mass","As heavy as the Moon","Twice the Earth's mass"],ans:0,
+   fb:"Correct! 约为太阳质量的 10 万倍。"},
+  {q:"What may this 'black hole star' help explain? 这个'黑洞星'可能帮助解释什么？",opts:["The strange 'little red dots' in the early universe","Why the Moon shines","How rain is made"],ans:0,
+   fb:"Yes! 它有助于解释早期宇宙中神秘的'小红点'。"},
+  {q:"What wraps around the black hole and makes it glow red? 是什么包裹黑洞、让它发出红光？",opts:["Thick hydrogen gas","Liquid gold","Snow"],ans:0,
+   fb:"Right! 是致密的氢气包裹着它，像巨星一样发光。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
