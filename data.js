@@ -1541,6 +1541,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-08-14",
+    "title": "Old MacDonald Had a Farm",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-14-old-macdonald-had-a-farm",
+    "url": "lessons/a1/2026-08-14-old-macdonald-had-a-farm.html",
+    "vocab": [
+      {
+        "word": "farm",
+        "zh": "农场",
+        "ex": "\"He has a big farm.\""
+      },
+      {
+        "word": "cow",
+        "zh": "奶牛",
+        "ex": "\"The cow says moo.\""
+      },
+      {
+        "word": "pig",
+        "zh": "猪",
+        "ex": "\"The pig says oink.\""
+      },
+      {
+        "word": "duck",
+        "zh": "鸭子",
+        "ex": "\"The duck says quack.\""
+      },
+      {
+        "word": "sheep",
+        "zh": "绵羊",
+        "ex": "\"The sheep says baa.\""
+      },
+      {
+        "word": "dog",
+        "zh": "狗",
+        "ex": "\"The dog says woof.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -1589,6 +1631,58 @@ const EPISODES = [
         "word": "glow",
         "zh": "发光、发亮",
         "ex": "\"The summer nights glow.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-14",
+    "title": "Ping Pong Power",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-14-ping-pong-power",
+    "url": "lessons/a2/2026-08-14-ping-pong-power.html",
+    "vocab": [
+      {
+        "word": "paddle",
+        "zh": "球拍：打乒乓球的拍子",
+        "ex": "\"He hits the ball with a paddle.\""
+      },
+      {
+        "word": "net",
+        "zh": "球网：桌子中间的网",
+        "ex": "\"The ball goes over the net.\""
+      },
+      {
+        "word": "point",
+        "zh": "分；得分",
+        "ex": "\"The game goes to 11 points.\""
+      },
+      {
+        "word": "medal",
+        "zh": "奖牌：比赛赢来的奖章",
+        "ex": "\"She wins a gold medal.\""
+      },
+      {
+        "word": "exercise",
+        "zh": "锻炼；运动",
+        "ex": "\"Ping pong is good exercise.\""
+      },
+      {
+        "word": "fast",
+        "zh": "快的；迅速的",
+        "ex": "\"The ball is very fast.\""
+      },
+      {
+        "word": "serve",
+        "zh": "发球：开始一分的动作",
+        "ex": "\"He serves the ball.\""
+      },
+      {
+        "word": "rally",
+        "zh": "对打；一来一回的击球",
+        "ex": "\"They have a long rally.\""
       }
     ]
   },

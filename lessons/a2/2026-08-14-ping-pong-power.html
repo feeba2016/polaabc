@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Ping Pong Power — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#0ea5e9;
+  --bg:#f3f7fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#ffe29a;
+  --border:#dde7f1;
+  --soft:#eef5fd;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#38bdf8);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #d6e8fa;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,78,216,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,78,216,.55);}70%{box-shadow:0 0 0 12px rgba(29,78,216,0);}100%{box-shadow:0 0 0 0 rgba(29,78,216,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #f59e0b;transition:.15s;}
+.kw:hover{background:#ffd166;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#fff4e5;border:2px solid #f59e0b;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#b45309;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ffe29a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Sports Broadcast</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Ping Pong Power</h1>
+      <p class="subtitle">2026年8月14日 · 体育运动｜乒乓球 Ping Pong —— 全文阅读（点黄色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Do you like <span class="kw" data-def="快的；速度很快的">fast</span> games? <span class="kw" data-def="乒乓球（也叫做 table tennis）">Ping pong</span> is one of the fastest sports in the world! People also call it <span class="kw" data-def="乒乓球（正式名称）">table tennis</span>. A small ball flies across a table. Are you ready to play?</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p><span class="kw" data-def="乒乓球">Ping pong</span> started in <span class="kw" data-def="英格兰（英国的一部分）">England</span> in the 1880s. At first, people used books as <span class="kw" data-def="球拍">paddles</span> and corks as balls! Today, players use a light paddle and a small plastic ball. The game is fast and fun.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p><span class="kw" data-def="中国">China</span> is very good at ping pong. Chinese players win many <span class="kw" data-def="金牌；奖牌">gold medals</span> at the Olympics. Ping pong is great <span class="kw" data-def="锻炼；运动">exercise</span>. It helps your eyes, hands, and brain work together. Anyone can try it!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>Would you like to try ping pong? You can play at school or at home. This is Pola, signing off from POLA NEWS. Grab a paddle and have fun. Bye for now!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>💡 安全小贴士 Safety Tips</h3>
+        <p style="margin:0;font-size:14.5px;">乒乓球很安全，但打球时请注意：在<b>平坦、宽敞</b>的地方玩，别把球打向别人的脸；用<b>真正的球拍</b>代替硬物。和朋友轮流打，友谊第一，比赛第二！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="paddle">🔊</button><div class="word">paddle<span class="pos">n.</span></div><div class="zh">球拍：打乒乓球的拍子</div><div class="ex">"He hits the ball with a paddle."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="net">🔊</button><div class="word">net<span class="pos">n.</span></div><div class="zh">球网：桌子中间的网</div><div class="ex">"The ball goes over the net."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="point">🔊</button><div class="word">point<span class="pos">n.</span></div><div class="zh">分；得分</div><div class="ex">"The game goes to 11 points."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="medal">🔊</button><div class="word">medal<span class="pos">n.</span></div><div class="zh">奖牌：比赛赢来的奖章</div><div class="ex">"She wins a gold medal."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="exercise">🔊</button><div class="word">exercise<span class="pos">n.</span></div><div class="zh">锻炼；运动</div><div class="ex">"Ping pong is good exercise."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fast">🔊</button><div class="word">fast<span class="pos">adj.</span></div><div class="zh">快的；迅速的</div><div class="ex">"The ball is very fast."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="serve">🔊</button><div class="word">serve<span class="pos">v.</span></div><div class="zh">发球：开始一分的动作</div><div class="ex">"He serves the ball."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rally">🔊</button><div class="word">rally<span class="pos">n.</span></div><div class="zh">对打；一来一回的击球</div><div class="ex">"They have a long rally."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. People also call it [table tennis].</h3>
+          <div class="zh">人们也叫它[……]。"call it + 名字" 用来给事物起另一个名字。</div>
+          <div class="eg">People also call it table tennis.</div>
+          <div class="practice">练习：用 "ping pong" 造句 → People also call it <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. It started in [the 1880s].</h3>
+          <div class="zh">它始于[……]。用一般过去时 "started" 讲一件过去发生的事。</div>
+          <div class="eg">It started in the 1880s.</div>
+          <div class="practice">练习：用 "England" → Ping pong started in <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. The ball can [go very fast].</h3>
+          <div class="zh">球可以[……]。"can + 动词原形" 表示能力或可能。</div>
+          <div class="eg">The ball can go very fast.</div>
+          <div class="practice">练习：用 "fly across the table" → The ball can <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. China is very good at [ping pong].</h3>
+          <div class="zh">中国很擅长[……]。"be good at + 名词/动词" 表示擅长某事。</div>
+          <div class="eg">China is very good at ping pong.</div>
+          <div class="practice">练习：用 "swimming" → China is very good at <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般过去时（Past Simple）</h3>
+          <div class="zh">讲过去发生的事，动词要变成过去式。规则动词加 -ed；不规则动词要记住，比如 start → started，use → used。</div>
+          <div class="eg">Ping pong <b>started</b> in England. / People <b>used</b> books as paddles.</div>
+        </div>
+        <div class="item">
+          <h3>2. 情态动词 can（表示能力）</h3>
+          <div class="zh">"can + 动词原形" 表示"能够、可以"。否定用 cannot / can't。它不分人称，后面永远接动词原形。</div>
+          <div class="eg">The ball <b>can</b> go very fast. / Anyone <b>can</b> try it!</div>
+        </div>
+        <div class="item">
+          <h3>3. 比较级（Comparative）</h3>
+          <div class="zh">比较两个人/物时，短词加 -er（fast → faster），多音节词前加 more（more fun）。than 用来连接被比较的一方。</div>
+          <div class="eg">The champion hits the ball <b>faster</b> than a beginner. / Ping pong is <b>more fun</b> than sitting still.</div>
+        </div>
+        <div class="item">
+          <h3>4. be good at（擅长）</h3>
+          <div class="zh">"be (am/is/are) good at + 名词或 -ing" 表示擅长做某事。at 后面接动词要加 -ing。</div>
+          <div class="eg">China <b>is good at</b> ping pong. / I <b>am good at</b> serving.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>乒乓球是什么？</h3>
+        <p><b>乒乓球</b>（英文叫 table tennis，大家也爱叫它 ping pong / 乒乓）是一项在桌上进行的球类运动。两名（或两对）选手用小小的球拍把球打过中间的<b>球网</b>，球不能落地两次。因为它的球速很快、来回很多，被称为"世界上最快的球拍运动"之一。</p>
+
+        <h3>小历史：从书本到奥运</h3>
+        <ul>
+          <li><b>1880 年代，英格兰</b>：天气冷的时候，英国人把草地网球搬进屋里，用书当球拍、用软木当球，这就是乒乓球的雏形。后来才用上真正的球拍和塑料小球。</li>
+          <li><b>1988 年，汉城（首尔）奥运会</b>：乒乓球第一次成为奥运正式比赛项目。从那以后，它成了夏季奥运会上最受欢迎的项目之一。</li>
+          <li><b>11 分制</b>：现在一局打到 11 分（要领先 2 分才算赢），比赛更紧张、更好看。</li>
+        </ul>
+
+        <h3>中国的"国球"</h3>
+        <p>在中国，乒乓球被称为<b>"国球"</b>。几十年来，中国乒乓球运动员在奥运会、世锦赛上拿了很多<b>金牌</b>，是世界公认的强队。许多小朋友在学校和社区就能学打乒乓球，它既锻炼身体，又锻炼反应和专注力。</p>
+
+        <h3>一段友好的历史：乒乓外交</h3>
+        <p>1971 年，中美两国的乒乓球运动员在比赛中友好交流，这件事后来被称为"<b>乒乓外交</b>"。小小的银球，曾为两个大国之间的民间友好打开了一扇门——这说明<b>体育可以增进人与人之间的理解与友谊</b>。体育无国界，友谊最珍贵。</p>
+
+        <h3>趣味知识</h3>
+        <ul>
+          <li>职业选手打出的球，速度可以超过<b>每小时 100 公里</b>，比你在街上骑的自行车还快！</li>
+          <li>一分钟内，高手能击球 <b>200 多次</b>，差不多每秒 4 下。</li>
+          <li>乒乓球是<b>残奥会</b>项目：坐着轮椅也能打，是一项对所有人开放的运动的运动。</li>
+        </ul>
+
+        <h3>动手做：家里的"迷你乒乓球"</h3>
+        <p>找一张长桌子，中间放一本书当"球网"，用海绵球或两个气球拍来来回回打。没有球拍？用硬纸板折一个也可以！记得在空旷处玩，注意安全，和家人来一场友谊赛吧。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>了解乒乓球（ping pong）的起源：1880 年代英格兰，现在是世界流行的运动。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般过去时、情态动词 can、比较级和 be good at 四种基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个运动主题核心词汇（paddle, net, point, medal, exercise, fast, serve, rally）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语介绍一项运动，并说出它的规则和好处。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得体育精神：友谊第一，比赛第二；运动让世界更友好。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🏓</span><div>和爸爸妈妈或朋友打一场"迷你乒乓球"，用英语数分：one, two, three...</div></div>
+        <div class="goal"><span class="ic">💬</span><div>用 "China is good at …" 说说中国还擅长什么运动。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Ping Pong Power · 2026-08-14 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Do you like fast games? Ping pong is one of the fastest sports in the world! People also call it table tennis. A small ball flies across a table. Are you ready to play?",
+  "Ping pong started in England in the 1880s. At first, people used books as paddles and corks as balls! Today, players use a light paddle and a small plastic ball. The game is fast and fun.",
+  "China is very good at ping pong. Chinese players win many gold medals at the Olympics. Ping pong is great exercise. It helps your eyes, hands, and brain work together. Anyone can try it!",
+  "Would you like to try ping pong? You can play at school or at home. This is Pola, signing off from POLA NEWS. Grab a paddle and have fun. Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where did ping pong start? 乒乓球最早起源于哪里？",opts:["China 中国","England 英格兰","The USA 美国","Japan 日本"],ans:1,
+   fb:"Correct! 乒乓球始于19世纪80年代的英格兰（英国）。"},
+  {q:"What did people use as paddles at first? 最早人们用什么当球拍？",opts:["Books 书本","Spoons 勺子","Hands 手","Sticks 树枝"],ans:0,
+   fb:"Yes! 最早人们用书本当球拍，用软木当球。"},
+  {q:"How many points to win one game? 一局打到多少分算赢？",opts:["21 points","11 points","5 points","15 points"],ans:1,
+   fb:"Right! 现在一局打到 11 分（要领先 2 分）。"},
+  {q:"Which country is very good at ping pong? 哪个国家很擅长乒乓球？",opts:["China 中国","France 法国","Brazil 巴西","Canada 加拿大"],ans:0,
+   fb:"Correct! 中国乒乓球很强，拿过很多奥运金牌。"},
+  {q:"Ping pong is good for your... 乒乓球对什么有好处？",opts:["eyes, hands and brain 眼睛、手和大脑","only legs 只有腿","ears 耳朵","nose 鼻子"],ans:0,
+   fb:"Yes! 乒乓球锻炼眼睛、手和大脑一起配合。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
