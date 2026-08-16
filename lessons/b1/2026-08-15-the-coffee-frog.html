@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Coffee Frog — Interactive Lesson</title>
+<style>
+:root{
+  --accent:#1f9d55;
+  --accent2:#c8772e;
+  --bg:#f4faf5;
+  --card:#ffffff;
+  --text:#13301f;
+  --muted:#5a6b5f;
+  --highlight:#e3f5e8;
+  --border:#cdebd6;
+  --soft:#f1f9f3;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#f0a857);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(31,157,85,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(19,48,31,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #bfe3cc;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(31,157,85,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(31,157,85,.55);}70%{box-shadow:0 0 0 12px rgba(31,157,85,0);}100%{box-shadow:0 0 0 0 rgba(31,157,85,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #1f9d55;transition:.15s;}
+.kw:hover{background:#cdeed6;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#7ee0a0;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(19,48,31,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .bluedot{color:var(--accent);font-weight:800;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(31,157,85,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e3f5e8;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Science Broadcast</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Coffee Frog</h1>
+      <p class="subtitle">哥斯达黎加咖啡园里，会"吹气球唱歌"的新种树蛙｜全文阅读（点绿色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Hello! I'm Pola, and I have a tiny, green <span class="kw" data-def="谜题；令人好奇的事">mystery</span> for you. Deep in the <span class="kw" data-def="咖啡种植园">coffee farms</span> of <span class="kw" data-def="哥斯达黎加，中美洲国家，以热带雨林和生物多样性闻名">Costa Rica</span>, <span class="kw" data-def="科学家">scientists</span> just met a brand-new <span class="kw" data-def="青蛙">frog</span>. It is smaller than your thumb — and it sings with a <span class="kw" data-def="气球">balloon</span>!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>This little frog is called <span class="kw" data-def="学名为 Isthmohyla nacientes 的'咖啡蛙'">Isthmohyla nacientes</span>, or the "<span class="kw" data-def="咖啡">coffee</span> frog." It is <span class="kw" data-def="绿色的">green</span> with dark <span class="kw" data-def="斑点">spots</span> and only four <span class="kw" data-def="厘米">centimeters</span> long. At <span class="kw" data-def="夜晚">night</span>, the <span class="kw" data-def="雄性的">male</span> puffs up his <span class="kw" data-def="喉咙">throat</span> like a tiny balloon and sings to find a friend.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>Here is the big idea: even busy coffee farms can hide animals we have never met! But <span class="kw" data-def="化学制剂（此处指农药）">chemicals</span> from the farms can flow into <span class="kw" data-def="溪流">streams</span> and hurt <span class="kw" data-def="小蝌蚪 / 幼蛙">baby frogs</span>. <span class="kw" data-def="干净的水">Clean water</span> keeps both frogs and <span class="kw" data-def="人们">people</span> healthy.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>That's your Pola News for today! Next time you sip hot <span class="kw" data-def="热可可">cocoa</span> or coffee, think of the little frog singing in the <span class="kw" data-def="树叶">leaves</span>. Bye for now — and keep exploring! Ha ha!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="frog">🔊</button><div class="word">frog<span class="pos">n.</span></div><div class="zh">青蛙：一种会跳跃、叫声响亮的两栖动物</div><div class="ex">"scientists just met a brand-new frog"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="species">🔊</button><div class="word">species<span class="pos">n.</span></div><div class="zh">物种：一类有共同特征的生物</div><div class="ex">"a brand-new species of frog"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="Costa Rica">🔊</button><div class="word">Costa Rica<span class="pos">n.</span></div><div class="zh">哥斯达黎加：中美洲国家，生物多样性极高</div><div class="ex">"coffee farms of Costa Rica"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="coffee">🔊</button><div class="word">coffee<span class="pos">n.</span></div><div class="zh">咖啡：由咖啡果制成的饮品</div><div class="ex">"the 'coffee frog'"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="throat">🔊</button><div class="word">throat<span class="pos">n.</span></div><div class="zh">喉咙：颈前部发声与呼吸的器官</div><div class="ex">"puffs up his throat like a balloon"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="see-through">🔊</button><div class="word">see-through<span class="pos">adj.</span></div><div class="zh">半透明的，能看穿的</div><div class="ex">"his see-through throat"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="nocturnal">🔊</button><div class="word">nocturnal<span class="pos">adj.</span></div><div class="zh">夜行的：在夜晚最活跃的</div><div class="ex">"a nocturnal frog sings at night"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="chemical">🔊</button><div class="word">chemical<span class="pos">n.</span></div><div class="zh">化学制剂（此处指农药）</div><div class="ex">"chemicals from the farms"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="stream">🔊</button><div class="word">stream<span class="pos">n.</span></div><div class="zh">溪流：山间流动的小河</div><div class="ex">"flow into streams"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scientist">🔊</button><div class="word">scientist<span class="pos">n.</span></div><div class="zh">科学家：研究自然世界的人</div><div class="ex">"scientists just met a frog"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Deep in [the coffee farms of Costa Rica], [scientists just met a brand-new frog].</h3>
+          <div class="zh">在[……]的深处，[……]。用 "Deep in + 地点, 主句" 引出故事发生的场景。</div>
+          <div class="eg">Deep in the coffee farms of Costa Rica, scientists just met a brand-new frog.</div>
+          <div class="practice">练习：用 "the forest / we found a tiny bird" → Deep in <input placeholder="your answer">, we found a tiny bird.</div>
+        </div>
+        <div class="item">
+          <h3>2. This little frog is called [Isthmohyla nacientes], or the ["coffee frog."]</h3>
+          <div class="zh">这只小蛙叫作[……]，或者["……"]。"be called + 名字" 用来介绍名称或别名。</div>
+          <div class="eg">This little frog is called Isthmohyla nacientes, or the "coffee frog."</div>
+          <div class="practice">练习：用 "the panda / the bamboo bear" → This animal is called the panda, or <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. At night, the male [puffs up his throat] like [a tiny balloon].</h3>
+          <div class="zh">[……]时，[……]像[……]一样。[动词短语] like + 名词，表示"像……一样"。</div>
+          <div class="eg">At night, the male puffs up his throat like a tiny balloon.</div>
+          <div class="practice">练习：用 "the cat / a soft ball" → The cat curls up <input placeholder="your answer"> a soft ball.</div>
+        </div>
+        <div class="item">
+          <h3>4. [Chemicals] can flow into [streams] and [hurt baby frogs].</h3>
+          <div class="zh">[……]会流入[……]并[……]。"can + 动词" 表示"可能会"；and 连接两个并列结果。</div>
+          <div class="eg">Chemicals can flow into streams and hurt baby frogs.</div>
+          <div class="practice">练习：用 "Rain / the river / flood the road" → Rain can flow into <input placeholder="your answer"> and flood the road.</div>
+        </div>
+        <div class="item">
+          <h3>5. [Clean water] keeps [both frogs and people] healthy.</h3>
+          <div class="zh">[……]让[……和……]都保持健康。"keep + 宾语 + 形容词" 表示"使……保持某种状态"；both A and B = A 和 B 都。</div>
+          <div class="eg">Clean water keeps both frogs and people healthy.</div>
+          <div class="practice">练习：用 "Exercise / you and me" → Exercise keeps <input placeholder="your answer"> strong.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般现在时 vs 一般过去时</h3>
+          <div class="zh">讲现在的状态或普遍事实用一般现在时（is, has, can flow, keeps, sings）；讲故事里已发生的事用一般过去时（met, called, puffed up）。</div>
+          <div class="eg">It <b>is</b> green with dark spots. / Scientists <b>met</b> a brand-new frog.</div>
+        </div>
+        <div class="item">
+          <h3>2. 情态动词 can + 动词原形（表能力 / 可能性）</h3>
+          <div class="zh">can 表示"能、会、可能会"。这里不是"可以"，而是说明某种自然可能性：农药"会"流进溪流、"能"伤害蝌蚪。</div>
+          <div class="eg">Chemicals <b>can</b> flow into streams and <b>hurt</b> baby frogs.</div>
+        </div>
+        <div class="item">
+          <h3>3. 连词 and 表并列 / but 表转折</h3>
+          <div class="zh">and 连接并列的动作或事物（flow into streams and hurt baby frogs；frogs and people）；but 连接意思相反或出乎意料的句子。</div>
+          <div class="eg">Clean water keeps both frogs <b>and</b> people healthy. / farms can hide animals, <b>but</b> chemicals can hurt them.</div>
+        </div>
+        <div class="item">
+          <h3>4. 比较结构：like + 名词（像……一样）</h3>
+          <div class="zh">like 在这里是介词，意思是"像"，后面接名词或代词，用来打比方，让描述更生动。</div>
+          <div class="eg">puffs up his throat <b>like</b> a tiny balloon / sings <b>like</b> a little bell</div>
+        </div>
+        <div class="item">
+          <h3>5. 使役结构 keep + 宾语 + 形容词</h3>
+          <div class="zh">keep 在这里意为"使……保持"，后面接宾语再加形容词作补语，说明状态。</div>
+          <div class="eg">Clean water <b>keeps</b> both frogs and people <b>healthy</b>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一只住在咖啡园里的小绿蛙</h3>
+        <p>在哥斯达黎加（Costa Rica）中部太平洋沿岸的<b>洛斯桑托斯（Los Santos）</b>地区——塔拉珠（Tarrazú）、多塔（Dota）、莱昂·科尔特斯——满山都是咖啡种植园。就在这里的咖啡树与山间溪流之间，科学家最近正式描述了一个<b>全新物种</b>：*Isthmohyla nacientes*，大家叫它"咖啡蛙"（coffee frog），学名俗名合起来也叫"春蛙"（Rana de las nacientes）。</p>
+
+        <h3>它会"吹气球"唱歌</h3>
+        <p>这种树蛙不到 <b>4 厘米</b>长，绿色带深绿斑点，是<b>夜行性</b>动物。最神奇的是雄蛙：它夜里趴在咖啡叶上鸣叫求偶时，<b>半透明的喉部会像小气球一样鼓胀起来</b>，帮助它发出短促而高亢的叫声。也就是说，它的"气球喉咙"其实是一个天然的<b>发声气囊</b>——很多蛙类都有类似的声囊，只是这只的颜色透亮、格外好看。</p>
+        <ul>
+          <li>它<b>不吃咖啡果</b>，而是吃栖息地里的微小昆虫，相当于咖啡园里免费的"害虫小卫士"。</li>
+          <li>它早在 <b>1960 年代</b>就被看到过，却一直被误认成别的蛙；直到 <b>2021 年</b>在塔拉珠附近一条溪流边重新出现，科学家才认真研究起来。</li>
+          <li>由哥斯达黎加大学（UCR）与阿根廷 CONICET 的 Wagner Chaves-Acuña 团队正式描述发表。</li>
+        </ul>
+
+        <h3>名字里的秘密：泉源与河流</h3>
+        <p>"<b>nacientes</b>" 在西班牙语里是"泉源、溪流上游"的意思。这个名字是当地圣洛伦索-德塔拉苏社区的居民一起提议的，用来<b>致敬保护泉水与河流的水务协会（ASADAS）</b>——他们既守护着供应村民饮水的溪流，也无意间守护了这只小蛙的家园。一个名字，把"干净的水""喝水的人"和"藏在叶丛里的小蛙"连在了一起。</p>
+
+        <h3>为什么咖啡园里也能藏着新物种？</h3>
+        <p>哥斯达黎加虽然以热带雨林闻名，但很多土地早已变成农场。这只小蛙告诉我们：<span class="bluedot">即使是看起来被人类"改造"得很厉害的农田，也可能藏着科学界从没正式认识过的生命</span>。它生活在咖啡树和溪流的交界处，说明"农业景观"和"野生自然"并非完全割裂。</p>
+
+        <h3>一个需要被认真对待的威胁</h3>
+        <p>可惜故事也有阴影：咖啡园里使用的<b>农药</b>会随空气飘散、渗入土壤，最终流进小蛙成长的水溪，伤害里面的<b>蝌蚪</b>。科学家提醒，要保护这种蛙，关键是<b>管住流进溪流的化学品、保护好溪边植被</b>。好消息是：当地已有居民自发组成小组，一边监测这只蛙，一边和社区一起设计保护方案。</p>
+
+        <h3>动手做：你的"气球喉咙"实验</h3>
+        <p>拿一个小小的气球（或一张纸折成的小袋），轻轻吹一点点气，用手指捏住口、只留一条小缝，然后慢慢放气——是不是发出了"呱——"的声音？这就是声囊放大声音的简单原理。再用两个纸杯和一根长线做一个"电话"，对着杯子说话，线拉直时声音能传到另一头。用这两个小实验，给家人讲讲：为什么小蛙要把喉咙鼓成"气球"才能把歌声传得更远？</p>
+
+        <h3>还想继续探索？</h3>
+        <p>研究者说，中美洲地峡（哥斯达黎加和巴拿马一带）的树蛙多样性，很可能比我们目前知道的还要丰富。也许再过几年，科学家会在同一片咖啡山里，又发现几只"从未谋面"的新朋友。保持好奇，下一个发现者可能就是你！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>认识哥斯达黎加咖啡园里的新种树蛙 *Isthmohyla nacientes*，了解它"吹气球唱歌"的独特本领。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般现在时与一般过去时的区别、can 表可能性、and/but 连词、like 打比方、keep + 宾语 + 形容词。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 10 个自然与动物主题核心词汇（frog, species, Costa Rica, coffee, throat 等），并能听懂、跟读。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会用英语描述"在……发现了……"和"……让……都保持健康"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立"农田里也藏着未知生命、干净水源对人和动物都重要"的环保意识。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿播报的语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🎈</span><div>和家人用小气球做"声囊发声"实验，聊聊为什么小蛙要把喉咙鼓成气球。</div></div>
+        <div class="goal"><span class="ic">☕</span><div>下次喝热可可或咖啡时，想想那只在叶丛里唱歌的小绿蛙，讲给家人听。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Coffee Frog · 2026-08-15 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.97; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Hello! I'm Pola, and I have a tiny, green mystery for you. Deep in the coffee farms of Costa Rica, scientists just met a brand-new frog. It is smaller than your thumb — and it sings with a balloon!",
+  "This little frog is called Isthmohyla nacientes, or the \"coffee frog.\" It is green with dark spots and only four centimeters long. At night, the male puffs up his see-through throat like a tiny balloon and sings to find a friend.",
+  "Here is the big idea: even busy coffee farms can hide animals we have never met! But chemicals from the farms can flow into streams and hurt baby frogs. Clean water keeps both frogs and people healthy.",
+  "That's your Pola News for today! Next time you sip hot cocoa or coffee, think of the little frog singing in the leaves. Bye for now — and keep exploring! Ha ha!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where was the coffee frog found? 咖啡蛙是在哪里被发现的？",opts:["In the coffee farms of Costa Rica","At the North Pole","On the Moon"],ans:0,
+   fb:"Correct! 它生活在哥斯达黎加的咖啡种植园里。"},
+  {q:"What is the frog's nickname? 这只蛙的绰号是什么？",opts:["The 'coffee frog'","The 'pizza frog'","The 'snow frog'"],ans:0,
+   fb:"Yes! 它叫'咖啡蛙'（coffee frog）。"},
+  {q:"What does the male frog do when it sings? 雄蛙鸣叫时会做什么？",opts:["Puffs up its see-through throat like a balloon","Grows a pair of wings","Changes its color to blue"],ans:0,
+   fb:"Right! 雄蛙鸣叫时，半透明的喉咙会像小气球一样鼓起来。"},
+  {q:"About how long is the frog? 这只蛙大约有多长？",opts:["About four centimeters","About two meters","As big as a dog"],ans:0,
+   fb:"Correct! 它不到 4 厘米长，比你的拇指还小。"},
+  {q:"What can flow from farms into streams and hurt baby frogs? 什么会从农场流进溪流、伤害小蝌蚪？",opts:["Chemicals (pesticides)","Raindrops","Sunlight"],ans:0,
+   fb:"Yes! 咖啡园里的化学农药会流进溪流，伤害蝌蚪。"},
+  {q:"What keeps both frogs and people healthy? 什么能让青蛙和人同时保持健康？",opts:["Clean water","Loud music","Coffee beans"],ans:0,
+   fb:"Right! 干净的水让青蛙和人都能保持健康。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

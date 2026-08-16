@@ -1457,6 +1457,130 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-14",
+    "title": "Neptune's Broken Moons",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-14-neptunes-broken-moons",
+    "url": "lessons/b1/2026-08-14-neptunes-broken-moons.html",
+    "vocab": [
+      {
+        "word": "Neptune",
+        "zh": "海王星：太阳系第八颗行星，呈蓝色",
+        "ex": "\"Look up at the blue planet Neptune\""
+      },
+      {
+        "word": "moon",
+        "zh": "卫星：围绕行星运行的天体",
+        "ex": "\"It has 16 moons\""
+      },
+      {
+        "word": "shatter",
+        "zh": "粉碎，打碎成许多碎片",
+        "ex": "\"The old moons shattered into dust\""
+      },
+      {
+        "word": "wrecking ball",
+        "zh": "拆楼用的大铁球（比喻撞毁一切）",
+        "ex": "\"crashed in like a wrecking ball\""
+      },
+      {
+        "word": "debris",
+        "zh": "碎片，残骸",
+        "ex": "\"broken pieces of debris\""
+      },
+      {
+        "word": "clay",
+        "zh": "黏土：一种需水才能形成的矿物",
+        "ex": "\"found special clay on these moons\""
+      },
+      {
+        "word": "telescope",
+        "zh": "望远镜（这里指太空望远镜）",
+        "ex": "\"A space telescope called JWST\""
+      },
+      {
+        "word": "ancient",
+        "zh": "古老的",
+        "ex": "\"an ancient world\""
+      },
+      {
+        "word": "orbit",
+        "zh": "轨道；绕……运行",
+        "ex": "\"moons orbit the planet\""
+      },
+      {
+        "word": "interior",
+        "zh": "内部",
+        "ex": "\"from deep inside its interior\""
+      }
+    ]
+  },
+  {
+    "level": "B1",
+    "date": "2026-08-15",
+    "title": "The Coffee Frog",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-15-the-coffee-frog",
+    "url": "lessons/b1/2026-08-15-the-coffee-frog.html",
+    "vocab": [
+      {
+        "word": "frog",
+        "zh": "青蛙：一种会跳跃、叫声响亮的两栖动物",
+        "ex": "\"scientists just met a brand-new frog\""
+      },
+      {
+        "word": "species",
+        "zh": "物种：一类有共同特征的生物",
+        "ex": "\"a brand-new species of frog\""
+      },
+      {
+        "word": "Costa Rica",
+        "zh": "哥斯达黎加：中美洲国家，生物多样性极高",
+        "ex": "\"coffee farms of Costa Rica\""
+      },
+      {
+        "word": "coffee",
+        "zh": "咖啡：由咖啡果制成的饮品",
+        "ex": "\"the 'coffee frog'\""
+      },
+      {
+        "word": "throat",
+        "zh": "喉咙：颈前部发声与呼吸的器官",
+        "ex": "\"puffs up his throat like a balloon\""
+      },
+      {
+        "word": "see-through",
+        "zh": "半透明的，能看穿的",
+        "ex": "\"his see-through throat\""
+      },
+      {
+        "word": "nocturnal",
+        "zh": "夜行的：在夜晚最活跃的",
+        "ex": "\"a nocturnal frog sings at night\""
+      },
+      {
+        "word": "chemical",
+        "zh": "化学制剂（此处指农药）",
+        "ex": "\"chemicals from the farms\""
+      },
+      {
+        "word": "stream",
+        "zh": "溪流：山间流动的小河",
+        "ex": "\"flow into streams\""
+      },
+      {
+        "word": "scientist",
+        "zh": "科学家：研究自然世界的人",
+        "ex": "\"scientists just met a frog\""
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -1583,6 +1707,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-08-15",
+    "title": "The Four Seasons",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-15-the-four-seasons",
+    "url": "lessons/a1/2026-08-15-the-four-seasons.html",
+    "vocab": [
+      {
+        "word": "spring",
+        "zh": "春天",
+        "ex": "\"Spring is warm.\""
+      },
+      {
+        "word": "summer",
+        "zh": "夏天",
+        "ex": "\"Summer is hot.\""
+      },
+      {
+        "word": "autumn",
+        "zh": "秋天",
+        "ex": "\"Autumn is cool.\""
+      },
+      {
+        "word": "winter",
+        "zh": "冬天",
+        "ex": "\"Winter is cold.\""
+      },
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "\"The sun shines.\""
+      },
+      {
+        "word": "snow",
+        "zh": "雪",
+        "ex": "\"Snow falls.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -1687,6 +1853,58 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A2",
+    "date": "2026-08-15",
+    "title": "Trash Into Playgrounds",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-15-trash-into-playgrounds",
+    "url": "lessons/a2/2026-08-15-trash-into-playgrounds.html",
+    "vocab": [
+      {
+        "word": "recycle",
+        "zh": "回收；再利用",
+        "ex": "\"We recycle paper and plastic.\""
+      },
+      {
+        "word": "plastic",
+        "zh": "塑料；塑料的",
+        "ex": "\"This bottle is made of plastic.\""
+      },
+      {
+        "word": "bottle",
+        "zh": "瓶子",
+        "ex": "\"Please put the bottle in the bin.\""
+      },
+      {
+        "word": "playground",
+        "zh": "游乐场；儿童乐园",
+        "ex": "\"Children play in the playground.\""
+      },
+      {
+        "word": "waste",
+        "zh": "垃圾；废弃物",
+        "ex": "\"We must make less waste.\""
+      },
+      {
+        "word": "protect",
+        "zh": "保护",
+        "ex": "\"We protect the sea animals.\""
+      },
+      {
+        "word": "clean",
+        "zh": "清洗；干净的",
+        "ex": "\"Let's keep the Earth clean.\""
+      },
+      {
+        "word": "reuse",
+        "zh": "再次使用；重复利用",
+        "ex": "\"You can reuse a glass jar.\""
+      }
+    ]
+  },
+  {
     "level": "B2",
     "date": "2026-08-12",
     "title": "Beyond Lithium The Rise of Solid-State Batteries",
@@ -1745,6 +1963,130 @@ const EPISODES = [
         "word": "demonstrate",
         "zh": "证明；表明",
         "ex": "\"Tests demonstrate far higher energy density.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-14",
+    "title": "How a Mocked Painting Named a Movement",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-14-how-a-mocked-painting-named-a-movement",
+    "url": "lessons/b2/2026-08-14-how-a-mocked-painting-named-a-movement.html",
+    "vocab": [
+      {
+        "word": "revolutionary",
+        "zh": "革命性的；开创性的",
+        "ex": "\"The Impressionists were revolutionary in their approach to light.\""
+      },
+      {
+        "word": "consequently",
+        "zh": "因此；所以",
+        "ex": "\"The critic mocked the show; consequently, the name stuck.\""
+      },
+      {
+        "word": "conventional",
+        "zh": "传统的；常规的",
+        "ex": "\"Conventional painters favoured smooth, polished finishes.\""
+      },
+      {
+        "word": "depict",
+        "zh": "描绘；刻画",
+        "ex": "\"The painting depicts a busy Parisian railway station.\""
+      },
+      {
+        "word": "emerge",
+        "zh": "出现；兴起",
+        "ex": "\"A bold new style emerged from their outdoor experiments.\""
+      },
+      {
+        "word": "provoke",
+        "zh": "激起；引发",
+        "ex": "\"The bright, loose colours provoked strong reactions from critics.\""
+      },
+      {
+        "word": "portray",
+        "zh": "描绘；表现",
+        "ex": "\"Monet sought to portray the feeling of a moment, not its details.\""
+      },
+      {
+        "word": "transform",
+        "zh": "彻底改变",
+        "ex": "\"Photography transformed how artists viewed reality.\""
+      },
+      {
+        "word": "perspective",
+        "zh": "视角；观点",
+        "ex": "\"Plein-air painting changed the artist's perspective on nature.\""
+      },
+      {
+        "word": "nevertheless",
+        "zh": "然而；不过",
+        "ex": "\"The public was hostile; nevertheless, the movement survived.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-16",
+    "title": "The Trolley Problem",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-16-the-trolley-problem",
+    "url": "lessons/b2/2026-08-16-the-trolley-problem.html",
+    "vocab": [
+      {
+        "word": "hypothetical",
+        "zh": "假设的；假想的",
+        "ex": "\"a famous hypothetical dilemma in moral philosophy\""
+      },
+      {
+        "word": "dilemma",
+        "zh": "困境；两难",
+        "ex": "\"A dilemma forces us to choose between two bad outcomes.\""
+      },
+      {
+        "word": "sacrifice",
+        "zh": "牺牲；献出",
+        "ex": "\"sacrificing one to save five\""
+      },
+      {
+        "word": "consequence",
+        "zh": "后果；结果",
+        "ex": "\"Why does the same consequence feel so different?\""
+      },
+      {
+        "word": "utilitarian",
+        "zh": "功利主义的（以最大福祉为准则）",
+        "ex": "\"A utilitarian argues we should maximise total welfare.\""
+      },
+      {
+        "word": "moral",
+        "zh": "道德的；伦理的",
+        "ex": "\"our moral intuition often rejects pushing the stranger\""
+      },
+      {
+        "word": "intuition",
+        "zh": "直觉；本能的判断",
+        "ex": "\"moral intuition often rejects direct killing\""
+      },
+      {
+        "word": "distinguish",
+        "zh": "区分；辨别",
+        "ex": "\"we can distinguish between killing and letting die\""
+      },
+      {
+        "word": "rationale",
+        "zh": "根本原因；逻辑依据",
+        "ex": "\"The rationale is that intending harm is impermissible.\""
+      },
+      {
+        "word": "impermissible",
+        "zh": "不允许的；不可接受的",
+        "ex": "\"intending harm is impermissible, even for a greater good\""
       }
     ]
   },
@@ -1869,6 +2211,130 @@ const EPISODES = [
         "word": "fragmentation",
         "zh": "碎片化；分裂为松散碎片",
         "ex": "\"A tool built to manage interdependence may deepen fragmentation.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-14",
+    "title": "The Half That Holds",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-14-the-half-that-holds",
+    "url": "lessons/c1/2026-08-14-the-half-that-holds.html",
+    "vocab": [
+      {
+        "word": "empirical",
+        "zh": "经验主义的；基于观察与实验证据的",
+        "ex": "\"In 2026 that doubt acquired empirical precision.\""
+      },
+      {
+        "word": "sobering",
+        "zh": "令人警醒的；发人深省的",
+        "ex": "\"Their verdict was sobering: only about half could be replicated.\""
+      },
+      {
+        "word": "edifice",
+        "zh": "大厦；此处隐喻\"权威/制度体系\"",
+        "ex": "\"The edifice of scientific authority rested on fragile foundations.\""
+      },
+      {
+        "word": "fragile",
+        "zh": "脆弱的；不稳固的",
+        "ex": "\"Scientific authority rested on surprisingly fragile foundations.\""
+      },
+      {
+        "word": "reproducibility",
+        "zh": "可再现性：同一数据用同一方法能否得到相同结果",
+        "ex": "\"Reproducibility held for 54% of studies once data were shared.\""
+      },
+      {
+        "word": "robustness",
+        "zh": "稳健性：换一种合理分析是否仍得相同结论",
+        "ex": "\"Robustness faltered in a quarter of cases.\""
+      },
+      {
+        "word": "replicability",
+        "zh": "可复制性：独立重复实验能否确认结果",
+        "ex": "\"Replicability succeeded for barely half the claims.\""
+      },
+      {
+        "word": "incentive",
+        "zh": "激励；诱因（制度性动机）",
+        "ex": "\"The fault seldom lies in fraud; it lies in incentive.\""
+      },
+      {
+        "word": "opaque",
+        "zh": "不透明的；模糊的（方法/过程）",
+        "ex": "\"Selective reporting, opaque methods, and hoarding of data conspire.\""
+      },
+      {
+        "word": "conspire",
+        "zh": "（拟人/贬义）串通、合谋促成（某结果）",
+        "ex": "\"They conspire to make results appear sharper than they are.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-15",
+    "title": "When Precedent Is a Hallucination",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-15-when-precedent-is-a-hallucination",
+    "url": "lessons/c1/2026-08-15-when-precedent-is-a-hallucination.html",
+    "vocab": [
+      {
+        "word": "watershed",
+        "zh": "分水岭；转折点；重大转折事件",
+        "ex": "\"In July 2026 the ruling may prove a watershed for the age of generative AI.\""
+      },
+      {
+        "word": "precedent",
+        "zh": "判例；先前判决所确立的司法先例",
+        "ex": "\"A tribunal founded its decision on legal precedents that never existed.\""
+      },
+      {
+        "word": "adjudication",
+        "zh": "裁决；审判；司法裁定（process of judging）",
+        "ex": "\"Even an iota of hallucinated text vitiates the entire adjudication process.\""
+      },
+      {
+        "word": "insidious",
+        "zh": "隐伏的；暗中为害、逐渐侵蚀的",
+        "ex": "\"AI hallucinations are invisible, insidious, and catastrophic before anyone notices.\""
+      },
+      {
+        "word": "vitiates",
+        "zh": "使无效；损害；破坏（第三人称单数 vitiate）",
+        "ex": "\"An iota of fake material vitiates the entire adjudicatory process.\""
+      },
+      {
+        "word": "discernment",
+        "zh": "辨别力；明辨是非的判断力",
+        "ex": "\"Judges may not outsource discernment to a machine.\""
+      },
+      {
+        "word": "sanctity",
+        "zh": "神圣不可侵犯性；庄严",
+        "ex": "\"The sanctity of adjudication is non-negotiable.\""
+      },
+      {
+        "word": "non-negotiable",
+        "zh": "不可妥协的；必须坚守的",
+        "ex": "\"The sanctity of adjudication is non-negotiable.\""
+      },
+      {
+        "word": "grapple",
+        "zh": "努力应对；搏斗（与 with 连用）",
+        "ex": "\"As courts worldwide grapple with automation, India offers a clarion principle.\""
+      },
+      {
+        "word": "clarion",
+        "zh": "清晰响亮的；明确的（a clarion call / principle）",
+        "ex": "\"India's zero-tolerance doctrine offers a clarion principle for the algorithmic age.\""
       }
     ]
   }

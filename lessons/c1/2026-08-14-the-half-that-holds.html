@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Half That Holds — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 学术论文 Academic Papers</span>
+      <h1 class="title">The Half That Holds</h1>
+      <p class="subtitle">What the SCORE audit reveals about the credibility of science · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Audit</div>
+            <p>For more than a decade the social and behavioural sciences have laboured under a shadow of doubt. In 2026 that doubt acquired <span class="kw" data-def="经验主义的；基于观察与实验证据的（empirical）">empirical</span> precision. On 1 April the Systematizing Confidence in Open Research and Evidence (SCORE) project published a landmark audit in Nature, marshalling 865 researchers to re-examine 3,900 published studies. Their verdict was <span class="kw" data-def="令人警醒的；发人深省的（sobering）">sobering</span>: only about half of the original results could be reproduced or replicated. The <span class="kw" data-def="大厦；此处隐喻'权威体系'（edifice）">edifice</span> of scientific authority, it transpired, rested on surprisingly <span class="kw" data-def="脆弱的；不稳固的（fragile）">fragile</span> foundations.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Three Dimensions</div>
+            <p>SCORE did not merely tally failures; it anatomised them across three dimensions. <span class="kw" data-def="可再现性：同一数据用同一方法能否得到相同结果">Reproducibility</span> — whether the same analysis of the same data returns the same result — held for 54% of studies once code and data were shared, yet only 24% of authors had released those materials at all. <span class="kw" data-def="稳健性：换一种合理分析是否仍得相同结论">Robustness</span> — whether alternative analyses reach the same conclusion — faltered in a quarter of cases, occasionally inverting the finding outright. <span class="kw" data-def="可复制性：独立重复实验能否确认结果">Replicability</span> — whether an independent repeat confirms the result — succeeded for barely half the claims, with effect sizes collapsing from a median correlation of 0.25 to 0.10.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Cause</div>
+            <p>Crucially, the project reframed the crisis as structural rather than moral. The fault seldom lies in fraud; it lies in <span class="kw" data-def="激励；诱因（制度性动机）">incentive</span>. A publication system that rewards novelty and statistical significance over transparency quietly penalises the patient labour of verification. Selective reporting, <span class="kw" data-def="不透明的；模糊的（opaque）">opaque</span> methods, and the hoarding of data <span class="kw" data-def="（拟人/贬义）串通、共同促成（此处指多种因素合谋放大假象）">conspire</span> to make results appear sharper than they are. When a field cannot see its own uncertainties, it mistakes a compelling narrative for a settled fact.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Remedy</div>
+            <p>The remedy, then, is cultural rather than merely technical. Registered reports, reviewed before data are collected, divorce publication from outcome. Open data and code render every claim checkable; multiverse analyses lay competing paths side by side. Far from undermining science, this discipline makes it trustworthy. This is Pola News, Advanced English. Read critically, and read deeply.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="empirical">🔊</button><div class="word">empirical<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">经验主义的；基于观察与实验证据的</div><div class="ex">"In 2026 that doubt acquired empirical precision."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sobering">🔊</button><div class="word">sobering<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">令人警醒的；发人深省的</div><div class="ex">"Their verdict was sobering: only about half could be replicated."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="edifice">🔊</button><div class="word">edifice<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">大厦；此处隐喻"权威/制度体系"</div><div class="ex">"The edifice of scientific authority rested on fragile foundations."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fragile">🔊</button><div class="word">fragile<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">脆弱的；不稳固的</div><div class="ex">"Scientific authority rested on surprisingly fragile foundations."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reproducibility">🔊</button><div class="word">reproducibility<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">可再现性：同一数据用同一方法能否得到相同结果</div><div class="ex">"Reproducibility held for 54% of studies once data were shared."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="robustness">🔊</button><div class="word">robustness<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">稳健性：换一种合理分析是否仍得相同结论</div><div class="ex">"Robustness faltered in a quarter of cases."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="replicability">🔊</button><div class="word">replicability<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">可复制性：独立重复实验能否确认结果</div><div class="ex">"Replicability succeeded for barely half the claims."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="incentive">🔊</button><div class="word">incentive<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">激励；诱因（制度性动机）</div><div class="ex">"The fault seldom lies in fraud; it lies in incentive."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="opaque">🔊</button><div class="word">opaque<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">不透明的；模糊的（方法/过程）</div><div class="ex">"Selective reporting, opaque methods, and hoarding of data conspire."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="conspire">🔊</button><div class="word">conspire<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">（拟人/贬义）串通、合谋促成（某结果）</div><div class="ex">"They conspire to make results appear sharper than they are."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Far from [X], [Y] [does Z].</h3>
+          <div class="zh">"远非 X，Y 反而 Z。" 高级让步/反驳结构，先否定误解再立论，是学术写作中收束段常用句式。</div>
+          <div class="eg">Far from undermining science, this discipline makes it trustworthy.</div>
+          <div class="practice">练习：用 "weakening the field / it strengthens it" → Far from <input placeholder="your answer">, it strengthens it.</div>
+        </div>
+        <div class="item">
+          <h3>2. [Noun phrase] rested on [adjective] foundations.</h3>
+          <div class="zh">"[某体系] 建立在……的基础之上。" 用 rested on + 形容词 + foundations 的隐喻结构，可褒可贬，书面感强。</div>
+          <div class="eg">The edifice of scientific authority rested on surprisingly fragile foundations.</div>
+          <div class="practice">练习：用 "the theory / shaky" → The theory <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Subject] reframed [X] as [Y] rather than [Z].</h3>
+          <div class="zh">"[主语] 把 X 重新框定为 Y 而非 Z。" 用 rather than 形成平行对比，凸显认知转向。</div>
+          <div class="eg">Crucially, the project reframed the crisis as structural rather than moral.</div>
+          <div class="practice">练习：用 "we should recast the problem / a failure / a puzzle" → We should recast the problem <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. [Noun phrase], reviewed before [clause], [verb phrase].</h3>
+          <div class="zh">"某事物，在……之前经过审查，……。" 过去分词 reviewed 作插入状语，压缩从句、提升信息密度，是典型的学术紧凑句式。</div>
+          <div class="eg">Registered reports, reviewed before data are collected, divorce publication from outcome.</div>
+          <div class="practice">练习：用 "the manuscript, edited by peers / was accepted" → The manuscript, <input placeholder="your answer">, was accepted.</div>
+        </div>
+        <div class="item">
+          <h3>5. [A], [B], and [C] conspire to [do D].</h3>
+          <div class="zh">"A、B 与 C 合谋/共同导致 D。" conspire 此处为拟人用法，指多种因素叠加产生（常为负向）结果，语气犀利。</div>
+          <div class="eg">Selective reporting, opaque methods, and the hoarding of data conspire to make results appear sharper than they are.</div>
+          <div class="practice">练习：用 "bias, small samples, and p-hacking / inflate the effect" → Bias, small samples, and p-hacking <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 名词化（Nominalization）</h3>
+          <div class="zh">学术英语偏好把动词变为抽象名词：reproduce → <b>reproducibility</b>、robust → <b>robustness</b>、replicate → <b>replicability</b>。名词化让论述更凝练、去人格化，是雅思写作 7+ 与期刊论文的标志。本课三个核心概念本身就是名词化产物。</div>
+          <div class="eg">"they could be <b>reproduced</b>" → "<b>reproducibility</b> held for 54% of studies".</div>
+        </div>
+        <div class="item">
+          <h3>2. 破折号插入定义（Em-dash appositive）</h3>
+          <div class="zh">用一对 em-dash（—）把解释性从句"夹"在名词之后，相当于非限制性定语从句，比括号更正式、比 which 从句更紧凑。注意前后两道破折号必须成对。</div>
+          <div class="eg"><b>Reproducibility</b> — whether the same analysis of the same data returns the same result — <b>held</b> for 54% of studies.</div>
+        </div>
+        <div class="item">
+          <h3>3. 现在分词表结果（Present participle of result）</h3>
+          <div class="zh">主句之后用 ", + 现在分词短语" 引出自然结果，相当于 "which + 动词"，信息密度高。分词的逻辑主语须与主句主语一致。</div>
+          <div class="eg">Robustness faltered in a quarter of cases, occasionally <b>inverting</b> the finding outright.</div>
+        </div>
+        <div class="item">
+          <h3>4. rather than 平行对比（Correlative contrast）</h3>
+          <div class="zh">"A rather than B" 把两个对等成分并列，强调取舍与转向。A、B 词性须一致（名词对名词、形容词对形容词）。本课反复出现：structural rather than moral、cultural rather than merely technical。</div>
+          <div class="eg">The crisis is <b>structural rather than moral</b>. / The remedy is <b>cultural rather than merely technical</b>.</div>
+        </div>
+        <div class="item">
+          <h3>5. 隐喻与抽象名词（Metaphor & abstract noun）</h3>
+          <div class="zh">"The edifice of scientific authority" 用 edifice（大厦）隐喻"权威体系"，把抽象制度具象化，增强修辞力。学术写作中恰当的隐喻能让论证更生动，但须避免混用不相容的喻体（mixed metaphor）。</div>
+          <div class="eg">The <b>edifice</b> of scientific authority rested on fragile foundations.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本期讨论的是<b>科学可信度（scientific credibility）</b>这一学术元议题：我们如何"核查"已发表的研究是否站得住脚。主角是一个名为 <b>SCORE</b>（Systematizing Confidence in Open Research and Evidence，系统化开放研究与证据信心）的大型国际合作项目：</p>
+        <ul>
+          <li><b>规模与权威：</b>由 865 名研究者历时多年完成，于 <b>2026 年 4 月 1 日</b>在《自然》（Nature）以系列论文形式发表；项目由美国 DARPA 资助、开放科学中心（Center for Open Science, COS）协调。</li>
+          <li><b>样本：</b>重新审视了 2009–2018 年间发表于 62 种期刊的 <b>3,900 篇</b>社会科学论文，覆盖经济学、心理学、社会学、教育学、政治学等领域。</li>
+          <li><b>核心结论：</b>约<b>一半</b>的已发表结果无法被再现（reproduce）或复制（replicate）。</li>
+        </ul>
+        <div class="box">🧭 <b>权威出处：</b>Nature 三篇配套论文——Miske et al.（可再现性）、Aczel et al.（稳健性）、Tyner et al.（可复制性）。斯坦福流行病学家 John Ioannidis 评论称结果"并不令人意外"，与早前小规模研究一致。本课文数字（54%、24%、91%、0.25→0.10 等）均据此提炼，尊重原始事实。</div>
+
+        <h3>二、三个维度的精确含义</h3>
+        <p>文章用三个极易混淆的术语拆解"可信度"，这是学术阅读常考的细微差别：</p>
+        <ul>
+          <li><b>Reproducibility 可再现性：</b>用<b>相同数据</b>、<b>相同方法</b>重新分析，能否得到相同结果。SCORE 发现：一旦作者公开代码与数据，可再现率达 <b>91%</b>；但仅有 <b>24%</b> 的作者公开了材料——不透明是首要症结。</li>
+          <li><b>Robustness 稳健性：</b>用<b>另一种合理分析</b>处理原数据，结论是否仍成立。约 1/4 案例未能通过，个别甚至得出<b>相反结论</b>。</li>
+          <li><b>Replicability 可复制性：</b>由他人<b>从头独立重复实验</b>，能否确认结果。274 个核心主张中仅 55.1% 被统计显著地复制；效应量中位数从原研究的 <b>r=0.25 骤降至 0.10</b>——原效应被明显夸大。</li>
+        </ul>
+
+        <h3>三、为什么是"结构性"而非"道德性"危机？</h3>
+        <p>文章刻意把危机<b>归因到制度激励，而非个人品德</b>："fault seldom lies in fraud; it lies in incentive"（错很少在造假，而在激励）。现行出版体系奖励<b>新颖性</b>与<b>统计显著性</b>，却忽视<b>透明度</b>与<b>可验证性</b>。于是研究者倾向于：选择性报告、隐藏方法细节、囤积数据——这些行为让结果"看起来"比实际更锋利。当整个领域看不到自身的不确定性，便把"动人的叙事"误当"既成事实"。这不是某个人堕落，而是系统对"耐心验证"这种苦活儿的系统性惩罚。</p>
+
+        <h3>四、解法：文化变革而非单纯技术</h3>
+        <ul>
+          <li><b>注册报告（Registered Reports）：</b>研究在数据收集<b>之前</b>就经同行评审，发表与否取决于研究设计与问题价值，而非结果是否"显著"——从而把"发表"与"结果"脱钩。</li>
+          <li><b>开放科学（Open data & code）：</b>公开数据与代码，使每一个结论都可被第三方核查。</li>
+          <li><b>多宇宙分析（Multiverse analysis）：</b>把多种合理分析方法并列呈现，暴露结论对分析路径的敏感程度。</li>
+        </ul>
+
+        <h3>五、内容合规与立场说明</h3>
+        <p>本课聚焦<b>科学研究方法论</b>这一中性学术议题，所有数据均引自 Nature 公开论文，立场客观、尊重事实，不涉及任何敏感政治话题。涉及主权与领土表述时，一律使用规范名称：台湾称"<b>中国台湾</b>"、香港称"<b>中国香港</b>"、澳门称"<b>中国澳门</b>"，均为中国不可分割的一部分。该话题安全可靠，适合作为雅思/托福备考素材。</p>
+
+        <h3>六、对雅思/托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>学术类 / 托福阅读高频出现 reproducibility, robustness, replicability, empirical, incentive, opaque 等词，且多用名词化与 em-dash 插入解释、长难句。本课即微型训练。</li>
+          <li><b>写作 Task 2 / 独立写作：</b>这是典型的"现象—诊断—对策"议论文。用 "<i>Far from undermining X, this discipline makes it trustworthy</i>" 作收束；用 "<i>[subject] reframed the crisis as structural rather than moral</i>" 展示批判性思维——这是 7 分以上的关键。</li>
+          <li><b>听力/口语：</b>用英语概括一项"研究报告"时，结构建议：发现（audit）→ 维度（three dimensions）→ 成因（incentive）→ 对策（remedy），最清晰有条理。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 学术研究核心词（empirical, sobering, edifice, fragile, reproducibility, robustness, replicability, incentive, opaque, conspire）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是 "Far from X, Y" 与 "[subject] reframed X as Y rather than Z"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解名词化、em-dash 插入定义、现在分词表结果、rather than 平行对比、隐喻等学术写作语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语概括一项大型研究报告，并展开"发现—维度—成因—对策"的批判性论述。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>熟悉雅思/托福阅读与写作中常见的"科学研究 / 方法论"话题框架。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听 Dacey 的自然英语朗读，跟读时注意重音（如 RE-pro-duc-i-BI-li-ty, in-CEN-tive）。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音，用每个词各造一个学术句子（参考句型练习）。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：Audit → Three Dimensions → Incentive → Remedy。用 "Far from…" 与 "reframed X as Y rather than Z" 拿高分。</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做测验时先读题干再定位原文；推理题（inference）答案通常不出现原词，而是同义改写（如 structural 对应 incentive system）。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Half That Holds · 2026-08-14 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "For more than a decade the social and behavioural sciences have laboured under a shadow of doubt. In 2026 that doubt acquired empirical precision. On 1 April the Systematizing Confidence in Open Research and Evidence (SCORE) project published a landmark audit in Nature, marshalling 865 researchers to re-examine 3,900 published studies. Their verdict was sobering: only about half of the original results could be reproduced or replicated. The edifice of scientific authority, it transpired, rested on surprisingly fragile foundations.",
+  "SCORE did not merely tally failures; it anatomised them across three dimensions. Reproducibility — whether the same analysis of the same data returns the same result — held for 54% of studies once code and data were shared, yet only 24% of authors had released those materials at all. Robustness — whether alternative analyses reach the same conclusion — faltered in a quarter of cases, occasionally inverting the finding outright. Replicability — whether an independent repeat confirms the result — succeeded for barely half the claims, with effect sizes collapsing from a median correlation of 0.25 to 0.10.",
+  "Crucially, the project reframed the crisis as structural rather than moral. The fault seldom lies in fraud; it lies in incentive. A publication system that rewards novelty and statistical significance over transparency quietly penalises the patient labour of verification. Selective reporting, opaque methods, and the hoarding of data conspire to make results appear sharper than they are. When a field cannot see its own uncertainties, it mistakes a compelling narrative for a settled fact.",
+  "The remedy, then, is cultural rather than merely technical. Registered reports, reviewed before data are collected, divorce publication from outcome. Open data and code render every claim checkable; multiverse analyses lay competing paths side by side. Far from undermining science, this discipline makes it trustworthy. This is Pola News, Advanced English. Read critically, and read deeply."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the central claim of the passage? 文章的核心主张是什么？",opts:["The SCORE audit proved that most social-science research is fraudulent","Only about half of published social and behavioural science results can be reproduced or replicated, revealing a structural credibility problem","The replication crisis has been fully solved by open-science reforms","Nature journals publish more reliable results than other journals"],ans:1,
+   fb:"Correct. 文章核心是 SCORE 审计显示约一半社会科学结果无法被再现/复制，暴露的是结构性（制度性）可信度问题，而非单纯造假。"},
+  {q:"2. According to the passage, what did the reproducibility assessment reveal about data sharing? 文中关于'可再现性'评估，对数据共享有何发现？",opts:["Sharing data and code raised reproducibility to 91%","Most authors had already shared their data and code","Only 24% of authors had shared their materials, yet sharing lifted reproducibility to 91%","Data sharing had no effect on reproducibility"],ans:2,
+   fb:"Yes. 文中指出：一旦代码与数据公开，可再现率达 91%；但仅有 24% 的作者公开了这些材料。不透明是首要症结。"},
+  {q:"3. In paragraph 1, 'sobering' most nearly means: 第一段中 sobering 最接近的意思是？",opts:["entertaining","grave and disconcerting; prompting serious reflection","trivial","celebratory"],ans:1,
+   fb:"Right. sobering = 令人警醒、发人深省的。文中指 SCORE 的结论让人严肃反思科学权威的根基。"},
+  {q:"4. What can be INFERRED about why the crisis is called 'structural rather than moral'? 关于'结构性而非道德性'危机，可以推断出什么？",opts:["The problem is caused mainly by individual researchers committing fraud","The root cause lies in incentive structures that reward novelty and significance over transparency, not in widespread cheating","Funding agencies have banned all replication studies","The crisis only affects the humanities, not the sciences"],ans:1,
+   fb:"Yes. 作者明确说'fault seldom lies in fraud; it lies in incentive'——出版体系奖励新颖性与显著性而非透明，这才是制度性根源。"},
+  {q:"5. The detail that effect sizes fell from 0.25 to 0.10 mainly serves to: 效应量从 0.25 跌至 0.10 这一细节主要作用是？",opts:["prove that all original studies were fabricated","show that replicable effects were markedly smaller than originally reported, underscoring inflation","demonstrate that correlation is irrelevant to social science","argue that statistics should be abolished"],ans:1,
+   fb:"Correct. 这一数字说明被复制确认的效果量大幅缩水，凸显原研究的效应被夸大，强化'可信度危机'的论点。"},
+  {q:"6. The author's tone toward the SCORE findings is best described as: 作者对 SCORE 发现的态度最准确描述是？",opts:["alarmist and nihilistic","uncritically triumphant","analytical, measured, and reform-oriented","indifferent and dismissive"],ans:2,
+   fb:"Correct. 作者以分析、克制且建设性的笔调呈现：既指出危机，又提出注册报告、开放科学等文化层面的 remedy。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

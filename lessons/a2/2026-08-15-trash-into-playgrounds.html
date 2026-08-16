@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Trash Into Playgrounds — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#15803d;
+  --accent2:#22c55e;
+  --bg:#f2faf4;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#d9f99d;
+  --border:#d5ead9;
+  --soft:#eaf7ee;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#4ade80);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(21,128,61,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #cfebd6;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(21,128,61,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(21,128,61,.55);}70%{box-shadow:0 0 0 12px rgba(21,128,61,0);}100%{box-shadow:0 0 0 0 rgba(21,128,61,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #65a30d;transition:.15s;}
+.kw:hover{background:#bef264;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#a3e635;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#ecfccb;border:2px solid #65a30d;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#3f6212;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(21,128,61,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#d9f99d;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Earth News</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Trash Into Playgrounds</h1>
+      <p class="subtitle">2026年8月15日 · 环境保护｜从垃圾到游乐场 —— 全文阅读（点绿色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Look at this old <span class="kw" data-def="塑料；塑料的">plastic</span> <span class="kw" data-def="瓶子">bottle</span>. What can we do with it? Please don't throw it away! We can <span class="kw" data-def="回收；再利用">recycle</span> it. In some places, people turn old plastic into new things. Can you guess what they make?</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>In Thailand, families collect empty <span class="kw" data-def="瓶子">bottles</span> at home. Trucks take the bottles to a special factory. Big machines <span class="kw" data-def="清洗；使干净">clean</span> the plastic and cut it into small pieces. Then workers use the pieces to build a fun <span class="kw" data-def="游乐场；儿童乐园">playground</span> for children!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>This is a great idea. Plastic <span class="kw" data-def="垃圾；废弃物">waste</span> is bad for our planet, and it can hurt sea animals. When we recycle, we make less waste. We also <span class="kw" data-def="再次使用；重复利用">reuse</span> things and make something new. Recycling helps the Earth.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>You can help too! Put your bottles in the recycling bin. Reuse things at home. Small actions will <span class="kw" data-def="保护">protect</span> our world. This is Pola, signing off from POLA NEWS. Let's keep the Earth clean. Bye for now!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>💡 环保小贴士 Green Tips</h3>
+        <p style="margin:0;font-size:14.5px;">在家把<b>塑料瓶、纸张、玻璃</b>分类放进回收箱；喝完的瓶子先<b>冲一冲、压扁</b>再回收；能重复用的东西别急着丢。记住三个词：<b>Reduce（少用）、Reuse（再用）、Recycle（回收）</b>！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="recycle">🔊</button><div class="word">recycle<span class="pos">v.</span></div><div class="zh">回收；再利用</div><div class="ex">"We recycle paper and plastic."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="plastic">🔊</button><div class="word">plastic<span class="pos">n.</span></div><div class="zh">塑料；塑料的</div><div class="ex">"This bottle is made of plastic."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bottle">🔊</button><div class="word">bottle<span class="pos">n.</span></div><div class="zh">瓶子</div><div class="ex">"Please put the bottle in the bin."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="playground">🔊</button><div class="word">playground<span class="pos">n.</span></div><div class="zh">游乐场；儿童乐园</div><div class="ex">"Children play in the playground."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="waste">🔊</button><div class="word">waste<span class="pos">n.</span></div><div class="zh">垃圾；废弃物</div><div class="ex">"We must make less waste."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="protect">🔊</button><div class="word">protect<span class="pos">v.</span></div><div class="zh">保护</div><div class="ex">"We protect the sea animals."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="clean">🔊</button><div class="word">clean<span class="pos">v./adj.</span></div><div class="zh">清洗；干净的</div><div class="ex">"Let's keep the Earth clean."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reuse">🔊</button><div class="word">reuse<span class="pos">v.</span></div><div class="zh">再次使用；重复利用</div><div class="ex">"You can reuse a glass jar."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. We can recycle [it].</h3>
+          <div class="zh">我们可以回收[它]。"can + 动词原形" 表示"能够、可以"做某事。</div>
+          <div class="eg">We can recycle it.</div>
+          <div class="practice">练习：用 "paper" 造句 → We can recycle <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Please don't [throw it away].</h3>
+          <div class="zh">请不要[把它扔掉]。"Please don't + 动词原形" 是有礼貌的否定请求。</div>
+          <div class="eg">Please don't throw it away.</div>
+          <div class="practice">练习：用 "waste water" → Please don't <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. Recycling helps [the Earth].</h3>
+          <div class="zh">回收有助于[地球]。"主语 + help(s) + 名词" 表示某事对某物有帮助。</div>
+          <div class="eg">Recycling helps the Earth.</div>
+          <div class="practice">练习：用 "sea animals" → Recycling helps <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. Small actions will [protect our world].</h3>
+          <div class="zh">小小的行动将会[保护我们的世界]。"will + 动词原形" 表示将要发生的事或承诺。</div>
+          <div class="eg">Small actions will protect our world.</div>
+          <div class="practice">练习：用 "help the planet" → Small actions will <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 情态动词 can（表示能力/可能）</h3>
+          <div class="zh">"can + 动词原形" 表示"能够、可以"。它不分人称，后面永远接动词原形；否定用 cannot / can't。</div>
+          <div class="eg">We <b>can</b> recycle it. / You <b>can</b> help too!</div>
+        </div>
+        <div class="item">
+          <h3>2. 一般将来时 will（表示将要）</h3>
+          <div class="zh">"will + 动词原形" 表示将要发生的事，也常用来表达决心或承诺。will 也不分人称。</div>
+          <div class="eg">Small actions <b>will</b> protect our world. / We <b>will</b> keep the Earth clean.</div>
+        </div>
+        <div class="item">
+          <h3>3. 比较级：less / fewer（更少）</h3>
+          <div class="zh">比较"更少"时：不可数名词用 <b>less</b>（less waste 更少的垃圾），可数名词用 <b>fewer</b>（fewer bottles 更少的瓶子）。</div>
+          <div class="eg">When we recycle, we make <b>less</b> waste. / We buy <b>fewer</b> plastic bottles.</div>
+        </div>
+        <div class="item">
+          <h3>4. 一般过去时（Past Simple）</h3>
+          <div class="zh">讲过去发生的事，动词要变过去式。规则动词加 -ed（collect → collected）；不规则动词要记住（take → took，make → made）。</div>
+          <div class="eg">Families <b>collected</b> the bottles. / Trucks <b>took</b> them to a factory.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>什么是"回收"（recycle）？</h3>
+        <p><b>回收</b>就是把用过的东西——比如塑料瓶、废纸、旧玻璃——收集起来，送进工厂重新加工，变成新的、有用的东西。这样我们就不用一直开采新的资源，也能减少垃圾。人们常说的"环保三个 R"就是：<b>Reduce（减少使用）、Reuse（重复使用）、Recycle（回收再造）</b>。</p>
+
+        <h3>一个塑料瓶的"新生"之旅</h3>
+        <ul>
+          <li><b>① 分类收集</b>：在家把喝完的塑料瓶单独放进回收箱。</li>
+          <li><b>② 运送</b>：垃圾车把瓶子送到专门的回收工厂。</li>
+          <li><b>③ 清洗切碎</b>：机器把瓶子洗干净，切成小小的塑料颗粒（pellets）。</li>
+          <li><b>④ 变成新东西</b>：工人用这些颗粒做出结实、安全的<b>游乐设施</b>，让小朋友开心地玩！</li>
+        </ul>
+        <p>2026 年，泰国就有企业和社区一起，用居民回收的塑料瓶，为孩子们建成了一座<b>环保游乐场</b>。垃圾摇身一变，成了欢笑声——这就是"循环经济"的魔法。</p>
+
+        <h3>为什么塑料垃圾要认真对待？</h3>
+        <p>塑料很难自然分解，可能要几百年。如果被随意丢弃，塑料会流进河流和大海，海龟、海鸟和鱼可能误把它当成食物，受到伤害。<b>减少和回收塑料，就是在保护这些可爱的海洋动物</b>。</p>
+
+        <h3>趣味知识</h3>
+        <ul>
+          <li>一个塑料瓶大约需要 <b>450 年</b>才能在自然中慢慢分解。</li>
+          <li>回收 1 吨塑料，可以节省大量石油和能源。</li>
+          <li>很多运动服、书包甚至足球，都是用<b>回收塑料</b>做成的！</li>
+        </ul>
+
+        <h3>动手做：家里的小小回收角</h3>
+        <p>和爸爸妈妈一起，用三个纸箱做"回收角"，分别贴上 <b>Plastic（塑料）、Paper（纸）、Glass（玻璃）</b>。每天把用完的东西分类放好，一周后看看你回收了多少，做个环保小卫士吧！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>了解回收（recycle）的意义：塑料瓶可以变成游乐场等有用的新东西。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握情态动词 can、一般将来时 will、比较级 less/fewer 和一般过去时四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个环保主题核心词汇（recycle, plastic, bottle, playground, waste, protect, clean, reuse）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语说出保护地球的小行动，理解 Reduce / Reuse / Recycle。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>树立环保意识：小小的行动，也能保护我们的地球和海洋动物。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">♻️</span><div>在家做一个"回收角"，用英语给三个箱子贴标签：plastic, paper, glass。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>用 "We can recycle …" 说说你今天回收了什么。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Trash Into Playgrounds · 2026-08-15 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Look at this old plastic bottle. What can we do with it? Please don't throw it away! We can recycle it. In some places, people turn old plastic into new things. Can you guess what they make?",
+  "In Thailand, families collect empty bottles at home. Trucks take the bottles to a special factory. Big machines clean the plastic and cut it into small pieces. Then workers use the pieces to build a fun playground for children!",
+  "This is a great idea. Plastic waste is bad for our planet, and it can hurt sea animals. When we recycle, we make less waste. We also reuse things and make something new. Recycling helps the Earth.",
+  "You can help too! Put your bottles in the recycling bin. Reuse things at home. Small actions will protect our world. This is Pola, signing off from POLA NEWS. Let's keep the Earth clean. Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What can we do with an old plastic bottle? 旧塑料瓶我们可以怎么做？",opts:["Throw it away 扔掉","Recycle it 回收它","Break it 打碎它","Hide it 藏起来"],ans:1,
+   fb:"Correct! 我们可以回收（recycle）它，变成新东西。"},
+  {q:"In the story, what do workers build from recycled plastic? 工人用回收塑料造了什么？",opts:["A car 汽车","A house 房子","A playground 游乐场","A boat 小船"],ans:2,
+   fb:"Yes! 他们用回收塑料为孩子们建了一座游乐场（playground）。"},
+  {q:"Why is plastic waste bad? 为什么塑料垃圾不好？",opts:["It is too heavy 太重了","It can hurt sea animals 会伤害海洋动物","It is too small 太小了","It is very cheap 太便宜了"],ans:1,
+   fb:"Right! 塑料垃圾会流进大海，伤害海洋动物。"},
+  {q:"When we recycle, we make ___ waste. 回收让我们产生……垃圾？",opts:["less 更少的","more 更多的","new 新的","big 大的"],ans:0,
+   fb:"Correct! 回收让我们产生 less（更少的）垃圾。"},
+  {q:"What are the three green words (3 R's)? 环保三个 R 是什么？",opts:["Run, Read, Rest","Reduce, Reuse, Recycle","Red, Rain, Rock","Ride, Rope, Ring"],ans:1,
+   fb:"Yes! Reduce（减少）、Reuse（再用）、Recycle（回收）。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

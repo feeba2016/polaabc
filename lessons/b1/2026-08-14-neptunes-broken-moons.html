@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Neptune's Broken Moons — Interactive Lesson</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#06b6d4;
+  --bg:#f2f8ff;
+  --card:#ffffff;
+  --text:#10233f;
+  --muted:#5b6b85;
+  --highlight:#e6f0ff;
+  --border:#d6e6fb;
+  --soft:#f4f9ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#22d3ee);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(16,35,63,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #cfe3fb;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #2563eb;transition:.15s;}
+.kw:hover{background:#cfe2ff;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#7dd3fc;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,35,63,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .bluedot{color:var(--accent);font-weight:800;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e6f0ff;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Science Broadcast</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Neptune's Broken Moons</h1>
+      <p class="subtitle">海王星的小卫星，是远古破碎世界的残骸｜全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Look up at the blue planet <span class="kw" data-def="海王星，太阳系第八颗行星，呈蓝色">Neptune</span>! It has 16 <span class="kw" data-def="卫星：围绕行星运行的天体">moons</span>, but its smallest moons may be made of broken pieces from a lost world far away!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>Long ago, Neptune had a big family of <span class="kw" data-def="卫星">moons</span>. Then a giant moon named <span class="kw" data-def="海王星最大的卫星，个头如冥王星，绕行方向与海王星相反">Triton</span> crashed in like a <span class="kw" data-def="拆楼用的大铁球，比喻撞毁一切">wrecking ball</span>! The old moons <span class="kw" data-def="粉碎，打碎成许多碎片">shattered</span> into dust and rock.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>A space <span class="kw" data-def="望远镜">telescope</span> called <span class="kw" data-def="詹姆斯·韦布空间望远镜，人类最强太空望远镜之一">JWST</span> found special <span class="kw" data-def="黏土：一种需水才能形成的矿物">clay</span> on these tiny moons. Clay needs water to form, but there is no ice! That means the clay came from deep inside a bigger world that was destroyed.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>So when you see Neptune's tiny moons, remember: they are pieces of an <span class="kw" data-def="古老的">ancient</span> world that lived long, long ago. This is Pola News, signing off!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="Neptune">🔊</button><div class="word">Neptune<span class="pos">n.</span></div><div class="zh">海王星：太阳系第八颗行星，呈蓝色</div><div class="ex">"Look up at the blue planet Neptune"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="moon">🔊</button><div class="word">moon<span class="pos">n.</span></div><div class="zh">卫星：围绕行星运行的天体</div><div class="ex">"It has 16 moons"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="shatter">🔊</button><div class="word">shatter<span class="pos">v.</span></div><div class="zh">粉碎，打碎成许多碎片</div><div class="ex">"The old moons shattered into dust"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="wrecking ball">🔊</button><div class="word">wrecking ball<span class="pos">n.</span></div><div class="zh">拆楼用的大铁球（比喻撞毁一切）</div><div class="ex">"crashed in like a wrecking ball"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="debris">🔊</button><div class="word">debris<span class="pos">n.</span></div><div class="zh">碎片，残骸</div><div class="ex">"broken pieces of debris"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="clay">🔊</button><div class="word">clay<span class="pos">n.</span></div><div class="zh">黏土：一种需水才能形成的矿物</div><div class="ex">"found special clay on these moons"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="telescope">🔊</button><div class="word">telescope<span class="pos">n.</span></div><div class="zh">望远镜（这里指太空望远镜）</div><div class="ex">"A space telescope called JWST"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ancient">🔊</button><div class="word">ancient<span class="pos">adj.</span></div><div class="zh">古老的</div><div class="ex">"an ancient world"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="orbit">🔊</button><div class="word">orbit<span class="pos">n./v.</span></div><div class="zh">轨道；绕……运行</div><div class="ex">"moons orbit the planet"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="interior">🔊</button><div class="word">interior<span class="pos">n.</span></div><div class="zh">内部</div><div class="ex">"from deep inside its interior"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. It has [16 moons], but [its smallest moons may be made of broken pieces].</h3>
+          <div class="zh">它拥有[……]，但[……]。用 but 连接两个意思相反或出乎意料的句子，制造"反转"。</div>
+          <div class="eg">It has 16 moons, but its smallest moons may be made of broken pieces.</div>
+          <div class="practice">练习：用 "a big family / they are gone" → It had <input placeholder="your answer">, but they are gone.</div>
+        </div>
+        <div class="item">
+          <h3>2. [A giant moon named Triton] crashed in like [a wrecking ball]!</h3>
+          <div class="zh">[……] 像[……]一样撞了进来！"named + 名字" 用来给事物取名；like + 名词 表示"像……一样"。</div>
+          <div class="eg">A giant moon named Triton crashed in like a wrecking ball!</div>
+          <div class="practice">练习：用 "a rock / a bullet" → A small <input placeholder="your answer"> crashed in like a bullet!</div>
+        </div>
+        <div class="item">
+          <h3>3. [The old moons] shattered into [dust and rock].</h3>
+          <div class="zh">[……] 碎成了[……]。"shatter into + 名词" = 粉碎成某物。</div>
+          <div class="eg">The old moons shattered into dust and rock.</div>
+          <div class="practice">练习：用 "The glass / tiny pieces" → The glass <input placeholder="your answer"> into tiny pieces.</div>
+        </div>
+        <div class="item">
+          <h3>4. [Clay] needs [water] to form, but [there is no ice]!</h3>
+          <div class="zh">[……] 需要[……]才能形成，但[……]！用 needs A to B 表示"需要 A 才能做 B"。</div>
+          <div class="eg">Clay needs water to form, but there is no ice!</div>
+          <div class="practice">练习：用 "Plants / sunlight / it is dark" → Plants need <input placeholder="your answer"> to grow, but it is dark!</div>
+        </div>
+        <div class="item">
+          <h3>5. That means [the clay came from deep inside a bigger world].</h3>
+          <div class="zh">这意味着[……]！"That means + 句子" 用来给出推论或结论。</div>
+          <div class="eg">That means the clay came from deep inside a bigger world that was destroyed.</div>
+          <div class="practice">练习：用 "we are late" → That means <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般过去时 vs 一般现在时</h3>
+          <div class="zh">讲已经发生的"撞击、粉碎"用一般过去时（had, crashed, shattered, found, was destroyed）；讲常态或普遍事实用一般现在时（has, needs, is, means）。</div>
+          <div class="eg">Neptune <b>had</b> a big family of moons. / Clay <b>needs</b> water to form.</div>
+        </div>
+        <div class="item">
+          <h3>2. 连词 but 表转折 / 连词 and 表并列</h3>
+          <div class="zh">but 连接意思相反或出乎意料的句子（有 16 颗卫星，但最小的可能是碎片）；and 连接并列的动作或事物（dust and rock）。</div>
+          <div class="eg">It has 16 moons, <b>but</b> its smallest may be broken pieces. / shattered into dust <b>and</b> rock.</div>
+        </div>
+        <div class="item">
+          <h3>3. 过去分词作定语 / 名词修饰名词</h3>
+          <div class="zh">named Triton（被命名为 Triton 的）、a bigger world that was destroyed（被摧毁的更大世界）；名词可直接修饰名词：space telescope、moon system。</div>
+          <div class="eg">a giant moon <b>named Triton</b> / a space <b>telescope</b> / a bigger world that was <b>destroyed</b></div>
+        </div>
+        <div class="item">
+          <h3>4. 情态动词 may + 动词原形（表推测）</h3>
+          <div class="zh">may 在这里不是"可以"，而是"可能、也许"，用来对不太确定的事做科学推测。</div>
+          <div class="eg">Its smallest moons <b>may be</b> made of broken pieces. / That <b>may</b> help explain it.</div>
+        </div>
+        <div class="item">
+          <h3>5. 介词短语：from deep inside / into</h3>
+          <div class="zh">from deep inside a bigger world（来自一个更大世界的深处）；shatter into dust（碎成尘埃）。from + 地点，into + 结果状态。</div>
+          <div class="eg">came <b>from deep inside</b> a bigger world / shattered <b>into</b> dust and rock</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>海王星和它的"第二代"卫星家族</h3>
+        <p>海王星是太阳系第八颗行星，是一颗深蓝色的巨行星。它一共有 <b>16 颗已知卫星</b>，但其中最大的一颗——<b>Triton（海卫一）</b>——占了所有卫星总质量的 99% 以上，个头差不多和冥王星一样大。更奇怪的是，Triton 绕海王星转的方向，和海王星自转的方向是<b>相反</b>的。这暗示它根本不是"土生土长"的卫星，而是从太阳系外围（柯伊伯带）被海王星的引力<b>捕获</b>来的。</p>
+
+        <h3>"大铁球"撞碎了原来的世界</h3>
+        <p>科学家猜想：在 Triton 被捕获之前，海王星本来可能拥有一整套像天王星那样正常、有序的大卫星家族。但 Triton 闯入时，就像一个<b>拆楼大铁球</b>，用引力的"撞击"把原本的卫星全部撞碎、撞乱。那些碎块有的飞散，有的慢慢重新聚拢，最终形成了我们今天看到的、那些小小的内侧卫星（如 Larissa、Galatea、Proteus）和尘埃环。</p>
+        <ul>
+          <li>Caltech 团队用<b>詹姆斯·韦布空间望远镜（JWST）</b>的近红外光谱，第一次看清了这些小卫星的"化学成分"。</li>
+          <li>他们在 <b>Larissa、Galatea</b> 以及海王星的光环里，发现了<b>含镁的黏土矿物（phyllosilicates）</b>——这类矿物在木星以外的外太阳系从未被发现过。</li>
+          <li>黏土矿物只有在<b>有液态水</b>的环境里才能形成，可这些卫星表面<b>却没有冰</b>！</li>
+        </ul>
+
+        <h3>为什么"没有冰"反而很重要？</h3>
+        <p>太阳系外圈的天体几乎都是冰冷的。可这些小卫星明明在那么远、那么冷的地方，却不含水冰，反而藏着需要水才能生成的黏土。科学家推断：这些黏土原本<b>深埋在某个更大冰质卫星的内部</b>——那里因为放射性物质等热源，曾经融化出液态水，生成了黏土。后来那个大世界被 Triton 撞碎，内部的黏土才"翻"到了今天小卫星的表面。换句话说，<span class="bluedot">我们正直接看着一颗被摧毁的远古世界"翻出来的内脏"</span>。</p>
+
+        <h3>动手做：你的"破碎世界"实验</h3>
+        <p>拿两块一样大的橡皮泥（或面团）当"远古大卫星"。在其中一块里揉进几颗小珠子当"黏土矿物"，代表它的内部。然后把这块捏碎、再重新搓成几颗小珠子——看，小珠子表面是不是露出了里面的珠子？这就像海王星的小卫星：碎掉、重组之后，原本藏在深处的东西跑到外面来了。用这个游戏给家人讲讲"为什么科学家能在小卫星表面找到黏土"。</p>
+
+        <h3>还有更多谜团</h3>
+        <p>研究还发现，三颗被观测的卫星里，最大的 <b>Proteus</b> 上<b>没有</b>检测到这种黏土——它可能来自碎屑盘里另一块"不含黏土"的区域。此外，JWST 还在这些卫星和环上发现了一样<b>目前无法识别的水合矿物</b>，像一个还没解开的谜题。科学家说，要彻底弄清海王星的过去，最好的办法是派出一艘专门探访这颗冰巨行星的探测器——毕竟，我们只有 1989 年"旅行者2号"那唯一一次飞掠。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>了解海王星小卫星可能来自被 Triton 撞碎的远古冰质世界，认识 Neptune、Triton、JWST 等天文概念。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般过去时与一般现在时的区别、but/and 连词、may 表推测、介词短语 from deep inside。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 10 个太空与天文主题核心词汇，并能听懂、跟读。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会用英语描述"用……发现了……"和"这意味着……"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立"太阳系里也藏着'破碎与重生'的惊喜"的好奇心，保持对星空的想象。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿播报的语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🔭</span><div>和家人用橡皮泥做"破碎世界"实验，聊聊为什么小卫星上会有黏土。</div></div>
+        <div class="goal"><span class="ic">🪐</span><div>挑一个晴朗的夜晚，用望远镜 App 找找海王星的位置，想象它那群"重生"的小卫星。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Neptune's Broken Moons · 2026-08-14 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.97; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Look up at the blue planet Neptune! It has 16 moons, but its smallest moons may be made of broken pieces from a lost world far away!",
+  "Long ago, Neptune had a big family of moons. Then a giant moon named Triton crashed in like a wrecking ball! The old moons shattered into dust and rock.",
+  "A space telescope called JWST found special clay on these tiny moons. Clay needs water to form, but there is no ice! That means the clay came from deep inside a bigger world that was destroyed.",
+  "So when you see Neptune's tiny moons, remember: they are pieces of an ancient world that lived long, long ago. This is Pola News, signing off!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"How many known moons does Neptune have? 海王星已知有多少颗卫星？",opts:["16","2","100"],ans:0,
+   fb:"Correct! 海王星有 16 颗已知卫星。"},
+  {q:"What crashed in 'like a wrecking ball'? 什么像'拆楼大铁球'一样撞了进来？",opts:["A giant moon named Triton","A comet from Earth","The Sun"],ans:0,
+   fb:"Yes! 是一颗叫 Triton（海卫一）的巨大卫星撞了进来。"},
+  {q:"What happened to the old moons? 原本的卫星发生了什么？",opts:["They shattered into dust and rock","They grew bigger","They turned into water"],ans:0,
+   fb:"Right! 它们被撞得粉碎，变成了尘埃和碎石。"},
+  {q:"Which telescope found special clay on the moons? 是哪台望远镜在卫星上发现了特殊黏土？",opts:["JWST (James Webb Space Telescope)","A pair of binoculars","A submarine"],ans:0,
+   fb:"Yes! 是詹姆斯·韦布空间望远镜（JWST）。"},
+  {q:"Why is the clay a surprise? 为什么发现黏土令人惊讶？",opts:["Clay needs water, but there is no ice there","Clay is always blue","Clay is made of gold"],ans:0,
+   fb:"Correct! 黏土需要水才能形成，可那里却没有冰——说明它来自更大世界的内部。"},
+  {q:"What do the tiny moons seem to be made of? 这些小卫星似乎是由什么构成的？",opts:["Broken pieces of an ancient, destroyed world","Fresh snow","Liquid gold"],ans:0,
+   fb:"Right! 它们像是被摧毁的远古世界破碎后的碎片。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

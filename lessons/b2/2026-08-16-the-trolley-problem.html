@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Trolley Problem: Would You Pull the Lever?</title>
+<style>
+:root{
+  --accent:#7c3aed;
+  --accent2:#2563eb;
+  --bg:#f5f7f9;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#ece4fb;
+  --border:#e2e8f0;
+  --soft:#f1ecfb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#22d3ee);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(124,58,237,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #d9cdf5;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(124,58,237,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,58,237,.55);}70%{box-shadow:0 0 0 12px rgba(124,58,237,0);}100%{box-shadow:0 0 0 0 rgba(124,58,237,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #7c3aed;transition:.15s;}
+.kw:hover{background:#d9cdf5;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#c4b5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(124,58,237,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ece4fb;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Philosophy</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Trolley Problem: Would You Pull the Lever?</h1>
+      <p class="subtitle">一道没有标准答案的伦理难题 ｜ 全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Hook</div>
+            <p>Imagine a runaway trolley is speeding toward five workers trapped on the track. You stand beside a lever. If you pull it, the trolley will switch to a side track — where one person stands. One dies; five live. This is the <span class="kw" data-def="电车难题，一个著名的伦理思想实验">trolley problem</span>, a famous <span class="kw" data-def="假设的；假想的">hypothetical</span> <span class="kw" data-def="困境；两难">dilemma</span> in moral philosophy first posed by Philippa Foot in 1967.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The twist</div>
+            <p>Most people say they would pull the lever. Yet the puzzle deepens with a twist. Suppose you stand on a footbridge above the track. There is no lever, but a large stranger stands beside you. Would you push him off to stop the trolley, <span class="kw" data-def="牺牲；献出">sacrificing</span> one to save five? Although the numbers are identical, most people refuse. Why does the same <span class="kw" data-def="后果；结果">consequence</span> feel so different?</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Why it matters</div>
+            <p>Philosophers use this gap to test rival theories. A <span class="kw" data-def="功利主义的（主张以最大福祉为准则）">utilitarian</span> argues we should maximise total welfare, so saving five beats saving one. But our <span class="kw" data-def="道德的；伦理的">moral</span> <span class="kw" data-def="直觉；本能的判断">intuition</span> often rejects pushing the stranger, because doing so is a direct act of killing. Foot claimed we can <span class="kw" data-def="区分；辨别">distinguish</span> between killing and merely letting someone die. The <span class="kw" data-def="根本原因；逻辑依据">rationale</span> is that intending harm is <span class="kw" data-def="不允许的；不可接受的">impermissible</span>, even for a greater good.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Reflection</div>
+            <p>The trolley problem has no single answer. Instead, it reveals how we weigh lives, intentions, and rules. Today it shapes real debates — from self-driving cars to wartime decisions. <span class="kw" data-def="道德推理；伦理思考">moral reasoning</span> itself became clearer only because philosophers kept asking this odd question.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hypothetical">🔊</button><div class="word">hypothetical<span class="pos">adj.</span></div><div class="zh">假设的；假想的</div><div class="ex">"a famous hypothetical dilemma in moral philosophy"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="dilemma">🔊</button><div class="word">dilemma<span class="pos">n.</span></div><div class="zh">困境；两难</div><div class="ex">"A dilemma forces us to choose between two bad outcomes."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sacrifice">🔊</button><div class="word">sacrifice<span class="pos">v./n.</span></div><div class="zh">牺牲；献出</div><div class="ex">"sacrificing one to save five"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="consequence">🔊</button><div class="word">consequence<span class="pos">n.</span></div><div class="zh">后果；结果</div><div class="ex">"Why does the same consequence feel so different?"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="utilitarian">🔊</button><div class="word">utilitarian<span class="pos">adj./n.</span></div><div class="zh">功利主义的（以最大福祉为准则）</div><div class="ex">"A utilitarian argues we should maximise total welfare."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="moral">🔊</button><div class="word">moral<span class="pos">adj.</span></div><div class="zh">道德的；伦理的</div><div class="ex">"our moral intuition often rejects pushing the stranger"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="intuition">🔊</button><div class="word">intuition<span class="pos">n.</span></div><div class="zh">直觉；本能的判断</div><div class="ex">"moral intuition often rejects direct killing"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="distinguish">🔊</button><div class="word">distinguish<span class="pos">v.</span></div><div class="zh">区分；辨别</div><div class="ex">"we can distinguish between killing and letting die"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rationale">🔊</button><div class="word">rationale<span class="pos">n.</span></div><div class="zh">根本原因；逻辑依据</div><div class="ex">"The rationale is that intending harm is impermissible."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="impermissible">🔊</button><div class="word">impermissible<span class="pos">adj.</span></div><div class="zh">不允许的；不可接受的</div><div class="ex">"intending harm is impermissible, even for a greater good"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Had [subject] + past participle, [main clause with would/might/could].</h3>
+          <div class="zh">过去虚拟语气倒装：省略 if，把 had 提到主语前，相当于 "If philosophers had never asked..."，表示与过去事实相反的假设。</div>
+          <div class="eg">Had philosophers never asked this odd question, we might understand our moral reasoning far less clearly.</div>
+          <div class="practice">练习：用 "she read the case / she would not see the flaw" → <input placeholder="your answer">, she would not see the flaw.</div>
+        </div>
+        <div class="item">
+          <h3>2. [Gerund phrase] + is + adjective / noun phrase.</h3>
+          <div class="zh">动名词（非谓语动词）短语作主语，表示一种行为或事实；谓语用单数。Sacrificing... 整体充当主语。</div>
+          <div class="eg">Sacrificing one to save five is, for many people, impossible to justify.</div>
+          <div class="practice">练习：用 "pushing the stranger / feels wrong" → <input placeholder="your answer"> feels deeply wrong to most of us.</div>
+        </div>
+        <div class="item">
+          <h3>3. Although [clause], [contrasting clause].</h3>
+          <div class="zh">让步状语从句：Although 引导从句，主句用转折语义，强调"即使事实如此，结果却相反"，是学术写作常用衔接。</div>
+          <div class="eg">Although the numbers are identical, most people refuse to push the stranger.</div>
+          <div class="practice">练习：用 "the cost is lower / few accept the trade-off" → <input placeholder="your answer">, few accept the trade-off.</div>
+        </div>
+        <div class="item">
+          <h3>4. A utilitarian argues (that) [noun clause].</h3>
+          <div class="zh">动词 + (that) 引导的名词性从句，作 argue / claim / suggest 的宾语，用于转述他人观点，是议论文的核心句式。</div>
+          <div class="eg">A utilitarian argues (that) we should maximise total welfare.</div>
+          <div class="practice">练习：用 "Foot claimed / we can distinguish two acts" → <input placeholder="your answer"> we can distinguish killing from letting die.</div>
+        </div>
+        <div class="item">
+          <h3>5. Instead, [restatement or contrast].</h3>
+          <div class="zh">衔接副词：Instead / Yet / Moreover 用于引出转折或递进，使语篇逻辑清晰、富于层次，是 B2 高级写作的标志。</div>
+          <div class="eg">The trolley problem has no single answer. Instead, it reveals how we weigh lives, intentions, and rules.</div>
+          <div class="practice">练习：用 "the rule seems simple / it hides a deep conflict" → The rule seems simple; <input placeholder="your answer">, it hides a deep conflict.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气倒装（Inverted subjunctive）</h3>
+          <div class="zh">当 if 条件句含 had / were / should 时，可省略 if 并把动词提到主语前，语气更正式、书面，是 B2 高级写法。</div>
+          <div class="eg">Had philosophers never asked this odd question, we might understand our reasoning far less clearly.</div>
+        </div>
+        <div class="item">
+          <h3>2. 非谓语动词 · 动名词作主语（Gerund as subject）</h3>
+          <div class="zh">动词加 -ing 可作名词用，放在句首充当主语，表示一种活动或事实，谓语用单数。</div>
+          <div class="eg"><b>Sacrificing</b> one to save five <b>is</b> impossible to justify for many. / <b>Pushing</b> the stranger <b>feels</b> wrong.</div>
+        </div>
+        <div class="item">
+          <h3>3. 让步状语从句（Concessive clause）</h3>
+          <div class="zh">用 Although / Though / Even if 引导，主句表达与从句预期相反的结果，突出对比，常见于议论文。</div>
+          <div class="eg">Although the numbers are identical, most people refuse to push the stranger.</div>
+        </div>
+        <div class="item">
+          <h3>4. 名词性从句（Noun clause after a verb）</h3>
+          <div class="zh">argue / claim / suggest 后接 (that) 从句，整个从句充当宾语，用来客观转述观点，避免武断。</div>
+          <div class="eg">A utilitarian argues <b>(that) we should maximise</b> total welfare. / Foot claimed <b>we can distinguish</b> two acts.</div>
+        </div>
+        <div class="item">
+          <h3>5. 语篇衔接词（Linking adverbs）</h3>
+          <div class="zh">Yet（然而）、Instead（反而）、Although（尽管）等衔接副词让句与句之间的转折、递进关系清晰，是学术写作连贯性的关键。</div>
+          <div class="eg">Most people would pull the lever. Yet the puzzle deepens with a twist. / Instead, it reveals how we weigh lives.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一句话讲清"电车难题"</h3>
+        <p>一辆失控的电车（trolley）正冲向铁轨上的五个人。你手边有一个拉杆：拉下它，电车会转向侧轨，但侧轨上站着一个人。于是你面临选择——<strong>不拉，死五个；拉，死一个、救五个</strong>。这就是"电车难题"，由英国哲学家<strong>菲利帕·福特（Philippa Foot）</strong>在 1967 年提出，后经<strong>朱迪思·贾维斯·汤姆森（Judith Jarvis Thomson）</strong>在 1976 年系统化并命名。它不是真要你当司机，而是一个<strong>思想实验（thought experiment）</strong>：用来探测我们道德直觉背后的逻辑。</p>
+
+        <h3>为什么"拉杆"和"推人"感觉不一样？</h3>
+        <p>最经典的变体是<strong>天桥版本（footbridge）</strong>：这次没有拉杆，你站在一座天桥上，身边有个大块头陌生人。如果把他推下去，他的身体能挡停电车、救下五人。结果同样是"死一救五"，但<strong>绝大多数人会拒绝推人</strong>。同样的数字，为什么观感天差地别？哲学家提出两种解释：</p>
+        <ul>
+          <li><strong>杀人与容许死亡（killing vs. letting die）</strong>：福特认为，拉杆是"让一个人死"，而推人是"主动杀死一个人"，二者道德分量不同。</li>
+          <li><strong>双重效应原则（Doctrine of Double Effect）</strong>：为了更大善而<em>间接</em>造成的伤害可被接受，但<em>直接</em>把人当工具去杀，则不可接受。</li>
+        </ul>
+
+        <h3>两种大理论的正面交锋</h3>
+        <p>电车难题几乎是<strong>功利主义（utilitarianism）</strong>与<strong>义务论（deontology）</strong>的缩影：</p>
+        <ul>
+          <li><strong>功利主义（以边沁、密尔、彼得·辛格为代表）</strong>：看"结果总量"。五条命大于一条命，所以拉杆甚至推人都"应该"。它追求<strong>最大化总体福祉</strong>。</li>
+          <li><strong>义务论（以康德为代表）</strong>：某些行为<strong>本身</strong>就是错的（如谋杀），不能因为结果好就正当化。把陌生人当"挡车工具"违背了对人的尊重，无论救多少人都不允许。</li>
+        </ul>
+        <p>神经科学也来凑热闹：脑成像显示，拉杆激活的是理性脑区（算人数），而推人激活的是情绪脑区（对"亲手杀人"的厌恶）。所以我们的选择，可能一半是逻辑、一半是本能。</p>
+
+        <h3>它不只是"脑洞"：现实中的影子</h3>
+        <p>电车难题早已走出哲学课堂，进入真实决策：</p>
+        <ul>
+          <li><strong>自动驾驶（self-driving cars）</strong>：当碰撞不可避免时，算法该优先保护车内乘客还是路人？这本质是"编程版电车难题"。</li>
+          <li><strong>战伦理与无人机</strong>：空袭中"附带伤亡（collateral damage）"能否被接受，对应"间接伤害 vs. 直接杀害"的区分。</li>
+          <li><strong>医疗资源分配</strong>：疫情中有限的呼吸机给谁用，也是"一换多"的功利计算。</li>
+        </ul>
+
+        <h3>学习者的收获</h3>
+        <p>电车难题<strong>没有标准答案</strong>，这正是它的价值：它不教你对错，而是教你<strong>如何为自己的判断辩护</strong>。当你能说清"我选拉杆，因为……""我拒绝推人，因为……"，你就已经在做真正的哲学思考了。这也提醒我们：在 B2 写作与口语中，用 <em>Although / Instead / A utilitarian argues that…</em> 这类句式，能让你把"我觉得"变成"我论证"。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标（B2 中高级）</h3>
+        <div class="goal"><span class="ic">🌟</span><div>理解"电车难题"这一经典思想实验的设定、变体与核心争论。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 CEFR B2 核心学术词汇（hypothetical, dilemma, sacrifice, consequence, utilitarian, moral, intuition, distinguish, rationale, impermissible）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会虚拟语气倒装（Had...）、动名词作主语、让步状语从句等高级句型。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>辨析名词性从句、语篇衔接词在议论文中的作用，提升论证表达力。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立批判性思维：区分"结果论"与"义务论"，能用自己的话为选择辩护。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读英文朗读，模仿学术英语的语调与停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，并用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>仿写一句虚拟语气倒装（Had... / Were...），体会正式书面语感。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div>读"中文知识扩展"，再用英语说明为何"拉杆"与"推人"直觉不同。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English · The Trolley Problem: Would You Pull the Lever? · 2026-08-16</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Imagine a runaway trolley is speeding toward five workers trapped on the track. You stand beside a lever. If you pull it, the trolley will switch to a side track where one person stands. One dies; five live. This is the trolley problem, a famous hypothetical dilemma in moral philosophy first posed by Philippa Foot in 1967.",
+  "Most people say they would pull the lever. Yet the puzzle deepens with a twist. Suppose you stand on a footbridge above the track. There is no lever, but a large stranger stands beside you. Would you push him off to stop the trolley, sacrificing one to save five? Although the numbers are identical, most people refuse. Why does the same consequence feel so different?",
+  "Philosophers use this gap to test rival theories. A utilitarian argues we should maximise total welfare, so saving five beats saving one. But our moral intuition often rejects pushing the stranger, because doing so is a direct act of killing. Foot claimed we can distinguish between killing and merely letting someone die. The rationale is that intending harm is impermissible, even for a greater good.",
+  "The trolley problem has no single answer. Instead, it reveals how we weigh lives, intentions, and rules. Today it shapes real debates, from self-driving cars to wartime decisions. Our moral reasoning itself became clearer only because philosophers kept asking this odd question."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Who first posed the trolley problem, and in what year? 谁最早提出了电车难题，在哪一年？",opts:["Philippa Foot, in 1967 菲利帕·福特，1967年","Immanuel Kant, in 1785 康德，1785年","Judith Thomson, in 1967 汤姆森，1967年","Albert Einstein, in 1905 爱因斯坦，1905年"],ans:0,
+   fb:"Correct! 英国哲学家菲利帕·福特（Philippa Foot）于 1967 年提出电车难题。"},
+  {q:"In the footbridge version, why do most people refuse to push the stranger? 在天桥版本中，为什么大多数人拒绝推人？",opts:["It is a direct act of killing, which feels morally wrong 那是直接的杀害，直觉上不可接受","The numbers are not in their favour 数字对自己不利","The stranger is too heavy 陌生人太重了","There is no trolley 根本没有电车"],ans:0,
+   fb:"Right! 推人是'主动杀人'，即便结果同样是死一救五，多数人也因道德直觉而拒绝。"},
+  {q:"What does a utilitarian typically support in the original case? 功利主义者通常会支持原版中的哪种做法？",opts:["Pull the lever to save five 拉杆救五人","Do nothing and let five die 什么都不做，任由五人死亡","Push the stranger 推下陌生人","Refuse to choose 拒绝选择"],ans:0,
+   fb:"Yes! 功利主义追求'总体福祉最大化'，五条命大于一条命，所以支持拉杆。"},
+  {q:"'Had philosophers never asked this odd question, we might understand...' is an example of: “Had philosophers never asked... we might understand...” 属于哪种语法？",opts:["Inverted subjunctive (虚拟语气倒装)","Simple present 一般现在时","Imperative 祈使句","Passive voice 被动语态"],ans:0,
+   fb:"Correct! 这是省略 if 的过去虚拟语气倒装，相当于 If philosophers had never asked..."},
+  {q:"According to Foot, what key distinction explains our different reactions? 福特认为，是什么关键区分解释了我们不同的反应？",opts:["Killing versus merely letting die 杀害 vs. 仅仅是容许死亡","Rich versus poor 富 vs. 穷","Near versus far 近 vs. 远","Known versus unknown 熟悉 vs. 陌生"],ans:0,
+   fb:"Right! 福特区分'主动杀人'与'容许死亡'，认为二者道德分量不同。"},
+  {q:"Where does the trolley problem appear in the real world today? 如今电车难题在哪些现实领域出现？",opts:["Self-driving cars and wartime ethics 自动驾驶与战伦理","Cooking recipes 烹饪食谱","Sports training 体育训练","Gardening 园艺"],ans:0,
+   fb:"Yes! 它在自动驾驶算法、无人机空袭的附带伤亡、医疗资源分配等真实决策中都有影子。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
