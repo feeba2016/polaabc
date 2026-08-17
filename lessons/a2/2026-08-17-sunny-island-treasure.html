@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Sunny Island Treasure — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#d97706;
+  --accent2:#f59e0b;
+  --bg:#fffbeb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#fde9c8;
+  --soft:#fff7ed;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#fbbf24);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(217,119,6,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #fbe0b3;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(217,119,6,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,119,6,.55);}70%{box-shadow:0 0 0 12px rgba(217,119,6,0);}100%{box-shadow:0 0 0 0 rgba(217,119,6,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #d97706;transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#ffedd5;border:2px solid #f59e0b;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#b45309;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(217,119,6,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Earth News</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Sunny Island Treasure</h1>
+      <p class="subtitle">2026年8月17日 · 冒险故事｜阳光岛寻宝记 —— 全文阅读（点黄色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Tom and Mia found an old <span class="kw" data-def="地图">map</span> in Grandpa's attic. "X marks the spot!" The map showed a small <span class="kw" data-def="岛屿">island</span> with a hidden <span class="kw" data-def="宝藏">treasure</span> <span class="kw" data-def="洞穴">cave</span>. "Let's go on an <span class="kw" data-def="冒险">adventure</span>!" they said.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>They took a small boat and <span class="kw" data-def="航行">sailed</span> to Sunny Island. They walked through the green forest and climbed a hill. At the top, they found a dark cave. Inside the cave, they saw colorful pictures on the wall.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>At the end of the cave, they found a wooden box. It was not gold! It was full of <span class="kw" data-def="种子">seeds</span> and old books. The treasure taught them to love nature and reading.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>Adventure is fun and safe with family. What will you <span class="kw" data-def="发现">discover</span>? This is Pola, signing off from POLA NEWS. Go and explore! Bye for now!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>💡 探险安全小贴士 Adventure Safety</h3>
+        <p style="margin:0;font-size:14.5px;">探险要和<b>家人或老师</b>一起，不去陌生的山洞或深水边；带上<b>水、帽子和地图</b>；告诉大人你去哪里。记住：<b>真正的好探险，安全第一、快乐第二</b>！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="adventure">🔊</button><div class="word">adventure<span class="pos">n.</span></div><div class="zh">冒险；奇遇</div><div class="ex">"We love a great adventure."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="map">🔊</button><div class="word">map<span class="pos">n.</span></div><div class="zh">地图</div><div class="ex">"The old map shows an island."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="island">🔊</button><div class="word">island<span class="pos">n.</span></div><div class="zh">岛屿</div><div class="ex">"They sailed to a small island."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cave">🔊</button><div class="word">cave<span class="pos">n.</span></div><div class="zh">洞穴</div><div class="ex">"They found a dark cave."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="treasure">🔊</button><div class="word">treasure<span class="pos">n.</span></div><div class="zh">宝藏；珍宝</div><div class="ex">"The box held a treasure."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="discover">🔊</button><div class="word">discover<span class="pos">v.</span></div><div class="zh">发现</div><div class="ex">"What will you discover?"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sail">🔊</button><div class="word">sail<span class="pos">v.</span></div><div class="zh">航行；扬帆</div><div class="ex">"They sailed to the island."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="seed">🔊</button><div class="word">seed<span class="pos">n.</span></div><div class="zh">种子</div><div class="ex">"The box was full of seeds."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. They found [a wooden box].</h3>
+          <div class="zh">他们找到了[一个木盒子]。"主语 + found + 名词" 用一般过去时讲述找到的东西。found 是 find 的过去式。</div>
+          <div class="eg">They found a wooden box.</div>
+          <div class="practice">练习：用 "an old map" 造句 → They found <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Let's [go on an adventure]!</h3>
+          <div class="zh">我们[去冒险]吧！"Let's + 动词原形" 用来提出建议、邀请一起做某事，非常常用又友好。</div>
+          <div class="eg">Let's go on an adventure!</div>
+          <div class="practice">练习：用 "climb the hill" → Let's <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. They saw [colorful pictures] on the wall.</h3>
+          <div class="zh">他们在墙上看到了[彩色的图画]。过去式 saw（see 的过去式）+ 地点，描述过去看见的事物。</div>
+          <div class="eg">They saw colorful pictures on the wall.</div>
+          <div class="practice">练习：用 "a small boat" → They saw <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. What will you [discover]?</h3>
+          <div class="zh">你将会[发现]什么？"What will you + 动词原形?" 用将来时提问对方将来要做的事。</div>
+          <div class="eg">What will you discover?</div>
+          <div class="practice">练习：用 "find" → What will you <input placeholder="your answer">?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般过去时（Past Simple）</h3>
+          <div class="zh">讲故事时，动词要变成过去式。规则动词加 -ed（climb → climbed，walk → walked）；不规则动词要记住：find → found，take → took，see → saw，go → went。</div>
+          <div class="eg">They <b>found</b> a map. / They <b>saw</b> pictures on the wall.</div>
+        </div>
+        <div class="item">
+          <h3>2. 方位介词（Prepositions of place）</h3>
+          <div class="zh">描述位置常用：<b>in</b>（在……里，in the cave）、<b>on</b>（在……上，on the wall）、<b>through</b>（穿过，through the forest）、<b>at</b>（在，at the top）、<b>inside</b>（在……内部）。</div>
+          <div class="eg">They walked <b>through</b> the forest. / Pictures are <b>on</b> the wall.</div>
+        </div>
+        <div class="item">
+          <h3>3. Let's + 动词原形（提建议）</h3>
+          <div class="zh">"Let's"（= Let us）后面永远接动词原形，用来邀请别人一起做某事，语气轻松友好。</div>
+          <div class="eg"><b>Let's</b> go on an adventure! / <b>Let's</b> explore the cave.</div>
+        </div>
+        <div class="item">
+          <h3>4. 一般将来时 will（表示将要）</h3>
+          <div class="zh">"will + 动词原形" 表示将要发生的事或提问未来。will 不分人称，疑问时把 will 提到主语前：What will you discover?</div>
+          <div class="eg">You <b>will</b> discover a treasure. / <b>What will</b> you find?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>什么是"地图"（map）？</h3>
+        <p><b>地图</b>是把真实世界画在平面上的图，能告诉我们山、河、道路和岛屿在哪里。很久以前，探险家们靠手绘地图找到新地方；今天我们用手机和卫星也能看到地图。故事里那张写着 <b>"X marks the spot"（X 标记地点）</b> 的旧地图，就是经典的"藏宝图"（treasure map）。</p>
+
+        <h3>真的有"洞穴里的图画"吗？</h3>
+        <p>有！世界上很多地方都有<b>史前洞穴壁画</b>。比如法国的拉斯科洞穴（Lascaux）、中国的周口店山顶洞等，古人在洞壁上用矿物颜料画下牛、马、鹿和手印，记录他们看到的世界。这些画是人类最早的"故事书"，距今已有上万年。故事里洞穴墙上的彩色图画，灵感就来自它们。</p>
+
+        <h3>"岛屿"（island）是怎么回事？</h3>
+        <ul>
+          <li><b>岛屿</b>是四面环水的小块陆地。世界上著名的岛有格陵兰岛、马达加斯加岛、日本的本州岛等。</li>
+          <li>中国也有许多美丽岛屿，例如<b>海南岛、台湾岛、舟山群岛</b>（台湾是中国不可分割的一部分，台湾岛是中国第一大岛）。</li>
+          <li>海岛上有独特的动植物，很多还是候鸟和海龟的家。</li>
+        </ul>
+
+        <h3>为什么故事里的"宝藏"是种子和书？</h3>
+        <p>真正的宝藏不一定是金子。故事想告诉我们：<b>大自然（种子会发芽长成大树）和知识（书能带我们去任何地方）才是能陪伴我们一生的宝藏</b>。一次探险最大的收获，往往是好奇心和新的发现。</p>
+
+        <h3>动手做：画一张你的"藏宝图"</h3>
+        <p>拿一张纸，画一条从家到公园（或学校）的路线，标上 <b>Start（起点）、Forest（森林）、Hill（小山）、Cave（洞穴）、X（终点）</b>。用方位词描述路线："Go through the forest, then climb the hill, and you will find the cave!" 和爸爸妈妈一起玩寻宝游戏吧！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一个 A2 水平的英文冒险小故事（寻宝记），理解大意。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般过去时、方位介词、Let's 提建议、will 将来时四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个冒险主题核心词汇（adventure, map, island, cave, treasure, discover, sail, seed）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语说出简单的探险路线，理解"真正的宝藏是知识与自然"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>树立安全意识：探险要和家人一起，安全第一。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🗺️</span><div>画一张自己的"藏宝图"，用英语标出 Start / Forest / Hill / Cave / X。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>用 "Let's …" 邀请家人一起做一件小事，比如 "Let's read a book!"</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Sunny Island Treasure · 2026-08-17 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Tom and Mia found an old map in Grandpa's attic. \"X marks the spot!\" The map showed a small island with a hidden treasure cave. \"Let's go on an adventure!\" they said.",
+  "They took a small boat and sailed to Sunny Island. They walked through the green forest and climbed a hill. At the top, they found a dark cave. Inside the cave, they saw colorful pictures on the wall.",
+  "At the end of the cave, they found a wooden box. It was not gold! It was full of seeds and old books. The treasure taught them to love nature and reading.",
+  "Adventure is fun and safe with family. What will you discover? This is Pola, signing off from POLA NEWS. Go and explore! Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where did Tom and Mia find the old map? 汤姆和米娅在哪里找到旧地图？",opts:["In a boat 在船上","In Grandpa's attic 在爷爷的阁楼","In a cave 在洞穴里","On an island 在岛上"],ans:1,
+   fb:"Correct! 他们在爷爷的阁楼（Grandpa's attic）里找到了旧地图。"},
+  {q:"How did they go to Sunny Island? 他们怎么去阳光岛的？",opts:["By plane 坐飞机","By train 坐火车","By boat 坐小船","By bike 骑自行车"],ans:2,
+   fb:"Yes! 他们坐小船（took a small boat / sailed）去的。"},
+  {q:"What did they see on the cave wall? 他们在洞穴墙上看到了什么？",opts:["Gold 金子","Colorful pictures 彩色图画","A big dog 大狗","Snow 雪"],ans:1,
+   fb:"Right! 他们在墙上看到了彩色的图画（colorful pictures）。"},
+  {q:"What was inside the wooden box? 木盒子里装的是什么？",opts:["Gold 金子","Toys 玩具","Seeds and old books 种子和旧书","Candy 糖果"],ans:2,
+   fb:"Correct! 盒子里装的是种子和旧书（seeds and old books），不是金子。"},
+  {q:"What does the treasure teach them? 这个宝藏教会了他们什么？",opts:["To love nature and reading 热爱自然与阅读","To eat more candy 多吃糖","To sleep all day 整天睡觉","To run fast 跑得快"],ans:0,
+   fb:"Yes! 宝藏教会他们热爱自然与阅读（love nature and reading）。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

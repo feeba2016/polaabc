@@ -1581,6 +1581,40 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-16",
+    "title": "The Demon Cavefish",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-16-the-demon-cavefish",
+    "url": "lessons/b1/2026-08-16-the-demon-cavefish.html",
+    "vocab": [
+      {
+        "word": "cavefish",
+        "zh": "无眼的",
+        "ex": "用于生动地介绍一个新动物。<br>例：<b>Meet the Demon Cavefish!</b>（认识一下恶魔洞穴鱼！）"
+      }
+    ]
+  },
+  {
+    "level": "B1",
+    "date": "2026-08-17",
+    "title": "The Lost Ice Age Toad",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-17-the-lost-ice-age-toad",
+    "url": "lessons/b1/2026-08-17-the-lost-ice-age-toad.html",
+    "vocab": [
+      {
+        "word": "museum",
+        "zh": "化石",
+        "ex": "用来引起注意、开启一个奇妙的画面。<br>例：<b>Imagine a tiny bone sleeping for 70 years!</b>（想象一根小骨头睡了 70 年！）"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -1749,6 +1783,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-08-17",
+    "title": "Goldilocks and the Three Bears",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-17-goldilocks-and-the-three-bears",
+    "url": "lessons/a1/2026-08-17-goldilocks-and-the-three-bears.html",
+    "vocab": [
+      {
+        "word": "bear",
+        "zh": "熊",
+        "ex": "\"This is a bear.\""
+      },
+      {
+        "word": "house",
+        "zh": "房子",
+        "ex": "\"This is a house.\""
+      },
+      {
+        "word": "bowl",
+        "zh": "碗",
+        "ex": "\"The bowl is hot.\""
+      },
+      {
+        "word": "big",
+        "zh": "大的",
+        "ex": "\"The bear is big.\""
+      },
+      {
+        "word": "small",
+        "zh": "小的",
+        "ex": "\"The bowl is small.\""
+      },
+      {
+        "word": "hot",
+        "zh": "热的",
+        "ex": "\"The bowl is hot.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -1901,6 +1977,58 @@ const EPISODES = [
         "word": "reuse",
         "zh": "再次使用；重复利用",
         "ex": "\"You can reuse a glass jar.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-17",
+    "title": "Sunny Island Treasure",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-17-sunny-island-treasure",
+    "url": "lessons/a2/2026-08-17-sunny-island-treasure.html",
+    "vocab": [
+      {
+        "word": "adventure",
+        "zh": "冒险；奇遇",
+        "ex": "\"We love a great adventure.\""
+      },
+      {
+        "word": "map",
+        "zh": "地图",
+        "ex": "\"The old map shows an island.\""
+      },
+      {
+        "word": "island",
+        "zh": "岛屿",
+        "ex": "\"They sailed to a small island.\""
+      },
+      {
+        "word": "cave",
+        "zh": "洞穴",
+        "ex": "\"They found a dark cave.\""
+      },
+      {
+        "word": "treasure",
+        "zh": "宝藏；珍宝",
+        "ex": "\"The box held a treasure.\""
+      },
+      {
+        "word": "discover",
+        "zh": "发现",
+        "ex": "\"What will you discover?\""
+      },
+      {
+        "word": "sail",
+        "zh": "航行；扬帆",
+        "ex": "\"They sailed to the island.\""
+      },
+      {
+        "word": "seed",
+        "zh": "种子",
+        "ex": "\"The box was full of seeds.\""
       }
     ]
   },
@@ -2087,6 +2215,68 @@ const EPISODES = [
         "word": "impermissible",
         "zh": "不允许的；不可接受的",
         "ex": "\"intending harm is impermissible, even for a greater good\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-17",
+    "title": "A Truth Universally Acknowledged",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-17-a-truth-universally-acknowledged",
+    "url": "lessons/b2/2026-08-17-a-truth-universally-acknowledged.html",
+    "vocab": [
+      {
+        "word": "universally",
+        "zh": "普遍地；人人都",
+        "ex": "\"It is a truth universally acknowledged...\""
+      },
+      {
+        "word": "acknowledge",
+        "zh": "承认；公认",
+        "ex": "\"The discovery was acknowledged by all.\""
+      },
+      {
+        "word": "possession",
+        "zh": "拥有；财产",
+        "ex": "\"a man in possession of a good fortune\""
+      },
+      {
+        "word": "fortune",
+        "zh": "财富；大笔财产",
+        "ex": "\"He inherited a large fortune.\""
+      },
+      {
+        "word": "rightful",
+        "zh": "合法的；正当的",
+        "ex": "\"the rightful property of their daughters\""
+      },
+      {
+        "word": "caprice",
+        "zh": "反复无常；任性",
+        "ex": "\"driven by caprice rather than reason\""
+      },
+      {
+        "word": "sarcastic",
+        "zh": "讽刺的；挖苦的",
+        "ex": "\"a sarcastic humour that hides warmth\""
+      },
+      {
+        "word": "solace",
+        "zh": "安慰；慰藉",
+        "ex": "\"its solace was visiting and news\""
+      },
+      {
+        "word": "reserve",
+        "zh": "沉默寡言；克制",
+        "ex": "\"a man of reserve and few words\""
+      },
+      {
+        "word": "insufficient",
+        "zh": "不足的；不够的",
+        "ex": "\"evidence insufficient to prove the claim\""
       }
     ]
   },
@@ -2335,6 +2525,68 @@ const EPISODES = [
         "word": "clarion",
         "zh": "清晰响亮的；明确的（a clarion call / principle）",
         "ex": "\"India's zero-tolerance doctrine offers a clarion principle for the algorithmic age.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-17",
+    "title": "Frankenstein Reclaimed",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-17-frankenstein-reclaimed",
+    "url": "lessons/c1/2026-08-17-frankenstein-reclaimed.html",
+    "vocab": [
+      {
+        "word": "progeny",
+        "zh": "后代；产物；子孙（此处 Shelley 戏称自己的小说为 \"hideous progeny\"）",
+        "ex": "\"a novel she would later call her hideous progeny.\""
+      },
+      {
+        "word": "galvanism",
+        "zh": "电流刺激（galvanism）；\"使死体复活\"之说，源自 18 世纪末 Galvani 的青蛙腿电击实验",
+        "ex": "\"it drew on the era's fascination with galvanism.\""
+      },
+      {
+        "word": "misremember",
+        "zh": "误记；错误地记住（本课核心论点：大众文化误读了原著）",
+        "ex": "\"Yet popular culture has badly misremembered Shelley's text.\""
+      },
+      {
+        "word": "usurp",
+        "zh": "篡夺；夺取（权力、地位）；本课用其名词 usurpation 指\"篡夺生育/创造之力\"",
+        "ex": "\"a usurpation of procreative power — born, they argue, of hubris.\""
+      },
+      {
+        "word": "hubris",
+        "zh": "狂妄自大；傲慢（古典悲剧中导致主人公覆灭的性格缺陷 hamartia）",
+        "ex": "\"Victor's solitary act of creation ... born, they argue, of hubris.\""
+      },
+      {
+        "word": "irrevocable",
+        "zh": "不可撤销的；不可挽回的；无法逆转的",
+        "ex": "\"The horror lies not in the creature but in the father whose abandonment proves irrevocable.\""
+      },
+      {
+        "word": "alienation",
+        "zh": "异化；疏离（马克思主义/存在主义批评核心概念；被社会排斥、失去归属）",
+        "ex": "\"Shelley's nested narration turns the creature into a figure of alienation.\""
+      },
+      {
+        "word": "sublime",
+        "zh": "壮美的；令人敬畏的（the sublime；浪漫主义美学术语，指崇高而可畏的美）",
+        "ex": "\"the Romantic sublime inverted into dread.\""
+      },
+      {
+        "word": "ontological",
+        "zh": "本体论的；关乎存在本质的（ontology 的形容词；关于 \"being\" 本身）",
+        "ex": "\"His tragedy is ontological: to be created, yet never chosen.\""
+      },
+      {
+        "word": "reconfigure",
+        "zh": "重新配置；重构（此处指每个时代都按自身焦虑重塑 Frankenstein 的意涵）",
+        "ex": "\"Each age reconfigures Frankenstein to its own dread.\""
       }
     ]
   }

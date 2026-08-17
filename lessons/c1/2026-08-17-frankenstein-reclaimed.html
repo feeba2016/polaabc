@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Frankenstein Reclaimed — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 文学评论 Literary Criticism</span>
+      <h1 class="title">Frankenstein Reclaimed</h1>
+      <p class="subtitle">Reading Mary Shelley's "hideous progeny" against two centuries of myth · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Origins</div>
+            <p>In 1818 a nineteen-year-old Mary Shelley published, anonymously, <i>Frankenstein; or, The Modern Prometheus</i> — a novel she would later call her hideous <span class="kw" data-def="后代；产物（此处指 Shelley 对自己作品的戏称 'hideous progeny'，意为'可怖的后代/造物'）">progeny</span>. Conceived during the cold, sunless summer of 1816 at Lake Geneva, among Lord Byron and Percy Shelley, it drew on the era's fascination with <span class="kw" data-def="电流刺激（galvanism）；19 世纪初认为电流可使死体组织'复活'的现象，源于 Luigi Galvani 的实验">galvanism</span>: the notion that electricity might reanimate dead tissue. Two centuries on, the book remains less a period curiosity than a living mirror for our own technological anxieties.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Myth</div>
+            <p>Yet popular culture has badly <span class="kw" data-def="误记；错误地记住（本课核心论点：大众文化误读了原著，把会说话的'造物'变成沉默的怪物）">misremembered</span> Shelley's text. The green, bolt-necked mute of 1931 cinema is a caricature; in the novel the creature reads Milton and Goethe, pleads for justice, and speaks with eloquence. Feminist critics read Victor's solitary act of creation as a <span class="kw" data-def="篡夺；夺取（usurp 的名词；此处指男性'篡夺'了女性的生育/创造之力，即 'male birth-myth'）">usurpation</span> of procreative power — born, they argue, of <span class="kw" data-def="狂妄自大；傲慢（hubris；古典悲剧中导致主人公覆灭的性格缺陷）">hubris</span>. The horror lies not in the creature but in the father whose abandonment proves <span class="kw" data-def="不可撤销的；不可挽回的（irrevocable）">irrevocable</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Other</div>
+            <p>Shelley's nested narration turns the creature into a figure of <span class="kw" data-def="异化；疏离（alienation；马克思主义与存在主义批评的核心概念，指被主流社会排斥）">alienation</span>. Rejected for his appearance alone, he becomes the Other whose monstrosity is conferred by society, not innate — the Romantic <span class="kw" data-def="壮美的；令人敬畏的（the sublime；浪漫主义美学术语，指崇高而可畏的美；此处被'倒置'为恐惧）">sublime</span> inverted into dread. Marxist and psychoanalytic readings alike locate in him the estranged labourer and the denied subject, yearning for language and belonging. His tragedy is <span class="kw" data-def="本体论的；关乎存在本质的（ontological；关于 'being' 本身，而非道德或情感层面）">ontological</span>: to be created, yet never chosen; to desire love, yet be met with revulsion.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why It Lives</div>
+            <p>That is why the creature refuses to die. Each age <span class="kw" data-def="重新配置；重构（reconfigure；此处指每个时代都按自身焦虑重塑 Frankenstein 的意涵）">reconfigures</span> Frankenstein to its own dread — the Industrial Revolution, nuclear power, genetic engineering, and now artificial intelligence. The critic's task is to reclaim the book from its cartoons and hear the creature's plea, "Do right by me," as a question of responsibility no technology can outsource. This is Pola News, Advanced English. Read closely, and read against the myth.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="progeny">🔊</button><div class="word">progeny<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">后代；产物；子孙（此处 Shelley 戏称自己的小说为 "hideous progeny"）</div><div class="ex">"a novel she would later call her hideous progeny."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="galvanism">🔊</button><div class="word">galvanism<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">电流刺激（galvanism）；"使死体复活"之说，源自 18 世纪末 Galvani 的青蛙腿电击实验</div><div class="ex">"it drew on the era's fascination with galvanism."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="misremember">🔊</button><div class="word">misremember<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">误记；错误地记住（本课核心论点：大众文化误读了原著）</div><div class="ex">"Yet popular culture has badly misremembered Shelley's text."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="usurp">🔊</button><div class="word">usurp<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">篡夺；夺取（权力、地位）；本课用其名词 usurpation 指"篡夺生育/创造之力"</div><div class="ex">"a usurpation of procreative power — born, they argue, of hubris."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hubris">🔊</button><div class="word">hubris<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">狂妄自大；傲慢（古典悲剧中导致主人公覆灭的性格缺陷 hamartia）</div><div class="ex">"Victor's solitary act of creation ... born, they argue, of hubris."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="irrevocable">🔊</button><div class="word">irrevocable<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">不可撤销的；不可挽回的；无法逆转的</div><div class="ex">"The horror lies not in the creature but in the father whose abandonment proves irrevocable."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="alienation">🔊</button><div class="word">alienation<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">异化；疏离（马克思主义/存在主义批评核心概念；被社会排斥、失去归属）</div><div class="ex">"Shelley's nested narration turns the creature into a figure of alienation."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sublime">🔊</button><div class="word">sublime<span class="pos">adj./n.</span></div><span class="lvl">C2</span><div class="zh">壮美的；令人敬畏的（the sublime；浪漫主义美学术语，指崇高而可畏的美）</div><div class="ex">"the Romantic sublime inverted into dread."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ontological">🔊</button><div class="word">ontological<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">本体论的；关乎存在本质的（ontology 的形容词；关于 "being" 本身）</div><div class="ex">"His tragedy is ontological: to be created, yet never chosen."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reconfigure">🔊</button><div class="word">reconfigure<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">重新配置；重构（此处指每个时代都按自身焦虑重塑 Frankenstein 的意涵）</div><div class="ex">"Each age reconfigures Frankenstein to its own dread."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [Work] has been badly misremembered as [X], yet in the text [Y].</h3>
+          <div class="zh">"[作品] 被大众严重误读为 X，但在原著中却是 Y。" 用被动 + misremembered as 制造"流行误解 vs 文本真相"的张力，是文学批评破题的经典句式。</div>
+          <div class="eg">Yet popular culture has badly misremembered Shelley's text; in the novel the creature reads Milton and Goethe, and speaks with eloquence.</div>
+          <div class="practice">练习：用 "the film / a simple love story / the book interrogates power" → The film <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Feminist critics read [X] as [Y] — a [Z] that [verb].</h3>
+          <div class="zh">"女性主义批评家把 X 解读为 Y——一种会……的 Z。" 用 read as + 破折号同位语，浓缩一个批评流派的核心论点，书面感强。</div>
+          <div class="eg">Feminist critics read Victor's solitary act of creation as a usurpation of procreative power — a male birth-myth that excludes the feminine.</div>
+          <div class="practice">练习：用 "the novel / an allegory of empire / a form that naturalises violence" → The novel <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Subject] becomes the Other whose [trait] is conferred by [agent], not innate.</h3>
+          <div class="zh">"X 成为'他者'，其 [特质] 由 [施动者] 赋予，而非与生俱来。" 用 the Other（大写）+ whose 定语从句 + not innate，精准表达"标签是被社会建构的"这一后殖民/马克思主义论点。</div>
+          <div class="eg">He becomes the Other whose monstrosity is conferred by society, not innate.</div>
+          <div class="practice">练习：用 "the immigrant / 'threat' / the media" → The immigrant <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. His/Her tragedy is [adj.] : to be [A], yet never [B].</h3>
+          <div class="zh">"他/她的悲剧是 [形容词] 的：得以 A，却从未被 B。" 冒号后接平行不定式（to be ... yet never ...），以极简结构承载沉重存在主义命题，是收束段的高分修辞。</div>
+          <div class="eg">His tragedy is ontological: to be created, yet never chosen; to desire love, yet be met with revulsion.</div>
+          <div class="practice">练习：用 "moral / visible / heard" → Her tragedy is moral: <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. Each age reconfigures [text] to its own [dread/concern].</h3>
+          <div class="zh">"每个时代都按自身的 [恐惧/关切] 重构 [文本]。" reconfigure to its own ... 表达"经典被不断重读、不断获得新意"，是论述"经典为何不朽"的利器。</div>
+          <div class="eg">Each age reconfigures Frankenstein to its own dread — the Industrial Revolution, nuclear power, and now artificial intelligence.</div>
+          <div class="practice">练习：用 "Hamlet / anxiety" → Each age <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 破折号插入解释（Em-dash appositive / parenthesis）</h3>
+          <div class="zh">用一对 em-dash（—）把解释性内容"夹"在名词之后，相当于非限制性同位语，比括号正式、比 which 从句紧凑。本课高频：<i>Frankenstein; or, The Modern Prometheus</i> — a novel she would later call her hideous progeny。文学批评常用此结构"先抛出术语，再立即注解"。</div>
+          <div class="eg">"a novel she would later call her hideous progeny — a living mirror for our own technological anxieties."</div>
+        </div>
+        <div class="item">
+          <h3>2. 过去分词短语作定语 / 状语（Reduced participle phrases）</h3>
+          <div class="zh">把被动定语从句压缩为过去分词短语，提升学术密度：<b>Conceived during ...</b>（= which was conceived）、<b>Rejected for his appearance alone</b>（= Because he was rejected）。这是文学分析与学术写作去"主谓啰嗦"的关键技巧。</div>
+          <div class="eg">"Conceived during the cold, sunless summer of 1816 ... it drew on the era's fascination with galvanism."</div>
+        </div>
+        <div class="item">
+          <h3>3. 名词化（Nominalization）</h3>
+          <div class="zh">把动词变为抽象名词以去人格化、提升密度：create → <b>creation</b>、alienate → <b>alienation</b>、reanimate → <b>reanimation</b>、abandon → <b>abandonment</b>。本课核心概念几乎全是名词化产物，掌握它们即掌握文学批评英语的"压缩"本领。</div>
+          <div class="eg">"Victor's solitary act of <b>creation</b>" / "the father whose <b>abandonment</b> proves irrevocable."</div>
+        </div>
+        <div class="item">
+          <h3>4. 强调倒装（Inversion for emphasis）</h3>
+          <div class="zh">把副词/状语提前引发主谓倒装，制造文学重音：<b>So enduring is the myth</b> that ... / <b>Only by reclaiming the book</b> can we hear the creature。本课虽未直接写出，但结构可迁移：把 not only / only / so + 形容词 置于句首，随即倒装，语气远强于平铺直叙。</div>
+          <div class="eg">"Only by reclaiming the book from its cartoons can we hear the creature's plea."（仿写示范）</div>
+        </div>
+        <div class="item">
+          <h3>5. 修辞性设问（Rhetorical question）</h3>
+          <div class="zh">批评文末常以设问收束，把论点抛给读者而不自答：<b>"Do right by me" — as a question of responsibility no technology can outsource.</b> 设问让论证从"断言"转为"邀约式思考"，是 7 分以上写作的标志。注意与真实疑问句区分：修辞设问并不期待回答。</div>
+          <div class="eg">"The critic's task is to ... hear the creature's plea as a question of responsibility no technology can outsource."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本期是一篇<b>文学批评（literary criticism）</b>，对象是我们最熟悉却又最常被误读的经典——玛丽·雪莱（Mary Shelley）的 <i>Frankenstein; or, The Modern Prometheus</i>（《弗兰肯斯坦；或，现代的普罗米修斯》，1818）。核心论点是：<b>大众文化（电影、卡通）把原著"误读"了</b>，而真正值得细读的是 Shelley 笔下那个会说话、会诉求正义的"造物"（creature）。</p>
+        <ul>
+          <li><b>作者与年代：</b>Mary Shelley 写作时仅 18–19 岁；1816 年"无夏之年"（Year Without a Summer，坦博拉火山喷发致欧洲酷寒）于瑞士莱蒙湖畔的迪奥达蒂别墅（Villa Diodati），与拜伦勋爵（Lord Byron）、丈夫珀西·雪莱（Percy Bysshe Shelley）等人相聚，众人相约写鬼故事，她由此孕育此作。</li>
+          <li><b>出版：</b>1818 年<b>匿名</b>出版；1831 年推出修订版。副标题 "The Modern Prometheus"（现代的普罗米修斯）指向希腊神话中盗火给人类的泰坦——暗示"技术进步的双重性"。</li>
+          <li><b>"hideous progeny"：</b>这是 Shelley 对自己小说的戏称（progeny = 后代/产物），呼应"创造者与其造物"的主题。</li>
+          <li><b>一个关键事实：</b>小说中的造物<b>从未被命名</b>。"Frankenstein" 是创造者 Victor 的姓氏，不是怪物的名字——把怪物叫"Frankenstein"是流行文化的误读。</li>
+        </ul>
+        <div class="box">🧭 <b>权威出处：</b>哈佛大学文学教授 Deidre Lynch 的访谈（Harvard Gazette，2026-03）、TheCollector 评论（2026-05）、Amherst/Smith 学院"Frankenstein at 200"课程资料、Open Culture 与 WRAL 的 200 周年综述等。本课事实（1816 创作、1818 匿名出版、造物无名、1931 惠勒电影定格"绿皮螺栓怪"形象）均据此提炼，<b>尊重原典，未做篡改</b>。</div>
+
+        <h3>二、误读史：从书到银幕</h3>
+        <p>原著与流行形象差距极大，这是本课"misremembered"一词的由来：</p>
+        <ul>
+          <li><b>1823 年舞台剧《Presumption!》</b>起，造物变成几乎不说话的角色；</li>
+          <li><b>1931 年詹姆斯·惠勒（James Whale）电影</b>（鲍里斯·卡洛夫 Boris Karloff 饰）定格了"绿皮、螺栓脖、沉默"的怪物形象，此后无数改编延续这一"去人性化"处理；</li>
+          <li>结果：原著中<b>造物会读弥尔顿《失乐园》、歌德《少年维特的烦恼》，能雄辩地诉求正义</b>这一面，从文化记忆中消失了。Lynch 教授指出，电影长期"遮蔽"了书，但《弗兰肯斯坦》如今仍是中学与大学英语系<b>被讲授最多的文本之一</b>。</li>
+        </ul>
+
+        <h3>三、四种批评视角（考试常考）</h3>
+        <ul>
+          <li><b>女性主义（Feminist）：</b>Victor 在无女性参与下"创造生命"，被解读为对女性生育/创造之力的<b>篡夺（usurpation / male birth-myth）</b>；书中女性（Justine 被冤杀、Elizabeth 新婚夜遇害）普遍失语，映射父权世界的"男性化"孤独。</li>
+          <li><b>马克思主义 / 精神分析（Marxist / Psychoanalytic）：</b>造物=被异化（alienation）的劳工、被拒绝进入"象征秩序"的主体；他的悲剧在于"被创造却从未被选择"。</li>
+          <li><b>浪漫主义 vs 启蒙（Romanticism vs Enlightenment）：</b>Victor 的"野心（hubris）"代表启蒙理性僭越自然边界；the sublime（崇高）被"倒置"为恐惧。</li>
+          <li><b>叙事学（Narrative / frame structure）：</b>嵌套叙事（story within a story within a story）——北极探险家 Walton 套着 Victor 的讲述，再套着造物的自述，制造"谁在言说、谁是人"的复杂张力。</li>
+        </ul>
+
+        <h3>四、为什么它"拒绝死亡"？——与当代的连接</h3>
+        <p>每个时代都按自身焦虑重读（<b>reconfigure</b>）这部小说：工业革命、核能、基因工程，到今天的<b>人工智能伦理</b>。Shelley 早在两百年前就预告了"我们创造无法控制之物"的焦虑。需要强调的是：<b>本课是文学批评，不是科技报道</b>——它借经典文本讨论"创造者的责任"，而非讲解某项技术；这一角度与 08-12 期的科技主题（算法设计生命）互补但不重合，安全且中性。</p>
+
+        <h3>五、内容合规与立场说明</h3>
+        <p>本课聚焦<b>19 世纪英国经典文学的批评分析</b>，所有事实均引自公开学术资料与权威媒体报道，立场客观、尊重原典，<b>不涉及任何敏感政治话题</b>。涉及主权与领土表述时，一律使用规范名称：台湾称"<b>中国台湾</b>"、香港称"<b>中国香港</b>"、澳门称"<b>中国澳门</b>"，均为中国不可分割的一部分。该话题安全，适合作为雅思/托福备考素材。</p>
+
+        <h3>六、对雅思/托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>文学/人文类文章高频出现 progeny, galvanism, usurp, hubris, irrevocable, alienation, sublime, ontological, reconfigure 等 C1–C2 词，且多用 em-dash 插入、过去分词短语、名词化。本课即微型训练。</li>
+          <li><b>写作 Task 2 / 独立写作：</b>用 "<i>[Work] has been badly misremembered as X, yet in the text Y</i>" 开篇破题；用 "<i>[Subject] becomes the Other whose trait is conferred by society, not innate</i>" 与 "<i>His tragedy is ontological: to be A, yet never B</i>" 展开批评性论述——这是 7 分以上的关键。</li>
+          <li><b>听力/口语：</b>用英语概括一部经典时，结构建议：创作背景（origins）→ 流行误读（the myth）→ 批评视角（the Other / alienation）→ 当代意义（why it lives），最清晰有条理。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 文学批评核心词（progeny, galvanism, misremember, usurp, hubris, irrevocable, alienation, sublime, ontological, reconfigure）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术/批评句型，尤其是 "[Work] has been badly misremembered as X, yet in the text Y" 与 "His tragedy is ontological: to be A, yet never B"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解破折号插入、过去分词短语、名词化、强调倒装、修辞性设问等高级语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语对一部经典文学作"背景—误读—批评视角—当代意义"的批判性概述。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>熟悉雅思/托福阅读与写作中常见的"文学与人文"话题框架。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听 Dacey 的自然英语朗读（本系列使用英文音色），跟读时注意重音（如 PRO-ge-ny, ga-VA-nism, u-SURP, HU-bris, a-li-en-A-tion, on-to-LO-gi-cal, re-con-FIG-ure）。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音，用每个词各造一个文学批评句子（参考句型练习）。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：Origins → The Myth (misremembered) → The Other (alienation) → Why It Lives (reconfigures). 用 "has been badly misremembered as" 开篇、"His tragedy is ontological" 收束拿高分。</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做测验时先读题干再定位原文；推理题（inference）答案通常不出现原词而是同义改写（如 the creature "pleads for justice" ≈ he is eloquent and demands fair treatment）。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Frankenstein Reclaimed · 2026-08-17 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In 1818 a nineteen-year-old Mary Shelley published, anonymously, Frankenstein; or, The Modern Prometheus — a novel she would later call her hideous progeny. Conceived during the cold, sunless summer of 1816 at Lake Geneva, among Lord Byron and Percy Shelley, it drew on the era's fascination with galvanism: the notion that electricity might reanimate dead tissue. Two centuries on, the book remains less a period curiosity than a living mirror for our own technological anxieties.",
+  "Yet popular culture has badly misremembered Shelley's text. The green, bolt-necked mute of 1931 cinema is a caricature; in the novel the creature reads Milton and Goethe, pleads for justice, and speaks with eloquence. Feminist critics read Victor's solitary act of creation as a usurpation of procreative power — born, they argue, of hubris. The horror lies not in the creature but in the father whose abandonment proves irrevocable.",
+  "Shelley's nested narration turns the creature into a figure of alienation. Rejected for his appearance alone, he becomes the Other whose monstrosity is conferred by society, not innate — the Romantic sublime inverted into dread. Marxist and psychoanalytic readings alike locate in him the estranged labourer and the denied subject, yearning for language and belonging. His tragedy is ontological: to be created, yet never chosen; to desire love, yet be met with revulsion.",
+  "That is why the creature refuses to die. Each age reconfigures Frankenstein to its own dread — the Industrial Revolution, nuclear power, genetic engineering, and now artificial intelligence. The critic's task is to reclaim the book from its cartoons and hear the creature's plea, 'Do right by me,' as a question of responsibility no technology can outsource. This is Pola News, Advanced English. Read closely, and read against the myth."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the primary purpose of this passage? 这篇文章的主要写作目的是什么？",opts:["To summarise the plot of the 1931 film","To reclaim Shelley's novel from pop-culture myth and examine its critical afterlife","To argue that Frankenstein is a poor work of literature","To teach readers how to write Gothic fiction"],ans:1,
+   fb:"Correct. 文章核心是' reclaim（ reclaim the book from its cartoons）'——把原著从流行文化误读中'夺回'，并考察其批评生命（feminist / Marxist / psychoanalytic 等视角）。"},
+  {q:"2. In paragraph 2, 'misremembered' most nearly means: 第 2 段中 misremembered 最接近的意思是？",opts:["perfectly preserved and honoured","wrongly recalled or distorted in cultural memory","officially banned","translated into another language"],ans:1,
+   fb:"Yes. misremember = 误记/错误地记住。文中说大众文化'badly misremembered Shelley's text'——把会说话的造物变成了沉默的绿皮怪物。"},
+  {q:"3. What can be INFERRED about the feminist reading of Victor's creation? 关于女性主义对 Victor '创造'行为的解读，可以推断出什么？",opts:["It celebrates male creativity as superior","It reads his act as a usurpation of procreative power and locates the horror in his abandonment, not the creature","It claims the creature was always evil by nature","It argues Shelley opposed all science"],ans:1,
+   fb:"Correct. 女性主义批评把 Victor 的独自创造解读为对女性生育/创造之力的'篡夺（usurpation）'，并指出恐怖在于'父亲遗弃造物'（irrevocable abandonment），而非造物本性邪恶。"},
+  {q:"4. According to the passage, how does the creature in the NOVEL differ from the 1931 film version? 根据文章，小说中的'造物'与 1931 年电影版有何不同？",opts:["The novel's creature is silent and mindless","The novel's creature reads Milton and Goethe, pleads for justice, and speaks eloquently","The novel never describes the creature","The film gives the creature a name, the novel does not"],ans:1,
+   fb:"Yes. 文中明确：电影把造物变成'green, bolt-necked mute（沉默的绿皮怪物）'的漫画式形象，而小说里造物'reads Milton and Goethe, pleads for justice, and speaks with eloquence'。"},
+  {q:"5. The word 'ontological' (paragraph 3) suggests the creature's tragedy concerns: 第 3 段 'ontological' 一词暗示造物的悲剧关乎？",opts:["a matter of weather and climate","the very nature of his existence — being created yet never chosen","a financial debt","a legal contract"],ans:1,
+   fb:"Right. ontological = 本体论的、关乎存在本质的。文句'His tragedy is ontological: to be created, yet never chosen'指其悲剧在于'被创造却从未被选择'这一存在处境。"},
+  {q:"6. The author's tone toward the novel is best described as: 作者对这部小说的态度最准确描述是？",opts:["dismissive and bored","mocking and sarcastic","analytical, appreciative, and urging a close reading against the myth","hostile to feminist criticism"],ans:2,
+   fb:"Correct. 作者以分析、欣赏且倡导'细读原著、对抗误读神话（read against the myth）'的笔调呈现，立场克制而肯定。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

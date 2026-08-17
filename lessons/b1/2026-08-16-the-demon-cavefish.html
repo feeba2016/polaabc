@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Demon Cavefish · Pola News</title>
+<style>
+:root{
+  --accent:#1d6fe0;
+  --accent2:#06b6d4;
+  --glow:#38bdf8;
+  --bg:#eaf2fb;
+  --bg2:#f6fafe;
+  --card:#ffffff;
+  --ink:#1f2d3d;
+  --muted:#5b6b7c;
+  --line:#d8e3f0;
+  --good:#1a9e6f;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(29,111,224,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+/* progress bar */
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+/* layout */
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,#13325c,#1d4e8f);color:#eaf2ff;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.75;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#dbe7fb;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.10)}
+.nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(6,182,212,.35)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(29,111,224,.12);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+/* reading segments */
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line)}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,111,224,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(6,182,212,.55)}70%{box-shadow:0 0 0 14px rgba(6,182,212,0)}100%{box-shadow:0 0 0 0 rgba(6,182,212,0)}}
+/* keyword */
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(6,182,212,.12)}
+/* tooltip */
+#tip{position:fixed;z-index:1000;max-width:280px;background:#13325c;color:#eaf2ff;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+#tip b{color:var(--glow)}
+/* vocab */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.vcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,#f4f9ff);transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.vcard .w{font-size:20px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:2px}
+.vcard .en{font-size:13px;color:var(--muted)}
+.vcard .spk{margin-top:10px;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px}
+.vcard .spk:hover{transform:scale(1.08)}
+/* patterns */
+.pat{border-left:4px solid var(--accent2);background:#f3f9ff;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px}
+.pat .p{font-weight:800;color:var(--accent);font-size:16px}
+.pat .ex{margin-top:4px;color:var(--ink)}
+.pat .ex b{color:var(--accent2)}
+/* grammar */
+.callout{background:#f3f9ff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.callout h3{font-size:17px;color:var(--accent);margin-bottom:6px}
+.formula{font-family:"Courier New",monospace;background:#13325c;color:#eaf2ff;padding:10px 14px;border-radius:8px;display:inline-block;margin:6px 0;font-size:15px}
+.tag{display:inline-block;background:rgba(29,111,224,.12);color:var(--accent);font-size:12px;padding:2px 8px;border-radius:6px;margin-right:6px}
+/* quiz */
+.q{margin-bottom:18px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:11px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff;transition:.15s;font-size:15px}
+.opt:hover{border-color:var(--accent)}
+.opt.correct{background:rgba(26,158,111,.15);border-color:var(--good);color:var(--good);font-weight:700}
+.opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad);font-weight:700}
+.opt:disabled{cursor:default}
+.q .fb{margin-top:8px;font-size:14px;display:none}
+.q .fb.show{display:block}
+/* cn */
+.cn p{margin-bottom:12px}
+.cn h3{font-size:18px;color:var(--accent);margin:14px 0 8px}
+.cn ul{margin:0 0 12px 22px}
+.cn li{margin-bottom:6px}
+.fact{background:#fff7e6;border-left:4px solid #f0a020;border-radius:0 12px 12px 0;padding:14px 18px;margin:12px 0}
+/* about */
+.about{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.about .avatar{width:84px;height:84px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:42px;flex:none}
+.about .info{flex:1;min-width:240px}
+.about .info p{margin-bottom:8px}
+/* footer */
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+/* responsive */
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;min-width:0;height:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+  .sidebar .brand,.sidebar .sub{width:100%}
+  .nav{display:flex;flex-wrap:wrap;gap:6px}
+  .nav a{margin:0;padding:8px 10px;font-size:13px}
+  .content{padding:20px 16px}
+}
+@media print{
+  .sidebar,#progress,#tip,.play,.spk{display:none!important}
+  body{background:#fff;color:#000}
+  section{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .layout{display:block}
+  .content{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>POLA NEWS</div>
+    <div class="sub">English Science News · B1</div>
+    <nav class="nav">
+      <a href="#reading" class="active"><span class="ic">📖</span>全文阅读</a>
+      <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+      <a href="#patterns"><span class="ic">💬</span>句型练习</a>
+      <a href="#grammar"><span class="ic">📘</span>语法点</a>
+      <a href="#quiz"><span class="ic">✅</span>练习测验</a>
+      <a href="#cn"><span class="ic">🌏</span>知识扩展</a>
+      <a href="#about"><span class="ic">⭐</span>关于本课</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <header class="top">
+      <span class="kicker">📰 Pola's Science News · 2026-08-16</span>
+      <h1>The Demon Cavefish</h1>
+      <div class="meta">
+        <span>🎙️ <b>Pola</b> the Quokka</span>
+        <span>📚 Level: <b>B1</b> (ages 10–12)</span>
+        <span>⏱️ <b>4</b> segments · ~60s</span>
+      </div>
+    </header>
+
+    <!-- 1. READING -->
+    <section id="reading">
+      <h2><span class="num">1</span>全文阅读 · Full Story</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击每段右侧的 <b>▶</b> 按钮听 Pola 朗读（优先播放预生成语音，失败则用浏览器原声）。蓝色虚线词可点击查看释义。</p>
+
+      <div class="seg">
+        <div class="badge">1</div>
+        <div class="txt">Deep under a secret <span class="kw" data-def="军事基地" data-en="a place where soldiers work">army base</span> in America, scientists found a fish that looks like a movie monster! It has no eyes and no color — but in the dark, it <span class="kw" data-def="发出柔和的光" data-en="gives off a soft light">glows</span> a faint blue.</div>
+        <button class="play" data-seg="0" aria-label="Play segment 1">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">2</div>
+        <div class="txt">Meet the Demon <span class="kw" data-def="洞穴鱼：生活在洞穴里、往往没有眼睛的鱼" data-en="a fish that lives in caves">Cavefish</span>! Its science name is <em>Demogorgonichthys arcanus</em>. It lives in Bobcat Cave, deep <span class="kw" data-def="地下的" data-en="below the ground">underground</span>. Scientists watched that cave four times a year for 30 years — but nobody ever saw this tiny fish! It hides far below, where the sun never reaches.</div>
+        <button class="play" data-seg="1" aria-label="Play segment 2">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">3</div>
+        <div class="txt">Here is the cool part. Another blind fish lives in the same pools. They look almost the same, but they are NOT family! Each one lost its eyes on its own, millions of years apart. Scientists call this <span class="kw" data-def="趋同演化：不同物种在相似环境下独立进化出相似特征" data-en="unrelated species evolve similar traits">convergent evolution</span>. It shows that even well-studied places can still hide big surprises.</div>
+        <button class="play" data-seg="2" aria-label="Play segment 3">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">4</div>
+        <div class="txt">That's your Pola News for today! Stay curious and keep exploring — because the greatest <span class="kw" data-def="秘密的；隐藏的" data-en="hidden from others">secrets</span> may be hiding right under our feet. See you next time — bye from Pola! Ha ha!</div>
+        <button class="play" data-seg="3" aria-label="Play segment 4">▶</button>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2><span class="num">2</span>词汇表 · Vocabulary</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">🔊 点击卡片上的喇叭按钮听单词发音。</p>
+      <div class="vgrid">
+        <div class="vcard"><div class="w">cavefish</div><div class="pos">n.</div><div class="zh">洞穴鱼</div><div class="en">a fish that lives in caves, often without eyes</div><button class="spk" data-word="cavefish">🔊</button></div>
+        <div class="vcard"><div class="w">eyeless</div><div class="pos">adj.</div><div class="zh">无眼的</div><div class="en">having no eyes</div><button class="spk" data-word="eyeless">🔊</button></div>
+        <div class="vcard"><div class="w">underground</div><div class="pos">adj./adv.</div><div class="zh">地下的</div><div class="en">below the ground</div><button class="spk" data-word="underground">🔊</button></div>
+        <div class="vcard"><div class="w">glow</div><div class="pos">v.</div><div class="zh">发光</div><div class="en">to give off a soft light</div><button class="spk" data-word="glow">🔊</button></div>
+        <div class="vcard"><div class="w">pigment</div><div class="pos">n.</div><div class="zh">色素</div><div class="en">the natural color in skin, scales, or fur</div><button class="spk" data-word="pigment">🔊</button></div>
+        <div class="vcard"><div class="w">aquifer</div><div class="pos">n.</div><div class="zh">含水层</div><div class="en">a layer of rock or sand that holds water underground</div><button class="spk" data-word="aquifer">🔊</button></div>
+        <div class="vcard"><div class="w">species</div><div class="pos">n.</div><div class="zh">物种</div><div class="en">a group of animals that can have babies together</div><button class="spk" data-word="species">🔊</button></div>
+        <div class="vcard"><div class="w">survey</div><div class="pos">v./n.</div><div class="zh">调查；普查</div><div class="en">to study and count something carefully</div><button class="spk" data-word="survey">🔊</button></div>
+        <div class="vcard"><div class="w">evolution</div><div class="pos">n.</div><div class="zh">演化；进化</div><div class="en">how living things slowly change over a very long time</div><button class="spk" data-word="evolution">🔊</button></div>
+        <div class="vcard"><div class="w">secret</div><div class="pos">adj./n.</div><div class="zh">秘密的；秘密</div><div class="en">hidden from others</div><button class="spk" data-word="secret">🔊</button></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2><span class="num">3</span>句型练习 · Sentence Patterns</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">试着用这些句型造你自己的句子！</p>
+      <div class="pat"><div class="p">① Meet the + [动物]!</div><div class="ex">用于生动地介绍一个新动物。<br>例：<b>Meet the Demon Cavefish!</b>（认识一下恶魔洞穴鱼！）</div></div>
+      <div class="pat"><div class="p">② Its science name is + [学名].</div><div class="ex">用来说明一个物种的拉丁学名。<br>例：<b>Its science name is Demogorgonichthys arcanus.</b></div></div>
+      <div class="pat"><div class="p">③ They look the same, but they are NOT + [关系].</div><div class="ex">表示"看起来像，但其实不是"。<br>例：<b>They look almost the same, but they are NOT family!</b></div></div>
+      <div class="pat"><div class="p">④ Scientists call this + [术语].</div><div class="ex">用来给一个现象命名。<br>例：<b>Scientists call this convergent evolution.</b></div></div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2><span class="num">4</span>语法点 · Grammar</h2>
+      <div class="callout">
+        <h3>现在完成时（Present Perfect）—— 描述"从过去持续到现在"</h3>
+        <p>本课用到：</p>
+        <p><span class="formula">have / has + 过去分词</span></p>
+        <p>文中例句：</p>
+        <p>• <b>Scientists <span style="color:var(--accent)">have watched</span></b> that cave four times a year for 30 years.（科学家已连续 30 年、每年四次观察那个洞穴。）</p>
+        <p>• <b>Nobody <span style="color:var(--accent)">has ever seen</span></b> this tiny fish!（从来没有人见过这条小鱼！）</p>
+        <p style="margin-top:10px"><span class="tag">for + 时间段</span><span class="tag">since + 时间点</span><span class="tag">ever / never</span></p>
+        <p style="margin-top:8px;color:var(--muted);font-size:14px">小提示：当动作从过去开始、一直持续到现在（或强调"经历/结果"）时，用现在完成时，而不是一般过去时。</p>
+      </div>
+      <div class="callout">
+        <h3>对比：连词 but 表示转折</h3>
+        <p><b>They look almost the same, <span style="color:var(--bad)">but</span> they are NOT family!</b></p>
+        <p style="color:var(--muted);font-size:14px">"but" 用来连接两个相反或出人意料的信息，让句子更有故事感。</p>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2><span class="num">5</span>练习测验 · Quiz</h2>
+      <div class="q" data-ans="1">
+        <div class="qt">1. Where was the Demon Cavefish found?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">In a lake in Canada</button>
+          <button class="opt" data-i="1">In a cave under a US army base</button>
+          <button class="opt" data-i="2">On a beach in Australia</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="2">
+        <div class="qt">2. What does the Demon Cavefish look like?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Big, colorful, with bright eyes</button>
+          <button class="opt" data-i="1">Covered in sharp spikes</button>
+          <button class="opt" data-i="2">Small, eyeless, pale, faint blue glow</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">3. The Demon Cavefish and the Southern Cavefish are...</div>
+        <div class="opts">
+          <button class="opt" data-i="0">The same species</button>
+          <button class="opt" data-i="1">Not family, but look alike (convergent evolution)</button>
+          <button class="opt" data-i="2">Brothers from one parent</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="0">
+        <div class="qt">4. Why is the fish hard to find?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">It lives deep underground and the cave was only watched 4× a year</button>
+          <button class="opt" data-i="1">It can fly very fast</button>
+          <button class="opt" data-i="2">It changes color every second</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+    </section>
+
+    <!-- 6. CN EXTENSION -->
+    <section id="cn" class="cn">
+      <h2><span class="num">6</span>中文知识扩展 · 拓展阅读</h2>
+      <h3>🐟 什么是"趋同演化"？</h3>
+      <p>恶魔洞穴鱼和同住一池的"南方洞穴鱼"外表都很苍白、都没有眼睛，看起来一模一样。但科学家用 CT 扫描和 DNA 比对发现：<b>它们根本不是近亲</b>！它们在数百万年间，各自独立地走进了黑暗的地下世界，并各自"关掉"了眼睛、淡化了体色。</p>
+      <p>这种"不同祖先、相似环境、相似结果"的现象，就叫 <b>趋同演化（convergent evolution）</b>。生活中还有好多例子：</p>
+      <ul>
+        <li>蝙蝠和鸟类都长出了翅膀，却不是亲戚；</li>
+        <li>鲨鱼（鱼类）和海豚（哺乳动物）都变成了流线型身体；</li>
+        <li>仙人掌（美洲）和大戟（非洲）都在干旱里变成了"带刺的储水柱"。</li>
+      </ul>
+      <div class="fact">💡 趣味点：洞穴里没有光，眼睛派不上用场；皮肤里的色素在黑暗中也毫无意义。漫长演化中，身体把能量用到了更管用的地方——比如更灵敏的触觉和侧线。</div>
+
+      <h3>🪨 为什么"老地方"还会藏着新物种？</h3>
+      <p>山猫洞（Bobcat Cave）位于美国阿拉巴马州亨茨维尔的<b>红石兵工厂（Redstone Arsenal）</b>地下，这里也是 NASA 火箭研发重镇。科学家<b>每个季度都来调查，坚持了 30 多年</b>，却一直没发现这条小鱼——因为它多数时间躲在地底更深的含水层里，偶尔才游上来。</p>
+      <p>这提醒我们：<b>即便被反复研究的地方，也可能藏着没被发现的生命。</b>保持好奇，永远值得。</p>
+
+      <h3>🌍 它为什么需要保护？</h3>
+      <p>目前这种鱼只在<b>单一洞穴及其含水层</b>里被发现，非常脆弱。地表的农业径流、泥沙，以及历史上军火处理留下的镉、铬、铅等污染物，都可能顺着雨水渗进地下水，威胁它的生存。保护整片地表水源，就是保护这条"小恶魔"。</p>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2><span class="num">7</span>关于本课 · About</h2>
+      <div class="about">
+        <div class="avatar">🦫</div>
+        <div class="info">
+          <p><b>主播：</b>Pola（短尾矮袋鼠 Quokka），实景记者播报。</p>
+          <p><b>英语等级：</b>B1（适合 10–12 岁小朋友）。</p>
+          <p><b>本期主题：</b>地下洞穴里发现的"恶魔洞穴鱼"——眼睛退化、通体透明、活体泛幽蓝微光的新属新种 <em>Demogorgonichthys arcanus</em>。</p>
+          <p><b>核心知识点：</b>趋同演化、洞穴生态、地下水保护。</p>
+          <p><b>日期：</b>2026-08-16</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · 每天一个有趣的英语科学小知识 · 🦫</footer>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Deep under a secret army base in America, scientists found a fish that looks like a movie monster! It has no eyes and no color — but in the dark, it glows a faint blue.",
+  "Meet the Demon Cavefish! Its science name is Demogorgonichthys arcanus. It lives in Bobcat Cave, deep underground. Scientists watched that cave four times a year for 30 years — but nobody ever saw this tiny fish! It hides far below, where the sun never reaches.",
+  "Here is the cool part. Another blind fish lives in the same pools. They look almost the same, but they are NOT family! Each one lost its eyes on its own, millions of years apart. Scientists call this convergent evolution. It shows that even well-studied places can still hide big surprises.",
+  "That's your Pola News for today! Stay curious and keep exploring — because the greatest secrets may be hiding right under our feet. See you next time — bye from Pola! Ha ha!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 测验 ===== */
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans,10);
+  const fb = q.querySelector('.fb');
+  q.querySelectorAll('.opt').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      if(opt.disabled) return;
+      q.querySelectorAll('.opt').forEach(function(o){ o.disabled = true; });
+      const i = parseInt(opt.dataset.i,10);
+      if(i === ans){
+        opt.classList.add('correct');
+        fb.textContent = '✅ 答对了！';
+        fb.style.color = 'var(--good)';
+      }else{
+        opt.classList.add('wrong');
+        const right = q.querySelector('.opt[data-i="'+ans+'"]');
+        if(right) right.classList.add('correct');
+        fb.textContent = '❌ 再想想，正确答案是高亮的那个。';
+        fb.style.color = 'var(--bad)';
+      }
+      fb.classList.add('show');
+    });
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
