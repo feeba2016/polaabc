@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Jane Goodall: Friend of the Chimps — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#16a34a;
+  --accent2:#4ade80;
+  --bg:#f0fdf4;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#bbf7d0;
+  --border:#bbf7d0;
+  --soft:#ecfdf5;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#4ade80);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(22,163,74,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #a7f3d0;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(22,163,74,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,163,74,.55);}70%{box-shadow:0 0 0 12px rgba(22,163,74,0);}100%{box-shadow:0 0 0 0 rgba(22,163,74,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #16a34a;transition:.15s;}
+.kw:hover{background:#86efac;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#86efac;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.culture{background:#ecfdf5;border:2px solid #4ade80;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.culture h3{margin:0 0 8px;color:#15803d;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(22,163,74,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#bbf7d0;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Earth News</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Jane Goodall: Friend of the Chimps</h1>
+      <p class="subtitle">2026年8月20日 · 人物传记｜英国动物学家简·古道尔（Jane Goodall） —— 全文阅读（点黄色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Jane Goodall <span class="kw" data-def="爱">loved</span> animals as a child. She had a toy <span class="kw" data-def="黑猩猩">chimpanzee</span> named Jubilee. She <span class="kw" data-def="梦想">dreamed</span> of going to <span class="kw" data-def="非洲">Africa</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>When Jane was 23, she traveled to Kenya in Africa. A <span class="kw" data-def="科学家">scientist</span> named Louis Leakey gave her a job. In 1960, she went to Tanzania to <span class="kw" data-def="研究">study</span> wild <span class="kw" data-def="黑猩猩">chimpanzees</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>Jane watched the chimpanzees for a long time. She saw them make <span class="kw" data-def="工具">tools</span> with grass to catch termites. She learned that chimps are <span class="kw" data-def="聪明的">smart</span> and have <span class="kw" data-def="感情">feelings</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>Jane started a group called Roots and Shoots to help young people <span class="kw" data-def="保护">protect</span> <span class="kw" data-def="大自然">nature</span>. This is Pola, signing off from POLA NEWS. Bye for now!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="culture">
+        <h3>💡 成长小提示 Growth Tip</h3>
+        <p style="margin:0;font-size:14.5px;">Jane 小时候只是一個喜欢动物的女孩，后来成了改变世界的科学家。她的故事告诉我们：<b>每个大大的梦想，都从小小的好奇心开始</b>。保护动物和大自然，不分年龄——你也可以从今天、从家门口的一只小虫子开始观察。记住：<b>耐心、善良、坚持</b>，是成长最好的朋友！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="chimpanzee">🔊</button><div class="word">chimpanzee<span class="pos">n.</span></div><div class="zh">黑猩猩</div><div class="ex">"Jane studied wild chimpanzees."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scientist">🔊</button><div class="word">scientist<span class="pos">n.</span></div><div class="zh">科学家</div><div class="ex">"Louis Leakey was a scientist."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="Africa">🔊</button><div class="word">Africa<span class="pos">n.</span></div><div class="zh">非洲</div><div class="ex">"She traveled to Africa."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="study">🔊</button><div class="word">study<span class="pos">v.</span></div><div class="zh">研究；学习</div><div class="ex">"She went to study chimps."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="tool">🔊</button><div class="word">tool<span class="pos">n.</span></div><div class="zh">工具</div><div class="ex">"Chimps use a tool to catch termites."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="discover">🔊</button><div class="word">discover<span class="pos">v.</span></div><div class="zh">发现</div><div class="ex">"She discovered chimps are smart."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="protect">🔊</button><div class="word">protect<span class="pos">v.</span></div><div class="zh">保护</div><div class="ex">"We can protect nature."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="nature">🔊</button><div class="word">nature<span class="pos">n.</span></div><div class="zh">大自然</div><div class="ex">"Roots and Shoots helps nature."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. She [loved animals] as a child.</h3>
+          <div class="zh">她小时候[喜欢动物]。"主语 + loved + 名词 + as a child" 用来讲述某人小时候的状态或爱好。loved 是 love 的过去式。</div>
+          <div class="eg">She loved animals as a child.</div>
+          <div class="practice">练习：用 "drew pictures"（画画）→ She <input placeholder="your answer"> as a child.</div>
+        </div>
+        <div class="item">
+          <h3>2. She traveled to [Africa] when she was [23].</h3>
+          <div class="zh">她[23岁]时去了[非洲]。"主语 + traveled to + 地点 + when + 时间" 用来讲过去某时去了某地。traveled 是 travel 的过去式。</div>
+          <div class="eg">She traveled to Africa when she was 23.</div>
+          <div class="practice">练习：用 "China"（中国）→ She traveled to <input placeholder="your answer"> when she was 23.</div>
+        </div>
+        <div class="item">
+          <h3>3. She saw [chimps make tools].</h3>
+          <div class="zh">她看到[黑猩猩制作工具]。"主语 + saw + 宾语 + 动词原形" 表示看到某人/某物做了某事（强调看见动作的全过程）。saw 是 see 的过去式。</div>
+          <div class="eg">She saw chimps make tools with grass.</div>
+          <div class="practice">练习：用 "birds sing"（鸟儿唱歌）→ She saw <input placeholder="your answer"> in the tree.</div>
+        </div>
+        <div class="item">
+          <h3>4. We can [protect nature].</h3>
+          <div class="zh">我们[可以保护自然]。"主语 + can + 动词原形" 表示能够或可以去做某事，can 不随人称变化。</div>
+          <div class="eg">We can protect nature.</div>
+          <div class="practice">练习：用 "help animals"（帮助动物）→ We can <input placeholder="your answer"> every day.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般过去时（讲故事）</h3>
+          <div class="zh">讲 Jane 的成长故事时，动词要用过去式。规则动词加 -ed（love → loved, dream → dreamed, study → studied）；不规则动词要记住：go → went，see → saw，have → had，travel → traveled。</div>
+          <div class="eg">She <b>loved</b> animals. / She <b>went</b> to Tanzania. / She <b>saw</b> chimps make tools.</div>
+        </div>
+        <div class="item">
+          <h3>2. 表示过去的时间状语</h3>
+          <div class="zh">过去时常常搭配时间词，把动作"放到过去"：when she was 23（她23岁时）、in 1960（在1960年）、as a child（小时候）。</div>
+          <div class="eg">She traveled to Africa <b>when she was 23</b>. / She studied chimps <b>in 1960</b>.</div>
+        </div>
+        <div class="item">
+          <h3>3. 情态动词 can（能力 / 允许）</h3>
+          <div class="zh">"can + 动词原形" 表示"能够"或"可以"，不随人称变化（I / you / he / she / we 都用 can）。</div>
+          <div class="eg">We <b>can</b> protect nature. / He <b>can</b> help animals.</div>
+        </div>
+        <div class="item">
+          <h3>4. 名词缩写与代词</h3>
+          <div class="zh">科普文章里常用缩写：chimps = chimpanzees（黑猩猩）的口语写法。they / them 常用来指代前面的黑猩猩，避免重复。</div>
+          <div class="eg">She watched the chimpanzees. <b>They</b> make tools with grass.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>谁是简·古道尔（Jane Goodall）？</h3>
+        <p><b>简·古道尔</b>是英国著名的动物学家，1934 年出生于英国伦敦。她从小就非常喜欢动物，还拥有一个叫 <b>Jubilee（朱比利）</b>的毛绒黑猩猩玩具。长大以后，她真的去了<b>非洲</b>，在<b>坦桑尼亚</b>的贡贝溪（Gombe）国家公园长期观察野生黑猩猩，一待就是几十年。</p>
+
+        <h3>黑猩猩有多聪明？</h3>
+        <p>Jane 最重要的发现是：<b>黑猩猩会制造并使用工具</b>。她看到一只叫 David Greybeard 的黑猩猩，把草茎伸进白蚁丘里"钓"白蚁吃——这打破了"只有人类会用工具"的旧想法。她还发现黑猩猩<b>会吃肉、有个性、有喜怒哀乐</b>。原来，我们和动物之间的相似之处，比想象中多得多。</p>
+
+        <h3>她为自然保护做了什么？</h3>
+        <ul>
+          <li><b>创立"根与芽"（Roots & Shoots）</b>：1991 年，Jane 和一群坦桑尼亚学生发起这个青少年环保项目，现在已遍布全球许多国家，鼓励小朋友从身边小事保护动物和环境。</li>
+          <li><b>写书与演讲</b>：她把黑猩猩的故事讲给全世界听，提醒大家"每个人每天的选择，都会影响地球"。</li>
+          <li><b>尊重每一种生命</b>：她用耐心和善良，让人类重新认识动物朋友。</li>
+        </ul>
+
+        <h3>动手做：你的"自然观察日记"</h3>
+        <p>像 Jane 一样，今天就在家附近观察一种小动物（蚂蚁、小鸟、甚至一只小虫子）。拿一张纸画下它，写下它的颜色、它在做什么，用英语标出今天学的词：<b>chimpanzee（黑猩猩）、scientist（科学家）、study（研究）、nature（大自然）</b>。告诉爸爸妈妈："We can protect nature!" 你也可以是小小的自然科学家！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一个 A2 水平的英文人物小传（Jane Goodall），理解大意。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般过去时、过去时间状语、情态动词 can、名词缩写与代词四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个传记主题核心词汇（chimpanzee, scientist, Africa, study, tool, discover, protect, nature）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>了解 Jane Goodall 的故事：好奇心 + 耐心 = 改变世界。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会尊重动物、保护自然，明白"小朋友也能行动"。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🐾</span><div>做一本"自然观察日记"，用英语标出 chimpanzee / scientist / study / nature。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>用 "We can protect nature!" 和家人分享一个保护自然的小行动。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Jane Goodall: Friend of the Chimps · 2026-08-20 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Jane Goodall loved animals as a child. She had a toy chimpanzee named Jubilee. She dreamed of going to Africa.",
+  "When Jane was 23, she traveled to Kenya in Africa. A scientist named Louis Leakey gave her a job. In 1960, she went to Tanzania to study wild chimpanzees.",
+  "Jane watched the chimpanzees for a long time. She saw them make tools with grass to catch termites. She learned that chimps are smart and have feelings.",
+  "Jane started a group called Roots and Shoots to help young people protect nature. This is Pola, signing off from POLA NEWS. Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where was Jane Goodall born? 简·古道尔出生在哪里？",opts:["England 英国","America 美国","China 中国","France 法国"],ans:0,
+   fb:"Correct! 简·古道尔出生在英国（England），伦敦。"},
+  {q:"What animal did Jane study? 简研究的是什么动物？",opts:["Elephants 大象","Chimpanzees 黑猩猩","Tigers 老虎","Pandas 熊猫"],ans:1,
+   fb:"Yes! 她研究的是黑猩猩（chimpanzees）。"},
+  {q:"How did chimps catch termites? 黑猩猩怎样抓白蚁？",opts:["With water 用水","With fire 用火","With grass (tools) 用草（工具）","With paper 用纸"],ans:2,
+   fb:"Right! 黑猩猩用草茎当工具（with grass / tools）钓白蚁。"},
+  {q:"In which country did she study chimps? 她在哪个国家研究黑猩猩？",opts:["Tanzania 坦桑尼亚","China 中国","India 印度","Japan 日本"],ans:0,
+   fb:"Correct! 她在坦桑尼亚（Tanzania）的贡贝观察黑猩猩。"},
+  {q:"What group did Jane start for young people? 简为青少年创立了什么组织？",opts:["Roots and Shoots 根与芽","Green Peace 绿色和平","World Wild 世界野生","Nature Kids 自然儿童"],ans:0,
+   fb:"Yes! 她创立了 Roots and Shoots（根与芽），鼓励年轻人保护自然。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#15803d';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

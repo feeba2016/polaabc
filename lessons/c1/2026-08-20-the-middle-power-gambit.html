@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Middle Power Gambit — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 国际政治 International Politics</span>
+      <h1 class="title">The Middle Power Gambit</h1>
+      <p class="subtitle">Can states that are neither hegemons nor bystanders build an order of their own? · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Rallying Cry</div>
+            <p>When Canada's prime minister addressed the World Economic Forum on 20 January 2026, he delivered not a policy briefing but a <span class="kw" data-def="宣言；纲领（manifesto；政党或运动公开发表的主张声明。此处强调这篇演讲不是技术性汇报，而是一份带纲领性质的宣言）">manifesto</span>. <span class="kw" data-def="援引；引用（invoke；正式用语，指引述权威文本、法律或先例来支撑自己的论点）">Invoking</span> Václav Havel's 1978 essay <i>The Power of the Powerless</i>, he likened the postwar rules-based order to a greengrocer who displays a slogan nobody believes — a fiction sustained by collective performance. The old order, he insisted, was not coming back; nostalgia was not a strategy.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · A Contested Category</div>
+            <p>His remedy was a coalition of middle powers — states that are neither <span class="kw" data-def="霸权国；主导强国（hegemon；源于希腊语 hēgemōn '领导者'。形容词 hegemonic，名词 hegemony 霸权）">hegemons</span> nor bystanders — organised by <span class="kw" data-def="可变几何（variable geometry；欧盟研究中的术语，指不同成员按议题组成不同深度的合作圈，而非人人参与所有事项）">variable geometry</span>: different coalitions for different issues. Yet the category itself resists definition. Once reserved for Canada, Australia and the Nordic states, it now stretches to Brazil, India and Indonesia, whose interests rarely converge. Were influence a matter of rank alone, such coalitions might <span class="kw" data-def="凝聚；连贯一致（cohere；指各部分结合成有机整体。名词 coherence 连贯性，形容词 coherent）">cohere</span> effortlessly.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Aspiration Meets Architecture</div>
+            <p>Herein lies the <span class="kw" data-def="悖论；看似矛盾之处（paradox；此处指'处境相同却难以共同行动'这一自相矛盾的现象）">paradox</span> the doctrine has yet to resolve. Had shared vulnerability translated automatically into shared action, these states would already have spoken with one voice. Instead, scholars observe that coalitions form more readily around <span class="kw" data-def="部门的；行业的（sectoral；指按经济部门/产业划分的，如能源、农业、数字技术等具体领域）">sectoral</span> advantage than around principle, and that a collective statement frequently fails to <span class="kw" data-def="实现；成为现实（materialise；指原本预期的事物真正出现。常用于 fail to materialise 未能兑现）">materialise</span>. Rhetoric, it seems, aligns more easily than <span class="kw" data-def="架构；建制（architecture；此处为隐喻，指支撑合作的制度性结构，而非建筑学）">architecture</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why It Matters</div>
+            <p>Whether this <span class="kw" data-def="务实的；实用主义的（pragmatic；以实际效果而非原则或理想为准。名词 pragmatism 实用主义）">pragmatic</span> drift is the ceiling of cooperation or merely its floor remains genuinely open. Should middle powers <span class="kw" data-def="使制度化（institutionalise；把临时安排固定为长期制度。此处指把松散联盟变成常设机制）">institutionalise</span> their coalitions, they might yet <span class="kw" data-def="缓和；调和（temper；此处为动词，指削弱某物的强度、使之趋于温和）">temper</span> an era of great-power rivalry; should they not, variable geometry may prove a <span class="kw" data-def="委婉语（euphemism；用悦耳说法替代刺耳事实。此处暗示'可变几何'其实只是'临场应付'的美化说法）">euphemism</span> for improvisation. The question, ultimately, concerns <span class="kw" data-def="能动性；行动主体性（agency；社会科学核心概念，指行为者自主选择与行动的能力，与 structure 结构相对）">agency</span>: can the ostensibly powerless take the sign out of the window? This is Pola News, Advanced English. Read critically.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="manifesto">🔊</button><div class="word">manifesto<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">宣言；纲领（政党、运动或艺术流派公开发表的主张声明；复数 manifestos / manifestoes）</div><div class="ex">"he delivered not a policy briefing but a manifesto."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="invoke">🔊</button><div class="word">invoke<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">援引；诉诸（引述权威文本、法律、先例以支撑论点；学术写作高频动词）</div><div class="ex">"Invoking Václav Havel's 1978 essay The Power of the Powerless..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hegemon">🔊</button><div class="word">hegemon<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">霸权国；主导强国（源自希腊语 hēgemōn "领导者"；hegemony 霸权，hegemonic 霸权的）</div><div class="ex">"states that are neither hegemons nor bystanders."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cohere">🔊</button><div class="word">cohere<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">凝聚；前后一致（各部分结合为有机整体；coherence 连贯性，coherent 有条理的）</div><div class="ex">"Were influence a matter of rank alone, such coalitions might cohere effortlessly."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="paradox">🔊</button><div class="word">paradox<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">悖论；似非而是的矛盾（形容词 paradoxical；学术论证中常用于点出核心张力）</div><div class="ex">"Herein lies the paradox the doctrine has yet to resolve."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="materialise">🔊</button><div class="word">materialise<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">实现；成为现实（美式拼写 materialize；固定搭配 fail to materialise 未能兑现）</div><div class="ex">"a collective statement frequently fails to materialise."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sectoral">🔊</button><div class="word">sectoral<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">部门的；行业的（按经济部门划分的，如能源、农业、数字技术；名词 sector）</div><div class="ex">"coalitions form more readily around sectoral advantage than around principle."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pragmatic">🔊</button><div class="word">pragmatic<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">务实的；实用主义的（以实际效果而非理想或原则为准；名词 pragmatism）</div><div class="ex">"Whether this pragmatic drift is the ceiling of cooperation or merely its floor..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="institutionalise">🔊</button><div class="word">institutionalise<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">使制度化（把临时安排固定为长期制度；美式拼写 institutionalize）</div><div class="ex">"Should middle powers institutionalise their coalitions..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="euphemism">🔊</button><div class="word">euphemism<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">委婉语（用悦耳说法替代刺耳事实；形容词 euphemistic。修辞分析题高频词）</div><div class="ex">"variable geometry may prove a euphemism for improvisation."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [Subject] delivered / offered not [A] but [B].</h3>
+          <div class="zh">"某人给出的不是 A，而是 B。" not... but... 的平行对比可在一句之内完成"降低预期—再抬高"的修辞落差，是评论性写作（commentary）开篇定调的利器。注意 A 与 B 词性必须对等。</div>
+          <div class="eg">"He delivered not a policy briefing but a manifesto."</div>
+          <div class="practice">练习：用 "the report / a neutral summary / an indictment" → The report offered <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Herein lies the [paradox / tension / difficulty] that [clause].</h3>
+          <div class="zh">"问题的症结就在这里：……" herein（在此）置于句首触发全倒装（lies + 主语），把抽象名词 paradox / tension 推到句末的信息焦点位置。这是学术论文"点出核心张力"的标志性句式。</div>
+          <div class="eg">"Herein lies the paradox the doctrine has yet to resolve."</div>
+          <div class="practice">练习：用 "tension / the policy cannot address" → Herein lies the <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. Had [X] [past participle], [Y] would (already) have [past participle].</h3>
+          <div class="zh">"倘若 X 当初……，Y 早就已经……了。" 省略 if 并将 had 提前的虚拟语气倒装，用来构造"反事实（counterfactual）"，暗示现实恰恰相反——是驳论段最优雅的开场方式。</div>
+          <div class="eg">"Had shared vulnerability translated automatically into shared action, these states would already have spoken with one voice."</div>
+          <div class="practice">练习：用 "the warning / be heeded / the crisis / be averted" → Had the warning <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. Whether [A] or merely [B] remains an open question.</h3>
+          <div class="zh">"究竟是 A 还是仅仅是 B，仍无定论。" whether...or... 引导主语从句，谓语用 remains，刻意悬置判断（suspended judgement）。学术写作中这是"审慎"（hedging）的高分表现，避免绝对化断言。</div>
+          <div class="eg">"Whether this pragmatic drift is the ceiling of cooperation or merely its floor remains genuinely open."</div>
+          <div class="practice">练习：用 "a turning point / a temporary pause" → Whether the agreement marks <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. Should [X] [verb], they might yet [verb]; should they not, [consequence].</h3>
+          <div class="zh">"若 X 做到……，或许仍能……；若做不到，则……。" should 倒装表示"万一/倘若"，两个分句以分号对称并置，构成一组条件分岔（bifurcation）。适合结论段权衡两种未来。might yet 意为"仍有可能"，语气克制。</div>
+          <div class="eg">"Should middle powers institutionalise their coalitions, they might yet temper an era of great-power rivalry; should they not, variable geometry may prove a euphemism for improvisation."</div>
+          <div class="practice">练习：用 "cities / invest early / avert the worst / act too late" → Should cities <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟条件句的三种倒装（Inverted conditionals: Were / Had / Should）</h3>
+          <div class="zh">正式书面语中可省略 if，把 were / had / should 提到主语之前。本课三种齐备：<b>Were</b> influence a matter of rank alone...（与现在事实相反）；<b>Had</b> shared vulnerability translated...（与过去事实相反）；<b>Should</b> middle powers institutionalise...（表示较小可能的将来）。<b>注意：</b>倒装虚拟句不能用 didn't / hadn't 缩写，否定须写作 <i>Were it not for...</i> / <i>Had it not been for...</i>。</div>
+          <div class="eg">"Were influence a matter of rank alone, such coalitions might cohere effortlessly." / "Had shared vulnerability translated automatically into shared action, these states would already have spoken with one voice."</div>
+        </div>
+        <div class="item">
+          <h3>2. 副词前置引发的全倒装（Full inversion after Herein / Therein）</h3>
+          <div class="zh">herein、therein、thereby、hence 等"here/there + 介词"的正式副词置于句首时，句子须全倒装：<b>Herein lies the paradox</b>（= The paradox lies herein）。全倒装（动词先于主语）只在主语为名词短语时成立；若主语是代词则不倒装。此结构把重要信息推到句末，形成"末端焦点（end-focus）"。</div>
+          <div class="eg">"Herein lies the paradox the doctrine has yet to resolve."</div>
+        </div>
+        <div class="item">
+          <h3>3. 破折号插入同位语（Em-dash appositive）</h3>
+          <div class="zh">用一对 em-dash 把定义性同位语"夹"在名词之后，比括号正式、比 which 从句紧凑：<b>middle powers — states that are neither hegemons nor bystanders —</b>。这是学术英语"先抛术语、立即定义"的标准手法。请与第 1 段 <b>a greengrocer who displays a slogan nobody believes — a fiction sustained by collective performance</b> 中的单破折号（追加解释）对照：成对表插入，单个表延伸。</div>
+          <div class="eg">"His remedy was a coalition of middle powers — states that are neither hegemons nor bystanders — organised by variable geometry."</div>
+        </div>
+        <div class="item">
+          <h3>4. 名词化与抽象对立（Nominalisation as argument）</h3>
+          <div class="zh">高阶学术英语常把整个论点压缩成两个抽象名词的对立：<b>Rhetoric</b> aligns more easily than <b>architecture</b>（言辞 vs 建制）、<b>the ceiling</b> vs <b>the floor</b>（上限 vs 下限）、<b>agency</b> vs structure（能动性 vs 结构）。动词/形容词转名词后（improvise → <b>improvisation</b>，vulnerable → <b>vulnerability</b>，aspire → <b>aspiration</b>）句子密度骤增——这正是雅思阅读长句难懂的根源，也是写作提分的关键。</div>
+          <div class="eg">"Rhetoric, it seems, aligns more easily than architecture."</div>
+        </div>
+        <div class="item">
+          <h3>5. 修辞性设问 + 插入语缓和（Rhetorical question &amp; hedging parentheticals）</h3>
+          <div class="zh">结尾以冒号引出不作回答的设问，把论述交还读者：<b>The question, ultimately, concerns agency: can the ostensibly powerless take the sign out of the window?</b> 同时注意本课密集使用的插入性缓和语——<b>it seems</b>、<b>ultimately</b>、<b>genuinely</b>、<b>arguably</b>、<b>ostensibly</b>（表面上）。这类 hedging 让论断显得审慎而非武断，是 7 分以上写作的分水岭。</div>
+          <div class="eg">"The question, ultimately, concerns agency: can the ostensibly powerless take the sign out of the window?"</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本期是<b>国际政治（International Politics）</b>栏目，解析 2026 年国际关系学界最热的一场概念辩论：<b>"中等强国"（middle powers）能否从口头宣示走向真正的制度建设</b>。</p>
+        <ul>
+          <li><b>演讲事实：</b>2026 年 1 月 20 日，加拿大总理马克·卡尼（Mark Carney）在瑞士达沃斯世界经济论坛（WEF）发表演讲，称当前局势是"<b>一场断裂，而非一次过渡</b>"（a rupture, not a transition），并说"旧秩序不会回来了……<b>怀旧不是战略</b>"（Nostalgia is not a strategy）。</li>
+          <li><b>哈维尔的比喻：</b>卡尼援引捷克剧作家、后任总统<b>瓦茨拉夫·哈维尔（Václav Havel）</b>1978 年的著名论文《<b>无权者的权力</b>》（<i>The Power of the Powerless</i>）。文中那位蔬果店老板每天在橱窗挂上自己并不相信的标语，只为"免生麻烦、表示顺从"；因为人人如此，体制才得以维系。哈维尔称之为"<b>活在谎言中</b>"（living within a lie）——而当有一个人把标语摘下，幻象就开始出现裂缝。</li>
+          <li><b>"可变几何"（variable geometry）：</b>卡尼提出的合作方式——"<b>不同议题组成不同联盟</b>"（different coalitions for different issues），而非要求所有国家在所有事务上一致行动。该术语原本来自欧盟一体化研究。</li>
+          <li><b>什么是"中等强国"：</b>指既非超级大国、也非小国的国家。传统上指加拿大、澳大利亚、北欧国家等；如今这一标签也被用于巴西、印度、印度尼西亚等——而这些国家的利益并不天然重合，这正是概念的争议点。</li>
+        </ul>
+        <div class="box">🧭 <b>权威出处：</b>演讲原文见 Politico、The Independent、Il Sole 24 Ore 等媒体全文转载（2026-01-20）；学理批评见 <i>Oxford Political Review</i>「Beyond the Carney Moment: Middle Powers at a Juncture」（2026-08-16）与海牙战略研究中心（HCSS）报告《Breakdown of the International Order? Strategic Options for Small and Middle Powers》。本课所有引文与事实均据此提炼，<b>尊重史实，未做篡改</b>。</div>
+
+        <h3>二、核心学术争论：从"中等强国"到"关键强国"</h3>
+        <p>本课第 2、3 段所指的学界分歧，是当前 IR（国际关系）理论的前沿：</p>
+        <ul>
+          <li><b>中等强国路径（middle power）</b>——按<b>地位（status）</b>定义：一个国家在国际等级中处于中间位置，因此有共同处境、应当联合。</li>
+          <li><b>关键强国路径（pivotal power）</b>——按<b>功能（function）</b>定义：由伦敦大学学院（UCL）繁荣研究所相关学者提出，主张一国是否"关键"取决于它对<b>特定问题</b>是否不可或缺。因此一国可能在气候治理上是关键强国，在数字治理上却不是。</li>
+        </ul>
+        <p>这一分歧直击第 3 段的悖论：<b>处境相同（shared vulnerability）并不自动生成共同行动（shared action）</b>。HCSS 报告归纳出四种战略选项——① 维护现有秩序、② 建立议题联盟、③ 在阵营间平衡、④ 打破体系——并认为对中小国家而言，<b>第 ② 项最为可行</b>。</p>
+
+        <h3>三、历史坐标：中等强国外交的经典案例</h3>
+        <p>"中等强国"并非新概念。最常被引用的原型是<b>1956 年苏伊士运河危机</b>中，加拿大时任外长<b>莱斯特·皮尔逊（Lester Pearson）</b>促成组建<b>联合国第一支维和部队</b>，为冲突方提供体面的退场机制，并因此获得 1957 年诺贝尔和平奖。这确立了"中等强国作为<b>创造性中介（creative broker）</b>"的范式。另一个常被引用的当代例证是《<b>全面与进步跨太平洋伙伴关系协定</b>》（CPTPP）——在美国退出后，由澳大利亚、日本等国推动而得以存续，被视为"没有霸权国也能维持的多边安排"。</p>
+
+        <h3>四、写作视角：如何读懂"悬置判断"的学术姿态</h3>
+        <p>请注意本文<b>刻意不给结论</b>：第 4 段用 "remains genuinely open"（仍无定论）、"might yet"（或许仍能）、"may prove"（可能被证明是）等表达，把判断交还读者。这在学术英语中称为 <b>hedging（缓和／审慎表达）</b>。中国考生写作时常见的失分点恰恰相反——过度使用 "must"、"undoubtedly"、"all people"，显得武断。<b>本课整篇即是一套 hedging 语料库</b>，值得逐句摘抄。</p>
+
+        <h3>五、内容合规与立场说明</h3>
+        <p>本课聚焦<b>国际关系理论概念（中等强国、可变几何、能动性）与公开演讲文本的语言分析</b>，属学术性、语言学习性质的解读，<b>立场中立客观</b>，不评判任何国家的具体政策，不涉及敏感政治争议。所有事实均引自公开可核查的媒体全文与智库报告，<b>尊重历史事实，不歪曲、不篡改</b>。涉及主权与领土表述时，一律使用规范名称：台湾称"<b>中国台湾</b>"、香港称"<b>中国香港</b>"、澳门称"<b>中国澳门</b>"，三者均为中国不可分割的一部分。</p>
+
+        <h3>六、对雅思/托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>国际政治与社科类文章高频出现 manifesto, invoke, hegemon, cohere, paradox, materialise, sectoral, pragmatic, institutionalise, euphemism 等 C1–C2 词，且大量使用虚拟倒装（Were / Had / Should）、全倒装（Herein lies...）、破折号同位语。本课即微型精读训练。</li>
+          <li><b>写作 Task 2 / 独立写作：</b>用 "<i>Herein lies the paradox that...</i>" 点出核心张力；用 "<i>Had [X] [done], [Y] would already have [done]</i>" 构造反事实驳论；用 "<i>Whether [A] or merely [B] remains an open question</i>" 收束——比 "In conclusion, I think..." 高出一个档次。</li>
+          <li><b>口语 Part 3 / 独立口语：</b>被问到国际合作、全球问题时，可用本课框架作答：<b>提出主张（the rallying cry）→ 界定概念的争议（a contested category）→ 指出理想与现实的落差（aspiration vs architecture）→ 悬置判断（an open question）</b>。层次清晰，且自带高级词汇。</li>
+          <li><b>常见陷阱：</b>本课测验第 5、6 题考"作者态度"与"修辞意图"。这类题目答案通常<b>既不是全盘赞同、也不是全盘否定</b>，而是"承认其意义，同时指出未解难题"——记住这个套路。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 国际政治／社科核心词（manifesto, invoke, hegemon, cohere, paradox, materialise, sectoral, pragmatic, institutionalise, euphemism）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是 "Herein lies the paradox that..." 与 "Whether [A] or merely [B] remains an open question"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>系统掌握虚拟条件句的三种倒装（Were / Had / Should），并能在写作中主动使用。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>识别并模仿学术英语的 hedging（审慎表达）策略，避免武断化写作。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语就"国际合作为何难以落实"作出四段式结构化论述。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听 Dacey 的自然英语朗读（本系列使用英文音色），跟读时注意重音：man-i-FES-to, in-VOKE, HE-ge-mon, co-HERE, PAR-a-dox, ma-TE-ri-a-lise, sec-TO-ral（亦作 SEC-to-ral）, prag-MAT-ic, in-sti-TU-tion-al-ise, EU-phe-mism。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音，用每个词各造一个国际关系类句子（参考句型练习）。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：The Rallying Cry → A Contested Category → Aspiration Meets Architecture → An Open Question。用 "not [A] but [B]" 定调、"Herein lies..." 点题、"Should... ; should they not..." 权衡两种未来。</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做测验时先读题干再定位原文；态度题（attitude）与推理题（inference）的正确选项往往是"<b>肯定其价值 + 保留其疑问</b>"的双面表述，纯褒或纯贬的选项通常是干扰项。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Middle Power Gambit · 2026-08-20 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "When Canada's prime minister addressed the World Economic Forum on 20 January 2026, he delivered not a policy briefing but a manifesto. Invoking Vaclav Havel's 1978 essay The Power of the Powerless, he likened the postwar rules-based order to a greengrocer who displays a slogan nobody believes — a fiction sustained by collective performance. The old order, he insisted, was not coming back; nostalgia was not a strategy.",
+  "His remedy was a coalition of middle powers — states that are neither hegemons nor bystanders — organised by variable geometry: different coalitions for different issues. Yet the category itself resists definition. Once reserved for Canada, Australia and the Nordic states, it now stretches to Brazil, India and Indonesia, whose interests rarely converge. Were influence a matter of rank alone, such coalitions might cohere effortlessly.",
+  "Herein lies the paradox the doctrine has yet to resolve. Had shared vulnerability translated automatically into shared action, these states would already have spoken with one voice. Instead, scholars observe that coalitions form more readily around sectoral advantage than around principle, and that a collective statement frequently fails to materialise. Rhetoric, it seems, aligns more easily than architecture.",
+  "Whether this pragmatic drift is the ceiling of cooperation or merely its floor remains genuinely open. Should middle powers institutionalise their coalitions, they might yet temper an era of great-power rivalry; should they not, variable geometry may prove a euphemism for improvisation. The question, ultimately, concerns agency: can the ostensibly powerless take the sign out of the window? This is Pola News, Advanced English. Read critically."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the primary purpose of this passage? 这篇文章的主要写作目的是什么？",opts:["To celebrate a successful new alliance of middle powers","To examine the middle-power doctrine and the gap between its rhetoric and its institutional reality","To provide a biography of Václav Havel","To argue that small states should always obey great powers"],ans:1,
+   fb:"Correct. 文章先介绍中等强国主张（第 1–2 段），再指出「言辞易统一、建制难落地」的落差（第 3 段），最后悬置判断（第 4 段）。核心是「审视这一主张」，而非庆祝或否定。"},
+  {q:"2. In paragraph 4, the word 「euphemism」 most nearly means: 第 4 段中 euphemism 最接近的意思是？",opts:["a technical term used only by specialists","a mild or flattering expression used in place of a harsher truth","a mathematical formula","a formal written agreement"],ans:1,
+   fb:"Yes. euphemism = 委婉语，用悦耳说法替代刺耳事实。文中说 variable geometry「may prove a euphemism for improvisation」，即「可变几何」可能只是「临场应付」的美化说法。"},
+  {q:"3. What can be INFERRED from the greengrocer comparison in paragraph 1? 从第 1 段的蔬果店老板类比可以推断出什么？",opts:["Most diplomats used to work in grocery shops","An order can persist because states publicly perform belief in rules they privately doubt","Slogans in shop windows are illegal in Canada","The rules-based order was created by Václav Havel in 1978"],ans:1,
+   fb:"Correct. 哈维尔笔下的老板挂上自己并不相信的标语以「免生麻烦」；类比义即：旧秩序之所以延续，靠的是各国公开配合演出、而非真心信服——文中称之为「a fiction sustained by collective performance」。"},
+  {q:"4. According to paragraph 2, why is the category 「middle power」 problematic? 根据第 2 段，「中等强国」这一范畴为何存在问题？",opts:["Because no country has ever accepted the label","Because it now covers states such as Brazil, India and Indonesia, whose interests rarely converge","Because it applies only to the Nordic states","Because it was invented at Davos in January 2026"],ans:1,
+   fb:"Yes. 文中明确指出该标签「once reserved for Canada, Australia and the Nordic states」，如今扩展到巴西、印度、印度尼西亚，而这些国家「interests rarely converge」（利益少有重合）——范畴过宽故难界定。"},
+  {q:"5. The author's attitude towards the middle-power doctrine is best described as: 作者对中等强国主张的态度最准确的描述是？",opts:["wholly enthusiastic and uncritical","openly contemptuous and dismissive","sympathetic to its diagnosis yet sceptical about its execution","completely indifferent to the outcome"],ans:2,
+   fb:"Correct. 作者认真对待其诊断（第 1–2 段中性陈述），但用「the paradox the doctrine has yet to resolve」「fails to materialise」「may prove a euphemism」表达对执行力的怀疑；结尾仍留有 might yet 的余地。既不全盘赞同，也不全盘否定。"},
+  {q:"6. Why does the author end with a question rather than a conclusion? 作者为何以设问而非结论收尾？",opts:["Because the author could not find enough information","To signal that the issue of agency remains genuinely unresolved and to invite the reader's judgement","Because rhetorical questions are required in all news reports","To suggest that middle powers have already failed completely"],ans:1,
+   fb:"Right. 结尾的修辞设问呼应第 4 段的「remains genuinely open」，属学术写作的 hedging（审慎表达）：把「无权者能否摘下橱窗标语」这一能动性问题交还读者，而非武断作答。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

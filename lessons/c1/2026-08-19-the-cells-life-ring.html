@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Cell's Life Ring — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 前沿科技 Tech Frontier</span>
+      <h1 class="title">The Cell's Life Ring</h1>
+      <p class="subtitle">How AI-designed proteins give living cells a memory that grows like tree rings · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Dream</div>
+            <p>Biologists have long dreamt of reading a single cell's biography — its full diary of molecular events, not a mere snapshot. A study in <i>Nature</i> on 3 March 2026, led by Dingchang Lin at Johns Hopkins University with Nobel laureate David Baker, introduces GEMINI, a platform that endows living cells with microscopic "memory" that grows like <span class="kw" data-def="年轮；树木每年新增的同心环。此处比喻 GEMINI 在细胞内记录的荧光同心环，可像数年轮一样'读出'时间">tree rings</span>. Where conventional methods capture only a static endpoint, GEMINI records an entire history within one particle.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Mechanism</div>
+            <p>At its core sits a computationally designed protein assembly — a <span class="kw" data-def="支架；骨架（此处指 GEMINI 的蛋白'支架亚基'，由计算设计而非进化产生）">scaffold</span> built not by evolution but by algorithm. As the cell meets stimuli, so-called reporter subunits are produced and woven into the granule as concentric, fluorescent rings. A researcher later "reads" the particle under a microscope, much as one counts a tree's rings, to <span class="kw" data-def="查明；确定（ascertain；此处指通过年轮式结构确定'发生了什么、何时发生'）">ascertain</span> what happened and, crucially, when. Because the assembly grows <span class="kw" data-def="各向同性的（isotropic；指从各个方向看结构相同，故信号可从任意角度读取，减少对细胞的机械干扰）">isotropically</span>, the signal is <span class="kw" data-def="解读；解码（decode；此处指把荧光环图案还原成细胞事件的时间线）">decoded</span> from any angle, sparing the cell the stress of earlier linear recorders.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Precision & Proof</div>
+            <p>The <span class="kw" data-def="分辨率（resolution；此处指记录时间的精确度，可达小时级）">resolution</span> is <span class="kw" data-def="前所未有的；空前的（unprecedented；指此前没有任何细胞内记录器达到这种精度）">unprecedented</span>. In validation, 75.9% of single-particle readings fell within one hour of the true time, 98.2% within two, and all within three. The system even distinguished events spaced a mere fifteen minutes apart. Deployed in living mouse brains, GEMINI traced NF-κB signalling — a master switch of inflammation — revealing the spatial <span class="kw" data-def="异质性（heterogeneity；指同一组织内不同位置反应不同，GEMINI 揭示了炎症信号的空间差异）">heterogeneity</span> of tissue responses with negligible effect on neurons, and <span class="kw" data-def="赋予；带来（confer；此处指 GEMINI 为神经科学'带来'一种高精度工具）">conferring</span> upon neuroscience a tool of remarkable <span class="kw" data-def="时空的（spatiotemporal；同时关于空间与时间的，GEMINI 同时在空间与时间里定位细胞事件）">spatiotemporal</span> precision.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why It Matters</div>
+            <p>GEMINI does more than refine technique; it shifts the <span class="kw" data-def="范式（paradigm；库恩式科学'典范'，此处指研究生命的方式发生根本转变）">paradigm</span> of how we study life. By compressing a cell's narrative into a readable artefact, it lets us replay disease as it unfolds, rather than infer it from fragments. Yet such power invites scrutiny: if a cell's private history can be recorded and decoded, who owns that biological memory? Each breakthrough reconfigures not only science but the ethics that must keep pace. This is Pola News, Advanced English. Read closely — and read responsibly.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="paradigm">🔊</button><div class="word">paradigm<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">范式；典范（库恩《科学革命的结构》中的"paradigm"，指一个领域共享的认知框架）</div><div class="ex">"GEMINI does more than refine technique; it shifts the paradigm of how we study life."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scaffold">🔊</button><div class="word">scaffold<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">支架；骨架（原指建筑脚手架；结构生物/工程中指支撑性框架结构）</div><div class="ex">"a scaffold built not by evolution but by algorithm."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="isotropic">🔊</button><div class="word">isotropic<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">各向同性的（物理/材料学术语；指性质不随方向改变，故可从任意角度读取信号）</div><div class="ex">"Because the assembly grows isotropically, the signal is decoded from any angle."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="spatiotemporal">🔊</button><div class="word">spatiotemporal<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">时空的（同时关涉空间与时间两个维度的；神经科学/地理信息常用词）</div><div class="ex">"conferring upon neuroscience a tool of remarkable spatiotemporal precision."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="heterogeneity">🔊</button><div class="word">heterogeneity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">异质性；差异性（heterogeneous 的名词；指群体内部各不相同，与 homogeneity 相对）</div><div class="ex">"revealing the spatial heterogeneity of tissue responses."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="resolution">🔊</button><div class="word">resolution<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">分辨率；清晰度（此处指记录时间的精确度，可达小时级）</div><div class="ex">"The resolution is unprecedented."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="decode">🔊</button><div class="word">decode<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">解读；解码（把编码信息还原为原意；此处把荧光环图案还原成细胞事件时间线）</div><div class="ex">"the signal is decoded from any angle."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="unprecedented">🔊</button><div class="word">unprecedented<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">前所未有的；空前的（precedent = 先例；un- 无 + precedent + -ed）</div><div class="ex">"The resolution is unprecedented."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ascertain">🔊</button><div class="word">ascertain<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">查明；确定（比 find out 更正式，常用于调查、法律、学术语境）</div><div class="ex">"...to ascertain what happened and, crucially, when."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="confer">🔊</button><div class="word">confer<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">赋予；带来（confer sth upon sb；正式用语，指把荣誉/特性/优势给予某物）</div><div class="ex">"conferring upon neuroscience a tool of remarkable spatiotemporal precision."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [X] does more than [verb]; it shifts the paradigm of how we [Y].</h3>
+          <div class="zh">"X 不只是……，它改变了我们 [Y] 的范式。" 用 does more than + 动词 制造"不止于表面"的递进，再用 shifts the paradigm 把论点提升到"范式转移"层面，是科技类写作的高分收束句。</div>
+          <div class="eg">"GEMINI does more than refine technique; it shifts the paradigm of how we study life."</div>
+          <div class="practice">练习：用 "this method / accelerate computing / understand memory" → This method <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Where [conventional method] [does A], [new method] [does B].</h3>
+          <div class="zh">"当 [旧方法] 只能 A 时，[新方法] 却能 B。" where 引导对比状语从句，凸显新旧方法的张力，是方法类论文引言的经典句式（compare-and-contrast）。</div>
+          <div class="eg">"Where conventional methods capture only a static endpoint, GEMINI records an entire history within one particle."</div>
+          <div class="practice">练习：用 "old surveys / measure output / the sensor / track process in real time" → Where old surveys <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. A researcher can later [verb] [X], much as one [verb] [Y], to [purpose].</h3>
+          <div class="zh">"研究者之后可以 [动词] X，正如人们 [动词] Y 一样，从而 [目的]。" much as 引导类比从句，用熟悉事物（数年轮）解释陌生机制，提升可读性与说服力。</div>
+          <div class="eg">"A researcher later 'reads' the particle under a microscope, much as one counts a tree's rings, to ascertain what happened and, crucially, when."</div>
+          <div class="practice">练习：用 "scan the sample / read a barcode / identify the specimen" → A researcher can later scan the sample, <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. Yet such power invites scrutiny: if [X] can be [done], who [owns/decides] [Y]?</h3>
+          <div class="zh">"然而这种力量引发审视：如果 X 可以被 [做到]，那么谁 [拥有/决定] Y？" 冒号后接"if 条件 + who 修辞设问"，把技术论述自然转向伦理，是科技写作的升华套路。</div>
+          <div class="eg">"Yet such power invites scrutiny: if a cell's private history can be recorded and decoded, who owns that biological memory?"</div>
+          <div class="practice">练习：用 "genetic data / be stored / controls access" → Yet such power invites scrutiny: if genetic data can be stored, <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. Each breakthrough reconfigures not only [A] but [B] that must keep pace.</h3>
+          <div class="zh">"每一项突破不仅重塑 A，也重塑必须与之同步的 B。" not only... but... that 引导定语从句，强调技术对制度/伦理的连带改变，呼应"科技与治理同频"。</div>
+          <div class="eg">"Each breakthrough reconfigures not only science but the ethics that must keep pace."</div>
+          <div class="practice">练习：用 "the model / the law / govern it" → Each breakthrough reconfigures not only <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 倒装句（Inversion for emphasis）</h3>
+          <div class="zh">把地点/方位状语置于句首，引发"系动词 + 主语"倒装，制造文学重音与画面感：<b>At its core sits a computationally designed protein assembly</b>（= A computationally designed protein assembly sits at its core）。科技与学术写作中，倒装常用于突出新事物的核心构造。</div>
+          <div class="eg">"At its core sits a computationally designed protein assembly — a scaffold built not by evolution but by algorithm."</div>
+        </div>
+        <div class="item">
+          <h3>2. 分词短语作状语（Reduced participial phrases）</h3>
+          <div class="zh">把被动/进行状语从句压缩为分词短语，提升学术密度：<b>Deployed in living mouse brains</b>（= When it was deployed）、<b>Built not by evolution but by algorithm</b>（= which was built）。这是去"主谓啰嗦"的关键技巧，也是雅思阅读长句的高频结构。</div>
+          <div class="eg">"Deployed in living mouse brains, GEMINI traced NF-κB signalling ... with negligible effect on neurons."</div>
+        </div>
+        <div class="item">
+          <h3>3. 破折号插入解释（Em-dash appositive / parenthesis）</h3>
+          <div class="zh">用一对 em-dash 把解释性同位语"夹"在名词之后，比括号正式、比 which 从句紧凑：<b>NF-κB signalling — a master switch of inflammation —</b>。科技文常用此结构"先抛术语，立即注解"，请与文段中 GEMINI 的破折号用法对照。</div>
+          <div class="eg">"GEMINI traced NF-κB signalling — a master switch of inflammation — revealing the spatial heterogeneity of tissue responses."</div>
+        </div>
+        <div class="item">
+          <h3>4. 修辞性设问 + 条件句（Rhetorical question & conditional）</h3>
+          <div class="zh">以 <b>if... can be... , who... ?</b> 的"条件 + 设问"结构收束，把技术论述转向伦理而不自答，引发读者思考：<b>"if a cell's private history can be recorded and decoded, who owns that biological memory?"</b> 修辞设问不期待回答，是 7 分以上写作的标志。</div>
+          <div class="eg">"Yet such power invites scrutiny: if a cell's private history can be recorded and decoded, who owns that biological memory?"</div>
+        </div>
+        <div class="item">
+          <h3>5. 名词化（Nominalization）</h3>
+          <div class="zh">把动词/形容词变为抽象名词以提升密度与客观性：resolve → <b>resolution</b>、heterogeneous → <b>heterogeneity</b>、signal → <b>signalling</b>、decode（动作）→ 名词化后融入术语 <b>spatiotemporal precision</b>。学术英语的"压缩"本领即在于此——本课核心概念几乎全是名词化产物。</div>
+          <div class="eg">"The <b>resolution</b> is unprecedented" / "revealing the spatial <b>heterogeneity</b> of tissue responses."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本期是<b>前沿科技（Tech Frontier）</b>栏目，解读一篇发表于《自然》（<i>Nature</i>）的突破性论文。核心内容：科学家用<b>计算设计的蛋白质"记忆装置"</b>给活细胞装上"生命年轮"——GEMINI，能以<b>小时级精度</b>记录单个细胞经历过的事件史。</p>
+        <ul>
+          <li><b>论文与团队：</b>论文题为 <i>Genetically encoded assembly recorder temporally resolves cellular history</i>，2026 年 3 月 3 日发表于 <i>Nature</i>。通讯/主导者为约翰·霍普金斯大学（Johns Hopkins University）的 <b>Dingchang Lin（林鼎昌）</b>团队，合作者包括<b>大卫·贝克（David Baker）</b>——2024 年诺贝尔化学奖得主，以"计算蛋白质设计"闻名（华盛顿大学蛋白质设计研究所）。</li>
+          <li><b>GEMINI 是什么：</b>全称 <b>Granularly Expanding Memory for Intracellular Narrative Integration</b>（细胞内叙事整合的颗粒扩展记忆）。它是一个由<b>计算设计的蛋白质组装体</b>构成的细胞内记录平台。</li>
+          <li><b>怎么工作（比喻）：</b>细胞遇到信号时，会产生"报告亚基"并被编入不断生长的颗粒，形成一圈圈<b>荧光同心环</b>，如同树木年轮。研究者之后在显微镜下"数年轮"，即可还原"发生了什么、何时发生"。</li>
+          <li><b>精度数字（关键事实）：</b>验证中，<b>75.9%</b> 的单颗粒读数与真实时间误差在 ±1 小时内，<b>98.2%</b> 在 ±2 小时内，<b>100%</b> 在 ±3 小时内；系统甚至能区分<b>仅相隔 15 分钟</b>的连续事件。</li>
+        </ul>
+        <div class="box">🧭 <b>权威出处：</b>《自然》期刊（Nature, 2026-03-03）原始论文；中文报道可参见澎湃新闻等对该论文的详细解读（含 GEMINI 三组分结构、精度验证、小鼠脑内实验等）。本课所有数据（75.9% / 98.2% / 100% / 15 分钟）与机制描述均据此提炼，<b>尊重原典，未做篡改</b>。</div>
+
+        <h3>二、为什么"各向同性（isotropic）"很重要？</h3>
+        <p>早期细胞内记录器多为<b>线性（linear）组装体</b>，会像一根棍子一样干扰细胞膜、挤压细胞，且只能从一个方向读取。GEMINI 改用<b>颗粒状、各向同性生长</b>的结构——从一维拓展到三维，且比细胞更小——极大减少机械干扰；又因为"各向同性"，无论从哪个角度都能准确读取信号，为大规模自动化分析铺平道路。这是它相较旧技术的<b>革命性优势</b>。</p>
+
+        <h3>三、它验证了什么真实生理过程？</h3>
+        <p>GEMINI 不仅在试管里有效，还被表达在<b>活体小鼠大脑</b>中：它对神经元存活与功能影响极小，却能记录 <b>NF-κB</b> 信号（免疫与炎症的"总开关"）的动态，并揭示与局部血管密度相关的<b>空间异质性（spatial heterogeneity）</b>。这意味着未来研究学习、记忆、神经疾病时，可以"回放"特定神经元在特定时段的活动史。</p>
+
+        <h3>四、技术之外的思考（考试常考的"科技伦理"角度）</h3>
+        <p>文章第 4 段提出一个<b>修辞性伦理追问</b>：如果细胞的"私人历史"能被记录和解读，那么这段<b>生物记忆归谁所有</b>？这呼应了更广阔的命题——基因数据、健康数据的<b>隐私与归属权</b>。雅思/托福写作 Task 2 常考"科技与伦理是否同步"类话题，本课即一套微型论据库。</p>
+
+        <h3>五、内容合规与立场说明</h3>
+        <p>本课聚焦<b>自然科学研究方法与国际顶刊论文</b>的科普解读，所有事实均引自公开学术资料，立场客观、尊重科学事实，<b>不涉及任何敏感政治话题</b>。涉及主权与领土表述时，一律使用规范名称：台湾称"<b>中国台湾</b>"、香港称"<b>中国香港</b>"、澳门称"<b>中国澳门</b>"，均为中国不可分割的一部分。该话题安全，适合作为雅思/托福备考素材。</p>
+
+        <h3>六、对雅思/托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>科学类文章高频出现 paradigm, scaffold, isotropic, spatiotemporal, heterogeneity, resolution, decode, unprecedented, ascertain, confer 等 C1–C2 词，且多用倒装（At its core sits...）、分词短语（Deployed in...）、破折号插入。本课即微型训练。</li>
+          <li><b>写作 Task 2 / 独立写作：</b>用 "<i>[X] does more than refine technique; it shifts the paradigm of how we [Y]</i>" 升华论点；用 "<i>Where conventional methods [A], [new method] [B]</i>" 作对比；用 "<i>if [X] can be done, who owns [Y]?</i>" 转向伦理——这是 7 分以上的关键。</li>
+          <li><b>听力/口语：</b>用英语讲解一项新技术时，结构建议：研究动机（the dream）→ 机制（the mechanism）→ 精度验证（precision & proof）→ 意义与伦理（why it matters），最清晰有条理。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 科技/学术核心词（paradigm, scaffold, isotropic, spatiotemporal, heterogeneity, resolution, decode, unprecedented, ascertain, confer）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是 "[X] does more than [verb]; it shifts the paradigm of how we [Y]" 与 "if [X] can be [done], who owns [Y]?"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解倒装句、分词短语、破折号插入、修辞性设问、名词化等高级语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语对一项前沿技术作"动机—机制—验证—意义/伦理"的结构化概述。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>熟悉雅思/托福阅读与写作中常见的"科学突破"话题框架。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听 Dacey 的自然英语朗读（本系列使用英文音色），跟读时注意重音（PAR-a-digm, SCaf-fold, i-so-TRO-pic, spa-tio-TEM-po-ral, he-ter-o-ge-NE-i-ty, res-o-LU-tion, de-CODE, un-PRE-ce-dent-ed, as-CER-tain, con-FER）。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音，用每个词各造一个科技类句子（参考句型练习）。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：The Dream → The Mechanism → Precision & Proof → Why It Matters. 用 "does more than... shifts the paradigm" 收束、"if... who owns...?" 转向伦理拿高分。</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做测验时先读题干再定位原文；推理题（inference）答案通常不出现原词而是同义改写（如 isotropic ≈ "decoded from any angle / same in all directions"）。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Cell's Life Ring · 2026-08-19 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Biologists have long dreamt of reading a single cell's biography — its full diary of molecular events, not a mere snapshot. A study in Nature on 3 March 2026, led by Dingchang Lin at Johns Hopkins University with Nobel laureate David Baker, introduces GEMINI, a platform that endows living cells with microscopic memory that grows like tree rings. Where conventional methods capture only a static endpoint, GEMINI records an entire history within one particle.",
+  "At its core sits a computationally designed protein assembly — a scaffold built not by evolution but by algorithm. As the cell meets stimuli, so-called reporter subunits are produced and woven into the granule as concentric, fluorescent rings. A researcher later reads the particle under a microscope, much as one counts a tree's rings, to ascertain what happened and, crucially, when. Because the assembly grows isotropically, the signal is decoded from any angle, sparing the cell the stress of earlier linear recorders.",
+  "The resolution is unprecedented. In validation, 75.9% of single-particle readings fell within one hour of the true time, 98.2% within two, and all within three. The system even distinguished events spaced a mere fifteen minutes apart. Deployed in living mouse brains, GEMINI traced NF-kappa-B signalling — a master switch of inflammation — revealing the spatial heterogeneity of tissue responses with negligible effect on neurons, and conferring upon neuroscience a tool of remarkable spatiotemporal precision.",
+  "GEMINI does more than refine technique; it shifts the paradigm of how we study life. By compressing a cell's narrative into a readable artefact, it lets us replay disease as it unfolds, rather than infer it from fragments. Yet such power invites scrutiny: if a cell's private history can be recorded and decoded, who owns that biological memory? Each breakthrough reconfigures not only science but the ethics that must keep pace. This is Pola News, Advanced English. Read closely — and read responsibly."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the primary purpose of this passage? 这篇文章的主要写作目的是什么？",opts:["To summarise the plot of a novel","To introduce a Nature study that gives cells a tree-ring-like memory and reflect on its significance","To argue that all previous cell-recording methods were useless","To teach readers how to win a Nobel Prize"],ans:1,
+   fb:"Correct. 文章核心是'介绍 GEMINI 这项研究（给细胞装上如年轮般的记忆）并反思其意义'——第 4 段明确把它上升到 paradigm shift 与伦理层面。"},
+  {q:"2. In paragraph 3, 'isotropically' most nearly means: 第 3 段中 isotropically 最接近的意思是？",opts:["in a random and chaotic manner","equally in all directions, so the signal can be read from any angle","only from the top surface","at a very high temperature"],ans:1,
+   fb:"Yes. isotropic = 各向同性（性质不随方向改变）。文中说 'the assembly grows isotropically, the signal is decoded from any angle'，即结构从各方向看一致，故信号可从任意角度读取。"},
+  {q:"3. What can be INFERRED about the 'tree rings' analogy? 关于"年轮"这个比喻，可以推断出什么？",opts:["Cells literally become trees","The concentric fluorescent rings let researchers read a cell's event history in chronological order, like counting a tree's rings","The rings are made of wood","Tree rings are used to power the microscope"],ans:1,
+   fb:"Correct. 比喻义是：GEMINI 形成的荧光同心环，如同树木年轮，可让研究者在显微镜下'读出'细胞事件的发生顺序与时间。"},
+  {q:"4. According to the passage, which statement about GEMINI's precision is TRUE? 根据文章，关于 GEMINI 精度哪项为真？",opts:["100% of readings were exact to the second","75.9% fell within one hour, 98.2% within two, and all within three hours","It could not tell apart events less than an hour apart","Only 50% of readings were usable"],ans:1,
+   fb:"Yes. 文中验证数据：75.9% 在 ±1 小时内，98.2% 在 ±2 小时内，100% 在 ±3 小时内；且能区分相隔仅 15 分钟的事件。"},
+  {q:"5. The author's tone toward GEMINI is best described as: 作者对 GEMINI 的态度最准确描述是？",opts:["dismissive and unimpressed","alarmed and opposed","admiring of the science yet alert to its ethical implications","indifferent and bored"],ans:2,
+   fb:"Correct. 作者赞赏其科学突破（'unprecedented'、'shifts the paradigm'），同时以 'Yet such power invites scrutiny' 警觉其伦理含义，态度是欣赏且审慎的。"},
+  {q:"6. The final rhetorical question ('who owns that biological memory?') implies that: 结尾的修辞设问（'谁拥有那段生物记忆？'）暗示了什么？",opts:["The memory belongs to the microscope","Breakthroughs in recording cell histories raise unresolved questions of privacy and ownership","David Baker personally owns all cell memories","No one should study cells at all"],ans:1,
+   fb:"Right. 设问指向'记录细胞历史的能力'所引发的隐私与归属权问题——呼应第 4 段 'the ethics that must keep pace'，是科技伦理类考题的典型推理点。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — Living Circuit Boards: Bacteria as Transistors</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#0d9488;
+  --bg:#f5f7fa;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eef4f8;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#60a5fa);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #cfe0f2;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #2563eb;transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Tech Frontier</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Living Circuit Boards: Bacteria as Transistors</h1>
+      <p class="subtitle">活体"电路板"：细菌变身晶体管 ｜ 全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Hook</div>
+            <p>For decades, computers have relied on silicon <span class="kw" data-def="晶体管，电子电路中控制电流通断的基本开关元件">transistors</span> to process information. Now, MIT engineers have reimagined the machine itself — by turning living <span class="kw" data-def="细菌（bacterium 的复数），单细胞微生物">bacteria</span> into switches that can compute.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · How it works</div>
+            <p>Using a common plant <span class="kw" data-def="细菌（单数），这里指作为底盘的微生物物种">bacterium</span>, Pantoea agglomerans, the researchers built two types of "biological <span class="kw" data-def="晶体管，这里指可执行开关功能的活细胞">transistors</span>." Each can be switched on or off by a <span class="kw" data-def="化学信号，由分子携带、在细胞间传递的信息">chemical signal</span>. Three additional bacterial strains act as <span class="kw" data-def="中继菌株；像电路中的导线一样把信号传递给下游">relays</span>, passing molecular messages between cells. Printed onto <span class="kw" data-def="琼脂，培养皿中让细菌生长的凝固胶状培养基">agar</span> in a <span class="kw" data-def="培养皿，实验室里盛放培养基的浅圆玻璃/塑料皿">Petri dish</span>, the colonies form living "circuit boards" that perform real <span class="kw" data-def="逻辑运算，如与/或/非等布尔计算">logic operations</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Why it matters</div>
+            <p>The largest circuit — a 24-colony <span class="kw" data-def="加法器，把两路输入信号相加的电路">adder</span> — can sum two inputs. Others function as OR gates or <span class="kw" data-def="解复用器，把一路输入按控制信号送往不同输出的电路">demultiplexers</span>. Crucially, changing the layout rewires the circuit without altering a single gene, demonstrating that simple cells, properly linked, can scale into complex <span class="kw" data-def="计算，这里特指生物计算（biological computing）">computation</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Outlook</div>
+            <p>Such living computers are slow — one calculation takes about eight hours. Yet for plants, which operate over days and seasons, speed matters less. Coating roots with bacterial circuits could let crops sense <span class="kw" data-def="干旱，长期缺水的气候状况">drought</span> or disease and respond on their own. "We're not trying to replace computers," says lead scientist Christopher Voigt, "but to give biology its own computational control."</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="transistor">🔊</button><div class="word">transistor<span class="pos">n.</span></div><div class="zh">晶体管（电子开关元件）</div><div class="ex">"A transistor acts as a switch in an electronic circuit."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reimagine">🔊</button><div class="word">reimagine<span class="pos">v.</span></div><div class="zh">重新构想；重新设想</div><div class="ex">"The team reimagined the computer as a living system."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="relay">🔊</button><div class="word">relay<span class="pos">v./n.</span></div><div class="zh">中继；转送（信号）</div><div class="ex">"Three strains relay signals between the transistors."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="diffusion">🔊</button><div class="word">diffusion<span class="pos">n.</span></div><div class="zh">扩散；弥漫</div><div class="ex">"Molecular diffusion carries messages between colonies."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reconfigure">🔊</button><div class="word">reconfigure<span class="pos">v.</span></div><div class="zh">重新配置；重新布局</div><div class="ex">"Changing the layout reconfigures the circuit."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scalable">🔊</button><div class="word">scalable<span class="pos">adj.</span></div><div class="zh">可扩展的；可伸缩的</div><div class="ex">"Simple cells prove scalable into complex computation."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="drought">🔊</button><div class="word">drought<span class="pos">n.</span></div><div class="zh">干旱；旱灾</div><div class="ex">"Bacterial circuits could detect drought in crops."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="demonstrate">🔊</button><div class="word">demonstrate<span class="pos">v.</span></div><div class="zh">证明；展示；表明</div><div class="ex">"The study demonstrates that living cells can compute."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bidirectional">🔊</button><div class="word">bidirectional<span class="pos">adj.</span></div><div class="zh">双向的；双向进行的</div><div class="ex">"A bidirectional switch sends signals two ways."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="organism">🔊</button><div class="word">organism<span class="pos">n.</span></div><div class="zh">生物体；有机体</div><div class="ex">"A single living organism can host computation."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Were [subject] + adjective, [main clause with might/could].</h3>
+          <div class="zh">与现在事实相反的虚拟语气倒装（省去 if）：把 were 提到句首，相当于 "If such circuits were faster..."。语气更正式、书面。</div>
+          <div class="eg">Were such circuits faster, they might replace conventional computers.</div>
+          <div class="practice">练习：用 "the bacteria cheaper / they could be used everywhere" → <input placeholder="your answer">, they could be used everywhere.</div>
+        </div>
+        <div class="item">
+          <h3>2. [Past participle phrase], + [main clause].</h3>
+          <div class="zh">过去分词短语作状语：Printed onto agar... 发生在主句动作之前，修饰主语 the colonies，相当于 "After they were printed onto agar..."。</div>
+          <div class="eg">Printed onto agar in a Petri dish, the colonies form living circuit boards.</div>
+          <div class="practice">练习：用 "engineered from a plant bacterium / the cells act as switches" → <input placeholder="your answer">, the cells act as switches.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Clause], + demonstrating that [clause].</h3>
+          <div class="zh">现在分词作结果状语：demonstrating 紧跟主句，表示"从而证明……"，是学术英语常用的高级收尾写法。</div>
+          <div class="eg">Changing the layout rewires the circuit, demonstrating that simple cells can scale.</div>
+          <div class="practice">练习：用 "the study linked five strains / it proved living cells can compute" → The study linked five strains, <input placeholder="your answer"> living cells can compute.</div>
+        </div>
+        <div class="item">
+          <h3>4. Only by [gerund phrase] + could + [subject] + [verb].</h3>
+          <div class="zh">Only + 状语置于句首引起部分倒装：助动词 could 提到主语前。强调"唯有通过……才能……"。</div>
+          <div class="eg">Only by linking simple cells could researchers achieve complex computation.</div>
+          <div class="practice">练习：用 "by changing the layout / we rewrite the circuit" → <input placeholder="your answer"> we rewrite the circuit without altering a gene.</div>
+        </div>
+        <div class="item">
+          <h3>5. [Noun], which [non-restrictive clause], + [main clause].</h3>
+          <div class="zh">非限制性定语从句（逗号 + which）补充说明先行词，去掉不影响主句意思，使信息更紧凑。</div>
+          <div class="eg">Pantoea agglomerans, which commonly grows on plants, was used as the base organism.</div>
+          <div class="practice">练习：用 "the relay strains / pass signals between cells" → The relay strains, <input placeholder="your answer">, pass signals between cells.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气倒装（Inverted subjunctive）</h3>
+          <div class="zh">当条件句含 were / had / should 时可省略 if，把动词提到主语前，是 B2 高级正式写法，表示与事实相反的假设。</div>
+          <div class="eg">Were such circuits faster, they might replace conventional computers.</div>
+        </div>
+        <div class="item">
+          <h3>2. 过去分词作状语（Past participle as adverbial）</h3>
+          <div class="zh">过去分词短语放在句首，表示被动或已完成的动作，修饰主句主语。科技说明文中常用于描述"被处理/被打印"的对象。</div>
+          <div class="eg">Printed onto agar in a Petri dish, the colonies form living circuit boards.</div>
+        </div>
+        <div class="item">
+          <h3>3. 非限制性定语从句（Non-restrictive relative clause）</h3>
+          <div class="zh">用 which / who 引导，前后加逗号，补充说明名词；即使删去，主句意思依然完整。让长句信息分层更清晰。</div>
+          <div class="eg">Pantoea agglomerans, <b>which commonly grows on plants</b>, was used as the base organism.</div>
+        </div>
+        <div class="item">
+          <h3>4. 现在分词作结果状语（Present participle result clause）</h3>
+          <div class="zh">主句之后用 doing 结构，表示自然产生的结果，相当于 "and this demonstrates that..."。是学术写作里优雅的"收尾"手段。</div>
+          <div class="eg">Changing the layout rewires the circuit, <b>demonstrating</b> that simple cells can scale.</div>
+        </div>
+        <div class="item">
+          <h3>5. 倒装句 · Only + 状语前置（Fronted inversion）</h3>
+          <div class="zh">"Only by / Only when + 状语"放在句首，主句需部分倒装（助动词提前）。强调达成结果唯一依赖的方式。</div>
+          <div class="eg">Only by linking simple cells <b>could researchers</b> achieve complex computation.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>把"细胞"变成一块芯片，是怎么做到的？</h3>
+        <p>传统电子计算机靠<strong>硅晶体管（transistor）</strong>工作：一个晶体管就是一个能在"开/关"之间切换的微小开关，几十亿个开关组合在一起，才完成计算。2026 年 8 月，麻省理工学院（MIT）生物工程系 Christopher Voigt 团队在《自然·化学生物学》（Nature Chemical Biology）发表研究，反其道而行——他们用<strong>活的细菌</strong>当开关，把"计算"直接装进了生命系统。</p>
+
+        <h3>五种"积木"，拼出生物电路</h3>
+        <p>研究团队选了一种常在植物表面生长的细菌<strong>聚团泛菌（Pantoea agglomerans）</strong>，把它改造成两类"生物晶体管"：一类被特定分子（OC-6）激活，另一类被它关闭。两类晶体管都能"感知"另一种分子（OC-12）是否存在，并据此释放输出分子 OHC-14。此外，还有三种菌株充当<strong>中继（relays）</strong>，把 OHC-14 信号"翻译"成下游晶体管能识别的化学语言——就像电子电路里连接芯片的导线。</p>
+        <ul>
+          <li><strong>怎么"连线"？</strong>用声学点样仪把菌落打印在铺有<strong>琼脂（agar）</strong>的<strong>培养皿（Petri dish）</strong>上，相邻菌落间隔约 5 毫米。化学信号靠<strong>分子扩散（diffusion）</strong>只传给最近的邻居，信息于是单向流动，不会乱窜。</li>
+          <li><strong>能算什么？</strong>论文展示了多输入逻辑门（multi-input）、或门（OR）、蕴含门（imply），以及解复用器（demultiplexer）。最大的一个电路是<strong>加法器（adder）</strong>，由 24 个菌落相连，能把两路输入"相加"。</li>
+        </ul>
+
+        <h3>这项研究真正的巧妙之处</h3>
+        <p>过去合成生物学有个老难题：把太多功能塞进<strong>同一个细胞</strong>，会让细胞的蛋白质合成机器超载，不同生物元件之间还会互相干扰（"串扰"）。MIT 的解法是——<strong>不在一个细胞里造整机，而是把细胞当成一个个晶体管</strong>，再用不同布局把它们拼起来。论文的核心洞见是：只要改变菌落在平板上的<strong>空间布局</strong>，就能重布线（reconfigure）出不同电路，<strong>完全不必改动任何基因</strong>。这意味着五类简单细胞，通过组合就能"扩展（scalable）"成复杂运算。</p>
+
+        <h3>慢，但够用：生物计算的速度账单</h3>
+        <p>必须诚实地说：生物电路<strong>极慢</strong>。一个计算大约要 <strong>8 小时</strong>，而电子计算机完成同类操作是纳秒（十亿分之一秒）级。但 Voigt 的观点很清醒——"我们不是要取代计算机"。植物以小时、天、整个生长季为时间尺度运行，对作物来说，8 小时完全在可接受范围内。</p>
+
+        <h3>它能在哪派上用场？</h3>
+        <ul>
+          <li><strong>智慧农业</strong>：把细菌电路涂在作物根系或叶片上，让植物自己"感知"干旱、虫害或病害信号，并就地触发反应——例如检测到胁迫后自动合成杀菌剂，相当于给植物装了一套<strong>去中心化的免疫系统</strong>。</li>
+          <li><strong>环境传感</strong>：无需电池与芯片，直接在生物环境中做就地检测与响应，适用于难以布设电子设备的场景。</li>
+        </ul>
+
+        <h3>一点背景与边界</h3>
+        <p>这项研究部分由美国国防高级研究计划局（DARPA）与情报高级研究计划局（IARPA）资助，体现了合成生物学在"活体计算"方向上的前沿探索。需要指出的是，它目前仍是<strong>实验室原理验证</strong>，离真正田间应用还有距离；速度、稳定性与大规模"打印"的一致性，都是下一步要啃的硬骨头。对学习者而言，理解"把生命系统本身当作计算平台"这一思想，比追逐某一篇论文的标题更重要。</p>
+        <p>补充视角：在合成生物学这一战略领域，中国也在积极布局（如在基因线路、人工细胞、生物制造等方向持续投入），全球范围内相关研究与产业竞争正同步加速。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标（B2 中高级）</h3>
+        <div class="goal"><span class="ic">🌟</span><div>了解生物计算（synthetic biology / biological computing）前沿：MIT 如何用细菌构建"活体电路板"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 CEFR B2 核心学术词汇（transistor, reimagine, relay, diffusion, reconfigure, scalable, drought, demonstrate, bidirectional, organism）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会虚拟语气倒装（Were...）、过去/现在分词作状语、非限制性定语从句、Only 倒装等高级句型。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>辨析生物电路与传统电子电路的异同，理解"模块化、改布局即重布线"的设计思想。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立批判性视角：区分"实验室原理验证"与"成熟应用"，理性看待技术突破。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读英文朗读，模仿学术英语的语调与停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，并用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>仿写两个虚拟语气倒装句（Were...）与一句 Only 倒装句，体会正式书面语感。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div>读"中文知识扩展"，再用自己的话用英文概括生物电路的三个核心创新。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English · Living Circuit Boards: Bacteria as Transistors · 2026-08-19</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "For decades, computers have relied on silicon transistors to process information. Now, MIT engineers have reimagined the machine itself — by turning living bacteria into switches that can compute.",
+  "Using a common plant bacterium, Pantoea agglomerans, the researchers built two types of biological transistors. Each can be switched on or off by a chemical signal. Three additional bacterial strains act as relays, passing molecular messages between cells. Printed onto agar in a Petri dish, the colonies form living circuit boards that perform real logic operations.",
+  "The largest circuit — a 24-colony adder — can sum two inputs. Others function as OR gates or demultiplexers. Crucially, changing the layout rewires the circuit without altering a single gene, demonstrating that simple cells, properly linked, can scale into complex computation.",
+  "Such living computers are slow — one calculation takes about eight hours. Yet for plants, which operate over days and seasons, speed matters less. Coating roots with bacterial circuits could let crops sense drought or disease and respond on their own. We're not trying to replace computers, says lead scientist Christopher Voigt, but to give biology its own computational control."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What is the main function of a biological transistor in the circuit? 生物晶体管在电路里的主要作用是什么？",opts:["To store genetic information 储存遗传信息","To act as a switch controlled by chemical signals 作为受化学信号控制的开关","To produce energy for the bacteria 为细菌产能","To repair damaged DNA 修复受损 DNA"],ans:1,
+   fb:"Correct! 生物晶体管由化学信号（如 OC-6）控制开关，在电路里充当'开关'。"},
+  {q:"Which bacterium did the researchers use as the base organism? 研究者用作底盘的是哪种细菌？",opts:["E. coli 大肠杆菌","Pantoea agglomerans 聚团泛菌","Streptococcus 链球菌","Bacillus subtilis 枯草芽孢杆菌"],ans:1,
+   fb:"Right! 用的是常见于植物表面的聚团泛菌（Pantoea agglomerans）。"},
+  {q:"How do the bacterial colonies communicate with one another? 细菌菌落之间如何传递信息？",opts:["Through electrical wires 通过电线","Through Wi-Fi signals 通过 Wi-Fi","Through molecular diffusion between colonies 通过菌落间的分子扩散","Through sound waves 通过声波"],ans:2,
+   fb:"Yes! 菌落之间通过分子扩散（molecular diffusion）传递化学信号。"},
+  {q:"What can the largest circuit, made of 24 colonies, do? 由 24 个菌落组成的最大电路能做什么？",opts:["It can photosynthesize 进行光合作用","It can add two inputs together 把两路输入相加","It can move on its own 自行移动","It can cure plant disease 治愈植物病害"],ans:1,
+   fb:"Correct! 最大的电路是一个'加法器'（adder），可把两路输入相加。"},
+  {q:"Why might the circuit's slow speed (about 8 hours per calculation) not matter for plants? 为什么约 8 小时一次计算的速度对植物来说可能无所谓？",opts:["Plants don't need computation 植物不需要计算","Plants operate over hours, days, and seasons 植物以小时、天、生长季为尺度运行","The bacteria speed up at night 细菌夜间加速","Plants are immune to time 植物不受时间影响"],ans:1,
+   fb:"Right! 植物的时间尺度很长，8 小时对它完全够用。"},
+  {q:"According to Christopher Voigt, what is the goal of this research? 据 Voigt 所说，这项研究的目标是什么？",opts:["To replace all computers with bacteria 用细菌取代所有计算机","To give biology its own computational control 让生物拥有自己的计算控制能力","To make computers out of silicon 用硅造计算机","To eliminate electronics entirely 彻底消灭电子设备"],ans:1,
+   fb:"Yes! Voigt 说'我们不是要取代计算机，而是要把计算控制能力引入生物学。'"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

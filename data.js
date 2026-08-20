@@ -1615,6 +1615,23 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-20",
+    "title": "The Glowing Twilight Zone",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-20-the-glowing-twilight-zone",
+    "url": "lessons/b1/2026-08-20-the-glowing-twilight-zone.html",
+    "vocab": [
+      {
+        "word": "midwater",
+        "zh": "水母",
+        "ex": "用来制造神秘感，开启一个隐藏的世界。<br>例：<b>Deep in the ocean, there is a twilight zone!</b>（海洋深处，有一片暮光带！）"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -1825,6 +1842,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-08-20",
+    "title": "My Birthday Party",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-20-my-birthday-party",
+    "url": "lessons/a1/2026-08-20-my-birthday-party.html",
+    "vocab": [
+      {
+        "word": "cake",
+        "zh": "蛋糕",
+        "ex": "\"This is my cake.\""
+      },
+      {
+        "word": "candle",
+        "zh": "蜡烛",
+        "ex": "\"The candle is small.\""
+      },
+      {
+        "word": "friend",
+        "zh": "朋友",
+        "ex": "\"This is my friend.\""
+      },
+      {
+        "word": "present",
+        "zh": "礼物",
+        "ex": "\"I have a present.\""
+      },
+      {
+        "word": "balloon",
+        "zh": "气球",
+        "ex": "\"The balloon is red.\""
+      },
+      {
+        "word": "happy",
+        "zh": "开心的",
+        "ex": "\"I am happy.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -2029,6 +2088,110 @@ const EPISODES = [
         "word": "seed",
         "zh": "种子",
         "ex": "\"The box was full of seeds.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-19",
+    "title": "Holi Festival of Colors",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-19-holi-festival-of-colors",
+    "url": "lessons/a2/2026-08-19-holi-festival-of-colors.html",
+    "vocab": [
+      {
+        "word": "festival",
+        "zh": "节日",
+        "ex": "\"Holi is a happy festival.\""
+      },
+      {
+        "word": "celebrate",
+        "zh": "庆祝",
+        "ex": "\"We celebrate Holi in spring.\""
+      },
+      {
+        "word": "colorful",
+        "zh": "多彩的；色彩缤纷的",
+        "ex": "\"They use colorful powder.\""
+      },
+      {
+        "word": "powder",
+        "zh": "粉末",
+        "ex": "\"People throw colored powder.\""
+      },
+      {
+        "word": "spring",
+        "zh": "春天",
+        "ex": "\"Holi comes in spring.\""
+      },
+      {
+        "word": "friend",
+        "zh": "朋友",
+        "ex": "\"Friends play together.\""
+      },
+      {
+        "word": "together",
+        "zh": "一起",
+        "ex": "\"We sing together.\""
+      },
+      {
+        "word": "throw",
+        "zh": "抛；撒（过去式 threw）",
+        "ex": "\"They throw water at friends.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-20",
+    "title": "Jane Goodall Friend of Chimps",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-20-jane-goodall-friend-of-chimps",
+    "url": "lessons/a2/2026-08-20-jane-goodall-friend-of-chimps.html",
+    "vocab": [
+      {
+        "word": "chimpanzee",
+        "zh": "黑猩猩",
+        "ex": "\"Jane studied wild chimpanzees.\""
+      },
+      {
+        "word": "scientist",
+        "zh": "科学家",
+        "ex": "\"Louis Leakey was a scientist.\""
+      },
+      {
+        "word": "Africa",
+        "zh": "非洲",
+        "ex": "\"She traveled to Africa.\""
+      },
+      {
+        "word": "study",
+        "zh": "研究；学习",
+        "ex": "\"She went to study chimps.\""
+      },
+      {
+        "word": "tool",
+        "zh": "工具",
+        "ex": "\"Chimps use a tool to catch termites.\""
+      },
+      {
+        "word": "discover",
+        "zh": "发现",
+        "ex": "\"She discovered chimps are smart.\""
+      },
+      {
+        "word": "protect",
+        "zh": "保护",
+        "ex": "\"We can protect nature.\""
+      },
+      {
+        "word": "nature",
+        "zh": "大自然",
+        "ex": "\"Roots and Shoots helps nature.\""
       }
     ]
   },
@@ -2277,6 +2440,68 @@ const EPISODES = [
         "word": "insufficient",
         "zh": "不足的；不够的",
         "ex": "\"evidence insufficient to prove the claim\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-19",
+    "title": "Living Circuit Boards Bacteria as Transistors",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-19-living-circuit-boards-bacteria-as-transistors",
+    "url": "lessons/b2/2026-08-19-living-circuit-boards-bacteria-as-transistors.html",
+    "vocab": [
+      {
+        "word": "transistor",
+        "zh": "晶体管（电子开关元件）",
+        "ex": "\"A transistor acts as a switch in an electronic circuit.\""
+      },
+      {
+        "word": "reimagine",
+        "zh": "重新构想；重新设想",
+        "ex": "\"The team reimagined the computer as a living system.\""
+      },
+      {
+        "word": "relay",
+        "zh": "中继；转送（信号）",
+        "ex": "\"Three strains relay signals between the transistors.\""
+      },
+      {
+        "word": "diffusion",
+        "zh": "扩散；弥漫",
+        "ex": "\"Molecular diffusion carries messages between colonies.\""
+      },
+      {
+        "word": "reconfigure",
+        "zh": "重新配置；重新布局",
+        "ex": "\"Changing the layout reconfigures the circuit.\""
+      },
+      {
+        "word": "scalable",
+        "zh": "可扩展的；可伸缩的",
+        "ex": "\"Simple cells prove scalable into complex computation.\""
+      },
+      {
+        "word": "drought",
+        "zh": "干旱；旱灾",
+        "ex": "\"Bacterial circuits could detect drought in crops.\""
+      },
+      {
+        "word": "demonstrate",
+        "zh": "证明；展示；表明",
+        "ex": "\"The study demonstrates that living cells can compute.\""
+      },
+      {
+        "word": "bidirectional",
+        "zh": "双向的；双向进行的",
+        "ex": "\"A bidirectional switch sends signals two ways.\""
+      },
+      {
+        "word": "organism",
+        "zh": "生物体；有机体",
+        "ex": "\"A single living organism can host computation.\""
       }
     ]
   },
@@ -2587,6 +2812,130 @@ const EPISODES = [
         "word": "reconfigure",
         "zh": "重新配置；重构（此处指每个时代都按自身焦虑重塑 Frankenstein 的意涵）",
         "ex": "\"Each age reconfigures Frankenstein to its own dread.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-19",
+    "title": "The Cell's Life Ring",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-19-the-cells-life-ring",
+    "url": "lessons/c1/2026-08-19-the-cells-life-ring.html",
+    "vocab": [
+      {
+        "word": "paradigm",
+        "zh": "范式；典范（库恩《科学革命的结构》中的\"paradigm\"，指一个领域共享的认知框架）",
+        "ex": "\"GEMINI does more than refine technique; it shifts the paradigm of how we study life.\""
+      },
+      {
+        "word": "scaffold",
+        "zh": "支架；骨架（原指建筑脚手架；结构生物/工程中指支撑性框架结构）",
+        "ex": "\"a scaffold built not by evolution but by algorithm.\""
+      },
+      {
+        "word": "isotropic",
+        "zh": "各向同性的（物理/材料学术语；指性质不随方向改变，故可从任意角度读取信号）",
+        "ex": "\"Because the assembly grows isotropically, the signal is decoded from any angle.\""
+      },
+      {
+        "word": "spatiotemporal",
+        "zh": "时空的（同时关涉空间与时间两个维度的；神经科学/地理信息常用词）",
+        "ex": "\"conferring upon neuroscience a tool of remarkable spatiotemporal precision.\""
+      },
+      {
+        "word": "heterogeneity",
+        "zh": "异质性；差异性（heterogeneous 的名词；指群体内部各不相同，与 homogeneity 相对）",
+        "ex": "\"revealing the spatial heterogeneity of tissue responses.\""
+      },
+      {
+        "word": "resolution",
+        "zh": "分辨率；清晰度（此处指记录时间的精确度，可达小时级）",
+        "ex": "\"The resolution is unprecedented.\""
+      },
+      {
+        "word": "decode",
+        "zh": "解读；解码（把编码信息还原为原意；此处把荧光环图案还原成细胞事件时间线）",
+        "ex": "\"the signal is decoded from any angle.\""
+      },
+      {
+        "word": "unprecedented",
+        "zh": "前所未有的；空前的（precedent = 先例；un- 无 + precedent + -ed）",
+        "ex": "\"The resolution is unprecedented.\""
+      },
+      {
+        "word": "ascertain",
+        "zh": "查明；确定（比 find out 更正式，常用于调查、法律、学术语境）",
+        "ex": "\"...to ascertain what happened and, crucially, when.\""
+      },
+      {
+        "word": "confer",
+        "zh": "赋予；带来（confer sth upon sb；正式用语，指把荣誉/特性/优势给予某物）",
+        "ex": "\"conferring upon neuroscience a tool of remarkable spatiotemporal precision.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-20",
+    "title": "The Middle Power Gambit",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-20-the-middle-power-gambit",
+    "url": "lessons/c1/2026-08-20-the-middle-power-gambit.html",
+    "vocab": [
+      {
+        "word": "manifesto",
+        "zh": "宣言；纲领（政党、运动或艺术流派公开发表的主张声明；复数 manifestos / manifestoes）",
+        "ex": "\"he delivered not a policy briefing but a manifesto.\""
+      },
+      {
+        "word": "invoke",
+        "zh": "援引；诉诸（引述权威文本、法律、先例以支撑论点；学术写作高频动词）",
+        "ex": "\"Invoking Václav Havel's 1978 essay The Power of the Powerless...\""
+      },
+      {
+        "word": "hegemon",
+        "zh": "霸权国；主导强国（源自希腊语 hēgemōn \"领导者\"；hegemony 霸权，hegemonic 霸权的）",
+        "ex": "\"states that are neither hegemons nor bystanders.\""
+      },
+      {
+        "word": "cohere",
+        "zh": "凝聚；前后一致（各部分结合为有机整体；coherence 连贯性，coherent 有条理的）",
+        "ex": "\"Were influence a matter of rank alone, such coalitions might cohere effortlessly.\""
+      },
+      {
+        "word": "paradox",
+        "zh": "悖论；似非而是的矛盾（形容词 paradoxical；学术论证中常用于点出核心张力）",
+        "ex": "\"Herein lies the paradox the doctrine has yet to resolve.\""
+      },
+      {
+        "word": "materialise",
+        "zh": "实现；成为现实（美式拼写 materialize；固定搭配 fail to materialise 未能兑现）",
+        "ex": "\"a collective statement frequently fails to materialise.\""
+      },
+      {
+        "word": "sectoral",
+        "zh": "部门的；行业的（按经济部门划分的，如能源、农业、数字技术；名词 sector）",
+        "ex": "\"coalitions form more readily around sectoral advantage than around principle.\""
+      },
+      {
+        "word": "pragmatic",
+        "zh": "务实的；实用主义的（以实际效果而非理想或原则为准；名词 pragmatism）",
+        "ex": "\"Whether this pragmatic drift is the ceiling of cooperation or merely its floor...\""
+      },
+      {
+        "word": "institutionalise",
+        "zh": "使制度化（把临时安排固定为长期制度；美式拼写 institutionalize）",
+        "ex": "\"Should middle powers institutionalise their coalitions...\""
+      },
+      {
+        "word": "euphemism",
+        "zh": "委婉语（用悦耳说法替代刺耳事实；形容词 euphemistic。修辞分析题高频词）",
+        "ex": "\"variable geometry may prove a euphemism for improvisation.\""
       }
     ]
   }
