@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Analyst's Shadow — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 学术论文 Academic Papers</span>
+      <h1 class="title">The Analyst's Shadow</h1>
+      <p class="subtitle">What 457 analysts revealed about a single dataset · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Experiment</div>
+            <p>For decades a single team has typically analysed a dataset and reported one pathway's result, despite a decade of <span class="kw" data-def="严谨的；严密的（rigorous）">rigorous</span> calls for reform. In 2025 a landmark Nature study shattered that comfort. As part of the SCORE programme, 457 independent analysts re-examined the same data from 100 published studies, each free to choose their own method. The question was disarmingly simple: would they agree? Their conclusions did not.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Dispersion</div>
+            <p>Most re-analyses broadly supported the original claims, yet measures of <span class="kw" data-def="稳健性：在多种合理分析下结论仍成立的程度（robustness）">robustness</span>, effect sizes and uncertainty estimates <span class="kw" data-def="分歧的；趋于不同的（diverged）">diverged</span> sharply. In only about a third of cases did all analysts reach the same conclusion as the original authors. This dispersion was no mark of incompetence. Even seasoned statisticians arrived at <span class="kw" data-def="分歧的；不一致的结果（divergent）">divergent</span> results just as often as novices — expertise did not guarantee <span class="kw" data-def="趋同；汇聚于一致结论（convergence）">convergence</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Cause</div>
+            <p>The culprit is analytic <span class="kw" data-def="变异性；可变性（variability）">variability</span>: the <span class="kw" data-def="固有的；内在的（inherent）">inherent</span> flexibility of data analysis. How data are cleaned, variables defined and models chosen are all legitimate yet consequential decisions, none singly 'correct.' When observational data permit more paths than neat experiments, uncertainty balloons under <span class="kw" data-def="仔细审查； scrutiny">scrutiny</span>. A single reported analysis masks the true breadth of empirical doubt and, being open to more than one <span class="kw" data-def="模棱两可的；不确定一的（equivocal）">equivocal</span> interpretation, breeds a false sense of certainty.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Remedy</div>
+            <p>The cure is structural, not moral: embrace multiverse and multi-analyst approaches where stakes are high. Rather than hunting one 'true' answer, reveal which findings survive every <span class="kw" data-def="可辩护的；站得住脚的（defensible）">defensible</span> method and <span class="kw" data-def="趋同；汇聚（converge）">converge</span> on a stable pattern. Pair this with radical <span class="kw" data-def="透明度；开放可见（transparency）">transparency</span>, so each analytic path is visible. This discipline does not weaken science; it exposes fragile edges and makes them robust. This is Pola News, Advanced English. Read critically, and read deeply.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rigorous">🔊</button><div class="word">rigorous<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">严谨的；严密的</div><div class="ex">"despite a decade of rigorous calls for reform"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="robustness">🔊</button><div class="word">robustness<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">稳健性：在多种合理分析下结论仍成立的程度</div><div class="ex">"measures of robustness, effect sizes and uncertainty estimates diverged"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="divergent">🔊</button><div class="word">divergent<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">分歧的；趋于不同的</div><div class="ex">"Even seasoned statisticians arrived at divergent results"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="converge">🔊</button><div class="word">converge<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">趋同；汇聚于一致结论</div><div class="ex">"converge on a stable pattern"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="variability">🔊</button><div class="word">variability<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">变异性；可变性</div><div class="ex">"The culprit is analytic variability"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="inherent">🔊</button><div class="word">inherent<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">固有的；内在的</div><div class="ex">"the inherent flexibility of data analysis"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scrutiny">🔊</button><div class="word">scrutiny<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">仔细审查； scrutiny</div><div class="ex">"uncertainty balloons under scrutiny"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="equivocal">🔊</button><div class="word">equivocal<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">模棱两可的；不确定一的</div><div class="ex">"open to more than one equivocal interpretation"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="defensible">🔊</button><div class="word">defensible<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">可辩护的；站得住脚的</div><div class="ex">"survive every defensible method"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="transparency">🔊</button><div class="word">transparency<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">透明度；开放可见</div><div class="ex">"Pair this with radical transparency"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [Subject] shattered that comfort.</h3>
+          <div class="zh">"[主语] 打破了那种安逸/错觉。" 用 shattered（粉碎）作强动词 + that comfort（隐喻"安适的错觉"），是学术写作中推翻固有假设的犀利开头句。</div>
+          <div class="eg">In 2025 a landmark Nature study shattered that comfort.</div>
+          <div class="practice">练习：用 "the new meta-analysis / the old consensus" → The new meta-analysis <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Only in [fraction] of cases did [subject] [verb] ...</h3>
+          <div class="zh">"仅在……比例的案例里，[主语] 才……。" Only + 介词短语前置触发主谓倒装（did [subject] [verb]），强调稀少或反直觉，是雅思写作 7+ 的标志性倒装。</div>
+          <div class="eg">In only about a third of cases did all analysts reach the same conclusion as the original authors.</div>
+          <div class="practice">练习：用 "a minority of trials / the effect persist" → Only in a minority of trials <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Noun phrase]: the [adjective] [noun] of [noun].</h3>
+          <div class="zh">"某概念：对……的[形容词][名词]。" 用冒号引出同位语/定义，比 which 从句更紧凑、更具定义感，适合论文引入核心术语。</div>
+          <div class="eg">The culprit is analytic variability: the inherent flexibility of data analysis.</div>
+          <div class="practice">练习：用 "the bottleneck / the limited capacity of working memory" → The bottleneck <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. Rather than hunting [X], reveal [Y].</h3>
+          <div class="zh">"与其追寻 X，不如揭示 Y。" rather than + 动名词 形成平行对比，先否定单向追求再立论，是学术论证常用转折结构。</div>
+          <div class="eg">Rather than hunting one 'true' answer, reveal which findings survive every defensible method.</div>
+          <div class="practice">练习：用 "chasing a single metric / expose the full distribution" → Rather than chasing a single metric, <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. This discipline does not weaken [X]; it exposes [Y] and makes them [Z].</h3>
+          <div class="zh">"这一纪律/方法不会削弱 X；它暴露 Y 并使之成为 Z。" 用 does not X; it Y 的对照收束，反驳误解、强化立场，语气克制有力。</div>
+          <div class="eg">This discipline does not weaken science; it exposes fragile edges and makes them robust.</div>
+          <div class="practice">练习：用 "criticism / the argument's weak points / stronger" → Criticism does not weaken the argument; it <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Only + 介词短语前置的倒装（Inversion after 'only'）</h3>
+          <div class="zh">"Only + 状语（介词短语/副词/从句）"置于句首，主句须主谓倒装。本课 "Only in about a third of cases did all analysts reach..." 把倒装与强调稀缺性结合。注意：only 修饰主语时不倒装（Only he agreed）。</div>
+          <div class="eg">Only in about a third of cases <b>did all analysts reach</b> the same conclusion as the original authors.</div>
+        </div>
+        <div class="item">
+          <h3>2. 冒号引导同位语 / 定义（Colon appositive）</h3>
+          <div class="zh">冒号后接名词短语，对前文术语作精炼定义，相当于 "which is / that is"。比定语从句更正式、信息密度更高。前后逻辑须为"总—分"或"词—释"。</div>
+          <div class="eg">The culprit is analytic variability<b>: the inherent flexibility of data analysis.</b></div>
+        </div>
+        <div class="item">
+          <h3>3. rather than 平行对比（Correlative contrast）</h3>
+          <div class="zh">"A rather than B" / "Rather than B, A" 把对等成分并列，强调取舍。B 与 A 词性须一致：本课 "Rather than hunting (动名词) ... reveal (动词原形并列在祈使)" 形成"不做 X，而做 Y"的平行。雅思写作高频。</div>
+          <div class="eg">Rather than <b>hunting</b> one 'true' answer, <b>reveal</b> which findings survive every defensible method.</div>
+        </div>
+        <div class="item">
+          <h3>4. 现在分词短语作伴随 / 原因状语（Participial phrase）</h3>
+          <div class="zh">"being + 过去分词/形容词" 前置作状语，等于 "because / since + 从句"，压缩因果、提升密度。逻辑主语须与主句主语（a single reported analysis）一致。</div>
+          <div class="eg">A single reported analysis ..., <b>being open to more than one equivocal interpretation</b>, breeds a false sense of certainty.</div>
+        </div>
+        <div class="item">
+          <h3>5. 学术名词化与抽象名词堆叠（Nominalization）</h3>
+          <div class="zh">本课核心词 variability, robustness, transparency, convergence, scrutiny 均为抽象名词（多由动词/形容词名词化：vary→variability, robust→robustness, converge→convergence）。名词化让论述去人格化、凝练，是期刊英语与雅思 7+ 的标志；但堆叠过多会牺牲清晰，需配具体例证。</div>
+          <div class="eg">"analytic <b>variability</b>" / "measures of <b>robustness</b>" / "radical <b>transparency</b>"</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本期讨论的是<b>分析稳健性（analytic robustness）</b>这一学术方法论议题：即便使用<b>完全相同的数据</b>，不同分析师也可能得出不同结论。主角是一项 2025 年发表于《自然》（Nature）的大规模多分析师研究：</p>
+        <ul>
+          <li><b>论文信息：</b>题名 <i>Estimating the analytic robustness of social and behavioural sciences</i>，DOI <b>10.1038/s41586-025-09844-9</b>，由 Balázs Aczél 与 Barnabás Szászi（匈牙利 Eötvös Loránd 大学与 Corvinus 大学）领衔。</li>
+          <li><b>规模：</b>隶属 <b>SCORE</b> 项目（Systematizing Confidence in Open Research and Evidence，由美国 DARPA 资助、共 865 名研究者参与）；本研究动员 <b>457 名独立分析师</b>，对 <b>100 篇</b>已发表的社会与行为科学论文数据做了 <b>504 次</b>重分析。</li>
+          <li><b>方法：</b>所有分析师拿到<b>相同数据</b>与<b>相同核心研究问题</b>，但可凭专业判断自由选择分析方法。</li>
+          <li><b>核心发现：</b>多数重分析大体支持原研究的<b>主要主张</b>，但效应量、统计估计与不确定性水平常显著不同；<b>仅约三分之一</b>的案例中，所有分析师都得出了与原作者相同的结论。</li>
+        </ul>
+        <div class="box">🧭 <b>权威出处：</b>Nature (2025) 论文及多家机构新闻稿（Max Planck 研究所、法兰克福歌德大学、芬兰 Aalto 大学）交叉印证，数字一致：457 分析师 / 504 重分析 / 100 研究 / 约 1/3 一致 / 观察性研究不如实验性稳健。本报告全部数字均据此提炼，尊重原始事实。</div>
+
+        <h3>二、关键概念：分析变异性（analytic variability / researcher's degrees of freedom）</h3>
+        <p>"分析变异性"指数据分析中大量的<b>自由决策点</b>：如何清洗数据、如何定义变量、选用哪种统计模型或软件、如何解释结果。每一项都"合理且站得住脚"，但叠加起来会根本改变结论。这被称为研究者的"自由度"（researcher's degrees of freedom）。它并非造假，而是<b>正常科学实践中的固有灵活性</b>——这正是本课标题 "The Analyst's Shadow"（分析师的阴影）的隐喻：单一分析报告的背后，藏着未被看见的不确定性。</p>
+
+        <h3>三、为什么分歧"不是能力问题"？</h3>
+        <p>研究发现，分歧<b>并非源于缺乏专业训练</b>：经验丰富、统计功底强的资深研究者，与新手一样经常得出不同结论。这说明根源在于<b>分析路径本身的灵活性</b>，而非个人能力缺陷。另一发现：<b>观察性研究比实验性研究更不稳健</b>——数据结构越复杂，可分析的路径越多，不确定性越大。这意味着某些领域（如流行病学、经济学）的结论天然更"脆"。</p>
+
+        <h3>四、与 08-14「SCORE 可复制性审计」的关系与区别</h3>
+        <ul>
+          <li><b>08-14「The Half That Holds」：</b>讲 SCORE 的<b>可复制性/可再现性/稳健性三维审计</b>——同一研究能否被他人独立重复（答案：约一半不能）。焦点在"研究能否被复现"。</li>
+          <li><b>本期「The Analyst's Shadow」：</b>讲 SCORE 同一项目下的<b>分析稳健性研究</b>——同一数据交给不同分析师，结论是否一致（答案：仅约 1/3 完全一致）。焦点在"分析方法的选择如何塑造结论"。</li>
+          <li>两者互补：前者揭示"复现危机"，后者揭示"即便数据相同，分析自由度也会制造分歧"——共同指向<b>开放科学、多宇宙分析、多分析师协作</b>的解法。</li>
+        </ul>
+
+        <h3>五、解法：多分析师与多宇宙分析（multi-analyst & multiverse）</h3>
+        <ul>
+          <li><b>多分析师分析：</b>同一数据由多个独立团队用各自方法分析，看结论是否在不同合理路径下都成立。</li>
+          <li><b>多宇宙分析（multiverse analysis）：</b>把多种合理分析方法并列呈现，暴露结论对分析路径的敏感程度（08-14 已提及）。</li>
+          <li><b>透明化：</b>公开每一步分析决策，呈现不确定性，而非只报告"单一路径"的确定假象。</li>
+        </ul>
+        <div class="box">💡 研究者 Enrico Glerean（Aalto）还指出：生成式 AI 常训练于包含不可复现/错误结论的旧文献，因此"科学自我修正的速度快于大模型"——理解何为最佳解释，仍离不开人。</div>
+
+        <h3>六、内容合规与立场说明</h3>
+        <p>本课聚焦<b>学术研究方法论</b>这一中性学术议题，所有数据引自 Nature 公开论文与机构新闻稿，立场客观、尊重事实，不涉及任何敏感政治话题。涉及主权与领土表述时，一律使用规范名称：台湾称"<b>中国台湾</b>"、香港称"<b>中国香港</b>"、澳门称"<b>中国澳门</b>"，均为中国不可分割的一部分。该话题安全可靠，适合作为雅思/托福备考素材。</p>
+
+        <h3>七、对雅思/托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>学术类 / 托福阅读高频出现 robustness, variability, transparency, scrutiny, defensible, converge 等词，且多用倒装（Only in... did...）、冒号定义、分词短语长难句。本课即微型训练。</li>
+          <li><b>写作 Task 2 / 独立写作：</b>这是典型的"现象—诊断—对策"议论文。用 "<i>Only in about a third of cases did all analysts reach the same conclusion</i>" 展示数据洞察；用 "<i>Rather than hunting one 'true' answer, reveal which findings survive every defensible method</i>" 展示批判性思维——这是 7 分以上的关键。</li>
+          <li><b>听力/口语：</b>用英语概括一项"大规模研究方法研究"时，结构建议：实验（457 analysts / 100 studies）→ 发现（only 1/3 agree）→ 成因（analytic variability）→ 对策（multi-analyst & transparency），最清晰有条理。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 学术研究核心词（rigorous, robustness, divergent, converge, variability, inherent, scrutiny, equivocal, defensible, transparency）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是 "Only in [X] did [subject] [verb]" 倒装与 "Rather than hunting X, reveal Y" 平行结构。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解 Only 前置倒装、冒号同位语、rather than 平行、分词短语状语、学术名词化等高级语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语概括一项大型研究方法研究，并展开"实验—发现—成因—对策"的批判性论述。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>熟悉雅思/托福阅读与写作中常见的"科学研究 / 方法论"话题框架，区分可复制性与分析稳健性。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听 Dacey 的自然英语朗读，跟读时注意重音（如 RO-bust-ness, va-ri-a-BI-li-ty, de-FEN-si-ble）。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音，用每个词各造一个学术句子（参考句型练习）。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：Experiment → Finding (only 1/3 agree) → Cause (analytic variability) → Remedy (multi-analyst & transparency)。用 "Only in..." 倒装与 "Rather than..." 拿高分。</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做测验时先读题干再定位原文；推理题（inference）答案通常不出现原词，而是同义改写（如 analytic variability 对应 how data are cleaned / variables defined / models chosen）。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Analyst's Shadow · 2026-08-21 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "For decades a single team has typically analysed a dataset and reported one pathway's result, despite a decade of rigorous calls for reform. In 2025 a landmark Nature study shattered that comfort. As part of the SCORE programme, 457 independent analysts re-examined the same data from 100 published studies, each free to choose their own method. The question was disarmingly simple: would they agree? Their conclusions did not.",
+  "Most re-analyses broadly supported the original claims, yet measures of robustness, effect sizes and uncertainty estimates diverged sharply. In only about a third of cases did all analysts reach the same conclusion as the original authors. This dispersion was no mark of incompetence. Even seasoned statisticians arrived at divergent results just as often as novices — expertise did not guarantee convergence.",
+  "The culprit is analytic variability: the inherent flexibility of data analysis. How data are cleaned, variables defined and models chosen are all legitimate yet consequential decisions, none singly 'correct.' When observational data permit more paths than neat experiments, uncertainty balloons under scrutiny. A single reported analysis masks the true breadth of empirical doubt and, being open to more than one equivocal interpretation, breeds a false sense of certainty.",
+  "The cure is structural, not moral: embrace multiverse and multi-analyst approaches where stakes are high. Rather than hunting one 'true' answer, reveal which findings survive every defensible method and converge on a stable pattern. Pair this with radical transparency, so each analytic path is visible. This discipline does not weaken science; it exposes fragile edges and makes them robust. This is Pola News, Advanced English. Read critically, and read deeply."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the central claim of the passage? 文章的核心主张是什么？",opts:["A single statistical method is always correct if applied by experts","When 457 analysts re-examined the same data, conclusions varied widely, revealing that analytic choices — not incompetence — shape results and that science needs multi-analyst transparency","The replication crisis has been fully solved by the SCORE programme","Observational studies are always more reliable than experiments"],ans:1,
+   fb:"Correct. 核心主张：同一数据由不同分析师处理，结论差异显著；差异源于分析选择的灵活性而非能力欠缺，因此需要多分析师与透明化。"},
+  {q:"2. According to the passage, what did the 2025 Nature study find about agreement with original authors? 关于与原作者结论的一致，2025 年 Nature 研究有何发现？",opts:["All 457 analysts agreed with the original authors in every case","Only about a third of cases saw all analysts reach the same conclusion as the original authors","Over 90% of re-analyses confirmed the original conclusions exactly","Novices agreed more often than experienced statisticians"],ans:1,
+   fb:"Yes. 文中明确：仅在约三分之一的案例中，所有分析师都得出与原作者相同的结论；其余案例结论分散。"},
+  {q:"3. In paragraph 2, 'divergent' most nearly means: 第二段中 divergent 最接近的意思是？",opts:["identical","tending to differ or move apart; disagreeing","trivial","certain"],ans:1,
+   fb:"Right. divergent = 分歧的、趋于不同的。文中指即便资深统计师也常得出 divergent（不一致）的结果。"},
+  {q:"4. What can be INFERRED about why experienced statisticians diverged as often as novices? 关于'资深统计师与新手一样常出分歧'，可以推断出什么？",opts:["Experienced analysts lacked basic statistical training","The divergence stems from legitimate analytic flexibility in how data are cleaned, variables defined and models chosen — not from a deficit of skill","The original studies were all fraudulent","Only experimental studies show any variability"],ans:1,
+   fb:"Yes. 作者强调分歧不是无能所致；经验丰富者同样易分歧，说明根源在于分析路径的固有灵活性（清洗、变量定义、模型选择等），而非技巧欠缺。"},
+  {q:"5. The detail that observational studies proved 'less robust' than experiments mainly serves to: 关于'观察性研究比实验性研究更不稳健'这一细节，主要作用是？",opts:["prove experiments are useless","show that more complex data structures allow more analytic paths, hence greater uncertainty — reinforcing the case for multi-analyst checks","argue that only randomized trials should ever be published","demonstrate that statisticians personally prefer experiments"],ans:1,
+   fb:"Correct. 该细节说明数据结构越复杂、可分析路径越多，不确定性越大；因此更需多分析师/多宇宙方法来暴露脆弱性。"},
+  {q:"6. The author's tone toward the findings is best described as: 作者对研究发现的语气最准确描述是？",opts:["alarmist and nihilistic","mocking of statisticians","analytical, measured, and reform-oriented","indifferent and dismissive"],ans:2,
+   fb:"Correct. 作者以分析、克制且建设性的笔调呈现：既指出单一分析的盲区，又提出多分析师、多宇宙分析与透明化的 remedy。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'']').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

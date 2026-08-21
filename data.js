@@ -1632,6 +1632,23 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-21",
+    "title": "The Dust That Cooked the Dinosaurs",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-21-the-dust-that-cooked-the-dinosaurs",
+    "url": "lessons/b1/2026-08-21-the-dust-that-cooked-the-dinosaurs.html",
+    "vocab": [
+      {
+        "word": "asteroid",
+        "zh": "恐龙",
+        "ex": "用来讲\"很久以前发生的事\"。<br>例：<b>Sixty-six million years ago, dinosaurs ruled the Earth.</b>"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -1880,6 +1897,48 @@ const EPISODES = [
         "word": "happy",
         "zh": "开心的",
         "ex": "\"I am happy.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-21",
+    "title": "Twinkle Twinkle Little Star",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-21-twinkle-twinkle-little-star",
+    "url": "lessons/a1/2026-08-21-twinkle-twinkle-little-star.html",
+    "vocab": [
+      {
+        "word": "star",
+        "zh": "星星",
+        "ex": "\"I see a star.\""
+      },
+      {
+        "word": "sky",
+        "zh": "天空",
+        "ex": "\"The sky is blue.\""
+      },
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "\"The sun is big.\""
+      },
+      {
+        "word": "night",
+        "zh": "夜晚",
+        "ex": "\"I see the moon at night.\""
+      },
+      {
+        "word": "light",
+        "zh": "光",
+        "ex": "\"You are a light.\""
+      },
+      {
+        "word": "high",
+        "zh": "高的",
+        "ex": "\"The star is high.\""
       }
     ]
   },
@@ -2196,6 +2255,58 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A2",
+    "date": "2026-08-21",
+    "title": "Basketball Peach Basket",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-21-basketball-peach-basket",
+    "url": "lessons/a2/2026-08-21-basketball-peach-basket.html",
+    "vocab": [
+      {
+        "word": "basketball",
+        "zh": "篮球",
+        "ex": "\"James Naismith invented basketball.\""
+      },
+      {
+        "word": "invent",
+        "zh": "发明",
+        "ex": "\"He wanted to invent a new game.\""
+      },
+      {
+        "word": "teacher",
+        "zh": "老师",
+        "ex": "\"James was a teacher.\""
+      },
+      {
+        "word": "ball",
+        "zh": "球",
+        "ex": "\"He used a ball and a basket.\""
+      },
+      {
+        "word": "basket",
+        "zh": "篮子",
+        "ex": "\"The first hoop was a peach basket.\""
+      },
+      {
+        "word": "play",
+        "zh": "玩；打（球）",
+        "ex": "\"Children love to play basketball.\""
+      },
+      {
+        "word": "team",
+        "zh": "队",
+        "ex": "\"We play as a team.\""
+      },
+      {
+        "word": "world",
+        "zh": "世界",
+        "ex": "\"People play it around the world.\""
+      }
+    ]
+  },
+  {
     "level": "B2",
     "date": "2026-08-12",
     "title": "Beyond Lithium The Rise of Solid-State Batteries",
@@ -2502,6 +2613,68 @@ const EPISODES = [
         "word": "organism",
         "zh": "生物体；有机体",
         "ex": "\"A single living organism can host computation.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-21",
+    "title": "Hokusai's Great Wave How One Print Conquered the World",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-21-hokusais-great-wave-how-one-print-conquered-the-world",
+    "url": "lessons/b2/2026-08-21-hokusais-great-wave-how-one-print-conquered-the-world.html",
+    "vocab": [
+      {
+        "word": "masterpiece",
+        "zh": "杰作；代表作",
+        "ex": "\"The Great Wave is widely regarded as Hokusai's masterpiece.\""
+      },
+      {
+        "word": "depict",
+        "zh": "描绘；刻画",
+        "ex": "\"The print depicts a towering wave and three small boats.\""
+      },
+      {
+        "word": "technique",
+        "zh": "技法；技巧",
+        "ex": "\"His woodblock technique changed the history of printmaking.\""
+      },
+      {
+        "word": "influence",
+        "zh": "影响；起作用",
+        "ex": "\"Ukiyo-e prints greatly influenced the French Impressionists.\""
+      },
+      {
+        "word": "revolutionize",
+        "zh": "彻底革新；根本性改变",
+        "ex": "\"Photography revolutionized how artists recorded the world.\""
+      },
+      {
+        "word": "evoke",
+        "zh": "唤起；引发（情感或思潮）",
+        "ex": "\"The deep blue evokes a sense of both danger and calm.\""
+      },
+      {
+        "word": "consequently",
+        "zh": "因此；所以",
+        "ex": "\"The print reached Europe; consequently, a craze began.\""
+      },
+      {
+        "word": "transform",
+        "zh": "彻底改变；转变",
+        "ex": "\"Hokusai's wave transformed Western ideas of composition.\""
+      },
+      {
+        "word": "perspective",
+        "zh": "视角；观点",
+        "ex": "\"Japonisme offered a fresh perspective on space and colour.\""
+      },
+      {
+        "word": "enduring",
+        "zh": "持久的；永恒的",
+        "ex": "\"The print left an enduring mark on modern art.\""
       }
     ]
   },
@@ -2936,6 +3109,68 @@ const EPISODES = [
         "word": "euphemism",
         "zh": "委婉语（用悦耳说法替代刺耳事实；形容词 euphemistic。修辞分析题高频词）",
         "ex": "\"variable geometry may prove a euphemism for improvisation.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-21",
+    "title": "The Analyst's Shadow",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-21-the-analysts-shadow",
+    "url": "lessons/c1/2026-08-21-the-analysts-shadow.html",
+    "vocab": [
+      {
+        "word": "rigorous",
+        "zh": "严谨的；严密的",
+        "ex": "\"despite a decade of rigorous calls for reform\""
+      },
+      {
+        "word": "robustness",
+        "zh": "稳健性：在多种合理分析下结论仍成立的程度",
+        "ex": "\"measures of robustness, effect sizes and uncertainty estimates diverged\""
+      },
+      {
+        "word": "divergent",
+        "zh": "分歧的；趋于不同的",
+        "ex": "\"Even seasoned statisticians arrived at divergent results\""
+      },
+      {
+        "word": "converge",
+        "zh": "趋同；汇聚于一致结论",
+        "ex": "\"converge on a stable pattern\""
+      },
+      {
+        "word": "variability",
+        "zh": "变异性；可变性",
+        "ex": "\"The culprit is analytic variability\""
+      },
+      {
+        "word": "inherent",
+        "zh": "固有的；内在的",
+        "ex": "\"the inherent flexibility of data analysis\""
+      },
+      {
+        "word": "scrutiny",
+        "zh": "仔细审查； scrutiny",
+        "ex": "\"uncertainty balloons under scrutiny\""
+      },
+      {
+        "word": "equivocal",
+        "zh": "模棱两可的；不确定一的",
+        "ex": "\"open to more than one equivocal interpretation\""
+      },
+      {
+        "word": "defensible",
+        "zh": "可辩护的；站得住脚的",
+        "ex": "\"survive every defensible method\""
+      },
+      {
+        "word": "transparency",
+        "zh": "透明度；开放可见",
+        "ex": "\"Pair this with radical transparency\""
       }
     ]
   }

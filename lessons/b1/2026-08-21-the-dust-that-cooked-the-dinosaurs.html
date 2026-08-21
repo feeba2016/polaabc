@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dust That Cooked the Dinosaurs · Pola News</title>
+<style>
+:root{
+  --accent:#d9622b;
+  --accent2:#b23a1e;
+  --glow:#ffc06a;
+  --bg:#fdf4ea;
+  --bg2:#fffaf2;
+  --card:#ffffff;
+  --ink:#3a2415;
+  --muted:#8a6a52;
+  --line:#f1ddc8;
+  --good:#3a9d5d;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(217,98,43,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,#4a2510,#8a3d18);color:#fdf4ea;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.75;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#f3e0cf;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.10)}
+.nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(178,58,30,.35)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(217,98,43,.12);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line)}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(217,98,43,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,192,106,.55)}70%{box-shadow:0 0 0 14px rgba(255,192,106,0)}100%{box-shadow:0 0 0 0 rgba(255,192,106,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(255,192,106,.20)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#4a2510;color:#fdf4ea;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+#tip b{color:var(--glow)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.vcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,#fdf4ea);transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.vcard .w{font-size:20px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:2px}
+.vcard .en{font-size:13px;color:var(--muted)}
+.vcard .spk{margin-top:10px;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px}
+.vcard .spk:hover{transform:scale(1.08)}
+.pat{border-left:4px solid var(--accent2);background:#fdf4ea;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px}
+.pat .p{font-weight:800;color:var(--accent);font-size:16px}
+.pat .ex{margin-top:4px;color:var(--ink)}
+.pat .ex b{color:var(--accent2)}
+.callout{background:#fdf4ea;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.callout h3{font-size:17px;color:var(--accent);margin-bottom:6px}
+.formula{font-family:"Courier New",monospace;background:#4a2510;color:#fdf4ea;padding:10px 14px;border-radius:8px;display:inline-block;margin:6px 0;font-size:15px}
+.tag{display:inline-block;background:rgba(217,98,43,.12);color:var(--accent);font-size:12px;padding:2px 8px;border-radius:6px;margin-right:6px}
+.q{margin-bottom:18px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:11px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff;transition:.15s;font-size:15px}
+.opt:hover{border-color:var(--accent)}
+.opt.correct{background:rgba(58,157,93,.15);border-color:var(--good);color:var(--good);font-weight:700}
+.opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad);font-weight:700}
+.opt:disabled{cursor:default}
+.q .fb{margin-top:8px;font-size:14px;display:none}
+.q .fb.show{display:block}
+.cn p{margin-bottom:12px}
+.cn h3{font-size:18px;color:var(--accent);margin:14px 0 8px}
+.cn ul{margin:0 0 12px 22px}
+.cn li{margin-bottom:6px}
+.fact{background:#fdece0;border-left:4px solid #d9622b;border-radius:0 12px 12px 0;padding:14px 18px;margin:12px 0}
+.about{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.about .avatar{width:84px;height:84px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:42px;flex:none}
+.about .info{flex:1;min-width:240px}
+.about .info p{margin-bottom:8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;min-width:0;height:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+  .sidebar .brand,.sidebar .sub{width:100%}
+  .nav{display:flex;flex-wrap:wrap;gap:6px}
+  .nav a{margin:0;padding:8px 10px;font-size:13px}
+  .content{padding:20px 16px}
+}
+@media print{
+  .sidebar,#progress,#tip,.play,.spk{display:none!important}
+  body{background:#fff;color:#000}
+  section{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .layout{display:block}
+  .content{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>POLA NEWS</div>
+    <div class="sub">English Science News · B1</div>
+    <nav class="nav">
+      <a href="#reading" class="active"><span class="ic">📖</span>全文阅读</a>
+      <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+      <a href="#patterns"><span class="ic">💬</span>句型练习</a>
+      <a href="#grammar"><span class="ic">📘</span>语法点</a>
+      <a href="#quiz"><span class="ic">✅</span>练习测验</a>
+      <a href="#cn"><span class="ic">🌏</span>知识扩展</a>
+      <a href="#about"><span class="ic">⭐</span>关于本课</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <header class="top">
+      <span class="kicker">📰 Pola's Science News · 2026-08-21</span>
+      <h1>The Dust That Cooked the Dinosaurs</h1>
+      <div class="meta">
+        <span>🎙️ <b>Pola</b> the Quokka</span>
+        <span>📚 Level: <b>B1</b> (ages 10–12)</span>
+        <span>⏱️ <b>4</b> segments · ~60s</span>
+      </div>
+    </header>
+    <!-- 1. READING -->
+    <section id="reading">
+      <h2><span class="num">1</span>全文阅读 · Full Story</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击每段右侧的 <b>▶</b> 按钮听 Pola 朗读（优先播放预生成语音，失败则用浏览器原声）。蓝色虚线词可点击查看释义。</p>
+
+      <div class="seg">
+        <div class="badge">1</div>
+        <div class="txt">Hello, Pola News here! Sixty-six million years ago, <span class="kw" data-def="恐龙：很久以前生活在地球上的巨型动物" data-en="giant animals that lived long ago">dinosaurs</span> ruled the Earth. Then one day, a giant <span class="kw" data-def="小行星：从太空飞来的大石头" data-en="a huge rock from space">asteroid</span> fell from the sky and changed everything. Today, <span class="kw" data-def="科学家：研究世界的人" data-en="a person who studies the world">scientists</span> just found out HOW it happened — and it is like a story from a movie!</div>
+        <button class="play" data-seg="0" aria-label="Play segment 1">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">2</div>
+        <div class="txt">A huge space rock, as big as Mount Everest, hit what is now Mexico and made a giant <span class="kw" data-def="陨石坑：撞击形成的大圆坑" data-en="a big round hole made by an impact">crater</span>. It blasted rock miles into the sky. The rock fell back and made a wave of <span class="kw" data-def="热量：很高的温度 / 暖意" data-en="warmth or high temperature">heat</span>. But tiny <span class="kw" data-def="尘埃：空气中细小的灰尘" data-en="tiny dry bits of dirt in the air">dust</span> — smaller than your hair — stayed in the air. Like a lid on a pot, it trapped the heat and cooked the land.</div>
+        <button class="play" data-seg="1" aria-label="Play segment 2">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">3</div>
+        <div class="txt">Animals that could hide — in water, in holes, or <span class="kw" data-def="地下的：地面以下" data-en="below the ground">underground</span> — stayed safe. But big dinosaurs in the open did not <span class="kw" data-def="生存：活下来" data-en="to stay alive">survive</span>. That is how the age of dinosaurs ended, and the age of <span class="kw" data-def="哺乳动物：用奶水喂养宝宝的动物" data-en="animals that feed their babies with milk">mammals</span> began. One event changed the story of life on Earth! This was the great <span class="kw" data-def="灭绝：一个物种完全消失" data-en="when a kind of animal completely disappears">extinction</span>.</div>
+        <button class="play" data-seg="2" aria-label="Play segment 3">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">4</div>
+        <div class="txt">That is your Pola News for today! The next time you see a tiny speck of <span class="kw" data-def="尘埃：空气中细小的灰尘" data-en="tiny dry bits of dirt in the air">dust</span>, remember: small things can do BIG things. This is Pola, signing off. Keep exploring — bye for now!</div>
+        <button class="play" data-seg="3" aria-label="Play segment 4">▶</button>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2><span class="num">2</span>词汇表 · Vocabulary</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">🔊 点击卡片上的喇叭按钮听单词发音。</p>
+      <div class="vgrid">
+        <div class="vcard"><div class="w">asteroid</div><div class="pos">n.</div><div class="zh">小行星</div><div class="en">a large rock from space</div><button class="spk" data-word="asteroid">🔊</button></div>
+        <div class="vcard"><div class="w">dinosaur</div><div class="pos">n.</div><div class="zh">恐龙</div><div class="en">a giant animal that lived long ago</div><button class="spk" data-word="dinosaur">🔊</button></div>
+        <div class="vcard"><div class="w">scientist</div><div class="pos">n.</div><div class="zh">科学家</div><div class="en">a person who studies the world</div><button class="spk" data-word="scientist">🔊</button></div>
+        <div class="vcard"><div class="w">dust</div><div class="pos">n.</div><div class="zh">尘埃</div><div class="en">tiny dry bits of dirt in the air</div><button class="spk" data-word="dust">🔊</button></div>
+        <div class="vcard"><div class="w">heat</div><div class="pos">n.</div><div class="zh">热量</div><div class="en">warmth or high temperature</div><button class="spk" data-word="heat">🔊</button></div>
+        <div class="vcard"><div class="w">crater</div><div class="pos">n.</div><div class="zh">陨石坑</div><div class="en">a big round hole made by an impact</div><button class="spk" data-word="crater">🔊</button></div>
+        <div class="vcard"><div class="w">mammal</div><div class="pos">n.</div><div class="zh">哺乳动物</div><div class="en">an animal that feeds its babies with milk</div><button class="spk" data-word="mammal">🔊</button></div>
+        <div class="vcard"><div class="w">extinction</div><div class="pos">n.</div><div class="zh">灭绝</div><div class="en">when a kind of animal completely disappears</div><button class="spk" data-word="extinction">🔊</button></div>
+        <div class="vcard"><div class="w">underground</div><div class="pos">adj.</div><div class="zh">地下的</div><div class="en">below the ground</div><button class="spk" data-word="underground">🔊</button></div>
+        <div class="vcard"><div class="w">survive</div><div class="pos">v.</div><div class="zh">生存 / 活下来</div><div class="en">to stay alive</div><button class="spk" data-word="survive">🔊</button></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2><span class="num">3</span>句型练习 · Sentence Patterns</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">试着用这些句型造你自己的句子！</p>
+      <div class="pat"><div class="p">① Sixty-six million years ago, + [something happened].</div><div class="ex">用来讲"很久以前发生的事"。<br>例：<b>Sixty-six million years ago, dinosaurs ruled the Earth.</b></div></div>
+      <div class="pat"><div class="p">② A + [big thing] + hit + [place] + and made + [result].</div><div class="ex">描述"一个巨大的东西撞上某地，造成了什么结果"。<br>例：<b>A huge space rock hit Mexico and made a giant crater.</b></div></div>
+      <div class="pat"><div class="p">③ Animals that could + [hide], stayed safe.</div><div class="ex">说明"能做到某事的生命得以幸存"。<br>例：<b>Animals that could hide underground stayed safe.</b></div></div>
+      <div class="pat"><div class="p">④ The next time you + [verb], remember: + [fact].</div><div class="ex">提醒听众一个值得记住的事实。<br>例：<b>The next time you see dust, remember: small things can do BIG things.</b></div></div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2><span class="num">4</span>语法点 · Grammar</h2>
+      <div class="callout">
+        <h3>一般过去时（Simple Past）—— 讲述很久以前发生的事</h3>
+        <p>本课讲的是 6600 万年前发生的事件，所以用了<b>一般过去时</b>：动词变成过去式。</p>
+        <p><span class="formula">过去式动词：ruled · fell · hit · blasted · made · trapped · ended · began · changed</span></p>
+        <p>文中例句：</p>
+        <p>• <b>dinosaurs <span style="color:var(--accent)">ruled</span></b> the Earth（恐龙统治地球。—— ruled 是 rule 的过去式）</p>
+        <p>• <b>a giant asteroid <span style="color:var(--accent)">fell</span></b> from the sky（一颗小行星从天而降。—— fell 是 fall 的过去式）</p>
+        <p>• <b>it <span style="color:var(--accent)">trapped</span> the heat and <span style="color:var(--accent)">cooked</span> the land</b>（它把热量困住，烤焦了大地。—— trapped / cooked 都是过去式）</p>
+        <p style="margin-top:10px"><span class="tag">动词 + ed</span><span class="tag">不规则变化</span><span class="tag">long ago 很久以前</span></p>
+        <p style="margin-top:8px;color:var(--muted);font-size:14px">小提示：讲"很久以前发生、已经结束"的事用一般过去时；而 "scientists just found out"（科学家刚刚发现）用现在完成时，强调"和现在有关"。本课把两种时态混用，让远古故事和今天的发现连在一起。</p>
+      </div>
+      <div class="callout">
+        <h3>比较与比喻：as ... as / like ...</h3>
+        <p><b>A huge space rock, <span style="color:var(--accent)">as big as</span> Mount Everest</b>（和珠穆朗玛峰一样大的太空岩石。—— as + 原级 + as 表示"和……一样"）</p>
+        <p><b>Like <span style="color:var(--accent)">a lid on a pot</span>, it trapped the heat</b>（像锅盖一样，它把热量困住。—— like + 名词 表示"像……一样"，是比喻，帮助小朋友想象尘埃如何保温）</p>
+        <p style="color:var(--muted);font-size:14px">"就像锅盖"这个比喻，把看不见的尘埃保温原理变成孩子能想象的画面。</p>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2><span class="num">5</span>练习测验 · Quiz</h2>
+      <div class="q" data-ans="0">
+        <div class="qt">1. How long ago did the asteroid hit the Earth?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">66 million years ago</button>
+          <button class="opt" data-i="1">66 years ago</button>
+          <button class="opt" data-i="2">660 years ago</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">2. What trapped the heat like a lid on a pot?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">The dinosaurs</button>
+          <button class="opt" data-i="1">The tiny dust</button>
+          <button class="opt" data-i="2">The ocean</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">3. Which animals stayed safe after the impact?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Big dinosaurs in the open</button>
+          <button class="opt" data-i="1">Animals that could hide underground or in water</button>
+          <button class="opt" data-i="2">Birds only</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">4. What age began after the dinosaurs ended?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">The age of fish</button>
+          <button class="opt" data-i="1">The age of mammals</button>
+          <button class="opt" data-i="2">The age of rocks</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+    </section>
+
+    <!-- 6. CN EXTENSION -->
+    <section id="cn" class="cn">
+      <h2><span class="num">6</span>中文知识扩展 · 拓展阅读</h2>
+      <h3>☄️ 那颗改变地球的"杀手小行星"</h3>
+      <p>大约 <b>6600 万年前</b>（白垩纪末期），一颗直径约 <b>10–12 公里</b>、差不多和珠穆朗玛峰一样大的小行星，撞上了今天<b>墨西哥尤卡坦半岛</b>附近。它砸出一个约 <b>180–200 公里宽</b>的<b>希克苏鲁伯陨石坑（Chicxulub crater）</b>，释放出巨大能量，引发超级地震、大海啸，并让约 <b>四分之三</b> 的地球物种消失——包括所有非鸟类恐龙。这就是著名的"白垩纪—古近纪灭绝事件"（K‑Pg 灭绝）。</p>
+
+      <h3>🔥 "锅盖"尘埃：为什么恐龙可能在几小时内就被"烤熟"？</h3>
+      <p>撞击把超过 <b>1000 立方公里</b> 的岩石汽化、抛向高空。其中一部分冷却成小玻璃珠（叫作 <b>spherules，球粒</b>，大约只有半粒糖那么大），落回大气时因摩擦产生一股热浪。但真正"致命"的，是另一种更细的<b>尘埃</b>：它只有约 <b>2.5 微米</b> 宽，比一根头发丝还细约 30 倍。这层尘埃像<b>锅盖</b>一样罩住地球，把热量困在靠近地表的地方，使地表温度比只有球粒时高出 <b>3.5 倍</b>。科学家估算，暴露在地表的动物受到的热辐射，是"对人类 100% 致死剂量"的 <b>17 倍</b>——足以点燃草地、松针，甚至直接烤焦大型动物。</p>
+      <div class="fact">💡 美国普渡大学（Purdue University）的行星科学家 Brandon Johnson 说："这就像表面和上面的一切都被放在炭火上烤。真正杀死恐龙的不是冲击波，也不是火球——是这团全球性的尘埃云。"</div>
+
+      <h3>🐭 为什么是小小的哺乳动物活了下来？</h3>
+      <p>能<b>躲起来</b>的动物最安全：钻进<b>地下洞穴</b>、躲进<b>水里</b>、或藏在遮蔽物中的生命得以幸存。早期的小型哺乳动物、鱼类和会飞的动物活了下来；而暴露在开阔地带的大型恐龙则没有机会。后来，尘埃还遮住阳光长达<b>数年甚至数十年</b>，全球气温下降约 <b>20°C</b>，进入漫长的"撞击冬天"。这给了幸存者（包括我们的哺乳动物祖先）机会——于是<b>哺乳动物的时代</b>开始了，最终才有了人类。</p>
+
+      <h3>🦴 来自化石的证据：北达科他州的"坦尼斯"遗址</h3>
+      <p>在美国北达科他州的 <b>坦尼斯（Tanis）</b> 化石点，科学家发现了在撞击当天就死亡的大量动物，很多鱼的<b>鳃里卡着小行星球粒</b>；它们上方还有一层极细的硅尘和铱元素。这正好支持"先有热浪、后有长期黑暗"的先后顺序，也帮助研究人员还原了那致命的第一小时。</p>
+
+      <h3>🌍 这对我们意味着什么？</h3>
+      <p>这次研究提醒我们：<b>一颗小行星、一层看不见的细尘，就能改写整颗行星的生命故事</b>。今天，科学家用超级计算机模拟撞击、在岩层里寻找尘埃证据，就是想搞清楚——当巨大的灾难降临时，什么样的生命能够幸存。下一次你看到空气里跳舞的一粒微尘，不妨想想：在 6600 万年前，正是无数这样的小尘埃，改变了地球的方向。</p>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2><span class="num">7</span>关于本课 · About</h2>
+      <div class="about">
+        <div class="avatar">🦖</div>
+        <div class="info">
+          <p><b>主播：</b>Pola（短尾矮袋鼠 Quokka），实景记者播报。</p>
+          <p><b>英语等级：</b>B1（适合 10–12 岁小朋友）。</p>
+          <p><b>本期主题：</b>6600 万年前一颗小行星撞击地球，掀起的细尘像"锅盖"一样困住热量，可能在数小时内烤焦地表、终结恐龙时代，并开启哺乳动物（包括人类祖先）的时代。</p>
+          <p><b>核心知识点：</b>希克苏鲁伯撞击、球粒与细尘、"锅盖"保温原理、撞击冬天、幸存与灭绝、一般过去时。</p>
+          <p><b>日期：</b>2026-08-21</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · 每天一个有趣的英语科学小知识 · ☄️</footer>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hello, Pola News here! Sixty-six million years ago, dinosaurs ruled the Earth. Then one day, a giant asteroid fell from the sky and changed everything. Today, scientists just found out HOW it happened — and it is like a story from a movie!",
+  "A huge space rock, as big as Mount Everest, hit what is now Mexico and made a giant crater. It blasted rock miles into the sky. The rock fell back and made a wave of heat. But tiny dust — smaller than your hair — stayed in the air. Like a lid on a pot, it trapped the heat and cooked the land.",
+  "Animals that could hide — in water, in holes, or underground — stayed safe. But big dinosaurs in the open did not survive. That is how the age of dinosaurs ended, and the age of mammals began. One event changed the story of life on Earth! This was the great extinction.",
+  "That is your Pola News for today! The next time you see a tiny speck of dust, remember: small things can do BIG things. This is Pola, signing off. Keep exploring — bye for now!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 测验 ===== */
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans,10);
+  const fb = q.querySelector('.fb');
+  q.querySelectorAll('.opt').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      if(opt.disabled) return;
+      q.querySelectorAll('.opt').forEach(function(o){ o.disabled = true; });
+      const i = parseInt(opt.dataset.i,10);
+      if(i === ans){
+        opt.classList.add('correct');
+        fb.textContent = '✅ 答对了！';
+        fb.style.color = 'var(--good)';
+      }else{
+        opt.classList.add('wrong');
+        const right = q.querySelector('.opt[data-i="'+ans+'"]');
+        if(right) right.classList.add('correct');
+        fb.textContent = '❌ 再想想，正确答案是高亮的那个。';
+        fb.style.color = 'var(--bad)';
+      }
+      fb.classList.add('show');
+    });
+  });
+});
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
