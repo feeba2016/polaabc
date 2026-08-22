@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sugar That Grew Our Brains · Pola News</title>
+<style>
+:root{
+  --accent:#e0a93b;
+  --accent2:#d9622b;
+  --glow:#ffe08a;
+  --bg:#fff9ec;
+  --bg2:#fffdf6;
+  --card:#ffffff;
+  --ink:#3a2a12;
+  --muted:#8a6a3a;
+  --line:#f3e3c4;
+  --good:#3a9d5d;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(217,98,43,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,#6e3d0e,#a85e16);color:#fff9ec;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.78;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#f6e6cf;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.10)}
+.nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(217,98,43,.35)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(224,169,59,.15);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line)}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(217,98,43,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,224,138,.55)}70%{box-shadow:0 0 0 14px rgba(255,224,138,0)}100%{box-shadow:0 0 0 0 rgba(255,224,138,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(255,224,138,.25)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#6e3d0e;color:#fff9ec;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+#tip b{color:var(--glow)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.vcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,#fff9ec);transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.vcard .w{font-size:20px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:2px}
+.vcard .en{font-size:13px;color:var(--muted)}
+.vcard .spk{margin-top:10px;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px}
+.vcard .spk:hover{transform:scale(1.08)}
+.pat{border-left:4px solid var(--accent2);background:#fff9ec;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px}
+.pat .p{font-weight:800;color:var(--accent);font-size:16px}
+.pat .ex{margin-top:4px;color:var(--ink)}
+.pat .ex b{color:var(--accent2)}
+.callout{background:#fff9ec;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.callout h3{font-size:17px;color:var(--accent);margin-bottom:6px}
+.formula{font-family:"Courier New",monospace;background:#6e3d0e;color:#fff9ec;padding:10px 14px;border-radius:8px;display:inline-block;margin:6px 0;font-size:15px}
+.tag{display:inline-block;background:rgba(224,169,59,.15);color:var(--accent);font-size:12px;padding:2px 8px;border-radius:6px;margin-right:6px}
+.q{margin-bottom:18px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:11px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff;transition:.15s;font-size:15px}
+.opt:hover{border-color:var(--accent)}
+.opt.correct{background:rgba(58,157,93,.15);border-color:var(--good);color:var(--good);font-weight:700}
+.opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad);font-weight:700}
+.opt:disabled{cursor:default}
+.q .fb{margin-top:8px;font-size:14px;display:none}
+.q .fb.show{display:block}
+.cn p{margin-bottom:12px}
+.cn h3{font-size:18px;color:var(--accent);margin:14px 0 8px}
+.cn ul{margin:0 0 12px 22px}
+.cn li{margin-bottom:6px}
+.fact{background:#fdeccf;border-left:4px solid #e0a93b;border-radius:0 12px 12px 0;padding:14px 18px;margin:12px 0}
+.about{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.about .avatar{width:84px;height:84px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:42px;flex:none}
+.about .info{flex:1;min-width:240px}
+.about .info p{margin-bottom:8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;min-width:0;height:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+  .sidebar .brand,.sidebar .sub{width:100%}
+  .nav{display:flex;flex-wrap:wrap;gap:6px}
+  .nav a{margin:0;padding:8px 10px;font-size:13px}
+  .content{padding:20px 16px}
+}
+@media print{
+  .sidebar,#progress,#tip,.play,.spk{display:none!important}
+  body{background:#fff;color:#000}
+  section{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .layout{display:block}
+  .content{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>POLA NEWS</div>
+    <div class="sub">English Science News · B1</div>
+    <nav class="nav">
+      <a href="#reading" class="active"><span class="ic">📖</span>全文阅读</a>
+      <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+      <a href="#patterns"><span class="ic">💬</span>句型练习</a>
+      <a href="#grammar"><span class="ic">📘</span>语法点</a>
+      <a href="#quiz"><span class="ic">✅</span>练习测验</a>
+      <a href="#cn"><span class="ic">🌏</span>知识扩展</a>
+      <a href="#about"><span class="ic">⭐</span>关于本课</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <header class="top">
+      <span class="kicker">📰 Pola's Science News · 2026-08-22</span>
+      <h1>The Sugar That Grew Our Brains</h1>
+      <div class="meta">
+        <span>🎙️ <b>Pola</b> the Quokka</span>
+        <span>📚 Level: <b>B1</b> (ages 10–12)</span>
+        <span>⏱️ <b>4</b> segments · ~60s</span>
+      </div>
+    </header>
+    <!-- 1. READING -->
+    <section id="reading">
+      <h2><span class="num">1</span>全文阅读 · Full Story</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击每段右侧的 <b>▶</b> 按钮听 Pola 朗读（优先播放预生成语音，失败则用浏览器原声）。金色虚线词可点击查看释义。</p>
+
+      <div class="seg">
+        <div class="badge">1</div>
+        <div class="txt">Hello, Pola News here! Did you know that eating <span class="kw" data-def="水果：植物结出的甜甜食物" data-en="sweet food that grows on plants">fruit</span> and <span class="kw" data-def="蜂蜜：蜜蜂酿的甜甜食物" data-en="sweet food made by bees">honey</span> may have helped make our <span class="kw" data-def="大脑：用来思考和学习的器官" data-en="the organ inside your head that thinks">brains</span> BIG? <span class="kw" data-def="科学家：研究世界的人" data-en="a person who studies the world">Scientists</span> just learned that <span class="kw" data-def="天然的：来自大自然，不是人造的" data-en="from nature, not made by people">natural</span> sugars gave early humans the <span class="kw" data-def="能量：做事需要的力气/动力" data-en="the power to do things">energy</span> to grow smart. It is a sweet surprise from the past!</div>
+        <button class="play" data-seg="0" aria-label="Play segment 1">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">2</div>
+        <div class="txt">Long ago, our <span class="kw" data-def="祖先：很久以前的家人" data-en="family members from long ago">ancestors</span> ate lots of <span class="kw" data-def="水果：植物结出的甜甜食物" data-en="sweet food that grows on plants">fruit</span> and wild <span class="kw" data-def="蜂蜜：蜜蜂酿的甜甜食物" data-en="sweet food made by bees">honey</span>. Their <span class="kw" data-def="大脑：用来思考和学习的器官" data-en="the organ inside your head that thinks">brains</span> grew from the size of an orange to a big watermelon — about five times bigger! The <span class="kw" data-def="大脑：用来思考和学习的器官" data-en="the organ inside your head that thinks">brain</span> needs a <span class="kw" data-def="糖：甜甜的东西，大脑的能量来源" data-en="sweet stuff that gives the body energy">sugar</span> called <span class="kw" data-def="葡萄糖：大脑用来工作的糖" data-en="the sugar the brain uses for energy">glucose</span> to work, and sweet foods gave it plenty of fuel.</div>
+        <button class="play" data-seg="1" aria-label="Play segment 2">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">3</div>
+        <div class="txt">So why does this matter? It shows that nature's sweets — not just meat — helped build the clever <span class="kw" data-def="人类：我们人这种生物" data-en="people; the human kind">human</span> mind. And that is why many of us love sweet things today. The next time you eat an apple, you are tasting <span class="kw" data-def="大脑：用来思考和学习的器官" data-en="the organ inside your head that thinks">brain</span> fuel from millions of years ago!</div>
+        <button class="play" data-seg="2" aria-label="Play segment 3">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">4</div>
+        <div class="txt">That is your Pola News for today! Small sweet foods helped make big smart <span class="kw" data-def="大脑：用来思考和学习的器官" data-en="the organ inside your head that thinks">brains</span>. This is Pola, signing off. Keep exploring — and maybe grab a piece of <span class="kw" data-def="水果：植物结出的甜甜食物" data-en="sweet food that grows on plants">fruit</span>. Bye for now!</div>
+        <button class="play" data-seg="3" aria-label="Play segment 4">▶</button>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2><span class="num">2</span>词汇表 · Vocabulary</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">🔊 点击卡片上的喇叭按钮听单词发音。</p>
+      <div class="vgrid">
+        <div class="vcard"><div class="w">fruit</div><div class="pos">n.</div><div class="zh">水果</div><div class="en">sweet food that grows on plants</div><button class="spk" data-word="fruit">🔊</button></div>
+        <div class="vcard"><div class="w">honey</div><div class="pos">n.</div><div class="zh">蜂蜜</div><div class="en">sweet food made by bees</div><button class="spk" data-word="honey">🔊</button></div>
+        <div class="vcard"><div class="w">brain</div><div class="pos">n.</div><div class="zh">大脑</div><div class="en">the organ inside your head that thinks</div><button class="spk" data-word="brain">🔊</button></div>
+        <div class="vcard"><div class="w">sugar</div><div class="pos">n.</div><div class="zh">糖</div><div class="en">sweet stuff that gives the body energy</div><button class="spk" data-word="sugar">🔊</button></div>
+        <div class="vcard"><div class="w">glucose</div><div class="pos">n.</div><div class="zh">葡萄糖</div><div class="en">the sugar the brain uses for energy</div><button class="spk" data-word="glucose">🔊</button></div>
+        <div class="vcard"><div class="w">energy</div><div class="pos">n.</div><div class="zh">能量</div><div class="en">the power to do things</div><button class="spk" data-word="energy">🔊</button></div>
+        <div class="vcard"><div class="w">scientist</div><div class="pos">n.</div><div class="zh">科学家</div><div class="en">a person who studies the world</div><button class="spk" data-word="scientist">🔊</button></div>
+        <div class="vcard"><div class="w">ancestor</div><div class="pos">n.</div><div class="zh">祖先</div><div class="en">family members from long ago</div><button class="spk" data-word="ancestor">🔊</button></div>
+        <div class="vcard"><div class="w">natural</div><div class="pos">adj.</div><div class="zh">天然的</div><div class="en">from nature, not made by people</div><button class="spk" data-word="natural">🔊</button></div>
+        <div class="vcard"><div class="w">human</div><div class="pos">n./adj.</div><div class="zh">人类（的）</div><div class="en">people; the human kind</div><button class="spk" data-word="human">🔊</button></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2><span class="num">3</span>句型练习 · Sentence Patterns</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">试着用这些句型造你自己的句子！</p>
+      <div class="pat"><div class="p">① Did you know that + [something surprising]?</div><div class="ex">用来引出"一个让你惊讶的事实"。<br>例：<b>Did you know that eating fruit and honey may have helped make our brains big?</b></div></div>
+      <div class="pat"><div class="p">② Long ago, our ancestors + [did something].</div><div class="ex">讲述"很久以前祖先做的事"。<br>例：<b>Long ago, our ancestors ate lots of fruit and wild honey.</b></div></div>
+      <div class="pat"><div class="p">③ The brain needs + [something] + to work.</div><div class="ex">说明"某物是正常运转所必需的"。<br>例：<b>The brain needs a sugar called glucose to work.</b></div></div>
+      <div class="pat"><div class="p">④ The next time you + [verb], you are + [something].</div><div class="ex">把一件小事和很久以前的联系起来。<br>例：<b>The next time you eat an apple, you are tasting brain fuel from millions of years ago!</b></div></div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2><span class="num">4</span>语法点 · Grammar</h2>
+      <div class="callout">
+        <h3>比较级与倍数（Comparatives & multiples）</h3>
+        <p>本课讲大脑"长大了"，用了<b>比较级</b>：short adjective 加 -er。</p>
+        <p><span class="formula">big → bigger · five times bigger</span></p>
+        <p>• <b>about <span style="color:var(--accent)">five times bigger</span></b>（大约大了五倍。—— "数字 + times + 比较级" 表示倍数）</p>
+        <p>• <b>from the size of an orange to a big watermelon</b>（从一个橙子的大小，到一个大西瓜。—— 用两个具体东西帮助小朋友想象"变大了好多"）</p>
+        <p style="margin-top:10px"><span class="tag">比较级 -er</span><span class="tag">five times 倍数</span><span class="tag">具体类比</span></p>
+      </div>
+      <div class="callout">
+        <h3>情态动词 may / can —— 推测与需要</h3>
+        <p><b>may have helped</b>（可能曾经帮助过。—— <i>may + have + 过去分词</i> 表示"对过去事情的推测"，语气比 must 更轻）</p>
+        <p>• <b>eating fruit and honey <span style="color:var(--accent)">may have helped</span> make our brains big</b>（吃水果和蜂蜜可能帮助大脑变大）</p>
+        <p><b>needs ... to work</b>（需要……才能工作。—— <i>need + 名词 + to do</i>）</p>
+        <p>• <b>The brain <span style="color:var(--accent)">needs</span> a sugar called glucose <span style="color:var(--accent)">to work</span></b>（大脑需要一种叫葡萄糖的糖才能工作）</p>
+        <p style="margin-top:8px;color:var(--muted);font-size:14px">小提示：科学新闻常用 may have + 过去分词 来表达"我们还不完全确定，但证据支持"的结论，既准确又谦虚。</p>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2><span class="num">5</span>练习测验 · Quiz</h2>
+      <div class="q" data-ans="0">
+        <div class="qt">1. What may have helped make our brains big?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Fruit and honey</button>
+          <button class="opt" data-i="1">Rocks and sand</button>
+          <button class="opt" data-i="2">Plain water</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">2. How much did human brains grow?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">They got smaller</button>
+          <button class="opt" data-i="1">About five times bigger</button>
+          <button class="opt" data-i="2">Exactly the same size</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="2">
+        <div class="qt">3. What sugar does the brain use for energy?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Salt</button>
+          <button class="opt" data-i="1">Sand</button>
+          <button class="opt" data-i="2">Glucose</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="0">
+        <div class="qt">4. Why do many people love sweet things today?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Our ancestors needed sweet energy to grow smart brains</button>
+          <button class="opt" data-i="1">Because of the Moon</button>
+          <button class="opt" data-i="2">Because of computers</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+    </section>
+
+    <!-- 6. CN EXTENSION -->
+    <section id="cn" class="cn">
+      <h2><span class="num">6</span>中文知识扩展 · 拓展阅读</h2>
+      <h3>🍯 一个"甜甜"的科学大发现</h3>
+      <p>2026 年 8 月，澳大利亚<b>悉尼大学（University of Sydney）</b>与英国<b>格拉斯哥大学（University of Glasgow）</b>的科学家在顶级期刊《Science》上发表研究：在烹饪技术出现之前，<b>水果、蜂蜜等天然糖类</b>，可能正是帮助人类大脑进化的重要能量来源。论文由营养学教授 <b>Jennie Brand-Miller</b> 领衔（DOI: 10.1126/science.aed8437）。</p>
+
+      <h3>🧠 大脑是个"吃糖大户"</h3>
+      <p>人的大脑只占身体重量的约 <b>2%</b>，却在休息时吃掉全身约 <b>20%</b> 的能量；小朋友的大脑更夸张——五六岁时要用掉全身约 <b>66%</b> 的能量！大脑最喜欢的"燃料"是一种叫<b>葡萄糖（glucose）</b>的糖。研究估算，在长达约 <b>400 万年</b> 的进化里，最早的人族（比如著名的"露西"南方古猿）可能从水果、蜂蜜等甜食中获得 <b>65% 以上</b> 的日常能量。</p>
+      <div class="fact">💡 在这 400 万年间，人类脑容量从早期人族约 <b>300 克</b>（和一个橙子差不多大）增大到现代人的约 <b>1500 克</b>（约一个大西瓜）——差不多大了 <b>五倍</b>！</div>
+
+      <h3>🍎 为什么我们能看清"哪颗果子最甜"？</h3>
+      <p>科学家认为，我们眼睛能分辨<b>深红、深橙、深黄</b>的颜色，最初很可能就是为了找出<b>最熟、最甜、营养最多</b>的果实。在热带森林里，不同果子在不同季节成熟；谁的脑子更会"记地图"、抢先找到甜果子，谁就更有可能活下来、把聪明基因传下去。这也许正是"甜甜的爱好"写进了我们基因里的原因。</p>
+
+      <h3>🥩 不只是肉：一个更完整的故事</h3>
+      <p>过去很多科普都说"吃肉让人类变聪明"。这项新研究并不是说肉不重要，而是提醒我们：<b>植物里的糖（水果、蜂蜜、后来的熟淀粉）</b>同样关键，甚至更早、更稳定地供应着大脑需要的葡萄糖。两位作者把它称作"平行的故事"，而非互相取代。</p>
+
+      <h3>⚠️ 天然糖 ≠ 糖果汽水</h3>
+      <p>这一点很重要：研究说的是<b>水果、蜂蜜里的天然糖</b>——它们和纤维、维生素、抗氧化物打包在一起；而现代零食里<b>添加精制糖</b>（汽水、糖果）则没有这些好处。所以科学家的建议是：与其害怕碳水，不如选择<b>完整水果、豆类、优质谷物</b>这类高质量来源。下次吃苹果时，你尝到的，正是几百万年前帮我们长出聪明大脑的那份"甜甜燃料"！</p>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2><span class="num">7</span>关于本课 · About</h2>
+      <div class="about">
+        <div class="avatar">🧠</div>
+        <div class="info">
+          <p><b>主播：</b>Pola（短尾矮袋鼠 Quokka），实景记者播报。</p>
+          <p><b>英语等级：</b>B1（适合 10–12 岁小朋友）。</p>
+          <p><b>本期主题：</b>2026 年 8 月《Science》研究指出，水果、蜂蜜中的天然糖类可能为人类大脑的进化提供了关键能量，让我们的大脑在 400 万年间变大了约五倍。</p>
+          <p><b>核心知识点：</b>葡萄糖与大脑能量、比较级与倍数、情态动词 may / can、天然糖与精制糖的区别。</p>
+          <p><b>日期：</b>2026-08-22</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · 每天一个有趣的英语科学小知识 · 🍯</footer>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hello, Pola News here! Did you know that eating fruit and honey may have helped make our brains BIG? Scientists just learned that natural sugars gave early humans the energy to grow smart. It is a sweet surprise from the past!",
+  "Long ago, our ancestors ate lots of fruit and wild honey. Their brains grew from the size of an orange to a big watermelon — about five times bigger! The brain needs a sugar called glucose to work, and sweet foods gave it plenty of fuel.",
+  "So why does this matter? It shows that nature's sweets — not just meat — helped build the clever human mind. And that is why many of us love sweet things today. The next time you eat an apple, you are tasting brain fuel from millions of years ago!",
+  "That is your Pola News for today! Small sweet foods helped make big smart brains. This is Pola, signing off. Keep exploring — and maybe grab a piece of fruit. Bye for now!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 测验 ===== */
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans,10);
+  const fb = q.querySelector('.fb');
+  q.querySelectorAll('.opt').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      if(opt.disabled) return;
+      q.querySelectorAll('.opt').forEach(function(o){ o.disabled = true; });
+      const i = parseInt(opt.dataset.i,10);
+      if(i === ans){
+        opt.classList.add('correct');
+        fb.textContent = '✅ 答对了！';
+        fb.style.color = 'var(--good)';
+      }else{
+        opt.classList.add('wrong');
+        const right = q.querySelector('.opt[data-i="'+ans+'"]');
+        if(right) right.classList.add('correct');
+        fb.textContent = '❌ 再想想，正确答案是高亮的那个。';
+        fb.style.color = 'var(--bad)';
+      }
+      fb.classList.add('show');
+    });
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

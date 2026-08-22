@@ -1649,6 +1649,23 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-22",
+    "title": "The Sugar That Grew Our Brains",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-22-the-sugar-that-grew-our-brains",
+    "url": "lessons/b1/2026-08-22-the-sugar-that-grew-our-brains.html",
+    "vocab": [
+      {
+        "word": "fruit",
+        "zh": "蜂蜜",
+        "ex": "用来引出\"一个让你惊讶的事实\"。<br>例：<b>Did you know that eating fruit and honey may have helped make our brains big?</b>"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -1939,6 +1956,48 @@ const EPISODES = [
         "word": "high",
         "zh": "高的",
         "ex": "\"The star is high.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-22",
+    "title": "The Rainbow",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-22-the-rainbow",
+    "url": "lessons/a1/2026-08-22-the-rainbow.html",
+    "vocab": [
+      {
+        "word": "red",
+        "zh": "红色",
+        "ex": "\"Red is a color.\""
+      },
+      {
+        "word": "orange",
+        "zh": "橙色",
+        "ex": "\"Orange is bright.\""
+      },
+      {
+        "word": "yellow",
+        "zh": "黄色",
+        "ex": "\"Yellow is sunny.\""
+      },
+      {
+        "word": "green",
+        "zh": "绿色",
+        "ex": "\"Green is grass.\""
+      },
+      {
+        "word": "blue",
+        "zh": "蓝色",
+        "ex": "\"Blue is the sky.\""
+      },
+      {
+        "word": "purple",
+        "zh": "紫色",
+        "ex": "\"Purple is pretty.\""
       }
     ]
   },
@@ -2303,6 +2362,58 @@ const EPISODES = [
         "word": "world",
         "zh": "世界",
         "ex": "\"People play it around the world.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-22",
+    "title": "Save the Sea Turtles",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-22-save-the-sea-turtles",
+    "url": "lessons/a2/2026-08-22-save-the-sea-turtles.html",
+    "vocab": [
+      {
+        "word": "turtle",
+        "zh": "海龟",
+        "ex": "\"A sea turtle swims in the ocean.\""
+      },
+      {
+        "word": "ocean",
+        "zh": "海洋",
+        "ex": "\"The ocean is big and blue.\""
+      },
+      {
+        "word": "plastic",
+        "zh": "塑料",
+        "ex": "\"We should use less plastic.\""
+      },
+      {
+        "word": "pollution",
+        "zh": "污染",
+        "ex": "\"Plastic pollution hurts animals.\""
+      },
+      {
+        "word": "protect",
+        "zh": "保护",
+        "ex": "\"We must protect sea turtles.\""
+      },
+      {
+        "word": "reusable",
+        "zh": "可重复使用的",
+        "ex": "\"A reusable bottle is good for Earth.\""
+      },
+      {
+        "word": "beach",
+        "zh": "海滩",
+        "ex": "\"Join a beach clean-up.\""
+      },
+      {
+        "word": "healthy",
+        "zh": "健康的",
+        "ex": "\"Turtles help the ocean stay healthy.\""
       }
     ]
   },
@@ -2675,6 +2786,68 @@ const EPISODES = [
         "word": "enduring",
         "zh": "持久的；永恒的",
         "ex": "\"The print left an enduring mark on modern art.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-22",
+    "title": "The Rosetta Stone How One Slab Unlocked Ancient Egypt",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-22-the-rosetta-stone-how-one-slab-unlocked-ancient-egypt",
+    "url": "lessons/b2/2026-08-22-the-rosetta-stone-how-one-slab-unlocked-ancient-egypt.html",
+    "vocab": [
+      {
+        "word": "decipher",
+        "zh": "破译；解读",
+        "ex": "\"Scholars spent decades trying to decipher the lost script.\""
+      },
+      {
+        "word": "inscription",
+        "zh": "铭文；碑文",
+        "ex": "\"The inscription recorded a royal decree in three languages.\""
+      },
+      {
+        "word": "decree",
+        "zh": "敕令；政令",
+        "ex": "\"The priestly decree honoured the young king Ptolemy V.\""
+      },
+      {
+        "word": "hieroglyph",
+        "zh": "象形文字（埃及圣书体）",
+        "ex": "\"Hieroglyphs had been silent for over a thousand years.\""
+      },
+      {
+        "word": "demonstrate",
+        "zh": "证明；表明",
+        "ex": "\"Young demonstrated that some signs stood for sounds.\""
+      },
+      {
+        "word": "subsequently",
+        "zh": "随后；继而",
+        "ex": "\"Young found the clue; subsequently, Champollion finished the work.\""
+      },
+      {
+        "word": "breakthrough",
+        "zh": "突破（性进展）",
+        "ex": "\"The 1822 breakthrough doubled the known length of Egyptian history.\""
+      },
+      {
+        "word": "transform",
+        "zh": "彻底改变；转变",
+        "ex": "\"The stone transformed our understanding of the ancient world.\""
+      },
+      {
+        "word": "significant",
+        "zh": "重大的；显著的",
+        "ex": "\"The find had a significant effect on the study of antiquity.\""
+      },
+      {
+        "word": "legacy",
+        "zh": "遗产；遗赠",
+        "ex": "\"The stone is a lasting legacy of human curiosity.\""
       }
     ]
   },
@@ -3171,6 +3344,68 @@ const EPISODES = [
         "word": "transparency",
         "zh": "透明度；开放可见",
         "ex": "\"Pair this with radical transparency\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-22",
+    "title": "The Mind Under Law",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-22-the-mind-under-law",
+    "url": "lessons/c1/2026-08-22-the-mind-under-law.html",
+    "vocab": [
+      {
+        "word": "constitutionalize",
+        "zh": "使成为宪法所保障的权利；将某原则写入宪法",
+        "ex": "\"Chile became the first country to constitutionalize neurorights in 2021.\""
+      },
+      {
+        "word": "neural data",
+        "zh": "神经数据（由中枢或外周神经系统活动产生的数据）",
+        "ex": "\"The EU treats neural data as a special category of personal information.\""
+      },
+      {
+        "word": "cognitive liberty",
+        "zh": "认知自由；思想不受外力操纵的自由",
+        "ex": "\"Neurorights defend cognitive liberty — the freedom to think without manipulation.\""
+      },
+      {
+        "word": "intimate",
+        "zh": "私密的；最内在的（most intimate aspects）",
+        "ex": "\"The Court called neurodata 'the most intimate aspects of human personality.'\""
+      },
+      {
+        "word": "inviolable",
+        "zh": "不可侵犯的；神圣不可侵犯的",
+        "ex": "\"The inner life was long considered inviolable by default.\""
+      },
+      {
+        "word": "landmark",
+        "zh": "里程碑式的；重大的（判决 / 案件）",
+        "ex": "\"Girardi v. Emotiv was a landmark judgment for neuroprivacy.\""
+      },
+      {
+        "word": "infer",
+        "zh": "推断；推论（infer a thought / emotion）",
+        "ex": "\"If a machine can infer your emotions from brainwaves, who may see that inference?\""
+      },
+      {
+        "word": "informed consent",
+        "zh": "知情同意（在充分知情前提下的明确授权）",
+        "ex": "\"Retaining brain data without informed consent violated the senator's rights.\""
+      },
+      {
+        "word": "patchwork",
+        "zh": "拼凑物；零散拼合、缺乏统一的体系",
+        "ex": "\"The global response remains a patchwork of conflicting state laws.\""
+      },
+      {
+        "word": "salient",
+        "zh": "显著的；突出的（the salient lesson）",
+        "ex": "\"The salient lesson is that law lags behind technology.\""
       }
     ]
   }

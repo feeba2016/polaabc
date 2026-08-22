@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Save the Sea Turtles — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#15803d;
+  --accent2:#22c55e;
+  --bg:#f0fdf4;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#bbf7d0;
+  --border:#bbf7d0;
+  --soft:#f0fdf4;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#22c55e);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(21,128,61,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #86efac;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(21,128,61,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(21,128,61,.55);}70%{box-shadow:0 0 0 12px rgba(21,128,61,0);}100%{box-shadow:0 0 0 0 rgba(21,128,61,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #15803d;transition:.15s;}
+.kw:hover{background:#86efac;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#86efac;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#15803d;color:#14532d;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.culture{background:#f0fdf4;border:2px solid #22c55e;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.culture h3{margin:0 0 8px;color:#15803d;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(21,128,61,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#bbf7d0;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Earth News</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Save the Sea Turtles</h1>
+      <p class="subtitle">2026年8月22日 · 环境保护｜塑料污染与可爱海龟——我们怎样保护它们？—— 全文阅读（点绿色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Sea <span class="kw" data-def="海龟">turtles</span> are amazing animals. They have lived in the <span class="kw" data-def="海洋">ocean</span> for over 100 million years! Some can hold their breath for five hours. But today, these gentle animals need our help.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>Plastic <span class="kw" data-def="污染">pollution</span> is a big problem. A <span class="kw" data-def="塑料">plastic</span> bag in the water looks like a jellyfish. Sea turtles eat the bag and get sick. Every year, millions of plastic pieces go into the ocean.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p><span class="kw" data-def="海龟">Turtles</span> help the ocean stay <span class="kw" data-def="健康的">healthy</span>. They eat jellyfish and keep the water clean. When turtles are in danger, the whole ocean is in danger too. We must <span class="kw" data-def="保护">protect</span> them.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>You can help! Use a <span class="kw" data-def="可重复使用的">reusable</span> bottle. Say no to plastic straws. Join a <span class="kw" data-def="海滩">beach</span> clean-up. Small actions save turtle lives. Let's protect our ocean friends!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="culture">
+        <h3>🌱 环保小提示 Green Tip</h3>
+        <p style="margin:0;font-size:14.5px;">海龟在地球上已经生活了 <b>超过一亿年</b>，比恐龙还古老！它们需要干净的海水才能健康长大。我们少用一个塑料袋、少扔一根吸管，海洋就多一分安全。记住：<b>小小的行动，能拯救海龟的生命</b>。和爸爸妈妈一起，从今天开始爱护地球吧！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="turtle">🔊</button><div class="word">turtle<span class="pos">n.</span></div><div class="zh">海龟</div><div class="ex">"A sea turtle swims in the ocean."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ocean">🔊</button><div class="word">ocean<span class="pos">n.</span></div><div class="zh">海洋</div><div class="ex">"The ocean is big and blue."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="plastic">🔊</button><div class="word">plastic<span class="pos">n.</span></div><div class="zh">塑料</div><div class="ex">"We should use less plastic."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pollution">🔊</button><div class="word">pollution<span class="pos">n.</span></div><div class="zh">污染</div><div class="ex">"Plastic pollution hurts animals."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="protect">🔊</button><div class="word">protect<span class="pos">v.</span></div><div class="zh">保护</div><div class="ex">"We must protect sea turtles."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reusable">🔊</button><div class="word">reusable<span class="pos">adj.</span></div><div class="zh">可重复使用的</div><div class="ex">"A reusable bottle is good for Earth."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="beach">🔊</button><div class="word">beach<span class="pos">n.</span></div><div class="zh">海滩</div><div class="ex">"Join a beach clean-up."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="healthy">🔊</button><div class="word">healthy<span class="pos">adj.</span></div><div class="zh">健康的</div><div class="ex">"Turtles help the ocean stay healthy."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. We must [protect sea turtles].</h3>
+          <div class="zh">我们[必须保护海龟]。"主语 + must + 动词原形" 表示"必须做某事"，must 不随人称变化。</div>
+          <div class="eg">We must protect sea turtles.</div>
+          <div class="practice">练习：用 "keep the ocean clean"（保持海洋干净）→ We must <input placeholder="your answer"> .</div>
+        </div>
+        <div class="item">
+          <h3>2. You can [help]!</h3>
+          <div class="zh">你[可以帮忙]！"主语 + can + 动词原形" 表示"能够、可以"，can 不随人称变化。</div>
+          <div class="eg">You can help! / You can use less plastic.</div>
+          <div class="practice">练习：用 "join a beach clean-up"（参加海滩清理）→ You can <input placeholder="your answer"> .</div>
+        </div>
+        <div class="item">
+          <h3>3. Use a [reusable bottle].</h3>
+          <div class="zh">用[一个可重复使用的瓶子]。"Use a / an + 名词" 是祈使句，用来给出建议或指令，动词放句首。</div>
+          <div class="eg">Use a reusable bottle.</div>
+          <div class="practice">练习：用 "cloth bag"（布袋子）→ Use a <input placeholder="your answer"> .</div>
+        </div>
+        <div class="item">
+          <h3>4. Say no to [plastic straws].</h3>
+          <div class="zh">对[塑料吸管]说不。"Say no to + 名词" 用来劝告别人不要做某事，也是祈使句。</div>
+          <div class="eg">Say no to plastic straws.</div>
+          <div class="practice">练习：用 "balloons"（气球）→ Say no to <input placeholder="your answer"> .</div>
+        </div>
+      </div>
+    </section>
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 情态动词 must / can（义务与能力）</h3>
+          <div class="zh">"must + 动词原形" 表示"必须、应该"（强烈建议）：We must protect them. "can + 动词原形" 表示"能够、可以"：You can help! 两者都不随人称变化。</div>
+          <div class="eg">We <b>must</b> protect sea turtles. / You <b>can</b> help!</div>
+        </div>
+        <div class="item">
+          <h3>2. 一般现在时（讲事实）</h3>
+          <div class="zh">描述海龟和海洋的常态事实时，用一般现在时：动词用原形（第三人称单数加 -s）。Turtles help…、They eat…、They keep… 表示一直如此。</div>
+          <div class="eg">Turtles <b>help</b> the ocean stay healthy. / They <b>eat</b> jellyfish.</div>
+        </div>
+        <div class="item">
+          <h3>3. 祈使句（给建议 / 指令）</h3>
+          <div class="zh">用动词原形开头，表示建议或命令，主语 you 省略：Use a reusable bottle. / Say no to plastic straws. / Join a beach clean-up. 语气友好、直接。</div>
+          <div class="eg"><b>Use</b> a reusable bottle. / <b>Say</b> no to plastic straws.</div>
+        </div>
+        <div class="item">
+          <h3>4. 可数名词复数（名词 + s）</h3>
+          <div class="zh">很多事物要用复数：turtle → turtles、piece → pieces、straw → straws、action → actions、animal → animals。加 -s 表示"多个"。</div>
+          <div class="eg">Small <b>actions</b> save turtle <b>lives</b>. / millions of plastic <b>pieces</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>海龟有多古老、多特别？</h3>
+        <p><b>海龟（sea turtle）</b>已经在地球的海洋里生活了 <b>超过一亿年</b>，比恐龙还古老！全世界共有 <b>7 种</b>海龟，它们能游过上千公里的大洋，还会回到自己出生的那片海滩产卵。海龟还是"憋气高手"——休息时能在水下屏住呼吸 <b>长达 5 小时</b>。它们吃水母、啃海草，帮海洋保持平衡，是海洋健康的小卫士。</p>
+
+        <h3>塑料污染为什么伤害海龟？</h3>
+        <p>海上漂浮的 <b>塑料袋看起来很像水母</b>，海龟以为是美食，一口吞下就会生病甚至死亡。科学家估计，每年约有 <b>800 万吨塑料</b>流进海洋，超过 <b>700 种</b>海洋动物曾被塑料困住或误食。塑料不像苹果核、树叶那样会自然分解，它能在海里存留 <b>几百年</b>，越碎越小变成"微塑料"，悄悄进入鱼、虾和我们吃的食物里。</p>
+
+        <h3>小朋友可以做什么？</h3>
+        <ul>
+          <li><b>少用一次性塑料</b>：带自己的水杯（reusable bottle），对塑料吸管（plastic straws）说不。</li>
+          <li><b>参加海滩 / 河岸清理</b>：和家人去海边玩时，顺手捡起几件垃圾，海洋就多一分干净。</li>
+          <li><b>不乱丢垃圾、不放气球</b>：气球落下常飘进海里，被动物误食；废纸、空瓶请分类回收。</li>
+          <li><b>把知识告诉别人</b>：和同学分享海龟的故事，更多人知道，就有更多人来保护它们。</li>
+        </ul>
+
+        <h3>你知道吗？世界海龟日</h3>
+        <p>每年 <b>6 月 16 日</b>是"世界海龟日（World Sea Turtle Day）"，人们在这一天宣传保护海龟。记住环保的"3R"原则：<b>Reduce（减量）、Reuse（重复使用）、Recycle（回收）</b>。每一个小小的选择，都能让海龟多一分安全。</p>
+
+        <h3>动手做：我的"减塑小标语"</h3>
+        <p>拿一张纸，画一只可爱的海龟，写下今天的英文词：<b>turtle（海龟）、ocean（海洋）、plastic（塑料）、protect（保护）、reusable（可重复使用的）</b>，再写一句号召：<b>"Say no to plastic straws!"</b> 贴在家里冰箱上，提醒全家一起减塑护海洋！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一个 A2 水平的英文小故事（海龟与塑料污染），理解大意。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握情态动词 must / can、一般现在时、祈使句、可数名词复数四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个环保主题核心词汇（turtle, ocean, plastic, pollution, protect, reusable, beach, healthy）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>了解塑料污染对海洋生物的真实影响，建立爱护环境的意识。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会"Reduce / Reuse / Recycle"的环保行动，从身边小事做起。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🌱</span><div>和爸爸妈妈一起做"减塑小标语"，用英语喊出 "Say no to plastic straws!"</div></div>
+        <div class="goal"><span class="ic">💬</span><div>用 "We must protect sea turtles." 向家人表达你的环保心愿。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Save the Sea Turtles · 2026-08-22 · Made for curious kids 🐢</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Sea turtles are amazing animals. They have lived in the ocean for over 100 million years! Some can hold their breath for five hours. But today, these gentle animals need our help.",
+  "Plastic pollution is a big problem. A plastic bag in the water looks like a jellyfish. Sea turtles eat the bag and get sick. Every year, millions of plastic pieces go into the ocean.",
+  "Turtles help the ocean stay healthy. They eat jellyfish and keep the water clean. When turtles are in danger, the whole ocean is in danger too. We must protect them.",
+  "You can help! Use a reusable bottle. Say no to plastic straws. Join a beach clean-up. Small actions save turtle lives. Let's protect our ocean friends!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"How long have sea turtles lived in the ocean? 海龟在海洋里生活了多久？",opts:["100 years 100年","Over 100 million years 超过一亿年","5 hours 5小时","1 year 1年"],ans:1,
+   fb:"Correct! 海龟已经在海洋里生活了超过一亿年（over 100 million years），比恐龙还古老。"},
+  {q:"What does a plastic bag look like to a sea turtle? 塑料袋在海龟眼里像什么？",opts:["A fish 一条鱼","A jellyfish 一只水母","A rock 一块石头","A shell 一个贝壳"],ans:1,
+   fb:"Yes! 塑料袋漂浮在水里，看起来像水母（jellyfish），海龟会误食。"},
+  {q:"What can you use instead of a plastic bottle? 你可以用什么代替塑料瓶？",opts:["A reusable bottle 可重复使用的水瓶","A paper bag 纸袋","A plastic straw 塑料吸管","A balloon 气球"],ans:0,
+   fb:"Right! 用可重复使用的水瓶（reusable bottle）代替一次性塑料瓶，更环保。"},
+  {q:"Which word means '保护'? 哪个词意思是"保护"？",opts:["pollute 污染","protect 保护","play 玩","plastic 塑料"],ans:1,
+   fb:"Correct! protect 意思是"保护"，我们说 We must protect sea turtles."},
+  {q:"What is a good thing kids can do? 小朋友可以做哪件好事？",opts:["Throw plastic in the sea 把塑料丢进海里","Join a beach clean-up 参加海滩清理","Release balloons 放气球","Use many straws 用很多吸管"],ans:1,
+   fb:"Yes! 参加海滩清理（beach clean-up）能直接帮助海洋和海龟。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#15803d';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#14532d';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
