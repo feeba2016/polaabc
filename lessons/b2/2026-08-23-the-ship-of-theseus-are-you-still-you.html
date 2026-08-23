@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Ship of Theseus: Are You Still You?</title>
+<style>
+:root{
+  --accent:#6d28d9;
+  --accent2:#0d9488;
+  --bg:#f7f5fb;
+  --card:#fffdfe;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#ede9fe;
+  --border:#e9e1f7;
+  --soft:#f5f3ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#a78bfa);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,253,254,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #ece4fa;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(109,40,217,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(109,40,217,.55);}70%{box-shadow:0 0 0 12px rgba(109,40,217,0);}100%{box-shadow:0 0 0 0 rgba(109,40,217,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #6d28d9;transition:.15s;}
+.kw:hover{background:#ddd6fe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#c4b5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ede9fe;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Philosophy</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Ship of Theseus: Are You Still You?</h1>
+      <p class="subtitle">忒修斯之船：当每一块木板都被替换，你还是你吗？｜全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The puzzle</div>
+            <p>The Ship of Theseus is one of philosophy's oldest puzzles — a <span class="kw" data-def="真正的；名副其实的">genuine</span> <span class="kw" data-def="悖论（看似矛盾却含真理的命题）">paradox</span> about <span class="kw" data-def="身份；同一性（事物在时间中的持续）">identity</span>. Greek legend says the hero Theseus sailed home on a wooden ship that Athenians later kept as a memorial. As the timbers rotted, they replaced each plank, until no original piece remained. Were every plank to be swapped, the puzzle asks, is it still the same ship?</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Hobbes' twist</div>
+            <p>Thomas Hobbes deepened the <span class="kw" data-def="悖论（看似矛盾却含真理的命题）">paradox</span> in the 1600s. Suppose a collector gathered the discarded original planks and <span class="kw" data-def="用旧部件重建；复原">reconstructed</span> a second ship from them. Now two vessels exist: the one kept in service, and the one built from the old wood. Which, then, is the <span class="kw" data-def="真正的；真实的">genuine</span> Ship of Theseus? Most thinkers agree the question reveals how we <span class="kw" data-def="感知；理解；认为">perceive</span> sameness.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Philosophical replies</div>
+            <p>Philosophers have answered differently. Some argue that what <span class="kw" data-def="构成；组成">constitutes</span> a thing is its continuous history, not its material; the maintained ship <span class="kw" data-def="持续存在；保持同一">persists</span> because it never stopped being the same object. Others say form and function matter more than timber. Had the original planks never been saved, the debate would be far simpler — yet the puzzle still <span class="kw" data-def="彻底改变；转变">transforms</span> how we think about change.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The human question</div>
+            <p>More striking still, the puzzle points at us. The human body replaces most of its cells over time, so are you the same person you were a decade ago? <span class="kw" data-def="因此；结果">Consequently</span>, the Ship of Theseus is <span class="kw" data-def="本质的；关键的">essential</span> to debates on memory, medicine, and the self. Not only does it question objects, but it also questions who we are — and that, perhaps, is its lasting gift.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="paradox">🔊</button><div class="word">paradox<span class="pos">n.</span></div><div class="zh">悖论（看似矛盾却含真理的命题）</div><div class="ex">"The paradox puzzles anyone who assumes objects are just their parts."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="identity">🔊</button><div class="word">identity<span class="pos">n.</span></div><div class="zh">身份；同一性（事物在时间中的持续）</div><div class="ex">"Personal identity is a central question in the philosophy of mind."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="genuine">🔊</button><div class="word">genuine<span class="pos">adj.</span></div><div class="zh">真正的；名副其实的</div><div class="ex">"Is the restored painting a genuine work of the master?"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="persist">🔊</button><div class="word">persist<span class="pos">v.</span></div><div class="zh">持续存在；保持同一</div><div class="ex">"The maintained ship persists because its history never broke."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="constitute">🔊</button><div class="word">constitute<span class="pos">v.</span></div><div class="zh">构成；组成</div><div class="ex">"What constitutes a nation is more than its borders."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reconstruct">🔊</button><div class="word">reconstruct<span class="pos">v.</span></div><div class="zh">重建；用旧部件复原</div><div class="ex">"Archaeologists reconstructed the vase from its broken pieces."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="perceive">🔊</button><div class="word">perceive<span class="pos">v.</span></div><div class="zh">感知；理解；认为</div><div class="ex">"We perceive sameness through stories, not merely through matter."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="transform">🔊</button><div class="word">transform<span class="pos">v.</span></div><div class="zh">彻底改变；转变</div><div class="ex">"The idea transformed how we view personal identity."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="consequently">🔊</button><div class="word">consequently<span class="pos">adv.</span></div><div class="zh">因此；结果</div><div class="ex">"The timber was rotten; consequently, it had to be replaced."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="essential">🔊</button><div class="word">essential<span class="pos">adj.</span></div><div class="zh">本质的；关键的</div><div class="ex">"Memory is essential to who we are."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Were [subject] + to + verb, [main clause].</h3>
+          <div class="zh">现在/将来虚拟语气倒装：把 were 提到句首，相当于 "If every plank were to be swapped..."，表示假想、不大可能发生的情形，语气正式。</div>
+          <div class="eg">Were every plank to be swapped, the puzzle asks, is it still the same ship?</div>
+          <div class="practice">练习：用 "the original planks / reassemble" → <input placeholder="your answer">, two ships would claim the name.</div>
+        </div>
+        <div class="item">
+          <h3>2. Had [subject] + not + past participle, [main clause would have + past participle].</h3>
+          <div class="zh">过去虚拟语气倒装（省去 if）：相当于 "If the original planks had never been saved..."，表示与过去事实相反的假设。</div>
+          <div class="eg">Had the original planks never been saved, the debate would be far simpler.</div>
+          <div class="practice">练习：用 "Hobbes / not add the twist" → <input placeholder="your answer">, the puzzle might be half-forgotten.</div>
+        </div>
+        <div class="item">
+          <h3>3. Not only does [subject] [verb], but [subject] also [verb].</h3>
+          <div class="zh">否定词前置引起的倒装：Not only 位于句首时，其后的助动词须提前。用于强调两件并列的事都成立。</div>
+          <div class="eg">Not only does it question objects, but it also questions who we are.</div>
+          <div class="practice">练习：用 "the ship / raise doubts / the self / wonder" → <input placeholder="your answer">, but the self also wonders who it is.</div>
+        </div>
+        <div class="item">
+          <h3>4. [Past participle phrase], [main clause].</h3>
+          <div class="zh">过去分词（非谓语动词）作状语，常表方式、原因或条件。句首分词短语的逻辑主语须与主句主语一致（此处指 the ship）。</div>
+          <div class="eg">Preserved as a memorial, the ship drew visitors for centuries.</div>
+          <div class="practice">练习：用 "rebuild from old timber" → <input placeholder="your answer">, the second vessel seemed just as real.</div>
+        </div>
+        <div class="item">
+          <h3>5. What + clause + is + noun / clause.</h3>
+          <div class="zh">主语从句（nominal clause）作主语：用 "What ..." 引导的从句充当句子的主语，是学术写作中表达抽象观点的高级结构。</div>
+          <div class="eg">What constitutes a thing is its continuous history, not its material.</div>
+          <div class="practice">练习：用 "make you you" → <input placeholder="your answer"> is your memory, not your cells.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气倒装（Inverted subjunctive）</h3>
+          <div class="zh">当 if 条件句含有 were / had / should 时，可省略 if 并把动词提到主语前，语气更正式、书面化，是 B2 高级写法的标志。本文出现 "Were every plank to be swapped..." 与 "Had the original planks never been saved..."。</div>
+          <div class="eg">Were every plank to be swapped, ... / Had the planks never been saved, ...</div>
+        </div>
+        <div class="item">
+          <h3>2. 否定词前置倒装（Negative inversion）</h3>
+          <div class="zh">Not only / Never / Seldom 等否定词位于句首时，其后的助动词须提前构成部分倒装。用于强调两件并列的事都成立，是学术英语的常见强调手段。</div>
+          <div class="eg">Not only does it question objects, but it also questions who we are.</div>
+        </div>
+        <div class="item">
+          <h3>3. 非谓语动词 · 过去分词作状语（Past participle as adverbial）</h3>
+          <div class="zh">动词加 -ed/-en 放在句首充当状语，可表示方式、原因或条件，使句子紧凑而高级。注意分词的逻辑主语必须就是主句主语。</div>
+          <div class="eg"><b>Preserved</b> as a memorial, the ship drew visitors for centuries. / <b>Rebuilt</b> from old timber, the vessel seemed real.</div>
+        </div>
+        <div class="item">
+          <h3>4. 主语从句（Nominal clause as subject）</h3>
+          <div class="zh">用 What / Whether / That 引导的从句充当主语，表达抽象命题，是哲学与学术写作的骨架。谓语动词用单数。</div>
+          <div class="eg"><b>What constitutes</b> a thing is its continuous history, not its material.</div>
+        </div>
+        <div class="item">
+          <h3>5. 被动语态（Passive voice）</h3>
+          <div class="zh">当动作的承受者更重要、或主语无需点明时，用 "be + 过去分词"。叙述典故与历史事实时常以被动突出"事实本身"而非执行者。</div>
+          <div class="eg">The ship <b>was kept</b> as a memorial. / Each plank <b>was replaced</b> as it rotted.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一块「换光了木板」的船，凭什么还能叫自己？</h3>
+        <p><strong>忒修斯之船（Ship of Theseus）</strong>是西方哲学最古老的同一性悖论之一。它的核心问题是：如果一个物体的所有组成部分都被逐一替换，它还是原来那个物体吗？这个问题看似小儿科，却一直逼着哲学家重新思考「什么是同一」「什么是自我」。</p>
+
+        <h3>悖论从哪来：普鲁塔克与「万物皆流」</h3>
+        <p>这个难题最早由古希腊传记作家<strong>普鲁塔克（Plutarch）</strong>在《希腊罗马名人传·忒修斯传》（Life of Theseus，约公元 75–100 年）中记载：雅典人把英雄忒修斯从克里特岛归来所乘的船当作纪念物保存，木板朽坏就换上新木，直到原木一块不剩；哲学家们由此争论它是否还是「同一艘船」。更早的赫拉克利特（Heraclitus）有名言「人不能两次踏入同一条河流」——万物皆在流变，却又被我们认作「同一个」。这条线索正是悖论的源头。</p>
+
+        <h3>霍布斯的「第二艘船」：把难题推到极致</h3>
+        <p>17 世纪英国哲学家<strong>托马斯·霍布斯（Thomas Hobbes）</strong>在《论物体》（De Corpore, 1655）里追加了一个著名变体：假如有人把换下来的旧木板一一收集，重新拼成一艘船，那么此刻就有<strong>两艘船</strong>都声称自己是「真正的忒修斯之船」——一艘是持续维修、从未中断的船；一艘是用「原装材料」拼回的船。这下，「形式同一」与「质料同一」之争被彻底摊开：你到底凭什么说哪艘才是真的？</p>
+
+        <h3>哲学家怎么答：五条主要思路</h3>
+        <ul>
+          <li><strong>亚里士多德四因说</strong>：决定一物的是其「形式」（shape/arrangement）与「目的」（purpose），而非质料。持续维修的船仍承担纪念忒修斯的功能，所以仍是原船。</li>
+          <li><strong>洛克的生命/意识连续性</strong>：在《人类理解论》（1689）中，洛克主张活物的同一性在于「同一组织化生命」的连续，而非某一刻由什么质料构成；对人的同一性，他更强调记忆与意识的连续。</li>
+          <li><strong>时空连续性理论</strong>：只要物体在时空里持续存在、历史不断裂，它就是同一的；拼回的那艘船缺少这种连续。</li>
+          <li><strong>四维主义 / 时间切片（David Lewis、Ted Sider）</strong>：物体是横跨时间的四维整体，不同时刻只是它的不同「时间部分」，两艘船在任一时刻都是不同的时间切片，并不矛盾。</li>
+          <li><strong>佛教「无我」视角</strong>：大乘佛典《大智度论》里有一个惊人相似的故事——旅人夜遇二鬼，身体被逐件拆下又由另一具尸体补上，旅人困惑「我究竟是谁」。佛教认为「同一」只是世俗的施设（约定），并非终极实相。</li>
+        </ul>
+
+        <h3>现代回响：从博物馆到你的身体</h3>
+        <p>这个两千年前的脑筋急转弯，今天处处能见：<strong>博物馆修复</strong>——一幅画修掉多少笔还算原作？<strong>医学与身份</strong>——器官移植、义肢、乃至脑机接口，换了心脏我还是我吗？<strong>公司身份</strong>——员工、产品全换，百年老店还是同一家企业？<strong>数字身份</strong>——软件更新、数据迁移，什么让一个程序或数据库是「同一个」？流行文化里，漫威《旺达幻视》（WandaVision）让两个 Vision 用这艘船达成和解，正是它的现代注脚。</p>
+
+        <h3>与 B2 英语学习的连接</h3>
+        <p>对英语学习者而言，这个悖论的价值在于它逼你用<strong>抽象名词从句、虚拟语气、倒装</strong>去讨论「假设」与「同一」：你会练习 "Were every plank to be swapped..."、主语从句 "What constitutes a thing is..."，以及 "Not only does it question objects, but it also questions who we are"。读懂忒修斯之船，不只是记一个典故，更是学会用高级句式做清晰、严谨的论证——这正是 B2 中高级英语最该练的能力。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标（B2 中高级）</h3>
+        <div class="goal"><span class="ic">🌟</span><div>理解忒修斯之船悖论的核心问题：物体部件全部替换后，是否仍是「同一物」。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 CEFR B2 核心学术词汇（paradox, identity, genuine, persist, constitute, reconstruct, perceive, transform, consequently, essential）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会虚拟语气倒装（Were... to... / Had... not...）、否定倒装、过去分词作状语与主语从句等高级句式。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>辨析被动语态、非谓语动词与主语从句在哲学论述中的作用。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立跨学科视角：把同一性悖论连接到个人身份、医学、文物修复与人工智能等现实议题。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读英文朗读，模仿学术英语的语调与停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，并用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>仿写两个虚拟语气倒装句（Were... to... / Had... not...），体会正式书面语感。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div>读「中文知识扩展」，再用自己的话用英文概括哲学家回答「同一性」的两条主要思路。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English · The Ship of Theseus: Are You Still You? · 2026-08-23</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "The Ship of Theseus is one of philosophy's oldest puzzles — a genuine paradox about identity. Greek legend says the hero Theseus sailed home on a wooden ship that Athenians later kept as a memorial. As the timbers rotted, they replaced each plank, until no original piece remained. Were every plank to be swapped, the puzzle asks, is it still the same ship?",
+  "Thomas Hobbes deepened the paradox in the 1600s. Suppose a collector gathered the discarded original planks and reconstructed a second ship from them. Now two vessels exist: the one kept in service, and the one built from the old wood. Which, then, is the genuine Ship of Theseus? Most thinkers agree the question reveals how we perceive sameness.",
+  "Philosophers have answered differently. Some argue that what constitutes a thing is its continuous history, not its material; the maintained ship persists because it never stopped being the same object. Others say form and function matter more than timber. Had the original planks never been saved, the debate would be far simpler — yet the puzzle still transforms how we think about change.",
+  "More striking still, the puzzle points at us. The human body replaces most of its cells over time, so are you the same person you were a decade ago? Consequently, the Ship of Theseus is essential to debates on memory, medicine, and the self. Not only does it question objects, but it also questions who we are — and that, perhaps, is its lasting gift."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What is the Ship of Theseus mainly about? 忒修斯之船主要探讨什么？",opts:["Whether an object stays the same when all its parts are replaced 物体部件全部替换后是否仍是同一物","How to build a faster warship 如何建造更快的战船","The life story of the hero Theseus 英雄忒修斯的生平事迹","A map of ancient Athens 一幅古雅典地图"],ans:0,
+   fb:"Correct! 它追问：当所有部件都被替换，物体是否仍是『同一个』——核心是同一性（identity）与持续（persistence）。"},
+  {q:"Who added the famous twist of reassembling the original planks? 谁增添了「把原木板重新拼成一艘船」的著名变体？",opts:["Thomas Hobbes 托马斯·霍布斯","Plutarch 普鲁塔克","Aristotle 亚里士多德","David Lewis 大卫·刘易斯"],ans:0,
+   fb:"Yes! 霍布斯在 17 世纪《论物体》中加入「第二艘船」变体，使形式同一与质料同一之争白热化。"},
+  {q:"What did Hobbes's imagined collector do? 霍布斯设想中的收藏家做了什么？",opts:["Reconstructed a second ship from the discarded original planks 用丢弃的原木板重建了第二艘船","Burned the old planks 烧掉了旧木板","Sold the ship to Rome 把船卖到了罗马","Sank the ship at sea 把船沉入海中"],ans:0,
+   fb:"Right! 他把换下的旧板收集重拼成一艘船，于是出现两艘都自称『真船』的船。"},
+  {q:"'Were every plank to be swapped...' is an example of: 这句话属于哪种语法？",opts:["Inverted subjunctive (虚拟语气倒装)","Past perfect 过去完成时","Imperative 祈使句","Comparative 比较级"],ans:0,
+   fb:"Right! 这是省略 if 的虚拟语气倒装，相当于 If every plank were to be swapped..."},
+  {q:"According to one view in the text, what constitutes a thing's identity? 据本文某观点，什么构成了一物的同一性？",opts:["Its continuous history, not its material 它连续的历程，而非其质料","The number of its planks 它木板的数量","Its colour 它的颜色","Its size 它的大小"],ans:0,
+   fb:"Yes! 文中说 what constitutes a thing is its continuous history, not its material——历史连续而非材料本身。"},
+  {q:"Why does the puzzle matter to human beings? 这个悖论为何与人类切身相关？",opts:["Our bodies replace most cells over time, raising the question of personal identity 人体细胞随时间不断更新，引出『个人同一性』之问","It proves ships are immortal 它证明船不朽","It shows wood lasts forever 它说明木头永存","It explains the force of gravity 它解释了引力"],ans:0,
+   fb:"Correct! 身体细胞不断更新，于是『十年前的我还是我吗』成了同一性悖论的现世版本。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#6d28d9';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

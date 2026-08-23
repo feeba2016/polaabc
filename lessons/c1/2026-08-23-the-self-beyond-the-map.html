@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Self Beyond the Map — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 跨文化比较 Cross-cultural</span>
+      <h1 class="title">The Self Beyond the Map</h1>
+      <p class="subtitle">Deconstructing the East–West binary of selfhood in an age of globalization · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Dichotomy</div>
+            <p>In 1991, Markus and Kitayama proposed that the self comes in two shapes: independent, typical of the West, where identity is carved from inner traits and achievement; and <span class="kw" data-def="相互依存的；彼此关联、由关系定义的">interdependent</span>, typical of East Asia, where the self is woven from relationships, roles, and the duty to preserve harmony. For three decades this elegant binary organized cross-cultural psychology — a clean map of the mind.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Dismantling</div>
+            <p>Yet the map was too neat. In a study spanning 33 countries and more than 7,000 adults, Vignoles and 70 colleagues <span class="kw" data-def="拆解；拆除（此处指推翻旧理论框架）">dismantled</span> the <span class="kw" data-def="二分法；二元对立（非此即彼的划分）">dichotomy</span>. They found not two selves but seven dimensions — difference, connection, self-direction, self-reliance, consistency, self-expression, and self-interest. Western samples scored above average on five, yet below on self-reliance and consistency. The independent West, it turned out, was never wholly independent.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Hybrid</div>
+            <p>Globalization has further blurred the lines. Individualistic values now <span class="kw" data-def="扩散；渗透（逐渐传播开来）">diffuse</span> into historically collectivist societies through consumer culture and social media, yet they are <span class="kw" data-def="重新语境化；被置于新的文化语境中 reinterpret">recontextualized</span>, not copied. In East Asia, young people pursue personal goals within a durable frame of family obligation and harmony — a process scholars call '<span class="kw" data-def="全球在地化；全球化与在地化融合（glocalization）">glocalization</span>.' The self, it seems, is neither fixed nor <span class="kw" data-def="可互换的；可替代的（失去独特性）">fungible</span>; it is negotiated.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Lesson</div>
+            <p>What endures is the danger of the single story. To <span class="kw" data-def="以刻板印象定型；把……套入固有模式">typecast</span> a billion people as 'interdependent' is to mistake an average for an <span class="kw" data-def="本质；固有属性（the essence of X）">essence</span>. Cultural neuroscience confirms the <span class="kw" data-def="可塑性；可改变、可重塑的特质">plasticity</span>: the same brain encodes a separate self in one context, a relational one in another. The task ahead is not to redraw the map, but to read it with humility. This is Pola News, Advanced English. Read critically, and read deeply.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="interdependent">🔊</button><div class="word">interdependent<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">相互依存的；由关系定义的（与 independent 相对）</div><div class="ex">"In East Asia the self is often interdependent, woven from relationships and roles."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="dichotomy">🔊</button><div class="word">dichotomy<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">二分法；二元对立（非此即彼的划分）</div><div class="ex">"Vignoles and colleagues dismantled the tidy East–West dichotomy."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="dismantle">🔊</button><div class="word">dismantle<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">拆解；拆除（此处指推翻旧理论框架）</div><div class="ex">"New data dismantled the theory that the West is wholly independent."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="recontextualize">🔊</button><div class="word">recontextualize<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">重新语境化；把外来价值置于本土文化语境中 reinterpret</div><div class="ex">"Global values are recontextualized, not merely copied, by local cultures."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fungible">🔊</button><div class="word">fungible<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">可互换的；可替代的（此处指丧失独特性、可被替换）</div><div class="ex">"The self is neither fixed nor fungible; it is constantly negotiated."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="typecast">🔊</button><div class="word">typecast<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">以刻板印象定型；把一群人套入固有模式</div><div class="ex">"To typecast a billion people as 'interdependent' is to mistake an average for an essence."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="essence">🔊</button><div class="word">essence<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">本质；固有属性（the essence of X）</div><div class="ex">"An average is a tendency, not the essence of a people."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="plasticity">🔊</button><div class="word">plasticity<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">可塑性；可被改变、被重塑的特质</div><div class="ex">"Cultural neuroscience confirms the plasticity of the self across contexts."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="glocalization">🔊</button><div class="word">glocalization<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">全球在地化；全球化与在地化融合（global + local）</div><div class="ex">"East Asian youth embrace global trends through glocalization, not imitation."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="diffuse">🔊</button><div class="word">diffuse<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">扩散；渗透（逐渐传播开来）</div><div class="ex">"Individualistic values now diffuse into historically collectivist societies."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [Scholar] proposed that the self comes in [N] shapes: [A] … and [B] …</h3>
+          <div class="zh">"[学者] 提出自我有 [N] 种形态：[A]……与 [B]……" 用 proposed that 引出理论，再用冒号列举二元分类，是学术综述开篇的高分结构。</div>
+          <div class="eg">In 1991, Markus and Kitayama proposed that the self comes in two shapes: independent … and interdependent.</div>
+          <div class="practice">练习：用 "Hofstede / five / power distance … and individualism" → Hofstede <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Yet the map was too [adj].</h3>
+          <div class="zh">"然而这幅地图过于 [形容词]。" 段首以 Yet + 短句制造强转折，先承认可有的理论，再一笔推翻，是评论文"欲扬先抑"的利器。</div>
+          <div class="eg">Yet the map was too neat.</div>
+          <div class="practice">练习：用 "simple" → Yet the <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. They found not [X] but [Y].</h3>
+          <div class="zh">"他们发现的不是 X，而是 Y。" not … but … 平行结构制造认知反差，常用于"推翻常识"的论证节点。</div>
+          <div class="eg">They found not two selves but seven dimensions.</div>
+          <div class="practice">练习：用 "a deficit / an adaptive strategy" → They found not <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. [Concept] now [verb] into [place], yet they are [verb-ed], not [verb-ed].</h3>
+          <div class="zh">"[概念] 如今渗透进 [某地]，却被重新语境化，而非被复制。" 用 yet 引出"借用—改造"的张力，精准描述 glocalization（全球在地化）。</div>
+          <div class="eg">Individualistic values now diffuse into collectivist societies, yet they are recontextualized, not copied.</div>
+          <div class="practice">练习：用 "fashions / flow / localized / imported" → Fashions now <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. To [verb] a billion people as [X] is to mistake [Y] for [Z].</h3>
+          <div class="zh">"把十亿人 [动词] 为 X，就是把 Y 误认作 Z。" 不定式主语 + is to mistake A for B，把刻板印象升格为伦理批判，是收束段的重磅修辞。</div>
+          <div class="eg">To typecast a billion people as 'interdependent' is to mistake an average for an essence.</div>
+          <div class="practice">练习：用 "label / a fixed type / a tendency / a destiny" → To label a nation <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 冒号列举与破折号插入（Colon listing & em-dash appositive）</h3>
+          <div class="zh">用冒号引出并列项清单（two shapes: independent … and interdependent）；用破折号插入解释或同位语（a clean map of the mind；seven dimensions — difference, connection …）。破折号比括号正式、比 which 从句紧凑，是学术英语的标志性 punctuation。</div>
+          <div class="eg">"They found not two selves but seven dimensions — difference, connection, self-direction, self-reliance, consistency, self-expression, and self-interest."</div>
+        </div>
+        <div class="item">
+          <h3>2. 平行结构与 not X but Y（Parallelism）</h3>
+          <div class="zh">not … but … 要求前后语法结构对称：not two selves（名词短语）but seven dimensions（名词短语）；recontextualized（过去分词）, not copied（过去分词）。对称的平行结构增强节奏感与说服力，是 C1–C2 写作加分项。</div>
+          <div class="eg">"They found not two selves but seven dimensions." / "recontextualized, not copied."</div>
+        </div>
+        <div class="item">
+          <h3>3. 被动语态与学术去人格化（Passive for objectification）</h3>
+          <div class="zh">学术/评论英语常用被动把焦点从"谁做"转向"发生了什么"：it turned out（无人称，相当于"结果表明"）、a process scholars call 'glocalization'（省略 which is 的缩略关系从句）。这种去人格化让论述显得客观、克制。</div>
+          <div class="eg">"The independent West, it turned out, was never wholly independent." / "a process scholars call 'glocalization.'"</div>
+        </div>
+        <div class="item">
+          <h3>4. 现在分词作伴随/结果状语（Present participle adjunct）</h3>
+          <div class="zh">woven from relationships（"由关系编织而成"）与 recontextualized, not copied 中，分词把 secondary 信息压缩进主句，避免堆砌 and 从句，使长句更凝练、更具文学性——这是高级学术写作的常用手法。</div>
+          <div class="eg">"the self is woven from relationships, roles, and the duty to preserve harmony."</div>
+        </div>
+        <div class="item">
+          <h3>5. 反讽式收束与修辞对照（Antithetical closure）</h3>
+          <div class="zh">用 not to A, but to B 的对照结构收束，把全文论点凝练为一句警句：redraw the map（重绘地图）vs read it with humility（以谦逊去读）。这种对照既呼应开篇"map"隐喻，又留下思辨余味，是评论文结尾的高分模板。</div>
+          <div class="eg">"The task ahead is not to redraw the map, but to read it with humility."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本期讨论的是跨文化心理学中一个被沿用了三十年的核心框架——<b>"自我构念"（self-construal）</b>的<b>独立型（independent）</b>与<b>互依型（interdependent）</b>二分，以及它如何在新的大规模实证研究与全球化浪潮下被<b>解构</b>。主角是一条清晰的事实链：</p>
+        <ul>
+          <li><b>Markus & Kitayama（1991）：</b>两位学者提出自我有两种形态——西方典型的"独立型"（身份由内在特质与个人成就雕琢而成），与东亚典型的"互依型"（自我由关系、角色与维持和谐的义务编织而成）。这一"东西二元"模型此后主导了跨文化心理学三十年。</li>
+          <li><b>Vignoles 等（2016）：</b>一项横跨 <b>33 个国家、55 个文化群体、7,000 余名成年人</b>、由 <b>71 位研究者</b>共同完成的大规模研究，推翻了简单二元论。研究者识别出 <b>七个维度</b>：差异（Difference）、联结（Connection）、自我导向（Self-Direction）、自我倚赖（Self-Reliance）、一致性（Consistency）、自我表达（Self-Expression）、自我利益（Self-Interest）。西方样本在五个维度上高于平均，却在"自我倚赖"与"一致性"上低于平均——所谓"完全独立的西方"从未真正独立。</li>
+          <li><b>全球化与"全球在地化"（glocalization）：</b>个人主义价值通过消费文化与社交媒体扩散进历史上偏集体主义的社会，却不是被"复制"，而是被<b>重新语境化</b>。东亚年轻人追求个人目标，却仍置于家庭义务与和谐的持久框架内——这正是学者所称的 glocalization。</li>
+          <li><b>文化神经科学：</b>脑成像研究发现，西方被试在思考"自我"时内侧前额叶皮层（mPFC）强烈激活、思考母亲时激活较弱；东亚被试对"自我"与"母亲"均强烈激活，显示自我的边界更具渗透性。这为主观的互依型自我提供了生物学基础，也印证了自我的<b>可塑性</b>（plasticity）。</li>
+        </ul>
+        <div class="box">🧭 <b>权威出处：</b>Markus & Kitayama (1991)《Culture and the Self》；Vignoles et al. (2016)《Beyond the 'East–West' Dichotomy: Global Variation in Cultural Models of Selfhood》（33 国 / 7,000+ 成人 / 7 维度模型）；Maricopa Open Digital Press《Beyond East and West Differences》(2025)；ScienceDirect (2025) 关于跨美国、东亚、东南亚、拉美、中东的自我构念量表比较研究。本课所有数字与引语均据此提炼，<b>尊重原始事实，未做篡改</b>。</div>
+
+        <h3>二、为什么"东西方心智二元论"受到挑战？</h3>
+        <p>二元论的魅力在于简洁，但简洁往往以牺牲真相为代价。Vignoles 的研究揭示：文化对自我的塑造不是"非东即西"的开关，而是由遗产、社会经济发展、聚落形态与生态语境共同编织的连续光谱。例如该研究发现，拉美文化在"差异"与"自我表达"维度上得分接近西方，却在"一致性"与"自我利益"上更高，挑战了"拉美天然集体主义"的旧说；穆斯林与天主教样本在"一致性"上得分突出，可能与两教强调行为一致性的教义有关。换言之，<b>"独立"与"互依"并非文化的属性标签，而是每个人身上都不同程度兼具的倾向</b>。</p>
+
+        <h3>三、全球化是"趋同"还是"杂交"？</h3>
+        <p>一个常见的误读是：全球化会让世界变成文化上的"大同"。但本文与大量社会学研究指向另一种图景——<b>杂交（hybridization）</b>而非同化。个人主义价值确实在扩散，却被本地文化"重新语境化"：东亚社会鼓励个人追求，却通常仍嵌套在家庭义务与社会和谐的框架内；年轻人既消费全球潮流，又参与春节、祭祖、传统艺术等在地实践。这种"全球—在地"的协商，正是 glocalization 的精髓，也解释了为何 Soft Power 竞争（如日本的"酷日本"、韩国的"韩流"外交）会促使社会同时拥抱全球符号与重申本土独特叙事。</p>
+
+        <h3>四、对雅思/托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>社科类文章高频出现 dichotomy, dismantle, recontextualize, fungible, typecast, essence, plasticity, glocalization, diffuse, interdependent 等 C1–C2 词，且多用冒号列举、破折号插入、not … but … 平行结构与被动去人格化。本课即微型训练。</li>
+          <li><b>写作 Task 2 / 独立写作：</b>这是典型的"理论—证伪—机制—反思"评论文。用 "<i>[Scholar] proposed that the self comes in two shapes</i>" 开篇；用 "<i>Yet the map was too neat</i>" 转折；用 "<i>not X but Y</i>" 与 "<i>The task ahead is not to A, but to B</i>" 收束，展示批判性思维——这是 7 分以上的关键。</li>
+          <li><b>听力/口语：</b>用英语概括一项"学术发现"时，结构建议：理论（the dichotomy）→ 证伪（Vignoles' 7 dimensions）→ 机制（glocalization / plasticity）→ 反思（the danger of the single story），最清晰有条理。</li>
+        </ul>
+
+        <h3>五、内容合规与立场说明</h3>
+        <p>本课聚焦<b>跨文化心理学与文化全球化</b>这一中性学术议题，所有事实均引自公开学术论文与权威教材，立场客观、尊重事实，<b>不涉及任何敏感政治话题</b>。涉及主权与领土表述时，一律使用规范名称：台湾称"<b>中国台湾</b>"、香港称"<b>中国香港</b>"、澳门称"<b>中国澳门</b>"，均为中国不可分割的一部分。该话题安全，适合作为雅思/托福备考素材。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 跨文化/评论核心词（interdependent, dichotomy, dismantle, recontextualize, fungible, typecast, essence, plasticity, glocalization, diffuse）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术/评论句型，尤其是 "[Scholar] proposed that the self comes in two shapes"、"not X but Y" 与 "To [verb] a billion people as X is to mistake Y for Z"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解冒号列举、破折号插入、not … but … 平行结构、被动去人格化、现在分词伴随状语等高级语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语概括一项学术发现，并展开"理论—证伪—机制—反思"的批判性论述。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>熟悉雅思/托福阅读与写作中常见的"跨文化比较"话题框架。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听 Dacey 的自然英语朗读（本系列使用英文音色），跟读时注意重音（如 di-CHO-to-my, dis-MAN-tle, re-con-TEX-tu-a-lize, fun-gi-ble, pla-STI-ci-ty, glocalization）。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音，用每个词各造一个跨文化/评论句子（参考句型练习）。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：The Dichotomy → The Dismantling → The Hybrid (glocalization) → The Lesson. 用 "Yet the map was too neat" 转折、"The task ahead is not to A, but to B" 收束拿高分。</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做测验时先读题干再定位原文；推理题（inference）答案通常不出现原词而是同义改写（如 "was never wholly independent" ≈ the binary was an oversimplification）。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Self Beyond the Map · 2026-08-23 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In 1991, Markus and Kitayama proposed that the self comes in two shapes: independent, typical of the West, where identity is carved from inner traits and achievement; and interdependent, typical of East Asia, where the self is woven from relationships, roles, and the duty to preserve harmony. For three decades this elegant binary organized cross-cultural psychology — a clean map of the mind.",
+  "Yet the map was too neat. In a study spanning 33 countries and more than 7,000 adults, Vignoles and 70 colleagues dismantled the dichotomy. They found not two selves but seven dimensions — difference, connection, self-direction, self-reliance, consistency, self-expression, and self-interest. Western samples scored above average on five, yet below on self-reliance and consistency. The independent West, it turned out, was never wholly independent.",
+  "Globalization has further blurred the lines. Individualistic values now diffuse into historically collectivist societies through consumer culture and social media, yet they are recontextualized, not copied. In East Asia, young people pursue personal goals within a durable frame of family obligation and harmony — a process scholars call 'glocalization.' The self, it seems, is neither fixed nor fungible; it is negotiated.",
+  "What endures is the danger of the single story. To typecast a billion people as 'interdependent' is to mistake an average for an essence. Cultural neuroscience confirms the plasticity: the same brain encodes a separate self in one context, a relational one in another. The task ahead is not to redraw the map, but to read it with humility. This is Pola News, Advanced English. Read critically, and read deeply."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the central claim of the passage? 文章的核心论点是什么？",opts:["The independent West and interdependent East are biologically fixed and unchanging","The tidy East–West binary of selfhood is an oversimplification now challenged by large-scale data and globalization","Markus and Kitayama's 1991 model was completely wrong and should be abandoned","Globalization is making every culture identical and erasing all difference"],ans:1,
+   fb:"Correct. 文章核心是：把自我简单分为'独立型西方 / 互依型东方'的二元论过于 neat（规整），已被 Vignoles 等的大规模研究与全球化现实所解构。"},
+  {q:"2. According to the Vignoles et al. study, which finding directly undermines the 'wholly independent West'? 根据 Vignoles 等的研究，哪项发现直接动摇了'完全独立的西方'？",opts:["Western samples scored above average on all seven dimensions","The study included only Western participants","Western samples scored below average on self-reliance and consistency","East Asians rejected the survey entirely"],ans:2,
+   fb:"Yes. 研究发现西方样本在七个维度中五个高于平均，却在'self-reliance'与'consistency'上低于平均，故'完全独立的西方'从未真正成立。"},
+  {q:"3. What can be INFERRED from 'The independent West, it turned out, was never wholly independent'? 从'独立的西方……从未真正独立'可推断出什么？",opts:["Western cultures have no individualistic traits at all","The East–West binary was an oversimplification; Western selves also carry interdependent tendencies","Vignoles proved that independence is a myth everywhere","The study was conducted only in the United States"],ans:1,
+   fb:"Correct. 该句意指二元划分是过度简化：即便是西方自我，也兼具互依型特征，并非铁板一块的独立。"},
+  {q:"4. In paragraph 3, 'fungible' most nearly means: 第 3 段中 fungible 最接近的意思是？",opts:["permanent and unchanging","interchangeable or replaceable; lacking unique identity","emotionally warm and connected","legally protected by treaty"],ans:1,
+   fb:"Right. fungible = 可互换的、可替代的。文中 'neither fixed nor fungible' 指自我既非固定不变，也非可随意替换、失去独特性的商品。"},
+  {q:"5. The mention of 'glocalization' primarily serves to: 提及 glocalization（全球在地化）主要作用是？",opts:["prove that Eastern cultures are disappearing","show that global values are adapted and recontextualized locally, not simply copied","argue that only Western youth use social media","demonstrate that consumer culture has no effect on identity"],ans:1,
+   fb:"Yes. 作者用 glocalization 说明：个人主义价值虽扩散入集体主义社会，却被'重新语境化'而非复制——是全球与在地融合的杂交，而非同化。"},
+  {q:"6. The author's tone toward the East–West self model is best described as: 作者对东西方自我模型的态度最准确描述是？",opts:["angry and dismissive of all cross-cultural research","nuanced and revisionist — respectful of its origins yet critical of its overreach","uncritical admiration of Markus and Kitayama","indifferent and superficial"],ans:1,
+   fb:"Correct. 作者态度细腻而具修正性：既承认 1991 模型的开创价值（'organized cross-cultural psychology for three decades'），又批评其'过于规整'、以平均数冒充本质，主张以谦逊重读。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

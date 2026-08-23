@@ -1666,6 +1666,23 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-23",
+    "title": "Two Languages Younger Brain",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-23-two-languages-younger-brain",
+    "url": "lessons/b1/2026-08-23-two-languages-younger-brain.html",
+    "vocab": [
+      {
+        "word": "language",
+        "zh": "大脑",
+        "ex": "先提一个问题拉近距离，再抛出好消息。<br>例：<b>Do you speak more than one language? Then here is great news.</b>"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -1998,6 +2015,48 @@ const EPISODES = [
         "word": "purple",
         "zh": "紫色",
         "ex": "\"Purple is pretty.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-23",
+    "title": "Hello Nice to Meet You",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-23-hello-nice-to-meet-you",
+    "url": "lessons/a1/2026-08-23-hello-nice-to-meet-you.html",
+    "vocab": [
+      {
+        "word": "hello",
+        "zh": "你好",
+        "ex": "\"Hello! I am Pola.\""
+      },
+      {
+        "word": "name",
+        "zh": "名字",
+        "ex": "\"My name is Ben.\""
+      },
+      {
+        "word": "fine",
+        "zh": "很好的",
+        "ex": "\"I am fine, thank you.\""
+      },
+      {
+        "word": "please",
+        "zh": "请",
+        "ex": "\"An apple, please.\""
+      },
+      {
+        "word": "thank you",
+        "zh": "谢谢",
+        "ex": "\"Thank you, Ben!\""
+      },
+      {
+        "word": "goodbye",
+        "zh": "再见",
+        "ex": "\"Goodbye, Pola!\""
       }
     ]
   },
@@ -2414,6 +2473,58 @@ const EPISODES = [
         "word": "healthy",
         "zh": "健康的",
         "ex": "\"Turtles help the ocean stay healthy.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-23",
+    "title": "Amazing Animal Facts",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-23-amazing-animal-facts",
+    "url": "lessons/a2/2026-08-23-amazing-animal-facts.html",
+    "vocab": [
+      {
+        "word": "amazing",
+        "zh": "令人惊奇的",
+        "ex": "\"The animal facts are amazing.\""
+      },
+      {
+        "word": "animal",
+        "zh": "动物",
+        "ex": "\"An octopus is a sea animal.\""
+      },
+      {
+        "word": "fact",
+        "zh": "事实",
+        "ex": "\"This is a fun fact.\""
+      },
+      {
+        "word": "heart",
+        "zh": "心脏",
+        "ex": "\"An octopus has three hearts.\""
+      },
+      {
+        "word": "sleep",
+        "zh": "睡觉",
+        "ex": "\"A snail can sleep for three years.\""
+      },
+      {
+        "word": "fly",
+        "zh": "飞",
+        "ex": "\"A hummingbird can fly backward.\""
+      },
+      {
+        "word": "protect",
+        "zh": "保护",
+        "ex": "\"Let's protect our animal friends.\""
+      },
+      {
+        "word": "surprise",
+        "zh": "惊喜",
+        "ex": "\"Animals are full of surprises!\""
       }
     ]
   },
@@ -2848,6 +2959,68 @@ const EPISODES = [
         "word": "legacy",
         "zh": "遗产；遗赠",
         "ex": "\"The stone is a lasting legacy of human curiosity.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-23",
+    "title": "The Ship of Theseus Are You Still You",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-23-the-ship-of-theseus-are-you-still-you",
+    "url": "lessons/b2/2026-08-23-the-ship-of-theseus-are-you-still-you.html",
+    "vocab": [
+      {
+        "word": "paradox",
+        "zh": "悖论（看似矛盾却含真理的命题）",
+        "ex": "\"The paradox puzzles anyone who assumes objects are just their parts.\""
+      },
+      {
+        "word": "identity",
+        "zh": "身份；同一性（事物在时间中的持续）",
+        "ex": "\"Personal identity is a central question in the philosophy of mind.\""
+      },
+      {
+        "word": "genuine",
+        "zh": "真正的；名副其实的",
+        "ex": "\"Is the restored painting a genuine work of the master?\""
+      },
+      {
+        "word": "persist",
+        "zh": "持续存在；保持同一",
+        "ex": "\"The maintained ship persists because its history never broke.\""
+      },
+      {
+        "word": "constitute",
+        "zh": "构成；组成",
+        "ex": "\"What constitutes a nation is more than its borders.\""
+      },
+      {
+        "word": "reconstruct",
+        "zh": "重建；用旧部件复原",
+        "ex": "\"Archaeologists reconstructed the vase from its broken pieces.\""
+      },
+      {
+        "word": "perceive",
+        "zh": "感知；理解；认为",
+        "ex": "\"We perceive sameness through stories, not merely through matter.\""
+      },
+      {
+        "word": "transform",
+        "zh": "彻底改变；转变",
+        "ex": "\"The idea transformed how we view personal identity.\""
+      },
+      {
+        "word": "consequently",
+        "zh": "因此；结果",
+        "ex": "\"The timber was rotten; consequently, it had to be replaced.\""
+      },
+      {
+        "word": "essential",
+        "zh": "本质的；关键的",
+        "ex": "\"Memory is essential to who we are.\""
       }
     ]
   },
@@ -3406,6 +3579,68 @@ const EPISODES = [
         "word": "salient",
         "zh": "显著的；突出的（the salient lesson）",
         "ex": "\"The salient lesson is that law lags behind technology.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-23",
+    "title": "The Self Beyond the Map",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-23-the-self-beyond-the-map",
+    "url": "lessons/c1/2026-08-23-the-self-beyond-the-map.html",
+    "vocab": [
+      {
+        "word": "interdependent",
+        "zh": "相互依存的；由关系定义的（与 independent 相对）",
+        "ex": "\"In East Asia the self is often interdependent, woven from relationships and roles.\""
+      },
+      {
+        "word": "dichotomy",
+        "zh": "二分法；二元对立（非此即彼的划分）",
+        "ex": "\"Vignoles and colleagues dismantled the tidy East–West dichotomy.\""
+      },
+      {
+        "word": "dismantle",
+        "zh": "拆解；拆除（此处指推翻旧理论框架）",
+        "ex": "\"New data dismantled the theory that the West is wholly independent.\""
+      },
+      {
+        "word": "recontextualize",
+        "zh": "重新语境化；把外来价值置于本土文化语境中 reinterpret",
+        "ex": "\"Global values are recontextualized, not merely copied, by local cultures.\""
+      },
+      {
+        "word": "fungible",
+        "zh": "可互换的；可替代的（此处指丧失独特性、可被替换）",
+        "ex": "\"The self is neither fixed nor fungible; it is constantly negotiated.\""
+      },
+      {
+        "word": "typecast",
+        "zh": "以刻板印象定型；把一群人套入固有模式",
+        "ex": "\"To typecast a billion people as 'interdependent' is to mistake an average for an essence.\""
+      },
+      {
+        "word": "essence",
+        "zh": "本质；固有属性（the essence of X）",
+        "ex": "\"An average is a tendency, not the essence of a people.\""
+      },
+      {
+        "word": "plasticity",
+        "zh": "可塑性；可被改变、被重塑的特质",
+        "ex": "\"Cultural neuroscience confirms the plasticity of the self across contexts.\""
+      },
+      {
+        "word": "glocalization",
+        "zh": "全球在地化；全球化与在地化融合（global + local）",
+        "ex": "\"East Asian youth embrace global trends through glocalization, not imitation.\""
+      },
+      {
+        "word": "diffuse",
+        "zh": "扩散；渗透（逐渐传播开来）",
+        "ex": "\"Individualistic values now diffuse into historically collectivist societies.\""
       }
     ]
   }

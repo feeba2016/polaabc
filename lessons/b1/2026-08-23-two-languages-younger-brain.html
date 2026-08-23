@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Languages, Younger Brain · Pola News</title>
+<style>
+:root{
+  --accent:#6d28d9;
+  --accent2:#14b8a6;
+  --glow:#c4b5fd;
+  --bg:#f8f7fe;
+  --bg2:#fdfdff;
+  --card:#ffffff;
+  --ink:#251b3f;
+  --muted:#6b5b8a;
+  --line:#e8e3f7;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(109,40,217,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,#2e1065,#5b21b6);color:#f5f3ff;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.78;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#e9e2ff;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.10)}
+.nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(109,40,217,.35)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(109,40,217,.12);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line)}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(109,40,217,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(196,181,253,.65)}70%{box-shadow:0 0 0 14px rgba(196,181,253,0)}100%{box-shadow:0 0 0 0 rgba(196,181,253,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(196,181,253,.28)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#2e1065;color:#f5f3ff;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+#tip b{color:var(--glow)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.vcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,#faf8ff);transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.vcard .w{font-size:20px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:2px}
+.vcard .en{font-size:13px;color:var(--muted)}
+.vcard .spk{margin-top:10px;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px}
+.vcard .spk:hover{transform:scale(1.08)}
+.pat{border-left:4px solid var(--accent2);background:#f8f6ff;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px}
+.pat .p{font-weight:800;color:var(--accent);font-size:16px}
+.pat .ex{margin-top:4px;color:var(--ink)}
+.pat .ex b{color:var(--accent2)}
+.callout{background:#f8f6ff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.callout h3{font-size:17px;color:var(--accent);margin-bottom:6px}
+.formula{font-family:"Courier New",monospace;background:#2e1065;color:#f5f3ff;padding:10px 14px;border-radius:8px;display:inline-block;margin:6px 0;font-size:15px}
+.tag{display:inline-block;background:rgba(109,40,217,.12);color:var(--accent);font-size:12px;padding:2px 8px;border-radius:6px;margin-right:6px}
+.q{margin-bottom:18px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:11px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff;transition:.15s;font-size:15px}
+.opt:hover{border-color:var(--accent)}
+.opt.correct{background:rgba(15,157,88,.13);border-color:var(--good);color:var(--good);font-weight:700}
+.opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad);font-weight:700}
+.opt:disabled{cursor:default}
+.q .fb{margin-top:8px;font-size:14px;display:none}
+.q .fb.show{display:block}
+.cn p{margin-bottom:12px}
+.cn h3{font-size:18px;color:var(--accent);margin:14px 0 8px}
+.cn ul{margin:0 0 12px 22px}
+.cn li{margin-bottom:6px}
+.fact{background:#efe9ff;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:14px 18px;margin:12px 0}
+.ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.rung{border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center;background:linear-gradient(180deg,#fff,#f6f2ff)}
+.rung .n{font-size:15px;font-weight:700;color:var(--muted)}
+.rung .v{font-size:26px;font-weight:800;color:var(--accent);line-height:1.2;margin-top:4px}
+.rung .u{font-size:12px;color:var(--muted)}
+.about{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.about .avatar{width:84px;height:84px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:42px;flex:none}
+.about .info{flex:1;min-width:240px}
+.about .info p{margin-bottom:8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;min-width:0;height:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+  .sidebar .brand,.sidebar .sub{width:100%}
+  .nav{display:flex;flex-wrap:wrap;gap:6px}
+  .nav a{margin:0;padding:8px 10px;font-size:13px}
+  .content{padding:20px 16px}
+}
+@media print{
+  .sidebar,#progress,#tip,.play,.spk{display:none!important}
+  body{background:#fff;color:#000}
+  section{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .layout{display:block}
+  .content{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>POLA NEWS</div>
+    <div class="sub">English Science News · B1</div>
+    <nav class="nav">
+      <a href="#reading" class="active"><span class="ic">📖</span>全文阅读</a>
+      <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+      <a href="#patterns"><span class="ic">💬</span>句型练习</a>
+      <a href="#grammar"><span class="ic">📘</span>语法点</a>
+      <a href="#quiz"><span class="ic">✅</span>练习测验</a>
+      <a href="#cn"><span class="ic">🌏</span>知识扩展</a>
+      <a href="#about"><span class="ic">⭐</span>关于本课</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <header class="top">
+      <span class="kicker">📰 Pola's Science News · 2026-08-23</span>
+      <h1>Two Languages, Younger Brain</h1>
+      <div class="meta">
+        <span>🎙️ <b>Pola</b> the Quokka</span>
+        <span>📚 Level: <b>B1</b> (ages 10–12)</span>
+        <span>⏱️ <b>4</b> segments · ~60s</span>
+      </div>
+    </header>
+
+    <!-- 1. READING -->
+    <section id="reading">
+      <h2><span class="num">1</span>全文阅读 · Full Story</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击每段右侧的 <b>▶</b> 按钮听 Pola 朗读（优先播放预生成语音，失败则用浏览器原声）。紫色虚线词可点击查看释义。</p>
+
+      <div class="seg">
+        <div class="badge">1</div>
+        <div class="txt">Hello, Pola News here! Do you speak more than one <span class="kw" data-def="语言：人们用来说话和交流的系统，比如英语、中文" data-en="a system of words people use to talk">language</span>? Then here is great news. <span class="kw" data-def="科学家：研究世界如何运作的人" data-en="a person who studies how the world works">Scientists</span> say that people who speak several <span class="kw" data-def="语言：人们用来说话和交流的系统，比如英语、中文" data-en="a system of words people use to talk">languages</span> have <span class="kw" data-def="大脑：头里用来思考、记忆和学习的器官" data-en="the organ in your head that thinks and remembers">brains</span> that look years <span class="kw" data-def="更年轻的：年纪更小的" data-en="not as old as something else">younger</span> than they really are. So <span class="kw" data-def="学习：获得新的知识或技能" data-en="to get new knowledge or a new skill">learning</span> English is brain training!</div>
+        <button class="play" data-seg="0" aria-label="Play segment 1">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">2</div>
+        <div class="txt"><span class="kw" data-def="研究人员：做科学研究的人" data-en="a person who studies something carefully">Researchers</span> in Spain built a special <span class="kw" data-def="大脑：头里用来思考、记忆和学习的器官" data-en="the organ in your head that thinks and remembers">brain</span> clock. A machine recorded the tiny magnetic <span class="kw" data-def="信号：传递信息的一小股能量或声光" data-en="a small wave that carries information">signals</span> inside people's heads, and a <span class="kw" data-def="电脑：能计算和处理信息的机器" data-en="a machine that stores and works with information">computer</span> <span class="kw" data-def="学习：获得新的知识或技能" data-en="to get new knowledge or a new skill">learned</span> to guess how old each <span class="kw" data-def="大脑：头里用来思考、记忆和学习的器官" data-en="the organ in your head that thinks and remembers">brain</span> was. People who spoke two <span class="kw" data-def="语言：人们用来说话和交流的系统，比如英语、中文" data-en="a system of words people use to talk">languages</span> had brains about six years <span class="kw" data-def="更年轻的：年纪更小的" data-en="not as old as something else">younger</span>. People who spoke four? Thirteen years younger!</div>
+        <button class="play" data-seg="1" aria-label="Play segment 2">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">3</div>
+        <div class="txt">So why does this happen? Every time you <span class="kw" data-def="切换：从一个东西换到另一个东西" data-en="to change from one thing to another">switch</span> <span class="kw" data-def="语言：人们用来说话和交流的系统，比如英语、中文" data-en="a system of words people use to talk">languages</span>, your <span class="kw" data-def="头脑：一个人思考和感受的地方" data-en="the part of you that thinks and feels">mind</span> must pick the right words and hold the other words back. That is hard work — like lifting weights for your <span class="kw" data-def="大脑：头里用来思考、记忆和学习的器官" data-en="the organ in your head that thinks and remembers">brain</span>. And the earlier you start, the stronger the effect.</div>
+        <button class="play" data-seg="2" aria-label="Play segment 3">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">4</div>
+        <div class="txt">That is your Pola News for today! Every English word you <span class="kw" data-def="学习：获得新的知识或技能" data-en="to get new knowledge or a new skill">learn</span> today is a gift to your <span class="kw" data-def="大脑：头里用来思考、记忆和学习的器官" data-en="the organ in your head that thinks and remembers">brain</span> tomorrow. This is Pola, signing off. Keep learning, keep <span class="kw" data-def="切换：从一个东西换到另一个东西" data-en="to change from one thing to another">switching</span> — and bye for now!</div>
+        <button class="play" data-seg="3" aria-label="Play segment 4">▶</button>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2><span class="num">2</span>词汇表 · Vocabulary</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">🔊 点击卡片上的喇叭按钮听单词发音。</p>
+      <div class="vgrid">
+        <div class="vcard"><div class="w">language</div><div class="pos">n.</div><div class="zh">语言</div><div class="en">a system of words people use to talk</div><button class="spk" data-word="language">🔊</button></div>
+        <div class="vcard"><div class="w">brain</div><div class="pos">n.</div><div class="zh">大脑</div><div class="en">the organ in your head that thinks and remembers</div><button class="spk" data-word="brain">🔊</button></div>
+        <div class="vcard"><div class="w">scientist</div><div class="pos">n.</div><div class="zh">科学家</div><div class="en">a person who studies how the world works</div><button class="spk" data-word="scientist">🔊</button></div>
+        <div class="vcard"><div class="w">researcher</div><div class="pos">n.</div><div class="zh">研究人员</div><div class="en">a person who studies something carefully</div><button class="spk" data-word="researcher">🔊</button></div>
+        <div class="vcard"><div class="w">signal</div><div class="pos">n.</div><div class="zh">信号</div><div class="en">a small wave that carries information</div><button class="spk" data-word="signal">🔊</button></div>
+        <div class="vcard"><div class="w">computer</div><div class="pos">n.</div><div class="zh">电脑</div><div class="en">a machine that stores and works with information</div><button class="spk" data-word="computer">🔊</button></div>
+        <div class="vcard"><div class="w">switch</div><div class="pos">v.</div><div class="zh">切换</div><div class="en">to change from one thing to another</div><button class="spk" data-word="switch">🔊</button></div>
+        <div class="vcard"><div class="w">mind</div><div class="pos">n.</div><div class="zh">头脑</div><div class="en">the part of you that thinks and feels</div><button class="spk" data-word="mind">🔊</button></div>
+        <div class="vcard"><div class="w">younger</div><div class="pos">adj.</div><div class="zh">更年轻的</div><div class="en">not as old as something else</div><button class="spk" data-word="younger">🔊</button></div>
+        <div class="vcard"><div class="w">learn</div><div class="pos">v.</div><div class="zh">学习</div><div class="en">to get new knowledge or a new skill</div><button class="spk" data-word="learn">🔊</button></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2><span class="num">3</span>句型练习 · Sentence Patterns</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">试着用这些句型造你自己的句子！</p>
+      <div class="pat"><div class="p">① Do you + [动词]? Then here is great news.</div><div class="ex">先提一个问题拉近距离，再抛出好消息。<br>例：<b>Do you speak more than one language? Then here is great news.</b></div></div>
+      <div class="pat"><div class="p">② People who + [动词] + have + [某种特点].</div><div class="ex">描述"做某事的那群人"有什么特点。<br>例：<b>People who speak several languages have brains that look younger.</b></div></div>
+      <div class="pat"><div class="p">③ Every time you + [动词], + [会发生的事].</div><div class="ex">表示"每一次……都会……"。<br>例：<b>Every time you switch languages, your mind must pick the right words.</b></div></div>
+      <div class="pat"><div class="p">④ The + [比较级] you + [动词], the + [比较级] + ...</div><div class="ex">表示"越……就越……"。<br>例：<b>The earlier you start, the stronger the effect.</b></div></div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2><span class="num">4</span>语法点 · Grammar</h2>
+      <div class="callout">
+        <h3>定语从句 who / that —— 给名词"加个说明"</h3>
+        <p>本课要说的不是"所有人"，而是"<b>会说好几种语言的</b>那些人"。英语用 <b>who</b>（指人）或 <b>that</b>（指人或物）把说明接在名词后面。</p>
+        <p><span class="formula">people + who speak several languages · brains + that look younger</span></p>
+        <p>• <b>people <span style="color:var(--accent)">who speak several languages</span></b>（那些会说好几种语言的人 —— who 后面直接跟动词，说明"什么样的人"）</p>
+        <p>• <b>brains <span style="color:var(--accent)">that look years younger</span></b>（看起来年轻好几岁的大脑 —— that 说明"什么样的大脑"）</p>
+        <p>• <b>a computer learned <span style="color:var(--accent)">to guess</span> how old each brain was</b>（电脑学会了去猜每个大脑多大 —— learn to do sth. 学会做某事）</p>
+        <p style="margin-top:10px"><span class="tag">who 指人</span><span class="tag">that 指人/物</span><span class="tag">learn to do</span></p>
+      </div>
+      <div class="callout">
+        <h3>比较级三连：than / the more...the more / Every time</h3>
+        <p><b>① 比较级 + than</b>（比……更……）</p>
+        <p>• <b>brains that look years <span style="color:var(--accent)">younger than</span> they really are</b>（大脑看起来比实际年龄年轻好几岁）</p>
+        <p>• <b>brains about six years <span style="color:var(--accent)">younger</span></b>（年轻大约六岁 —— 注意"具体数字 + 比较级"的顺序：six years younger）</p>
+        <p><b>② the + 比较级, the + 比较级</b>（越……就越……）</p>
+        <p>• <b><span style="color:var(--accent)">The earlier</span> you start, <span style="color:var(--accent)">the stronger</span> the effect.</b>（你开始得越早，效果就越强）</p>
+        <p><b>③ Every time + 句子</b>（每次……的时候）</p>
+        <p>• <b><span style="color:var(--accent)">Every time</span> you switch languages, your mind must pick the right words.</b></p>
+        <p style="margin-top:8px;color:var(--muted);font-size:14px">小提示：Every time 在这里当连词用，等于 whenever，后面直接跟一个完整的句子，不用加 that。</p>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2><span class="num">5</span>练习测验 · Quiz</h2>
+      <div class="q" data-ans="1">
+        <div class="qt">1. What did scientists find about people who speak several languages?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Their brains look older than their real age</button>
+          <button class="opt" data-i="1">Their brains look younger than their real age</button>
+          <button class="opt" data-i="2">Their brains stop growing</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="2">
+        <div class="qt">2. How much younger did the brains of four-language speakers look?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">About two years</button>
+          <button class="opt" data-i="1">About six years</button>
+          <button class="opt" data-i="2">About thirteen years</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="0">
+        <div class="qt">3. What did the machine in Spain record?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">The tiny magnetic signals inside people's heads</button>
+          <button class="opt" data-i="1">The colour of people's eyes</button>
+          <button class="opt" data-i="2">The number of books people read</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">4. Why is switching languages good for the brain?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Because it lets the brain rest</button>
+          <button class="opt" data-i="1">Because the mind must pick the right words and hold others back</button>
+          <button class="opt" data-i="2">Because it makes people talk faster</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="2">
+        <div class="qt">5. According to Pola, when is the best time to start learning?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Only after you turn twenty</button>
+          <button class="opt" data-i="1">Only in Spain</button>
+          <button class="opt" data-i="2">As early as you can — the earlier, the stronger the effect</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+    </section>
+
+    <!-- 6. CN EXTENSION -->
+    <section id="cn" class="cn">
+      <h2><span class="num">6</span>中文知识扩展 · 拓展阅读</h2>
+
+      <h3>🧠 一个和你有关的科学发现</h3>
+      <p>2026 年 8 月，一项关于"多语言与大脑衰老"的研究成为科学新闻头条。研究由西班牙<b>巴斯克认知、脑与语言研究中心（Basque Center on Cognition, Brain and Language）</b>的 <b>Lucia Amoruso 博士</b>领衔，联合智利拉美脑健康研究所、阿根廷圣安德烈斯大学与爱尔兰圣三一学院全球脑健康研究所共同完成，成果在<b>2026 年欧洲神经科学学会联合会论坛（FENS Forum 2026）</b>上发布。</p>
+      <p>为什么这条新闻特别值得你读？因为它说的正是<b>你正在做的事情</b>——学一门新语言。</p>
+
+      <h3>⏰ 科学家怎么给大脑"量年龄"？</h3>
+      <p>人不能把大脑取出来看年轮，于是研究团队想了个办法，做出一个"<b>大脑衰老时钟</b>"：</p>
+      <ul>
+        <li>先用<b>脑磁图（MEG）</b>技术记录 <b>728 人</b> 的大脑活动。脑细胞工作时会产生极其微弱的磁场，MEG 就是专门"听"这种磁信号的仪器。</li>
+        <li>再让<b>人工智能</b>学习"不同年龄的大脑，连接模式长什么样"。</li>
+        <li>最后把这个时钟用在<b>另外 144 人</b>身上——这些人的数据没参与训练，所以能检验时钟准不准。</li>
+      </ul>
+      <p>为什么挑巴斯克地区？因为那里的居民日常可能同时使用<b>西班牙语、巴斯克语、法语、英语</b>，从只会一种到会四种的人都有，正好能比较"语言数量"的影响。</p>
+
+      <h3>📈 语言越多，大脑越"年轻"</h3>
+      <div class="ladder">
+        <div class="rung"><div class="n">1 种语言</div><div class="v">0</div><div class="u">与实际年龄相当</div></div>
+        <div class="rung"><div class="n">2 种语言</div><div class="v">≈6</div><div class="u">岁更年轻</div></div>
+        <div class="rung"><div class="n">3 种语言</div><div class="v">≈7</div><div class="u">岁更年轻</div></div>
+        <div class="rung"><div class="n">4 种语言</div><div class="v">≈13</div><div class="u">岁更年轻</div></div>
+      </div>
+      <p>更有意思的是：这不只是"会几种"的问题。<b>第二语言学得越早、说得越熟练</b>，大脑衰老延缓的效果也越明显。Amoruso 博士把这叫做"<b>梯度效应</b>"——不是"双语 / 非双语"的开关，而是<b>深度和时长</b>累积出来的结果。</p>
+      <div class="fact">💡 另一项发表在《Nature Aging》上的大型研究，分析了欧洲 27 个国家<b>超过 86,000 名</b>中老年人的数据，同样发现：会多种语言的人，出现"加速老化"迹象的比例明显更低。</div>
+
+      <h3>🏋️ 为什么"换语言"就像举重？</h3>
+      <p>想象你会中文和英语。当你要说 "apple" 的时候，你的大脑里其实<b>两个词同时被点亮了</b>——"苹果"和 "apple"。你必须选中要用的那个，同时<b>按住</b>另一个不让它跑出来。</p>
+      <p>这个"选择 + 抑制"的动作，用的正是大脑的<b>执行控制网络（executive control network）</b>——它也负责专注、切换任务、忍住冲动。你每天说英语、背单词、听 Pola News，其实都在悄悄练这块"肌肉"。科学家把这种攒下来的本钱叫做<b>认知储备（cognitive reserve）</b>：就像给大脑存了一笔备用金，将来遇到衰老或疾病时更扛得住。</p>
+      <p>研究还发现，双语者即使大脑里已经出现和阿尔茨海默病相关的变化，症状往往也会<b>比单语者晚几年</b>才显现出来。</p>
+
+      <h3>🤔 但也要读得聪明一点</h3>
+      <p>好的科学新闻会告诉你结论，好的读者会问"这有多确定？"研究者自己就很谨慎地提醒了三件事：</p>
+      <ul>
+        <li>这是<b>相关性</b>，不等于<b>因果性</b>：不能百分百断定"多语言直接导致大脑年轻"。</li>
+        <li>会多语言的人可能在<b>生活方式、社交活跃度</b>上本来就不一样，这些也会影响大脑健康。</li>
+        <li>研究已经控制了年龄、性别、受教育程度，但仍需要更多研究来解释<b>为什么</b>。</li>
+      </ul>
+      <p>下一步，团队打算研究阿尔茨海默病患者身上是否也有同样的规律，还想看看<b>两种很相似的语言</b>（词汇语法都接近，更容易互相干扰）是不是需要更强的控制力、因此锻炼效果更好。</p>
+
+      <h3>✨ 给小朋友的三句大实话</h3>
+      <ul>
+        <li><b>永远不算晚。</b>研究显示，即使是老年人开始学新语言，几个月后工作记忆、注意力也会有可测量的进步。</li>
+        <li><b>但越早越好。</b>你现在 10 岁、12 岁，正是研究里"最占优势"的那批人。</li>
+        <li><b>用起来才算数。</b>关键不是"学过"，而是<b>经常在两种语言之间来回切换</b>。所以每天读一段、听一段、说一段，比一次性背 100 个单词更管用。</li>
+      </ul>
+      <p>换句话说：你今天点开这一课，不只是学了几个英文单词——你还在给几十年后的自己<b>存了一份礼物</b>。🎁</p>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2><span class="num">7</span>关于本课 · About</h2>
+      <div class="about">
+        <div class="avatar">🧠</div>
+        <div class="info">
+          <p><b>主播：</b>Pola（短尾矮袋鼠 Quokka），实景记者播报。</p>
+          <p><b>英语等级：</b>B1（适合 10–12 岁小朋友）。</p>
+          <p><b>本期主题：</b>西班牙巴斯克认知、脑与语言研究中心 Lucia Amoruso 博士团队用"大脑衰老时钟"发现——会说的语言越多，大脑连接模式越年轻：双语者约年轻 6 岁，四语者约年轻 13 岁。</p>
+          <p><b>核心知识点：</b>定语从句 who / that、比较级 + than、the + 比较级 的双重结构、Every time 时间状语从句；脑磁图（MEG）、执行控制网络、认知储备。</p>
+          <p><b>日期：</b>2026-08-23</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · 每天一个有趣的英语科学小知识 · 🧠</footer>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hello, Pola News here! Do you speak more than one language? Then here is great news. Scientists say that people who speak several languages have brains that look years younger than they really are. So learning English is brain training!",
+  "Researchers in Spain built a special brain clock. A machine recorded the tiny magnetic signals inside people's heads, and a computer learned to guess how old each brain was. People who spoke two languages had brains about six years younger. People who spoke four? Thirteen years younger!",
+  "So why does this happen? Every time you switch languages, your mind must pick the right words and hold the other words back. That is hard work — like lifting weights for your brain. And the earlier you start, the stronger the effect.",
+  "That is your Pola News for today! Every English word you learn today is a gift to your brain tomorrow. This is Pola, signing off. Keep learning, keep switching — and bye for now!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 测验 ===== */
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans,10);
+  const fb = q.querySelector('.fb');
+  q.querySelectorAll('.opt').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      if(opt.disabled) return;
+      q.querySelectorAll('.opt').forEach(function(o){ o.disabled = true; });
+      const i = parseInt(opt.dataset.i,10);
+      if(i === ans){
+        opt.classList.add('correct');
+        fb.textContent = '✅ 答对了！';
+        fb.style.color = 'var(--good)';
+      }else{
+        opt.classList.add('wrong');
+        const right = q.querySelector('.opt[data-i="'+ans+'"]');
+        if(right) right.classList.add('correct');
+        fb.textContent = '❌ 再想想，正确答案是高亮的那个。';
+        fb.style.color = 'var(--bad)';
+      }
+      fb.classList.add('show');
+    });
+  });
+});
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Amazing Animal Facts — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#7c3aed;
+  --accent2:#a78bfa;
+  --bg:#f5f3ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#ede9fe;
+  --border:#ddd6fe;
+  --soft:#f5f3ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#a78bfa);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(124,58,237,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #c4b5fd;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(124,58,237,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,58,237,.55);}70%{box-shadow:0 0 0 12px rgba(124,58,237,0);}100%{box-shadow:0 0 0 0 rgba(124,58,237,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #7c3aed;transition:.15s;}
+.kw:hover{background:#c4b5fd;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#c4b5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#ede9fe;border-color:#7c3aed;color:#4c1d95;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.culture{background:#f5f3ff;border:2px solid #a78bfa;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.culture h3{margin:0 0 8px;color:#7c3aed;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(124,58,237,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ede9fe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Fun Facts</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Amazing Animal Facts</h1>
+      <p class="subtitle">2026年8月23日 · 趣味知识｜动物冷知识大惊奇——你绝对想不到！—— 全文阅读（点紫色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Did you know animals are full of <span class="kw" data-def="惊喜">surprises</span>? Here are some <span class="kw" data-def="令人惊奇的">amazing</span> <span class="kw" data-def="动物">animal</span> <span class="kw" data-def="事实">facts</span>! The world is full of wonders.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>An <span class="kw" data-def="章鱼">octopus</span> has three <span class="kw" data-def="心脏">hearts</span> and blue blood. A <span class="kw" data-def="蜗牛">snail</span> can <span class="kw" data-def="睡觉">sleep</span> for three years! The hummingbird is the only bird that can <span class="kw" data-def="飞">fly</span> backward.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>The <span class="kw" data-def="猎豹">cheetah</span> is <span class="kw" data-def="比…更快">faster than</span> a car. A sea turtle can hold its <span class="kw" data-def="呼吸">breath</span> for five hours. Nature is full of surprises!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>Which animal <span class="kw" data-def="事实">fact</span> is your <span class="kw" data-def="最喜欢的">favorite</span>? Tell your friends and family! Learning about animals is fun. Let's love and <span class="kw" data-def="保护">protect</span> our animal friends!</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="culture">
+        <h3>🔢 趣味小提示 Fun Tip</h3>
+        <p style="margin:0;font-size:14.5px;">动物世界里藏着好多"哇塞"冷知识！章鱼有三颗心脏、蜗牛能睡三年、蜂鸟能倒着飞——大自然是不是超神奇？记住：<b>每一个"没想到"的背后，都是真实的科学</b>。和爸爸妈妈一起，去动物园或自然纪录片里发现更多惊喜吧！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="amazing">🔊</button><div class="word">amazing<span class="pos">adj.</span></div><div class="zh">令人惊奇的</div><div class="ex">"The animal facts are amazing."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="animal">🔊</button><div class="word">animal<span class="pos">n.</span></div><div class="zh">动物</div><div class="ex">"An octopus is a sea animal."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fact">🔊</button><div class="word">fact<span class="pos">n.</span></div><div class="zh">事实</div><div class="ex">"This is a fun fact."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="heart">🔊</button><div class="word">heart<span class="pos">n.</span></div><div class="zh">心脏</div><div class="ex">"An octopus has three hearts."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sleep">🔊</button><div class="word">sleep<span class="pos">v.</span></div><div class="zh">睡觉</div><div class="ex">"A snail can sleep for three years."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fly">🔊</button><div class="word">fly<span class="pos">v.</span></div><div class="zh">飞</div><div class="ex">"A hummingbird can fly backward."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="protect">🔊</button><div class="word">protect<span class="pos">v.</span></div><div class="zh">保护</div><div class="ex">"Let's protect our animal friends."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="surprise">🔊</button><div class="word">surprise<span class="pos">n.</span></div><div class="zh">惊喜</div><div class="ex">"Animals are full of surprises!"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Did you know [animals are full of surprises]?</h3>
+          <div class="zh">你知道吗，[动物充满惊喜]？"Did you know + 句子" 用来引出冷知识，引导读者惊讶。</div>
+          <div class="eg">Did you know an octopus has three hearts?</div>
+          <div class="practice">练习：用 "snails sleep for three years"（蜗牛睡三年）→ Did you know <input placeholder="your answer"> ?</div>
+        </div>
+        <div class="item">
+          <h3>2. An [octopus] has [three hearts].</h3>
+          <div class="zh">[章鱼]有[三颗心脏]。"主语 + has + 数量 / 特征" 用来描述事实（第三人称单数用 has）。</div>
+          <div class="eg">An octopus has three hearts. / A snail has a shell.</div>
+          <div class="practice">练习：用 "a hummingbird / blue feathers"（蜂鸟 / 蓝色羽毛）→ A hummingbird <input placeholder="your answer"> .</div>
+        </div>
+        <div class="item">
+          <h3>3. A [hummingbird] can [fly backward].</h3>
+          <div class="zh">[蜂鸟]能[倒着飞]。"主语 + can + 动词原形" 表示"能够、可以"，can 不随人称变化。</div>
+          <div class="eg">A hummingbird can fly backward. / A cheetah can run fast.</div>
+          <div class="practice">练习：用 "a sea turtle / hold its breath"（海龟 / 屏住呼吸）→ A sea turtle <input placeholder="your answer"> .</div>
+        </div>
+        <div class="item">
+          <h3>4. The [cheetah] is [faster than a car].</h3>
+          <div class="zh">[猎豹]比[汽车还快]。"主语 + be + 比较级 + than" 用来比较两者，faster 是 fast 的比较级。</div>
+          <div class="eg">The cheetah is faster than a car.</div>
+          <div class="practice">练习：用 "an elephant / bigger than a dog"（大象 / 比狗大）→ An elephant <input placeholder="your answer"> .</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般现在时（讲事实）</h3>
+          <div class="zh">描述动物一直如此的特征时，用一般现在时：动词用原形（第三人称单数加 -s / has）。An octopus has…、A snail can sleep…、The cheetah is… 表示客观事实。</div>
+          <div class="eg">An octopus <b>has</b> three hearts. / A snail <b>can sleep</b> for three years.</div>
+        </div>
+        <div class="item">
+          <h3>2. 情态动词 can（能力）</h3>
+          <div class="zh">"can + 动词原形" 表示"能够、可以"：A hummingbird can fly backward. / A sea turtle can hold its breath. can 不随人称变化，否定用 cannot / can't。</div>
+          <div class="eg">A hummingbird <b>can</b> fly backward. / We <b>can</b> learn fun facts.</div>
+        </div>
+        <div class="item">
+          <h3>3. 形容词比较级 + than</h3>
+          <div class="zh">单音节词加 -er 变成比较级，再用 than 引出比较对象：fast → faster，The cheetah is faster than a car. 表示"比……更……"。</div>
+          <div class="eg">The cheetah is <b>faster than</b> a car. / An elephant is <b>bigger than</b> a dog.</div>
+        </div>
+        <div class="item">
+          <h3>4. 数字与可数名词复数</h3>
+          <div class="zh">表示数量时，数字 + 名词，多数名词变复数加 -s：three hearts、three years、five hours。year → years，hour → hours。用数字让事实更清楚。</div>
+          <div class="eg">three <b>hearts</b> / three <b>years</b> / five <b>hours</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>动物冷知识，是真的吗？</h3>
+        <p>今天我们读到的小知识，全部来自真实的动物科学研究，不是童话哦！<b>章鱼（octopus）</b>真的有三颗心脏、血液是蓝色的（因为含有血蓝蛋白）；<b>蜗牛（snail）</b>在天气太干或没食物时，会进入"夏眠"，一次能睡上 <b>三年</b>；<b>蜂鸟（hummingbird）</b>是唯一能倒着飞、还能悬停的鸟，翅膀每秒扇动约 50–80 次；<b>猎豹（cheetah）</b>从 0 加速到每小时 100 公里只要 3 秒，比很多跑车还快；<b>海龟（sea turtle）</b>能屏住呼吸长达 <b>5 小时</b>。大自然真是充满了"哇塞"惊喜！</p>
+
+        <h3>为什么动物会有这些本领？</h3>
+        <p>每一种"神奇"背后都有原因：章鱼的三颗心脏帮它在海里高效运送氧气；蜗牛长睡是为了熬过恶劣环境、保存体力；蜂鸟倒飞是为了稳稳停在花朵前吸花蜜；猎豹的超强肌肉让它成为"陆地短跑王"，用来追捕猎物。动物们的身体，都是<b>亿万年进化</b>打磨出来的精密工具。</p>
+
+        <h3>我们可以怎样爱护动物？</h3>
+        <ul>
+          <li><b>去动物园 / 海洋馆看真实的它们</b>：观察动物怎么动、怎么吃，把今天学的英文词说给爸爸妈妈听。</li>
+          <li><b>看自然纪录片</b>：如《蓝色星球》《动物世界》，了解更多动物冷知识。</li>
+          <li><b>保护它们的家</b>：不乱丢垃圾、支持保护森林与海洋，让动物有干净的环境。</li>
+          <li><b>把知识分享出去</b>：用 "An octopus has three hearts." 向同学炫耀你的新发现！</li>
+        </ul>
+
+        <h3>动手做：我的"动物冷知识卡"</h3>
+        <p>拿一张纸，画一只你最喜欢的动物，写下今天学的英文词：<b>amazing（令人惊奇的）、animal（动物）、fact（事实）、heart（心脏）、sleep（睡觉）、fly（飞）、protect（保护）、surprise（惊喜）</b>，再写一条冷知识，例如 <b>"A snail can sleep for three years!"</b> 贴在家里墙上，当小小动物科学家！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一个 A2 水平的英文趣味短文（动物冷知识），理解大意。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般现在时、情态动词 can、比较级 + than、数字与名词复数四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个趣味知识主题核心词汇（amazing, animal, fact, heart, sleep, fly, protect, surprise）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>了解真实有趣的动物科学事实，激发对自然世界的好奇心。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会用英语分享冷知识，向家人表达"爱护动物"的心愿。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">🔢</span><div>和爸爸妈妈玩"冷知识问答"：用 "Did you know…?" 考考他们！</div></div>
+        <div class="goal"><span class="ic">💬</span><div>用 "Let's protect our animal friends." 向家人表达你的爱心。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Amazing Animal Facts · 2026-08-23 · Made for curious kids 🐙</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Did you know animals are full of surprises? Here are some amazing animal facts! The world is full of wonders.",
+  "An octopus has three hearts and blue blood. A snail can sleep for three years! The hummingbird is the only bird that can fly backward.",
+  "The cheetah is faster than a car. A sea turtle can hold its breath for five hours. Nature is full of surprises!",
+  "Which animal fact is your favorite? Tell your friends and family! Learning about animals is fun. Let's love and protect our animal friends!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"How many hearts does an octopus have? 章鱼有几颗心脏？",opts:["One 一颗","Two 两颗","Three 三颗","Four 四颗"],ans:2,
+   fb:"Correct! 章鱼有三颗心脏（An octopus has three hearts），而且血液是蓝色的哦！"},
+  {q:"What can a hummingbird do that other birds cannot? 蜂鸟会做什么其他鸟不会的事？",opts:["Fly backward 倒着飞","Swim 游泳","Sleep for years 睡好几年","Change color 变色"],ans:0,
+   fb:"Yes! 蜂鸟是唯一能倒着飞的鸟（The hummingbird can fly backward）。"},
+  {q:"How long can a snail sleep? 蜗牛能睡多久？",opts:["Three days 三天","Three months 三个月","Three years 三年","Three hours 三小时"],ans:2,
+   fb:"Right! 蜗牛在环境不好时可以睡上三年（A snail can sleep for three years）。"},
+  {q:"Which word means 保护? 哪个词意思是保护？",opts:["surprise 惊喜","protect 保护","sleep 睡觉","fly 飞"],ans:1,
+   fb:"Correct! protect 意思是保护，我们说 Let's protect our animal friends."},
+  {q:"The cheetah is ______ a car. 猎豹比汽车______。",opts:["slower than 比…慢","faster than 比…快","as big as 和…一样大","smaller than 比…小"],ans:1,
+   fb:"Yes! 猎豹比汽车还快（The cheetah is faster than a car）。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#7c3aed';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#4c1d95';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标紫。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
