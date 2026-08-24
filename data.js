@@ -1683,6 +1683,23 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-24",
+    "title": "The Snail That Eats Gas",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-24-the-snail-that-eats-gas",
+    "url": "lessons/b1/2026-08-24-the-snail-that-eats-gas.html",
+    "vocab": [
+      {
+        "word": "snail",
+        "zh": "北极",
+        "ex": "报道一个新发现，直接引出主角。<br>例：<b>Scientists just found a tiny new snail living down there!</b>"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -2057,6 +2074,48 @@ const EPISODES = [
         "word": "goodbye",
         "zh": "再见",
         "ex": "\"Goodbye, Pola!\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-24",
+    "title": "The Three Little Pigs",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-24-the-three-little-pigs",
+    "url": "lessons/a1/2026-08-24-the-three-little-pigs.html",
+    "vocab": [
+      {
+        "word": "pig",
+        "zh": "猪",
+        "ex": "\"This is a pig.\""
+      },
+      {
+        "word": "wolf",
+        "zh": "狼",
+        "ex": "\"The wolf is big.\""
+      },
+      {
+        "word": "house",
+        "zh": "房子",
+        "ex": "\"This is a house.\""
+      },
+      {
+        "word": "brick",
+        "zh": "砖",
+        "ex": "\"The brick is red.\""
+      },
+      {
+        "word": "straw",
+        "zh": "稻草",
+        "ex": "\"The straw is yellow.\""
+      },
+      {
+        "word": "strong",
+        "zh": "坚固的",
+        "ex": "\"The house is strong.\""
       }
     ]
   },
@@ -2525,6 +2584,58 @@ const EPISODES = [
         "word": "surprise",
         "zh": "惊喜",
         "ex": "\"Animals are full of surprises!\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-24",
+    "title": "Amazon River Adventure",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-24-amazon-river-adventure",
+    "url": "lessons/a2/2026-08-24-amazon-river-adventure.html",
+    "vocab": [
+      {
+        "word": "adventure",
+        "zh": "冒险；奇遇",
+        "ex": "\"We love a big adventure.\""
+      },
+      {
+        "word": "river",
+        "zh": "河流",
+        "ex": "\"The Amazon is a long river.\""
+      },
+      {
+        "word": "dolphin",
+        "zh": "海豚",
+        "ex": "\"Pink dolphins swim in the river.\""
+      },
+      {
+        "word": "forest",
+        "zh": "森林",
+        "ex": "\"The big forest makes clean air.\""
+      },
+      {
+        "word": "animal",
+        "zh": "动物",
+        "ex": "\"Many animals live in the forest.\""
+      },
+      {
+        "word": "protect",
+        "zh": "保护",
+        "ex": "\"We must protect nature.\""
+      },
+      {
+        "word": "nature",
+        "zh": "自然",
+        "ex": "\"We love nature and animals.\""
+      },
+      {
+        "word": "explore",
+        "zh": "探索",
+        "ex": "\"What will you explore?\""
       }
     ]
   },
@@ -3021,6 +3132,68 @@ const EPISODES = [
         "word": "essential",
         "zh": "本质的；关键的",
         "ex": "\"Memory is essential to who we are.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-24",
+    "title": "The Best of Times Worst of Times",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-24-the-best-of-times-worst-of-times",
+    "url": "lessons/b2/2026-08-24-the-best-of-times-worst-of-times.html",
+    "vocab": [
+      {
+        "word": "paradox",
+        "zh": "悖论；自相矛盾的说法",
+        "ex": "\"an era can be wonderful and dreadful at the same time — a paradox\""
+      },
+      {
+        "word": "antithesis",
+        "zh": "对偶；对照（相反事物的并置）",
+        "ex": "\"Light and Darkness form a striking antithesis.\""
+      },
+      {
+        "word": "epoch",
+        "zh": "时代；纪元",
+        "ex": "\"the epoch of belief and the epoch of incredulity\""
+      },
+      {
+        "word": "incredulity",
+        "zh": "怀疑；不信任",
+        "ex": "\"He read the news with utter incredulity.\""
+      },
+      {
+        "word": "duality",
+        "zh": "二元性；双重性",
+        "ex": "\"the duality of progress and violence\""
+      },
+      {
+        "word": "upheaval",
+        "zh": "剧变；动荡",
+        "ex": "\"the social upheaval of the French Revolution\""
+      },
+      {
+        "word": "simultaneously",
+        "zh": "同时地",
+        "ex": "\"hope and despair existing simultaneously\""
+      },
+      {
+        "word": "contradiction",
+        "zh": "矛盾；对立",
+        "ex": "\"a string of contradictions in one sentence\""
+      },
+      {
+        "word": "resonates",
+        "zh": "引起共鸣；回响",
+        "ex": "\"The line still resonates with modern readers.\""
+      },
+      {
+        "word": "profound",
+        "zh": "深刻的；意义深远的",
+        "ex": "\"a profound observation about human nature\""
       }
     ]
   },
@@ -3641,6 +3814,68 @@ const EPISODES = [
         "word": "diffuse",
         "zh": "扩散；渗透（逐渐传播开来）",
         "ex": "\"Individualistic values now diffuse into historically collectivist societies.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-24",
+    "title": "The Madwoman Writes Back",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-24-the-madwoman-writes-back",
+    "url": "lessons/c1/2026-08-24-the-madwoman-writes-back.html",
+    "vocab": [
+      {
+        "word": "canonical",
+        "zh": "经典的；被列入\"正典\"的（名词 canon 正典、经典书目）",
+        "ex": "\"a touchstone of the English canonical tradition\""
+      },
+      {
+        "word": "predicated",
+        "zh": "以……为前提／基础（be predicated on / upon sth）",
+        "ex": "\"that triumph is predicated on a silence\""
+      },
+      {
+        "word": "metropolitan",
+        "zh": "大都市的；（后殖民语境）局限于帝国中心视角的",
+        "ex": "\"electrifying, yet resolutely metropolitan\""
+      },
+      {
+        "word": "epistemic",
+        "zh": "认知的；知识层面的（epistemology 认识论）",
+        "ex": "\"an allegory of epistemic violence\""
+      },
+      {
+        "word": "intertextual",
+        "zh": "互文的：一个文本与另一文本相互指涉、对话",
+        "ex": "\"Jean Rhys had already staged an intertextual rejoinder\""
+      },
+      {
+        "word": "effacement",
+        "zh": "抹除；使消隐（动词 efface：擦掉、使不被看见）",
+        "ex": "\"enacts the effacement Brontë performed\""
+      },
+      {
+        "word": "subaltern",
+        "zh": "属下阶层；被支配而无法自我发声的边缘群体",
+        "ex": "\"a wealthy, slave-owning white Creole is hardly a subaltern\""
+      },
+      {
+        "word": "contentious",
+        "zh": "有争议的；引发争论的（也可指\"好争辩的\"）",
+        "ex": "\"Such contentious disagreement is itself the value\""
+      },
+      {
+        "word": "palimpsest",
+        "zh": "重写本：旧字被刮去后层层叠写的羊皮纸；喻层累改写之物",
+        "ex": "\"less a monument than a palimpsest\""
+      },
+      {
+        "word": "appropriation",
+        "zh": "挪用；据为己有（cultural appropriation 文化挪用）",
+        "ex": "\"each restitution shadowed by appropriation\""
       }
     ]
   }
