@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Seeds Hear the Rain — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#4f46e5;
+  --accent2:#818cf8;
+  --bg:#eef2ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#e0e7ff;
+  --border:#c7d2fe;
+  --soft:#f5f3ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#a5b4fc);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(79,70,229,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #ddd6fe;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(79,70,229,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,70,229,.55);}70%{box-shadow:0 0 0 12px rgba(79,70,229,0);}100%{box-shadow:0 0 0 0 rgba(79,70,229,0);}}
+.zh-trans{color:var(--muted);font-size:14px;margin-top:8px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #4f46e5;transition:.15s;}
+.kw:hover{background:#c7d2fe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#a5b4fc;}
+.trans-toggle{background:var(--accent2);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#e0e7ff;border:2px solid #818cf8;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#4f46e5;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(79,70,229,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e0e7ff;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Kid's Science News</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Seeds Hear the Rain</h1>
+      <p class="subtitle">2026年8月25日 · 科学发现｜种子听雨记 —— 全文阅读（点蓝色词看释义，可显示中文翻译）</p>
+
+      <button class="trans-toggle" id="transToggle">🇨🇳 显示中文翻译</button>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Scientists made a fun <span class="kw" data-def="发现">discovery</span>! Rice <span class="kw" data-def="种子">seeds</span> can "hear" the <span class="kw" data-def="声音">sound</span> of <span class="kw" data-def="雨">rain</span>. They have no ears, but they feel the rain's song.</p>
+            <div class="zh-trans" style="display:none;">科学家有了一个有趣的新发现！水稻种子能"听见"雨声。它们没有耳朵，却能感觉到雨的歌声。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p><span class="kw" data-def="工程师">Engineers</span> at <span class="kw" data-def="麻省理工学院">MIT</span> tested 8,000 rice <span class="kw" data-def="种子">seeds</span>. Some seeds heard the sound of falling water. These seeds <span class="kw" data-def="生长（过去式）">grew</span> 30 to 40 percent <span class="kw" data-def="更快地">faster</span> than seeds in a quiet place.</p>
+            <div class="zh-trans" style="display:none;">麻省理工学院（MIT）的工程师测试了 8000 颗水稻种子。有些种子听到了落水的声音。这些种子比安静环境下的种子长得快 30% 到 40%。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>How does it work? Tiny parts inside a <span class="kw" data-def="种子">seed</span> feel the rain's shaking. This is a <span class="kw" data-def="信号">signal</span>. It tells the seed to <span class="kw" data-def="醒来">wake up</span> and <span class="kw" data-def="生长">grow</span>. Rain is a gentle alarm clock for plants.</p>
+            <div class="zh-trans" style="display:none;">这是怎么做到的？种子里的小小结构能感觉到雨水的震动。这种震动是一种信号，它告诉种子醒来、生长。对植物来说，雨就像温柔的闹钟。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>Next time it rains, go outside and listen. A little <span class="kw" data-def="种子">seed</span> under the ground is waking up. <span class="kw" data-def="大自然">Nature</span> is full of surprises! This is Pola, signing off from POLA NEWS. Bye for now!</p>
+            <div class="zh-trans" style="display:none;">下次下雨时，到户外去听听吧。地面下的某颗小种子正在醒来。大自然充满了惊喜！这里是 Pola，在 POLA NEWS 向你道别。再见！</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>💡 小小科学家提示 Science Tip</h3>
+        <p style="margin:0;font-size:14.5px;">做小实验要和大人一起，<b>不玩电、不尝不明植物和雨水</b>；用眼睛仔细观察、用小本子记录，你也能发现大自然的秘密！保持好奇，安全第一！</p>
+      </div>
+    </section>
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="seed">🔊</button><div class="word">seed<span class="pos">n.</span></div><div class="zh">种子</div><div class="ex">"A tiny seed can grow into a plant."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sound">🔊</button><div class="word">sound<span class="pos">n.</span></div><div class="zh">声音</div><div class="ex">"I hear the sound of rain."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rain">🔊</button><div class="word">rain<span class="pos">n.</span></div><div class="zh">雨；下雨</div><div class="ex">"The rain falls from the sky."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="grow">🔊</button><div class="word">grow<span class="pos">v.</span></div><div class="zh">生长；长大（过去式 grew）</div><div class="ex">"Plants grow in spring."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="engineer">🔊</button><div class="word">engineer<span class="pos">n.</span></div><div class="zh">工程师</div><div class="ex">"An engineer tests new ideas."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="signal">🔊</button><div class="word">signal<span class="pos">n.</span></div><div class="zh">信号</div><div class="ex">"Rain is a signal for seeds."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="surprise">🔊</button><div class="word">surprise<span class="pos">n.</span></div><div class="zh">惊喜；惊奇</div><div class="ex">"Nature is full of surprises."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="wake up">🔊</button><div class="word">wake up<span class="pos">phr.</span></div><div class="zh">醒来</div><div class="ex">"The seed wakes up and grows."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Scientists made [a fun discovery].</h3>
+          <div class="zh">科学家有了一个[有趣的发现]。"主语 + made + 名词"，用一般过去时 make 的过去式 made 表示"做出/有了……"。</div>
+          <div class="eg">Scientists made a fun discovery.</div>
+          <div class="practice">练习：用 "a new test" 造句 → Scientists made <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Rice seeds can "hear" [the sound of rain].</h3>
+          <div class="zh">水稻种子能"听见"[雨声]。"can + 动词原形" 表示能力，can 不分人称。</div>
+          <div class="eg">Rice seeds can "hear" the sound of rain.</div>
+          <div class="practice">练习：用 "the music" → Rice seeds can hear <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. These seeds grew [30 to 40 percent faster].</h3>
+          <div class="zh">这些种子长得[快 30% 到 40%]。"grew"（grow 的过去式）+ 比较级 faster than，描述过去比……更快。</div>
+          <div class="eg">These seeds grew 30 to 40 percent faster.</div>
+          <div class="practice">练习：用 "much taller" → These seeds grew <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. The sound tells the seed to [wake up and grow].</h3>
+          <div class="zh">声音告诉种子去[醒来并生长]。"tell + 宾语 + to + 动词原形" 表示"告诉……去做……"。</div>
+          <div class="eg">The sound tells the seed to wake up and grow.</div>
+          <div class="practice">练习：用 "sleep" → The sound tells the seed to <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般过去时（Past Simple）</h3>
+          <div class="zh">讲故事时，动词要变成过去式。不规则动词要记住：make → made，test → tested，grow → grew，hear → heard。规则动词加 -ed。</div>
+          <div class="eg">Scientists <b>made</b> a discovery. / These seeds <b>grew</b> faster.</div>
+        </div>
+        <div class="item">
+          <h3>2. 比较级（Comparative）</h3>
+          <div class="zh">faster（更快）是 fast 的比较级，用 "than" 来比较两者：A grew faster than B。</div>
+          <div class="eg">These seeds grew <b>faster</b> than quiet seeds.</div>
+        </div>
+        <div class="item">
+          <h3>3. 情态动词 can（能）</h3>
+          <div class="zh">"can + 动词原形" 表示能够、会做某事，can 不分人称，否定用 cannot / can't。</div>
+          <div class="eg">Rice seeds <b>can</b> hear the sound of rain.</div>
+        </div>
+        <div class="item">
+          <h3>4. 名词复数（Plural nouns）</h3>
+          <div class="zh">一般名词加 -s：seed → seeds，scientist → scientists，sound → sounds。以 s, x, ch, sh 结尾加 -es。很多名词变复数有规律可循。</div>
+          <div class="eg">Many <b>seeds</b> hear many <b>sounds</b>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>真实的研究：种子真的会"听"雨吗？</h3>
+        <p>2026 年 4 月 22 日，美国<b>麻省理工学院（MIT）</b>的工程师在科学期刊《Scientific Reports》上发表了一项研究。他们用约 <b>8000 颗水稻种子</b>做实验——有的种子"听"到落水的声音，结果比安静环境下的种子<b>发芽快了 30% 到 40%</b>。这是科学家第一次直接证明：种子的"耳朵"能感受到自然界的声音。</p>
+
+        <h3>种子没有耳朵，怎么"听"？</h3>
+        <p>种子里有一种叫 <b>"平衡石"（statolith）</b> 的微小结构，平时帮种子感知重力、判断根往哪边长。当雨滴落在水面或泥土上，会产生<b>声波和震动</b>。这种震动会让平衡石轻轻晃动，就像有人在种子里说："该醒啦，该发芽啦！"</p>
+
+        <h3>为什么水里的声音更大？</h3>
+        <p>水的密度比空气大，所以雨滴在水下或湿土里产生的<b>压力波很强</b>。MIT 的教授说，一颗种子感受到的雨声强度，差不多等于在几米外听<b>喷气式飞机</b>！难怪它能"听"得那么清楚。</p>
+
+        <h3>这是植物的"生存智慧"</h3>
+        <p>如果一颗种子能"听"到雨，说明它离地面很近——发芽后能顺利<b>见到阳光、喝到水</b>。这是大自然千万年进化出来的本领，帮植物选对时机生长。除了雨声，科学家还想知道：风声、虫鸣……植物是不是也能"听"到？</p>
+
+        <h3>动手小实验：听听"雨打水面"</h3>
+        <p>下雨天，用碗装一点水，用滴管或手指滴水，听一听"雨打水面"的声音（记得在家长陪同下，不玩电、不接雨水喝）。再种一颗豆子，每天放轻柔音乐或对它说说话，观察它是不是长得更快——这只是一个好玩的猜想，真正的科学，要做很多很多次实验才能下结论哦！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一个 A2 水平的英文科学小短文（种子听雨），理解大意。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般过去时、比较级、can 情态动词、名词复数四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个科学主题核心词汇（seed, sound, rain, grow, engineer, signal, surprise, wake up）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语说出简单的科学发现，理解"大自然充满了惊喜"。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>激发好奇心：像小科学家一样观察身边的自然现象，安全第一。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">💡</span><div>用 "Scientists made a …" 说说你还知道的科学发现。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>和爸爸妈妈一起读"中文知识扩展"，聊聊"植物还有哪些超能力？"</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Seeds Hear the Rain · 2026-08-25 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Chinese translation toggle ---------- */
+const transBtn=document.getElementById('transToggle');
+let transOn=false;
+transBtn.addEventListener('click',()=>{
+  transOn=!transOn;
+  document.querySelectorAll('.zh-trans').forEach(d=>{d.style.display=transOn?'block':'none';});
+  transBtn.textContent=transOn?'🇨🇳 隐藏中文翻译':'🇨🇳 显示中文翻译';
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Scientists made a fun discovery! Rice seeds can \"hear\" the sound of rain. They have no ears, but they feel the rain's song.",
+  "Engineers at MIT tested 8,000 rice seeds. Some seeds heard the sound of falling water. These seeds grew 30 to 40 percent faster than seeds in a quiet place.",
+  "How does it work? Tiny parts inside a seed feel the rain's shaking. This is a signal. It tells the seed to wake up and grow. Rain is a gentle alarm clock for plants.",
+  "Next time it rains, go outside and listen. A little seed under the ground is waking up. Nature is full of surprises! This is Pola, signing off from POLA NEWS. Bye for now!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What can rice seeds \"hear\"? 水稻种子能\"听见\"什么？",opts:["Music 音乐","The sound of rain 雨声","People's voices 人的说话声","Nothing 什么都听不见"],ans:1,
+   fb:"Correct! 水稻种子能\"听见\"雨的声音（the sound of rain）。"},
+  {q:"Where did the engineers work? 工程师在哪里工作？",opts:["A farm 农场","MIT (麻省理工学院)","A school 学校","NASA 美国宇航局"],ans:1,
+   fb:"Yes! 他们在麻省理工学院 MIT 工作。"},
+  {q:"The seeds grew ___ percent faster. 这些种子长得快了百分之___。",opts:["10 to 20","30 to 40","50 to 60","70 to 80"],ans:1,
+   fb:"Right! 比安静的种子快 30% 到 40%（30 to 40 percent faster）。"},
+  {q:"Tiny parts inside the seed feel the ___ of the rain. 种子里的小结构能感觉到雨的___。",opts:["color 颜色","shaking 震动","smell 气味","taste 味道"],ans:1,
+   fb:"Correct! 是雨水的震动（the shaking of the rain）。"},
+  {q:"Rain is like a ___ for the seeds. 对种子来说，雨就像___。",opts:["alarm clock 闹钟","toy 玩具","book 书","ball 球"],ans:0,
+   fb:"Yes! 雨就像温柔的闹钟（a gentle alarm clock），唤醒种子。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#4f46e5';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

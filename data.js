@@ -1700,6 +1700,23 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-25",
+    "title": "The Seahorse That Was Three",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-25-the-seahorse-that-was-three",
+    "url": "lessons/b1/2026-08-25-the-seahorse-that-was-three.html",
+    "vocab": [
+      {
+        "word": "seahorse",
+        "zh": "鱼",
+        "ex": "用一个比喻介绍主角，立刻抓住注意力。<br>例：<b>Meet the seahorse — a tiny fish that looks like a little dragon from the sea.</b>"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -2116,6 +2133,48 @@ const EPISODES = [
         "word": "strong",
         "zh": "坚固的",
         "ex": "\"The house is strong.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-25",
+    "title": "The Lion and the Mouse",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-25-the-lion-and-the-mouse",
+    "url": "lessons/a1/2026-08-25-the-lion-and-the-mouse.html",
+    "vocab": [
+      {
+        "word": "lion",
+        "zh": "狮子",
+        "ex": "\"The lion is big.\""
+      },
+      {
+        "word": "mouse",
+        "zh": "老鼠",
+        "ex": "\"The mouse is small.\""
+      },
+      {
+        "word": "tree",
+        "zh": "树",
+        "ex": "\"I see a tree.\""
+      },
+      {
+        "word": "net",
+        "zh": "网",
+        "ex": "\"The net is big.\""
+      },
+      {
+        "word": "teeth",
+        "zh": "牙齿",
+        "ex": "\"My teeth are white.\""
+      },
+      {
+        "word": "help",
+        "zh": "帮助",
+        "ex": "\"I can help you.\""
       }
     ]
   },
@@ -2636,6 +2695,58 @@ const EPISODES = [
         "word": "explore",
         "zh": "探索",
         "ex": "\"What will you explore?\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-25",
+    "title": "Seeds Hear the Rain",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-25-seeds-hear-the-rain",
+    "url": "lessons/a2/2026-08-25-seeds-hear-the-rain.html",
+    "vocab": [
+      {
+        "word": "seed",
+        "zh": "种子",
+        "ex": "\"A tiny seed can grow into a plant.\""
+      },
+      {
+        "word": "sound",
+        "zh": "声音",
+        "ex": "\"I hear the sound of rain.\""
+      },
+      {
+        "word": "rain",
+        "zh": "雨；下雨",
+        "ex": "\"The rain falls from the sky.\""
+      },
+      {
+        "word": "grow",
+        "zh": "生长；长大（过去式 grew）",
+        "ex": "\"Plants grow in spring.\""
+      },
+      {
+        "word": "engineer",
+        "zh": "工程师",
+        "ex": "\"An engineer tests new ideas.\""
+      },
+      {
+        "word": "signal",
+        "zh": "信号",
+        "ex": "\"Rain is a signal for seeds.\""
+      },
+      {
+        "word": "surprise",
+        "zh": "惊喜；惊奇",
+        "ex": "\"Nature is full of surprises.\""
+      },
+      {
+        "word": "wake up",
+        "zh": "醒来",
+        "ex": "\"The seed wakes up and grows.\""
       }
     ]
   },
@@ -3876,6 +3987,68 @@ const EPISODES = [
         "word": "appropriation",
         "zh": "挪用；据为己有（cultural appropriation 文化挪用）",
         "ex": "\"each restitution shadowed by appropriation\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-25",
+    "title": "Engels' Pause, Rebooted",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-25-engels-pause-rebooted",
+    "url": "lessons/c1/2026-08-25-engels-pause-rebooted.html",
+    "vocab": [
+      {
+        "word": "stagnation",
+        "zh": "停滞；不增长（尤指经济零增长或近乎零增长）",
+        "ex": "\"Economic historians call it stagnation: the decades...\""
+      },
+      {
+        "word": "intangible",
+        "zh": "无形的；intangible capital 指流程、技能、组织经验等不计入资产负债表的投入",
+        "ex": "\"heavy investment in intangible capital and retrained staff\""
+      },
+      {
+        "word": "diffusion",
+        "zh": "扩散；渗透（技术扩散，指创新从领先企业向整体经济传播）",
+        "ex": "\"before the gains diffuse across the economy\""
+      },
+      {
+        "word": "displacement",
+        "zh": "（劳动力的）替代、被取代（动词 displace；displacement outrunning creation 指替代快于新岗位创造）",
+        "ex": "\"raising the risk of displacement outrunning creation\""
+      },
+      {
+        "word": "polarization",
+        "zh": "两极分化（labour-market polarization 劳动力市场两极化：中间技能岗位被挤压）",
+        "ex": "\"or harden into lasting polarization?\""
+      },
+      {
+        "word": "asymmetrical",
+        "zh": "不对称的（asymmetry 的形容词；此处指冲击在各群体间分布不均）",
+        "ex": "\"leaves an asymmetrical shock with less time to adapt\""
+      },
+      {
+        "word": "exacerbation",
+        "zh": "加剧、恶化（动词 exacerbate；the exacerbation of inequality 不平等的加剧）",
+        "ex": "\"the exacerbation of inequality may be precipitous\""
+      },
+      {
+        "word": "precipitous",
+        "zh": "急剧的、骤然的（precipice 悬崖；喻陡降或骤变，需谨慎用于正式文体）",
+        "ex": "\"the exacerbation of inequality may be precipitous\""
+      },
+      {
+        "word": "remediation",
+        "zh": "补救、矫正（动词 remedy；此处指通过再培训纠正分配失衡）",
+        "ex": "\"The remedy is to hasten remediation through training\""
+      },
+      {
+        "word": "corollary",
+        "zh": "必然结果、推论（a corollary being that... 意为「由此推论」）",
+        "ex": "\"the corollary being that institutions, not machines, decide the ending\""
       }
     ]
   }

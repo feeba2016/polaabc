@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Engels' Pause, Rebooted — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 经济学人风格 Economist-style</span>
+      <h1 class="title">Engels' Pause, Rebooted</h1>
+      <p class="subtitle">When history's wage lag meets the AI productivity paradox · 全文阅读（点蓝词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Original Pause</div>
+            <p>Economic historians call it <span class="kw" data-def="停滞；零增长（stagnation）">stagnation</span>: the decades, roughly 1790 to 1840, when British real wages flatlined even as output per head climbed. Robert C. Allen, who coined the term in 2008, drew it from Engels's 1845 indictment of industrial England. Output per worker rose 46 per cent; real wages, a mere 12. The dividend accrued to capital, not labour — a pattern excoriated as <span class="kw" data-def="偏向富人的（增长）；pro-rich">pro-rich</span> growth.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Catch-up and the J-Curve</div>
+            <p>Yet the story did not end there. From 1840 to 1900, real wages leapt 123 per cent. Optimists invoke the Productivity J-Curve: AI first depresses measured productivity, then rewards it — but only after heavy investment in <span class="kw" data-def="无形的；intangible capital 指流程、技能、组织经验等不计入资产负债表的投入">intangible</span> capital and retrained staff, before the gains <span class="kw" data-def="扩散、渗透（技术从领先企业向整体经济传播）；diffusion">diffuse</span> across the economy. Electrification took thirty to forty years to show up in the statistics. Patience, the bulls argue, is a strategy.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The AI Divergence</div>
+            <p>A 2026 survey of 750 chief financial officers found AI's productivity gains positive but modest — trapped inside corporate balance sheets. Goldman Sachs saw no macro evidence AI is lifting output or costing jobs. The IMF reckons 40 per cent of global employment is exposed, 60 per cent in advanced economies. The original pause granted fifty years to build unions and welfare; this one compresses that into a decade, raising the risk of <span class="kw" data-def="（劳动力的）替代、被取代；displacement outrunning creation 指替代快于新岗位创造">displacement</span> outrunning creation.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Unresolved Debate</div>
+            <p>So will the AI pause end like the first — wages eventually catching up — or harden into lasting <span class="kw" data-def="两极分化；labour-market polarization 劳动力市场两极化">polarization</span>? Pessimists warn that, unlike steam, which displaced muscle, algorithms displace the cognitive routines of the middle class. Faster adoption, the ECB notes, leaves an <span class="kw" data-def="不对称的；asymmetrical shock 指冲击在各群体间分布不均">asymmetrical</span> shock with less time to adapt, and the <span class="kw" data-def="加剧、恶化；exacerbation of inequality 不平等的加剧">exacerbation</span> of inequality may be <span class="kw" data-def="急剧的、骤然的；precipitous 喻陡降或骤变">precipitous</span>. The remedy is to hasten <span class="kw" data-def="补救、矫正；remediation 此处指通过再培训纠正分配失衡">remediation</span> through training — the <span class="kw" data-def="必然结果、推论；a corollary being that... 意为「由此推论」">corollary</span> being that institutions, not machines, decide the ending. This is Pola News, Advanced English.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="stagnation">🔊</button><div class="word">stagnation<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">停滞；不增长（尤指经济零增长或近乎零增长）</div><div class="ex">"Economic historians call it stagnation: the decades..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="intangible">🔊</button><div class="word">intangible<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">无形的；intangible capital 指流程、技能、组织经验等不计入资产负债表的投入</div><div class="ex">"heavy investment in intangible capital and retrained staff"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="diffusion">🔊</button><div class="word">diffusion<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">扩散；渗透（技术扩散，指创新从领先企业向整体经济传播）</div><div class="ex">"before the gains diffuse across the economy"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="displacement">🔊</button><div class="word">displacement<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">（劳动力的）替代、被取代（动词 displace；displacement outrunning creation 指替代快于新岗位创造）</div><div class="ex">"raising the risk of displacement outrunning creation"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="polarization">🔊</button><div class="word">polarization<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">两极分化（labour-market polarization 劳动力市场两极化：中间技能岗位被挤压）</div><div class="ex">"or harden into lasting polarization?"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="asymmetrical">🔊</button><div class="word">asymmetrical<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">不对称的（asymmetry 的形容词；此处指冲击在各群体间分布不均）</div><div class="ex">"leaves an asymmetrical shock with less time to adapt"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="exacerbation">🔊</button><div class="word">exacerbation<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">加剧、恶化（动词 exacerbate；the exacerbation of inequality 不平等的加剧）</div><div class="ex">"the exacerbation of inequality may be precipitous"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="precipitous">🔊</button><div class="word">precipitous<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">急剧的、骤然的（precipice 悬崖；喻陡降或骤变，需谨慎用于正式文体）</div><div class="ex">"the exacerbation of inequality may be precipitous"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="remediation">🔊</button><div class="word">remediation<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">补救、矫正（动词 remedy；此处指通过再培训纠正分配失衡）</div><div class="ex">"The remedy is to hasten remediation through training"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="corollary">🔊</button><div class="word">corollary<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">必然结果、推论（a corollary being that... 意为「由此推论」）</div><div class="ex">"the corollary being that institutions, not machines, decide the ending"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [X] call it [Y]: [description].</h3>
+          <div class="zh">"X 将之称为 Y：即……。" 学术写作给现象命名/下定义的经典起手式；冒号后展开说明，比 "This is called Y because..." 更凝练有力。</div>
+          <div class="eg">Economic historians call it stagnation: the decades, roughly 1790 to 1840, when British real wages flatlined even as output per head climbed.</div>
+          <div class="practice">练习：用 "economists / the paradox / that productivity rises without wage gains" → Economists call it the paradox: <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. [A] first [does V], then [does V] — but only after [condition].</h3>
+          <div class="zh">"A 先……，再……——但唯有在……之后。" 描述通用技术（GPT）的 J 曲线时序：先用破折号制造转折，再以 only after 引出前提，是经济学人式因果链条写法。</div>
+          <div class="eg">AI first depresses measured productivity, then rewards it — but only after heavy investment in intangible capital and retrained staff, before the gains diffuse across the economy.</div>
+          <div class="practice">练习：用 "the model / suppresses wages / restores them / the institutions catch up" → The model first suppresses wages, then restores them — <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. Unlike [A], which [V], [B] [V].</h3>
+          <div class="zh">"与 A（……）不同，B……。" unlike + 名词 + 非限制性定语从句（which...）引出对照项，主句给出相反结论；比 "A did X, but B did Y" 更紧凑、对比更锋利。</div>
+          <div class="eg">Unlike steam, which displaced muscle, algorithms displace the cognitive routines of the middle class.</div>
+          <div class="practice">练习：用 "tariffs / protected factories / automation / erodes offices" → Unlike tariffs, which protected factories, <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. The [noun] is not to [V] but to [V].</h3>
+          <div class="zh">"……的目的不是……，而是……。" not to A but to B 用于修正流行认知、重新框定目标，是社科论文最优雅的"再定义"句式之一。</div>
+          <div class="eg">The remedy is not to stall invention but to hasten its remediation through training and transfer.</div>
+          <div class="practice">练习：用 "the goal / punish firms / redirect surplus" → The goal is not to punish firms but to <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. So will [X] end like [Y] — or harden into [Z]?</h3>
+          <div class="zh">"那么 X 会像 Y 那样收场——还是固化为 Z？" 修辞性两难问句，用破折号分隔第三种可能；常用于段末抛出发人深省的不确定性，比平铺陈述更具张力。</div>
+          <div class="eg">So will the AI pause end like the first — wages eventually catching up — or harden into lasting polarization?</div>
+          <div class="practice">练习：用 "the boom / a soft landing / a bust" → So will the boom end like a soft landing — <input placeholder="your answer">?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 破折号（em dash）作插入性同位解释</h3>
+          <div class="zh">破折号后接名词短语，对前文整句作浓缩结论（等于 which is... 的同位语）。比关系从句更干脆，是经济学人标志式写法。注意：前后各一个 em dash（—），切勿与 hyphen（-）混用。</div>
+          <div class="eg">The dividend accrued to capital, not labour <b>— a pattern excoriated as pro-rich growth.</b></div>
+        </div>
+        <div class="item">
+          <h3>2. 省略平行结构（elliptical comparison）</h3>
+          <div class="zh">后句省去与前句相同的动词与介词，仅留主语与补语，形成强对照。须保证前后结构平行（此处均表"增长幅度"），否则产生歧义。口语中易补全省略，书面则可利用省略制造节奏。</div>
+          <div class="eg">Output per worker rose 46 per cent; real wages, <b>a mere 12.</b></div>
+        </div>
+        <div class="item">
+          <h3>3. 修辞性问句 + 嵌入手分词短语（nominative absolute）</h3>
+          <div class="zh">"wages eventually catching up" 是"名词 + 现在分词"的独立分词结构（nominative absolute），夹在两破折号间作第三种可能。它不依附主句主语，独立表伴随状态，是高级写作制造张力的手法；托福/雅思写作用之可立刻拉开档次。</div>
+          <div class="eg">So will the AI pause end like the first <b>— wages eventually catching up —</b> or harden into lasting polarization?</div>
+        </div>
+        <div class="item">
+          <h3>4. "the + 名词 + being that" 名词化推论结构</h3>
+          <div class="zh">being 此处为 be 的现在分词，构成"名词 + being + that 从句"的正式推论句式，等价于 "which means that"，常用于段末收束、引出必然结论。注意 being 不可换成 is（那是另一个句型）。</div>
+          <div class="eg">the <b>corollary being that</b> institutions, not machines, decide the ending.</div>
+        </div>
+        <div class="item">
+          <h3>5. unlike A, which B, C D 对比从属结构</h3>
+          <div class="zh">unlike + 名词 + 非限制性定语从句（which displaced muscle）先立对照项，主句（algorithms displace...）再给相反结论。这一"先抑后扬"的对比框架，比并列句更能突出差异，适合论证段首。</div>
+          <div class="eg"><b>Unlike steam, which displaced muscle,</b> algorithms displace the cognitive routines of the middle class.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本期借用一个真实的经济史概念——<b>恩格斯停顿（Engels' Pause）</b>——来框架当下 AI 时代的"生产率上升、工资停滞"之争。它不是虚构比喻，而是经济史学界有明确定义、有数据、有学术辩论的硬概念。</p>
+        <ul>
+          <li><b>概念的提出：</b>经济史家 <b>Robert C. Allen</b> 在 2008/2009 年论文（<i>Explorations in Economic History</i>）中正式创造 "Engels' Pause" 一词，指英国约 <b>1790–1840 年</b>的一段时期：工人阶级实际工资停滞，而人均 GDP 快速扩张。他取名自 <b>弗里德里希·恩格斯</b> 1845 年的《英国工人阶级状况》(<i>The Condition of the Working Class in England</i>)——恩格斯痛斥工业家"靠大众的苦难致富"。</li>
+          <li><b>经典数据：</b>据 Crafts–Harley 估算，1780–1840 年<b>每工人产出上升约 46%</b>，而据 Feinstein 实际工资指数，<b>实际工资仅上升约 12%</b>。增长红利主要归于资本与工业家，劳动份额承压——这正是"pro-rich growth（亲富增长）"的含义。</li>
+          <li><b>后来的追赶：</b>1840–1900 年，随着企业吸收新机器、工人组织起来，实际工资<b>跃升约 123%</b>（同期每工人产出 +90%），工资与生产率恢复同步增长——即文中 "modern pattern"。</li>
+        </ul>
+        <div class="box">🧭 <b>事实与出处：</b>以上年代与数字据 Allen (2008/2009)、Crafts &amp; Harley (1992)、Feinstein (1998)、以及 Wikipedia 与 CEPR Discussion Paper DP14762（Crafts, 2020, <i>Oxford Economic Papers</i>）交叉印证。本课尊重经济史事实，未作任何改写或虚构。</div>
+
+        <h3>二、关键学术辩论：是"亲富增长"还是"生产率悖论"？</h3>
+        <p>2020 年 Crafts 在 <i>Oxford Economic Papers</i> 用 Broadberry et al. (2015) 的新数据重算，发现差距比 Allen 宣称的小得多：1770–1820 年实际工资约 +12%，生产率约 +16%——更像是" paradoxically slow productivity growth（出奇慢的生产率增长）"，而非剧烈的"亲富增长"。这提示：用历史类比预测 AI，必须先校准数据。本课在正文采用了 Allen 的广被引用版本（46% vs 12%），但在扩展段点出 Crafts 的修正，体现学术诚实。</p>
+
+        <h3>三、为什么今天又提起它？——三条证据链</h3>
+        <ul>
+          <li><b>J 曲线（乐观派）：</b>MIT 的 Brynjolfsson、Rock 与芝加哥大学的 Syverson 在 NBER 工作论文 w25148（2018）《The Productivity J-Curve》中提出：电力花了 30–40 年才体现在生产率统计中；通用技术（GPT）先压低、后回报"measured productivity"，前提是企业在流程再设计、再培训等<b>无形资本（intangible capital）</b>上重金投入。AI 的 J 曲线可能比电力短。</li>
+          <li><b>宏观证据（谨慎派）：</b>2025–2026 年对近 <b>750 名 CFO</b> 的 NBER 调查显示 AI 生产率增益"positive but modest（正面但温和）"；高盛（Goldman Sachs, 2026）称在宏观层面"no evidence AI is either boosting productivity or damaging employment"。即数百亿投入尚未转化为可统计的生产率跃升。</li>
+          <li><b>暴露度与速度（结构派）：</b>IMF（2024）估计全球约 <b>40%</b> 就业岗位暴露于 AI，发达经济体达 <b>60%</b>；欧洲央行（ECB, 2026-03 演讲）指出 AI 采用速度更快，意味着<b>调整摩擦更大、留给适应的时间更短</b>。</li>
+        </ul>
+
+        <h3>四、悲观派的声音：Frey 与 Acemoglu</h3>
+        <ul>
+          <li><b>Carl Benedikt Frey (2019)：</b>把英国工业革命当作"警示灯"——工资停滞、利润飙升、不平等飙升；担心今天重演，且 AI 版被压缩到十年，社会来不及建工会、学校、福利。</li>
+          <li><b>Acemoglu &amp; Restrepo (2019)：</b>提出 AI 先"displace（替代）"劳动，但随生产率上升、资本深化与新任务涌现，长期会创造新需求；关键在于<b>劳动力市场的任务再配置（task reallocation）</b>是否够快。若中间技能岗位被挤压、新岗位却滞后，便出现<b>两极化（polarization）</b>。</li>
+        </ul>
+        <p>这正是本课末段的辩论核心：AI 不只替代肌肉（如蒸汽），更替代<b>中产认知型岗位</b>——社会稳定的政治核心。原版停顿给了 50 年缓冲，AI 版只有十年。</p>
+
+        <h3>五、与往期 C1 课程的关系</h3>
+        <ul>
+          <li><b>08-21「The Analyst's Shadow」：</b>讲<b>分析自由度</b>如何塑造结论（同一数据，457 名分析师仅 1/3 与原作者一致）。</li>
+          <li><b>本期：</b>讲<b>生产率与工资的分配脱节</b>——技术增益能否、何时传导到劳动者。两者同属"方法/结构如何决定我们看到的结果"这一更高主题，但角度不同（分析稳健性 vs 分配机制）。</li>
+        </ul>
+
+        <h3>六、内容合规与立场说明</h3>
+        <p>本课聚焦经济史与宏观经济学的学术讨论，所有年代、人物、数据均据公开学术文献，立场客观、尊重事实，不涉及任何敏感政治话题，亦未对任何国家现行政策作评判。涉及主权与领土表述时，一律使用规范名称：台湾称"<b>中国台湾</b>"、香港称"<b>中国香港</b>"、澳门称"<b>中国澳门</b>"，均为中国不可分割的一部分。</p>
+
+        <h3>七、对雅思／托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>本课是典型的"学术论证型"文本——先立历史类比，再分乐观/悲观两派，末段抛出发人深省的不确定性。练习重点：分清"作者自己的论点"（末段 the corollary being that institutions...）与"作者转述的他人观点"（optimists invoke / pessimists warn / the ECB notes）。托福"作者态度题""递推题"必考此点。</li>
+          <li><b>写作 Task 2：</b>可套用本课框架写"科技与就业"类题目：命名现象（call it X）→ 历史类比 → 乐观机制（J-curve）→ 悲观机制（displacement outrunning creation）→ 收束（the corollary being that...）。高级词汇 stagnation / intangible / polarization / remediation 直接可用。</li>
+          <li><b>口语 Part 3：</b>被问到"AI 会抢走工作吗"，可用本课三分法回答：短期 displacement &gt; creation，长期取决于 institutions 的 remediation——有数据、有辩证，7+ 稳。</li>
+          <li><b>易错点：</b>em dash（—）与 hyphen（-）别混；省略平行句须前后结构对等；"the X being that" 中 being 不可写成 is。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 经济/社科核心词（stagnation, intangible, diffusion, displacement, polarization, asymmetrical, exacerbation, precipitous, remediation, corollary）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是 "X call it Y:" 命名式与 "The X is not to A but to B" 再定义结构。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握破折号同位解释、省略平行比较、修辞性问句 + 独立分词、the X being that 推论、unlike-which 对比从属等 5 个高级语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语梳理一场宏观经济学辩论的三层结构：历史类比 → 乐观机制（J 曲线）→ 悲观机制（displacement）→ 制度决定论。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解 Engels' Pause、Productivity J-Curve、labour-market polarization 等概念，并能在口语与写作中调用。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听 Dacey 的自然英语朗读，注意重音：in-TAN-gi-ble、dis-place-MENT、po-la-ri-ZA-tion、a-sym-ME-tri-cal、ex-a-cer-BA-tion、re-me-DI-a-tion、co-ROL-la-ry。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音；每词各造一个学术句，优先套用本课五个句型。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：Name the phenomenon → Historical analogy → Optimist mechanism (J-curve) → Pessimist mechanism (displacement) → Reframing（the corollary being that institutions decide the ending）.</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做题先分辨"谁在说话"：作者立场往往只出现在段末（the corollary being that...），中间大量是转述他人（optimists invoke / pessimists warn / the ECB notes）。托福"作者态度题"必考此点。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Engels' Pause, Rebooted · 2026-08-25 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Economic historians call it stagnation: the decades, roughly 1790 to 1840, when British real wages flatlined even as output per head climbed. Robert C. Allen, who coined the term in 2008, drew it from Engels's 1845 indictment of industrial England. Output per worker rose 46 per cent; real wages, a mere 12. The dividend accrued to capital, not labour — a pattern excoriated as pro-rich growth.",
+  "Yet the story did not end there. From 1840 to 1900, real wages leapt 123 per cent. Optimists invoke the Productivity J-Curve: AI first depresses measured productivity, then rewards it — but only after heavy investment in intangible capital and retrained staff, before the gains diffuse across the economy. Electrification took thirty to forty years to show up in the statistics. Patience, the bulls argue, is a strategy.",
+  "A 2026 survey of 750 chief financial officers found AI's productivity gains positive but modest — trapped inside corporate balance sheets. Goldman Sachs saw no macro evidence AI is lifting output or costing jobs. The IMF reckons 40 per cent of global employment is exposed, 60 per cent in advanced economies. The original pause granted fifty years to build unions and welfare; this one compresses that into a decade, raising the risk of displacement outrunning creation.",
+  "So will the AI pause end like the first — wages eventually catching up — or harden into lasting polarization? Pessimists warn that, unlike steam, which displaced muscle, algorithms displace the cognitive routines of the middle class. Faster adoption, the ECB notes, leaves an asymmetrical shock with less time to adapt, and the exacerbation of inequality may be precipitous. The remedy is to hasten remediation through training — the corollary being that institutions, not machines, decide the ending. This is Pola News, Advanced English."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the central argument of the passage? 文章的核心论点是什么？",opts:["The original Engels' Pause proved that new technology always harms workers permanently","AI's productivity gains are a statistical illusion with no real economic effect","The Engels' Pause offers a historical lens: AI's gains may lag before reaching workers, and whether wages eventually catch up depends on institutions, not the technology itself","British industrialisation was unique and offers no lessons for the modern economy"],ans:2,
+   fb:"Correct. 全文以历史类比立论：第一段讲原版恩格斯停顿（工资滞后于生产率），二、三段讲乐观派 J 曲线与 AI 版被压缩的时间窗口，末段点明结局由制度而非机器决定。C 完整概括了『历史透镜 + 制度决定论』的双层论点。"},
+  {q:"2. According to the passage, what happened to British real wages between 1840 and 1900? 根据文章，1840–1900 年英国实际工资发生了什么？",opts:["They stagnated, rising by only 12 per cent","They leapt by 123 per cent as firms absorbed new machinery and workers organised","They fell below their 1790 level","They grew faster than output per worker from the very start"],ans:1,
+   fb:"Yes. 第二段明确：1840–1900 实际工资跃升 123%，对应企业吸收新机器、工人组织起来的『追赶期』。A 是 1780–1840（原版停顿）的数据，属混淆项。"},
+  {q:"3. Why do optimists cite the Productivity J-Curve? 乐观派引用生产率 J 曲线是为了说明什么？",opts:["To prove that AI will never raise productivity","To argue that AI's absence from productivity statistics so far is a normal early-stage lag, not evidence of failure","To show that electricity and AI diffuse at exactly the same speed","To demonstrate that only manufacturing benefits from AI"],ans:1,
+   fb:"Correct — 推理题。第二段说 GPT 先压低后回报 measured productivity，且电力花了 30–40 年才体现在统计中；乐观派因此主张『耐心即策略』，即当前统计里看不到 AI 成效属正常早期滞后，而非失败证据。"},
+  {q:"4. In paragraph 1, 'pro-rich growth' most nearly means: 第一段中 pro-rich growth 最接近的意思是？",opts:["growth that mainly benefits owners of capital rather than workers","growth financed by progressive taxation","rapid inflation that erodes household savings","equal gains shared across all income groups"],ans:0,
+   fb:"Right. pro-rich = 偏向富人的。前文说『红利归于资本而非劳动』，故 pro-rich growth 指增长收益不成比例地流向资本与资产所有者，而非劳工。"},
+  {q:"5. The author regards the AI 'pause' as more dangerous than the original chiefly because: 作者认为 AI 版『停顿』更危险，主要原因是？",opts:["algorithms target cognitive white-collar roles and the adjustment is compressed into a decade","it occurred in a pre-democratic society","British workers were wholly unorganised in the nineteenth century","modern technology cannot be taxed at all"],ans:0,
+   fb:"Yes — 推理题。第三段说原版给了 50 年建工会与福利，AI 版压缩到十年；末段指出算法替代的是中产认知型岗位（政治稳定核心）。两者叠加 → 制度来不及适应，故更危险。"},
+  {q:"6. The author's stance toward AI-driven displacement is best described as: 作者对 AI 引发的岗位替代的态度最准确的描述是？",opts:["fatalistic: nothing can prevent mass unemployment","dismissive: the fears are wholly unfounded","concerned but not fatalistic: the remedy lies in hastening remediation through training and transfer, and institutions will decide the outcome","celebratory: displacement is always beneficial"],ans:2,
+   fb:"Correct. 末段『The remedy is not to stall invention but to hasten its remediation...』与『the corollary being that institutions, not machines, decide the ending』表明作者担忧但不宿命，把解决之道归于制度性补救与再培训。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
