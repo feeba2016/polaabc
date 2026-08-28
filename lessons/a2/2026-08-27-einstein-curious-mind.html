@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Albert Einstein: A Curious Mind — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#f59e0b;
+  --bg:#f3f7ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#dbeafe;
+  --border:#bfdbfe;
+  --soft:#eff6ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#60a5fa);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #bfdbfe;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.zh-trans{color:var(--muted);font-size:14px;margin-top:8px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #2563eb;transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.trans-toggle{background:var(--accent2);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#eff6ff;border:2px solid #93c5fd;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#1d4ed8;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Biographies</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Albert Einstein: A Curious Mind</h1>
+      <p class="subtitle">2026年8月27日 · 人物传记｜爱因斯坦 —— 全文阅读（点蓝色词看释义，可显示中文翻译）</p>
+
+      <button class="trans-toggle" id="transToggle">🇨🇳 显示中文翻译</button>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>The <span class="kw" data-def="科学家">scientist</span> Albert Einstein was born in 1879 in Germany. As a boy, he was very <span class="kw" data-def="好奇的">curious</span>. He liked to ask big <span class="kw" data-def="问题">questions</span> about the stars and light.</p>
+            <div class="zh-trans" style="display:none;">科学家阿尔伯特·爱因斯坦于1879年出生在德国。小时候，他非常好奇。他喜欢问关于星星和光的大问题。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>Albert did not love school. He learned by himself. He read books and thought a lot. He loved <span class="kw" data-def="音乐">music</span> and played the violin. He said, "<span class="kw" data-def="想象力">Imagination</span> is more important than knowledge."</p>
+            <div class="zh-trans" style="display:none;">阿尔伯特并不喜欢学校。他自己学习。他读书、勤思考。他热爱音乐，还会拉小提琴。他说过："想象力比知识更重要。"</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Achievements</div>
+            <p>When he grew up, he studied science. He made a famous equation: E = mc². This idea changed how we understand space, time, and <span class="kw" data-def="能量">energy</span>. The whole <span class="kw" data-def="世界">world</span> remembers his name.</p>
+            <div class="zh-trans" style="display:none;">长大后，他研究科学。他提出了一个著名的方程式：E=mc²。这个想法改变了我们理解空间、时间和能量的方式。全世界都记得他的名字。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>Albert Einstein showed us that curiosity is a superpower. Ask <span class="kw" data-def="问题">questions</span>. Read books. Dream big! You can <span class="kw" data-def="发现">discover</span> amazing things, too.</p>
+            <div class="zh-trans" style="display:none;">阿尔伯特·爱因斯坦告诉我们，好奇心是一种超能力。多提问，多读书，大胆梦想！你也能发现奇妙的事物。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>💡 成长小提示 Growth Tip</h3>
+        <p style="margin:0;font-size:14.5px;">爱因斯坦小时候也不喜欢死记硬背的学校，但他<b>从不停止提问</b>。小朋友也可以这样：看到不懂的事就问"为什么"，多读书、多思考，<b>好奇心就是你的超能力</b>！</p>
+      </div>
+    </section>
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scientist">🔊</button><div class="word">scientist<span class="pos">n.</span></div><div class="zh">科学家</div><div class="ex">"Albert Einstein was a great scientist."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="curious">🔊</button><div class="word">curious<span class="pos">adj.</span></div><div class="zh">好奇的</div><div class="ex">"The boy was curious about the stars."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="question">🔊</button><div class="word">question<span class="pos">n.</span></div><div class="zh">问题</div><div class="ex">"She asked a big question."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="imagination">🔊</button><div class="word">imagination<span class="pos">n.</span></div><div class="zh">想象力</div><div class="ex">"Imagination is more important than knowledge."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="music">🔊</button><div class="word">music<span class="pos">n.</span></div><div class="zh">音乐</div><div class="ex">"He loved music and the violin."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="energy">🔊</button><div class="word">energy<span class="pos">n.</span></div><div class="zh">能量</div><div class="ex">"E = mc² is about energy."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="discover">🔊</button><div class="word">discover<span class="pos">v.</span></div><div class="zh">发现</div><div class="ex">"You can discover new things."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="world">🔊</button><div class="word">world<span class="pos">n.</span></div><div class="zh">世界</div><div class="ex">"The whole world knows him."</div></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Albert Einstein was [one of the greatest scientists].</h3>
+          <div class="zh">爱因斯坦是[最伟大的科学家之一]。"be 动词 + 名词" 用来描述人物身份。</div>
+          <div class="eg">Albert Einstein was one of the greatest scientists.</div>
+          <div class="practice">练习：用 "a curious boy" 造句 → Albert Einstein was <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. He liked to [ask big questions].</h3>
+          <div class="zh">他喜欢[问大问题]。"主语 + like to + 动词原形" 表达喜欢做某事。</div>
+          <div class="eg">He liked to ask big questions about the stars.</div>
+          <div class="practice">练习：用 "read books" → He liked to <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. He loved [music] and played the violin.</h3>
+          <div class="zh">他热爱[音乐]并会拉小提琴。"love + 名词" 表达热爱的人或事物。</div>
+          <div class="eg">He loved music and played the violin.</div>
+          <div class="practice">练习：用 "science" → He loved <input placeholder="your answer"> and studied hard.</div>
+        </div>
+        <div class="item">
+          <h3>4. You can [discover amazing things], too.</h3>
+          <div class="zh">你也[能发现奇妙的事物]。"can + 动词原形" 表示有能力做到。</div>
+          <div class="eg">You can discover amazing things, too.</div>
+          <div class="practice">练习：用 "ask questions" → You can <input placeholder="your answer">, too.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般过去时（Past Simple）</h3>
+          <div class="zh">讲故事时，动词要用过去式。be → was；规则动词加 -ed：like → liked，love → loved，ask → asked，play → played；不规则动词要记：make → made，show → showed，grow → grew。</div>
+          <div class="eg">He <b>was</b> a curious boy. / He <b>loved</b> music and <b>played</b> the violin.</div>
+        </div>
+        <div class="item">
+          <h3>2. 比较级（Comparative）</h3>
+          <div class="zh">important（重要的）是多音节词，比较级用 "more important"，再加 "than"：A is more important than B（A 比 B 更重要）。</div>
+          <div class="eg">Imagination is <b>more important than</b> knowledge.</div>
+        </div>
+        <div class="item">
+          <h3>3. 情态动词 can（能）</h3>
+          <div class="zh">"can + 动词原形" 表示能够、会做某事，不分人称，否定用 can't / cannot。</div>
+          <div class="eg">You <b>can</b> discover amazing things, too.</div>
+        </div>
+        <div class="item">
+          <h3>4. 时间 / 方式表达</h3>
+          <div class="zh">When he grew up（当他长大后）引导时间状语从句；by himself 表示"独自"；a lot 修饰动词 thought，表示"很多"。</div>
+          <div class="eg"><b>When</b> he grew up, he studied science. / He learned <b>by himself</b>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>爱因斯坦是谁？（尊重历史）</h3>
+        <p>阿尔伯特·爱因斯坦（Albert Einstein）是<b>20世纪最伟大的科学家之一</b>。他于<b>1879年3月14日</b>出生在<b>德国乌尔姆</b>的一个犹太家庭。小时候，他就是个充满好奇心的孩子，不喜欢死记硬背的学校，但数学很好。他6岁开始学<b>小提琴</b>，音乐陪伴了他一生。</p>
+
+        <h3>奇迹年与 E = mc²</h3>
+        <p><b>1905年</b>被称为爱因斯坦的"奇迹年"（Annus Mirabilis）。那一年，26岁的他在专利局工作，却一口气发表了4篇划时代的论文，包括狭义相对论和光电效应。其中著名的方程式 <b>E = mc²</b> 告诉我们：质量和能量是可以互相转化的——这是现代物理学的基石。因为对光电效应的研究，他在<b>1921年获得诺贝尔物理学奖</b>。</p>
+
+        <h3>想象力比知识更重要</h3>
+        <p>爱因斯坦常说："想象力比知识更重要。"他喜欢用"思想实验"来思考：比如"如果我骑在一束光上，会看到什么？"他相信，敢于提问、敢于想象，比记住现成答案更有力量。这也是为什么他鼓励每个孩子<b>多问"为什么"</b>。</p>
+
+        <h3>热爱和平的人</h3>
+        <p>爱因斯坦不仅聪明，也关心世界。他是一位<b>和平主义者</b>，反对战争，呼吁用理解和对话解决争端。1933年，他移居<b>美国</b>，在普林斯顿继续研究，直到1955年逝世，享年76岁。</p>
+
+        <h3>成长启示</h3>
+        <p>爱因斯坦的故事告诉我们：<b>好奇心是一种超能力</b>。你不需要和别人一模一样，也不必害怕提问。学音乐、读好书、多思考，都能帮你成为一个更会观察世界的人。</p>
+
+        <h3>动手小活动：画一张"我的问题卡"</h3>
+        <p>拿出彩笔，画一张卡片，写下3个你想问世界的问题，比如 "Why is the sky blue?"（天空为什么是蓝的？）。和爸爸妈妈用英语说一句：<b>"I have a question about the stars."</b> 保持好奇，你也能像爱因斯坦一样，发现奇妙的世界！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一个 A2 水平的英文人物传记短文（爱因斯坦），理解大意。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般过去时、比较级、can 情态动词、时间状语四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个传记主题核心词汇（scientist, curious, question, imagination, music, energy, discover, world）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语简单介绍爱因斯坦：他好奇、爱音乐、提出了 E = mc²。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解"好奇心是超能力"，学会多提问、多思考。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">💡</span><div>用 "I have a question about ..." 说出你想问世界的问题。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>和爸爸妈妈一起读"中文知识扩展"，聊聊"你最好奇的事是什么？"</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Albert Einstein: A Curious Mind · 2026-08-27 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Chinese translation toggle ---------- */
+const transBtn=document.getElementById('transToggle');
+let transOn=false;
+transBtn.addEventListener('click',()=>{
+  transOn=!transOn;
+  document.querySelectorAll('.zh-trans').forEach(d=>{d.style.display=transOn?'block':'none';});
+  transBtn.textContent=transOn?'🇨🇳 隐藏中文翻译':'🇨🇳 显示中文翻译';
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "The scientist Albert Einstein was born in 1879 in Germany. As a boy, he was very curious. He liked to ask big questions about the stars and light.",
+  "Albert did not love school. He learned by himself. He read books and thought a lot. He loved music and played the violin. He said, \"Imagination is more important than knowledge.\"",
+  "When he grew up, he studied science. He made a famous equation: E = mc². This idea changed how we understand space, time, and energy. The whole world remembers his name.",
+  "Albert Einstein showed us that curiosity is a superpower. Ask questions. Read books. Dream big! You can discover amazing things, too."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where was Albert Einstein born? 爱因斯坦出生在哪里？",opts:["Germany 德国","France 法国","China 中国","USA 美国"],ans:0,
+   fb:"Correct! 爱因斯坦1879年出生在德国（Germany）。"},
+  {q:"What did he love to do as a boy? 他小时候喜欢做什么？",opts:["Ask big questions 问大问题","Play soccer 踢足球","Sleep 睡觉","Cook 做饭"],ans:0,
+   fb:"Yes! 他小时候喜欢问大问题（ask big questions）。"},
+  {q:"What instrument did he play? 他会演奏什么乐器？",opts:["Violin 小提琴","Piano 钢琴","Drums 鼓","Guitar 吉他"],ans:0,
+   fb:"Right! 他会拉小提琴（violin）。"},
+  {q:"What is E = mc² about? E=mc² 是关于什么的？",opts:["Space, time and energy 空间、时间和能量","A song 一首歌","A food 一种食物","A game 一个游戏"],ans:0,
+   fb:"Correct! E=mc² 是关于空间、时间和能量的（space, time and energy）。"},
+  {q:"What does the lesson teach us? 本课告诉我们什么？",opts:["Curiosity is a superpower 好奇心是超能力","Never read 永远不读书","Sleep all day 整天睡觉","Eat candy 吃糖"],ans:0,
+   fb:"Yes! 好奇心是一种超能力（curiosity is a superpower）！"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#2563eb';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

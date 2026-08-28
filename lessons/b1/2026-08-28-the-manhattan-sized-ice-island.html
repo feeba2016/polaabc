@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Manhattan-Sized Ice Island · Pola News</title>
+<style>
+:root{
+  --accent:#0e7490;
+  --accent2:#38bdf8;
+  --glow:#bae6fd;
+  --bg:#f0f9ff;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#0c3a4a;
+  --muted:#5b7c8d;
+  --line:#cfe8f5;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(14,116,144,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,#0e7490,#0891b2);color:#eaf8ff;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.78;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#d6f1fb;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.10)}
+.nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(14,116,144,.35)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(14,116,144,.12);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line)}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(14,116,144,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(186,230,253,.65)}70%{box-shadow:0 0 0 14px rgba(186,230,253,0)}100%{box-shadow:0 0 0 0 rgba(186,230,253,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(186,230,253,.30)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#0c3a4a;color:#eaf8ff;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+#tip b{color:var(--glow)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.vcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,#f0f9ff);transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.vcard .w{font-size:20px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:2px}
+.vcard .en{font-size:13px;color:var(--muted)}
+.vcard .spk{margin-top:10px;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px}
+.vcard .spk:hover{transform:scale(1.08)}
+.pat{border-left:4px solid var(--accent2);background:#eef8fd;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px}
+.pat .p{font-weight:800;color:var(--accent);font-size:16px}
+.pat .ex{margin-top:4px;color:var(--ink)}
+.pat .ex b{color:var(--accent2)}
+.callout{background:#eef8fd;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.callout h3{font-size:17px;color:var(--accent);margin-bottom:6px}
+.formula{font-family:"Courier New",monospace;background:#0c3a4a;color:#eaf8ff;padding:10px 14px;border-radius:8px;display:inline-block;margin:6px 0;font-size:15px}
+.tag{display:inline-block;background:rgba(14,116,144,.12);color:var(--accent);font-size:12px;padding:2px 8px;border-radius:6px;margin-right:6px}
+.q{margin-bottom:18px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:11px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff;transition:.15s;font-size:15px}
+.opt:hover{border-color:var(--accent)}
+.opt.correct{background:rgba(15,157,88,.13);border-color:var(--good);color:var(--good);font-weight:700}
+.opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad);font-weight:700}
+.opt:disabled{cursor:default}
+.q .fb{margin-top:8px;font-size:14px;display:none}
+.q .fb.show{display:block}
+.cn p{margin-bottom:12px}
+.cn h3{font-size:18px;color:var(--accent);margin:14px 0 8px}
+.cn ul{margin:0 0 12px 22px}
+.cn li{margin-bottom:6px}
+.fact{background:#dff1fb;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:14px 18px;margin:12px 0}
+.ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.rung{border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center;background:linear-gradient(180deg,#fff,#eef8fd)}
+.rung .n{font-size:15px;font-weight:700;color:var(--muted)}
+.rung .v{font-size:22px;font-weight:800;color:var(--accent);line-height:1.2;margin-top:4px}
+.rung .u{font-size:12px;color:var(--muted)}
+.about{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.about .avatar{width:84px;height:84px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:42px;flex:none}
+.about .info{flex:1;min-width:240px}
+.about .info p{margin-bottom:8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;min-width:0;height:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+  .sidebar .brand,.sidebar .sub{width:100%}
+  .nav{display:flex;flex-wrap:wrap;gap:6px}
+  .nav a{margin:0;padding:8px 10px;font-size:13px}
+  .content{padding:20px 16px}
+}
+@media print{
+  .sidebar,#progress,#tip,.play,.spk{display:none!important}
+  body{background:#fff;color:#000}
+  section{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .layout{display:block}
+  .content{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>POLA NEWS</div>
+    <div class="sub">English Science News · B1</div>
+    <nav class="nav">
+      <a href="#reading" class="active"><span class="ic">📖</span>全文阅读</a>
+      <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+      <a href="#patterns"><span class="ic">💬</span>句型练习</a>
+      <a href="#grammar"><span class="ic">📘</span>语法点</a>
+      <a href="#quiz"><span class="ic">✅</span>练习测验</a>
+      <a href="#cn"><span class="ic">🌏</span>知识扩展</a>
+      <a href="#about"><span class="ic">⭐</span>关于本课</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <header class="top">
+      <span class="kicker">📰 Pola's Science News · 2026-08-28</span>
+      <h1>The Manhattan-Sized Ice Island</h1>
+      <div class="meta">
+        <span>🎙️ <b>Pola</b> the Quokka</span>
+        <span>📚 Level: <b>B1</b> (ages 10–12)</span>
+        <span>⏱️ <b>4</b> segments · ~60s</span>
+      </div>
+    </header>
+
+    <!-- 1. READING -->
+    <section id="reading">
+      <h2><span class="num">1</span>全文阅读 · Full Story</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击每段右侧的 <b>▶</b> 按钮听 Pola 朗读（优先播放预生成语音，失败则用浏览器原声）。蓝色虚线词可点击查看释义。</p>
+
+      <div class="seg">
+        <div class="badge">1</div>
+        <div class="txt">Guess what? A block of ice as big as Manhattan just broke free! It happened in <span class="kw" data-def="格陵兰：北极附近巨大的冰封岛屿" data-en="a giant island of ice near the North Pole">Greenland</span>, a giant island of ice near the <span class="kw" data-def="北极：北极点周围的冰冻地区" data-en="the frozen region around the North Pole">North Pole</span>.</div>
+        <button class="play" data-seg="0" aria-label="Play segment 1">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">2</div>
+        <div class="txt">On August 4, 2026, a huge ice island split off Petermann <span class="kw" data-def="冰川：像河流一样缓慢流动的巨大冰体" data-en="a very slow river of ice">Glacier</span>. It is 76 square <span class="kw" data-def="公里：距离单位，1公里=1000米" data-en="a measure of distance, 1000 meters">kilometers</span> — about the size of Manhattan — and 150 meters thick. <span class="kw" data-def="卫星：在太空给地球拍照的机器" data-en="a machine in space that takes pictures of Earth">Satellites</span> watched the <span class="kw" data-def="裂缝：冰或岩石上长长的细缝" data-en="a long thin break in ice or rock">cracks</span> grow for years.</div>
+        <button class="play" data-seg="1" aria-label="Play segment 2">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">3</div>
+        <div class="txt">This shows how fast our <span class="kw" data-def="气候：一个地方多年的通常天气" data-en="the usual weather in a place over many years">climate</span> is changing. The ice was already <span class="kw" data-def="漂浮：停在水面而不下沉" data-en="to stay on top of water without sinking">floating</span>, so the sea did not rise right away. But <span class="kw" data-def="科学家：研究世界如何运作的人" data-en="a person who studies how the world works">scientists</span> study it to keep ships safe and learn about our warming <span class="kw" data-def="北极：北极点周围的冰冻地区" data-en="the frozen region around the North Pole">Arctic</span> world.</div>
+        <button class="play" data-seg="2" aria-label="Play segment 3">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">4</div>
+        <div class="txt">So next time you see a floating <span class="kw" data-def="冰山：漂浮在海上的巨大冰块" data-en="a large piece of ice floating in the sea">iceberg</span>, remember: even giants can move. This is Pola, signing off. Stay curious, keep exploring, and bye for now!</div>
+        <button class="play" data-seg="3" aria-label="Play segment 4">▶</button>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2><span class="num">2</span>词汇表 · Vocabulary</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">🔊 点击卡片上的喇叭按钮听单词发音。</p>
+      <div class="vgrid">
+        <div class="vcard"><div class="w">glacier</div><div class="pos">n.</div><div class="zh">冰川</div><div class="en">a very slow river of ice</div><button class="spk" data-word="glacier">🔊</button></div>
+        <div class="vcard"><div class="w">iceberg</div><div class="pos">n.</div><div class="zh">冰山</div><div class="en">a large piece of ice floating in the sea</div><button class="spk" data-word="iceberg">🔊</button></div>
+        <div class="vcard"><div class="w">satellite</div><div class="pos">n.</div><div class="zh">卫星</div><div class="en">a machine in space that takes pictures of Earth</div><button class="spk" data-word="satellite">🔊</button></div>
+        <div class="vcard"><div class="w">Greenland</div><div class="pos">n.</div><div class="zh">格陵兰</div><div class="en">a giant island of ice near the North Pole</div><button class="spk" data-word="Greenland">🔊</button></div>
+        <div class="vcard"><div class="w">Arctic</div><div class="pos">n./adj.</div><div class="zh">北极</div><div class="en">the frozen region around the North Pole</div><button class="spk" data-word="Arctic">🔊</button></div>
+        <div class="vcard"><div class="w">crack</div><div class="pos">n.</div><div class="zh">裂缝</div><div class="en">a long thin break in ice or rock</div><button class="spk" data-word="crack">🔊</button></div>
+        <div class="vcard"><div class="w">scientist</div><div class="pos">n.</div><div class="zh">科学家</div><div class="en">a person who studies how the world works</div><button class="spk" data-word="scientist">🔊</button></div>
+        <div class="vcard"><div class="w">climate</div><div class="pos">n.</div><div class="zh">气候</div><div class="en">the usual weather in a place over many years</div><button class="spk" data-word="climate">🔊</button></div>
+        <div class="vcard"><div class="w">float</div><div class="pos">v.</div><div class="zh">漂浮</div><div class="en">to stay on top of water without sinking</div><button class="spk" data-word="float">🔊</button></div>
+        <div class="vcard"><div class="w">kilometer</div><div class="pos">n.</div><div class="zh">公里</div><div class="en">a measure of distance, 1000 meters</div><button class="spk" data-word="kilometer">🔊</button></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2><span class="num">3</span>句型练习 · Sentence Patterns</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">试着用这些句型造你自己的句子！</p>
+      <div class="pat"><div class="p">① Guess what? + [A block of ice as big as Manhattan just broke free!]</div><div class="ex">用一个惊讶的事实开场，抓住听众注意力。<br>例：<b>Guess what? A block of ice as big as Manhattan just broke free!</b></div></div>
+      <div class="pat"><div class="p">② On [August 4, 2026], [a huge ice island split off Petermann Glacier].</div><div class="ex">用 On + 日期 引出"何时发生了何事"。<br>例：<b>On August 4, 2026, a huge ice island split off Petermann Glacier.</b></div></div>
+      <div class="pat"><div class="p">③ It is + [76 square kilometers] + and + [150 meters thick].</div><div class="ex">用 and 连接两个并列的尺寸特征，描述大小。<br>例：<b>It is 76 square kilometers and 150 meters thick.</b></div></div>
+      <div class="pat"><div class="p">④ This shows how + [fast our climate is changing].</div><div class="ex">用 shows how 说出"这告诉我们什么道理"。<br>例：<b>This shows how fast our climate is changing.</b></div></div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2><span class="num">4</span>语法点 · Grammar</h2>
+      <div class="callout">
+        <h3>as ... as —— "和……一样……" 的同级比较</h3>
+        <p>当我们想说"两者程度相同"，英语用 <b>as + 形容词 + as</b> 结构：</p>
+        <p><span class="formula">A block of ice as big as Manhattan</span></p>
+        <p>• 这里 <b>big</b> 是形容词，夹在 <b>as ... as</b> 中间，表示"和曼哈顿一样大"。</p>
+        <p>• 常见搭配：as tall as（和……一样高）、as cold as（和……一样冷）、as fast as（和……一样快）。</p>
+      </div>
+      <div class="callout">
+        <h3>过去进行时 was / were + doing</h3>
+        <p>描述"过去某个时刻正在发生的事"，用 <b>was / were + 动词-ing</b>：</p>
+        <p>• <b>The ice <span style="color:var(--accent)">was already floating</span>, so the sea did not rise right away.</b>（冰当时已经在漂浮了）</p>
+        <p>• 对比：讲"观察到"一个动作，常用一般过去时 <b>Satellites <span style="color:var(--accent)">watched</span> the cracks grow for years.</b>（卫星注视裂缝生长多年）</p>
+        <p style="margin-top:8px"><span class="tag">as ... as 同级比较</span><span class="tag">was / were doing</span><span class="tag">一般过去时 watched</span></p>
+      </div>
+      <div class="callout">
+        <h3>shows how / shows that —— "这告诉我们……"</h3>
+        <p>用 <b>shows (us) how / that</b> 引出"一个现象说明了什么道理"，是新闻总结常用的句式：</p>
+        <p>• <b>This <span style="color:var(--accent)">shows how</span> fast our climate is changing.</b>（这告诉我们气候变得多快）</p>
+        <p>• 讲"刚发生的事"用一般过去时 <b>A huge ice island split off...</b>；讲"它一直揭示的道理"用一般现在时 <b>shows</b>。</p>
+        <p style="margin-top:8px;color:var(--muted);font-size:14px">小提示：split off 是短语动词，意思是"脱离、裂开"，这里指冰山从冰川上断裂漂走。</p>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2><span class="num">5</span>练习测验 · Quiz</h2>
+      <div class="q" data-ans="1">
+        <div class="qt">1. How big was the ice island that broke off?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">As small as a car</button>
+          <button class="opt" data-i="1">About the size of Manhattan (76 km²)</button>
+          <button class="opt" data-i="2">As big as a whole country</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="0">
+        <div class="qt">2. On what date did the ice island break off?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">August 4, 2026</button>
+          <button class="opt" data-i="1">December 25</button>
+          <button class="opt" data-i="2">January 1</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="2">
+        <div class="qt">3. How did scientists watch the cracks grow?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">With submarines under the ice</button>
+          <button class="opt" data-i="1">With telescopes on the ground</button>
+          <button class="opt" data-i="2">With satellites in space</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="0">
+        <div class="qt">4. Why did the sea NOT rise right away?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">The ice was already floating</button>
+          <button class="opt" data-i="1">The ice was made of soft snow</button>
+          <button class="opt" data-i="2">The glacier was very small</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">5. What will scientists do with the ice island?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Ignore it completely</button>
+          <button class="opt" data-i="1">Study it to keep ships safe and learn about climate</button>
+          <button class="opt" data-i="2">Build a house on top of it</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+    </section>
+
+    <!-- 6. CN EXTENSION -->
+    <section id="cn" class="cn">
+      <h2><span class="num">6</span>中文知识扩展 · 拓展阅读</h2>
+
+      <h3>🧊 一块"曼哈顿"大的冰从格陵兰崩裂</h3>
+      <p>2026 年 8 月 4 日，格陵兰西北部<b>彼得曼冰川（Petermann Glacier）</b>的浮冰舌（一块向海上延伸、漂浮在水面的长长冰舌）崩裂出一块巨型平顶冰山，科学家把它叫做"冰岛"（ice island）。它的面积约 <b>76.4 平方公里</b>——差不多等于纽约的曼哈顿，厚度可以达到 <b>150 米</b>，比一栋 40 层的大楼还要高！这是彼得曼冰川自 2012 年以来最大的一次浮冰损失，也是<b>北极自 2020 年以来规模最大的"崩裂"事件</b>（calving，即冰从冰川上断裂漂走）。</p>
+
+      <h3>🛰️ 卫星如何"看见"裂缝？</h3>
+      <p>这块冰山并不是突然"啪"地一下裂开的。以加拿大渥太华大学博士生 <b>Adam Garbo</b> 为首的国际团队，从 <b>2019 年</b>起就一直用卫星盯着彼得曼冰川，记录冰舌上裂缝的扩张。2026 年 4 月的雷达影像已经显示冰体在变形、出现裂隙；8 月 3 日的影像里裂缝明显恶化，到 8 月 4 日 20:00（UTC）冰山就完全分离了。</p>
+      <ul>
+        <li>他们用的是欧空局（ESA）的 <b>Sentinel-1</b> 雷达卫星。雷达不怕黑夜、能穿透云层，所以即使在极地漫长的黑夜或阴天也能拍照。</li>
+        <li>2026 年恰逢 Sentinel-1C 与刚发射的 Sentinel-1D 暂时" tandem（串联）"飞行，每 <b>一天</b>就能拍一次，让科学家几乎实时地看着裂缝蔓延。</li>
+      </ul>
+
+      <h3>🌡️ 为什么会崩裂？和气候变化有关吗？</h3>
+      <p>彼得曼冰川一直被视为格陵兰"最稳定的冰舌之一"。但近些年，随着海洋变暖，它的浮冰舌变得越来越不稳定。这次崩裂提醒我们：<b>即使是最"坚强"的冰川，也可能在几年内迅速改变</b>。研究这种北极"冰岛"能帮我们理解冰川退缩、海洋变化，以及未来海平面会怎样变化。</p>
+
+      <h3>🚢 漂移的冰岛会威胁船只吗？</h3>
+      <p>这块冰山很厚，能在海上<b>漂浮好几年</b>，慢慢碎成更小、更难追踪的冰块。加拿大环境与气候变化部正在追踪它的漂移路线，因为它可能对北极的船只和海上设施（比如钻井平台）造成危险。所以，它不仅是科学研究的对象，也和"航运安全"息息相关。</p>
+
+      <div class="fact">💡 一句话记住：冰川不是一动不动的——它也会"裂开、漂走、改变形状"，而我们头顶的卫星正日夜帮科学家盯着这一切。</div>
+
+      <h3>🌊 海平面会上升吗？</h3>
+      <p>好消息是：这块冰原本就<b>漂浮在海面上</b>，所以它崩裂、融化，并不会让海平面"立刻"上升（就像杯子里漂浮的冰块融化，水位不会升高一样）。但是——浮冰舌一旦失去一大块，可能让后面的冰川<b>更快地向海洋流动</b>，而陆地上的冰进入海洋，才会真正推高海平面。所以科学家才要紧紧盯住它。</p>
+
+      <h3>🧊 给小朋友的三点小思考</h3>
+      <ul>
+        <li><b>"稳定"也会改变。</b>彼得曼冰川曾被认为很稳固，但几年间裂缝就悄悄长成了一次大崩裂——很多变化在发生前都有信号。</li>
+        <li><b>卫星是我们的"太空眼睛"。</b>人很难常年待在寒冷的北极，但雷达卫星能日夜、穿云地观察地球，帮我们发现看不见的变化。</li>
+        <li><b>漂浮的冰≠海平面上升。</b>只有从陆地滑进海里的冰，才会让海平面升高；这个区别，正是科学家最关心的。</li>
+      </ul>
+      <p>所以下次你在电视上看到一座漂浮的冰山，不妨想一想：在遥远的北极，一块"曼哈顿"那么大的冰，刚刚悄悄启程，开始它漫长的海上旅程。🧊</p>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2><span class="num">7</span>关于本课 · About</h2>
+      <div class="about">
+        <div class="avatar">🧊</div>
+        <div class="info">
+          <p><b>主播：</b>Pola（短尾矮袋鼠 Quokka），实景记者播报。</p>
+          <p><b>英语等级：</b>B1（适合 10–12 岁小朋友）。</p>
+          <p><b>本期主题：</b>2026-08-04 格陵兰彼得曼冰川崩裂出一块约 76 km²（曼哈顿大小）、厚 150 米的"冰岛"；由渥太华大学团队经 Sentinel-1 卫星识别，系彼得曼冰川自 2012 年、北极自 2020 年以来最大崩裂事件。</p>
+          <p><b>核心知识点：</b>as ... as 同级比较、过去进行时 was/were + doing、shows how 总结句式；冰川崩裂（calving）、雷达卫星监测、漂浮冰与海平面上升的区别。</p>
+          <p><b>日期：</b>2026-08-28</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · 每天一个有趣的英语科学小知识 · 🧊</footer>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Guess what? A block of ice as big as Manhattan just broke free! It happened in Greenland, a giant island of ice near the North Pole.",
+  "On August 4, 2026, a huge ice island split off Petermann Glacier. It is 76 square kilometers — about the size of Manhattan — and 150 meters thick. Satellites watched the cracks grow for years.",
+  "This shows how fast our climate is changing. The ice was already floating, so the sea did not rise right away. But scientists study it to keep ships safe and learn about our warming Arctic world.",
+  "So next time you see a floating iceberg, remember: even giants can move. This is Pola, signing off. Stay curious, keep exploring, and bye for now!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 测验 ===== */
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans,10);
+  const fb = q.querySelector('.fb');
+  q.querySelectorAll('.opt').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      if(opt.disabled) return;
+      q.querySelectorAll('.opt').forEach(function(o){ o.disabled = true; });
+      const i = parseInt(opt.dataset.i,10);
+      if(i === ans){
+        opt.classList.add('correct');
+        fb.textContent = '✅ 答对了！';
+        fb.style.color = 'var(--good)';
+      }else{
+        opt.classList.add('wrong');
+        const right = q.querySelector('.opt[data-i="'+ans+'"]');
+        if(right) right.classList.add('correct');
+        fb.textContent = '❌ 再想想，正确答案是高亮的那个。';
+        fb.style.color = 'var(--bad)';
+      }
+      fb.classList.add('show');
+    });
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

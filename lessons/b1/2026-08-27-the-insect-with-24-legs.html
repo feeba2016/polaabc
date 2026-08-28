@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Insect With 24 Legs · Pola News</title>
+<style>
+:root{
+  --accent:#b45309;
+  --accent2:#d97706;
+  --glow:#fcd34d;
+  --bg:#fdf6ec;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#3a2a16;
+  --muted:#7a6a52;
+  --line:#ecd9b8;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(180,83,9,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,#7c4a14,#b45309);color:#fdf6ec;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.78;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#fbe9cf;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.10)}
+.nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(180,83,9,.35)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(180,83,9,.12);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line)}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(180,83,9,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(252,211,77,.65)}70%{box-shadow:0 0 0 14px rgba(252,211,77,0)}100%{box-shadow:0 0 0 0 rgba(252,211,77,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(252,211,77,.30)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#4a2f12;color:#fdf6ec;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+#tip b{color:var(--glow)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.vcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,#fdf6ec);transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.vcard .w{font-size:20px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:2px}
+.vcard .en{font-size:13px;color:var(--muted)}
+.vcard .spk{margin-top:10px;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px}
+.vcard .spk:hover{transform:scale(1.08)}
+.pat{border-left:4px solid var(--accent2);background:#fdf3e3;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px}
+.pat .p{font-weight:800;color:var(--accent);font-size:16px}
+.pat .ex{margin-top:4px;color:var(--ink)}
+.pat .ex b{color:var(--accent2)}
+.callout{background:#fdf3e3;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.callout h3{font-size:17px;color:var(--accent);margin-bottom:6px}
+.formula{font-family:"Courier New",monospace;background:#4a2f12;color:#fdf6ec;padding:10px 14px;border-radius:8px;display:inline-block;margin:6px 0;font-size:15px}
+.tag{display:inline-block;background:rgba(180,83,9,.12);color:var(--accent);font-size:12px;padding:2px 8px;border-radius:6px;margin-right:6px}
+.q{margin-bottom:18px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:11px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff;transition:.15s;font-size:15px}
+.opt:hover{border-color:var(--accent)}
+.opt.correct{background:rgba(15,157,88,.13);border-color:var(--good);color:var(--good);font-weight:700}
+.opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad);font-weight:700}
+.opt:disabled{cursor:default}
+.q .fb{margin-top:8px;font-size:14px;display:none}
+.q .fb.show{display:block}
+.cn p{margin-bottom:12px}
+.cn h3{font-size:18px;color:var(--accent);margin:14px 0 8px}
+.cn ul{margin:0 0 12px 22px}
+.cn li{margin-bottom:6px}
+.fact{background:#fbeccb;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:14px 18px;margin:12px 0}
+.ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.rung{border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center;background:linear-gradient(180deg,#fff,#fdf3e3)}
+.rung .n{font-size:15px;font-weight:700;color:var(--muted)}
+.rung .v{font-size:22px;font-weight:800;color:var(--accent);line-height:1.2;margin-top:4px}
+.rung .u{font-size:12px;color:var(--muted)}
+.about{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.about .avatar{width:84px;height:84px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:42px;flex:none}
+.about .info{flex:1;min-width:240px}
+.about .info p{margin-bottom:8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;min-width:0;height:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+  .sidebar .brand,.sidebar .sub{width:100%}
+  .nav{display:flex;flex-wrap:wrap;gap:6px}
+  .nav a{margin:0;padding:8px 10px;font-size:13px}
+  .content{padding:20px 16px}
+}
+@media print{
+  .sidebar,#progress,#tip,.play,.spk{display:none!important}
+  body{background:#fff;color:#000}
+  section{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .layout{display:block}
+  .content{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>POLA NEWS</div>
+    <div class="sub">English Science News · B1</div>
+    <nav class="nav">
+      <a href="#reading" class="active"><span class="ic">📖</span>全文阅读</a>
+      <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+      <a href="#patterns"><span class="ic">💬</span>句型练习</a>
+      <a href="#grammar"><span class="ic">📘</span>语法点</a>
+      <a href="#quiz"><span class="ic">✅</span>练习测验</a>
+      <a href="#cn"><span class="ic">🌏</span>知识扩展</a>
+      <a href="#about"><span class="ic">⭐</span>关于本课</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <header class="top">
+      <span class="kicker">📰 Pola's Science News · 2026-08-27</span>
+      <h1>The Insect With 24 Legs</h1>
+      <div class="meta">
+        <span>🎙️ <b>Pola</b> the Quokka</span>
+        <span>📚 Level: <b>B1</b> (ages 10–12)</span>
+        <span>⏱️ <b>4</b> segments · ~60s</span>
+      </div>
+    </header>
+
+    <!-- 1. READING -->
+    <section id="reading">
+      <h2><span class="num">1</span>全文阅读 · Full Story</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击每段右侧的 <b>▶</b> 按钮听 Pola 朗读（优先播放预生成语音，失败则用浏览器原声）。蓝色虚线词可点击查看释义。</p>
+
+      <div class="seg">
+        <div class="badge">1</div>
+        <div class="txt">Guess what? Bugs once had 24 legs! <span class="kw" data-def="科学家：研究世界如何运作的人" data-en="a person who studies how the world works">Scientists</span> found a tiny <span class="kw" data-def="化石：古代生物的遗骸变成的石头" data-en="the stone remains of an ancient living thing">fossil</span> <span class="kw" data-def="昆虫：蚂蚁、甲虫、蜜蜂这类小动物" data-en="a small animal like an ant, beetle or bee">insect</span> with extra legs on its belly. It is a real "missing link" from 324 <span class="kw" data-def="百万：一百万，很大的数字" data-en="one million, a very big number">million</span> years ago. Its name is Chosha praecursor!</div>
+        <button class="play" data-seg="0" aria-label="Play segment 1">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">2</div>
+        <div class="txt">This little creature lived at the edge of the <span class="kw" data-def="水：江、河、湖、海里的液体" data-en="the liquid in rivers, lakes and seas">water</span>. It had six legs for walking and eighteen paddle-legs for swimming! For decades its <span class="kw" data-def="化石：古代生物的遗骸变成的石头" data-en="the stone remains of an ancient living thing">fossil</span> sat forgotten in a <span class="kw" data-def="博物馆：存放和展出古老宝贝的地方" data-en="a building that keeps and shows old and special things">museum</span> drawer — mistaken for a tiny shrimp. A clever <span class="kw" data-def="科学家：研究世界如何运作的人" data-en="a person who studies how the world works">scientist</span> spotted it in an old book.</div>
+        <button class="play" data-seg="1" aria-label="Play segment 2">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">3</div>
+        <div class="txt">Chosha shows us how <span class="kw" data-def="昆虫：蚂蚁、甲虫、蜜蜂这类小动物" data-en="a small animal like an ant, beetle or bee">insects</span> left the <span class="kw" data-def="水：江、河、湖、海里的液体" data-en="the liquid in rivers, lakes and seas">water</span> and learned to live on <span class="kw" data-def="陆地：地球表面的干地，不是水" data-en="the dry ground of Earth, not the water">land</span>. It fills an 80-million-year gap in the story of life. Every bug you see today has just six legs — but its <span class="kw" data-def="祖先：很久以前的家人，比如爷爷的爷爷" data-en="a family member from long, long ago">ancestor</span> had many more!</div>
+        <button class="play" data-seg="2" aria-label="Play segment 3">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">4</div>
+        <div class="txt">So next time a beetle scurries by, remember: its family once paddled in ancient ponds. This is Pola, signing off. Stay curious, keep exploring, and bye for now!</div>
+        <button class="play" data-seg="3" aria-label="Play segment 4">▶</button>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2><span class="num">2</span>词汇表 · Vocabulary</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">🔊 点击卡片上的喇叭按钮听单词发音。</p>
+      <div class="vgrid">
+        <div class="vcard"><div class="w">insect</div><div class="pos">n.</div><div class="zh">昆虫</div><div class="en">a small animal like an ant, beetle or bee</div><button class="spk" data-word="insect">🔊</button></div>
+        <div class="vcard"><div class="w">fossil</div><div class="pos">n.</div><div class="zh">化石</div><div class="en">the stone remains of an ancient living thing</div><button class="spk" data-word="fossil">🔊</button></div>
+        <div class="vcard"><div class="w">scientist</div><div class="pos">n.</div><div class="zh">科学家</div><div class="en">a person who studies how the world works</div><button class="spk" data-word="scientist">🔊</button></div>
+        <div class="vcard"><div class="w">museum</div><div class="pos">n.</div><div class="zh">博物馆</div><div class="en">a building that keeps and shows old and special things</div><button class="spk" data-word="museum">🔊</button></div>
+        <div class="vcard"><div class="w">ancestor</div><div class="pos">n.</div><div class="zh">祖先</div><div class="en">a family member from long, long ago</div><button class="spk" data-word="ancestor">🔊</button></div>
+        <div class="vcard"><div class="w">million</div><div class="pos">n.</div><div class="zh">百万</div><div class="en">one million, a very big number</div><button class="spk" data-word="million">🔊</button></div>
+        <div class="vcard"><div class="w">leg</div><div class="pos">n.</div><div class="zh">腿</div><div class="en">the part of an animal used for walking</div><button class="spk" data-word="leg">🔊</button></div>
+        <div class="vcard"><div class="w">water</div><div class="pos">n.</div><div class="zh">水</div><div class="en">the liquid in rivers, lakes and seas</div><button class="spk" data-word="water">🔊</button></div>
+        <div class="vcard"><div class="w">land</div><div class="pos">n.</div><div class="zh">陆地</div><div class="en">the dry ground of Earth, not the water</div><button class="spk" data-word="land">🔊</button></div>
+        <div class="vcard"><div class="w">discover</div><div class="pos">v.</div><div class="zh">发现</div><div class="en">to find something for the first time</div><button class="spk" data-word="discover">🔊</button></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2><span class="num">3</span>句型练习 · Sentence Patterns</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">试着用这些句型造你自己的句子！</p>
+      <div class="pat"><div class="p">① Guess what? + [Bugs once had 24 legs!]</div><div class="ex">用一个惊讶的事实开场，抓住听众注意力。<br>例：<b>Guess what? Bugs once had 24 legs!</b></div></div>
+      <div class="pat"><div class="p">② Scientists found + [a tiny fossil insect ...].</div><div class="ex">报道一个新发现，直接引出主角。<br>例：<b>Scientists found a tiny fossil insect with extra legs on its belly.</b></div></div>
+      <div class="pat"><div class="p">③ It had + [six legs ...] + and + [eighteen paddle-legs ...].</div><div class="ex">用 and 连接两个并列特征，描述外貌。<br>例：<b>It had six legs for walking and eighteen paddle-legs for swimming!</b></div></div>
+      <div class="pat"><div class="p">④ Chosha shows us + how + [insects left the water ...].</div><div class="ex">用 shows us how 说出"这告诉我们什么道理"。<br>例：<b>Chosha shows us how insects left the water and learned to live on land.</b></div></div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2><span class="num">4</span>语法点 · Grammar</h2>
+      <div class="callout">
+        <h3>once —— "曾经"讲过去的事</h3>
+        <p>当我们想说"以前是那样，现在不是了"，英语常用 <b>once</b>（曾经、一度）放在动词前或句末：</p>
+        <p><span class="formula">Bugs once had 24 legs!</span></p>
+        <p>• 现在的虫子只有 6 条腿，但<b>曾经</b>有 24 条——once 强调"今昔对比"。</p>
+        <p>• 同义替换：<b>used to</b>（过去常常）。<b>Bugs used to have 24 legs.</b> 意思相近，但 used to 更强调"过去习惯/状态，现已改变"。</p>
+      </div>
+      <div class="callout">
+        <h3>and 连接并列 —— "既……又……"</h3>
+        <p>描述一个事物的两个特征时，常用 <b>and</b> 把两部分并列起来：</p>
+        <p>• <b>It had six legs for walking <span style="color:var(--accent)">and</span> eighteen paddle-legs for swimming!</b></p>
+        <p>• 结构：<b>A + and + B</b>。A 和 B 词性、结构尽量对称（这里都是 "数字 + legs + for + 用途"）。</p>
+        <p style="margin-top:8px"><span class="tag">once 曾经</span><span class="tag">A and B 并列</span><span class="tag">used to</span></p>
+      </div>
+      <div class="callout">
+        <h3>shows us how / shows that —— "这告诉我们……"</h3>
+        <p>用 <b>shows (us) how / that</b> 引出"一个发现说明了什么道理"，是新闻收尾常用的总结句式：</p>
+        <p>• <b>Chosha <span style="color:var(--accent)">shows us how</span> insects left the water...</b>（告诉我们昆虫如何离开水）</p>
+        <p>• <b>It <span style="color:var(--accent)">fills</span> an 80-million-year gap...</b>（fill a gap = 填补空白，常用搭配）</p>
+        <p style="margin-top:8px;color:var(--muted);font-size:14px">对比：讲"刚刚发现"用一般过去时 <b>Scientists found...</b>；讲"它一直告诉我们"用一般现在时 <b>shows</b>。</p>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2><span class="num">5</span>练习测验 · Quiz</h2>
+      <div class="q" data-ans="1">
+        <div class="qt">1. How many legs did the ancient insect Chosha have?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Six</button>
+          <button class="opt" data-i="1">Twenty-four</button>
+          <button class="opt" data-i="2">One hundred</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="2">
+        <div class="qt">2. What were the extra legs on its belly used for?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Flying in the sky</button>
+          <button class="opt" data-i="1">Digging in the sand</button>
+          <button class="opt" data-i="2">Swimming in the water</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="0">
+        <div class="qt">3. Where did the fossil hide for decades?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">In a museum drawer, mistaken for a shrimp</button>
+          <button class="opt" data-i="1">At the bottom of the ocean</button>
+          <button class="opt" data-i="2">Inside a volcano</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">4. What does Chosha help us understand?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">How birds learned to fly</button>
+          <button class="opt" data-i="1">How insects moved from water to land</button>
+          <button class="opt" data-i="2">How fish breathe underwater</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="2">
+        <div class="qt">5. How old is this fossil insect?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">About 324 years old</button>
+          <button class="opt" data-i="1">About 80 years old</button>
+          <button class="opt" data-i="2">About 324 million years old</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+    </section>
+
+    <!-- 6. CN EXTENSION -->
+    <section id="cn" class="cn">
+      <h2><span class="num">6</span>中文知识扩展 · 拓展阅读</h2>
+
+      <h3>🐛 一只长着 24 条腿的"昆虫老祖宗"</h3>
+      <p>2026 年 8 月 26 日，国际顶级期刊《自然》（Nature）在线发表了一项重磅发现：科学家找到了一种约 <b>3.24 亿年前</b>（石炭纪）的早期昆虫化石，学名 <b>Chosha praecursor</b>，中文叫"先驱乔昔虫"。今天我们在花园里看到的虫子大多只有 6 条腿，可这位"老祖宗"身上总共长了 <b>24 条腿</b>——胸部长着 6 条用来走路的足，肚子上 1–9 节还保留着分节的附肢，后几对特化成了像小船桨一样的"桨状腿"，用来在水里划水。</p>
+
+      <h3>🌊 从水到陆地：昆虫的"上岸"中转站</h3>
+      <p>昆虫是地球上物种最多的动物类群。可它们最早并不是住在陆地上的——祖先来自水中。先驱乔昔虫就像一张"昆虫上岸途中的快照"：</p>
+      <ul>
+        <li>它生活在<b>水陆交界的湿润环境</b>（近岸浅水、三角洲滨岸），既能在水里用桨状腿划水，又能在岸上用六足爬行，属于<b>半水生</b>动物。</li>
+        <li>它证明昆虫登陆不是"一步到位"，而是经历了漫长的<b>水陆两栖过渡阶段</b>：肚子上的游泳附肢慢慢退化，才变成今天昆虫清一色的六条腿。</li>
+        <li>这项研究填补了困扰学界约 <b>8000 万年的"六足动物空缺期"</b>，把昆虫起源和早期分化时间向前推到了早泥盆世，调和了"分子钟推算"和"化石记录"之间的矛盾。</li>
+      </ul>
+      <div class="ladder">
+        <div class="rung"><div class="n">远古祖先</div><div class="v">多足虾形</div><div class="u">水里游泳</div></div>
+        <div class="rung"><div class="n">过渡形态</div><div class="v">乔昔虫</div><div class="u">水陆两栖·24腿</div></div>
+        <div class="rung"><div class="n">现代昆虫</div><div class="v">六足</div><div class="u">陆地爬行</div></div>
+        <div class="rung"><div class="n">空缺期</div><div class="v">8000万年</div><div class="u">被化石填补</div></div>
+      </div>
+
+      <h3>📚 "博物馆抽屉里睡了 40 年的宝贝"</h3>
+      <p>这个故事最有趣的地方在于它的"身世"：这块化石早在 <b>1985 年</b>就被采集于美国得克萨斯州 Big Bend 一带，却长期被误认为是一种甲壳动物（像小虾）的幼体，在圣迭戈自然历史博物馆的抽屉里<b>沉睡了几十年</b>。直到剑桥大学的古生物学家 Erik Tihelka 在一本<b>二手俄文古生物教科书</b>里看到它的线条图，才觉得"不对劲"，专程飞去博物馆亲眼比对——透过偏光镜，他认出了昆虫才有的特征（三节胸部、产卵器、尾丝等）。</p>
+      <div class="fact">💡 一句话记住：很多科学突破不在荒野，而在博物馆的抽屉里。只要有人愿意多问一句"这真的是虾吗？"，沉睡的真相就会被唤醒。</div>
+
+      <h3>🪲 "missing link" 是什么意思？</h3>
+      <p>口播里说的 <b>"missing link"（缺失的一环）</b>，指的是演化链条中那块"一直找不到、但理论上应该存在"的拼图。先驱乔昔虫正好补齐了"多足水生祖先 → 六足陆生昆虫"之间缺失的过渡形态，所以被称为一块活生生的 missing link。下次听到这个词，你就可以想到：它是连接两个世界的桥梁。</p>
+
+      <h3>🤔 给小朋友的三点小思考</h3>
+      <ul>
+        <li><b>"6 条腿"不是天经地义。</b>今天昆虫的六足，是漫长演化里"减法"的结果——祖先的腿更多，是后来慢慢丢掉的。</li>
+        <li><b>演化是"过渡"，不是"跳跃"。</b>从水到陆地，生命用了上亿年慢慢适应，乔昔虫就是这段慢旅程的路标。</li>
+        <li><b>好奇心能唤醒沉睡的真相。</b>一块被冷落 40 年的化石，因为一个人"多看了它一眼"，重新改写了昆虫演化的故事。</li>
+      </ul>
+      <p>所以下次有只小甲虫匆匆从你脚边爬过，不妨想想：在 3 亿多年前的远古水塘边，它的远房祖先进化出的"桨状腿"，正悄悄变成了今天这六条奔跑的小脚。🪲</p>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2><span class="num">7</span>关于本课 · About</h2>
+      <div class="about">
+        <div class="avatar">🐛</div>
+        <div class="info">
+          <p><b>主播：</b>Pola（短尾矮袋鼠 Quokka），实景记者播报。</p>
+          <p><b>英语等级：</b>B1（适合 10–12 岁小朋友）。</p>
+          <p><b>本期主题：</b>3.24 亿年前的化石昆虫"先驱乔昔虫"（Chosha praecursor），曾长着 24 条腿，是连接"多足水生祖先"与"六足陆生昆虫"的过渡 missing link；化石 1985 年采集、在博物馆抽屉沉睡数十年后被重新认出，2026-08-26 发表于《自然》。</p>
+          <p><b>核心知识点：</b>once / used to 讲"曾经"、and 并列结构、shows us how / fills a gap 总结句式；昆虫从水到陆的演化过渡、半水生与"六足动物空缺期"。</p>
+          <p><b>日期：</b>2026-08-27</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · 每天一个有趣的英语科学小知识 · 🐛</footer>
+  </main>
+</div>
+<div id="tip"></div>
+
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Guess what? Bugs once had 24 legs! Scientists found a tiny fossil insect with extra legs on its belly. It is a real \"missing link\" from 324 million years ago. Its name is Chosha praecursor!",
+  "This little creature lived at the edge of the water. It had six legs for walking and eighteen paddle-legs for swimming! For decades its fossil sat forgotten in a museum drawer — mistaken for a tiny shrimp. A clever scientist spotted it in an old book.",
+  "Chosha shows us how insects left the water and learned to live on land. It fills an 80-million-year gap in the story of life. Every bug you see today has just six legs — but its ancestor had many more!",
+  "So next time a beetle scurries by, remember: its family once paddled in ancient ponds. This is Pola, signing off. Stay curious, keep exploring, and bye for now!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 测验 ===== */
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans,10);
+  const fb = q.querySelector('.fb');
+  q.querySelectorAll('.opt').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      if(opt.disabled) return;
+      q.querySelectorAll('.opt').forEach(function(o){ o.disabled = true; });
+      const i = parseInt(opt.dataset.i,10);
+      if(i === ans){
+        opt.classList.add('correct');
+        fb.textContent = '✅ 答对了！';
+        fb.style.color = 'var(--good)';
+      }else{
+        opt.classList.add('wrong');
+        const right = q.querySelector('.opt[data-i="'+ans+'"]');
+        if(right) right.classList.add('correct');
+        fb.textContent = '❌ 再想想，正确答案是高亮的那个。';
+        fb.style.color = 'var(--bad)';
+      }
+      fb.classList.add('show');
+    });
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

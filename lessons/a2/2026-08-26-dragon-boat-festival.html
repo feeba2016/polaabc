@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Dragon Boat Festival — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#dc2626;
+  --accent2:#f59e0b;
+  --bg:#fff7f3;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#fee2e2;
+  --border:#fecaca;
+  --soft:#fff1f2;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#fbbf24);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(220,38,38,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #fecaca;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(220,38,38,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.55);}70%{box-shadow:0 0 0 12px rgba(220,38,38,0);}100%{box-shadow:0 0 0 0 rgba(220,38,38,0);}}
+.zh-trans{color:var(--muted);font-size:14px;margin-top:8px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #dc2626;transition:.15s;}
+.kw:hover{background:#fecaca;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.trans-toggle{background:var(--accent2);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#fff7ed;border:2px solid #fdba74;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#ea580c;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(220,38,38,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fee2e2;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>World Culture</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Dragon Boat Festival</h1>
+      <p class="subtitle">2026年8月26日 · 世界文化｜端午节 —— 全文阅读（点红色词看释义，可显示中文翻译）</p>
+
+      <button class="trans-toggle" id="transToggle">🇨🇳 显示中文翻译</button>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>The <span class="kw" data-def="节日">Dragon Boat Festival</span> is a happy day in China. It comes in early summer, on the fifth day of the fifth <span class="kw" data-def="农历的月份">lunar month</span>. Families <span class="kw" data-def="庆祝">celebrate</span> it together. It is over 2,000 years old!</p>
+            <div class="zh-trans" style="display:none;">端午节是中国一个欢乐的节日。它在初夏，农历五月初五这一天到来。家人们一起庆祝它。它已经有两千多年的历史了！</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>Long ago, there was a good <span class="kw" data-def="诗人">poet</span> named Qu Yuan. He loved his country. When it was in danger, he was very sad. He went into a river. People <span class="kw" data-def="划船比赛">raced boats</span> to find him. This is why we have <span class="kw" data-def="龙舟比赛">dragon boat races</span> today.</p>
+            <div class="zh-trans" style="display:none;">很久以前，有一位好诗人叫屈原。他深爱自己的国家。当国家陷入危难，他非常伤心。他投江了。人们划船去寻找他。这就是为什么今天我们会有龙舟比赛。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Customs</div>
+            <p>On this day, people eat <span class="kw" data-def="粽子">zongzi</span>. Zongzi is <span class="kw" data-def="米；米饭">rice</span> <span class="kw" data-def="包裹；包">wrapped</span> in green leaves. It can be sweet or salty. Children wear colorful sachets for good <span class="kw" data-def="运气；好运">luck</span>.</p>
+            <div class="zh-trans" style="display:none;">在这一天，人们吃粽子。粽子是用绿叶包裹的糯米。它可以是甜的，也可以是咸的。孩子们戴上彩色的香囊，祈求好运。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p><span class="kw" data-def="龙舟比赛">Dragon boat races</span> are fun and loud! Teams <span class="kw" data-def="划桨">paddle</span> to the beat of big <span class="kw" data-def="鼓">drums</span>. The boats look like long dragons. We remember Qu Yuan and <span class="kw" data-def="庆祝">celebrate</span> summer!</p>
+            <div class="zh-trans" style="display:none;">龙舟比赛又好玩又热闹！队员们和着大鼓的节拍划桨。龙舟看起来像长长的龙。我们纪念屈原，也庆祝夏天的到来！</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>💡 文化小提示 Culture Tip</h3>
+        <p style="margin:0;font-size:14.5px;">每个国家的节日都很有趣，我们要<b>尊重不同的文化</b>。玩彩色香囊、看龙舟时，要听大人的话，<b>不靠近水边、不独自下水</b>；和家人一起过节、了解传统，是最棒的学习！</p>
+      </div>
+    </section>
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="festival">🔊</button><div class="word">festival<span class="pos">n.</span></div><div class="zh">节日</div><div class="ex">"The Dragon Boat Festival is a happy festival."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="celebrate">🔊</button><div class="word">celebrate<span class="pos">v.</span></div><div class="zh">庆祝</div><div class="ex">"We celebrate with our families."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="poet">🔊</button><div class="word">poet<span class="pos">n.</span></div><div class="zh">诗人</div><div class="ex">"Qu Yuan was a famous poet."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="race">🔊</button><div class="word">race<span class="pos">n.</span></div><div class="zh">比赛；竞赛</div><div class="ex">"Teams race dragon boats."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="zongzi">🔊</button><div class="word">zongzi<span class="pos">n.</span></div><div class="zh">粽子</div><div class="ex">"Zongzi is rice in green leaves."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="wrap">🔊</button><div class="word">wrap<span class="pos">v.</span></div><div class="zh">包裹；包</div><div class="ex">"We wrap rice in leaves."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="drum">🔊</button><div class="word">drum<span class="pos">n.</span></div><div class="zh">鼓</div><div class="ex">"They beat big drums."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="luck">🔊</button><div class="word">luck<span class="pos">n.</span></div><div class="zh">运气；好运</div><div class="ex">"Sachets bring good luck."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. The Dragon Boat Festival is [a happy day in China].</h3>
+          <div class="zh">端午节是[中国一个欢乐的节日]。"be 动词 + 名词" 用来描述节日是什么。</div>
+          <div class="eg">The Dragon Boat Festival is a happy day in China.</div>
+          <div class="practice">练习：用 "a fun festival" 造句 → The Dragon Boat Festival is <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. People eat [zongzi] on this day.</h3>
+          <div class="zh">人们在这一天吃[粽子]。"主语 + eat + 食物" 表达吃什么。</div>
+          <div class="eg">People eat zongzi on this day.</div>
+          <div class="practice">练习：用 "rice dumplings" → People eat <input placeholder="your answer"> on this day.</div>
+        </div>
+        <div class="item">
+          <h3>3. Teams paddle [to the beat of big drums].</h3>
+          <div class="zh">队员们[和着大鼓的节拍]划桨。"主语 + paddle + 介词短语" 描述划桨的节奏。</div>
+          <div class="eg">Teams paddle to the beat of big drums.</div>
+          <div class="practice">练习：用 "together" → Teams paddle <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. We remember [Qu Yuan] and celebrate summer.</h3>
+          <div class="zh">我们纪念[屈原]并庆祝夏天的到来。"remember + 宾语 + and + 动词" 连接两个动作。</div>
+          <div class="eg">We remember Qu Yuan and celebrate summer.</div>
+          <div class="practice">练习：用 "our family" → We remember <input placeholder="your answer"> and celebrate summer.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般过去时（Past Simple）</h3>
+          <div class="zh">讲故事时，动词要变成过去式。不规则动词要记住：be → was，go → went，race → raced，love → loved。规则动词加 -ed。</div>
+          <div class="eg">Long ago, there <b>was</b> a poet. / He <b>went</b> into a river.</div>
+        </div>
+        <div class="item">
+          <h3>2. 情态动词 can（能）</h3>
+          <div class="zh">"can + 动词原形" 表示能够、会做某事，can 不分人称，否定用 cannot / can't。</div>
+          <div class="eg">Zongzi <b>can</b> be sweet or salty.</div>
+        </div>
+        <div class="item">
+          <h3>3. 比较级（Comparative）</h3>
+          <div class="zh">longer（更长的）是 long 的比较级，louder（更响的）是 loud 的比较级。用 "than" 比较两者：A is longer than B。</div>
+          <div class="eg">Dragon boats are <b>longer</b> than small boats. / The drums are <b>louder</b> than music.</div>
+        </div>
+        <div class="item">
+          <h3>4. 时间 / 方位介词（Prepositions）</h3>
+          <div class="zh">on 接具体某天（on the fifth day），in 接季节或地点（in early summer, in a river），with 表示"和……一起"（with families）。</div>
+          <div class="eg">It comes <b>in</b> early summer, <b>on</b> the fifth day of the fifth lunar month.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>端午节：中国三大传统节日之一</h3>
+        <p>端午节，又叫端阳节、龙舟节，是农历<b>五月初五</b>的节日。它和春节、中秋节一起，被称为中国三大传统节日，历史已有<b>两千多年</b>。每到这一天，全家人会聚在一起，吃粽子、看龙舟，热热闹闹。</p>
+
+        <h3>屈原的故事（尊重历史）</h3>
+        <p>端午节最著名的故事，是关于战国时期的楚国诗人<b>屈原</b>。他是一位爱国的诗人，深爱自己的国家。当楚国被敌人打败、国家陷入危难时，他非常伤心，投<b>汨罗江</b>以身殉国。百姓们划着船去江里寻找他，还把米饭包进竹叶丢进江里，希望鱼儿吃米、不要伤害他。后来，这就变成了<b>吃粽子、赛龙舟</b>的习俗。</p>
+
+        <h3>龙舟竞渡：从救人变成比赛</h3>
+        <p>龙舟又长又窄，船头刻着龙头、船尾画着龙尾，非常漂亮。队员们在鼓手的鼓点下整齐划桨，你追我赶。这项比赛最早是为了纪念屈原，如今已经变成一项<b>世界性的运动</b>——不仅在中国，连新加坡、马来西亚、美国等地也会举办龙舟赛。</p>
+
+        <h3>粽子：甜咸都好吃</h3>
+        <p>粽子是用<b>糯米</b>包在竹叶或芦苇叶里做成的，里面可以放红枣、豆沙（甜的），也可以放肉、蛋黄（咸的）。一家人围坐包粽子，是端午节最温馨的画面。</p>
+
+        <h3>挂艾草、戴香囊：夏日的智慧</h3>
+        <p>五月初五天气转热、虫子变多。古人会在门口挂<b>艾草和菖蒲</b>，给小孩戴上装有香草的<b>彩色香囊</b>，用来驱虫、避疫、祈求健康平安。这是古人顺应季节、保护家人的生活智慧。</p>
+
+        <h3>动手小活动：画一艘龙舟</h3>
+        <p>拿出彩笔，画一艘长长的龙舟，涂上红、黄、绿的颜色，再画几个划桨的小人儿和一面大鼓。和爸爸妈妈说说："这艘龙舟要去参加什么比赛？"用英语试一句：<b>"Teams paddle to the beat of big drums."</b> 了解自己的传统节日，会让我们更爱自己的文化！</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一个 A2 水平的英文文化短文（端午节），理解大意。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般过去时、can 情态动词、比较级、介词四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个节日主题核心词汇（festival, celebrate, poet, race, zongzi, wrap, drum, luck）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语简单介绍端午节的特色：龙舟（dragon boats）和粽子（zongzi）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>了解中国传统节日，尊重历史与文化，增强文化自豪感。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">💡</span><div>用 "We celebrate ..." 说说你还知道的中国节日（春节、中秋……）。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>和爸爸妈妈一起读"中文知识扩展"，聊聊"你家怎么过端午？"</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Dragon Boat Festival · 2026-08-26 · Made for curious kids 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Chinese translation toggle ---------- */
+const transBtn=document.getElementById('transToggle');
+let transOn=false;
+transBtn.addEventListener('click',()=>{
+  transOn=!transOn;
+  document.querySelectorAll('.zh-trans').forEach(d=>{d.style.display=transOn?'block':'none';});
+  transBtn.textContent=transOn?'🇨🇳 隐藏中文翻译':'🇨🇳 显示中文翻译';
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "The Dragon Boat Festival is a happy day in China. It comes in early summer, on the fifth day of the fifth lunar month. Families celebrate it together. It is over 2,000 years old!",
+  "Long ago, there was a good poet named Qu Yuan. He loved his country. When it was in danger, he was very sad. He went into a river. People raced boats to find him. This is why we have dragon boat races today.",
+  "On this day, people eat zongzi. Zongzi is rice wrapped in green leaves. It can be sweet or salty. Children wear colorful sachets for good luck.",
+  "Dragon boat races are fun and loud! Teams paddle to the beat of big drums. The boats look like long dragons. We remember Qu Yuan and celebrate summer!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"When is the Dragon Boat Festival? 端午节在什么时候？",opts:["January 1 一月一日","The fifth day of the fifth lunar month 农历五月初五","December 25 十二月二十五","Winter 冬天"],ans:1,
+   fb:"Correct! 端午节在农历五月初五（the fifth day of the fifth lunar month）。"},
+  {q:"Who was Qu Yuan? 屈原是谁？",opts:["A king 国王","A good poet 一位好诗人","A doctor 医生","A farmer 农民"],ans:1,
+   fb:"Yes! 屈原是一位好诗人（a good poet），深爱自己的国家。"},
+  {q:"What do people eat at the festival? 节日里人们吃什么？",opts:["Zongzi 粽子","Pizza 披萨","Hamburgers 汉堡","Cake 蛋糕"],ans:0,
+   fb:"Right! 人们吃粽子（zongzi）。"},
+  {q:"What do dragon boat teams do? 龙舟队做什么？",opts:["They sing songs 唱歌","They paddle to drums 和着鼓声划桨","They fly kites 放风筝","They sleep 睡觉"],ans:1,
+   fb:"Correct! 队员们和着大鼓的节拍划桨（paddle to the beat of drums）。"},
+  {q:"What can zongzi be? 粽子可以是什么味道？",opts:["Only sweet 只有甜","Only salty 只有咸","Sweet or salty 甜或咸","Spicy 辣"],ans:2,
+   fb:"Yes! 粽子可以是甜的或咸的（sweet or salty）。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#dc2626';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

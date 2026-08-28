@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The 15-Minute City: Reimagining Urban Life</title>
+<style>
+:root{
+  --accent:#0d9488;
+  --accent2:#b45309;
+  --bg:#f1f7f6;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#cdeee9;
+  --border:#d4e7e4;
+  --soft:#e7f3f1;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#5eead4);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(13,148,136,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #bfe0db;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(13,148,136,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(13,148,136,.55);}70%{box-shadow:0 0 0 12px rgba(13,148,136,0);}100%{box-shadow:0 0 0 0 rgba(13,148,136,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #0d9488;transition:.15s;}
+.kw:hover{background:#a7e0d8;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#5eead4;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.datatable{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;}
+.datatable th,.datatable td{border:1px solid var(--border);padding:8px 10px;text-align:left;}
+.datatable th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(13,148,136,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#cdeee9;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Social Issues</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The 15-Minute City</h1>
+      <p class="subtitle">让日常所需都在步行 15 分钟之内 ｜ 全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The idea</div>
+            <p>Imagine a city in which almost everything you need—work, school, shops, healthcare and leisure—lies within a fifteen-minute walk or bike ride of home. The 15-minute city is an urban-planning <span class="kw" data-def="范式；模式">paradigm</span> proposed in 2016 by Carlos Moreno, a Franco-Colombian professor, and later championed by Paris mayor Anne Hidalgo in her 2020 re-election platform. Its core principle is <span class="kw" data-def="邻近；接近">proximity</span>: daily life measured in minutes, not kilometres.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The problem it solves</div>
+            <p>For much of the twentieth century, cities were planned around the car. Homes were separated from workplaces, shops and schools, forcing millions to endure long commutes. The result was severe traffic <span class="kw" data-def="拥堵">congestion</span>, rising carbon emissions, and a quiet erosion of community life. People grew so dependent on private vehicles that streets meant for connection became barriers between neighbours.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · How it works</div>
+            <p>Proximity planning reverses this by weaving daily necessities back into the neighbourhood. Not only does it cut car use and greenhouse gases; it also encourages walking, cycling and the chance encounters that strengthen social bonds. Barcelona's "superblocks" reclaim streets from traffic, while Shanghai has written a 15-minute community life circle into its 2035 master plan. Each case aims at a more <span class="kw" data-def="可持续的">sustainable</span>, liveable city.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The challenges</div>
+            <p>Yet the model is no universal remedy. Were it imposed too rigidly, it could backfire. Creating desirable neighbourhoods often pushes up rents, and without safeguards low-income families may be <span class="kw" data-def="被迫迁离；流离失所">displaced</span>—a process called <span class="kw" data-def="绅士化；士绅化">gentrification</span>. <span class="kw" data-def="相反地；反之亦然">Conversely</span>, some residents distrust top-down change; public <span class="kw" data-def="认知；看法">perception</span> of such projects can turn a sound idea into a political flashpoint. To <span class="kw" data-def="实施；落实">implement</span> the vision <span class="kw" data-def="公平的；公正的">equitably</span>, planners must pair bold design with fair housing policy.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="paradigm">🔊</button><div class="word">paradigm<span class="pos">n.</span></div><div class="zh">范式；模式；典范</div><div class="ex">"The 15-minute city is an urban-planning paradigm."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="proximity">🔊</button><div class="word">proximity<span class="pos">n.</span></div><div class="zh">邻近；接近（adj. proximate）</div><div class="ex">"Its core principle is proximity: measured in minutes."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="congestion">🔊</button><div class="word">congestion<span class="pos">n.</span></div><div class="zh">拥堵；拥挤（v. congest）</div><div class="ex">"The result was severe traffic congestion."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sustainable">🔊</button><div class="word">sustainable<span class="pos">adj.</span></div><div class="zh">可持续的（n. sustainability）</div><div class="ex">"Each case aims at a more sustainable, liveable city."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="displaced">🔊</button><div class="word">displaced<span class="pos">adj./v.</span></div><div class="zh">被迫迁离的；流离失所的（v. displace）</div><div class="ex">"low-income families may be displaced by rising rents"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="gentrification">🔊</button><div class="word">gentrification<span class="pos">n.</span></div><div class="zh">士绅化；绅士化（社区改造致原住民被迫迁离）</div><div class="ex">"a process called gentrification"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="conversely">🔊</button><div class="word">conversely<span class="pos">adv.</span></div><div class="zh">相反地；反之（adj. converse）</div><div class="ex">"Conversely, some residents distrust top-down change."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="perception">🔊</button><div class="word">perception<span class="pos">n.</span></div><div class="zh">认知；看法；感知（v. perceive）</div><div class="ex">"public perception of such projects"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="implement">🔊</button><div class="word">implement<span class="pos">v.</span></div><div class="zh">实施；落实；执行（n. implementation）</div><div class="ex">"To implement the vision equitably, planners must…"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="equitable">🔊</button><div class="word">equitable<span class="pos">adj.</span></div><div class="zh">公平的；公正的（n. equity）</div><div class="ex">"To implement the vision equitably, planners must pair design with fair policy."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. so + adj. + that + clause（结果状语从句）</h3>
+          <div class="zh">"so…that…" 表示"如此……以至于……"。so 后接程度（so dependent），that 后接结果（that streets…became barriers）。学术写作中用来强调某种状态达到的程度。</div>
+          <div class="eg">People grew <strong>so dependent</strong> on private vehicles <strong>that</strong> streets meant for connection became barriers between neighbours.</div>
+          <div class="practice">练习：用 "so crowded / we could barely move" → The train was <input placeholder="your answer"> we could barely move.</div>
+        </div>
+        <div class="item">
+          <h3>2. Preposition + which + infinitive: a framework within which to live…</h3>
+          <div class="zh">"介词 + 关系代词 + 不定式"是极正式的书面结构，把定语从句压缩为不定式，使句子紧凑。本课 the neighbourhood 后可理解为 "a setting within which to live, work and play"。</div>
+          <div class="eg">…weaving daily necessities back into the neighbourhood, <strong>a place within which to</strong> live, work and play.</div>
+          <div class="practice">练习：用 "a tool / measure distance" → GPS is <input placeholder="your answer"> distance quickly and accurately.</div>
+        </div>
+        <div class="item">
+          <h3>3. Relative clause with "whose"（定语从句）</h3>
+          <div class="zh">whose 表示"其……的"，既可指人也可指物。本课的 "a city whose residents can reach…" 中 whose 指 the city。</div>
+          <div class="eg">…a <strong>city whose</strong> residents can reach school, work and clinics on foot.</div>
+          <div class="practice">练习：用 "a policy / goal is fairness" → It is a policy <input placeholder="your answer"> goal is fairness for all.</div>
+        </div>
+        <div class="item">
+          <h3>4. Negative inversion: Not only + does + subject…</h3>
+          <div class="zh">否定词置于句首须部分倒装（助动词提前）。"Not only does A…; it also does B" 递进强调"不仅……而且……"，比单纯 also 更有力。</div>
+          <div class="eg"><strong>Not only does</strong> it cut car use and greenhouse gases; it also encourages walking and cycling.</div>
+          <div class="practice">练习：用 "the plan reduce emissions" → <input placeholder="your answer"> the plan reduce emissions; it also creates public space.</div>
+        </div>
+        <div class="item">
+          <h3>5. Inverted subjunctive: Were + subject + to + V, …</h3>
+          <div class="zh">虚拟语气倒装（与将来事实相反或可能性较小）：省略 if，把 were 提到主语前，等于 "If it were to be imposed too rigidly…"，正式且书面。</div>
+          <div class="eg"><strong>Were it imposed</strong> too rigidly, it could backfire.</div>
+          <div class="practice">练习：用 "were the city to ban all cars" → <input placeholder="your answer">, many commuters would be stranded.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. so…that 结果状语从句（Result clause）</h3>
+          <div class="zh">结构：so + 形容词/副词 + that + 完整从句。so 后是"程度"，that 后是"结果"。注意与 "such + 名词 + that" 区分：so dependent that… / such a dependent public that…</div>
+          <div class="eg">so dependent on cars that streets became barriers ＝ such heavy car dependence that streets became barriers</div>
+        </div>
+        <div class="item">
+          <h3>2. 介词 + 关系代词 + 不定式（within which to…）</h3>
+          <div class="zh">学术英语标志性结构：先行词 + 介词 + which + to do，把定语从句压缩为不定式，句子更紧凑。常见搭配：a framework within which to act, a tool with which to measure, a model against which to compare。</div>
+          <div class="eg">the neighbourhood, a place within which to live, work and play（＝ a place that people can live, work and play in）</div>
+        </div>
+        <div class="item">
+          <h3>3. 否定倒装（Not only … ; … also …）</h3>
+          <div class="zh">否定词（not only, never, hardly, little）置于句首时，主句须部分倒装：助动词/be 动词提前到主语前；若无助动词则借用 do/does/did。</div>
+          <div class="eg">Not only does it cut car use; it also encourages walking.（比较：It not only cuts car use but also encourages walking.）</div>
+        </div>
+        <div class="item">
+          <h3>4. 过去分词作状语（proposed / championed / meant）</h3>
+          <div class="zh">"proposed in 2016 by Carlos Moreno" 与 "meant for connection" 都是过去分词短语作后置定语或状语，相当于省略的定语从句（which was proposed / which were meant）。它让长句更紧凑，是 B2 写作提分点。</div>
+          <div class="eg">The 15-minute city is a paradigm (which was) proposed in 2016 by Carlos Moreno. ／ streets (which were) meant for connection</div>
+        </div>
+        <div class="item">
+          <h3>5. 虚拟语气倒装（Were + 主语 + to do）</h3>
+          <div class="zh">Were + 主语 + to do 表示对将来的假设，省略 if 后倒装，等于 "If it were to be imposed too rigidly…"。正式书面语中常用于讨论政策、后果等尚未发生的情况。</div>
+          <div class="eg">Were it imposed too rigidly, it could backfire.（＝ If it were to be imposed too rigidly, it could backfire.）</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>什么是"15 分钟城市"？</h3>
+        <p><strong>"15 分钟城市"（15-minute city）</strong>是一种城市规划理念：居民在步行、骑行或短途公交 <strong>15 分钟</strong>之内，就能满足工作、上学、购物、医疗、休闲等日常基本需求。它不再以"公里"衡量城市，而以"分钟"衡量生活。这一概念由<strong>法籍哥伦比亚裔科学家卡洛斯·莫雷诺（Carlos Moreno）</strong>于 <strong>2016 年</strong>正式提出，后被巴黎市长<strong>安妮·伊达尔戈（Anne Hidalgo）</strong>纳入其 2020 年连任纲领而声名鹊起；新冠疫情期间的封控，让"就近生活"的设想迅速获得全球关注。</p>
+
+        <h3>它想解决什么：汽车中心主义的三重痼疾</h3>
+        <p>20 世纪的主流规划把住宅、工作、商业分区隔离，居民高度依赖私家车长途通勤，带来了三大问题：① <strong>环境危机与交通拥堵</strong>——尾气排放与空气污染；② <strong>社会隔离与生活质量下降</strong>——"睡城"缺乏活力，邻里关系稀薄；③ <strong>城市蔓延与土地低效</strong>——城市半径不断外扩，基建成本飙升。15 分钟城市主张以"人的时间尺度"重构城市，把被浪费在路上的时间还给居民。</p>
+
+        <h3>理念有根：从花园城市到新城市主义</h3>
+        <ul>
+          <li><strong>埃比尼泽·霍华德（Ebenezer Howard）</strong>19 世纪末提出"花园城市"，主张城乡结合、社区自给自足。</li>
+          <li><strong>克拉伦斯·佩里（Clarence Perry）</strong>1929 年提出"邻里单元"，以学校为中心配置公共设施。</li>
+          <li><strong>简·雅各布斯（Jane Jacobs）</strong>在《美国大城市的死与生》（1960 年代）中倡导"以社区为中心"、可步行、有人情味的街区。</li>
+          <li><strong>"新城市主义"</strong>运动强调可步行性、混合功能与传统城市结构。</li>
+        </ul>
+        <p>莫雷诺把这些思想与当下的气候变化、社会隔离问题结合，提炼出更具操作性的框架：让居民在 15 分钟内获得<strong>居住、工作、商业、学习、医疗、休闲</strong>六大核心功能。</p>
+
+        <h3>全球实践剪影</h3>
+        <ul>
+          <li><strong>巴黎（法国）</strong>：拓宽人行道、增绿、限车，将部分校园在非教学时段开放为社区空间；并以"15 分钟可达率"作为绩效指标，与学界用 GIS、出行调查、空气监测评估成效。</li>
+          <li><strong>巴塞罗那（西班牙）</strong>："超级街区（superblocks）"把相邻街区整合为单元、限制车辆，释放绿地与儿童活动空间，目标削减约 20% 机动车交通。</li>
+          <li><strong>米兰（意大利）</strong>：疫情后"开放街道计划"将 35 公里道路改为自行车道与步行区。</li>
+          <li><strong>哥本哈根 / 赫尔辛基</strong>：分别以"全球最宜骑行"的绿色半径、以及用大数据与 AI 优化布局的"智能邻里"著称。</li>
+          <li><strong>中国上海</strong>：2014 年率先提出"15 分钟社区生活圈"，2016 年发布全国首个相关规划导则，并写入《上海市城市总体规划（2017—2035 年）》。长宁区新华路街道、徐汇区"生活盒子"等把养老、托育、健身、医疗融合为"一站式"社区综合体——在中国，15 分钟既是一把衡量便捷度的标尺，也是城市温度的体现。</li>
+        </ul>
+
+        <h3>争议与反思：它绝非"万能药"</h3>
+        <ul>
+          <li><strong>士绅化（gentrification）风险</strong>：改造后的街区租金上涨，可能把中低收入原住民"挤出"，加剧不平等。反制手段包括租金管制、保障性住房配建、社区土地信托。</li>
+          <li><strong>改造成本与政治复杂度</strong>：对已经高度依赖汽车、蔓延式扩张的城市做"翻新"，耗资巨大且牵涉多方利益。</li>
+          <li><strong>被误读为"15 分钟监狱"</strong>：在欧美部分圈子，该理念曾被阴谋论攻击为"气候封锁""社会控制工具"。多家事实核查机构已澄清：没有任何可信的城市方案打算把居民"锁"在社区或禁止出行。</li>
+          <li><strong>郊区与农村适配性</strong>：对习惯开车、公共服务本就稀疏的郊区居民，理念可能需要不同的落地方式。</li>
+        </ul>
+
+        <h3>关键事实一览</h3>
+        <table class="datatable">
+          <tr><th>项目</th><th>说明</th></tr>
+          <tr><td>提出者</td><td>卡洛斯·莫雷诺（Carlos Moreno），2016 年</td></tr>
+          <tr><td>核心指标</td><td>步行 / 骑行 / 短途公交 15 分钟可达</td></tr>
+          <tr><td>六大功能</td><td>居住·工作·商业·学习·医疗·休闲</td></tr>
+          <tr><td>政治推手</td><td>巴黎市长伊达尔戈 2020 连任纲领</td></tr>
+          <tr><td>加速因素</td><td>新冠疫情封控凸显"就近生活"价值</td></tr>
+          <tr><td>中国实践</td><td>上海"15 分钟社区生活圈"（写入 2035 总规）</td></tr>
+          <tr><td>主要争议</td><td>士绅化、成本、被误读为"开放式监狱"</td></tr>
+        </table>
+
+        <h3>为什么值得高中生、大学生思考</h3>
+        <p>15 分钟城市是观察<strong>城市化、可持续发展与社会公平</strong>三者张力的绝佳样本。它提醒我们：好的城市政策既要"低碳高效"，也要"公平包容"——邻近性必须成为<strong>普遍的权利</strong>，而非某个阶层的特权。当你未来参与社区设计、公共讨论或政策制定时，这正是"以人为本"最具体的注脚。语言上，本课文本集中出现了 <em>so…that</em> 结果从句、<em>within which to…</em> 紧凑结构、<em>Not only does…</em> 递进倒装、<em>Were…to…</em> 虚拟语气倒装，以及大量过去分词作定语（proposed / championed / meant）——把它们迁移到你的英语写作与雅思、考研作文里，文章的学术质感会立刻提升。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标（B2 中高级）</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一则真实的城市规划议题：15 分钟城市——让日常所需都在步行 15 分钟之内。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 CEFR B2 核心词汇（paradigm, proximity, congestion, sustainable, displaced, gentrification, conversely, perception, implement, equitable）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级句型：so…that 结果从句、介词+which+不定式、whose 定语从句、否定倒装 Not only does…、虚拟语气倒装 Were…to…。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解过去分词作定语（proposed / championed / meant）与虚拟语气倒装的用法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立公民素养：理解"可持续城市"与"社会公平"如何相互制衡，培养批判性看待公共政策的习惯。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮跟读，注意数字与单位的读法（fifteen-minute, 2035, 20%）。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，并用每个词造一句与"城市/社会"相关的英文句子。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>用 "Were … to …" 写一句关于某项城市政策的假设句，再用 "Not only does …" 改写一句递进强调。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div>读完"中文知识扩展"，再用英语向同学解释：为什么 15 分钟城市既要"低碳"又要防"士绅化"？</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <h3 style="color:var(--accent);">📚 资料来源</h3>
+        <div class="goal"><span class="ic">📰</span><div>Nature (Scientific Reports) "The '15-Minute City' concept can shape a net-zero urban future," 2022 — Moreno et al.</div></div>
+        <div class="goal"><span class="ic">📰</span><div>新华社《环球》杂志《欧洲"15分钟城市"的实践与反思》（2025-10-29）及科普中国《"15分钟生活圈"是如何提出的》（2024-07-18）。</div></div>
+        <div class="goal"><span class="ic">📄</span><div>Fact-check 综述 "15 minute cities: benefits, challenges, implementation"（factually.co, 2024）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English · The 15-Minute City: Reimagining Urban Life · 2026-08-27</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.9; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Imagine a city in which almost everything you need—work, school, shops, healthcare and leisure—lies within a fifteen-minute walk or bike ride of home. The 15-minute city is an urban-planning paradigm proposed in 2016 by Carlos Moreno, a Franco-Colombian professor, and later championed by Paris mayor Anne Hidalgo in her 2020 re-election platform. Its core principle is proximity: daily life measured in minutes, not kilometres.",
+  "For much of the twentieth century, cities were planned around the car. Homes were separated from workplaces, shops and schools, forcing millions to endure long commutes. The result was severe traffic congestion, rising carbon emissions, and a quiet erosion of community life. People grew so dependent on private vehicles that streets meant for connection became barriers between neighbours.",
+  "Proximity planning reverses this by weaving daily necessities back into the neighbourhood. Not only does it cut car use and greenhouse gases; it also encourages walking, cycling and the chance encounters that strengthen social bonds. Barcelona's \"superblocks\" reclaim streets from traffic, while Shanghai has written a 15-minute community life circle into its 2035 master plan. Each case aims at a more sustainable, liveable city.",
+  "Yet the model is no universal remedy. Were it imposed too rigidly, it could backfire. Creating desirable neighbourhoods often pushes up rents, and without safeguards low-income families may be displaced—a process called gentrification. Conversely, some residents distrust top-down change; public perception of such projects can turn a sound idea into a political flashpoint. To implement the vision equitably, planners must pair bold design with fair housing policy."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Who is credited with first proposing the 15-minute city concept in 2016? 谁在 2016 年最先提出"15 分钟城市"概念？",opts:["Carlos Moreno 卡洛斯·莫雷诺","Anne Hidalgo 安妮·伊达尔戈","Jane Jacobs 简·雅各布斯","Ebenezer Howard 埃比尼泽·霍华德"],ans:0,
+   fb:"Correct! 法籍哥伦比亚裔科学家卡洛斯·莫雷诺于 2016 年提出该概念，后被巴黎市长伊达尔戈推广。"},
+  {q:"In this context, what does 'proximity' mean? 文中 'proximity' 是什么意思？",opts:["distance measured in kilometres 以公里计的距离","nearness; being close at hand 邻近；触手可及","the speed of cars 车速","population density 人口密度"],ans:1,
+   fb:"Right! proximity 指"邻近、接近"，本课强调以"分钟"而非"公里"来衡量生活。"},
+  {q:"'Not only does it cut car use…; it also encourages walking' — why is 'does' used? 为什么加 does？",opts:["Because it is a question 因为这是疑问句","Because a negative word at the front needs inversion 句首否定词要求部分倒装","Because the verb is irregular 因为动词不规则","It is a spelling mistake 这是拼写错误"],ans:1,
+   fb:"Correct! not only 置于句首时需部分倒装，无助动词则借用 do/does/did。"},
+  {q:"'Were it imposed too rigidly, it could backfire.' expresses: 这句表达的是？",opts:["a completed past fact 已完成的过去事实","a hypothetical future situation 对将来的假设（虚拟语气倒装）","a direct command 直接命令","a habitual action 习惯性动作"],ans:1,
+   fb:"Yes! Were + 主语 + to do 是省略 if 的虚拟倒装，谈论尚未发生的可能性。"},
+  {q:"What does 'gentrification' refer to in the text? 文中 'gentrification' 指什么？",opts:["traffic jams 交通堵塞","rising rents pushing out low-income residents 租金上涨挤走低收入居民","air pollution 空气污染","loss of parks 公园消失"],ans:1,
+   fb:"Right! 士绅化指社区改造后房价上涨，原低收入居民被迫迁离，是 15 分钟城市的主要风险之一。"},
+  {q:"Which Chinese city is mentioned as writing a 15-minute community life circle into its 2035 master plan? 文中提到哪座中国城市把"15 分钟社区生活圈"写入 2035 总规？",opts:["Beijing 北京","Shanghai 上海","Shenzhen 深圳","Chengdu 成都"],ans:1,
+   fb:"Yes! 上海于 2014 年率先提出、2016 年发布导则，并写入《上海市城市总体规划（2017—2035 年）》。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#0d9488';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

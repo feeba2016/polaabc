@@ -1717,6 +1717,40 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-27",
+    "title": "The Insect With 24 Legs",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-27-the-insect-with-24-legs",
+    "url": "lessons/b1/2026-08-27-the-insect-with-24-legs.html",
+    "vocab": [
+      {
+        "word": "insect",
+        "zh": "化石",
+        "ex": "用一个惊讶的事实开场，抓住听众注意力。<br>例：<b>Guess what? Bugs once had 24 legs!</b>"
+      }
+    ]
+  },
+  {
+    "level": "B1",
+    "date": "2026-08-28",
+    "title": "The Manhattan-Sized Ice Island",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-28-the-manhattan-sized-ice-island",
+    "url": "lessons/b1/2026-08-28-the-manhattan-sized-ice-island.html",
+    "vocab": [
+      {
+        "word": "glacier",
+        "zh": "冰山",
+        "ex": "用一个惊讶的事实开场，抓住听众注意力。<br>例：<b>Guess what? A block of ice as big as Manhattan just broke free!</b>"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -2175,6 +2209,132 @@ const EPISODES = [
         "word": "help",
         "zh": "帮助",
         "ex": "\"I can help you.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-26",
+    "title": "How Plants Grow",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-26-how-plants-grow",
+    "url": "lessons/a1/2026-08-26-how-plants-grow.html",
+    "vocab": [
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "\"The sun is warm.\""
+      },
+      {
+        "word": "water",
+        "zh": "水",
+        "ex": "\"I drink water.\""
+      },
+      {
+        "word": "plant",
+        "zh": "植物",
+        "ex": "\"The plant is green.\""
+      },
+      {
+        "word": "grow",
+        "zh": "生长 / 长大",
+        "ex": "\"The plant grows.\""
+      },
+      {
+        "word": "green",
+        "zh": "绿色的",
+        "ex": "\"Leaves are green.\""
+      },
+      {
+        "word": "flower",
+        "zh": "花",
+        "ex": "\"The flower is pretty.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-27",
+    "title": "A Visit to the Doctor",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-27-a-visit-to-the-doctor",
+    "url": "lessons/a1/2026-08-27-a-visit-to-the-doctor.html",
+    "vocab": [
+      {
+        "word": "doctor",
+        "zh": "医生",
+        "ex": "\"The doctor is kind.\""
+      },
+      {
+        "word": "sick",
+        "zh": "生病的",
+        "ex": "\"Tom is sick.\""
+      },
+      {
+        "word": "tummy",
+        "zh": "肚子",
+        "ex": "\"He has a tummy ache.\""
+      },
+      {
+        "word": "medicine",
+        "zh": "药",
+        "ex": "\"The doctor gives medicine.\""
+      },
+      {
+        "word": "water",
+        "zh": "水",
+        "ex": "\"Drink water.\""
+      },
+      {
+        "word": "better",
+        "zh": "好些了",
+        "ex": "\"Tom feels better.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-28",
+    "title": "If You Are Happy and You Know It",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-28-if-you-are-happy-and-you-know-it",
+    "url": "lessons/a1/2026-08-28-if-you-are-happy-and-you-know-it.html",
+    "vocab": [
+      {
+        "word": "happy",
+        "zh": "开心的",
+        "ex": "\"I am happy.\""
+      },
+      {
+        "word": "clap",
+        "zh": "拍手",
+        "ex": "\"Clap your hands.\""
+      },
+      {
+        "word": "hands",
+        "zh": "手（复数）",
+        "ex": "\"Clap your hands.\""
+      },
+      {
+        "word": "feet",
+        "zh": "脚（复数）",
+        "ex": "\"Stomp your feet.\""
+      },
+      {
+        "word": "sing",
+        "zh": "唱歌",
+        "ex": "\"Sing a song.\""
+      },
+      {
+        "word": "dance",
+        "zh": "跳舞",
+        "ex": "\"Dance and spin.\""
       }
     ]
   },
@@ -2751,6 +2911,162 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A2",
+    "date": "2026-08-26",
+    "title": "Dragon Boat Festival",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-26-dragon-boat-festival",
+    "url": "lessons/a2/2026-08-26-dragon-boat-festival.html",
+    "vocab": [
+      {
+        "word": "festival",
+        "zh": "节日",
+        "ex": "\"The Dragon Boat Festival is a happy festival.\""
+      },
+      {
+        "word": "celebrate",
+        "zh": "庆祝",
+        "ex": "\"We celebrate with our families.\""
+      },
+      {
+        "word": "poet",
+        "zh": "诗人",
+        "ex": "\"Qu Yuan was a famous poet.\""
+      },
+      {
+        "word": "race",
+        "zh": "比赛；竞赛",
+        "ex": "\"Teams race dragon boats.\""
+      },
+      {
+        "word": "zongzi",
+        "zh": "粽子",
+        "ex": "\"Zongzi is rice in green leaves.\""
+      },
+      {
+        "word": "wrap",
+        "zh": "包裹；包",
+        "ex": "\"We wrap rice in leaves.\""
+      },
+      {
+        "word": "drum",
+        "zh": "鼓",
+        "ex": "\"They beat big drums.\""
+      },
+      {
+        "word": "luck",
+        "zh": "运气；好运",
+        "ex": "\"Sachets bring good luck.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-27",
+    "title": "Einstein Curious Mind",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-27-einstein-curious-mind",
+    "url": "lessons/a2/2026-08-27-einstein-curious-mind.html",
+    "vocab": [
+      {
+        "word": "scientist",
+        "zh": "科学家",
+        "ex": "\"Albert Einstein was a great scientist.\""
+      },
+      {
+        "word": "curious",
+        "zh": "好奇的",
+        "ex": "\"The boy was curious about the stars.\""
+      },
+      {
+        "word": "question",
+        "zh": "问题",
+        "ex": "\"She asked a big question.\""
+      },
+      {
+        "word": "imagination",
+        "zh": "想象力",
+        "ex": "\"Imagination is more important than knowledge.\""
+      },
+      {
+        "word": "music",
+        "zh": "音乐",
+        "ex": "\"He loved music and the violin.\""
+      },
+      {
+        "word": "energy",
+        "zh": "能量",
+        "ex": "\"E = mc² is about energy.\""
+      },
+      {
+        "word": "discover",
+        "zh": "发现",
+        "ex": "\"You can discover new things.\""
+      },
+      {
+        "word": "world",
+        "zh": "世界",
+        "ex": "\"The whole world knows him.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-28",
+    "title": "Swimming Fun",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-28-swimming-fun",
+    "url": "lessons/a2/2026-08-28-swimming-fun.html",
+    "vocab": [
+      {
+        "word": "swimming",
+        "zh": "游泳",
+        "ex": "\"Swimming is a fun sport.\""
+      },
+      {
+        "word": "stroke",
+        "zh": "泳姿；划水动作",
+        "ex": "\"There are four swimming strokes.\""
+      },
+      {
+        "word": "freestyle",
+        "zh": "自由泳",
+        "ex": "\"In freestyle, you swim on your front.\""
+      },
+      {
+        "word": "healthy",
+        "zh": "健康的",
+        "ex": "\"It makes you strong and healthy.\""
+      },
+      {
+        "word": "enjoy",
+        "zh": "享受；喜欢",
+        "ex": "\"Everyone can enjoy swimming.\""
+      },
+      {
+        "word": "careful",
+        "zh": "小心的",
+        "ex": "\"Be careful near water.\""
+      },
+      {
+        "word": "goggles",
+        "zh": "泳镜",
+        "ex": "\"Put on your goggles.\""
+      },
+      {
+        "word": "pool",
+        "zh": "游泳池",
+        "ex": "\"You can swim in a pool.\""
+      }
+    ]
+  },
+  {
     "level": "B2",
     "date": "2026-08-12",
     "title": "Beyond Lithium The Rise of Solid-State Batteries",
@@ -3305,6 +3621,192 @@ const EPISODES = [
         "word": "profound",
         "zh": "深刻的；意义深远的",
         "ex": "\"a profound observation about human nature\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-26",
+    "title": "The Thinnest Wire in the World",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-26-the-thinnest-wire-in-the-world",
+    "url": "lessons/b2/2026-08-26-the-thinnest-wire-in-the-world.html",
+    "vocab": [
+      {
+        "word": "synthesise",
+        "zh": "合成；人工制造（美式拼写 synthesize）",
+        "ex": "\"The team synthesised the longest atomic chain ever made.\""
+      },
+      {
+        "word": "proportionally",
+        "zh": "按比例地；成比例地",
+        "ex": "\"Scaled up proportionally, it equals a four-metre wire.\""
+      },
+      {
+        "word": "equivalent",
+        "zh": "相等的；等价的；等同物",
+        "ex": "\"That length is equivalent to a household copper wire.\""
+      },
+      {
+        "word": "fragility",
+        "zh": "脆弱性；易损性（adj. fragile）",
+        "ex": "\"The obstacle has always been their fragility.\""
+      },
+      {
+        "word": "unstable",
+        "zh": "不稳定的（n. instability）",
+        "ex": "\"Earlier chains were too unstable to be useful.\""
+      },
+      {
+        "word": "sheath",
+        "zh": "护套；鞘；保护外层",
+        "ex": "\"A dense carbon sheath locks the atoms in place.\""
+      },
+      {
+        "word": "compress",
+        "zh": "压缩；压紧（n. compression）",
+        "ex": "\"They compressed the crystal to twenty gigapascals.\""
+      },
+      {
+        "word": "nanoscale",
+        "zh": "纳米级的；纳米尺度的",
+        "ex": "\"building blocks for nanoscale circuits\""
+      },
+      {
+        "word": "plausible",
+        "zh": "看似可信的；合理的",
+        "ex": "\"A family of designer atomic wires now looks plausible.\""
+      },
+      {
+        "word": "ultimate",
+        "zh": "最终的；极限的；根本的",
+        "ex": "\"They have reached the ultimate limit of thinness.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-27",
+    "title": "The 15-Minute City Reimagining Urban Life",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-27-the-15-minute-city-reimagining-urban-life",
+    "url": "lessons/b2/2026-08-27-the-15-minute-city-reimagining-urban-life.html",
+    "vocab": [
+      {
+        "word": "paradigm",
+        "zh": "范式；模式；典范",
+        "ex": "\"The 15-minute city is an urban-planning paradigm.\""
+      },
+      {
+        "word": "proximity",
+        "zh": "邻近；接近（adj. proximate）",
+        "ex": "\"Its core principle is proximity: measured in minutes.\""
+      },
+      {
+        "word": "congestion",
+        "zh": "拥堵；拥挤（v. congest）",
+        "ex": "\"The result was severe traffic congestion.\""
+      },
+      {
+        "word": "sustainable",
+        "zh": "可持续的（n. sustainability）",
+        "ex": "\"Each case aims at a more sustainable, liveable city.\""
+      },
+      {
+        "word": "displaced",
+        "zh": "被迫迁离的；流离失所的（v. displace）",
+        "ex": "\"low-income families may be displaced by rising rents\""
+      },
+      {
+        "word": "gentrification",
+        "zh": "士绅化；绅士化（社区改造致原住民被迫迁离）",
+        "ex": "\"a process called gentrification\""
+      },
+      {
+        "word": "conversely",
+        "zh": "相反地；反之（adj. converse）",
+        "ex": "\"Conversely, some residents distrust top-down change.\""
+      },
+      {
+        "word": "perception",
+        "zh": "认知；看法；感知（v. perceive）",
+        "ex": "\"public perception of such projects\""
+      },
+      {
+        "word": "implement",
+        "zh": "实施；落实；执行（n. implementation）",
+        "ex": "\"To implement the vision equitably, planners must…\""
+      },
+      {
+        "word": "equitable",
+        "zh": "公平的；公正的（n. equity）",
+        "ex": "\"To implement the vision equitably, planners must pair design with fair policy.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-28",
+    "title": "Cézanne and Us The Painter Who Built Modern Art",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-28-cézanne-and-us-the-painter-who-built-modern-art",
+    "url": "lessons/b2/2026-08-28-cézanne-and-us-the-painter-who-built-modern-art.html",
+    "vocab": [
+      {
+        "word": "exert",
+        "zh": "施加；发挥（影响）",
+        "ex": "\"Few artists have exerted so profound an influence on the century that followed.\""
+      },
+      {
+        "word": "profound",
+        "zh": "深刻的；深远的",
+        "ex": "\"His work had a profound effect on twentieth-century painting.\""
+      },
+      {
+        "word": "perspective",
+        "zh": "透视；视角；观点",
+        "ex": "\"Cézanne changed the perspective from which we view a landscape.\""
+      },
+      {
+        "word": "fundamental",
+        "zh": "基本的；根本的",
+        "ex": "\"His treatment of space became fundamental to Cubism.\""
+      },
+      {
+        "word": "demonstrate",
+        "zh": "证明；展示",
+        "ex": "\"His canvases demonstrated that colour could carry form.\""
+      },
+      {
+        "word": "consequently",
+        "zh": "因此；所以",
+        "ex": "\"He was mocked in life; consequently, he was celebrated after death.\""
+      },
+      {
+        "word": "subsequently",
+        "zh": "随后；后来",
+        "ex": "\"A painter mocked in his lifetime was subsequently embraced by the world.\""
+      },
+      {
+        "word": "legacy",
+        "zh": "遗产；留给后世的影响",
+        "ex": "\"His legacy transcends any single art movement.\""
+      },
+      {
+        "word": "transcend",
+        "zh": "超越；超出",
+        "ex": "\"Great art transcends the time and place that produced it.\""
+      },
+      {
+        "word": "reshape",
+        "zh": "重塑；重新塑造",
+        "ex": "\"Cézanne reshaped how later artists would see the world.\""
       }
     ]
   },
@@ -4049,6 +4551,130 @@ const EPISODES = [
         "word": "corollary",
         "zh": "必然结果、推论（a corollary being that... 意为「由此推论」）",
         "ex": "\"the corollary being that institutions, not machines, decide the ending\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-26",
+    "title": "Quantum Vibe Coding",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-26-quantum-vibe-coding",
+    "url": "lessons/c1/2026-08-26-quantum-vibe-coding.html",
+    "vocab": [
+      {
+        "word": "autonomously",
+        "zh": "自主地；无需人类逐步干预地（independently, without continuous human control）",
+        "ex": "\"can take an English-language prompt and autonomously write, simulate, and run quantum code\""
+      },
+      {
+        "word": "frontier",
+        "zh": "前沿的（最先进、处于研究前沿的；a frontier model 指能力边界上的大模型）",
+        "ex": "\"wraps a frontier large language model around Pasqal's existing software stack\""
+      },
+      {
+        "word": "protocol",
+        "zh": "（实验/操作）方案、规程（a prescribed procedure or set of steps）",
+        "ex": "\"the agent then extracts a protocol from a paper\""
+      },
+      {
+        "word": "validate",
+        "zh": "验证、确认有效（部署前核查设计是否成立）",
+        "ex": "\"validates it on two simulated layers\""
+      },
+      {
+        "word": "reproduce",
+        "zh": "复现、重现（独立地再次得到相同结果）",
+        "ex": "\"the agent reproduced a 2019 Harvard experiment overnight\""
+      },
+      {
+        "word": "correlation",
+        "zh": "关联（correlation length 关联长度，描述有序态空间相关尺度）",
+        "ex": "\"recovered the original correlation length within statistical error\""
+      },
+      {
+        "word": "observable",
+        "zh": "（物理）观测量（可被测量的物理量，如磁化强度）",
+        "ex": "\"the agent selected an observable too crude to prove the physical claim\""
+      },
+      {
+        "word": "temper",
+        "zh": "使缓和、使不过分（此处：失败使胜利不被夸大）",
+        "ex": "\"two documented failures temper the triumph\""
+      },
+      {
+        "word": "paradigm",
+        "zh": "范式（占主导地位的概念框架或模型）",
+        "ex": "\"expose the limits of the current paradigm\""
+      },
+      {
+        "word": "authority",
+        "zh": "权威、权威性（scientific authority 科学判断的权威性）",
+        "ex": "\"scientific authority has not been automated away\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-28",
+    "title": "The Rating That Vanished",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-28-the-rating-that-vanished",
+    "url": "lessons/c1/2026-08-28-the-rating-that-vanished.html",
+    "vocab": [
+      {
+        "word": "decouple",
+        "zh": "使脱钩、使分离（decouple publication from acceptance = 把『发表』与『录用』脱钩）",
+        "ex": "\"it chose to decouple publication from acceptance\""
+      },
+      {
+        "word": "preprint",
+        "zh": "预印本（未经正式录用的论文初稿，先公开于预印本平台供学界讨论）",
+        "ex": "\"every manuscript sent for peer review is published as a preprint\""
+      },
+      {
+        "word": "validation",
+        "zh": "验证、确证（confirming that a result or method is sound and trustworthy）",
+        "ex": "\"the strength of the validation\""
+      },
+      {
+        "word": "scrutiny",
+        "zh": "仔细审查、详查（careful and critical examination）",
+        "ex": "\"By exposing the full record of scrutiny\""
+      },
+      {
+        "word": "rigour",
+        "zh": "严谨、严密（thoroughness and exactness in method；美式拼写为 rigor）",
+        "ex": "\"the rigour of expert review\""
+      },
+      {
+        "word": "endorse",
+        "zh": "认可、背书（to express formal support or approval of a claim or decision）",
+        "ex": "\"eLife's model did not endorse findings through a binding accept–reject decision\""
+      },
+      {
+        "word": "entrenched",
+        "zh": "根深蒂固的（firmly established and difficult to dislodge or change）",
+        "ex": "\"The metric, long entrenched in hiring, promotion and grant decisions\""
+      },
+      {
+        "word": "autonomous",
+        "zh": "自治的、独立的（self-governing, independent of external control）",
+        "ex": "\"a discipline of autonomous journals\""
+      },
+      {
+        "word": "corrosive",
+        "zh": "腐蚀性的、有害的（tending to weaken or undermine gradually）",
+        "ex": "\"the impact factor is a corrosive proxy\""
+      },
+      {
+        "word": "paradigm",
+        "zh": "范式（a dominant conceptual framework or model）",
+        "ex": "\"Whether this paradigm endures\""
       }
     ]
   }

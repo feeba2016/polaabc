@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Rating That Vanished — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:300px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 学术论文 Academic Papers</span>
+      <h1 class="title">The Rating That Vanished</h1>
+      <p class="subtitle">When a leading journal abandoned accept–reject peer review — and forfeited its impact factor · 全文阅读（点蓝词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Break</div>
+            <p>In January 2023, eLife — founded in 2012 — broke with the academic establishment. Rather than merely competing for prestige, it chose to <span class="kw" data-def="使脱钩、使分离（decouple = to separate two things that were connected; here: 把『发表』与『录用』脱钩）">decouple</span> publication from acceptance. Under its new 'publish–review–curate' model, every manuscript sent for peer review is published as a <span class="kw" data-def="预印本（preprint = 未经正式录用的论文初稿，先公开于预印本平台供讨论）">preprint</span> with reviewers' reports attached — no accept, no reject.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The New Logic</div>
+            <p>Central to the reform is radical transparency. Each article now carries an 'eLife Assessment' summarising the significance of the findings and the strength of the <span class="kw" data-def="验证、确证（validation = the act of confirming that a result or method is sound and trustworthy）">validation</span>. By exposing the full record of <span class="kw" data-def="仔细审查、详查（scrutiny = careful and critical examination）">scrutiny</span>, the journal argues, readers judge quality directly instead of deferring to a proprietary score. Proponents say the approach marries the speed of preprints with the <span class="kw" data-def="严谨、严密（rigour = thoroughness and exactness in method）">rigour</span> of expert review.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Backlash</div>
+            <p>Yet the establishment pushed back. In late 2024, Clarivate — operator of the Web of Science and the journal impact factor — ruled that eLife's model did not <span class="kw" data-def="认可、背书（endorse = to express formal support or approval of a claim）">endorse</span> findings through a binding accept–reject decision, and announced the journal would lose its impact factor. The metric, long <span class="kw" data-def="使根深蒂固（entrenched = firmly established and difficult to dislodge）">entrenched</span> in hiring and promotion, was stripped in 2025. eLife's founding editor, Randy Schekman, had already resigned from the board in protest.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Unfinished Argument</div>
+            <p>The episode poses a question no statistic settles. Can a discipline of <span class="kw" data-def="自治的、独立的（autonomous = self-governing, independent of external control）">autonomous</span> journals reform a ranking it helped create? eLife insists the impact factor is a <span class="kw" data-def="腐蚀性的、有害的（corrosive = tending to weaken or undermine gradually）">corrosive</span> proxy that mistakes the container for its contents; its critics fear the reform hurts researchers in metric-dependent systems. Whether this <span class="kw" data-def="范式（paradigm = a dominant conceptual framework or model）">paradigm</span> endures depends less on eLife's courage than on funders ceasing to outsource judgement to a number.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="decouple">🔊</button><div class="word">decouple<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">使脱钩、使分离（decouple publication from acceptance = 把『发表』与『录用』脱钩）</div><div class="ex">"it chose to decouple publication from acceptance"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="preprint">🔊</button><div class="word">preprint<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">预印本（未经正式录用的论文初稿，先公开于预印本平台供学界讨论）</div><div class="ex">"every manuscript sent for peer review is published as a preprint"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="validation">🔊</button><div class="word">validation<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">验证、确证（confirming that a result or method is sound and trustworthy）</div><div class="ex">"the strength of the validation"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scrutiny">🔊</button><div class="word">scrutiny<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">仔细审查、详查（careful and critical examination）</div><div class="ex">"By exposing the full record of scrutiny"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rigour">🔊</button><div class="word">rigour<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">严谨、严密（thoroughness and exactness in method；美式拼写为 rigor）</div><div class="ex">"the rigour of expert review"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="endorse">🔊</button><div class="word">endorse<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">认可、背书（to express formal support or approval of a claim or decision）</div><div class="ex">"eLife's model did not endorse findings through a binding accept–reject decision"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="entrenched">🔊</button><div class="word">entrenched<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">根深蒂固的（firmly established and difficult to dislodge or change）</div><div class="ex">"The metric, long entrenched in hiring, promotion and grant decisions"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="autonomous">🔊</button><div class="word">autonomous<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">自治的、独立的（self-governing, independent of external control）</div><div class="ex">"a discipline of autonomous journals"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="corrosive">🔊</button><div class="word">corrosive<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">腐蚀性的、有害的（tending to weaken or undermine gradually）</div><div class="ex">"the impact factor is a corrosive proxy"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="paradigm">🔊</button><div class="word">paradigm<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">范式（a dominant conceptual framework or model）</div><div class="ex">"Whether this paradigm endures"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Rather than [X], [subject] chose to [Y].</h3>
+          <div class="zh">"与其做 X，……选择了做 Y。" 先否定旧路径、再点出颠覆性动作，是学术反驳与改革叙事的经典起手式；比 "Instead of X, it did Y" 更具决断感。</div>
+          <div class="eg">Rather than merely competing for prestige, it chose to decouple publication from acceptance.</div>
+          <div class="practice">练习：用 "chase citations / rethink how we credit discovery" → Rather than chasing citations, the lab chose to <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>2. By [gerund phrase], [subject] argues, [clause] — instead of [gerund].</h3>
+          <div class="zh">"通过……，某方主张，……——而非……。" By + 动名词作方式状语，中间插入 argues 作插入语，结尾用 instead of 形成对照，是论证"机制—主张—反面对照"的高级句式。</div>
+          <div class="eg">By exposing the full record of scrutiny, the journal argues, readers judge quality directly instead of deferring to a proprietary score.</div>
+          <div class="practice">练习：用 "sharing the raw data / the public / trusting a black-box metric" → By sharing the raw data, the authors argue, the public judges merit directly instead of <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>3. In late [year], [entity] ruled that [clause], and announced [clause].</h3>
+          <div class="zh">"在 X 年末，某机构裁定……，并宣布……。" 用于叙述权威机构（法院、监管机构）的裁决与后续动作，是学术/政策类写作的timeline必备句。</div>
+          <div class="eg">In late 2024, Clarivate ruled that eLife's model did not endorse findings through a binding accept–reject decision, and announced the journal would lose its impact factor.</div>
+          <div class="practice">练习：用 "2025 / the committee / the rule was invalid / a review would begin" → In late 2025, the committee ruled that <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>4. [A] insists [B] is a [adj.] [noun] that [clause]; its critics fear that [clause].</h3>
+          <div class="zh">"A 坚称 B 是一个……的 C（定语从句）；其批评者则担忧……。" 用分号并列"主张 vs 担忧"，一句话呈现辩论两侧，是 op-ed / 文献综述的利器。</div>
+          <div class="eg">eLife insists the impact factor is a corrosive proxy that mistakes the container for its contents; its critics fear that, without a shared benchmark, careers in metric-dependent systems will suffer.</div>
+          <div class="practice">练习：用 "the model / efficient / wastes reviewers' time / quality will slip" → The model insists the new process is an efficient reform that saves reviewers' hours; its critics fear that <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>5. Whether [subject] [V] depends less on [X] than on [Y].</h3>
+          <div class="zh">"……能否……，与其说取决于 X，不如说取决于 Y。" less on X than on Y 比较省略平行，把结论从表面因素引向深层结构因素，是段末升华句。</div>
+          <div class="eg">Whether this paradigm endures depends less on eLife's courage than on universities and funders ceasing to outsource judgement to a number.</div>
+          <div class="practice">练习：用 "the reform succeeds / one lab / the whole field" → Whether the reform succeeds depends less on one lab than on <input placeholder="your answer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 过去分词作后置定语 / 省略关系从句（Reduced relative clause）</h3>
+          <div class="zh">"eLife, founded in 2012, had aspired…" 中 founded in 2012 是 which was founded in 2012 的省略——省去关系代词+be 动词，直接以过去分词开头作后置修饰，使句子更紧凑、书面感更强。注意：分词逻辑主语须与主句主语一致（eLife）。</div>
+          <div class="eg">eLife, <b>founded in 2012,</b> had aspired to rival Cell, Nature and Science.</div>
+        </div>
+        <div class="item">
+          <h3>2. 破折号引出同位语（Dash as appositive）</h3>
+          <div class="zh">"Clarivate — operator of the Web of Science and the journal impact factor — ruled that…" 两个 em dash（—）之间的名词短语对 Clarivate 作同位解释，比 which is… 关系从句更干脆，是经济学人/学术写作标志式用法。注意：前后各一个 em dash，勿与 hyphen（-）混用。</div>
+          <div class="eg">In late 2024, <b>Clarivate — operator of the Web of Science and the journal impact factor —</b> ruled that eLife's model did not endorse findings.</div>
+        </div>
+        <div class="item">
+          <h3>3. 动名词短语作状语（Gerund phrase as adverbial）</h3>
+          <div class="zh">"By exposing the full record of scrutiny, the journal argues, readers judge quality directly" 中 By exposing… 是 by + 动名词构成的手段状语；句末 instead of deferring 是 instead of + 动名词作对照。动名词作状语在学术英语中极常见，比用从句更凝练。</div>
+          <div class="eg"><b>By exposing</b> the full record of scrutiny, the journal argues, readers judge quality directly instead of <b>deferring</b> to a proprietary score.</div>
+        </div>
+        <div class="item">
+          <h3>4. less A than B 省略平行结构（Parallel 'less A than B'）</h3>
+          <div class="zh">"depends less on eLife's courage than on universities and funders ceasing to outsource judgement" = 与其说取决于 eLife 的勇气，不如说取决于大学与资助方停止把判断外包给一个数字。less on X than on Y 省略了与前者平行的 on，属高级省略平行；强调对比时比 "not X but Y" 更侧重程度比较。</div>
+          <div class="eg">Whether this paradigm endures depends <b>less on eLife's courage than on universities and funders</b> ceasing to outsource judgement to a number.</div>
+        </div>
+        <div class="item">
+          <h3>5. 修辞性问句（Rhetorical question）</h3>
+          <div class="zh">"Can a discipline of autonomous journals reform a ranking it helped create?" 并非真要读者回答，而是以问句形式抛出一个无法用统计解决的深层难题，引导读者反思，常见于议论文/社论的结论段，比直接陈述更有张力。注意：修辞问句多为一般疑问句，句末用问号。</div>
+          <div class="eg"><b>Can a discipline of autonomous journals reform a ranking it helped create?</b> eLife insists the impact factor is a corrosive proxy…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本期源自已发生、可查证的真实学术出版事件——开放获取期刊 <b>eLife</b> 在 2023 年推翻传统"录用/拒稿"同行评议、改用"publish–review–curate（发表—评议—策展，简称 PRC）"模式，并因此在 2025 年失去其期刊影响因子（Impact Factor, IF）。这不是虚构比喻，而是有 eLife 官方声明、Clarivate（Web of Science 运营方）公告与《Science》报道交叉印证的真实事件。</p>
+        <ul>
+          <li><b>期刊来历：</b>eLife 创刊于 2012 年，由霍华德·休斯医学研究所（HHMI）等资助，定位为能与 Cell、Nature、Science 竞争的"选择性开放获取顶级刊"。</li>
+          <li><b>2023 年 1 月改革：</b>改为 PRC 模式——所有送审稿件不论评审意见正负，均以"Reviewed Preprint（已评议预印本）"形式发表，附公开评审报告与一篇"eLife Assessment"（由编辑与评审撰写的"重要性 + 证据强度"评级）。不再有 accept / reject。</li>
+          <li><b>2024 年末裁定：</b>Clarivate 宣布 eLife 的模式"将发表与同行评议的验证（validation）脱钩"，不符合其影响因子标准；2025 年 6 月正式剥夺其影响因子（此前约 6.4）。</li>
+          <li><b>代价：</b>据 eLife 2026 年三年回顾数据，2025 年投稿量较 2024 年下降约 55%（从 6,396 降至 2,853），送审量降 41%（1,719→1,013），但送审入选率反而从 27% 升至 35%——说明流失的主要是低质量投稿。分地区看，中国投稿降幅约 80%，美国降 40%，英国仅降 18%。</li>
+        </ul>
+        <div class="box">🧭 <b>事实与出处：</b>以上据 eLife 官方《Scientific Publishing: Rethinking how research is reviewed and published》(2026)、eLife《The eLife Model: Three-year update》(2026)、Clarivate 公告，以及《Science》报道（Brainard, 2025, doi:10.1126/science.adu7465）交叉印证。本课尊重事实，未作改写或虚构。</div>
+
+        <h3>二、为什么"失去影响因子"如此致命？</h3>
+        <p>影响因子本质是"某刊前两年论文在当年被引次数的平均值"，本是一个文献计量指标。但在全球很多学术评价体系里，它早已异化为<b>衡量学者与机构的代理指标（proxy）</b>：招聘、 tenure（终身教职）、晋升、科研经费，乃至一国"顶尖期刊目录"的认定，都看论文发在哪本刊、IF 多高。eLife 自己就是《旧金山研究评估宣言》（DORA, 2012）的签署方，长期主张"以研究内容而非发表载体评价科学"，并称影响因子是"腐蚀性的（corrosive）"指标。Clarivate 的反击逻辑是：一本连"是否录用"都不做最终裁定的期刊，其"内容是否被同行评议验证"无法被索引体系确认，因此不予授予 IF。</p>
+
+        <h3>三、辩论的两极（考试最爱考的"作者态度/双方立场"）</h3>
+        <ul>
+          <li><b>改革派（eLife 及其支持者，含 HHMI）：</b>公开评审 + 透明 Assessment，让读者直接判断论文质量，省去"从一刊 cascading 到另一刊"的羞辱式投稿循环；预印本的"快"与专家评审的"严"可以兼得；影响因子误把"容器"当"内容"。诺奖得主、eLife 创始主编 Randy Schekman 早年（2013 获奖后）就公开呼吁学界摆脱对"奢侈品期刊"的迷信。</li>
+          <li><b>保守派 / 批评者：</b>eLife 创始编辑 Schekman 本人却因反对 2023 新模式而辞去编委会职务——他曾在 2018 年试行类似模式，发现"有作者根本不在乎评审意见、即便遭到严厉批评仍坚持发表"，认为这失去了评议的意义。批评者担心：没有共同基准（shared benchmark），在高度依赖指标体系的系统（如亚洲多国）里，青年学者的职业风险会显著上升。</li>
+        </ul>
+        <p>这场争论的本质，是<b>"谁来为科学的质量背书（endorse）"</b>——是期刊编辑部的 accept/reject 裁决，还是公开、可问责的评审过程本身。</p>
+
+        <h3>四、关键学术概念</h3>
+        <ul>
+          <li><b>Impact Factor（影响因子）：</b>科睿唯安（Clarivate）基于 Web of Science 计算的期刊年均被引量；争议在于它衡量"期刊"而非"单篇论文"或"学者"。</li>
+          <li><b>Publish–Review–Curate (PRC)：</b>eLife 的自创模式——先发表（preprint），再附公开评审，最后由 Assessment 策展；把"发表"与"录用"解耦。</li>
+          <li><b>Reviewed Preprint（已评议预印本）：</b>送审后立刻公开、带评审报告的版本，中位数约 95 天即可上线，远快于传统期刊。</li>
+          <li><b>DORA（旧金山研究评估宣言，2012）：</b>呼吁在招聘、晋升、资助中"不把期刊指标作为替代性评判"，全球数千家机构签署。</li>
+          <li><b>Wellcome 投资：</b>2026 年前后，Wellcome 信托宣布三年投入 240 万英镑支持 eLife Pathways，建设开放出版基础设施——说明改革派仍获重要资助方背书。</li>
+        </ul>
+
+        <h3>五、更广阔的图景（横向对比）</h3>
+        <ul>
+          <li><b>预注册（preregistration）运动：</b>与 eLife 同源，都是"可信度革命"的延伸——要求研究者在收集数据前公开假设与分析计划，以减少 p-hacking、HARKing。但 2024–2025 研究显示，心理学论文预注册比例仅从 2% 升至约 7%，且一项 Cortex (2025) 研究发现已预注册研究的"实际遵循率"平均仅 60%。说明制度性改革推进缓慢。</li>
+          <li><b>其他"去影响因子"尝试：</b>PLoS、PeerJ 等早已推行"文章级指标"；欧盟与多国推行"负责任研究评估"（Coalition for Advancing Research Assessment, CoARA, 2022）。eLife 的特别之处在于它本是一本高 IF 顶刊，却主动"走下神坛"。</li>
+        </ul>
+        <div class="box">📌 <b>附赠价值：</b>eLife 2026 三年回顾中最具启发的数据是——投稿总量虽降，但"送审入选率"反而上升。这暗示：失去 IF 后离开的多是冲着招牌来的低质量投稿，留下的是认同其理念的作者。换言之，一个评价体系一旦不再被"数字"绑架，反而可能更接近它声称要服务的"科学本身"。</div>
+
+        <h3>六、内容合规与立场说明</h3>
+        <p>本课聚焦学术出版与评价体系的真实改革事件，所有机构、人物、年份、数据均据公开报道与官方声明，立场客观、尊重事实，不涉及任何敏感政治话题，亦未对任何国家现行政策作评判。涉及主权与领土表述时，一律使用规范名称：台湾称"<b>中国台湾</b>"、香港称"<b>中国香港</b>"、澳门称"<b>中国澳门</b>"，均为中国不可分割的一部分。文中提及的英国、美国、法国、德国、西班牙、意大利、印度、中国等地名，均按其主权国家/地区规范表述。</p>
+
+        <h3>七、对雅思／托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>本课是典型的"事件陈述 + 辩证评价"型文本——先讲改革（段1–2），再讲反噬（段3），末段升华（段4）。练习重点：分清"事实"（2025 年失去 IF、Schekman 辞职）与"作者评价"（影响因子是 corrosive proxy、改革的成败在制度而非勇气）。托福"作者态度题""推理题"必考此点。</li>
+          <li><b>写作 Task 2：</b>可套用本课框架写"传统评价 vs 改革"类题目：命名现象（Rather than competing for prestige, it chose to decouple X from Y）→ 机制（By exposing…, readers judge… instead of…）→ 反噬（Yet the establishment pushed back）→ 升华（depends less on X than on Y）。高级词汇 decouple / validation / scrutiny / rigour / endorse / entrenched / paradigm 直接可用。</li>
+          <li><b>口语 Part 3：</b>被问到"该如何评价科研成果"，可用本课三分法：看内容而非载体（content over container）、透明评审优于黑箱指标、但需兼顾依赖指标体系的青年学者权益——有事实、有辩证，7+ 稳。</li>
+          <li><b>易错点：</b>em dash（—）与 hyphen（-）别混；By + 动名词作方式状语；less A than B 须前后结构对等；修辞问句（Can a discipline…?）用于收尾增强张力，不等于真要回答。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 学术/出版核心词（decouple, preprint, validation, scrutiny, rigour, endorse, entrenched, autonomous, corrosive, paradigm）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是 "Rather than X, [subject] chose to Y" 立论式与 "Whether [subject] [V] depends less on X than on Y" 升华式。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握过去分词作后置定语、破折号同位语、动名词短语作状语、less A than B 省略平行、修辞性问句等 5 个高级语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语梳理一场"事件陈述 + 辩证评价"的论证结构：改革展示 → 体制反噬 → 制度性反思升华。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解 publish–review–curate、Reviewed Preprint、DORA、impact factor 等概念，并能在口语与写作中调用。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听自然英语朗读，注意重音：de-COUP-le、PRE-print、val-i-DA-tion、SCRU-ti-ny、RIG-our、en-DORSE、en-TRENCHED、au-TON-o-mous、cor-RO-sive、PAR-a-digm。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音；每词各造一个学术句，优先套用本课五个句型。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：Name the break (Rather than… it chose to decouple X from Y) → Explain the logic (By exposing…, readers judge… instead of…) → The backlash (Yet the establishment pushed back) → Reframing（depends less on X than on Y）.</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做题先分辨"事实 vs 评价"：本文大量是事实陈述与作者评价交织，段末 "Whether this paradigm endures depends less on eLife's courage than on universities and funders" 才是作者真正想说的结论；托福"作者态度题"必考此点。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Rating That Vanished · 2026-08-28 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+300>window.innerWidth)left=window.innerWidth-310;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In January 2023, eLife — founded in 2012 — broke with the academic establishment. Rather than merely competing for prestige, it chose to decouple publication from acceptance. Under its new 'publish–review–curate' model, every manuscript sent for peer review is published as a preprint with reviewers' reports attached — no accept, no reject.",
+  "Central to the reform is radical transparency. Each article now carries an 'eLife Assessment' summarising the significance of the findings and the strength of the validation. By exposing the full record of scrutiny, the journal argues, readers judge quality directly instead of deferring to a proprietary score. Proponents say the approach marries the speed of preprints with the rigour of expert review.",
+  "Yet the establishment pushed back. In late 2024, Clarivate — operator of the Web of Science and the journal impact factor — ruled that eLife's model did not endorse findings through a binding accept–reject decision, and announced the journal would lose its impact factor. The metric, long entrenched in hiring and promotion, was stripped in 2025. eLife's founding editor, Randy Schekman, had already resigned from the board in protest.",
+  "The episode poses a question no statistic settles. Can a discipline of autonomous journals reform a ranking it helped create? eLife insists the impact factor is a corrosive proxy that mistakes the container for its contents; its critics fear the reform hurts researchers in metric-dependent systems. Whether this paradigm endures depends less on eLife's courage than on funders ceasing to outsource judgement to a number."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the central subject of this passage? 本文的核心议题是什么？",opts:["How to write a successful grant proposal in the life sciences","Why the journal impact factor was invented in the 20th century","A leading open-access journal's abandonment of accept–reject peer review and the loss of its impact factor, which ignited a debate about how science should be judged","The discovery of a new method for measuring citation counts automatically"],ans:2,
+   fb:"Correct. 全文围绕 eLife 在 2023 年抛弃『录用/拒稿』的同行评议模式、2025 年因此被剥夺影响因子这一事件展开，并引申出『科学该由期刊品牌还是由内容本身来评价』的辩论。C 精准概括了『事件 + 争论』的双层主题。"},
+  {q:"2. According to the passage, what did eLife's 2023 model actually do? 根据文章，eLife 2023 年的新模式实际做了什么？",opts:["It accepted only the top 10% of submissions and rejected the rest","It published every manuscript sent for peer review as a preprint with the reviewers' reports attached, with no accept or reject decision","It removed peer review entirely and let authors self-publish without oversight","It merged with Nature and Science to form a single mega-journal"],ans:1,
+   fb:"Yes. 第二段与第三段说明：新模式（publish–review–curate）下，每一篇进入同行评议的稿件都会被作为『Reviewed Preprint』发表，附上评审报告与 eLife Assessment，不再有 accept / reject。这正是 Clarivate 认为『与同行评议的验证脱钩』的原因。"},
+  {q:"3. It can be inferred that Clarivate stripped eLife's impact factor mainly because: 可以推断，Clarivate 剥夺 eLife 影响因子的主要原因是：",opts:["eLife had published too few articles to qualify","eLife's model 'decoupled publication from validation by peer review' — papers appeared without a binding accept–reject endorsement","eLife refused to pay the Web of Science subscription fee","the journal's citations had fallen below a fixed threshold for three consecutive years"],ans:1,
+   fb:"Correct — 推理题。第三段指出 Clarivate 判定 eLife 的模式『did not endorse findings through a binding accept–reject decision』，《Science》的报道也写明 Clarivate 的新政策只收录『经同行评议验证（validation）』的内容；由于 eLife 把所有送审稿件无论评审意见如何都发表，Clarivate 认为其发表与评议验证脱钩，故不予授予影响因子。"},
+  {q:"4. In paragraph 3, 'entrenched' most nearly means: 第三段中 entrenched 最接近的意思是？",opts:["newly invented and experimental（新创的、实验性的）","firmly established and difficult to remove（根深蒂固、难以撼动的）","officially banned（被正式禁止的）","randomly assigned（随机分配的）"],ans:1,
+   fb:"Right. entrenched 此处作形容词，意为『根深蒂固的、难以移除的』。『The metric, long entrenched in hiring, promotion and grant decisions』= 这个指标长期深植于招聘、晋升与经费决策之中，暗示其地位稳固到难以改革。"},
+  {q:"5. The author's tone toward eLife's experiment can best be described as: 文章对 eLife 这场实验的语气最准确的是？",opts:["uncritical enthusiasm for the reform（对改革毫无保留的狂热）","biting mockery of both sides（对双方尖刻的嘲讽）","balanced and measured: it acknowledges the reform's internal logic yet notes the real costs to researchers in metric-dependent systems（有分寸的平衡：既认可改革的内在逻辑，也点出其对依赖指标体系的研究者造成的真实代价）","open hostility toward Clarivate（对 Clarivate 的公然敌视）"],ans:2,
+   fb:"Yes. 全文既肯定了 eLife『公开评审、直接呈现质量』的逻辑（段2）与改革勇气，也如实写出其失去影响因子后投稿量骤降、依赖指标体系的地区（如中国、美国）研究者受影响更大等真实代价（段3–4），并以开放问句收尾，属典型的 balanced / measured 学术语气。"},
+  {q:"6. The final paragraph primarily serves to: 最后一段的主要作用是？",opts:["introduce a brand-new experiment conducted in 2026","restate eLife's founding year","reframe the issue from one journal's fate to a systemic question — whether universities and funders will stop outsourcing judgement to a single number（把议题从『一本期刊的遭遇』重新框定为系统性问题：大学与资助方是否会停止把判断外包给一个数字）","advertise Clarivate's Web of Science product"],ans:2,
+   fb:"Correct. 末段以修辞问句『Can a discipline of autonomous journals reform a ranking it helped create?』起手，再用 less on eLife's courage than on universities and funders 把结论上升为『制度性反思』：改革的成败不在 eLife 一家的勇气，而在整个学术评价体系是否愿意改变。这是 op-ed 式『以小见大』的收束。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
