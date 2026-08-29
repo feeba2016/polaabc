@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Fish Before the Great Dying · Pola News</title>
+<style>
+:root{
+  --accent:#c2691c;
+  --accent2:#0e7490;
+  --glow:#fde68a;
+  --bg:#fbf7f0;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#3a2a14;
+  --muted:#8a7a5f;
+  --line:#ecdcc2;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(158,90,31,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#fdf3e3;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.82;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#fbe7cf;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.10)}
+.nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(158,90,31,.35)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(194,105,28,.12);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line)}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(158,90,31,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(253,230,138,.65)}70%{box-shadow:0 0 0 14px rgba(253,230,138,0)}100%{box-shadow:0 0 0 0 rgba(253,230,138,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(253,230,138,.35)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#3a2a14;color:#fdf3e3;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+#tip b{color:var(--glow)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.vcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,#fbf7f0);transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.vcard .w{font-size:20px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:2px}
+.vcard .en{font-size:13px;color:var(--muted)}
+.vcard .spk{margin-top:10px;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px}
+.vcard .spk:hover{transform:scale(1.08)}
+.pat{border-left:4px solid var(--accent2);background:#fdf3e3;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px}
+.pat .p{font-weight:800;color:var(--accent);font-size:16px}
+.pat .ex{margin-top:4px;color:var(--ink)}
+.pat .ex b{color:var(--accent2)}
+.callout{background:#fdf3e3;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.callout h3{font-size:17px;color:var(--accent);margin-bottom:6px}
+.formula{font-family:"Courier New",monospace;background:#3a2a14;color:#fdf3e3;padding:10px 14px;border-radius:8px;display:inline-block;margin:6px 0;font-size:15px}
+.tag{display:inline-block;background:rgba(194,105,28,.12);color:var(--accent);font-size:12px;padding:2px 8px;border-radius:6px;margin-right:6px}
+.q{margin-bottom:18px}
+.q .qt{font-weight:700;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:11px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff;transition:.15s;font-size:15px}
+.opt:hover{border-color:var(--accent)}
+.opt.correct{background:rgba(15,157,88,.13);border-color:var(--good);color:var(--good);font-weight:700}
+.opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad);font-weight:700}
+.opt:disabled{cursor:default}
+.q .fb{margin-top:8px;font-size:14px;display:none}
+.q .fb.show{display:block}
+.cn p{margin-bottom:12px}
+.cn h3{font-size:18px;color:var(--accent);margin:14px 0 8px}
+.cn ul{margin:0 0 12px 22px}
+.cn li{margin-bottom:6px}
+.fact{background:#fbeccb;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:14px 18px;margin:12px 0}
+.about{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.about .avatar{width:84px;height:84px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:42px;flex:none}
+.about .info{flex:1;min-width:240px}
+.about .info p{margin-bottom:8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;min-width:0;height:auto;display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+  .sidebar .brand,.sidebar .sub{width:100%}
+  .nav{display:flex;flex-wrap:wrap;gap:6px}
+  .nav a{margin:0;padding:8px 10px;font-size:13px}
+  .content{padding:20px 16px}
+}
+@media print{
+  .sidebar,#progress,#tip,.play,.spk{display:none!important}
+  body{background:#fff;color:#000}
+  section{box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .layout{display:block}
+  .content{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span>POLA NEWS</div>
+    <div class="sub">English Science News · B1</div>
+    <nav class="nav">
+      <a href="#reading" class="active"><span class="ic">📖</span>全文阅读</a>
+      <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+      <a href="#patterns"><span class="ic">💬</span>句型练习</a>
+      <a href="#grammar"><span class="ic">📘</span>语法点</a>
+      <a href="#quiz"><span class="ic">✅</span>练习测验</a>
+      <a href="#cn"><span class="ic">🌏</span>知识扩展</a>
+      <a href="#about"><span class="ic">⭐</span>关于本课</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <header class="top">
+      <span class="kicker">📰 Pola's Science News · 2026-08-29</span>
+      <h1>The Fish Before the Great Dying</h1>
+      <div class="meta">
+        <span>🎙️ <b>Pola</b> the Quokka</span>
+        <span>📚 Level: <b>B1</b> (ages 10–12)</span>
+        <span>⏱️ <b>4</b> segments · ~60s</span>
+      </div>
+    </header>
+
+    <!-- 1. READING -->
+    <section id="reading">
+      <h2><span class="num">1</span>全文阅读 · Full Story</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击每段右侧的 <b>▶</b> 按钮听 Pola 朗读（优先播放预生成语音，失败则用浏览器原声）。橙色虚线词可点击查看释义。</p>
+
+      <div class="seg">
+        <div class="badge">1</div>
+        <div class="txt">Guess what? <span class="kw" data-def="科学家：研究世界如何运作的人" data-en="a person who studies how the world works">Scientists</span> found a tiny <span class="kw" data-def="化石：保存在岩石中的远古动物或植物形状" data-en="the shape of an old animal or plant kept in rock">fossil</span> that is 254 <span class="kw" data-def="百万：一个很大的数，1,000,000" data-en="a very big number: 1,000,000">million</span> years old! It is so old, it lived just before the biggest disaster in Earth's history — the great <span class="kw" data-def="灭绝：某一类生物完全消失" data-en="when a kind of living thing completely disappears">extinction</span>.</div>
+        <button class="play" data-seg="0" aria-label="Play segment 1">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">2</div>
+        <div class="txt">The fish is called Leolepis. It was only 15 centimeters long — about as long as a pencil! Its body was covered in hard, shiny <span class="kw" data-def="鳞片：覆盖鱼身的小硬片" data-en="small hard plates that cover a fish's body">scales</span> made of the same stuff as your <span class="kw" data-def="牙齿：嘴里坚硬的白色部分" data-en="the hard white parts in your mouth">teeth</span> — like a little suit of <span class="kw" data-def="盔甲：保护身体的坚硬外壳" data-en="hard covering that protects the body">armor</span>.</div>
+        <button class="play" data-seg="1" aria-label="Play segment 2">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">3</div>
+        <div class="txt">Leolepis lived in a huge <span class="kw" data-def="湖：四周都是陆地的大片水域" data-en="a large area of water with land all around it">lake</span> in <span class="kw" data-def="巴西：南美洲的一个大国" data-en="a big country in South America">Brazil</span>. Not long after, most life on Earth died in the greatest mass extinction ever. A giant space <span class="kw" data-def="小行星：太空中飞行的大石头" data-en="a big rock flying in space">asteroid</span> even hit the ground nearby. This little fish shows us the world just before it all changed.</div>
+        <button class="play" data-seg="2" aria-label="Play segment 3">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="badge">4</div>
+        <div class="txt">So even a tiny fish can tell a big story. This is Pola, signing off. Stay curious, keep exploring, and bye for now!</div>
+        <button class="play" data-seg="3" aria-label="Play segment 4">▶</button>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2><span class="num">2</span>词汇表 · Vocabulary</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">🔊 点击卡片上的喇叭按钮听单词发音。</p>
+      <div class="vgrid">
+        <div class="vcard"><div class="w">scientist</div><div class="pos">n.</div><div class="zh">科学家</div><div class="en">a person who studies how the world works</div><button class="spk" data-word="scientist">🔊</button></div>
+        <div class="vcard"><div class="w">fossil</div><div class="pos">n.</div><div class="zh">化石</div><div class="en">the shape of an old animal or plant kept in rock</div><button class="spk" data-word="fossil">🔊</button></div>
+        <div class="vcard"><div class="w">million</div><div class="pos">n.</div><div class="zh">百万</div><div class="en">a very big number: 1,000,000</div><button class="spk" data-word="million">🔊</button></div>
+        <div class="vcard"><div class="w">extinction</div><div class="pos">n.</div><div class="zh">灭绝</div><div class="en">when a kind of living thing completely disappears</div><button class="spk" data-word="extinction">🔊</button></div>
+        <div class="vcard"><div class="w">scales</div><div class="pos">n.</div><div class="zh">鳞片</div><div class="en">small hard plates that cover a fish's body</div><button class="spk" data-word="scales">🔊</button></div>
+        <div class="vcard"><div class="w">teeth</div><div class="pos">n.</div><div class="zh">牙齿</div><div class="en">the hard white parts in your mouth</div><button class="spk" data-word="teeth">🔊</button></div>
+        <div class="vcard"><div class="w">armor</div><div class="pos">n.</div><div class="zh">盔甲</div><div class="en">hard covering that protects the body</div><button class="spk" data-word="armor">🔊</button></div>
+        <div class="vcard"><div class="w">lake</div><div class="pos">n.</div><div class="zh">湖</div><div class="en">a large area of water with land all around it</div><button class="spk" data-word="lake">🔊</button></div>
+        <div class="vcard"><div class="w">Brazil</div><div class="pos">n.</div><div class="zh">巴西</div><div class="en">a big country in South America</div><button class="spk" data-word="Brazil">🔊</button></div>
+        <div class="vcard"><div class="w">asteroid</div><div class="pos">n.</div><div class="zh">小行星</div><div class="en">a big rock flying in space</div><button class="spk" data-word="asteroid">🔊</button></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2><span class="num">3</span>句型练习 · Sentence Patterns</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">试着用这些句型造你自己的句子！</p>
+      <div class="pat"><div class="p">① Guess what? + [Scientists found a tiny fossil that is 254 million years old!]</div><div class="ex">用一个惊讶的事实开场，抓住听众注意力。<br>例：<b>Guess what? Scientists found a tiny fossil that is 254 million years old!</b></div></div>
+      <div class="pat"><div class="p">② The fish is called + [Leolepis].</div><div class="ex">用 is called 给一个新事物命名。<br>例：<b>The fish is called Leolepis.</b></div></div>
+      <div class="pat"><div class="p">③ It was only + [15 centimeters long] — about as long as [a pencil]!</div><div class="ex">用 as ... as 把一个东西和熟悉的事物比大小。<br>例：<b>It was only 15 centimeters long — about as long as a pencil!</b></div></div>
+      <div class="pat"><div class="p">④ This little fish shows us + [the world just before it all changed].</div><div class="ex">用 shows us 说出"这让我们看见了什么"。<br>例：<b>This little fish shows us the world just before it all changed.</b></div></div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2><span class="num">4</span>语法点 · Grammar</h2>
+      <div class="callout">
+        <h3>as ... as —— "和……一样……" 的同级比较</h3>
+        <p>当我们想说"两者程度相同"，英语用 <b>as + 形容词 + as</b> 结构：</p>
+        <p><span class="formula">about as long as a pencil</span></p>
+        <p>• 这里 <b>long</b> 是形容词，夹在 <b>as ... as</b> 中间，表示"和一支铅笔一样长"。</p>
+        <p>• 常见搭配：as big as（和……一样大）、as old as（和……一样老）、as small as（和……一样小）。</p>
+      </div>
+      <div class="callout">
+        <h3>一般过去时 —— 讲"过去发生的事"</h3>
+        <p>描述几亿年前的发现与事件，用动词的过去式 <b>was / were / found / lived / called / hit</b>：</p>
+        <p>• <b>Scientists <span style="color:var(--accent)">found</span> a tiny fossil that is 254 million years old.</b>（科学家发现了一条小鱼化石）</p>
+        <p>• <b>It <span style="color:var(--accent)">was</span> only 15 centimeters long.</b>（它只有 15 厘米长）</p>
+        <p>• <b>A giant space asteroid even <span style="color:var(--accent)">hit</span> the ground nearby.</b>（附近还有小行星撞上地面）</p>
+        <p style="margin-top:8px">对比：讲"一直成立的道理"用一般现在时 <b>This little fish <span style="color:var(--accent)">shows</span> us...</b>（这条小鱼让我们看见……）。时间远的用过去式，普遍真理用现在式。</p>
+        <p style="margin-top:8px"><span class="tag">as ... as 同级比较</span><span class="tag">一般过去时 found/was/hit</span><span class="tag">一般现在时 shows</span></p>
+      </div>
+      <div class="callout">
+        <h3>just before —— "在……之前不久"</h3>
+        <p>用 <b>just before</b> 表示某个时间点紧挨着的前一刻：</p>
+        <p>• <b>It lived <span style="color:var(--accent)">just before</span> the biggest disaster in Earth's history.</b>（它生活在地球史上最大灾难之前不久）</p>
+        <p>• 同族短语：<b>not long after</b>（不久之后）—— <b>Not long after, most life on Earth died.</b>（不久之后，地球上大部分生命灭绝了）</p>
+        <p style="margin-top:8px;color:var(--muted);font-size:14px">小提示：Leolepis 这个名字来自希腊语 lepis（鳞片），加上发现地巴西的 Mato Grosso 州，所以叫 Leolepis matogrossensis。</p>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2><span class="num">5</span>练习测验 · Quiz</h2>
+      <div class="q" data-ans="1">
+        <div class="qt">1. How old is the fish fossil?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Only 10 years old</button>
+          <button class="opt" data-i="1">254 million years old</button>
+          <button class="opt" data-i="2">As old as a dinosaur tooth (50 million)</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">2. How long was Leolepis?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">As long as a bus</button>
+          <button class="opt" data-i="1">About 15 centimeters (as long as a pencil)</button>
+          <button class="opt" data-i="2">As long as a whale</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="2">
+        <div class="qt">3. What covered its body?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">Soft fur</button>
+          <button class="opt" data-i="1">Feathers</button>
+          <button class="opt" data-i="2">Hard shiny scales like teeth (armor)</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="0">
+        <div class="qt">4. Where did Leolepis live?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">A huge lake in Brazil</button>
+          <button class="opt" data-i="1">A desert in Africa</button>
+          <button class="opt" data-i="2">A mountain in China</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+      <div class="q" data-ans="1">
+        <div class="qt">5. What happened not long after?</div>
+        <div class="opts">
+          <button class="opt" data-i="0">The fish became a pet</button>
+          <button class="opt" data-i="1">Most life died in the greatest mass extinction; an asteroid hit nearby</button>
+          <button class="opt" data-i="2">Nothing changed at all</button>
+        </div>
+        <div class="fb"></div>
+      </div>
+    </section>
+
+    <!-- 6. CN EXTENSION -->
+    <section id="cn" class="cn">
+      <h2><span class="num">6</span>中文知识扩展 · 拓展阅读</h2>
+
+      <h3>🐟 一条"穿盔甲"的小鱼，活在大灭绝的前夜</h3>
+      <p>科学家在巴西中西部<b>马托格罗索州（Mato Grosso）</b>发现了一块几乎完整的远古鱼化石，给它起名 <b>Leolepis matogrossensis</b>（中文可译作"马托格罗索鳞鱼"）。它生活在大约 <b>2.54 亿年前</b>的二叠纪晚期，身长只有约 <b>15 厘米</b>——和一支铅笔差不多长。最特别的是，它的身体覆盖着坚硬、闪亮的<b>鳞片</b>，材料和我们的<b>牙齿</b>一样（牙本质 dentine + 类釉质），就像穿了一身小盔甲。</p>
+
+      <h3>🦴 为什么这块化石这么珍贵？</h3>
+      <p>在巴西，这个年代的鱼通常只留下零碎的牙齿、鳞片或骨头碎片。而 Leolepis 是<b>一整条鱼</b>，连头骨、下巴和约 50 排脊状鳞片都保存下来了！它最初还被当地居民误认成一只青蛙。化石由地质学家 <b>Léo Adriano de Oliveira</b> 在 2005 年于一条沟壑中发现，后来存放在马托格罗索联邦大学。论文由里约热内卢州立大学的 <b>Valéria Gallo</b> 团队发表于《Journal of South American Earth Sciences》（2026）。</p>
+
+      <h3>🌍 它活在"大死亡"之前</h3>
+      <p>Leolepis 生活的湖泊，是远古超级大陆<b>冈瓦纳（Gondwana）</b>的一部分（那时南美洲和非洲还连在一起）。就在它死后不久，地球迎来了史上最惨烈的灭绝事件——<b>二叠纪—三叠纪大灭绝（Permian–Triassic extinction）</b>，发生在约 <b>2.52 亿年前</b>，被称为"大死亡（the Great Dying）"：</p>
+      <ul>
+        <li>陆地上约 <b>78%</b> 的物种消失；</li>
+        <li>海洋中多达 <b>95%</b> 的物种灭绝（差不多每 100 种海里动物就有 95 种不见了）；</li>
+        <li>主因被认为是今天西伯利亚一带的<b>超级火山</b>大喷发，改变了气候和海水。</li>
+      </ul>
+      <p>而 Leolepis 化石出土地点，距离南美洲最大的陨石坑 <b>阿拉瓜伊尼亚（Araguainha）</b> 只有约 50 公里。这个坑由一块约 3 公里宽的小行星撞击而成，时间恰好也在"大死亡"前后。科学家认为：撞击可能给南半球生态又添了一记重击，但<b>并不能证明</b>是小行星直接造成了那场大灭绝。</p>
+
+      <div class="fact">💡 一句话记住：一条小小的、穿"牙齿盔甲"的鱼，恰好定格在大灭绝降临前的世界——它是穿越 2.5 亿年寄来的时间胶囊。</div>
+
+      <h3>🪐 小鱼和今天的大鱼有什么关系？</h3>
+      <p>Leolepis 属于<b>辐鳍鱼（ray-finned fish，学名 actinopterygian）</b>——这一类鱼占了今天地球上 96% 的硬骨鱼，金枪鱼、三文鱼、鳕鱼都是它的"远房亲戚"。所以，这条 2.5 亿年前的小鱼，其实是餐桌上许多鱼的古老祖先之一！研究它，能帮我们看清辐鳍鱼早期是怎么演化的。</p>
+
+      <h3>🔍 给小朋友的三点小思考</h3>
+      <ul>
+        <li><b>完整比零碎更有故事。</b>别人只有牙齿和鳞片，而这条完整的鱼让我们看见了整个身体——科学里，"保存得好"往往比"东西大"更珍贵。</li>
+        <li><b>"大死亡"不是小行星一个人干的。</b>火山喷发早就让地球喘不过气，小行星可能只是补了最后一刀。很多大灾难，都是多股力量叠加的结果。</li>
+        <li><b>脚下可能还藏着惊喜。</b>论文作者说，巴西乃至整个南美洲，可能还有更多惊人的化石等着被发现——也许下一次，发现者就是你。</li>
+      </ul>
+      <p>所以下次你路过博物馆的化石柜，不妨想一想：在 2.5 亿年前那个大湖里，曾有一条"穿盔甲"的小鱼，悄悄替我们保存了世界改变之前最后一眼的样子。🐟</p>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2><span class="num">7</span>关于本课 · About</h2>
+      <div class="about">
+        <div class="avatar">🐟</div>
+        <div class="info">
+          <p><b>主播：</b>Pola（短尾矮袋鼠 Quokka），实景记者播报。</p>
+          <p><b>英语等级：</b>B1（适合 10–12 岁小朋友）。</p>
+          <p><b>本期主题：</b>巴西马托格罗索州发现 2.54 亿年前的装甲小鱼 <i>Leolepis matogrossensis</i>，完整化石像时间胶囊，定格在"二叠纪—三叠纪大灭绝（大死亡）"之前；附近即南美洲最大陨石坑阿拉瓜伊尼亚，由里约热内卢州立大学 Gallo 团队 2026 年发表于《Journal of South American Earth Sciences》。</p>
+          <p><b>核心知识点：</b>as ... as 同级比较、一般过去时（found / was / hit）讲过去事件 vs 一般现在时（shows）讲普遍道理、just before / not long after 时间短语；辐鳍鱼与牙齿盔甲鳞片、大灭绝与冈瓦纳古陆。</p>
+          <p><b>日期：</b>2026-08-29</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · 每天一个有趣的英语科学小知识 · 🐟</footer>
+  </main>
+</div>
+<div id="tip"></div>
+
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Guess what? Scientists found a tiny fossil that is 254 million years old! It is so old, it lived just before the biggest disaster in Earth's history — the great extinction.",
+  "The fish is called Leolepis. It was only 15 centimeters long — about as long as a pencil! Its body was covered in hard, shiny scales made of the same stuff as your teeth — like a little suit of armor.",
+  "Leolepis lived in a huge lake in Brazil. Not long after, most life on Earth died in the greatest mass extinction ever. A giant space asteroid even hit the ground nearby. This little fish shows us the world just before it all changed.",
+  "So even a tiny fish can tell a big story. This is Pola, signing off. Stay curious, keep exploring, and bye for now!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 测验 ===== */
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans,10);
+  const fb = q.querySelector('.fb');
+  q.querySelectorAll('.opt').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      if(opt.disabled) return;
+      q.querySelectorAll('.opt').forEach(function(o){ o.disabled = true; });
+      const i = parseInt(opt.dataset.i,10);
+      if(i === ans){
+        opt.classList.add('correct');
+        fb.textContent = '✅ 答对了！';
+        fb.style.color = 'var(--good)';
+      }else{
+        opt.classList.add('wrong');
+        const right = q.querySelector('.opt[data-i="'+ans+'"]');
+        if(right) right.classList.add('correct');
+        fb.textContent = '❌ 再想想，正确答案是高亮的那个。';
+        fb.style.color = 'var(--bad)';
+      }
+      fb.classList.add('show');
+    });
+  });
+});
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1751,6 +1751,23 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-29",
+    "title": "The Fish Before the Great Dying",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-29-the-fish-before-the-great-dying",
+    "url": "lessons/b1/2026-08-29-the-fish-before-the-great-dying.html",
+    "vocab": [
+      {
+        "word": "scientist",
+        "zh": "化石",
+        "ex": "用一个惊讶的事实开场，抓住听众注意力。<br>例：<b>Guess what? Scientists found a tiny fossil that is 254 million years old!</b>"
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -3811,6 +3828,68 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-08-29",
+    "title": "The Roman Shipwreck That Time Forgot",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-29-the-roman-shipwreck-that-time-forgot",
+    "url": "lessons/b2/2026-08-29-the-roman-shipwreck-that-time-forgot.html",
+    "vocab": [
+      {
+        "word": "remarkably",
+        "zh": "非凡地；显著地",
+        "ex": "\"The ship was remarkably preserved after two thousand years underwater.\""
+      },
+      {
+        "word": "preserve",
+        "zh": "保存；保护",
+        "ex": "\"Cold, still water helped preserve the wooden hull.\""
+      },
+      {
+        "word": "laden",
+        "zh": "满载的；装载的",
+        "ex": "\"The ship was laden with hundreds of wine jars.\""
+      },
+      {
+        "word": "amphorae",
+        "zh": "双耳陶罐（复数）",
+        "ex": "\"Roman amphorae carried wine, oil, and fish sauce.\""
+      },
+      {
+        "word": "intact",
+        "zh": "完好无损的；完整的",
+        "ex": "\"The cargo remained intact when the ship sank.\""
+      },
+      {
+        "word": "reconstruct",
+        "zh": "重建；复原",
+        "ex": "\"Divers hope to reconstruct the ancient trade route.\""
+      },
+      {
+        "word": "unrivalled",
+        "zh": "无与伦比的",
+        "ex": "\"The wreck offers an unrivalled view of Roman commerce.\""
+      },
+      {
+        "word": "consequently",
+        "zh": "因此；所以",
+        "ex": "\"The find is rare; consequently, it attracts great attention.\""
+      },
+      {
+        "word": "crossroads",
+        "zh": "交汇处；十字路口",
+        "ex": "\"The Mediterranean was a crossroads of civilisations.\""
+      },
+      {
+        "word": "enduring",
+        "zh": "持久的；恒久的",
+        "ex": "\"Trade built enduring ties between distant peoples.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
@@ -4675,6 +4754,68 @@ const EPISODES = [
         "word": "paradigm",
         "zh": "范式（a dominant conceptual framework or model）",
         "ex": "\"Whether this paradigm endures\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-29",
+    "title": "A Right to a Livable Climate",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-29-a-right-to-a-livable-climate",
+    "url": "lessons/c1/2026-08-29-a-right-to-a-livable-climate.html",
+    "vocab": [
+      {
+        "word": "vindicate",
+        "zh": "维护；证明（权利/主张）正当",
+        "ex": "\"Litigants had long sought to vindicate the right to a stable climate.\""
+      },
+      {
+        "word": "standing",
+        "zh": "诉讼资格；出庭资格（= locus standi）",
+        "ex": "\"The Court granted the association standing to bring the climate claim.\""
+      },
+      {
+        "word": "actio popularis",
+        "zh": "民众诉讼；公益诉讼（欧洲人权法院原则上不受理此类一般公共利益之诉）",
+        "ex": "\"Climate suits risk being dismissed as actio popularis, a general-interest complaint.\""
+      },
+      {
+        "word": "intergenerational",
+        "zh": "代际的；跨代的",
+        "ex": "\"The case reframed climate harm as an intergenerational claim.\""
+      },
+      {
+        "word": "positive obligations",
+        "zh": "积极义务；国家须主动作为以保护权利的义务",
+        "ex": "\"Switzerland failed to meet its positive obligations to mitigate climate change.\""
+      },
+      {
+        "word": "justiciable",
+        "zh": "可诉的；适合由法院裁决的",
+        "ex": "\"Critics ask whether climate policy is truly justiciable in court.\""
+      },
+      {
+        "word": "deference",
+        "zh": "遵从；尊重（司法上对民主机关的遵从）",
+        "ex": "\"Judges should show deference to the democratic margin of appreciation.\""
+      },
+      {
+        "word": "margin of appreciation",
+        "zh": "（欧洲人权法院）裁量余地；成员国在履约方式上的判断空间",
+        "ex": "\"States enjoy a wide margin of appreciation in climate policy.\""
+      },
+      {
+        "word": "subsidiarity",
+        "zh": "辅助性原则；职权应从低层级向上集中，中央仅补位",
+        "ex": "\"Commanding legislation may breach the principle of subsidiarity.\""
+      },
+      {
+        "word": "enforceable",
+        "zh": "可强制执行的；可被法院强制实施的",
+        "ex": "\"A right is only meaningful if it is enforceable in practice.\""
       }
     ]
   }
