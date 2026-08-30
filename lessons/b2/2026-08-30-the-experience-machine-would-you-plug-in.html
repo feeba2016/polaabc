@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Experience Machine: Would You Plug In?</title>
+<style>
+:root{
+  --accent:#5b21b6;
+  --accent2:#c2410c;
+  --bg:#f5f3ff;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#ede9fe;
+  --border:#e0d8f5;
+  --soft:#f3effe;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#8b5cf6);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(91,33,182,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #ddd2f5;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(91,33,182,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(91,33,182,.55);}70%{box-shadow:0 0 0 12px rgba(91,33,182,0);}100%{box-shadow:0 0 0 0 rgba(91,33,182,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #5b21b6;transition:.15s;}
+.kw:hover{background:#ddd6fe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#c4b5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(91,33,182,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ede9fe;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Philosophy</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Experience Machine: Would You Plug In?</h1>
+      <p class="subtitle">体验机：你会选择插上电源吗？｜全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Hook</div>
+            <p>Imagine a machine that could give you any experience you desire — writing a novel, making a friend, or winning a prize. The philosopher Robert Nozick posed this <span class="kw" data-def="引人入胜的；有说服力的">compelling</span> puzzle in 1974, in his book Anarchy, State, and Utopia. His question is simple: would you plug in for life? Inside, no one would know it was unreal. Most people, he noted, would refuse. But why?</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The argument</div>
+            <p>Nozick built the machine to <span class="kw" data-def="反驳；驳斥">refute</span> hedonism, the view that only pleasure gives life value. If pleasure were truly all that mattered, we would gladly plug in for endless joy. Yet we would not. This <span class="kw" data-def="厌恶；反感">aversion</span> shows that something else matters. Pleasure, it seems, is not the only good; we value more than how a life feels from within. In short, <span class="kw" data-def="享乐主义（认为快乐是唯一善）">hedonism</span> cannot explain our choice.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Three reasons</div>
+            <p>Nozick gave three reasons. First, we want to do things, not merely <span class="kw" data-def="模拟；假装">simulate</span> doing them. Second, we want to be a certain kind of person; floating in a tank, one cannot truly be brave or kind. Third, the machine traps us in an <span class="kw" data-def="人造的；虚假的">artificial</span> world, cut off from any <span class="kw" data-def="固有的；内在的">inherent</span> reality beyond human design. Were we to lose that contact, we would lose meaning itself. These limits, <span class="kw" data-def="因此；所以（B2 连接副词）">consequently</span>, reveal what we value most.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why it matters</div>
+            <p>Half a century on, his question feels urgent. As virtual worlds, chatbots, and AI videos grow lifelike, we meet his choice daily. The Matrix turned the idea into film; today's technology makes it nearly real. Nozick believed we would rather touch the <span class="kw" data-def="真实的；本真的">authentic</span> than a perfect fake. Perhaps that longing is human — a need no machine can <span class="kw" data-def="超越；超出">transcend</span>. Would you still plug in?</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="compelling">🔊</button><div class="word">compelling<span class="pos">adj.</span></div><div class="zh">引人入胜的；有说服力的</div><div class="ex">"Nozick posed a compelling puzzle about what we truly value."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="refute">🔊</button><div class="word">refute<span class="pos">v.</span></div><div class="zh">反驳；驳斥</div><div class="ex">"The machine was built to refute the claim that pleasure is all."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hedonism">🔊</button><div class="word">hedonism<span class="pos">n.</span></div><div class="zh">享乐主义（认为快乐是唯一善）</div><div class="ex">"Hedonism holds that pleasure is the only thing of value."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="aversion">🔊</button><div class="word">aversion<span class="pos">n.</span></div><div class="zh">厌恶；反感</div><div class="ex">"Our aversion to the machine suggests we value more than pleasure."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="simulate">🔊</button><div class="word">simulate<span class="pos">v.</span></div><div class="zh">模拟；假装</div><div class="ex">"We want to act, not merely simulate the acting."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="artificial">🔊</button><div class="word">artificial<span class="pos">adj.</span></div><div class="zh">人造的；虚假的</div><div class="ex">"The machine traps us in an artificial world of our own design."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="inherent">🔊</button><div class="word">inherent<span class="pos">adj.</span></div><div class="zh">固有的；内在的</div><div class="ex">"We seek contact with any reality that is inherent, not made."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="consequently">🔊</button><div class="word">consequently<span class="pos">adv.</span></div><div class="zh">因此；所以</div><div class="ex">"The limits are real; consequently, they reveal our deepest values."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="authentic">🔊</button><div class="word">authentic<span class="pos">adj.</span></div><div class="zh">真实的；本真的</div><div class="ex">"We would rather touch the authentic than a flawless fake."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="transcend">🔊</button><div class="word">transcend<span class="pos">v.</span></div><div class="zh">超越；超出</div><div class="ex">"It is a human need that no machine can transcend."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Were [subject] + to + verb, [main clause with would/could].</h3>
+          <div class="zh">将来/现在虚拟语气倒装（省去 if）：把 were 提到句首，表示假想、不大可能发生的情形，语气正式。相当于 "If we were to lose that contact..."。</div>
+          <div class="eg">Were we to lose that contact with reality, we would lose meaning itself.</div>
+          <div class="practice">练习：用 "pleasure / be all that mattered" → <input placeholder="your answer">, we would gladly plug in.</div>
+        </div>
+        <div class="item">
+          <h3>2. If [subject] + were + complement, [main clause with would].</h3>
+          <div class="zh">一般虚拟语气（与现在事实相反）：be 动词用 were（无论人称），主句用 would + 动词原形。书面语中亦可倒装为 "Were pleasure truly all that mattered..."。</div>
+          <div class="eg">If pleasure were truly all that mattered, we would gladly plug in for endless joy.</div>
+          <div class="practice">练习：用 "authenticity / matter most" → <input placeholder="your answer">, we would never choose the fake.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Present participle phrase], [main clause].</h3>
+          <div class="zh">现在分词（非谓语动词）作状语，表伴随或原因。分词逻辑主语须与主句主语一致（此处指 one）。</div>
+          <div class="eg">Floating in a tank, one cannot truly be brave or kind.</div>
+          <div class="practice">练习：用 "cut off from reality" → <input placeholder="your answer">, a person loses contact with the world.</div>
+        </div>
+        <div class="item">
+          <h3>4. [Noun phrase], [appositive] the view / belief that [clause].</h3>
+          <div class="zh">同位语结构：用 "the view / belief that..." 解释前面的抽象名词（如 hedonism），that 引导同位语从句说明其内容。</div>
+          <div class="eg">Nozick challenged hedonism, the view that only pleasure gives life value.</div>
+          <div class="practice">练习：用 "authenticity / matters most" → <input placeholder="your answer">, the idea that reality itself has worth.</div>
+        </div>
+        <div class="item">
+          <h3>5. It is [X] that [clause].</h3>
+          <div class="zh">强调句型（cleft sentence）：用 "It is ... that ..." 突出句子中的某一成分。哲学写作中常用来强调"真正重要的东西"。</div>
+          <div class="eg">It is authenticity that we truly value, not the perfect fake.</div>
+          <div class="practice">练习：用 "our contact with reality" → <input placeholder="your answer"> that gives life its meaning.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气倒装（Inverted subjunctive）</h3>
+          <div class="zh">当 if 条件句含 were / should 时，可省略 if 并把 were 提到主语前，语气更正式、书面化，是 B2 高级写法的标志。本文出现 "Were we to lose that contact..."。</div>
+          <div class="eg">Were we to lose that contact, we would lose meaning itself. / Were pleasure truly all that mattered, we would plug in.</div>
+        </div>
+        <div class="item">
+          <h3>2. 非谓语动词 · 现在分词作状语（Participial adverbial）</h3>
+          <div class="zh">动词加 -ing 放在句首充当状语，表伴随、方式或原因，使句子紧凑而高级。注意分词的逻辑主语必须就是主句主语。</div>
+          <div class="eg"><b>Floating</b> in a tank, one cannot truly be brave or kind. / <b>Cut off</b> from reality, a person loses the world.</div>
+        </div>
+        <div class="item">
+          <h3>3. 定语从句（Relative clauses）</h3>
+          <div class="zh">用 that / which 引导，修饰前面的名词，让指称清晰，是学术写作的骨架。本文 "a need that no machine can transcend" 为限制性定语从句。</div>
+          <div class="eg">...a need <b>that no machine can transcend</b>. / virtual worlds <b>that grow lifelike</b>.</div>
+        </div>
+        <div class="item">
+          <h3>4. 同位语从句（Appositive clause: the view / belief that...）</h3>
+          <div class="zh">抽象名词（view, belief, idea）后用 that 引导同位语从句，解释该名词的具体内容。注意 that 在从句中不作成分，只起连接作用。</div>
+          <div class="eg">hedonism, <b>the view that</b> only pleasure gives life value. / the idea <b>that</b> we value reality.</div>
+        </div>
+        <div class="item">
+          <h3>5. 强调句型（Cleft sentence: It is ... that ...）</h3>
+          <div class="zh">通过 "It is X that Y" 把焦点放在 X 上，强调正是某事物造成了结果。哲学写作中常用来突出"真正重要的价值"。</div>
+          <div class="eg"><b>It is</b> authenticity <b>that</b> we truly value, not the perfect fake.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一个"体验机"的思想实验，为何半个世纪后仍让人不安？</h3>
+        <p>1974 年，美国哲学家<strong>罗伯特·诺齐克（Robert Nozick，1938—2002）</strong>在著作《无政府、国家与乌托邦》（Anarchy, State, and Utopia）里提出一个看似简单的问题：假如有一台机器，能给你任何想要的体验——写一本伟大的小说、交一个知心朋友、赢得一座奖杯，而且你在里面不会察觉这一切是假的——你愿意插上电源、在机器里过完一生吗？诺齐克观察到，大多数人的直觉答案是<strong>"不愿意"</strong>。这个反直觉的回答，正是整个思想实验的支点。</p>
+
+        <h3>它想反驳什么？——享乐主义（hedonism）</h3>
+        <p>诺齐克设计这台机器，是为了<strong>反驳享乐主义</strong>：一种认为"快乐（pleasure）是人生唯一有价值的善"的伦理学立场，其最著名的代表是古典功利主义者边沁（Jeremy Bentham）。享乐主义的逻辑很直接——如果快乐是唯一的好，那能带来最多快乐的东西就该被选择。而体验机恰恰承诺了"无穷无尽、且无法分辨真假"的快乐。按享乐主义，我们理应有压倒性的理由插上去；可我们偏偏不愿意。<strong>这种"反感"（aversion）说明：除了快乐体验，我们还看重别的东西。</strong>于是享乐主义被证伪——至少是不完整的。</p>
+
+        <h3>诺齐克给出的三个理由</h3>
+        <p>为什么我们拒绝？诺齐克列出三点，层层递进：</p>
+        <ul>
+          <li><strong>我们想"真的去做"，而不只是"体验在做"</strong>。我们想要的是写作、交友、夺冠这些<em>行动本身</em>，机器只给"我在做"的错觉。</li>
+          <li><strong>我们想成为某种人</strong>。漂浮在容器里的"一团不定形的东西"无法真正勇敢、善良或有创造力；插上机器在诺齐克看来近乎一种"自杀"——因为你失去了真实的品格。</li>
+          <li><strong>我们想要接触"更深的现实"</strong>。机器把我们困在人造（artificial）世界，切断了与人类设计之外、固有的（inherent）真实之间的联系；一旦失去这种接触，意义本身也会流失。</li>
+        </ul>
+        <p>诺齐克由此得出：<strong>"我们通过想象一台体验机，并意识到自己不会使用它，从而得知——除了体验，还有些东西对我们很重要。"</strong></p>
+
+        <h3>为什么今天读它特别"应景"？</h3>
+        <p>五十年后，诺齐克的问题从哲学书页走进了日常生活。虚拟现实（VR）、元宇宙、AI 聊天机器人、AI 生成的视频与图像，正以越来越逼真的形态包围我们——花一个下午"在元宇宙里"、把聊天机器人当真人朋友、看一段 AI 合成的影像，这些都是体验机问题的微型版本。电影《黑客帝国》（The Matrix，1999）把"你愿意活在完美却虚假的世界吗"搬上银幕，其思想源头正是诺齐克；而诺齐克版里没有邪恶 AI，机器由"友善可信的外星人"提供，纯粹考验人对"真实"（authentic）的依恋。</p>
+
+        <h3>争议与回响：诺齐克说对了吗？</h3>
+        <p>诺齐克当年只是陈述自己的直觉，并未证明"大多数人都不愿插上"。2016 年，荷兰格罗宁根大学的 Frank Hindriks 与法国索邦大学的 Igor Douven 真的做了问卷调查去验证。后续研究还提出反对意见：比如"现状偏差"（status quo bias，人天然厌恶改变）和"损失厌恶"可能才是我们拒绝的原因，而非对真实的原则性坚持；又比如，如果机器足够先进，能模拟努力、挣扎与道德成长本身，它或许就能装下我们看重的一切。2023 年《纽约客》相关讨论甚至指出，在孤独与社交疏离加剧的时代，一部分人可能比诺齐克预想的更愿意"插上"。无论如何，体验机已成为当代关于<strong>"幸福感（well-being）"与"真实性（authenticity）"之争</strong>中最常被引用的思想实验之一。</p>
+
+        <h3>给 B2 学习者的延伸思考</h3>
+        <p>这个实验的妙处，在于它用一个"假想机器"逼我们说出自己真正在乎什么。对学英语的你而言，读懂它不只是背几个词，更是练习一种思维：<strong>先假设一个极端情形（if... were...），再看我们的直觉暴露出什么深层价值。</strong>下次面对"虚拟 vs 真实""AI 生成 vs 亲手创造"的选择时，不妨自问：我拒绝，是因为快乐不够，还是因为我想"真的去做、成为、触碰真实"？这种把抽象概念落到具体抉择的能力，正是 B2 向更高阶学术英语迈进的关键。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标（B2 中高级）</h3>
+        <div class="goal"><span class="ic">🌟</span><div>了解罗伯特·诺齐克 1974 年提出的"体验机"思想实验，能复述"为什么大多数人宁愿真实也不愿插上电源"的核心论证。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 CEFR B2 核心学术词汇（compelling, refute, hedonism, aversion, simulate, artificial, inherent, consequently, authentic, transcend）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会虚拟语气倒装（Were... to... / If... were...）、现在分词作状语、同位语从句与强调句型等高级句式。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>辨析定语从句、同位语从句与强调句在哲学论述中的作用，提升学术英语表达力。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立现实联系：把"体验机问题"映射到 VR / AI / 元宇宙时代关于"真实性"的讨论，培养批判性思维。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读英文朗读，模仿学术英语的语调与停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，并用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>仿写两个虚拟语气倒装句（Were... to... / If... were...），体会正式书面语感。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div>读"中文知识扩展"，再用自己的话用英文概括：为什么诺齐克认为我们不应插上体验机？</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English · The Experience Machine: Would You Plug In? · 2026-08-30</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Imagine a machine that could give you any experience you desire — writing a novel, making a friend, or winning a prize. The philosopher Robert Nozick posed this compelling puzzle in 1974, in his book Anarchy, State, and Utopia. His question is simple: would you plug in for life? Inside, no one would know it was unreal. Most people, he noted, would refuse. But why?",
+  "Nozick built the machine to refute hedonism, the view that only pleasure gives life value. If pleasure were truly all that mattered, we would gladly plug in for endless joy. Yet we would not. This aversion shows that something else matters. Pleasure, it seems, is not the only good; we value more than how a life feels from within. In short, hedonism cannot explain our choice.",
+  "Nozick gave three reasons. First, we want to do things, not merely simulate doing them. Second, we want to be a certain kind of person; floating in a tank, one cannot truly be brave or kind. Third, the machine traps us in an artificial world, cut off from any inherent reality beyond human design. Were we to lose that contact, we would lose meaning itself. These limits, consequently, reveal what we value most.",
+  "Half a century on, his question feels urgent. As virtual worlds, chatbots, and AI videos grow lifelike, we meet his choice daily. The Matrix turned the idea into film; today's technology makes it nearly real. Nozick believed we would rather touch the authentic than a perfect fake. Perhaps that longing is human — a need no machine can transcend. Would you still plug in?"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Who proposed the Experience Machine, and when? 谁在何时提出了'体验机'思想实验？",opts:["Robert Nozick, in 1974 罗伯特·诺齐克，1974年","Jeremy Bentham, in 1789 边沁，1789年","Plato, in ancient Greece 柏拉图，古希腊","The Matrix directors, in 1999 黑客帝国导演，1999年"],ans:0,
+   fb:"Correct! 诺齐克在 1974 年《无政府、国家与乌托邦》中提出体验机。"},
+  {q:"What theory did Nozick aim to refute with the machine? 诺齐克想用这台机器反驳哪种理论？",opts:["Hedonism — the view that only pleasure is good 享乐主义：快乐是唯一善","Democracy 民主","Relativism 相对主义","Determinism 决定论"],ans:0,
+   fb:"Yes! 体验机旨在反驳享乐主义（hedonism），即'快乐是人生唯一价值'。"},
+  {q:"Why do most people refuse to plug in, according to the text? 据本文，大多数人为什么拒绝插上？",opts:["They value doing, being a person, and contact with reality 他们看重行动、成为某种人、以及与真实接触","The machine is too expensive 机器太贵","They cannot find a plug 找不到插座","Hedonism is illegal 享乐主义违法"],ans:0,
+   fb:"Right! 诺齐克给出三个理由：想真去做、想成为某种人、想接触更深层的真实。"},
+  {q:"'Were we to lose that contact, we would lose meaning itself.' 这句话属于哪种语法？",opts:["Inverted subjunctive (虚拟语气倒装)","Simple past 一般过去时","Passive voice 被动语态","Imperative 祈使句"],ans:0,
+   fb:"Correct! 这是省略 if 的将来虚拟语气倒装，相当于 If we were to lose that contact..."},
+  {q:"Which word means '固有的；内在的'? 哪个词意思是'固有的；内在的'？",opts:["inherent","artificial","compelling","aversion"],ans:0,
+   fb:"Yes! inherent = 固有的、内在的（如 inherent reality 固有真实）。"},
+  {q:"How does the text connect Nozick's idea to today? 本文如何把诺齐克的思想与当下联系起来？",opts:["The Matrix and VR/AI make his question urgent today 《黑客帝国》与 VR/AI 让这个问题在当下变得紧迫","It is only of historical interest 它只有历史价值","It proves hedonism is correct 它证明享乐主义正确","It has no modern link 它与现代无关"],ans:0,
+   fb:"Right! 文中指出《黑客帝国》与今天的 VR、聊天机器人、AI 视频让'插不插'成为日常抉择。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#5b21b6';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

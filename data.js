@@ -2356,6 +2356,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-08-29",
+    "title": "The Little Seed",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-29-the-little-seed",
+    "url": "lessons/a1/2026-08-29-the-little-seed.html",
+    "vocab": [
+      {
+        "word": "seed",
+        "zh": "种子",
+        "ex": "\"I plant a seed in the dirt.\""
+      },
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "\"The sun shines bright.\""
+      },
+      {
+        "word": "water",
+        "zh": "水",
+        "ex": "\"The seed drinks water.\""
+      },
+      {
+        "word": "root",
+        "zh": "根",
+        "ex": "\"A small root grows down.\""
+      },
+      {
+        "word": "leaf",
+        "zh": "叶子",
+        "ex": "\"A green leaf grows up.\""
+      },
+      {
+        "word": "flower",
+        "zh": "花",
+        "ex": "\"A pretty flower opens.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -3080,6 +3122,110 @@ const EPISODES = [
         "word": "pool",
         "zh": "游泳池",
         "ex": "\"You can swim in a pool.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-29",
+    "title": "Busy Bees",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-29-busy-bees",
+    "url": "lessons/a2/2026-08-29-busy-bees.html",
+    "vocab": [
+      {
+        "word": "bee",
+        "zh": "蜜蜂",
+        "ex": "\"Bees are tiny but important.\""
+      },
+      {
+        "word": "flower",
+        "zh": "花",
+        "ex": "\"They fly from flower to flower.\""
+      },
+      {
+        "word": "honey",
+        "zh": "蜂蜜",
+        "ex": "\"Bees make honey, too.\""
+      },
+      {
+        "word": "pollen",
+        "zh": "花粉",
+        "ex": "\"They carry pollen to flowers.\""
+      },
+      {
+        "word": "pollinate",
+        "zh": "传粉（帮花结籽）",
+        "ex": "\"Bees pollinate flowers.\""
+      },
+      {
+        "word": "protect",
+        "zh": "保护",
+        "ex": "\"Let's protect bees together!\""
+      },
+      {
+        "word": "garden",
+        "zh": "花园",
+        "ex": "\"Plant flowers in your garden.\""
+      },
+      {
+        "word": "important",
+        "zh": "重要的",
+        "ex": "\"Bees are very important!\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-30",
+    "title": "Space Wow Facts",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-30-space-wow-facts",
+    "url": "lessons/a2/2026-08-30-space-wow-facts.html",
+    "vocab": [
+      {
+        "word": "planet",
+        "zh": "行星（像地球一样绕太阳转的大球）",
+        "ex": "\"Jupiter is the biggest planet.\""
+      },
+      {
+        "word": "ring",
+        "zh": "环（这里指土星周围的光环）",
+        "ex": "\"Saturn has beautiful rings.\""
+      },
+      {
+        "word": "storm",
+        "zh": "风暴（又大又猛的气旋）",
+        "ex": "\"Jupiter has a giant red storm.\""
+      },
+      {
+        "word": "spin",
+        "zh": "旋转；自转",
+        "ex": "\"The planet spins fast.\""
+      },
+      {
+        "word": "moon",
+        "zh": "卫星（绕行星转的天体，如月亮）",
+        "ex": "\"Uranus has 27 moons.\""
+      },
+      {
+        "word": "universe",
+        "zh": "宇宙（包含所有星星和行星的空间）",
+        "ex": "\"The universe is full of wonders.\""
+      },
+      {
+        "word": "surprise",
+        "zh": "惊喜；使惊讶",
+        "ex": "\"Space is full of surprises!\""
+      },
+      {
+        "word": "night",
+        "zh": "夜晚",
+        "ex": "\"Look up at the night sky.\""
       }
     ]
   },
@@ -3886,6 +4032,68 @@ const EPISODES = [
         "word": "enduring",
         "zh": "持久的；恒久的",
         "ex": "\"Trade built enduring ties between distant peoples.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-30",
+    "title": "The Experience Machine Would You Plug In",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-30-the-experience-machine-would-you-plug-in",
+    "url": "lessons/b2/2026-08-30-the-experience-machine-would-you-plug-in.html",
+    "vocab": [
+      {
+        "word": "compelling",
+        "zh": "引人入胜的；有说服力的",
+        "ex": "\"Nozick posed a compelling puzzle about what we truly value.\""
+      },
+      {
+        "word": "refute",
+        "zh": "反驳；驳斥",
+        "ex": "\"The machine was built to refute the claim that pleasure is all.\""
+      },
+      {
+        "word": "hedonism",
+        "zh": "享乐主义（认为快乐是唯一善）",
+        "ex": "\"Hedonism holds that pleasure is the only thing of value.\""
+      },
+      {
+        "word": "aversion",
+        "zh": "厌恶；反感",
+        "ex": "\"Our aversion to the machine suggests we value more than pleasure.\""
+      },
+      {
+        "word": "simulate",
+        "zh": "模拟；假装",
+        "ex": "\"We want to act, not merely simulate the acting.\""
+      },
+      {
+        "word": "artificial",
+        "zh": "人造的；虚假的",
+        "ex": "\"The machine traps us in an artificial world of our own design.\""
+      },
+      {
+        "word": "inherent",
+        "zh": "固有的；内在的",
+        "ex": "\"We seek contact with any reality that is inherent, not made.\""
+      },
+      {
+        "word": "consequently",
+        "zh": "因此；所以",
+        "ex": "\"The limits are real; consequently, they reveal our deepest values.\""
+      },
+      {
+        "word": "authentic",
+        "zh": "真实的；本真的",
+        "ex": "\"We would rather touch the authentic than a flawless fake.\""
+      },
+      {
+        "word": "transcend",
+        "zh": "超越；超出",
+        "ex": "\"It is a human need that no machine can transcend.\""
       }
     ]
   },
@@ -4816,6 +5024,68 @@ const EPISODES = [
         "word": "enforceable",
         "zh": "可强制执行的；可被法院强制实施的",
         "ex": "\"A right is only meaningful if it is enforceable in practice.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-30",
+    "title": "The Cartography of Feeling",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-30-the-cartography-of-feeling",
+    "url": "lessons/c1/2026-08-30-the-cartography-of-feeling.html",
+    "vocab": [
+      {
+        "word": "untranslatability",
+        "zh": "不可译性；某概念无法在另一语言中找到对等表达的属性",
+        "ex": "\"Such untranslatability is not a lexical accident but a window onto culture.\""
+      },
+      {
+        "word": "taxonomy",
+        "zh": "分类体系；对概念加以切分与归类的系统",
+        "ex": "\"Emotion words encode culturally evolved taxonomies rather than universal givens.\""
+      },
+      {
+        "word": "colexification",
+        "zh": "共词化；同一个词同时命名两个相关概念的现象",
+        "ex": "\"The team estimated emotion semantics using colexification across 2,474 languages.\""
+      },
+      {
+        "word": "valence",
+        "zh": "效价；情绪的愉悦或不悦程度",
+        "ex": "\"All language families differentiate emotions primarily by valence.\""
+      },
+      {
+        "word": "arousal",
+        "zh": "唤醒度；伴随情绪的生理激活水平",
+        "ex": "\"Sadness and anger differ less in valence than in arousal.\""
+      },
+      {
+        "word": "salience",
+        "zh": "突显性；某事物在认知或社会层面的显著程度",
+        "ex": "\"Shame carries a social salience bound to reputation and obligation.\""
+      },
+      {
+        "word": "construe",
+        "zh": "解读为；理解、阐释为",
+        "ex": "\"The East–West divide was long construed as the master variable.\""
+      },
+      {
+        "word": "dichotomy",
+        "zh": "二分对立；把复杂现象简化为两个互斥类别",
+        "ex": "\"The familiar dichotomy simply failed to hold under scrutiny.\""
+      },
+      {
+        "word": "confound",
+        "zh": "（作为干扰变量）混淆、搅乱因果判断",
+        "ex": "\"National value scores may confound as much as they clarify.\""
+      },
+      {
+        "word": "correlational",
+        "zh": "相关性的；只显示变量共变，不能证明因果",
+        "ex": "\"The design is correlational, so causal claims remain premature.\""
       }
     ]
   }

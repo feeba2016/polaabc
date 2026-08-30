@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Space Wow Facts — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#4f46e5;
+  --accent2:#818cf8;
+  --bg:#eef2ff;
+  --card:#ffffff;
+  --text:#1e1b4b;
+  --muted:#6b7280;
+  --highlight:#e0e7ff;
+  --border:#c7d2fe;
+  --soft:#eef2ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#a5b4fc);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(79,70,229,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #c7d2fe;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(79,70,229,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,70,229,.55);}70%{box-shadow:0 0 0 12px rgba(79,70,229,0);}100%{box-shadow:0 0 0 0 rgba(79,70,229,0);}}
+.zh-trans{color:var(--muted);font-size:14px;margin-top:8px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #4f46e5;transition:.15s;}
+.kw:hover{background:#c7d2fe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#a5b4fc;}
+.trans-toggle{background:var(--accent2);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.factbox{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border:2px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.factbox h3{margin:0 0 8px;color:var(--accent);font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(79,70,229,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e0e7ff;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Fun Facts</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Space Wow Facts</h1>
+      <p class="subtitle">2026年8月30日 · 趣味知识｜太空冷知识 —— 全文阅读（点蓝色词看释义，可显示中文翻译）</p>
+      <button class="trans-toggle" id="transToggle">🇨🇳 显示中文翻译</button>
+
+      <div class="seg">
+        <div class="num">1</div>
+        <div class="body">
+          <div class="role">Story · 开场</div>
+          <p>Space is full of <span class="kw" data-tip="<b>surprise</b> 惊喜：让人意想不到的事。">surprises</span>! Did you know that <span class="kw" data-tip="<b>Jupiter</b> 木星：太阳系里最大的行星。">Jupiter</span> is the biggest <span class="kw" data-tip="<b>planet</b> 行星：像地球一样绕太阳转动的大球。">planet</span>? It is so big that more than 1,300 <span class="kw" data-tip="<b>Earth</b> 地球：我们生活的行星。">Earths</span> could fit inside it.</p>
+          <div class="zh-trans">太空充满了惊喜！你知道木星是太阳系里最大的行星吗？它实在太大了，超过 1300 个地球都能装进它里面。</div>
+        </div>
+        <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="num">2</div>
+        <div class="body">
+          <div class="role">Story · 木星</div>
+          <p>A day on Jupiter is very short. The <span class="kw" data-tip="<b>planet</b> 行星：像地球一样绕太阳转动的大球。">planet</span> <span class="kw" data-tip="<b>spins</b> 自转：像陀螺一样转动。">spins</span> fast. One day is only 10 hours. On Earth, one day is 24 hours. Jupiter has a giant red <span class="kw" data-tip="<b>storm</b> 风暴：又大又猛的风雨或气旋。">storm</span>. The storm is bigger than Earth!</p>
+          <div class="zh-trans">木星上的一天很短。它自转得很快。木星上的一天只有 10 小时。在地球上，一天是 24 小时。木星上还有一个巨大的红色风暴，比地球还大！</div>
+        </div>
+        <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="num">3</div>
+        <div class="body">
+          <div class="role">Story · 土星</div>
+          <p><span class="kw" data-tip="<b>Saturn</b> 土星：以美丽行星环闻名的行星。">Saturn</span> is famous for its beautiful <span class="kw" data-tip="<b>ring</b> 环：土星周围一圈圈的光环。">rings</span>. The rings are made of <span class="kw" data-tip="<b>ice</b> 冰：水在寒冷处结成的固体。">ice</span> and <span class="kw" data-tip="<b>rock</b> 岩石：坚硬的石头。">rock</span>. Some pieces are as small as sand. Others are as big as a house! More than 700 Earths fit inside Saturn.</p>
+          <div class="zh-trans">土星以它美丽的行星环而闻名。这些环由冰和岩石组成。有的碎片小如沙粒，有的大如房屋！超过 700 个地球能装进土星里。</div>
+        </div>
+        <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+      </div>
+
+      <div class="seg">
+        <div class="num">4</div>
+        <div class="body">
+          <div class="role">Story · 天王星</div>
+          <p><span class="kw" data-tip="<b>Uranus</b> 天王星：一颗"躺着"自转的行星。">Uranus</span> is a strange planet. It spins on its side, like a rolling ball. Uranus has 27 <span class="kw" data-tip="<b>moon</b> 卫星：绕着行星转的天体，像月亮绕地球。">moons</span>. The <span class="kw" data-tip="<b>universe</b> 宇宙：包含所有星星和行星的浩瀚空间。">universe</span> is full of wonders. Look up at the night sky and wonder!</p>
+          <div class="zh-trans">天王星是一颗奇怪的行星。它"躺着"自转，像一个滚动的球。天王星有 27 颗卫星。宇宙充满奇迹。抬头看看夜晚的天空，去想象吧！</div>
+        </div>
+        <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">词汇表 · Vocabulary</h2>
+      <p class="subtitle">8 个核心词汇，点击 🔊 听发音（点词卡右上角小喇叭）。</p>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="planet">🔊</button><div class="word">planet<span class="pos">n.</span></div><div class="zh">行星（像地球一样绕太阳转的大球）</div><div class="ex">"Jupiter is the biggest planet."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ring">🔊</button><div class="word">ring<span class="pos">n.</span></div><div class="zh">环（这里指土星周围的光环）</div><div class="ex">"Saturn has beautiful rings."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="storm">🔊</button><div class="word">storm<span class="pos">n.</span></div><div class="zh">风暴（又大又猛的气旋）</div><div class="ex">"Jupiter has a giant red storm."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="spin">🔊</button><div class="word">spin<span class="pos">v.</span></div><div class="zh">旋转；自转</div><div class="ex">"The planet spins fast."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="moon">🔊</button><div class="word">moon<span class="pos">n.</span></div><div class="zh">卫星（绕行星转的天体，如月亮）</div><div class="ex">"Uranus has 27 moons."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="universe">🔊</button><div class="word">universe<span class="pos">n.</span></div><div class="zh">宇宙（包含所有星星和行星的空间）</div><div class="ex">"The universe is full of wonders."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="surprise">🔊</button><div class="word">surprise<span class="pos">n./v.</span></div><div class="zh">惊喜；使惊讶</div><div class="ex">"Space is full of surprises!"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="night">🔊</button><div class="word">night<span class="pos">n.</span></div><div class="zh">夜晚</div><div class="ex">"Look up at the night sky."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">句型练习 · Sentence Patterns</h2>
+      <p class="subtitle">4 个实用句型，读一读，再试着填空。</p>
+      <div class="card">
+        <div class="item">
+          <h3>① Did you know that + 句子?</h3>
+          <div class="zh">用来分享一个有趣的冷知识。</div>
+          <div class="eg">Did you know that <u>Jupiter is the biggest planet</u>?</div>
+          <div class="practice">✏️ 你的句子：Did you know that <input type="text" placeholder="（例如：the Moon has no air）"> ?</div>
+        </div>
+        <div class="item">
+          <h3>② [主语] is so + 形容词 + that + 句子</h3>
+          <div class="zh">表示"太……以至于……"。</div>
+          <div class="eg">Jupiter is <b>so big</b> that 1,300 Earths could fit inside it.</div>
+          <div class="practice">✏️ 你的句子：<input type="text" placeholder="（主语）"> is so <input type="text" placeholder="形容词"> that <input type="text" placeholder="结果"> .</div>
+        </div>
+        <div class="item">
+          <h3>③ [数字] + 复数名词</h3>
+          <div class="zh">用数字描述数量。</div>
+          <div class="eg">Uranus has <b>27 moons</b>. / More than <b>700 Earths</b> fit inside Saturn.</div>
+          <div class="practice">✏️ 你的句子：There are <input type="text" placeholder="数字"> <input type="text" placeholder="复数名词"> .</div>
+        </div>
+        <div class="item">
+          <h3>④ Look + 介词短语 + and + 动词</h3>
+          <div class="zh">发出一个看的动作建议。</div>
+          <div class="eg">Look <b>up at the night sky</b> and <b>wonder</b>!</div>
+          <div class="practice">✏️ 你的句子：Look <input type="text" placeholder="介词短语"> and <input type="text" placeholder="动词"> !</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">语法点 · Grammar</h2>
+      <p class="subtitle">A2 级别重点：比较级、数字复数、情态动词、一般现在时。</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. 比较级（Comparative: -er / more）</h3>
+          <div class="zh">短形容词加 -er 构成比较级，表示"更……"。</div>
+          <div class="eg">big → bigger　·　The storm is <b>bigger than</b> Earth.</div>
+        </div>
+        <div class="item">
+          <h3>2. 数字与可数名词复数</h3>
+          <div class="zh">数字大于 1 时，名词用复数，通常加 -s。</div>
+          <div class="eg">1,300 <b>Earths</b>　·　27 <b>moons</b>　·　700 <b>Earths</b></div>
+        </div>
+        <div class="item">
+          <h3>3. 情态动词 could（能力 / 可能性）</h3>
+          <div class="zh">could 表示"能够、可以"，这里描述一种可能性。</div>
+          <div class="eg">1,300 Earths <b>could fit</b> inside Jupiter.</div>
+        </div>
+        <div class="item">
+          <h3>4. 一般现在时表事实</h3>
+          <div class="zh">描述永恒、客观的事实，用一般现在时。</div>
+          <div class="eg">Jupiter <b>is</b> the biggest planet. Saturn <b>has</b> beautiful rings.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">练习测验 · Quiz</h2>
+      <p class="subtitle">5 道选择题，圈出正确答案，点「Check 检查」看反馈。</p>
+      <div class="q">
+        <div class="qt">1. What is the biggest planet in the solar system?</div>
+        <div class="opts">
+          <label><input type="radio" name="q1"> A. Earth</label>
+          <label class="correct"><input type="radio" name="q1"> B. Jupiter</label>
+          <label><input type="radio" name="q1"> C. Saturn</label>
+        </div>
+        <button class="check" data-q="q1">Check 检查</button>
+        <div class="feedback" id="fb-q1"></div>
+      </div>
+      <div class="q">
+        <div class="qt">2. How long is one day on Jupiter?</div>
+        <div class="opts">
+          <label><input type="radio" name="q2"> A. 24 hours</label>
+          <label class="correct"><input type="radio" name="q2"> B. 10 hours</label>
+          <label><input type="radio" name="q2"> C. 12 years</label>
+        </div>
+        <button class="check" data-q="q2">Check 检查</button>
+        <div class="feedback" id="fb-q2"></div>
+      </div>
+      <div class="q">
+        <div class="qt">3. What are Saturn's rings made of?</div>
+        <div class="opts">
+          <label class="correct"><input type="radio" name="q3"> A. ice and rock</label>
+          <label><input type="radio" name="q3"> B. water and sand</label>
+          <label><input type="radio" name="q3"> C. gold</label>
+        </div>
+        <button class="check" data-q="q3">Check 检查</button>
+        <div class="feedback" id="fb-q3"></div>
+      </div>
+      <div class="q">
+        <div class="qt">4. How many moons does Uranus have?</div>
+        <div class="opts">
+          <label class="correct"><input type="radio" name="q4"> A. 27</label>
+          <label><input type="radio" name="q4"> B. 1</label>
+          <label><input type="radio" name="q4"> C. 700</label>
+        </div>
+        <button class="check" data-q="q4">Check 检查</button>
+        <div class="feedback" id="fb-q4"></div>
+      </div>
+      <div class="q">
+        <div class="qt">5. What is the giant red spot on Jupiter?</div>
+        <div class="opts">
+          <label><input type="radio" name="q5"> A. a ring</label>
+          <label class="correct"><input type="radio" name="q5"> B. a storm</label>
+          <label><input type="radio" name="q5"> C. a moon</label>
+        </div>
+        <button class="check" data-q="q5">Check 检查</button>
+        <div class="feedback" id="fb-q5"></div>
+      </div>
+    </section>
+    <!-- 6. EXTENSION (Chinese) -->
+    <section id="ext">
+      <h2 class="sec">中文知识扩展</h2>
+      <p class="subtitle">用中文多了解一点，帮你看懂英文课文背后的故事。</p>
+      <div class="factbox">
+        <h3>🔭 本节课趣味知识一览</h3>
+        <p>木星是太阳系最大的行星；土星有最亮最美的行星环；天王星"躺着"自转。这些都不是传说，而是科学家用望远镜和探测器观察到的真实事实。</p>
+      </div>
+      <div class="card ext">
+        <h3>① 太阳系八大行星</h3>
+        <p>太阳是中心，周围有八颗大行星：水星、金星、地球、火星、木星、土星、天王星、海王星。木星最大，水星最小。我们课文里讲到的木星、土星、天王星，分别是第五、第六、第七颗行星。</p>
+        <h3>② 木星为什么这么大？</h3>
+        <p>木星是一颗"气态巨行星"，主要由氢和氦组成，和太阳的材料很像。它的质量比太阳系里其他所有行星加起来的总和还要大两倍多，所以能装下 1300 多个地球。</p>
+        <h3>③ 土星的环</h3>
+        <p>1610 年，科学家伽利略第一次用望远镜看到了土星环。这些环主要由无数小块的冰和岩石组成，有的比沙粒还小，有的像房子一样大。虽然木星、天王星、海王星也有环，但土星的环最大最亮。</p>
+        <h3>④ 天王星"躺着转"</h3>
+        <p>大多数行星像陀螺一样"站着"自转，但天王星的自转轴几乎横躺（倾斜约 98 度），看起来就像在"滚着"绕太阳转。科学家猜想，这可能源于很久以前它被一个巨大天体撞过。天王星有 27 颗卫星。</p>
+        <h3>⑤ 动手做：画一幅"我的太空图"</h3>
+        <ul>
+          <li>在一张纸上画太阳和几颗行星。</li>
+          <li>用英语标出你最喜欢的行星名字：Jupiter / Saturn / Uranus。</li>
+          <li>在旁边写一句：Did you know that ... ? 把你今天学到的冷知识写上去！</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">关于本课</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>认识太阳系三个有趣的太空冷知识（木星最大、土星有环、天王星躺着转）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会用比较级 <b>bigger than</b> 描述大小。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语说 <b>"Did you know that ... ?"</b> 来分享冷知识。</div></div>
+        <h3 style="color:var(--accent);">💡 学习建议</h3>
+        <div class="goal"><span class="ic">👨‍👩‍👧</span><div>晚上和爸爸妈妈一起抬头看星星，试试用英语说出一颗行星的名字。</div></div>
+        <div class="goal"><span class="ic">🗣️</span><div>把今天学到的三个事实讲给朋友听，用 "Did you know that ... ?" 开头。</div></div>
+        <div class="goal"><span class="ic">🎨</span><div>完成"我的太空图"，贴在书桌旁，每天记一个太空小知识。</div></div>
+        <button class="print-btn" id="printBtn" style="margin-top:14px;">🖨️ 打印本课</button>
+      </div>
+      <p class="subtitle" style="margin-top:10px;">Pola News · 趣味知识 Fun Facts · 适合 A2 水平（7-12 岁）· 事实来源：NASA 官方儿童科普资料</p>
+    </section>
+  </main>
+</div>
+
+<div id="tip"></div>
+<footer>POLA NEWS · Learn English with Pola the Quokka · 每日一词一世界</footer>
+<script>
+/* ---------- Progress bar ---------- */
+const progress=document.getElementById('progress');
+function updateProgress(){
+  const h=document.documentElement;
+  const sc=h.scrollTop||document.body.scrollTop;
+  const max=h.scrollHeight-h.clientHeight;
+  progress.style.width=(max>0?(sc/max*100):0)+'%';
+}
+document.addEventListener('scroll',updateProgress);
+updateProgress();
+
+/* ---------- Sidebar navigation ---------- */
+const links=document.querySelectorAll('nav.sidebar a');
+const sections=document.querySelectorAll('main section');
+function activate(name){
+  links.forEach(a=>a.classList.toggle('active',a.dataset.sec===name));
+  sections.forEach(s=>s.classList.toggle('active',s.id===name));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+links.forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();
+  activate(a.dataset.sec);
+  document.getElementById('sidebar').classList.remove('open');
+}));
+
+/* ---------- Mobile menu ---------- */
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('open'));
+
+/* ---------- Keyword tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(k=>{
+  k.addEventListener('mouseenter',e=>{
+    tip.innerHTML=k.getAttribute('data-tip')||'';
+    tip.style.display='block';
+    const r=k.getBoundingClientRect();
+    let top=r.bottom+8; let left=r.left;
+    if(left+260>window.innerWidth) left=window.innerWidth-270;
+    tip.style.top=top+'px'; tip.style.left=left+'px';
+  });
+  k.addEventListener('mouseleave',()=>{tip.style.display='none';});
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Chinese translation toggle ---------- */
+const transBtn=document.getElementById('transToggle');
+let transOn=false;
+transBtn.addEventListener('click',()=>{
+  transOn=!transOn;
+  document.querySelectorAll('.zh-trans').forEach(d=>{d.style.display=transOn?'block':'none';});
+  transBtn.textContent=transOn?'🇨🇳 隐藏中文翻译':'🇨🇳 显示中文翻译';
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Space is full of surprises! Did you know that Jupiter is the biggest planet? It is so big that more than 1,300 Earths could fit inside it.",
+  "A day on Jupiter is very short. The planet spins fast. One day is only 10 hours. On Earth, one day is 24 hours. Jupiter has a giant red storm. The storm is bigger than Earth!",
+  "Saturn is famous for its beautiful rings. The rings are made of ice and rock. Some pieces are as small as sand. Others are as big as a house! More than 700 Earths fit inside Saturn.",
+  "Uranus is a strange planet. It spins on its side, like a rolling ball. Uranus has 27 moons. The universe is full of wonders. Look up at the night sky and wonder!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz check ---------- */
+document.querySelectorAll('.check').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const name=btn.dataset.q;
+    const fb=document.getElementById('fb-'+name);
+    const checked=document.querySelector('input[name="'+name+'"]:checked');
+    if(!checked){fb.textContent='请先选择一个答案哦！';fb.style.color='#b45309';return;}
+    const lab=checked.closest('label');
+    const correct=lab.classList.contains('correct');
+    if(correct){
+      lab.classList.add('correct'); fb.textContent='✅ Great job! 答对了！'; fb.style.color='#166534';
+    }else{
+      lab.classList.add('wrong'); fb.textContent='❌ Not quite. Try again! 再想想～'; fb.style.color='#991b1b';
+    }
+  });
+});
+
+/* ---------- Print ---------- */
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Busy Bees: Tiny Helpers, Big Jobs — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#d97706;
+  --accent2:#f59e0b;
+  --bg:#fffbeb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#fef3c7;
+  --border:#fcd34d;
+  --soft:#fffbeb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#fbbf24);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(217,119,6,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #fcd34d;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(217,119,6,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,119,6,.55);}70%{box-shadow:0 0 0 12px rgba(217,119,6,0);}100%{box-shadow:0 0 0 0 rgba(217,119,6,0);}}
+.zh-trans{color:var(--muted);font-size:14px;margin-top:8px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid #d97706;transition:.15s;}
+.kw:hover{background:#fde68a;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.trans-toggle{background:var(--accent2);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.safety{background:#ecfdf5;border:2px solid #6ee7b7;border-radius:14px;padding:16px 18px;margin-bottom:16px;}
+.safety h3{margin:0 0 8px;color:#047857;font-size:17px;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(217,119,6,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fef3c7;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Environment</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Busy Bees: Tiny Helpers, Big Jobs</h1>
+      <p class="subtitle">2026年8月29日 · 环境保护｜蜜蜂 —— 全文阅读（点蓝色词看释义，可显示中文翻译）</p>
+
+      <button class="trans-toggle" id="transToggle">🇨🇳 显示中文翻译</button>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Segment 1 · Hook</div>
+            <p>Bees are tiny, but they are very <span class="kw" data-def="重要的">important</span>! They fly from <span class="kw" data-def="花">flower</span> to flower every day. They work very hard.</p>
+            <div class="zh-trans" style="display:none;">蜜蜂很小，但它们非常重要！它们每天从一朵花飞到另一朵花，辛勤地工作。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Segment 2 · Story</div>
+            <p>Bees help <span class="kw" data-def="花">flowers</span> grow. They carry <span class="kw" data-def="花粉">pollen</span> and make seeds and <span class="kw" data-def="水果">fruit</span>. One in three bites of our food comes from <span class="kw" data-def="蜜蜂">bees</span>! Bees make <span class="kw" data-def="蜂蜜">honey</span>, too.</p>
+            <div class="zh-trans" style="display:none;">蜜蜂帮助花朵生长。它们携带花粉，结出种子和果实。我们每吃三口食物，就有一口来自蜜蜂！蜜蜂还会酿蜂蜜。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Segment 3 · Why it matters</div>
+            <p>But bees are in <span class="kw" data-def="麻烦、困境">trouble</span>. They need flowers, clean air, and safe <span class="kw" data-def="家">homes</span>. We can <span class="kw" data-def="种植">plant</span> flowers and help them.</p>
+            <div class="zh-trans" style="display:none;">但是蜜蜂遇到了麻烦。它们需要花朵、干净的空气和安全的家。我们可以种花来帮助它们。</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Segment 4 · Sign-off</div>
+            <p>You can be a <span class="kw" data-def="朋友">bee friend</span>! <span class="kw" data-def="种植">Plant</span> a flower, make a bee bath, and say hello to bees. Small actions <span class="kw" data-def="保护">help</span> our planet. Let's <span class="kw" data-def="保护">protect</span> bees together!</p>
+            <div class="zh-trans" style="display:none;">你可以成为蜜蜂的朋友！种一朵花，做一个蜜蜂水盆，和蜜蜂打个招呼。小小的行动能保护我们的地球。让我们一起保护蜜蜂吧！</div>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="safety">
+        <h3>🌱 环保小提示 Green Tip</h3>
+        <p style="margin:0;font-size:14.5px;">看到蜜蜂不要<b>拍打或惊吓</b>它，它正在工作；在<b>家长帮助下</b>种花、做蜜蜂水盆；请大人<b>少用农药</b>，用天然方法照顾花园；不随便碰<b>野外蜂巢</b>。爱护小生命，从身边做起！</p>
+      </div>
+    </section>
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bee">🔊</button><div class="word">bee<span class="pos">n.</span></div><div class="zh">蜜蜂</div><div class="ex">"Bees are tiny but important."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="flower">🔊</button><div class="word">flower<span class="pos">n.</span></div><div class="zh">花</div><div class="ex">"They fly from flower to flower."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="honey">🔊</button><div class="word">honey<span class="pos">n.</span></div><div class="zh">蜂蜜</div><div class="ex">"Bees make honey, too."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pollen">🔊</button><div class="word">pollen<span class="pos">n.</span></div><div class="zh">花粉</div><div class="ex">"They carry pollen to flowers."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pollinate">🔊</button><div class="word">pollinate<span class="pos">v.</span></div><div class="zh">传粉（帮花结籽）</div><div class="ex">"Bees pollinate flowers."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="protect">🔊</button><div class="word">protect<span class="pos">v.</span></div><div class="zh">保护</div><div class="ex">"Let's protect bees together!"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="garden">🔊</button><div class="word">garden<span class="pos">n.</span></div><div class="zh">花园</div><div class="ex">"Plant flowers in your garden."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="important">🔊</button><div class="word">important<span class="pos">adj.</span></div><div class="zh">重要的</div><div class="ex">"Bees are very important!"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Bees are [tiny but important].</h3>
+          <div class="zh">[主语] are + 形容词，描述人或事物的特征。"蜜蜂虽小却很重要。"</div>
+          <div class="eg">Bees are tiny but important. / Bees are busy workers.</div>
+          <div class="practice">练习：用 "bees" 描述 → Bees are <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. They carry [pollen] and make [fruit].</h3>
+          <div class="zh">主语 + 动词（carry / make）+ 名词，描述蜜蜂做的事。</div>
+          <div class="eg">They carry pollen and make seeds and fruit.</div>
+          <div class="practice">练习：用 "honey" → They make <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. One in three bites [of our food] comes from bees.</h3>
+          <div class="zh">"One in three..." 表示"三分之一……"，用来讲比例。</div>
+          <div class="eg">One in three bites of our food comes from bees!</div>
+          <div class="practice">练习：用 "apples" → One in three <input placeholder="your answer"> comes from bees.</div>
+        </div>
+        <div class="item">
+          <h3>4. You can [be a bee friend]!</h3>
+          <div class="zh">"You can + 动词原形" 表示"你可以……"，提出建议或能力。</div>
+          <div class="eg">You can be a bee friend! / You can plant a flower.</div>
+          <div class="practice">练习：用 "make a bee bath" → You can <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般现在时（Simple Present）</h3>
+          <div class="zh">描述经常发生或一直成立的事实与习惯。主语是第三人称单数时，动词加 -s：fly → flies，make → makes，is 是 be 的现在式。</div>
+          <div class="eg">Bees <b>fly</b> from flower to flower. / They <b>carry</b> pollen.</div>
+        </div>
+        <div class="item">
+          <h3>2. 情态动词 can（能、会、可以）</h3>
+          <div class="zh">"can + 动词原形" 表示能够或可以，不分人称；否定用 can't / cannot。</div>
+          <div class="eg">We <b>can</b> plant flowers. / You <b>can</b> be a bee friend.</div>
+        </div>
+        <div class="item">
+          <h3>3. 祈使句（Imperative）</h3>
+          <div class="zh">用动词原形开头，表示建议、提醒或请求。常用来讲"你可以做什么"：Plant / Make / Say + ...</div>
+          <div class="eg"><b>Plant</b> a flower. / <b>Make</b> a bee bath. / <b>Say</b> hello to bees.</div>
+        </div>
+        <div class="item">
+          <h3>4. 第三人称单数 -s</h3>
+          <div class="zh">主语是单数（a bee / one bite）时，动词加 -s；复数（bees / they）则不加。注意 come → comes。</div>
+          <div class="eg">A bee <b>makes</b> honey. / One bite <b>comes</b> from bees.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>传粉的奥秘</h3>
+        <p>蜜蜂在花间采花蜜时，身上细密的绒毛会沾上<b>花粉（pollen）</b>。当它飞到下一朵花，就把花粉带了过去，帮助植物结出<b>种子和果实</b>。这个过程叫<b>传粉（pollination）</b>。没有传粉，许多植物就没法繁殖。全球约 <b>75% 的开花植物</b>和 <b>三分之一的食物</b>都离不开蜜蜂等传粉昆虫。</p>
+
+        <h3>我们每三口饭，就有一口靠蜜蜂</h3>
+        <p>科学家说，我们吃的食物里，<b>三分之一</b>需要昆虫传粉。苹果、草莓、蓝莓、樱桃、杏仁、西瓜、黄瓜，甚至巧克力和可可，都要靠蜜蜂帮忙。如果蜜蜂变少，这些好吃的食物也会变少。</p>
+
+        <h3>蜜蜂会"跳舞"说话</h3>
+        <p>蜜蜂发现一片好花蜜后，会跳一种<b>"摇摆舞（waggle dance）"</b>：它一边画圈一边扭屁股，告诉同伴"花在哪里、有多远"。蜜蜂还能记住花朵的位置，超聪明！蜂群里还有<b>蜂后、工蜂和雄蜂</b>，大家分工合作，像一个小团队。</p>
+
+        <h3>蜂蜜放几千年也不坏</h3>
+        <p>考古学家在几千年前的古墓里发现过<b>蜂蜜</b>，因为蜂蜜糖分高、水分少，细菌很难生存，居然还能吃。蜜蜂用花蜜酿出蜂蜜，是它们过冬的粮食，也是人类喜欢的食物。</p>
+
+        <h3>蜜蜂遇到了麻烦</h3>
+        <p>现在蜜蜂数量在下降，原因有：农田里的<b>杀虫剂</b>会毒害蜜蜂；城市扩张、草地变水泥，让蜜蜂<b>找不到花</b>；<b>气候变化</b>让花开的时间和蜜蜂活动对不上。全球约 <b>40% 的传粉昆虫</b>面临危险。所以保护蜜蜂，就是保护我们自己的食物。</p>
+
+        <h3>小朋友能做什么？</h3>
+        <ul>
+          <li>种蜜蜂喜欢的花：<b>向日葵、薰衣草、雏菊、三叶草</b>，阳台上几盆也能帮上忙。</li>
+          <li>做<b>"蜜蜂水盆"</b>：浅盘子装水，放几颗小石子，蜜蜂站在石子上安全喝水。</li>
+          <li>请大人<b>少用农药</b>，用肥皂水、醋等天然方法除虫。</li>
+          <li>不动蜂巢、不拍打蜜蜂，远远看它工作就好。</li>
+          <li>用竹竿和纸筒做<b>"蜜蜂旅馆"</b>，给独居蜜蜂一个家。</li>
+          <li>记住：<b>5月20日是世界蜜蜂日</b>，可以和同学讲蜜蜂的故事。</li>
+        </ul>
+
+        <h3>动手小活动：画一只小蜜蜂 + 说一句英语</h3>
+        <p>拿出黄黑两色笔，画一只带翅膀的小蜜蜂，配上花朵。然后和爸爸妈妈用英语说：<b>"Bees are tiny but important."</b>（蜜蜂虽小却很重要。）再加一句行动：<b>"I can plant a flower."</b>（我能种一朵花。）</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>读懂一篇 A2 水平的英文环保短文（蜜蜂），理解大意。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握一般现在时、can 情态动词、祈使句、第三人称单数 -s 四个基础语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>积累 8 个蜜蜂主题核心词汇（bee, flower, honey, pollen, pollinate, protect, garden, important）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语说出 "One in three bites of our food comes from bees." 这样的比例句。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解蜜蜂对食物和环境的重要，学会 "You can plant a flower!" 这样的行动句。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读 Pola 的朗读，模仿语调和停顿。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，试着用每个词造一个英文句子。</div></div>
+        <div class="goal"><span class="ic">💡</span><div>用 "You can ..." 说说你能为蜜蜂做什么，比如 "I can plant a flower."</div></div>
+        <div class="goal"><span class="ic">💬</span><div>和爸爸妈妈一起读"中文知识扩展"，聊聊"我们怎么保护蜜蜂？"</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Busy Bees: Tiny Helpers, Big Jobs · 2026-08-29 · Made for curious kids 🐝</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+260>window.innerWidth)left=window.innerWidth-270;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Chinese translation toggle ---------- */
+const transBtn=document.getElementById('transToggle');
+let transOn=false;
+transBtn.addEventListener('click',()=>{
+  transOn=!transOn;
+  document.querySelectorAll('.zh-trans').forEach(d=>{d.style.display=transOn?'block':'none';});
+  transBtn.textContent=transOn?'🇨🇳 隐藏中文翻译':'🇨🇳 显示中文翻译';
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Bees are tiny, but they are very important! They fly from flower to flower every day. They work very hard.",
+  "Bees help flowers grow. They carry pollen and make seeds and fruit. One in three bites of our food comes from bees! Bees make honey, too.",
+  "But bees are in trouble. They need flowers, clean air, and safe homes. We can plant flowers and help them.",
+  "You can be a bee friend! Plant a flower, make a bee bath, and say hello to bees. Small actions help our planet. Let's protect bees together!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What do bees carry to help flowers grow? 蜜蜂携带什么帮助花朵生长？",opts:["Pollen 花粉","Water 水","Sand 沙子","Paper 纸"],ans:0,
+   fb:"Correct! 蜜蜂携带花粉（pollen）帮助植物传粉、结出果实。"},
+  {q:"How much of our food comes from bees? 我们多少食物来自蜜蜂？",opts:["One in three bites 三分之一","All food 全部","None 没有","One in ten 十分之一"],ans:0,
+   fb:"Yes! 我们每吃三口食物，就有一口（one in three bites）离不开蜜蜂。"},
+  {q:"What sweet food do bees make? 蜜蜂酿出什么甜甜的食物？",opts:["Honey 蜂蜜","Milk 牛奶","Sugar 糖","Salt 盐"],ans:0,
+   fb:"Right! 蜜蜂会酿蜂蜜（honey）。"},
+  {q:"What can YOU do to help bees? 你能做什么来帮助蜜蜂？",opts:["Plant a flower 种一朵花","Cut all flowers 剪光花","Use more spray 多用农药","Sleep 睡觉"],ans:0,
+   fb:"Yes! 种花（plant a flower）、做蜜蜂水盆都能帮助蜜蜂。"},
+  {q:"Bees need flowers, clean air, and ___ 蜜蜂需要花、干净的空气和___",opts:["safe homes 安全的家","TVs 电视","cars 汽车","phones 手机"],ans:0,
+   fb:"Correct! 蜜蜂需要安全的家（safe homes）才能生存。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#d97706';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
