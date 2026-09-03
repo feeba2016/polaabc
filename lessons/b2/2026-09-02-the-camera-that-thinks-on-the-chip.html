@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — HyperVision: The Camera That Thinks on the Chip</title>
+<style>
+:root{
+  --accent:#6d28d9;
+  --accent2:#0ea5e9;
+  --bg:#faf8ff;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#ede9fe;
+  --border:#e7e0fb;
+  --soft:#f6f3ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(109,40,217,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(109,40,217,.55);}70%{box-shadow:0 0 0 12px rgba(109,40,217,0);}100%{box-shadow:0 0 0 0 rgba(109,40,217,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#ddd6fe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#c4b5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ede9fe;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Technology</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">HyperVision: The Camera That Thinks on the Chip</h1>
+      <p class="subtitle">把"光谱实验室"塞进 950 克：一台在芯片上完成思考的高光谱相机｜全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Bottleneck 瓶颈</div>
+            <p>For decades, <span class="kw" data-def="高光谱的（能记录成百上千个窄波段）">hyperspectral</span> cameras have seen more than ordinary ones, capturing the chemical <span class="kw" data-def="特征签名；标志性特征">signature</span> of every pixel rather than its shape alone. That gift is also their curse: a single frame may occupy hundreds of megabytes, and the data must travel to a distant server before anyone can use it. <span class="kw" data-def="笨重的；繁琐的">Cumbersome</span> as this workflow is, most engineers long accepted it as unavoidable. Had the hardware alone been the problem, the story would have ended there.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Breakthrough 突破</div>
+            <p>On 28 August 2026, a team led by Academician Zhang Jun and Professor Bian Liheng at the Beijing Institute of Technology published a different answer in Science. Rather than shipping raw data elsewhere, their HyperVision system <span class="kw" data-def="重建；还原（由原始信号恢复完整信息）">reconstructs</span> each spectrum inside a purpose-built chip, the HyperN, which <span class="kw" data-def="消除；排除">eliminates</span> the constant traffic between sensor and processor. Freed from that burden, the finished device weighs about 950 grams, draws roughly 25 watts, and still delivers video-rate output at 32.9 frames per second.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Deeper Shift 更深的变化</div>
+            <p>What makes the result striking is not the image quality alone, but the <span class="kw" data-def="范式；思维与研究的根本模式">paradigm</span> it overturns. Classical von Neumann machines fetch instructions and data in turn, leaving much of the pipeline idle; the team instead mapped the entire spectral computation graph directly onto the physical space of the chip, so that data flows through one continuous chain of operators. Not only does this remove the idle gaps, it also collapses <span class="kw" data-def="延迟；等待时间">latency</span> from hours to milliseconds.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why It Matters 意义</div>
+            <p>The consequences reach well beyond remote sensing. Wherever a decision must be made on the spot, be it a surgeon judging tissue, a farmer spotting disease, or a car <span class="kw" data-def="辨别；分辨出细微差别">discerning</span> ice from wet asphalt, carrying the whole laboratory becomes possible. Were such cameras to become cheap and <span class="kw" data-def="紧凑的；小型的">compact</span> enough to <span class="kw" data-def="部署；投入使用">deploy</span> by the million, machines would finally perceive the world as spectroscopy describes it: not merely as shapes, but as substances. Whether seeing more always means judging better is, of course, another question.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hyperspectral">🔊</button><div class="word">hyperspectral<span class="pos">adj.</span></div><div class="zh">高光谱的（记录成百上千个窄波段）</div><div class="ex">"Hyperspectral cameras record hundreds of narrow bands, not just red, green and blue."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="signature">🔊</button><div class="word">signature<span class="pos">n.</span></div><div class="zh">特征签名；标志性特征</div><div class="ex">"Every material leaves a spectral signature as distinctive as a fingerprint."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cumbersome">🔊</button><div class="word">cumbersome<span class="pos">adj.</span></div><div class="zh">笨重的；繁琐不便的</div><div class="ex">"Cumbersome as the old workflow is, it remained standard for decades."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reconstruct">🔊</button><div class="word">reconstruct<span class="pos">v.</span></div><div class="zh">重建；还原</div><div class="ex">"The chip reconstructs a full spectrum from what a single sensor captures."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="eliminate">🔊</button><div class="word">eliminate<span class="pos">v.</span></div><div class="zh">消除；排除</div><div class="ex">"Computing on the chip eliminates the need to shuttle data to a server."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="paradigm">🔊</button><div class="word">paradigm<span class="pos">n.</span></div><div class="zh">范式；根本性的思维与做法模式</div><div class="ex">"The team did not improve the old paradigm; it overturned it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="latency">🔊</button><div class="word">latency<span class="pos">n.</span></div><div class="zh">延迟；等待时间</div><div class="ex">"On-chip computing collapses latency from hours to milliseconds."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="discern">🔊</button><div class="word">discern<span class="pos">v.</span></div><div class="zh">辨别；分辨（细微差别）</div><div class="ex">"A hyperspectral sensor can discern real stone from a painted copy."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="compact">🔊</button><div class="word">compact<span class="pos">adj.</span></div><div class="zh">紧凑的；小型的</div><div class="ex">"The whole system is compact enough to be held in one hand."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="deploy">🔊</button><div class="word">deploy<span class="pos">v.</span></div><div class="zh">部署；投入使用</div><div class="ex">"Cheaper chips would let engineers deploy such cameras by the million."</div></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [形容词 / 名词] + as + 主语 + 谓语, 主句.（让步倒装）</h3>
+          <div class="zh">把表语或状语提到 as / though 之前表示"尽管……"，比 Although 更书面、更有力。注意：as 引导让步时不可换成 although 的语序；名词提前时冠词要省略（Child as he is...）。</div>
+          <div class="eg">Cumbersome as this workflow is, most engineers long accepted it as unavoidable.</div>
+          <div class="practice">练习：用 "the old cameras / be powerful" → <input placeholder="Powerful as the old cameras were">, they could not work without a server.</div>
+        </div>
+        <div class="item">
+          <h3>2. Had + 主语 + 过去分词, 主句 (would / could / might have done).</h3>
+          <div class="zh">过去虚拟语气倒装：省略 if 并把 had 提到主语前，表示"如果当时……（与过去事实相反）"。在科技评论中常用来做反事实推演。</div>
+          <div class="eg">Had the hardware alone been the problem, the story would have ended there.</div>
+          <div class="practice">练习：用 "the team / give up" → <input placeholder="Had the team given up">, the device would never have reached video rate.</div>
+        </div>
+        <div class="item">
+          <h3>3. Rather than + 动名词 (doing) + 名词短语, 主句.</h3>
+          <div class="zh">rather than 后接动名词，引出"被放弃的旧做法"，主句写新做法，形成鲜明对照。比 instead of 更正式，是科技写作中"亮出新方案"的常用开头。</div>
+          <div class="eg">Rather than shipping raw data elsewhere, their HyperVision system reconstructs each spectrum inside a purpose-built chip.</div>
+          <div class="practice">练习：用 "wait for the server" → Rather than <input placeholder="waiting for the server">, the camera finishes the analysis on the spot.</div>
+        </div>
+        <div class="item">
+          <h3>4. Not only + 助动词 + 主语 + 动词原形, (but) 主语 + also + 动词.</h3>
+          <div class="zh">not only 置于句首时，前一分句必须部分倒装（助动词提前），后一分句用正常语序。这是议论文中"递进列举"的高级写法。</div>
+          <div class="eg">Not only does this remove the idle gaps, it also collapses latency from hours to milliseconds.</div>
+          <div class="practice">练习：用 "the chip / cut power use" → Not only <input placeholder="does the chip cut power use">, it also fits in a handheld device.</div>
+        </div>
+        <div class="item">
+          <h3>5. Were + 主语 + to + 动词原形, 主句 (would / could / might do).</h3>
+          <div class="zh">将来虚拟语气倒装：省去 if、把 were 提到主语前，表示"万一 / 假如有朝一日……"，假设性比 If...do 更强，适合写展望与警示。</div>
+          <div class="eg">Were such cameras to become cheap and compact enough to deploy by the million, machines would finally perceive the world as spectroscopy describes it.</div>
+          <div class="practice">练习：用 "every satellite / carry one" → <input placeholder="Were every satellite to carry one">, we would no longer wait hours for an answer.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 让步状语从句的倒装（Concessive inversion: Adj./N./Adv. + as/though + S + V）</h3>
+          <div class="zh">把形容词、名词或副词提到 as / though 之前，形成"尽管……"的倒装。它比 although 从句更凝练，常出现在议论性段落的转折处。提醒：名词前置时不加冠词；动词位置保持不变。</div>
+          <div class="eg"><b>Cumbersome as</b> this workflow is, most engineers accepted it. / <b>Child as</b> he was, he understood the danger. / <b>Much as</b> I admire the design, it is expensive.</div>
+        </div>
+        <div class="item">
+          <h3>2. 虚拟条件句的省略与倒装（Had / Were / Should inversion）</h3>
+          <div class="zh">条件句中含 had、were 或 should 时，可省略 if 并把它提到主语前。本文两处形成对照：<b>Had the hardware alone been the problem</b>（与过去相反）与 <b>Were such cameras to become</b>（与将来相反）。掌握这一组，英文议论的正式度会立刻提升一档。</div>
+          <div class="eg"><b>Had</b> the hardware alone <b>been</b> the problem, the story would have ended there. / <b>Were</b> such cameras <b>to become</b> cheap, machines would see differently.</div>
+        </div>
+        <div class="item">
+          <h3>3. 非谓语动词作状语（Participial adverbials）</h3>
+          <div class="zh">过去分词（-ed）表被动或已完成，现在分词（-ing）表主动或伴随结果。前者常译为"被……之后"，后者常译为"……，结果使得……"。关键规则：分词的逻辑主语必须与主句主语一致。</div>
+          <div class="eg"><b>Freed</b> from that burden, the finished device weighs about 950 grams.（被动） / ...fetch instructions and data in turn, <b>leaving</b> much of the pipeline idle.（结果）</div>
+        </div>
+        <div class="item">
+          <h3>4. Not only 前置的部分倒装（Partial inversion after "not only"）</h3>
+          <div class="zh">not only / never / rarely / seldom 等含否定意义的词置于句首时，主句必须部分倒装：助动词 + 主语 + 动词原形。若原句无助动词，需借 do / does / did。后一分句（but also）不倒装。</div>
+          <div class="eg">Not only <b>does this remove</b> the idle gaps, it also collapses latency. / Not only <b>did the team</b> build a chip, they built an entire camera around it.</div>
+        </div>
+        <div class="item">
+          <h3>5. What 引导的名词性从句 + not... but... 平行结构</h3>
+          <div class="zh">"What + 主语 + 谓语"可直接充当句子主语，把一整件事打包成一个概念；"not A but B"则要求 A、B 词性一致、结构对称，用来纠正读者的预期，是议论文的常用起手式。</div>
+          <div class="eg"><b>What makes the result striking</b> is <b>not</b> the image quality alone, <b>but</b> the paradigm it overturns. / ...perceive the world not merely as shapes, but as substances.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、先弄清"高光谱"到底多看了什么</h3>
+        <p>普通手机相机把光分成<strong>红、绿、蓝三个通道</strong>。高光谱相机则把同一束光切成<strong>几十甚至几百个连续的窄波段</strong>，于是画面里的每一个像素都不再只是一个颜色点，而是一条<strong>完整的光谱曲线</strong>。</p>
+        <p>这条曲线之所以重要，是因为不同物质对不同波长的光有各自的吸收与反射特征——就像人各有各的指纹。正因如此，光谱被科研人员称为物质的<strong>"光指纹"</strong>或<strong>"光基因"</strong>：石头和涂了漆的假石头，肉眼几乎一样，光谱却能一眼分出真假；作物在病害显现之前，叶片的反射曲线就已经变了。</p>
+
+        <h3>二、代价：看得越多，数据越"重"</h3>
+        <p>这正是高光谱技术几十年来的痛点。多出一个光谱维度，数据量就成十倍、百倍地膨胀——<strong>一张图片往往就是几百兆甚至上千兆</strong>。传统的做法是"现场只管拍，回来慢慢算"：把原始数据存下来或传回地面站，再交给服务器农场处理，几小时甚至几天后才出结果。</p>
+        <p>对于卫星遥感这类"回头再看也无妨"的场景，这个延迟尚可接受。但对<strong>手术台上判断组织切缘、自动驾驶识别路面结冰、田间地头发现早期病害</strong>这类"此刻就必须知道"的场景，等不起。</p>
+
+        <h3>三、HyperVision 做了什么：把计算搬进芯片</h3>
+        <p>2026 年 8 月 28 日，<strong>北京理工大学</strong>团队在《科学》（<em>Science</em>）期刊在线发表论文，题为 <em>Hypervision: An on-chip hyperspectral microsystem for online video-rate computational imaging</em>（DOI: 10.1126/science.aef8268）。北京理工大学为<strong>唯一完成单位</strong>；<strong>边丽蘅教授与 2023 级博士生孟庆昊为共同第一作者，中国工程院院士张军、边丽蘅教授为共同通讯作者</strong>。</p>
+        <p>团队研制出<strong>全球首款一体化在线实时高光谱成像微系统 HyperVision</strong>，整套设备集成了自研的<strong>光谱专用计算芯片 HyperN</strong> 与<strong>宽带光谱成像传感器 HyperspecI</strong>，并配有大容量电池模组与高清显示屏，<strong>无需外接供电、不依赖外部算力集群</strong>，在可见—近红外宽波段稳定输出视频级实时高光谱画面。</p>
+        <table class="facts">
+          <tr><th>指标</th><th>数值</th></tr>
+          <tr><td>重建速度（模式一）</td><td>512 × 512 像素 × 61 个光谱通道下，<strong>32.9 fps</strong>（视频级）</td></tr>
+          <tr><td>重建速度（模式二）</td><td>1024 × 1024 像素 × 16 个光谱通道下，<strong>24.6 fps</strong></td></tr>
+          <tr><td>整机重量</td><td>约 <strong>950 克</strong>（含电池与显示屏，可手持）</td></tr>
+          <tr><td>整机功耗</td><td>约 <strong>25.3 瓦</strong></td></tr>
+          <tr><td>能效比</td><td>约每瓦每秒 <strong>3670 亿次</strong>运算</td></tr>
+          <tr><td>光谱范围</td><td>可见光—近红外宽波段</td></tr>
+          <tr><td>核心部件</td><td>光谱专用计算芯片 HyperN + 宽带光谱成像传感器 HyperspecI</td></tr>
+          <tr><td>论文信息</td><td><em>Science</em>，2026-08-28 在线发表，DOI: 10.1126/science.aef8268</td></tr>
+        </table>
+
+        <h3>四、真正的难点不在"算得慢"，而在"搬得累"</h3>
+        <p>很多人以为瓶颈是算力不够。团队给出的答案恰恰相反：<strong>瓶颈是数据在芯片与内存之间来回搬运</strong>。经典的<strong>冯·诺依曼架构</strong>把指令和数据分时取用，计算单元常常要等数据到位，中间就会出现所谓<strong>"流水线气泡"（pipeline bubble）</strong>——明明有算力，却闲着。</p>
+        <p>团队跳出通用 CPU / GPU 的路径依赖，提出<strong>"类数据域并行计算"</strong>方法：<strong>把完整的光谱计算图直接映射到芯片的物理空间上</strong>，用分布式的硬件算子搭出一条连续的数据流通道。数据不再来回"奔波"，而是一路向前流过去，闲置气泡被彻底消除。</p>
+        <blockquote>该架构完成了高光谱成像从"离线后置处理"到"片上原位在线实时计算"的跨越，开辟了下一代集成化、嵌入式高光谱视觉系统的全新技术路线。
+          <em>——北京理工大学分析测试中心科研进展报道（2026-08-31）</em>
+        </blockquote>
+
+        <h3>五、这不是一次偶然：从 Nature 到 Science</h3>
+        <p>值得留意的是，这不是该团队第一次登上顶级期刊。<strong>2024 年</strong>，他们先在《自然》（<em>Nature</em>）刊发成果，攻克<strong>片上光谱编码</strong>难题，把片上光谱成像的<strong>光能利用率从不足 25% 提升到 74.8%</strong>——解决的是"进光量太少"的问题。两年后的这篇《科学》，解决的是"算得太慢"的问题。</p>
+        <p>北京理工大学分析测试中心微纳加工中心利用<strong>紫外光刻</strong>加工宽带光谱调制掩膜，再通过<strong>键合工艺</strong>把掩膜与相机感光层一体化集成，为这次的芯片架构提供了关键工艺保障。从理论、芯片到整机，是一条完整的工程闭环。</p>
+
+        <h3>六、它能用在哪儿？</h3>
+        <ul>
+          <li><strong>空天遥感</strong>：过去卫星要把海量数据传回地面才能分析；计算芯片化之后，卫星可以<strong>在轨直接出结果</strong>，只把结论发回来，极大节省带宽。</li>
+          <li><strong>智能驾驶</strong>：识别湿沥青上的薄冰、判断前方是真人还是广告牌上的图案——这些"看得出材质才安全"的场景，正是高光谱的用武之地。</li>
+          <li><strong>智慧农业</strong>：作物在肉眼可见病变之前，叶片光谱就已改变，可用于早期病害与缺水预警。</li>
+          <li><strong>精准医疗</strong>：辅助判断组织边界、血氧分布等，为术中实时决策提供信息。</li>
+          <li><strong>工业检测与分选</strong>：食品异物、药品成分、塑料回收分类，都依赖"看成分"而非"看形状"。</li>
+        </ul>
+
+        <h3>七、冷静地看：还有哪些开放问题</h3>
+        <p>报道中也明确指出，这套系统短期内仍有边界。首先是<strong>分辨率与光谱通道数的取舍</strong>：32.9 fps 对应的是 512×512×61 通道，把分辨率提到 1024×1024 时通道数就降到 16，帧率也降到 24.6 fps——"看得细"与"分得细"尚不能同时拉满。其次是<strong>成本与量产</strong>：从实验室样机到人手一台，中间隔着工艺良率与价格两道坎。此外，轻量化 AI 光谱重建网络依赖训练数据，在陌生场景下的<strong>泛化能力</strong>仍需更多实地验证。</p>
+        <p>还有一个属于使用者而非工程师的问题：<strong>看得更细，是否必然判断得更准？</strong>当一台机器能分辨出你肉眼看不见的差异时，谁来定义"差异"意味着什么？这是本课结尾那句话留给我们的作业。</p>
+
+        <h3>八、给 B2 学习者的延伸思考</h3>
+        <ul>
+          <li><strong>练"让步 + 转折"的写法。</strong>用 <em>Cumbersome as this workflow is, ...</em> 造一个与自己专业相关的句子，比如 "Complicated as the method sounds, it runs on a phone."</li>
+          <li><strong>练虚拟语气倒装。</strong>写两句：一句 <em>Had...</em> 谈过去（反事实推演），一句 <em>Were... to...</em> 谈未来（展望或警示）。这是雅思、托福议论文最能"提分"的句式之一。</li>
+          <li><strong>掌握一组科技写作高频搭配。</strong>ship raw data elsewhere / deliver video-rate output / collapse latency / deploy at scale / overturn a paradigm —— 试着用其中三个写一整段。</li>
+          <li><strong>练习概括（paraphrase）。</strong>用一句话英文解释：为什么"把计算搬到芯片上"比"造一台更快的服务器"更有效？（提示：瓶颈是数据搬运，不是算力本身。）</li>
+        </ul>
+        <p class="source">资料来源：北京理工大学分析测试中心《科研进展｜分析测试中心助力北理工〈Science〉发表》（2026-08-31）；央视网《我国科研团队首次实现高光谱相机实时解析》（2026-09-02）；中国新闻网、IT之家同题报道。论文：Bian L., Meng Q. et al., "Hypervision: An on-chip hyperspectral microsystem for online video-rate computational imaging", <em>Science</em>, 2026-08-28, DOI: 10.1126/science.aef8268。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标（B2 中高级）</h3>
+        <div class="goal"><span class="ic">🌟</span><div>理解高光谱成像"看得细却算得慢"的核心矛盾，能用自己的话解释"把计算搬到芯片上"为什么比"造更快的服务器"更有效。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 CEFR B2 核心学术与科技词汇（hyperspectral, signature, cumbersome, reconstruct, eliminate, paradigm, latency, discern, compact, deploy）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会并仿写五种高级句式：让步倒装（Adj. + as + S + V）、过去虚拟倒装（Had...）、Rather than + doing、Not only 前置部分倒装、将来虚拟倒装（Were... to...）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>辨析非谓语动词作状语（Freed from... / ...leaving the pipeline idle）与 What 引导的名词性从句主语 + not... but... 平行结构。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立批判视角：既能讲清一项技术突破的价值，也能指出它的边界与开放问题，提升科技类议论文写作能力。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读英文朗读，注意虚拟语气句与倒装句的语调起伏。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，并用每个词造一个与"技术、数据、感知"相关的英文句子。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>仿写两个倒装句：一个用 Cumbersome as...（让步），一个用 Were... to...（将来虚拟）。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div>读"中文知识扩展"中的关键数据表，再用英文写一段 60 词左右的成果简介（abstract）。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English · HyperVision: The Camera That Thinks on the Chip · 2026-09-02</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "For decades, hyperspectral cameras have seen more than ordinary ones, capturing the chemical signature of every pixel rather than its shape alone. That gift is also their curse: a single frame may occupy hundreds of megabytes, and the data must travel to a distant server before anyone can use it. Cumbersome as this workflow is, most engineers long accepted it as unavoidable. Had the hardware alone been the problem, the story would have ended there.",
+  "On 28 August 2026, a team led by Academician Zhang Jun and Professor Bian Liheng at the Beijing Institute of Technology published a different answer in Science. Rather than shipping raw data elsewhere, their HyperVision system reconstructs each spectrum inside a purpose-built chip, the HyperN, which eliminates the constant traffic between sensor and processor. Freed from that burden, the finished device weighs about 950 grams, draws roughly 25 watts, and still delivers video-rate output at 32.9 frames per second.",
+  "What makes the result striking is not the image quality alone, but the paradigm it overturns. Classical von Neumann machines fetch instructions and data in turn, leaving much of the pipeline idle; the team instead mapped the entire spectral computation graph directly onto the physical space of the chip, so that data flows through one continuous chain of operators. Not only does this remove the idle gaps, it also collapses latency from hours to milliseconds.",
+  "The consequences reach well beyond remote sensing. Wherever a decision must be made on the spot, be it a surgeon judging tissue, a farmer spotting disease, or a car discerning ice from wet asphalt, carrying the whole laboratory becomes possible. Were such cameras to become cheap and compact enough to deploy by the million, machines would finally perceive the world as spectroscopy describes it: not merely as shapes, but as substances. Whether seeing more always means judging better is, of course, another question."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What is the main advantage of hyperspectral imaging over an ordinary camera? 与普通相机相比，高光谱成像的主要优势是什么？",opts:["It records the chemical signature of every pixel, not just its colour 它记录每个像素的化学特征，而不只是颜色","It takes sharper photos in the dark 它在暗处拍得更清晰","It is always cheaper to build 它造价一定更低","It needs no lens at all 它完全不需要镜头"],ans:0,
+   fb:"Correct! 高光谱相机把光切成几十到几百个窄波段，每个像素都有一条完整光谱曲线，被称为物质的“光指纹”。"},
+  {q:"Why was hyperspectral imaging considered impractical for on-the-spot decisions? 为什么高光谱成像长期被认为不适合现场即时决策？",opts:["A single frame is huge and must be sent to a server before it can be used 单帧数据极大，必须传到服务器后才能使用","The cameras could not focus 相机无法对焦","The images were always black and white 图像总是黑白的","The sensors could not detect visible light 传感器探测不到可见光"],ans:0,
+   fb:"Right! 一张图片可达几百甚至上千兆，传统做法是“现场只管拍、回来慢慢算”，延迟以小时计。"},
+  {q:"Where and when was the HyperVision result published? HyperVision 的成果发表在哪里、何时？",opts:["In Science, on 28 August 2026 发表在《科学》，2026年8月28日","In Nature, in 2024 发表在《自然》，2024年","In a Chinese engineering journal, in 2020 发表在中国工程类期刊，2020年","It has not been published yet 尚未发表"],ans:0,
+   fb:"Correct! 论文题为 Hypervision: An on-chip hyperspectral microsystem for online video-rate computational imaging，DOI: 10.1126/science.aef8268。"},
+  {q:"'Cumbersome as this workflow is, most engineers long accepted it as unavoidable.' 这句话使用了什么结构？",opts:["Concessive inversion 让步倒装（表语提前 + as + 主谓）","Relative clause 定语从句","Cleft sentence 强调句","Passive voice 被动语态"],ans:0,
+   fb:"Yes! 相当于 Although this workflow is cumbersome...，是更书面的让步表达。"},
+  {q:"'Had the hardware alone been the problem, the story would have ended there.' 这句话的时态与语气是什么？",opts:["Past unreal conditional with inversion 过去虚拟语气倒装（与过去事实相反）","Future real conditional 将来真实条件句","Present perfect 现在完成时","Future unreal conditional 将来虚拟语气"],ans:0,
+   fb:"Correct! 省略 if 后把 had 提前，相当于 If the hardware alone had been the problem..."},
+  {q:"According to the text, what is the real bottleneck the team identified? 按课文说法，团队认定的真正瓶颈是什么？",opts:["Moving data back and forth between chip and memory 数据在芯片与内存之间来回搬运","The lack of powerful cameras 相机性能不够强","The shortage of trained engineers 缺少受过训练的工程师","The cost of satellite launches 卫星发射成本"],ans:0,
+   fb:"Right! 经典冯·诺依曼架构分时取用指令与数据，产生“流水线气泡”；团队把计算图直接映射到芯片物理空间，让数据连续流过。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#6d28d9';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

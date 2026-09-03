@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Giant Scorpion Before the Trees · Pola News</title>
+<style>
+:root{
+  --accent:#92400e;
+  --accent2:#0f766e;
+  --glow:#fcd34d;
+  --ember:#d97706;
+  --bg:#fffbeb;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#3b2a10;
+  --muted:#7a6437;
+  --line:#fde68a;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(146,64,14,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#fff7ed;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.85;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#fef3c7;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.12)}
+.nav a.active{background:rgba(255,255,255,.20);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(146,64,14,.30)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(146,64,14,.10);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px;min-width:220px}
+.seg .zh{flex-basis:100%;margin-left:50px;font-size:14px;color:var(--muted);line-height:1.65;margin-top:6px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(146,64,14,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(252,211,77,.70)}70%{box-shadow:0 0 0 14px rgba(252,211,77,0)}100%{box-shadow:0 0 0 0 rgba(252,211,77,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(252,211,77,.45)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#3b2a10;color:#fff7ed;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.vcard{background:linear-gradient(160deg,#fffbeb,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(146,64,14,.14)}
+.vcard .w{font-size:19px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:4px}
+.vcard .en{font-size:13px;color:var(--muted);line-height:1.5}
+.vcard .spk{position:absolute;top:10px;right:10px;border:none;background:rgba(15,118,110,.14);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;transition:.2s}
+.vcard .spk:hover{background:var(--accent2);transform:scale(1.1)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 4px}
+.stat{background:linear-gradient(160deg,#fffbeb,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent);line-height:1.15}
+.stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+.pat{background:#fffbeb;border-left:4px solid var(--accent2);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.pat .en{font-size:17px;font-weight:600;margin-bottom:4px}
+.pat .zh{font-size:14px;color:var(--muted);margin-bottom:8px}
+.pat .fill{background:#fff;border:1px dashed var(--accent2);border-radius:8px;padding:8px 12px;font-size:15px;margin-top:6px}
+.pat .fill input{border:none;border-bottom:2px solid var(--accent2);background:transparent;font-size:15px;outline:none;min-width:110px;text-align:center;color:var(--accent);font-weight:700;font-family:inherit}
+.pat .fill button{margin-left:8px;border:none;background:var(--accent);color:#fff;border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer}
+.pat .ans{font-size:14px;margin-top:6px;font-weight:700;min-height:20px}
+.gbox{background:#fffbeb;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.gbox h3{font-size:18px;color:var(--accent);margin-bottom:8px}
+.gbox .rule{background:#fff;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--accent);margin-bottom:10px;border:1px dashed var(--accent2)}
+.gbox ul{margin-left:20px;font-size:15px}
+.gbox li{margin-bottom:6px}
+.gbox table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.gbox th,.gbox td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.gbox th{background:rgba(146,64,14,.08);color:var(--accent)}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.q .qt{font-size:16px;font-weight:600;margin-bottom:10px}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q .opt{border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:15px;transition:.15s;background:#fffbeb}
+.q .opt:hover{background:rgba(252,211,77,.45)}
+.q .opt.right{background:rgba(15,157,88,.14);border-color:var(--good);color:var(--good);font-weight:700}
+.q .opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad)}
+.q .exp{font-size:14px;color:var(--muted);margin-top:9px;display:none;line-height:1.6}
+.q .exp.show{display:block}
+#score{text-align:center;font-size:18px;font-weight:700;color:var(--accent);margin-top:10px}
+#resetq{display:block;margin:14px auto 0;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:9px 24px;border-radius:999px;font-size:15px;cursor:pointer;font-weight:700}
+.cn{background:linear-gradient(160deg,#fffbeb,#fff)}
+.cn h3{font-size:19px;color:var(--accent);margin:16px 0 8px}
+.cn h3:first-child{margin-top:0}
+.cn p{font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn ul{margin-left:22px;font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn li{margin-bottom:7px}
+.cn .fact{background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:15px}
+.cn .fact b{color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:15px}
+.flow .step{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:5px 14px;font-size:14px;font-weight:700}
+.flow .step.ember{background:linear-gradient(135deg,var(--ember),#f59e0b)}
+.flow .arw{color:var(--accent2);font-weight:800}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.cmp .box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cmp .box h4{font-size:16px;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.cmp .box .big{font-size:22px;font-weight:800;color:var(--accent2);line-height:1.2}
+.cmp .box p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.7}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;min-width:0;padding:14px}
+  .nav{display:flex;overflow-x:auto;gap:6px}
+  .nav a{margin-bottom:0;white-space:nowrap}
+  .content{padding:22px 16px}
+  .q .opts{grid-template-columns:1fr}
+  .seg .zh{margin-left:0}
+  .cmp{grid-template-columns:1fr}
+}
+@media print{
+  .sidebar,#progress,.play,.spk,#resetq{display:none!important}
+  body{background:#fff;font-size:12pt}
+  section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span>POLA NEWS</div>
+  <div class="sub">2026-09-03 · Level B1</div>
+  <nav class="nav">
+    <a href="#read"><span class="ic">📖</span>Full Text</a>
+    <a href="#vocab"><span class="ic">🔤</span>Vocabulary</a>
+    <a href="#pattern"><span class="ic">🗣️</span>Sentence Patterns</a>
+    <a href="#grammar"><span class="ic">📐</span>Grammar</a>
+    <a href="#quiz"><span class="ic">✅</span>Quiz</a>
+    <a href="#more"><span class="ic">💡</span>知识扩展</a>
+    <a href="#about"><span class="ic">ℹ️</span>About</a>
+  </nav>
+</aside>
+<main class="content">
+<header class="top">
+  <span class="kicker">🦂 PREHISTORIC LIFE · FOSSILS · DISCOVERY</span>
+  <h1>The Giant Scorpion Before the Trees</h1>
+  <div class="meta">
+    <span>📅 <b>2026-09-03</b></span>
+    <span>🎧 <b>B1 · ages 10–12</b></span>
+    <span>⏱ <b>~4 × 15s</b></span>
+    <span>📍 <b>Natural History Museum, London</b></span>
+  </div>
+</header>
+<section id="read">
+  <h2><span class="num">1</span>📖 Full Text · 全文阅读</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:8px">点击 ▶ 听 Pola 朗读；点击带虚线的棕色单词查看中文释义。</p>
+
+  <div class="seg">
+    <div class="badge">1</div>
+    <div class="txt">Hi everyone, I'm Pola. Imagine a <span class="kw" data-def="蝎子" data-en="a small animal with eight legs, two big front claws and a tail with a sting">scorpion</span> as long as a golden retriever. Its <span class="kw" data-def="螯；钳子（复数，单数是 pincer）" data-en="the pair of curved claws at the front, used for grabbing and holding">pincers</span> alone were sixteen centimetres — bigger than your hand. This <span class="kw" data-def="巨兽；巨大的东西（也可作形容词：巨大的）" data-en="an extremely large animal or thing; also an adjective meaning very large">giant</span> really lived, and it walked across what is now England and Wales.</div>
+    <button class="play" data-seg="0" title="Play">▶</button>
+    <div class="zh">大家好，我是 Pola。想象一只和金毛寻回犬一样长的蝎子。光是它的螯就有 16 厘米——比你的手还大。这个巨兽真的存在过，而且它走过的地方，就是今天的英格兰和威尔士。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">2</div>
+    <div class="txt">It lived four hundred and fifteen million years ago. Then scientists took a fresh look at some <span class="kw" data-def="古老的；远古的" data-en="very, very old; belonging to the distant past">ancient</span> <span class="kw" data-def="化石（复数，单数是 fossil）" data-en="the hard remains of an animal or plant that died long ago, kept in rock">fossils</span>. They had sat in a <span class="kw" data-def="博物馆" data-en="a building where old and interesting things are kept and shown to people">museum</span> drawer for over a hundred and fifty years — and nobody knew what they really were.</div>
+    <button class="play" data-seg="1" title="Play">▶</button>
+    <div class="zh">它生活在 4.15 亿年前。后来，科学家重新审视了一些古老的化石。它们在一个博物馆的抽屉里躺了一百五十多年——没人知道它们到底是什么。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">3</div>
+    <div class="txt">Why does this matter? This giant lived before trees even existed. Most huge bugs came much later, when the air held more <span class="kw" data-def="氧气" data-en="the gas in the air that animals and people must breathe to stay alive">oxygen</span>. So this scorpion probably grew big because no other <span class="kw" data-def="捕食者；掠食动物" data-en="an animal that hunts and eats other animals">predator</span> was big enough to fight it.</div>
+    <button class="play" data-seg="2" title="Play">▶</button>
+    <div class="zh">这为什么重要？这个巨兽生活的年代，连树都还没有出现。大多数巨型虫子出现在更晚以后，那时空气中的氧气更多。所以这只蝎子之所以能长得这么大，很可能是因为没有别的捕食者大到能跟它争。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">4</div>
+    <div class="txt">Big discoveries don't always need a brand-new fossil. Sometimes they just need a fresh look at an old one. So keep asking questions. I'm Pola, and this is POLA NEWS. See you next time!</div>
+    <button class="play" data-seg="3" title="Play">▶</button>
+    <div class="zh">重大的发现，不一定要靠一块全新的化石。有时候，只需要用新的眼光重新看看旧的化石。所以，继续保持提问。我是 Pola，这里是 POLA NEWS。下次见！</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">1 m+</div><div class="l">身长，和金毛寻回犬差不多</div></div>
+    <div class="stat"><div class="n">16 cm</div><div class="l">一对螯的长度，比你的手还大</div></div>
+    <div class="stat"><div class="n">415</div><div class="l">百万年前（泥盆纪早期）</div></div>
+    <div class="stat"><div class="n">150+</div><div class="l">年在博物馆抽屉里等着被认出来</div></div>
+  </div>
+</section>
+
+<section id="vocab">
+  <h2><span class="num">2</span>🔤 Vocabulary · 词汇表</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 10 个核心词。点击右上角 🔊 听发音。</p>
+  <div class="vgrid">
+    <div class="vcard">
+      <button class="spk" data-word="scorpion">🔊</button>
+      <div class="w">scorpion</div><div class="pos">noun /ˈskɔːpiən/</div>
+      <div class="zh">蝎子</div>
+      <div class="en">A scorpion has two big front claws and a tail with a sting.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="pincer">🔊</button>
+      <div class="w">pincer</div><div class="pos">noun /ˈpɪnsə(r)/ (usually plural: pincers)</div>
+      <div class="zh">螯；钳子</div>
+      <div class="en">Its pincers were sixteen centimetres long.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="giant">🔊</button>
+      <div class="w">giant</div><div class="pos">noun & adjective /ˈdʒaɪənt/</div>
+      <div class="zh">巨兽；巨大的</div>
+      <div class="en">This giant really lived, long before the dinosaurs.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="fossil">🔊</button>
+      <div class="w">fossil</div><div class="pos">noun /ˈfɒsl/ (plural: fossils)</div>
+      <div class="zh">化石</div>
+      <div class="en">Old fossils can still hold brand-new secrets.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="predator">🔊</button>
+      <div class="w">predator</div><div class="pos">noun /ˈpredətə(r)/</div>
+      <div class="zh">捕食者；掠食动物</div>
+      <div class="en">No other predator was big enough to fight it.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="museum">🔊</button>
+      <div class="w">museum</div><div class="pos">noun /mjuˈziːəm/</div>
+      <div class="zh">博物馆</div>
+      <div class="en">The fossils sat in a museum drawer for 150 years.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="oxygen">🔊</button>
+      <div class="w">oxygen</div><div class="pos">noun /ˈɒksɪdʒən/</div>
+      <div class="zh">氧气</div>
+      <div class="en">Later, the air held more oxygen, so bugs grew huge.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="ancient">🔊</button>
+      <div class="w">ancient</div><div class="pos">adjective /ˈeɪnʃənt/</div>
+      <div class="zh">古老的；远古的</div>
+      <div class="en">They took a fresh look at some ancient fossils.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="floodplain">🔊</button>
+      <div class="w">floodplain</div><div class="pos">noun /ˈflʌdpleɪn/</div>
+      <div class="zh">泛滥平原；河漫滩</div>
+      <div class="en">It hunted across the wide muddy floodplains.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="crustacean">🔊</button>
+      <div class="w">crustacean</div><div class="pos">noun /krʌˈsteɪʃn/</div>
+      <div class="zh">甲壳类动物（虾、蟹等）</div>
+      <div class="en">At first, scientists thought it was a giant crustacean.</div>
+    </div>
+  </div>
+</section>
+
+<section id="pattern">
+  <h2><span class="num">3</span>🗣️ Sentence Patterns · 句型练习</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">先读句子，再填空，点“检查”看答案。</p>
+
+  <div class="pat">
+    <div class="en">Imagine a scorpion <b>as long as</b> a golden retriever.</div>
+    <div class="zh">想象一只和金毛寻回犬一样长的蝎子。—— <b>as + 形容词 + as</b> 表示“和……一样……”，形容词一定要放在两个 as 中间。</div>
+    <div class="fill">Imagine a scorpion <input id="f1" type="text" placeholder="三个词" autocomplete="off"> a golden retriever. <button onclick="check('f1',['as long as'],'as long as')">检查</button></div>
+    <div class="ans" id="a1"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Its pincers were sixteen centimetres <b>long</b>.</div>
+    <div class="zh">它的螯有十六厘米长。—— 说尺寸时，用 <b>数字 + 单位 + 形容词（long / tall / wide / deep）</b>。</div>
+    <div class="fill">Its pincers were sixteen centimetres <input id="f2" type="text" placeholder="形容词" autocomplete="off">. <button onclick="check('f2',['long'],'long')">检查</button></div>
+    <div class="ans" id="a2"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">This giant lived <b>before</b> trees even existed.</div>
+    <div class="zh">这个巨兽生活的年代，连树都还没出现。—— <b>before</b> 引导时间状语从句，意思是“在……之前”。</div>
+    <div class="fill">This giant lived <input id="f3" type="text" placeholder="连词" autocomplete="off"> trees even existed. <button onclick="check('f3',['before'],'before')">检查</button></div>
+    <div class="ans" id="a3"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">No other predator was big <b>enough</b> to fight it.</div>
+    <div class="zh">没有别的捕食者大到能跟它打。—— <b>enough</b> 要放在形容词<b>后面</b>（big enough），但放在名词<b>前面</b>（enough food）。</div>
+    <div class="fill">No other predator was big <input id="f4" type="text" placeholder="一个词" autocomplete="off"> to fight it. <button onclick="check('f4',['enough'],'enough')">检查</button></div>
+    <div class="ans" id="a4"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Big discoveries <b>don't always</b> need a brand-new fossil.</div>
+    <div class="zh">重大的发现<b>不一定</b>需要全新的化石。—— <b>not always</b> 是“部分否定”，意思是“并不总是”，语气比 never（从不）温和得多。</div>
+    <div class="fill">Big discoveries <input id="f5" type="text" placeholder="两个词" autocomplete="off"> need a brand-new fossil. <button onclick="check('f5',['don\'t always','do not always'],'don\'t always')">检查</button></div>
+    <div class="ans" id="a5"></div>
+  </div>
+</section>
+
+<section id="grammar">
+  <h2><span class="num">4</span>📐 Grammar · 语法点</h2>
+
+  <div class="gbox">
+    <h3>1. 一般过去时：规则动词 -ed 与不规则动词</h3>
+    <div class="rule">规则动词 + -ed　｜　不规则动词要单独背（look → looked ／ know → knew）</div>
+    <ul>
+      <li>This giant really <b>lived</b>. （这个巨兽真的存在过。）</li>
+      <li>It <b>walked</b> across England and Wales. （它走过英格兰和威尔士。）</li>
+      <li>Nobody <b>knew</b> what they were. （没人知道它们是什么。）</li>
+    </ul>
+    <table>
+      <tr><th>动词原形</th><th>过去式</th><th>类型</th></tr>
+      <tr><td>live</td><td>lived</td><td>规则：直接加 -ed</td></tr>
+      <tr><td>walk</td><td>walked</td><td>规则：直接加 -ed</td></tr>
+      <tr><td>know</td><td>knew</td><td>不规则：要单独记</td></tr>
+      <tr><td>come</td><td>came</td><td>不规则：要单独记</td></tr>
+      <tr><td>hold</td><td>held</td><td>不规则：要单独记</td></tr>
+      <tr><td>grow</td><td>grew</td><td>不规则：要单独记</td></tr>
+    </table>
+  </div>
+
+  <div class="gbox">
+    <h3>2. as + 形容词 + as（同级比较）</h3>
+    <div class="rule">as + 形容词原级 + as　＝　和……一样……　｜　not as ... as　＝　没有……那么……</div>
+    <ul>
+      <li>Imagine a scorpion <b>as long as</b> a golden retriever. （和金毛寻回犬一样长）</li>
+      <li>Its pincers were <b>as big as</b> your hand. （和你的手一样大）</li>
+      <li>Today's biggest scorpion is <b>not as big as</b> that one. （今天最大的蝎子没有那只大）</li>
+      <li>⚠️ 中间的形容词必须用<b>原级</b>，不能加 -er：要说 as long as，不能说 as longer as。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>3. before / when 引导的时间状语从句</h3>
+    <div class="rule">before + 从句 ＝ 在……之前　｜　when + 从句 ＝ 当……的时候</div>
+    <ul>
+      <li>This giant lived <b>before</b> trees even existed. （在树出现之前）</li>
+      <li>Most huge bugs came later, <b>when</b> the air held more oxygen. （当空气里氧气更多的时候）</li>
+      <li>放在<b>句首</b>时，主句前面要加逗号：<br>
+      <b>Before</b> trees existed, this giant was already hunting.</li>
+      <li>放在<b>句中</b>时，<b>不需要</b>逗号：<br>
+      This giant lived <b>before</b> trees existed.</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>4. million / hundred 与 ... years ago</h3>
+    <div class="rule">具体数字 + hundred / thousand / million（<b>不加 s</b>）　＋　years ago</div>
+    <ul>
+      <li>four hundred and fifteen <b>million</b> years ago （4.15 亿年前——不加 s）</li>
+      <li>two <b>hundred</b> years ago （200 年前——不加 s）</li>
+      <li><b>millions of</b> years ago （数百万年前——没有具体数字时要加 s，还要加 of）</li>
+      <li>💡 读法：英语数字三位一节，415 million 读作 <b>four hundred and fifteen million</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2><span class="num">5</span>✅ Quiz · 练习测验</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 5 题，点击选项即可作答，做完后可以看解析。</p>
+
+  <div class="q" data-ans="2">
+    <div class="qt">1. How long was Praearcturus gigas?</div>
+    <div class="opts">
+      <div class="opt">A) 16 centimetres</div>
+      <div class="opt">B) About 23 centimetres</div>
+      <div class="opt">C) Over one metre</div>
+      <div class="opt">D) Four metres</div>
+    </div>
+    <div class="exp">✅ 正确答案：C。它的身体超过 <b>1 米</b>，和一只金毛寻回犬差不多长。注意别被其他数字骗了：16 厘米是<b>一对螯</b>的长度，23 厘米是<b>今天</b>最大的蝎子（印度森林蝎）的身长，4 米那是日本蜘蛛蟹——虽然它也是节肢动物，但不是蝎子。</div>
+  </div>
+
+  <div class="q" data-ans="2">
+    <div class="qt">2. How long ago did this scorpion live?</div>
+    <div class="opts">
+      <div class="opt">A) 4.15 million years ago</div>
+      <div class="opt">B) 41.5 million years ago</div>
+      <div class="opt">C) 415 million years ago</div>
+      <div class="opt">D) 4,150 years ago</div>
+    </div>
+    <div class="exp">✅ 正确答案：C。它生活在距今 <b>4.15 亿年</b>的泥盆纪早期。做个对比你就知道有多久了：恐龙是在大约 2.3 亿年前才出现的，也就是说，这只蝎子比最早的恐龙还早了将近 <b>2 亿年</b>。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">3. Where had these fossils been for more than 150 years?</div>
+    <div class="opts">
+      <div class="opt">A) In a deep cave in Wales</div>
+      <div class="opt">B) In a drawer at the Natural History Museum in London</div>
+      <div class="opt">C) In a museum in Canada</div>
+      <div class="opt">D) Buried under a car park</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。这些化石 1871 年就被命名了，之后一直在伦敦自然史博物馆的收藏柜里躺着。<b>关键不在于挖到新化石，而在于有人用新方法重新看了旧化石。</b>加拿大是另一种蝎子化石 <i>Eramoscorpius</i> 的发现地——正是靠它做对比，科学家才终于确认了身份。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">4. Why was its huge size such a surprise to scientists?</div>
+    <div class="opts">
+      <div class="opt">A) Scorpions simply cannot grow that big</div>
+      <div class="opt">B) It lived before forests and long before other giant bugs, when land life was still tiny</div>
+      <div class="opt">C) It had no pincers at all</div>
+      <div class="opt">D) It only ate plants</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。人们熟悉的巨型虫子（比如巨型千足虫 <i>Arthropleura</i>）生活在石炭纪，比它晚了至少 <b>5000 万年</b>，那时候森林已经长起来、空气含氧量也高得多。而 <i>Praearcturus</i> 活在一个<b>连树都还没有</b>、陆地上几乎没有大家伙的世界——在那个环境里长到 1 米，完全出乎意料。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">5. What did scientists first think the fossil was, back in 1871?</div>
+    <div class="opts">
+      <div class="opt">A) A scorpion</div>
+      <div class="opt">B) A giant crustacean, like a huge woodlouse</div>
+      <div class="opt">C) A millipede</div>
+      <div class="opt">D) A fish</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。1871 年 Henry Woodward 命名它时，以为这是一种巨大的、像潮虫（woodlouse）一样的甲壳动物。这个名字还留着痕迹：<b>Arcturus</b> 本身就是一类现生潮虫的名字。科学家怀疑它是蝎子始于 1980 年代，但一直没法证明——因为化石太碎，<b>没有留下蝎子最标志性的尾巴</b>。</div>
+  </div>
+
+  <div id="score"></div>
+  <button id="resetq">🔄 再做一次</button>
+</section>
+
+<section id="more" class="cn">
+  <h2><span class="num">6</span>💡 中文知识扩展</h2>
+
+  <h3>一、它到底有多大？跟今天的蝎子比一比</h3>
+  <p>我们平时见到的蝎子，一般只有几厘米长。就算是世界上现存最大的蝎子——<b>印度森林蝎</b>，身长也只有 <b>23 厘米</b>左右。</p>
+  <div class="cmp">
+    <div class="box">
+      <h4>🦂 今天的纪录保持者</h4>
+      <div class="big">约 23 cm</div>
+      <p>印度森林蝎。和一支铅笔差不多长，已经算得上“巨无霸”了。</p>
+    </div>
+    <div class="box">
+      <h4>🦂 史上最大的蝎子</h4>
+      <div class="big">超过 100 cm</div>
+      <p><i>Praearcturus gigas</i>。身长是它的 4 倍多，光一对螯就有 16 厘米——比一个成年人的手掌还长。</p>
+    </div>
+  </div>
+  <div class="fact">📏 <b>换算一下：</b>它的身体大约和一只金毛寻回犬一样长，或者说，差不多是<b>三个小学生并排躺着</b>那么长。</div>
+
+  <h3>二、150 年的“认错人”：一块化石的身份之谜</h3>
+  <p>这块化石的故事，特别像一部侦探片。</p>
+  <div class="flow">
+    <span class="step">1871 年：被命名</span><span class="arw">→</span>
+    <span class="step">被当成“巨型潮虫”</span><span class="arw">→</span>
+    <span class="step">1980 年代：有人起疑</span><span class="arw">→</span>
+    <span class="step">化石太碎，无法证明</span><span class="arw">→</span>
+    <span class="step ember">2015 年：加拿大找到关键对照</span><span class="arw">→</span>
+    <span class="step">2026 年：确认是蝎子</span>
+  </div>
+  <p>为什么拖了一百多年？因为化石保存得太零碎了，<b>最关键的那条蝎子尾巴一直没有找到</b>。没有尾巴，就很难说它到底是不是蝎子。</p>
+  <p>转机出现在 2015 年。科学家在加拿大描述了一种保存完好的古代蝎子，叫 <i>Eramoscorpius</i>。它身上有一个非常特别的结构——<b>胸板（sternum）</b>：一块长长的三角形骨片，正中间还有一道凹槽。</p>
+  <p>研究者再回头看 <i>Praearcturus</i> 的化石：<b>年龄相近，而且也有这样一块胸板。</b>证据对上了。研究负责人 Richard Howard 博士说，这下“毫无疑问”了，它一定是一种蝎子。</p>
+
+  <h3>三、为什么这么大？一个“没人抢”的世界</h3>
+  <p>过去教科书里解释“古代虫子为什么能长这么大”，最流行的答案是：<b>那时候空气里氧气多</b>。节肢动物靠身体表面的小孔呼吸，氧气越足，理论上就能长得越大。</p>
+  <p>但这个答案，解释不了 <i>Praearcturus</i>。</p>
+  <ul>
+    <li>它生活的年代<b>比森林早了很久</b>——那时候植物刚爬上陆地，空气中的氧气并没有特别高。</li>
+    <li>它比那些“著名巨型虫子”早了<b>至少 5000 万年</b>，而那批家伙靠的正是森林带来的高氧环境。</li>
+    <li>所以科学家提出了一个更朴素的解释：<b>因为陆地上还没有别的大家伙跟它抢。</b></li>
+  </ul>
+  <div class="fact">💡 <b>这就是生态学里说的“生态位空缺”。</b>一个地方如果暂时没有天敌、也没有竞争对手，先到的物种就可能“放飞自我”，长到很不寻常的尺寸。等后来者多起来，这种好事就没了。</div>
+
+  <h3>四、它可能还是个“两栖选手”</h3>
+  <p>还有一些更有趣的线索。部分化石标本的腹部，保存着<b>片状的结构</b>——很像今天的龙虾、螃蟹这些甲壳动物身上的游泳肢。</p>
+  <p>这意味着 <i>Praearcturus</i> 很可能<b>既能在陆地上走，也能在水里活动</b>。研究者 Russell Garwood 博士说：要长到这么夸张的尺寸，也许它本来就有相当一部分时间待在水里——<b>水里的世界本来就更容易长得大</b>。</p>
+  <p>自然史博物馆的 Greg Edgecombe 博士补充说：“那个年代陆地和海洋的<b>界限远没有今天这么分明</b>。”甚至还有一种可能：它的祖先已经爬上了陆地，而它这一支后来又<b>重新回到了水里</b>。</p>
+  <div class="fact">🔍 还有一个统计上的旁证：这个年代的岩层里，<b>蝎子化石的数量明显多于其他蛛形类动物</b>。如果它们常待在淡水环境里，就更容易被泥沙快速掩埋、变成化石——这个数据和“半水生”的猜测正好吻合。</div>
+
+  <h3>五、住在一个“没有树的世界”</h3>
+  <p>让我们闭上眼睛，想象一下 4.15 亿年前的英格兰和威尔士：</p>
+  <ul>
+    <li>🌫️ <b>没有树。</b>一棵都没有。最高的植物大概只到脚踝，像苔藓和低矮的小草。</li>
+    <li>🦗 <b>没有恐龙，没有鸟，没有哺乳动物。</b>爬行动物、鸟类、哺乳动物的祖先，那时都还生活在水里。</li>
+    <li>🏞️ <b>大片的泛滥平原。</b>河流时不时漫过两岸，留下一片片湿润的泥地。</li>
+    <li>🦂 <b>就在这样的世界里，一只 1 米长的蝎子走了过去。</b>它高高地“俯视”着周围那些小家伙，几乎想吃什么就吃什么。</li>
+  </ul>
+  <p>研究者说，这恰恰是最让人着迷的地方：<b>陆地生态系统才刚刚开始搭建，就已经能养活这么大的一个捕食者了。</b></p>
+
+  <h3>六、动手试试：用你的手量一量</h3>
+  <p><b>材料：</b>一把尺子（或者一根筷子 + 直尺）、一支笔、一张纸。</p>
+  <ul>
+    <li><b>第 1 步：</b>把自己的手掌按在纸上，用笔沿着边缘描一圈，量一量<b>从手腕到中指尖</b>有多长。</li>
+    <li><b>第 2 步：</b>在纸上画一条 <b>16 厘米</b>的线段。这就是 <i>Praearcturus</i> 一只螯的长度。<b>和你的手比一比，谁更长？</b></li>
+    <li><b>第 3 步：</b>再找一根绳子，量出 <b>1 米</b>（100 厘米）长，在地上摆一摆。然后躺下来，看看这根绳子到你的哪个位置。</li>
+    <li><b>第 4 步：</b>最后，量出 <b>23 厘米</b>，画在旁边——那是今天世界上最大的蝎子。</li>
+  </ul>
+  <div class="fact">🧠 <b>想一想的进阶问题：</b>如果你有一条 1 米长的绳子，代表 4.15 亿年。那么恐龙出现的 2.3 亿年前，应该在这条绳子的哪个位置？（提示：大约是<b>从中点再往后一点</b>——也就是说，这只蝎子比恐龙早了差不多“半条绳子”的时间！）</div>
+
+  <h3>七、科学素养提醒：新发现，不一定要挖新化石</h3>
+  <ul>
+    <li>这项研究最棒的一点，是它<b>没有挖到任何新化石</b>。所有材料都在博物馆里躺了一百多年。改变结果的是<b>新的成像技术 + 新的对照标本 + 新的提问方式</b>。</li>
+    <li>同时也要留意：研究者说 <i>Praearcturus</i> <b>可能</b>半水生、<b>可能</b>因为缺少竞争对手才长这么大——这些都还是<b>有待检验的假说</b>，不是板上钉钉的结论。化石越完整，答案才会越清楚。</li>
+    <li>还有一个好习惯值得记住：看科学新闻时，先分清<b>观察到了什么</b>（化石上有胸板、腹部有片状结构、身长 1 米）和<b>科学家怎么解释它</b>（半水生、缺少竞争）。前者是事实，后者是可以被新证据推翻的推测。</li>
+  </ul>
+  <div class="fact">🌟 <b>这期的科学金句：</b>Howard 博士说：“一个多世纪前采集的标本，依然能带来全新的洞见。用现代技术重新审视它们，我们就能有重塑人类对地球生命认知的发现。”</div>
+</section>
+
+<section id="about" class="cn">
+  <h2><span class="num">7</span>ℹ️ About · 关于本课</h2>
+  <h3>本期主角</h3>
+  <p><b>Pola</b>（宝拉）是一只短尾矮袋鼠（quokka），被称为“世界上最快乐的动物”。她是 POLA NEWS 的记者，会带着话筒跑到真实的现场——实验室、野外、博物馆、海边——把最新的科学发现讲给你听。她的招牌动作是：<b>双爪挥手告别 + 大大的笑脸</b>。</p>
+  <h3>难度与用法</h3>
+  <ul>
+    <li><b>等级：</b>B1（适合 10–12 岁）</li>
+    <li><b>结构：</b>4 段口播，每段约 15 秒：① 吸引注意 → ② 讲故事 → ③ 为什么重要 → ④ 告别</li>
+    <li><b>建议学习顺序：</b>先听全文（不看文字）→ 再看全文跟读 → 学词汇 → 练句型 → 做测验 → 读中文扩展</li>
+  </ul>
+  <h3>资料来源</h3>
+  <p>Howard, R. J., Garwood, R. J., &amp; Edgecombe, G. D. 等 (2026). <i>Praearcturus gigas</i> 的重新研究（Revision of <i>Praearcturus gigas</i>）。<b>Palaeontology</b>（《古生物学》），2026 年 9 月 2 日发表。</p>
+  <p>研究机构：伦敦自然史博物馆（Natural History Museum, London）、曼彻斯特大学（University of Manchester）。化石产地：威尔士 St Maughan's 组地层及英格兰多处地点。</p>
+  <div class="fact">🦂 <b>本期分类：</b>史前生物 · 古生物学 · 动物世界<br>📅 制作日期：2026-09-03</div>
+</section>
+</main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hi everyone, I'm Pola. Imagine a scorpion as long as a golden retriever. Its pincers alone were sixteen centimetres — bigger than your hand. This giant really lived, and it walked across what is now England and Wales.",
+  "It lived four hundred and fifteen million years ago. Then scientists took a fresh look at some ancient fossils. They had sat in a museum drawer for over a hundred and fifty years — and nobody knew what they really were.",
+  "Why does this matter? This giant lived before trees even existed. Most huge bugs came much later, when the air held more oxygen. So this scorpion probably grew big because no other predator was big enough to fight it.",
+  "Big discoveries don't always need a brand-new fossil. Sometimes they just need a fresh look at an old one. So keep asking questions. I'm Pola, and this is POLA NEWS. See you next time!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 句型练习 - 单空 ===== */
+function check(inputId, answers, display){
+  const el = document.getElementById(inputId);
+  const ansEl = document.getElementById(inputId.replace('f','a'));
+  if(!el || !ansEl) return;
+  const val = (el.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(answers.indexOf(val) !== -1){
+    ansEl.innerHTML = '✅ 答对啦！<b>' + display + '</b>';
+    ansEl.style.color = 'var(--good)';
+  }else if(val === ''){
+    ansEl.textContent = '✏️ 先填一个答案试试。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 正确答案是 <b>' + display + '</b>';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 测验 ===== */
+const scoreEl = document.getElementById('score');
+let answered = 0;
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = '已作答 ' + answered + ' / 5';
+}
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans, 10);
+  const exp = q.querySelector('.exp');
+  const opts = q.querySelectorAll('.opt');
+  opts.forEach(function(opt, i){
+    opt.addEventListener('click', function(){
+      if(q.dataset.done === '1') return;
+      q.dataset.done = '1';
+      answered++;
+      opts.forEach(function(o){ o.style.cursor = 'default'; });
+      if(i === ans){
+        opt.classList.add('right');
+      }else{
+        opt.classList.add('wrong');
+        if(opts[ans]) opts[ans].classList.add('right');
+      }
+      if(exp) exp.classList.add('show');
+      updateScore();
+    });
+  });
+});
+document.getElementById('resetq').addEventListener('click', function(){
+  answered = 0;
+  updateScore();
+  document.querySelectorAll('.q').forEach(function(q){
+    q.dataset.done = '0';
+    q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('right','wrong');
+      o.style.cursor = 'pointer';
+    });
+    const exp = q.querySelector('.exp');
+    if(exp) exp.classList.remove('show');
+  });
+  const inputs = ['f1','f2','f3','f4','f5'];
+  inputs.forEach(function(id){ const e=document.getElementById(id); if(e) e.value=''; });
+  ['a1','a2','a3','a4','a5'].forEach(function(id){ const e=document.getElementById(id); if(e){ e.textContent=''; e.style.color=''; } });
+});
+updateScore();
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

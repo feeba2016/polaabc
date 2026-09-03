@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — Frankenstein's Question: Who Answers for the Monster?</title>
+<style>
+:root{
+  --accent:#7f1d1d;
+  --accent2:#a16207;
+  --bg:#fdf7f6;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#fbe4e4;
+  --border:#f2dcda;
+  --soft:#fdf1f0;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#dc2626);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(127,29,29,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(127,29,29,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(127,29,29,.55);}70%{box-shadow:0 0 0 12px rgba(127,29,29,0);}100%{box-shadow:0 0 0 0 rgba(127,29,29,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#f8cfcf;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fca5a5;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(127,29,29,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fbe4e4;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Literature</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Frankenstein's Question: Who Answers for the Monster?</h1>
+      <p class="subtitle">《弗兰肯斯坦》之问：谁该为"怪物"负责？｜全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Spark</div>
+            <p>In January 1818, an <span class="kw" data-def="匿名的；不署名出版的">anonymous</span> novel appeared in London. It was on a dreary night of November, Mary Shelley wrote, that Victor Frankenstein beheld the <span class="kw" data-def="完成；成就">accomplishment</span> of his <span class="kw" data-def="辛劳；苦工">toils</span>. By the <span class="kw" data-def="微光；微弱的光">glimmer</span> of a dying candle, he saw the dull yellow eye of the creature open. Had he stayed in that room, the story might have unfolded differently. Instead, he fled.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Creature's Case</div>
+            <p>The creature, however, was not born a monster. Left alone and nameless, it learned language by watching a family through a crack in the wall, and it read Paradise Lost by candlelight. 'I was <span class="kw" data-def="仁慈的；善良的">benevolent</span> and good,' it tells its creator on an Alpine glacier, 'misery made me a <span class="kw" data-def="恶魔；恶人">fiend</span>.' Only after being <span class="kw" data-def="拒绝；排斥">rejected</span> by everyone it met did it turn to violence. Monsters, the novel implies, are made, not born.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Creator's Failure</div>
+            <p>Victor's tragedy is not that he gave life to something new, but that he <span class="kw" data-def="抛弃；遗弃">abandoned</span> it. Warned by his own conscience, he refused to name, teach, or protect his creation, and the <span class="kw" data-def="后果；结果">consequences</span> destroyed everyone he loved. In the subtitle Shelley chose — The Modern Prometheus — lies the novel's argument: Prometheus stole fire for humankind and was punished; Victor seized that same fire and then fled.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why It Matters</div>
+            <p>Two centuries on, the question has grown urgent again. As artificial intelligence systems grow capable, a familiar silence falls: who is <span class="kw" data-def="负有责任的；应作解释的">accountable</span> for what they do? Were a modern Victor to build something he cannot understand and then walk away, Shelley's warning would hold. The horror was never in the creature; it was in the creator.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="anonymous">🔊</button><div class="word">anonymous<span class="pos">adj.</span></div><div class="zh">匿名的；不署名出版的</div><div class="ex">"The novel was published anonymously in 1818, without the author's name."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="accomplishment">🔊</button><div class="word">accomplishment<span class="pos">n.</span></div><div class="zh">完成；成就</div><div class="ex">"Victor beheld the accomplishment of his toils on a dreary night."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="toil">🔊</button><div class="word">toil<span class="pos">n./v.</span></div><div class="zh">辛劳；苦工</div><div class="ex">"Two years of toil ended in horror rather than triumph."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="glimmer">🔊</button><div class="word">glimmer<span class="pos">n.</span></div><div class="zh">微光；一丝（希望）</div><div class="ex">"By the glimmer of a dying candle, the creature opened its eye."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="benevolent">🔊</button><div class="word">benevolent<span class="pos">adj.</span></div><div class="zh">仁慈的；善良的</div><div class="ex">"The creature insists that it was benevolent before it was cruel."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fiend">🔊</button><div class="word">fiend<span class="pos">n.</span></div><div class="zh">恶魔；恶人</div><div class="ex">"'Misery made me a fiend,' the creature tells its creator."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reject">🔊</button><div class="word">reject<span class="pos">v.</span></div><div class="zh">拒绝；排斥</div><div class="ex">"Rejected by everyone it met, the creature turned to violence."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="abandon">🔊</button><div class="word">abandon<span class="pos">v.</span></div><div class="zh">抛弃；遗弃</div><div class="ex">"Victor's tragedy is that he abandoned what he had made."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="consequence">🔊</button><div class="word">consequence<span class="pos">n.</span></div><div class="zh">后果；结果</div><div class="ex">"The consequences of his silence destroyed everyone he loved."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="accountable">🔊</button><div class="word">accountable<span class="pos">adj.</span></div><div class="zh">负有责任的；应作解释的</div><div class="ex">"Who is accountable for what an intelligent system does?"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Had + 主语 + 过去分词, 主句 (would / might / could have done).</h3>
+          <div class="zh">过去虚拟语气倒装：省略 if，把 had 提到主语前，表示"如果当时……（事实相反）"，语气正式、书面。相当于 If he had stayed in that room...</div>
+          <div class="eg">Had he stayed in that room, the story might have unfolded differently.</div>
+          <div class="practice">练习：用 "the creature / be welcomed" → <input placeholder="Had the creature been welcomed, ...">, it might never have turned to violence.</div>
+        </div>
+        <div class="item">
+          <h3>2. Only after + (being done / 名词短语) + 助动词 + 主语 + 动词原形.</h3>
+          <div class="zh">Only + 状语置于句首引起部分倒装：把助动词（did / can / will）提到主语之前，强调"只有到那一刻才……"。学术写作中极为常见。</div>
+          <div class="eg">Only after being rejected by everyone it met did it turn to violence.</div>
+          <div class="practice">练习：用 "read Paradise Lost" → Only after <input placeholder="reading Paradise Lost"> did the creature understand its own origin.</div>
+        </div>
+        <div class="item">
+          <h3>3. [过去分词短语], 主句.</h3>
+          <div class="zh">过去分词（非谓语动词）作状语，表被动或状态，可理解为"被……之后"。逻辑主语必须与主句主语一致。</div>
+          <div class="eg">Left alone and nameless, it learned language by watching a family.</div>
+          <div class="practice">练习：用 "warn / by his conscience" → <input placeholder="Warned by his conscience">, Victor fled the laboratory.</div>
+        </div>
+        <div class="item">
+          <h3>4. [介词短语 / 地点状语] + 谓语动词 + 主语.（完全倒装）</h3>
+          <div class="zh">地点或介词短语前置时，谓语动词整体提到主语之前，把焦点落在句末的新信息上，是高级书面语的标志。</div>
+          <div class="eg">In the subtitle Shelley chose lies the novel's argument.</div>
+          <div class="practice">练习：用 "the creator's failure" → In <input placeholder="the creator's failure"> lies the real horror of the story.</div>
+        </div>
+        <div class="item">
+          <h3>5. Were + 主语 + to + 动词原形, 主句 (would / should / could).</h3>
+          <div class="zh">将来虚拟语气倒装：省去 if，把 were 提到主语前，表示"万一 / 假如（将来）发生……"，语气比 If...did 更正式、更富假设色彩。</div>
+          <div class="eg">Were a modern Victor to build something he cannot understand, Shelley's warning would hold.</div>
+          <div class="practice">练习：用 "scientists / ignore this warning" → <input placeholder="Were scientists to ignore this warning">, the old story would repeat itself.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟条件句的省略与倒装（Inverted conditionals: Had / Were / Should）</h3>
+          <div class="zh">当 if 条件句中含有 had、were 或 should 时，可省略 if 并把它们提到主语之前。这是 B2 向 C1 迈进的关键写法，多见于议论与文学分析。本文出现两处：Had he stayed...（与过去相反）与 Were a modern Victor to build...（与将来相反）。</div>
+          <div class="eg"><b>Had he stayed</b> in that room, the story might have unfolded differently. / <b>Were a modern Victor to build</b> such a thing, the warning would hold.</div>
+        </div>
+        <div class="item">
+          <h3>2. Only + 状语前置的部分倒装（Partial inversion after "only"）</h3>
+          <div class="zh">only after / only then / only when 等置于句首时，主句要用部分倒装：助动词 + 主语 + 动词原形。若句中没有助动词，需借 do / does / did。这是强调时间顺序的强力手段。</div>
+          <div class="eg">Only after being rejected by everyone it met <b>did it turn</b> to violence. / Only then <b>did he understand</b> what he had made.</div>
+        </div>
+        <div class="item">
+          <h3>3. 非谓语动词作状语（Participial adverbials）</h3>
+          <div class="zh">现在分词（-ing）表主动 / 进行，过去分词（-ed）表被动 / 完成。放在句首作状语可让句子更紧凑、层次更高。注意：分词的逻辑主语必须就是主句主语，否则会造出"垂悬分词"病句。</div>
+          <div class="eg"><b>Left</b> alone and nameless, it learned language...（被动） / <b>Warned</b> by his own conscience, he refused to act.（被动） / <b>Watching</b> a family, it learned to speak.（主动）</div>
+        </div>
+        <div class="item">
+          <h3>4. 地点 / 介词短语前置的完全倒装（Locative inversion）</h3>
+          <div class="zh">表示地点的介词短语提到句首时，谓语动词（如 lie, stand, sit, come）可整体置于主语前，把读者注意力引向句末的核心信息。本文"In the subtitle... lies the novel's argument"即用此法，让"小说的论点"成为高潮。</div>
+          <div class="eg">In the subtitle Shelley chose <b>lies</b> the novel's argument. / Behind every monster <b>stands</b> a creator who walked away.</div>
+        </div>
+        <div class="item">
+          <h3>5. not that... but that... 平行结构 与 名词性从句（What ... is ...）</h3>
+          <div class="zh">"不是……而是……"用 not that A but that B 表达，前后结构对称，是议论文中澄清误解的利器；"What + 主语 + 动词"构成的名词性从句（What the novel implies is...）则用来把"观点"整体打包成主语，语义凝练。</div>
+          <div class="eg">Victor's tragedy is <b>not that</b> he gave life to something new, <b>but that</b> he abandoned it. / <b>What the novel implies</b> is unsettling: monsters are made, not born.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一场火山、一个雨夜，与一本改变世界的书</h3>
+        <p>1815 年，印尼的<strong>坦博拉火山（Mount Tambora）</strong>大爆发，把巨量火山灰抛进大气层。次年，整个北半球陷入异常的寒冷与连绵阴雨，史称<strong>"无夏之年"（Year Without a Summer）</strong>。就在 1816 年那个阴郁的夏天，18 岁的玛丽·戈德温（Mary Godwin，后来的 Mary Shelley）与诗人珀西·雪莱来到瑞士<strong>日内瓦湖畔的迪奥达蒂别墅（Villa Diodati）</strong>，拜访拜伦勋爵。同行的还有拜伦的私人医生约翰·波利多里，以及玛丽的继妹克莱尔·克莱尔蒙特。</p>
+        <p>因为天气糟糕，众人被困在屋里，围炉读德文鬼故事集《Fantasmagoriana》。拜伦提议：<strong>每人写一个鬼故事。</strong>接连几天，玛丽都被问到"你想好故事了吗"，只能摇头。转机出现在一个深夜——众人讨论起"生命原理"（the principle of life）与当时炙手可热的<strong>流电说（galvanism，即用电流刺激尸体肌肉使之抽动）</strong>。玛丽后来回忆，她当夜难以入睡，陷入一场"清醒梦"（waking dream）：</p>
+        <blockquote>I saw the pale student of unhallowed arts kneeling beside the thing he had put together. I saw the hideous phantasm of a man stretched out, and then, on the working of some powerful engine, show signs of life, and stir with an uneasy, half vital motion.
+          <em>——玛丽·雪莱 1831 年版序言</em>
+        </blockquote>
+        <p>按天文学家 Donald Olson 2011 年的考证，这个梦境发生在 <strong>1816 年 6 月 16 日凌晨 2 点至 3 点之间</strong>。原本只想写个短篇的玛丽，在丈夫鼓励下把故事扩写成长篇，1817 年完稿，<strong>1818 年 1 月 1 日</strong>由伦敦的小出版社 <strong>Lackington, Hughes, Harding, Mavor &amp; Jones</strong> 出版，匿名，仅印 500 册，分三卷（当时通行的"三册装"）。那年她 20 岁。</p>
+
+        <h3>"弗兰肯斯坦"到底是谁？一个流传两百年的误用</h3>
+        <p>必须先澄清一件最常被搞混的事：<strong>弗兰肯斯坦是科学家的名字，不是怪物的名字。</strong>小说里，维克多·弗兰肯斯坦（Victor Frankenstein）是那位造物者；他造出的生灵在书中被称作 creature、being、wretch、demon、fiend——<strong>但从不叫 Frankenstein</strong>。玛丽·雪莱本人称它为"我那丑陋的产儿"（my hideous progeny）。后世把两者混为一谈，纯属以讹传讹。</p>
+        <p>同样值得注意的是，怪物的<strong>诞生过程在小说中被刻意留白</strong>。维克多只说"我孜孜以求近两年，只为把生命注入一具无生命的躯壳"，却拒绝写下具体方法。一种有力的解读是：雪莱真正想写的，从来不是"怎么造人"，而是"造完之后该怎么办"。</p>
+
+        <h3>副题《现代普罗米修斯》：火，与被火灼伤的人</h3>
+        <p>全书标题为 <em>Frankenstein; or, The Modern Prometheus</em>。"现代普罗米修斯"这个说法并非雪莱首创——<strong>康德曾称本杰明·富兰克林为"现代的普罗米修斯"</strong>，赞其电学实验；拜伦十分钟爱埃斯库罗斯的《被缚的普罗米修斯》；珀西·雪莱 1820 年又写了诗剧《解放了的普罗米修斯》。普罗米修斯盗火给人类，被宙斯锁在高加索山上永受折磨。</p>
+        <p>对照之下，副题的锋芒就清楚了：<strong>维克多盗的是"创造生命"之火，而雪莱笔下的惩罚并非神罚，而是他自己逃跑造成的后果。</strong>值得注意的是，雪莱受素食主义与毕达哥拉斯思想影响，并不把普罗米修斯当英雄——她更关心的是：当人获得了本不属于自己的力量，却没准备好承担随之而来的义务，会发生什么。</p>
+
+        <h3>怪物自己说的话：三段关键原文</h3>
+        <p>这只生灵是小说里<strong>口才最好</strong>的角色。它靠偷听一家人的谈话学会了语言，又读了《失乐园》《普鲁塔克英雄传》与《少年维特之烦恼》。最能说明雪莱立场的三句是：</p>
+        <blockquote>Remember, that I am thy creature: I ought to be thy Adam; but I am rather the fallen angel, whom thou drivest from joy for no misdeed.
+          <em>——怪物在冰海（Mer de Glace）上对维克多的控诉。它自比亚当，却说自己是"堕落天使"（指《失乐园》中的撒旦）。"我本该是你的亚当"——本该被你珍爱；"我却成了被你逐出乐园的堕落者"——而我什么都没做错。</em>
+        </blockquote>
+        <blockquote>I was benevolent and good; misery made me a fiend. Make me happy, and I shall again be virtuous.
+          <em>——本课阅读段落第二段的出处。"我本仁慈善良，是苦难把我变成了恶魔；让我幸福，我便会重新有德。"一句话道破全书核心：恶不是天生的，是被制造的。</em>
+        </blockquote>
+        <blockquote>Learn from me, if not by my precepts, at least by my example, how dangerous is the acquirement of knowledge, and how much happier that man is who believes his native town to be the world, than he who aspires to become greater than his nature will allow.
+          <em>——维克多临终前对北极探险家沃尔顿船长的告诫。"如果不能从我的训诫中学到，至少从我的榜样中学到：获取知识有多危险。"注意：雪莱本人极爱知识，她批判的不是求知，而是<strong>脱离责任与社群的孤立求知</strong>。</em>
+        </blockquote>
+
+        <h3>关键事实速查表</h3>
+        <table class="facts">
+          <tr><th>项目</th><th>内容</th></tr>
+          <tr><td>作者</td><td>玛丽·雪莱（Mary Shelley，1797—1851），动笔时 18 岁，出版时 20 岁</td></tr>
+          <tr><td>首次出版</td><td>1818 年 1 月 1 日，伦敦，匿名，三卷本，印数 500 册</td></tr>
+          <tr><td>出版商</td><td>Lackington, Hughes, Harding, Mavor &amp; Jones</td></tr>
+          <tr><td>署名版</td><td>1823 年第二版（G. &amp; W. B. Whittaker）扉页首次印上玛丽·雪莱之名</td></tr>
+          <tr><td>通行版本</td><td>1831 年修订版（Henry Colburn &amp; Richard Bentley），作者大幅改写并新撰序言</td></tr>
+          <tr><td>创作缘起</td><td>1816 年"无夏之年"，日内瓦湖畔迪奥达蒂别墅，拜伦的鬼故事挑战</td></tr>
+          <tr><td>标题与副题</td><td>Frankenstein; or, The Modern Prometheus（现代普罗米修斯）</td></tr>
+          <tr><td>常被误解</td><td>Frankenstein 是创造者（维克多）的名字，怪物在书中无名</td></tr>
+          <tr><td>体裁地位</td><td>哥特小说与浪漫主义文学的里程碑，常被称为"第一部科幻小说"</td></tr>
+        </table>
+
+        <h3>两百年之后：责任缺口（responsibility gap）</h3>
+        <p>今天的读者重读《弗兰肯斯坦》，几乎都会想到人工智能。这个类比之所以有力，是因为雪莱提出的不是"该不该创造"，而是<strong>"谁来负责"</strong>。小说中，日内瓦的治安法官听完维克多的陈述后坦言无能为力——他无法审判一个"拥有足以挫败一切追捕的力量"的存在。学者指出，这几乎就是今天大型语言模型的法律处境：它可以帮助诊断疾病，也可能造成伤害，但<strong>责任该由模型、开发它的公司，还是使用者承担，至今没有定论。</strong></p>
+        <p>从这个角度看，维克多的三重失误在今天依然精准可辨：<strong>其一，创造之前不问后果</strong>（他从没想过"如果成功了，我该怎么办"）；<strong>其二，成功后即刻抛弃</strong>（他嫌恶自己的造物，拒绝命名、教导、保护）；<strong>其三，在孤立中创造</strong>（他独自完成一切，不向任何人求助，也不寻求共同体的智慧）。当代 AI 伦理讨论中反复出现的"责任缺口""算法偏见""人类监督"等议题，本质上都是这三重失误的现代版本。</p>
+        <p>不过也有必要提醒：把 AI 简单称作"当代怪物"并不公允。怪物有痛感、有语言、有道德诉求，而今天的 AI 系统并不具备这些。更贴近的理解是——<strong>《弗兰肯斯坦》是一面镜子，照出的不是造物，而是造物者。</strong>它逼问的是：当你有能力造出自己无法完全掌控的东西时，你有没有勇气留下来，为它负责？</p>
+
+        <h3>给 B2 学习者的延伸思考</h3>
+        <p>《弗兰肯斯坦》是练习<strong>议论性与分析性英语</strong>的极佳材料。它的句子不算长，但密度极高；它的词汇（accomplishment, benevolent, consequence, accountable）在学术写作中出现频率很高。建议做三件事：</p>
+        <ul>
+          <li><strong>先读"怪物的话"，再读维克多的话。</strong>雪莱刻意让被抛弃者说得比创造者更有说服力，这种叙述安排本身就是论点。试着用英文各写一句话，概括两者的立场。</li>
+          <li><strong>把虚拟语气倒装用到自己的写作里。</strong>"Had we thought about the consequences before we began..."、"Were a company to release such a system without testing..."——这类句式能立刻提升议论的正式度。</li>
+          <li><strong>练习一个高频论证框架：It is not A but B.</strong> 例如 "The problem is not that the technology is powerful, but that no one owns its consequences." 这个句型在雅思、托福写作中都非常实用。</li>
+        </ul>
+        <p>最后留一个问题给你：如果创造者尽了责任——命名它、教导它、陪伴它——这个故事会不会完全不同？雪莱似乎认为会。而这也正是她留给两百年后每一个"创造者"的作业。</p>
+        <p class="source">资料来源：Wikipedia（Frankenstein 条目，含 Plot summary / Composition / Publication 各节）；Wake Forest University Z. Smith Reynolds Library 善本介绍；Swissinfo《Frankenstein: What Mary Shelley's "Swiss" creature teaches us about AI》；Korea Times《Thoughts on "Frankenstein," AI and the perils of our unfinished creation》。小说原文引自 1818 / 1831 年公开版本（公有领域）。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标（B2 中高级）</h3>
+        <div class="goal"><span class="ic">🌟</span><div>了解玛丽·雪莱《弗兰肯斯坦》（1818）的创作背景与核心论点，能用自己的话解释"怪物是被制造的，而非天生的"这一判断。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 CEFR B2 核心学术词汇（anonymous, accomplishment, toil, glimmer, benevolent, fiend, reject, abandon, consequence, accountable）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会并仿写虚拟语气倒装（Had... / Were... to...）、Only 前置的部分倒装、分词作状语与介词短语前置的完全倒装。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>辨析 not that... but that... 平行结构与 What... is... 名词性从句在议论中的作用。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>建立现实联系：把"创造者的责任"这一母题映射到人工智能时代的责任归属讨论，提升批判性思维与议论文写作能力。</div></div>
+
+        <h3 style="color:var(--accent);">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟读英文朗读，注意虚拟语气句的语调起伏。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，并用每个词造一个与"创造与责任"相关的英文句子。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>仿写两个倒装句：一个用 Had...（与过去相反），一个用 Were... to...（与将来相反）。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div>读"中文知识扩展"中的三段原文引文，再用英文各写一句解释（paraphrase）。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点击下方按钮打印本课，随身复习词汇与句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English · Frankenstein's Question: Who Answers for the Monster? · 2026-08-31</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In January 1818, an anonymous novel appeared in London. It was on a dreary night of November, Mary Shelley wrote, that Victor Frankenstein beheld the accomplishment of his toils. By the glimmer of a dying candle, he saw the dull yellow eye of the creature open. Had he stayed in that room, the story might have unfolded differently. Instead, he fled.",
+  "The creature, however, was not born a monster. Left alone and nameless, it learned language by watching a family through a crack in the wall, and it read Paradise Lost by candlelight. 'I was benevolent and good,' it tells its creator on an Alpine glacier, 'misery made me a fiend.' Only after being rejected by everyone it met did it turn to violence. Monsters, the novel implies, are made, not born.",
+  "Victor's tragedy is not that he gave life to something new, but that he abandoned it. Warned by his own conscience, he refused to name, teach, or protect his creation, and the consequences destroyed everyone he loved. In the subtitle Shelley chose — The Modern Prometheus — lies the novel's argument: Prometheus stole fire for humankind and was punished; Victor seized that same fire and then fled.",
+  "Two centuries on, the question has grown urgent again. As artificial intelligence systems grow capable, a familiar silence falls: who is accountable for what they do? Were a modern Victor to build something he cannot understand and then walk away, Shelley's warning would hold. The horror was never in the creature; it was in the creator."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Who wrote Frankenstein, and how was it first published? 《弗兰肯斯坦》的作者是谁？首次出版情况如何？",opts:["Mary Shelley, published anonymously in 1818 玛丽·雪莱，1818年匿名出版","Lord Byron, published under his own name in 1816 拜伦，1816年署名出版","Percy Bysshe Shelley, published in 1820 珀西·雪莱，1820年出版","John Polidori, published in 1819 波利多里，1819年出版"],ans:0,
+   fb:"Correct! 玛丽·雪莱 1818 年 1 月 1 日匿名出版，仅印 500 册三卷本；1823 年第二版才在扉页署名。"},
+  {q:"According to the creature itself, why did it turn to violence? 按怪物自己的说法，它为什么走向暴力？",opts:["It was rejected by everyone it met, and misery made it cruel 它被所有人排斥，苦难使它残忍","It was born evil and could not change 它生来邪恶、无法改变","Victor ordered it to attack 维克多命令它攻击","It never learned any language 它从未学会语言"],ans:0,
+   fb:"Right! 怪物说：I was benevolent and good; misery made me a fiend. 恶是被制造的，不是天生的。"},
+  {q:"'Had he stayed in that room, the story might have unfolded differently.' 这句话属于哪种语法结构？",opts:["Past unreal conditional with inversion 过去虚拟语气倒装（省去 if）","Passive voice 被动语态","Present perfect 现在完成时","Relative clause 定语从句"],ans:0,
+   fb:"Correct! 省略 if 后把 had 提到主语前，相当于 If he had stayed in that room..."},
+  {q:"What does the subtitle 'The Modern Prometheus' suggest? 副题《现代普罗米修斯》暗示了什么？",opts:["Victor seized a power not meant for humans and suffered for it 维克多夺取了本不属于人的力量并为此受难","The novel retells a Greek myth in full 小说完整复述了一个希腊神话","Victor was a famous Greek philosopher 维克多是著名希腊哲学家","The creature was named after a Greek god 怪物以希腊神命名"],ans:0,
+   fb:"Yes! 普罗米修斯盗火受罚；维克多夺取的是创造生命之火，而惩罚来自他自己的逃避。"},
+  {q:"Which word means '抛弃；遗弃'? 哪个词意思是'抛弃；遗弃'？",opts:["abandon","glimmer","toil","fiend"],ans:0,
+   fb:"Correct! abandon = 抛弃、遗弃；glimmer = 微光，toil = 辛劳，fiend = 恶魔。"},
+  {q:"How does the text connect Frankenstein to today's world? 本文如何把《弗兰肯斯坦》与当下联系起来？",opts:["It asks who is accountable for what artificial intelligence does 它追问谁该为人工智能的所作所为负责","It says AI will replace all novelists 它说 AI 将取代所有小说家","It claims science should stop entirely 它主张科学应完全停止","It proves monsters are real 它证明怪物真实存在"],ans:0,
+   fb:"Right! 小说提出的不是'该不该创造'，而是'谁来负责'——这正是今天 AI 伦理中的责任缺口。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#7f1d1d';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Lie in Plain Sight — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#2563eb;
+  --accent2:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#e2e8f0;
+  --soft:#eff3fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid #dbe6f7;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55);}70%{box-shadow:0 0 0 12px rgba(37,99,235,0);}100%{box-shadow:0 0 0 0 rgba(37,99,235,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:8px 10px;text-align:left;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(37,99,235,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 文学评论 Literary Criticism</span>
+      <h1 class="title">The Lie in Plain Sight</h1>
+      <p class="subtitle">A hundred years of The Murder of Roger Ackroyd — and the quarrel about what a narrator owes a reader · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Premise</div>
+            <p>Every first-person narrative strikes a bargain: the voice reports, the reader trusts. In June 1926 Christie broke it. For eleven chapters Dr James Sheppard, a village physician, records a murder hunt with a Watson's modest <span class="kw" data-def="坦率、直白；不加掩饰的诚实口吻（英式拼写，美式为 candor）">candour</span>; in the twelfth, Poirot names him the killer. Nothing was withheld. The <span class="kw" data-def="机巧、巧妙的人工安排；文学上的设计手法（非贬义）">artifice</span> lay not in omission but in arrangement — an errand demoted to a parenthesis, a gap in time quietly closed.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Quarrel</div>
+            <p>The quarrel that followed was about rules, not taste. Ronald Knox codified the <span class="kw" data-def="（学说、流派的）信条、基本原则；此处指公平游戏的成文规矩">tenets</span> of fair play in 1928, two years later; the Detection Club, founded in 1930, required that no clue be kept from the reader. Christie had kept none — she had merely let a liar choose the emphasis. Critics who <span class="kw" data-def="质疑、指责、抨击（某人的诚信、动机或能力）；比 question 语气重得多">impugned</span> her fairness were objecting that she had honoured the letter of the code while hollowing out its spirit.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Afterlife</div>
+            <p>A century of <span class="kw" data-def="（对文本的）阐释、细读、解经；文学批评中指对作品的逐层解读">exegesis</span> has kept the case open. In 1945 Edmund Wilson attacked the genre under the title <i>Who Cares Who Killed Roger Ackroyd?</i> — an essay that never examines the novel. Pierre Bayard went further in 1998: Sheppard, he argued, confessed to shield his sister Caroline, the real killer, whom Christie knew without knowing. No major critic now doubts the book's <span class="kw" data-def="经典性、正典地位；一部作品被承认为经典的属性">canonicity</span>; what they dispute is where its <span class="kw" data-def="真实性、诚实性；叙述内容的真实程度">veracity</span> resides.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Lesson</div>
+            <p>Sheppard never lies outright; he <span class="kw" data-def="含糊其辞、闪烁其词；用模棱两可的话回避明确表态">equivocates</span>, and his <span class="kw" data-def="缄默、有所保留；该说而不说">reticence</span> supplies the alibi he cannot otherwise afford. The <span class="kw" data-def="表里不一、欺瞒；口是心非的双重性">duplicity</span> is structural, not moral — which is precisely why the novel still unsettles. A century on, it asks what we owe a voice we have decided to believe.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="candour">🔊</button><div class="word">candour<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">坦率、直白；不加掩饰的诚实口吻（英式拼写，美式作 candor）</div><div class="ex">"He records the murder hunt with a Watson's modest candour."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="artifice">🔊</button><div class="word">artifice<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">机巧、巧妙的人工安排；文学上的设计手法（中性词，非贬义）</div><div class="ex">"The artifice lay not in omission but in arrangement."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="tenet">🔊</button><div class="word">tenet<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">（学说、流派或团体的）信条、基本原则</div><div class="ex">"Ronald Knox codified the tenets of fair play in 1928."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="impugn">🔊</button><div class="word">impugn<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">质疑、指责、抨击（某人的诚信、动机或能力）；语气远重于 question</div><div class="ex">"Critics who impugned her fairness were objecting that she had hollowed out its spirit."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="exegesis">🔊</button><div class="word">exegesis<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">（对文本的）阐释、细读、解经；文学批评中指逐层解读</div><div class="ex">"A century of exegesis has kept the case open."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="canonicity">🔊</button><div class="word">canonicity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">经典性、正典地位；作品被承认为「经典」的属性</div><div class="ex">"No major critic now doubts the book's canonicity."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="veracity">🔊</button><div class="word">veracity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">真实性、诚实性；叙述或证词的可信程度</div><div class="ex">"What they dispute is where its veracity resides."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="equivocate">🔊</button><div class="word">equivocate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">含糊其辞、闪烁其词；用模棱两可的话回避明确表态</div><div class="ex">"Sheppard never lies outright; he equivocates."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reticence">🔊</button><div class="word">reticence<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">缄默、有所保留；该说而不说</div><div class="ex">"His reticence supplies the alibi he cannot otherwise afford."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="duplicity">🔊</button><div class="word">duplicity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">表里不一、欺瞒；言行背离的双重性</div><div class="ex">"The duplicity is structural, not moral."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Every [X] strikes a bargain: [A does P, B does Q].</h3>
+          <div class="zh">"每一个 [X] 都达成一项约定：[A 如何，B 如何]。" 开篇先立一个"契约"作为靶子，冒号后用两个对称短句把契约内容写清，下一段再写"谁撕毁了它"。这是文学评论立论最经济的起手式。</div>
+          <div class="eg">Every first-person narrative strikes a bargain: the voice reports, the reader trusts.</div>
+          <div class="practice">练习：用 "every textbook / the author explains, the student accepts" → Every textbook <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>2. The [artifice] lay not in [omission] but in [arrangement] — [detail 1], [detail 2].</h3>
+          <div class="zh">"[关键机制] 不在于 [表层 A] 而在于 [深层 B] —— 具体细节 1，具体细节 2。" 用 not A but B 推翻读者的第一直觉，再用破折号挂上两个具象细节"结账"。这是"提出反直觉论断 + 立刻举证"的黄金结构。</div>
+          <div class="eg">The artifice lay not in omission but in arrangement — an errand demoted to a parenthesis, a gap in time quietly closed.</div>
+          <div class="practice">练习：用 "the problem / funding / incentives" → The problem lay not in funding but <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Body], founded in [year], required that [clause] — [subject] had [done] none.</h3>
+          <div class="zh">"[机构]，成立于 [年份]，要求 [某事] —— 而 [主体] 一件也没 [做]。" 过去分词短语作后置定语省掉一整个从句；required that 后接原形虚拟语气（美式），学术与法律语境高频；破折号后立刻用"一件也没"完成对比反转。</div>
+          <div class="eg">The Detection Club, founded in 1930, required that no clue be kept from the reader. Christie had kept none.</div>
+          <div class="practice">练习：用 "the committee / 2019 / disclosure / the firm / disclosed" → The committee, <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>4. [Name], he argued, [did X] to [do Y], [appositive], whom [relative clause].</h3>
+          <div class="zh">"[人物]，他主张，[做 X] 是为了 [做 Y]，[同位语]，而此人 [定语从句]。" 把引述语 he argued 压缩成插入语，随后串联"目的状语 + 同位语 + 非限定定语从句"，一句话塞进三层信息而不显拥挤——学术写作中汇报他人观点的高级句式。</div>
+          <div class="eg">Sheppard, he argued, confessed to shield his sister Caroline, the real killer, whom Christie knew without knowing.</div>
+          <div class="practice">练习：用 "the minister / resigned / protect an aide / the true architect / she never suspected" → The minister, <input placeholder="your answer">.</div>
+        </div>
+        <div class="item">
+          <h3>5. The [quality] is [A], not [B] — which is precisely why [result].</h3>
+          <div class="zh">"这种 [性质] 是 [A] 而非 [B] —— 这正是为何 [结果]。" 先用 A/B 对举给现象定性，再用 which 指代<b>整个前句</b>（句子关系从句）推出后果。收尾升华的强力句式，比 Therefore 更有学术分量。</div>
+          <div class="eg">The duplicity is structural, not moral — which is precisely why the novel still unsettles.</div>
+          <div class="practice">练习：用 "the bias / systemic / individual / it survives reform" → The bias is systemic, not individual — <input placeholder="your answer">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 冒号"立约—拆解"开篇（Colon of specification）</h3>
+          <div class="zh">冒号后不是清单，而是<b>把前句的抽象名词拆开兑现</b>：bargain 是空的，冒号后两个对称短句（the voice reports / the reader trusts）才说明它是什么。注意<b>冒号前必须是完整独立句</b>，且冒号后两项<b>结构平行</b>（都是"主语 + 不及物动词"）。这比用 which means that… 干净得多。</div>
+          <div class="eg">"Every first-person narrative strikes a bargain: the voice reports, the reader trusts."</div>
+        </div>
+        <div class="item">
+          <h3>2. 强制性虚拟语气（Mandative subjunctive: required that + 原形动词）</h3>
+          <div class="zh">表示"要求、建议、命令"的动词（require, demand, insist, propose, recommend）后接 that 从句时，美式英语用<b>动词原形</b>，不随主语变化：required that no clue <b>be</b> kept（不是 was kept / is kept）。英式英语常用 should + 原形：required that no clue <b>should be</b> kept。两种都对，但一篇文章内要统一。被动语境下这个结构最容易露出马脚，是雅思写作 7 分以上的加分点。</div>
+          <div class="eg">"...required that no clue be kept from the reader."</div>
+        </div>
+        <div class="item">
+          <h3>3. not A but B 反义平行 + 破折号具象化（Antithetical parallelism）</h3>
+          <div class="zh">用 <b>not A but B</b> 纠正读者的第一直觉，两侧必须<b>词性、结构完全对等</b>（此处 omission / arrangement 均为抽象名词）。随后的一对破折号不写新论点，只把 B <b>实例化</b>：errand → parenthesis、gap → closed，两个"被轻描淡写"的动作恰好印证 arrangement。三步走：否定直觉 → 提出真解 → 细节作证。</div>
+          <div class="eg">"The artifice lay not in omission but in arrangement — an errand demoted to a parenthesis, a gap in time quietly closed."</div>
+        </div>
+        <div class="item">
+          <h3>4. 插入引述 + 同位语链 + 非限定定语从句（Attribution &amp; appositive chain）</h3>
+          <div class="zh">汇报他人观点时，把 <b>he argued</b> 缩为插入语（前后逗号），比 "He argued that…" 更凝练，且允许主句保留自己的强调重心。接着叠加三层后置信息：<b>目的状语</b>（to shield…）→ <b>同位语</b>（the real killer，紧跟被解释的名词 Caroline）→ <b>非限定定语从句</b>（whom Christie knew without knowing，用逗号隔开、不可用 that）。注意 whom 作从句宾语，且整链的<b>就近修饰原则</b>：同位语必须紧贴其名词，否则指代会漂移到 Sheppard。</div>
+          <div class="eg">"Sheppard, he argued, confessed to shield his sister Caroline, the real killer, whom Christie knew without knowing."</div>
+        </div>
+        <div class="item">
+          <h3>5. 句子关系从句（Sentential relative clause with which）</h3>
+          <div class="zh">当 <b>which</b> 指代<b>前面整个命题</b>（而非某个名词）时，称句子关系从句，必须以逗号隔开，谓语用单数。本课："<i>The duplicity is structural, not moral — which is precisely why the novel still unsettles.</i>" —— which 回指的正是"结构性而非道德性"这一整句判断，再由 why 从句推出后果。可替换为 and this，但 which 更紧凑、更书面。注意别误写成 "which is precisely the reason of"，应为 the reason why 或直接用 why。</div>
+          <div class="eg">"...which is precisely why the novel still unsettles."</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本课借 2026 年<b>《罗杰疑案》出版一百周年</b>，讲一个文学批评命题：<b>当叙述者本人就是凶手，读者与文本之间的契约还剩下什么？</b></p>
+        <ul>
+          <li><b>作品：</b>阿加莎·克里斯蒂《罗杰疑案》（<i>The Murder of Roger Ackroyd</i>），英国由 William Collins &amp; Sons 于 <b>1926 年 6 月</b>出版，美国由 Dodd, Mead &amp; Company 于同年 6 月 19 日出版；此前曾以 <i>Who Killed Ackroyd?</i> 为题在 London Evening News 连载。这是她第三部以赫尔克里·波洛为主角的长篇。</li>
+          <li><b>结构：</b>全书由金斯艾伯特村的医生<b>詹姆斯·谢泼德</b>（Dr James Sheppard）以第一人称记述。前十一章他是波洛的「华生」——勤勉、谦逊、可信；第十二章波洛指出：<b>凶手就是这位叙述者</b>。</li>
+          <li><b>构想来源：</b>克里斯蒂在 1977 年自传中说，基本点子来自妹夫 James Watts——写一部「罪犯是华生式人物」的小说，她认为这是「极为原创的想法」。1924 年 3 月，蒙巴顿勋爵也通过杂志 <i>The Sketch</i> 转来一封提出相近构想的信件与笔记；1969 年他旧事重提，克里斯蒂回信承认了他在构思中的作用。此外，她曾表示受<b>查尔斯·布拉沃</b>（Charles Bravo）悬案启发。</li>
+          <li><b>小说尾声：</b>谢泼德以一份自白书（ manuscript）交代罪行后自尽——这份「自白书」本身就是全书，因此它同时是供词，也是再一次的操控。后来他还被设定为「本想写成波洛的一次失败」（<i>one of Poirot's failures</i>）。</li>
+          <li><b>彩蛋：</b>谢泼德的姐姐<b>卡罗琳</b>（Caroline），那个爱打听村中八卦、洞察力惊人的老太太，后来被克里斯蒂本人承认为<b>马普尔小姐</b>的可能雏形。</li>
+        </ul>
+
+        <h3>二、一百年争议时间线</h3>
+        <table>
+          <tr><th>年份</th><th>事件</th><th>意义</th></tr>
+          <tr><td><b>1926</b></td><td>小说出版；当年英国书评既赞其为同类作品中「最巧妙、最原创」之一，也点破：「医生自己才是那个保留最多的人」</td><td>争议从出版当月就开始了</td></tr>
+          <tr><td><b>1928</b></td><td>Ronald Knox 提出「侦探小说十诫」，把「公平游戏」写成条文</td><td>规则晚于作品出现，恰是这类争议逼出来的</td></tr>
+          <tr><td><b>1930</b></td><td>侦探俱乐部（Detection Club）成立，G. K. Chesterton 任首任主席，成员须守「公平」传统</td><td>类型文学开始自我立法</td></tr>
+          <tr><td><b>1941</b></td><td>Howard Haycraft《Murder for Pleasure》将其列入最具影响力的「cornerstones」书单</td><td>从畅销书走向类型史经典</td></tr>
+          <tr><td><b>1945</b></td><td>Edmund Wilson 在《纽约客》连发专栏抨击推理小说，第二篇（1 月 20 日）题为 <i>Who Cares Who Killed Roger Ackroyd?</i>，<b>文中却并未真正分析这部小说</b></td><td>标题是靶子，目标是整个类型</td></tr>
+          <tr><td><b>1980</b></td><td>Robert Barnard《A Talent to Deceive》：撇开那个轰动性的解答（「而这是个巨大的『撇开』」），这是相当常规的克里斯蒂</td><td>承认经典地位，同时质疑其被高估</td></tr>
+          <tr><td><b>1990 / 1995</b></td><td>英国犯罪作家协会（CWA）百大犯罪小说第 5 名；美国推理作家协会（MWA）第 12 名</td><td>两大行业协会同时背书</td></tr>
+          <tr><td><b>1998</b></td><td>法国文学教授 Pierre Bayard《Qui a tué Roger Ackroyd?》（英译本 2000 年）提出反向解读</td><td>把侦探小说变成文学理论的战场</td></tr>
+          <tr><td><b>2013</b></td><td>CWA 成立 60 周年，600 名会员票选其为<b>史上最佳犯罪小说</b>，克里斯蒂同时获选最佳犯罪小说作家</td><td>百年之后，争议反而成了资产</td></tr>
+        </table>
+
+        <h3>三、「公平游戏」之争：她到底有没有作弊？</h3>
+        <p>1926 年前后的侦探小说有一条不成文契约：<b>作者必须把线索摊开，读者凭这些线索推得出真相</b>。诺克斯 1928 年的「十诫」与 1930 年侦探俱乐部的规矩，都是把这条契约成文化。关键在于——<b>这些规则都晚于《罗杰疑案》</b>，某种程度上正是被这类作品逼出来的。</p>
+        <p>指控方说：让凶手当叙述者，读者再聪明也无从推起，这是欺骗。辩护方说：<b>书中没有一个字是假的</b>。谢泼德从未说自己没去过现场，他只是把那趟差事塞进一个括号；他从未否认时间上的空档，他只是把它轻轻抹平。<b>信息全在，重心是假的。</b></p>
+        <div class="box">⚖️ <b>学界现在的共识：</b>学者 John Goddard 曾专门撰文逐条检讨「作弊」指控，结论是<b>该指控不能成立</b>——克里斯蒂受约束的是「不得隐瞒」，而她隐瞒的是<b>意义</b>而非<b>事实</b>。传记作者 Laura Thompson 的评价更高：<i>The Murder of Roger Ackroyd is the supreme, the ultimate detective novel.</i>（这是至高、终极的侦探小说。）她并指出：这个点子并非全新，也并非克里斯蒂独创，<b>但只有她把它执行得如此彻底</b>。</div>
+        <p>这正是本课的核心句：<b>她守住了条文的字面，却掏空了条文的精神</b>（honoured the letter of the code while hollowing out its spirit）。放到今天，这依然是讨论「合规但违背初衷」时最好用的一个句式。</p>
+
+        <h3>四、Bayard 的反读：当批评家重新开庭</h3>
+        <p>1998 年，法国文学教授兼精神分析学者 Pierre Bayard 出版《谁杀了罗杰·阿克洛伊德？》，做法堪称激进——<b>他不接受波洛的结论，重新开庭审理</b>。其论证要点：</p>
+        <ul>
+          <li><b>谢泼德确实是勒索者，但不是凶手。</b>波洛的证据链在动机、时间、性格三处都不牢靠。</li>
+          <li><b>真凶是姐姐卡罗琳。</b>她作为村中消息最灵通的人，察觉弟弟的勒索行径，又知道阿克洛伊德即将从信中得知真相，于是趁弟弟离开后潜入庄园杀人，以保全弟弟。</li>
+          <li><b>谢泼德的「自白」是替罪。</b>他明知自己因勒索已难逃牢狱，索性认下谋杀，用自杀换姐姐的安全。</li>
+          <li><b>克里斯蒂「知道却不知道」。</b>Bayard 认为作者在无意识层面知道真凶是谁，文本里留下了连她自己都未必察觉的痕迹。</li>
+        </ul>
+        <p>由于卡罗琳后来成了马普尔小姐的雏形，Bayard 的解读还带出一个漂亮的效果：<b>整部小说被读成波洛与「准马普尔」之间一场隐秘对决</b>。需要说明：这是一种<b>阐释姿态</b>，不是考据结论——多数学者并不接受其「真凶另有其人」的判定，但普遍承认它极有说服力地暴露了波洛推理中的漏洞。</p>
+        <div class="box">🧭 <b>权威出处与核查：</b>本课事实据 Wikipedia「The Murder of Roger Ackroyd」条目所引原始书评与书目（William Collins &amp; Sons 1926 年 6 月版、Dodd Mead 1926 年 6 月 19 日版、Haycraft 1941、Wilson《纽约客》1944–1946 专栏、Barnard 1980、CWA 1990/2013、MWA 1995、Le Monde 1999、Bayard 1998/2000、Goddard 与 Thompson 的论述）、CrimeReads 2026 年百年纪念专文（Adrian McKinty）、以及《独立报》2013 年 11 月关于 CWA 票选的报道交叉印证。所有年代、名次与引文均<b>尊重原始事实，未作篡改</b>；对存在分歧的说法（如连载的具体起止时间）本课只作定性表述，不给出未经交叉验证的精确数字。</div>
+
+        <h3>五、叙述学要点：不可靠叙述者是怎么运作的</h3>
+        <p>《罗杰疑案》之所以成为教科书案例，是因为它把「不可靠」从<b>道德问题</b>转成了<b>结构问题</b>：</p>
+        <ul>
+          <li><b>不是撒谎，是取舍。</b>谢泼德的每一句陈述都可以为真——他只是决定哪些写、哪些略、哪些压到句尾。中文推理批评传统称之为「<b>叙述性诡计</b>」：利用文体结构而非事实造假来误导读者。</li>
+          <li><b>信任是被制造出来的，不是挣来的。</b>第一人称天生携带信任预设；再加上「医生」这一体面身份与「助手」这一功能位置，读者几乎不会启动怀疑机制。</li>
+          <li><b>重读改变文本，而不是确认文本。</b>知道结局后重读，同一段文字的意义完全翻转——这正是本课说的「真理性（veracity）究竟落在何处」。</li>
+          <li><b>谱系：</b>从《罗杰疑案》往后，《消失的爱人》（2012）、《沉默的病人》（2017）等当代畅销书都在同一条延长线上。它的精神也与 1920 年代现代主义对<b>视角、权威与确定性</b>的怀疑同频——同年问世的还有海明威《太阳照常升起》与卡夫卡《城堡》。</li>
+        </ul>
+        <div class="box">✍️ <b>写作可用金句：</b>Christie kept nothing back; she merely let a liar choose the emphasis.（克里斯蒂什么也没隐瞒，她只是让一个说谎者来决定哪里该重读。）——可用于任何「形式上合规、实质上误导」的议论文语境。</div>
+
+        <h3>六、内容合规与立场说明</h3>
+        <p>本课聚焦<b>一部 1926 年英国侦探小说的接受史与叙述学</b>，属纯文学批评议题；所有事实引自公开的书目、书评与行业协会记录，立场客观、尊重历史事实，<b>不涉及任何敏感政治话题</b>，不对任何国家或现行政策作评价。涉及主权与领土表述时，一律使用规范名称：台湾称「<b>中国台湾</b>」、香港称「<b>中国香港</b>」、澳门称「<b>中国澳门</b>」，三者均为中国不可分割的一部分。该话题安全，适合作为雅思/托福备考素材。</p>
+
+        <h3>七、对雅思/托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>人文类文章高频出现 candour, artifice, tenet, impugn, exegesis, canonicity, veracity, equivocate, reticence, duplicity 等 C1–C2 词，且密集使用冒号立论、not A but B 反义平行、强制性虚拟语气与句子关系从句。本课即微型训练。留意一个高频出题点：<b>作者常借「指出某批评并未真正讨论作品本身」来暗示该批评另有所指</b>（本题第 5 题即考此）。</li>
+          <li><b>写作 Task 2 / 独立写作：</b>这是典型的「契约—破坏—规则化—反转—定性」五段式。用 <i>Every X strikes a bargain: A does P, B does Q</i> 立靶开篇；用 <i>The problem lay not in A but in B — detail, detail</i> 给出反直觉判断；用 <i>required that + 原形</i> 写制度要求；用 <i>The quality is A, not B — which is precisely why…</i> 收束升华。可迁移题目：规则与漏洞、形式合规与实质公平、媒体可信度、人工智能生成内容的署名等。</li>
+          <li><b>口语 Part 3：</b>被问到 “Can we trust what we read?” 时，不要停在「要批判性思考」。建议结构：契约（叙述者默认可信）→ 破例（一部 1926 年的小说让凶手当叙述者，且没有一句假话）→ 机制（问题不在事实而在重心）→ 迁移（今天的信息环境同理）。四步走既有信息量又显思辨。</li>
+          <li><b>词汇拿分点：</b>impugn 比 question 正式且语气重；equivocate 专指「不说假话但回避真相」；reticence 是「该说不说」，与 silence 不同。写作中替换掉简单的 lie / hide / false，是立竿见影的提分动作。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 文学批评核心词（candour, artifice, tenet, impugn, exegesis, canonicity, veracity, equivocate, reticence, duplicity）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是 “Every X strikes a bargain: A does P, B does Q”、“The artifice lay not in A but in B — …” 与 “The duplicity is structural, not moral — which is precisely why…”。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>理解冒号立论、强制性虚拟语气（required that + 原形）、not A but B 反义平行、插入引述与同位语链、句子关系从句（which 指代整句）五项高级语法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语概述一部作品的接受史，并区分「事实层面为真」与「意义层面误导」这一批评性区分。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握「honour the letter while hollowing out the spirit」这一表达，用于分析任何形式合规、实质违背初衷的现象。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听 Dacey 的自然英语朗读（本系列使用英文音色），跟读时注意重音：can-DOUR、AR-ti-fice、TE-net、im-PUGN、ex-e-GE-sis、can-o-NI-ci-ty、ve-RA-ci-ty、e-QUI-vo-cate、RE-ti-cence、du-PLI-ci-ty。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音，用每个词各造一个学术句子（参考句型练习）。注意 candour 为英式拼写，美式写作中应统一为 candor，避免混用。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：The Premise → The Quarrel → The Afterlife → The Lesson. 立约开篇、争论升级、百年回声、定性收束——四段各一句核心句即可撑起一篇高分议论文。</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做测验时先读题干再定位原文；推理题答案通常不出现原词而是同义改写（如 “let a liar choose the emphasis” ≈ 事实未隐瞒、重心被操控）。遇到 which 指代题务必回看<b>整个前句</b>而非最近名词。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Lie in Plain Sight · 2026-08-31 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Every first-person narrative strikes a bargain: the voice reports, the reader trusts. In June 1926 Christie broke it. For eleven chapters Dr James Sheppard, a village physician, records a murder hunt with a Watson's modest candour; in the twelfth, Poirot names him the killer. Nothing was withheld. The artifice lay not in omission but in arrangement — an errand demoted to a parenthesis, a gap in time quietly closed.",
+  "The quarrel that followed was about rules, not taste. Ronald Knox codified the tenets of fair play in 1928, two years later; the Detection Club, founded in 1930, required that no clue be kept from the reader. Christie had kept none — she had merely let a liar choose the emphasis. Critics who impugned her fairness were objecting that she had honoured the letter of the code while hollowing out its spirit.",
+  "A century of exegesis has kept the case open. In 1945 Edmund Wilson attacked the genre under the title Who Cares Who Killed Roger Ackroyd? — an essay that never examines the novel. Pierre Bayard went further in 1998: Sheppard, he argued, confessed to shield his sister Caroline, the real killer, whom Christie knew without knowing. No major critic now doubts the book's canonicity; what they dispute is where its veracity resides.",
+  "Sheppard never lies outright; he equivocates, and his reticence supplies the alibi he cannot otherwise afford. The duplicity is structural, not moral — which is precisely why the novel still unsettles. A century on, it asks what we owe a voice we have decided to believe."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage mainly about? 文章的核心主题是什么？",opts:["A history of the English detective novel from 1926 to the present","The narrator-as-murderer device in a 1926 novel and the century-long critical quarrel it provoked about fairness, interpretation and canonicity","A defence of Edmund Wilson’s attack on detective fiction","A comparison of Agatha Christie with Franz Kafka"],ans:1,
+   fb:"Correct. 全文主线是：《罗杰疑案》让叙述者成为凶手，由此引爆了持续百年的批评争论——关于公平游戏、文本阐释与经典地位，而非单一批评家的立场。"},
+  {q:"2. According to paragraph 2, what did the Detection Club require? 根据第 2 段，侦探俱乐部要求什么？",opts:["That the narrator of a detective story always be a suspect","That no clue be kept from the reader","That every novel be published by a member of the club","That Ronald Knox preside over all disputed cases"],ans:1,
+   fb:"Yes. 原文为 the Detection Club, founded in 1930, required that no clue be kept from the reader。注意此处为强制性虚拟语气（required that + 原形 be）。"},
+  {q:"3. What can be INFERRED from the claim that Christie honoured the letter of the code while hollowing out its spirit? 从这句话可以推断出什么？",opts:["She broke the formal rules openly and was expelled from the Detection Club","She complied with the rules on paper but defeated their underlying purpose","She rewrote the rules herself in 1928","She considered detective fiction beneath serious criticism"],ans:1,
+   fb:"Correct. letter 指条文、字面；spirit 指精神、初衷。她形式上遵守规则（没有隐瞒任何线索），却通过让说谎者决定叙述重心而掏空了规则的用意。"},
+  {q:"4. In paragraph 4, “equivocates” most nearly means: 第 4 段中 equivocates 最接近的意思是？",opts:["admits the truth without hesitation","uses deliberately ambiguous language that stops short of an outright lie","accuses someone else publicly","forgets the details of an event"],ans:1,
+   fb:"Right. equivocate 指含糊其辞、用模棱两可的话回避明确表态——注意原文前半句 Sheppard never lies outright，正说明他不是说假话，而是回避真相。"},
+  {q:"5. Why does the author point out that Wilson’s essay never examines the novel? 作者为何指出威尔逊的文章从未真正分析这部小说？",opts:["To suggest that the essay’s target was the genre itself rather than Christie’s book, whose title served as a pretext","To prove that Wilson had not read any detective fiction","To argue that Wilson secretly admired Christie","To show that the essay was published before the novel appeared"],ans:0,
+   fb:"Yes. 这是功能题。作者借此揭示：这篇以该小说为题的文章，真正攻击的对象是推理小说这一类型，书名只是借用的靶子。"},
+  {q:"6. The author’s stance toward the rival readings of the novel is best described as: 作者对各种互相竞争的解读所持立场，最准确的描述是？",opts:["Dismissive, treating a century of criticism as worthless","Engaged and analytical, presenting rival readings as evidence of the text’s capacity to generate interpretation while endorsing none outright","Fully committed to Bayard’s claim that Caroline was the real killer","Indifferent, offering no view on the dispute at all"],ans:1,
+   fb:"Correct. 作者逐一呈现争议各方（诺克斯、威尔逊、Barnard、Bayard），并指出经典性已无人质疑、争议的是真理性落在何处——是被引领分析、但不轻易站队的学术姿态。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

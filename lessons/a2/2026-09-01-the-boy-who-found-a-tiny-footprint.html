@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Boy Who Found a Tiny Footprint — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#a16207;
+  --accent2:#0d9488;
+  --bg:#fffbeb;
+  --card:#ffffff;
+  --text:#44403c;
+  --muted:#78716c;
+  --highlight:#fef3c7;
+  --border:#fde68a;
+  --soft:#fffdf5;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#0d9488);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(161,98,7,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg{flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(161,98,7,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(161,98,7,.55);}70%{box-shadow:0 0 0 12px rgba(161,98,7,0);}100%{box-shadow:0 0 0 0 rgba(161,98,7,0);}}
+.seg .zh{flex-basis:100%;margin-left:50px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fde68a;}
+#tip{position:fixed;z-index:1200;background:#1c1917;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),#0d9488);color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border:1px solid #5eead4;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#0f766e;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#115e59;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE BOY WHO FOUND A TINY FOOTPRINT · 2026-09-01</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🦶 The Boy Who Found a Tiny Footprint</h1>
+  <div class="subtitle">发现小脚印的男孩 · CEFR A2 · 约 118 词 · 🔬 科学发现</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">Hook · 开场</div>
+        <p>Twelve-year-old Ni Jingchen loves rocks. In January 2025, he went to a hill in Beijing with his parents. He opened a grey <span class="kw" data-word="stone">stone</span> and saw four <span class="kw" data-word="tiny">tiny</span> toes. Was it a <span class="kw" data-word="footprint">footprint</span>?</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">十二岁的倪景辰很喜欢石头。2025 年 1 月，他和父母去北京的一座小山。他敲开一块灰色的石头，看到了四个小小的脚趾。这会是一个脚印吗？</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">Story · 故事</div>
+        <p>He took a photo and put it online. A <span class="kw" data-word="scientist">scientist</span> named Xing Lida saw the photo. He came to look at the stone with his team. The two footprints were only 1.5 centimetres long.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">他拍了照片发到网上。一位名叫邢立达的科学家看到了这张照片。他和团队来查看这块石头。那两个脚印只有 1.5 厘米长。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">Why it matters · 意义</div>
+        <p>The footprints are about 160 <span class="kw" data-word="million">million</span> years old. A small salamander-like <span class="kw" data-word="animal">animal</span> made them near a lake. It is the first amphibian footprint from the Jurassic ever found in Asia.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">这些脚印大约有 1.6 亿年的历史。一只像蝾螈一样的小动物在湖边留下了它们。这是亚洲首次在侏罗纪地层中发现的两栖动物脚印。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Sign-off · 结语</div>
+        <p>Ni Jingchen was just a pupil, but he helped science. Look down, ask questions, and you may <span class="kw" data-word="discover">discover</span> something <span class="kw" data-word="amazing">amazing</span> too.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">倪景辰只是一名小学生，却帮助了科学。低下头看看，多问几个为什么，你也可能发现惊人的东西。</div>
+    </div>
+  </div>
+
+  <div class="tipbox">
+    <h3>🔬 Science Tip · 小小科学家提示</h3>
+    <ul>
+      <li><b>先观察，再动手。</b>很多大发现都始于一次仔细的观察。</li>
+      <li><b>有疑问就记下来。</b>把问题写在本子上，再去查书或问老师。</li>
+      <li><b>野外安全最重要：</b>一定要有大人陪同，不去陡坡和积水处，不私自挖掘，发现化石要报告专业人员，共同保护地质遗迹。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Vocabulary</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="footprint">🔊</button>
+        <div class="word">footprint<span class="pos">n.</span></div>
+        <div class="zh">脚印；足迹</div>
+        <div class="ex">The footprint is very small.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="stone">🔊</button>
+        <div class="word">stone<span class="pos">n.</span></div>
+        <div class="zh">石头；石块</div>
+        <div class="ex">He opened a grey stone.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="tiny">🔊</button>
+        <div class="word">tiny<span class="pos">adj.</span></div>
+        <div class="zh">极小的；微小的</div>
+        <div class="ex">The baby has tiny hands.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="scientist">🔊</button>
+        <div class="word">scientist<span class="pos">n.</span></div>
+        <div class="zh">科学家</div>
+        <div class="ex">A scientist came to look.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="million">🔊</button>
+        <div class="word">million<span class="pos">num.</span></div>
+        <div class="zh">百万</div>
+        <div class="ex">It is 160 million years old.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="animal">🔊</button>
+        <div class="word">animal<span class="pos">n.</span></div>
+        <div class="zh">动物</div>
+        <div class="ex">A small animal lived near the lake.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="discover">🔊</button>
+        <div class="word">discover<span class="pos">v.</span></div>
+        <div class="zh">发现；发觉</div>
+        <div class="ex">You may discover something new.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="amazing">🔊</button>
+        <div class="word">amazing<span class="pos">adj.</span></div>
+        <div class="zh">惊人的；了不起的</div>
+        <div class="ex">What an amazing find!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">He was just a pupil, but he helped science.</div>
+    <div class="zh">他只是一名小学生，却帮助了科学。</div>
+    <div class="note">用 <b>but</b> 连接两个意思相反的句子。试着说：The stone was small, but it was important.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">The footprints are about 160 million years old.</div>
+    <div class="zh">这些脚印大约有 1.6 亿年的历史。</div>
+    <div class="note">用 <b>数字 + years old</b> 说明年代或年龄。注意：million 后面<b>不加 s</b>。</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">He took a photo and put it online.</div>
+    <div class="zh">他拍了照片并发到网上。</div>
+    <div class="note">用 <b>and</b> 连接先后发生的两个动作，两个动词都用过去式。</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">Look down, ask questions, and you may discover something amazing.</div>
+    <div class="zh">低头看看，多问为什么，你就可能发现惊人的东西。</div>
+    <div class="note">祈使句 + <b>and</b> + 结果句，表示<b>这样做就会有这样的结果</b>。</div>
+  </div>
+</section>
+
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 一般过去时（讲已经发生的事）</h3>
+    <ul>
+      <li>规则动词加 <b>-ed</b>：look → looked，help → helped，open → opened。</li>
+      <li>不规则动词要特别记：<b>go → went</b>，<b>see → saw</b>，<b>take → took</b>，<b>put → put</b>，<b>come → came</b>，<b>make → made</b>。</li>
+      <li class="eg">He <span class="good">went</span> to a hill. He <span class="good">saw</span> four tiny toes.</li>
+      <li>否定和疑问用 <b>did</b>：<span class="bad">He didn't went.</span> → <span class="good">He didn't go.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. 大数字与量词</h3>
+    <ul>
+      <li><b>hundred</b> 百 · <b>thousand</b> 千 · <b>million</b> 百万。</li>
+      <li>这些词前面有具体数字时<b>不加 s</b>：<span class="good">160 million years</span>，不能说 160 millions。</li>
+      <li>长度用 <b>数字 + centimetres long</b>：<span class="good">1.5 centimetres long</span>（1.5 厘米长）。</li>
+      <li class="eg">The footprints were only 1.5 centimetres long.</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. but 连接的并列句</h3>
+    <ul>
+      <li><b>but</b> 表示转折，意思是<b>但是、却</b>。</li>
+      <li class="eg">He was just a pupil, <span class="good">but</span> he helped science.</li>
+      <li>注意：英语里 <b>because</b> 和 <b>so</b> 不能同时用在一个句子里。</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. may / can 表示可能性</h3>
+    <ul>
+      <li><b>may</b> 表示<b>可能</b>，语气比 can 更不确定一点。</li>
+      <li class="eg">You <span class="good">may</span> discover something amazing.</li>
+      <li><b>can</b> 表示<b>能够</b>：<span class="good">Children can help science too.</span></li>
+      <li>两个词后面都直接跟<b>动词原形</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz</h2>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">1. How old was Ni Jingchen when he found the footprints?</div>
+    <div class="qzh">倪景辰发现脚印时几岁？</div>
+    <button class="opt">A) Ten years old</button>
+    <button class="opt">B) Twelve years old</button>
+    <button class="opt">C) Twenty years old</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">2. What did Ni Jingchen see on the grey stone?</div>
+    <div class="qzh">倪景辰在灰色石头上看到了什么？</div>
+    <button class="opt">A) A green leaf</button>
+    <button class="opt">B) A round coin</button>
+    <button class="opt">C) Four tiny toes</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">3. How old are the footprints?</div>
+    <div class="qzh">这些脚印有多少年历史？</div>
+    <button class="opt">A) About 160 years</button>
+    <button class="opt">B) About 160 million years</button>
+    <button class="opt">C) About 160 thousand years</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">4. Which animal probably made the footprints?</div>
+    <div class="qzh">哪种动物可能留下了这些脚印？</div>
+    <button class="opt">A) A salamander-like animal</button>
+    <button class="opt">B) A big dinosaur</button>
+    <button class="opt">C) A blue whale</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">5. What can we learn from this story?</div>
+    <div class="qzh">我们能从这个故事中学到什么？</div>
+    <button class="opt">A) Only adults can do science</button>
+    <button class="opt">B) Children can help science too</button>
+    <button class="opt">C) Rocks are not interesting</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · 背景知识</h2>
+
+  <div class="know">
+    <h3>🦶 一个小学生的大发现</h3>
+    <p>2025 年 1 月 11 日，北京小学生倪景辰和父母来到北京市<b>门头沟区</b>九龙路森林保护站附近的山坡。他敲开一块风化的岩板，发现上面有清晰的四趾印痕。他把照片发到网上，引起了<b>中国地质大学（北京）</b>副教授<b>邢立达</b>的注意。科研团队随后到现场考察确认。</p>
+    <p>2026 年 1 月 30 日，这项由中国学者主导的成果在国际期刊《遗迹学》（Ichnos）上发表：这是<b>中国乃至亚洲首次</b>在侏罗纪地层中发现并科学描述的两栖动物足迹化石。</p>
+  </div>
+
+  <div class="know">
+    <h3>🔍 化石也有两种：身体化石和遗迹化石</h3>
+    <ul>
+      <li><b>身体化石</b>：动植物身体留下的部分，比如骨骼、贝壳、叶子。</li>
+      <li><b>遗迹化石</b>：生物活动留下的痕迹，比如<b>脚印、爬痕、洞穴、粪便</b>。</li>
+      <li>这次发现的是<b>遗迹化石</b>。它告诉我们这只动物<b>曾经来过、走过</b>，比骨骼更能说明它当时的行为。</li>
+      <li>这两枚脚印非常小：清晰的那枚<b>长 1.5 厘米、宽 1.3 厘米</b>，另一枚约 1.1 厘米长。科研团队用<b>三维建模</b>技术把细节放大来看。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🌿 1.6 亿年前的北京是什么样？</h3>
+    <ul>
+      <li>那时属于<b>中侏罗世</b>，北京地区是一片<b>湖泊和沼泽</b>，水网密布。</li>
+      <li>岸边长满了<b>蕨类、银杏和苏铁</b>等植物，植被非常茂盛。</li>
+      <li>留下脚印的很可能是一种<b>早期的蝾螈类两栖动物</b>，体型很小，已经能适应陆地生活。</li>
+      <li>此前北京地区发现的侏罗纪脊椎动物足迹，<b>主要是恐龙和龟类</b>，从没发现过两栖类足迹。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🙋 普通人也能参与科学</h3>
+    <ul>
+      <li>倪景辰 5 岁时收到第一块三叶虫化石，从此爱上了古生物。他常常在父母陪伴下到野外<b>寻宝</b>。</li>
+      <li>他说，跟着科研团队学到了<b>脊椎动物遗迹学的鉴定方法</b>，也学会了两栖动物的特征分类。</li>
+      <li>科学家说，这是一个<b>公众参与科学发现</b>的生动例子：地球历史的篇章，有时就藏在身边岩石最细微的痕迹里，等着有心人去发现。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>✋ 动手做：我的观察笔记</h3>
+    <ul>
+      <li>准备一个小本子，做一册<b>自然观察笔记</b>。</li>
+      <li>散步时低头看看：路边石头的纹路、树叶的形状、雨后泥土上的<b>小鸟脚印</b>。</li>
+      <li>每次记录三行：<b>我在哪里看到</b> · <b>它是什么样</b> · <b>我的问题是什么</b>。</li>
+      <li>把问题和爸爸妈妈、老师一起查一查。说不定，你的问题就是下一个发现。</li>
+    </ul>
+  </div>
+
+  <div class="tipbox">
+    <h3>🦺 安全与保护提醒</h3>
+    <ul>
+      <li>野外活动<b>必须有大人陪同</b>，不去陡坡、深水和施工区域。</li>
+      <li>化石是珍贵的地质遗产，<b>不要私自挖掘或带走</b>。发现可疑化石应当拍照记录，并报告老师、博物馆或科研机构。</li>
+      <li>在保护区和景区，要遵守规定，<b>只带走照片，不破坏环境</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><span class="txt">读懂一篇约 118 词的 A2 级别英文短文，了解一次真实的科学发现。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">掌握 8 个核心词汇：footprint, stone, tiny, scientist, million, animal, discover, amazing。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用 4 个实用句型讲故事、说年代、表达可能。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">复习一般过去时、大数字、but 并列句和 may / can。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--accent);">📚 学习建议</h3>
+    <div class="goal"><span class="tick">1</span><span class="txt"><b>先听后读</b>：点播放键听一遍，再看着英文跟读。</span></div>
+    <div class="goal"><span class="tick">2</span><span class="txt"><b>遮住中文</b>：看懂英文后再对照中文翻译检查。</span></div>
+    <div class="goal"><span class="tick">3</span><span class="txt"><b>复述故事</b>：用 4 句话，把谁、在哪里、发现了什么、为什么重要讲一遍。</span></div>
+    <div class="goal"><span class="tick">4</span><span class="txt"><b>造句练习</b>：用 but 和 数字 + years old 各造一个句子。</span></div>
+    <div class="goal"><span class="tick">5</span><span class="txt"><b>做观察笔记</b>：从今天开始记录身边的自然发现。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--accent);">🗣️ 口语小任务</h3>
+    <p style="font-size:14.5px;color:#374151;margin:0 0 10px;">试着用英语回答下面三个问题，每句话不少于 5 个词：</p>
+    <ul style="font-size:14.5px;color:#374151;padding-left:20px;margin:0;">
+      <li>What did Ni Jingchen find?</li>
+      <li>How old are the footprints?</li>
+      <li>What do you want to discover?</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  Pola News A2 · 2026-09-01 · 🔬 科学发现 · 内容基于新华社、中新网、光明网、科普中国等公开报道整理<br>
+  适合 7-12 岁小学阶段学习者 · 点击生词可查看中文释义 · 支持打印与离线阅读
+</footer>
+<div id="tip"></div>
+<script>
+var segmentTexts = [
+  "Twelve-year-old Ni Jingchen loves rocks. In January 2025, he went to a hill in Beijing with his parents. He opened a grey stone and saw four tiny toes. Was it a footprint?",
+  "He took a photo and put it online. A scientist named Xing Lida saw the photo. He came to look at the stone with his team. The two footprints were only 1.5 centimetres long.",
+  "The footprints are about 160 million years old. A small salamander-like animal made them near a lake. It is the first amphibian footprint from the Jurassic ever found in Asia.",
+  "Ni Jingchen was just a pupil, but he helped science. Look down, ask questions, and you may discover something amazing too."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 播放按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'footprint': '脚印；足迹',
+  'stone': '石头；石块',
+  'tiny': '极小的；微小的',
+  'scientist': '科学家',
+  'million': '百万',
+  'animal': '动物',
+  'discover': '发现；发觉',
+  'amazing': '惊人的；了不起的'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  for(var i = 0; i < secs.length; i++){
+    secs[i].classList.remove('active');
+  }
+  for(var j = 0; j < links.length; j++){
+    links[j].classList.remove('active');
+  }
+  var target = document.querySelector(hash);
+  if(target) target.classList.add('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var href = a.getAttribute('href');
+      if(history.pushState) history.pushState(null, '', href);
+      goTo(href);
+    });
+  })(links[l]);
+}
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(btn.parentNode.getAttribute('data-done') === '1') return;
+          btn.parentNode.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

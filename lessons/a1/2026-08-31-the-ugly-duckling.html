@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Ugly Duckling — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#0891b2;
+  --accent2:#f59e0b;
+  --bg:#f0fbff;
+  --card:#ffffff;
+  --text:#134e5e;
+  --muted:#5b7f8f;
+  --highlight:#fff3b0;
+  --border:#a5e8f0;
+  --soft:#e0f7fa;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,#06b6d4,#22d3ee,#f59e0b,#0891b2);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(8,145,178,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(19,78,94,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #8fe3ef;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(8,145,178,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(8,145,178,.6);}70%{box-shadow:0 0 0 14px rgba(8,145,178,0);}100%{box-shadow:0 0 0 0 rgba(8,145,178,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#ffe680;}
+#tip{position:fixed;z-index:1200;background:#0b3b47;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(19,78,94,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(8,145,178,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fff3b0;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Ugly Duckling 🦆</h1>
+      <p class="subtitle">2026年8月31日 · 童话故事｜丑小鸭变天鹅 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · The Egg 蛋</div>
+            <p>Mother <span class="kw" data-def="鸭子：会在水里游泳、嘎嘎叫的鸟">duck</span> sits on her <span class="kw" data-def="蛋：圆圆的、硬硬的白壳，小鸟从里面孵出来">eggs</span>. 🥚 One egg is big. The big egg opens late. A big grey duckling comes out. 🐣</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Sad 难过</div>
+            <p>The other ducks laugh at him. They say, "You are ugly!" The duckling is sad. 😢 He runs away.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Winter 冬天</div>
+            <p><span class="kw" data-def="冬天：一年里最冷的季节，会下雪、结冰">Winter</span> comes. ❄️ It is cold. He is alone. He looks in the <span class="kw" data-def="水：透明的液体，河里、湖里、池塘里的东西">water</span>. 💧</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Swan 天鹅</div>
+            <p>Spring comes. 🌷 He is a big white <span class="kw" data-def="天鹅：脖子长长、羽毛雪白的大鸟，游泳很优雅">swan</span>! 🦢 He is <span class="kw" data-def="美丽的：非常好看、让人喜欢">beautiful</span>. ✨ He is happy. 😄</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#fff6e3;border:2px solid #f59e0b;">
+        <h3 style="margin:0 0 8px;color:#b45309;font-size:20px;">💡 一起念！Say With Pola</h3>
+        <p style="margin:0;font-size:16px;">丑小鸭被大家笑，可是他没有放弃。等到春天一来，他变成了一只又白又美的天鹅！🦢 跟着 Pola 一边看图一边大声念这四段吧！</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="duck">🔊</button><div class="emoji">🦆</div><div class="word">duck<span class="pos">n.</span></div><div class="zh">鸭子</div><div class="ex">"Mother duck sits on her eggs."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="egg">🔊</button><div class="emoji">🥚</div><div class="word">egg<span class="pos">n.</span></div><div class="zh">蛋</div><div class="ex">"One egg is very big."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="swan">🔊</button><div class="emoji">🦢</div><div class="word">swan<span class="pos">n.</span></div><div class="zh">天鹅</div><div class="ex">"He is a big white swan."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="water">🔊</button><div class="emoji">💧</div><div class="word">water<span class="pos">n.</span></div><div class="zh">水</div><div class="ex">"He looks in the water."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="winter">🔊</button><div class="emoji">❄️</div><div class="word">winter<span class="pos">n.</span></div><div class="zh">冬天</div><div class="ex">"Winter comes. It is cold."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="beautiful">🔊</button><div class="emoji">✨</div><div class="word">beautiful<span class="pos">adj.</span></div><div class="zh">美丽的</div><div class="ex">"The white swan is beautiful."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. This is a [noun].</h3>
+          <div class="zh">"This is a + 东西"。用来指着一个东西说"这是一个……"。</div>
+          <div class="eg">This is a swan. / This is an egg.</div>
+          <div class="practice">练习：用 "a duck" → This is <input placeholder="word">.</div>
+        </div>
+        <div class="item">
+          <h3>2. He is [adjective].</h3>
+          <div class="zh">"He is + 样子"。用来描述他是什么样子的（She is / It is 也一样用）。</div>
+          <div class="eg">He is sad. / He is beautiful. / He is happy.</div>
+          <div class="practice">练习：用 "happy" → He is <input placeholder="word">.</div>
+        </div>
+        <div class="item">
+          <h3>3. I see a [noun].</h3>
+          <div class="zh">"I see a + 东西"。用来告诉别人"我看见了什么"。</div>
+          <div class="eg">I see a swan. / I see an egg.</div>
+          <div class="practice">练习：用 "a duck" → I see <input placeholder="word">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. a / an（一个）</h3>
+          <div class="zh">a 用在辅音开头的词前（a duck, a swan, a big egg），an 用在元音开头的词前（an egg, an apple）。</div>
+          <div class="eg">a white swan 🦢 / an egg 🥚</div>
+        </div>
+        <div class="item">
+          <h3>2. 一般现在时（Simple Present）</h3>
+          <div class="zh">讲故事、说现在发生的事，用现在时。第三人称单数（he / she / it）的动词要加 -s：duck <b>sits</b>，winter <b>comes</b>，he <b>looks</b>，he <b>runs</b>。</div>
+          <div class="eg">Winter <b>comes</b>. / He <b>looks</b> in the water.</div>
+        </div>
+        <div class="item">
+          <h3>3. 形容词（Adjectives）</h3>
+          <div class="zh">形容词放在 be 动词（is / am / are）后面，用来描述"什么样的"：big, grey, cold, white, beautiful, happy, sad。</div>
+          <div class="eg">He is <b>sad</b>. 😢 / He is <b>beautiful</b>. ✨ / It is <b>cold</b>. ❄️</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🦆 一只"丑小鸭"的神奇变身</h3>
+        <p>小朋友，你有没有过这样的时刻：觉得自己和别人不太一样，心里有点难过？😢 今天的故事讲的就是这样一只小鸭子。他个子大、羽毛灰灰的，被大家笑话；可是最后，他长成了一只又白又美的<b>天鹅 🦢</b>。</p>
+
+        <h3>📖 这个故事是谁写的？</h3>
+        <p>《丑小鸭》是<b>丹麦作家安徒生（Hans Christian Andersen）</b>写的童话，在 <b>1843 年 11 月 11 日</b>第一次发表，收在他的童话集《新童话》里。安徒生一生写了很多著名的童话，比如《卖火柴的小女孩》《皇帝的新装》《拇指姑娘》。</p>
+        <p>安徒生自己说过，《丑小鸭》写的就是<b>他自己的一生</b>。他小时候家里很穷，个子高高、鼻子大大，常常被别的孩子取笑。可是他没有放弃，一直写啊写，最后成了全世界都喜欢的童话作家。所以这个故事想告诉我们：<b>重要的不是你从哪里来，而是你将来会成为什么样的人</b>。</p>
+
+        <h3>第一步：一个大大的蛋（The Egg）</h3>
+        <p>鸭妈妈孵着她的蛋 🥚。别的蛋都裂开了，钻出毛茸茸的黄色小鸭；只有最大的那颗蛋，迟迟不肯开。最后它终于裂开，走出来一只<b>大大的、灰灰的小鸭 🐣</b>。</p>
+
+        <h3>第二步：被笑话的小鸭（Sad）</h3>
+        <p>别的小鸭都笑他："你真丑！" 丑小鸭心里<b>很难过 😢</b>，就独自离开了家。这一段提醒我们：随便笑话别人是不对的，说出来的话会让别人很伤心。</p>
+
+        <h3>第三步：最难熬的冬天（Winter）</h3>
+        <p><b>冬天来了 ❄️</b>，天很冷，他孤零零一个人。可是他撑过来了。等到春天，他低头看向<b>水面 💧</b>——水里那只又白又优雅的大鸟，居然就是他自己！</p>
+
+        <h3>第四步：原来是天鹅（Swan）</h3>
+        <p>他从来都不是鸭子。他本来就是一只天鹅，只是<b>需要时间长大 ⏳</b>。天鹅们欢迎他，他第一次觉得自己属于这里，<b>好开心 😄</b>。</p>
+
+        <h3>🤝 和爸爸妈妈一起玩</h3>
+        <ul>
+          <li><b>照镜子说英语</b>：站在镜子前，指着自己说 "I am happy." "I am big." 再指爸爸妈妈说 "He is tall." "She is kind." 练练 "is + 形容词"。</li>
+          <li><b>找一找天鹅</b>：去公园的湖边看看有没有鸭子或天鹅，用英语说 "I see a duck." 或 "I see a swan."，比一比它们哪里不一样。</li>
+          <li><b>画一画变身</b>：画四格漫画——蛋、灰色小鸭、冬天、白天鹅，在每格下面写上 "egg, duck, winter, swan"。</li>
+          <li><b>聊一聊</b>：问问爸爸妈妈"你小时候有没有觉得自己和别人不一样？" 听完这个故事，说说长大以后想成为什么样的人。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并用简单英语讲出《丑小鸭》的四段故事。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 词汇：duck, egg, swan, water, winter, beautiful。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 "This is a...", "He is...", "I see a..." 说简单句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 a / an、一般现在时（动词加 -s），以及 "is + 形容词" 的用法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>明白一个温暖的道理：每个人都不一样，长大需要时间。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 大声念丑小鸭的故事。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，边听边记六个核心单词。</div></div>
+        <div class="goal"><span class="ic">🦢</span><div>和爸妈玩"变身"游戏：先说 "He is sad."，再说 "He is beautiful."。</div></div>
+        <div class="goal"><span class="ic">🖍️</span><div>画一只灰色小鸭和一只白天鹅，涂上颜色，写下 duck 和 swan。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，随时复习词汇和句型。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Ugly Duckling · 2026-08-31 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(male|man)/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/mark/i.test(v.name)&&/microsoft/i.test(v.name)); if(v)return v;
+  v=match(v=>/(male|man)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.1;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Mother duck sits on her eggs. One egg is big. The big egg opens late. A big grey duckling comes out.",
+  "The other ducks laugh at him. They say, You are ugly! The duckling is sad. He runs away.",
+  "Winter comes. It is cold. He is alone. He looks in the water.",
+  "Spring comes. He is a big white swan! He is beautiful. He is happy."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"One egg is very ___. 有一颗蛋非常怎么样？",em:["🥚","🦆","🦢"],opts:["big","small","white"],ans:0,
+   fb:"Correct! 有一颗蛋特别大 big，它裂开得最晚，里面是灰色的小鸭。"},
+  {q:"The other ducks laugh at him. He feels ___. 别的小鸭笑他，他感觉怎么样？",em:["😄","😢","😴"],opts:["happy","sad","sleepy"],ans:1,
+   fb:"Yes! 被大家笑话，丑小鸭很伤心 sad，所以他离开了家。"},
+  {q:"He looks in the water and sees a ___. 他在水里看见了什么？",em:["🐸","🦢","🐟"],opts:["frog","swan","fish"],ans:1,
+   fb:"Right! 他在水里看见一只美丽的天鹅 swan——那其实就是他自己！"},
+  {q:"At the end, the swan is ___. 最后天鹅怎么样？",em:["😄","😢","😠"],opts:["happy","sad","angry"],ans:0,
+   fb:"Correct! 天鹅们欢迎他，他第一次觉得属于这里，非常开心 happy！"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 再看看正确的答案，记住它！';fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Diamond That Makes Electricity · Pola News</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#06b6d4;
+  --glow:#7dd3fc;
+  --bg:#f4f8ff;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#152447;
+  --muted:#64748b;
+  --line:#dbeafe;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(29,78,216,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#eaf4ff;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.85;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#dceeff;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.12)}
+.nav a.active{background:rgba(255,255,255,.20);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(29,78,216,.30)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(29,78,216,.10);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px;min-width:220px}
+.seg .zh{flex-basis:100%;margin-left:50px;font-size:14px;color:var(--muted);line-height:1.65;margin-top:6px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,78,216,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(125,211,252,.70)}70%{box-shadow:0 0 0 14px rgba(125,211,252,0)}100%{box-shadow:0 0 0 0 rgba(125,211,252,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(125,211,252,.35)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#152447;color:#eaf4ff;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.vcard{background:linear-gradient(160deg,#f7fbff,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,78,216,.14)}
+.vcard .w{font-size:19px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:4px}
+.vcard .en{font-size:13px;color:var(--muted);line-height:1.5}
+.vcard .spk{position:absolute;top:10px;right:10px;border:none;background:rgba(6,182,212,.14);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;transition:.2s}
+.vcard .spk:hover{background:var(--accent2);transform:scale(1.1)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 4px}
+.stat{background:linear-gradient(160deg,#f7fbff,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent);line-height:1.15}
+.stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+.pat{background:#f7fbff;border-left:4px solid var(--accent2);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.pat .en{font-size:17px;font-weight:600;margin-bottom:4px}
+.pat .zh{font-size:14px;color:var(--muted);margin-bottom:8px}
+.pat .fill{background:#fff;border:1px dashed var(--accent2);border-radius:8px;padding:8px 12px;font-size:15px;margin-top:6px}
+.pat .fill input{border:none;border-bottom:2px solid var(--accent2);background:transparent;font-size:15px;outline:none;min-width:110px;text-align:center;color:var(--accent);font-weight:700;font-family:inherit}
+.pat .fill button{margin-left:8px;border:none;background:var(--accent);color:#fff;border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer}
+.pat .ans{font-size:14px;margin-top:6px;font-weight:700;min-height:20px}
+.gbox{background:#f7fbff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.gbox h3{font-size:18px;color:var(--accent);margin-bottom:8px}
+.gbox .rule{background:#fff;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--accent);margin-bottom:10px;border:1px dashed var(--accent2)}
+.gbox ul{margin-left:20px;font-size:15px}
+.gbox li{margin-bottom:6px}
+.gbox table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.gbox th,.gbox td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.gbox th{background:rgba(29,78,216,.08);color:var(--accent)}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.q .qt{font-size:16px;font-weight:600;margin-bottom:10px}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q .opt{border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:15px;transition:.15s;background:#f7fbff}
+.q .opt:hover{background:rgba(125,211,252,.30)}
+.q .opt.right{background:rgba(15,157,88,.14);border-color:var(--good);color:var(--good);font-weight:700}
+.q .opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad)}
+.q .exp{font-size:14px;color:var(--muted);margin-top:9px;display:none;line-height:1.6}
+.q .exp.show{display:block}
+#score{text-align:center;font-size:18px;font-weight:700;color:var(--accent);margin-top:10px}
+#resetq{display:block;margin:14px auto 0;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:9px 24px;border-radius:999px;font-size:15px;cursor:pointer;font-weight:700}
+.cn{background:linear-gradient(160deg,#f7fbff,#fff)}
+.cn h3{font-size:19px;color:var(--accent);margin:16px 0 8px}
+.cn h3:first-child{margin-top:0}
+.cn p{font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn ul{margin-left:22px;font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn li{margin-bottom:7px}
+.cn .fact{background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:15px}
+.cn .fact b{color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:15px}
+.flow .step{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:5px 14px;font-size:14px;font-weight:700}
+.flow .arw{color:var(--accent2);font-weight:800}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;min-width:0;padding:14px}
+  .nav{display:flex;overflow-x:auto;gap:6px}
+  .nav a{margin-bottom:0;white-space:nowrap}
+  .content{padding:22px 16px}
+  .q .opts{grid-template-columns:1fr}
+  .seg .zh{margin-left:0}
+}
+@media print{
+  .sidebar,#progress,.play,.spk,#resetq{display:none!important}
+  body{background:#fff;font-size:12pt}
+  section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span>POLA NEWS</div>
+  <div class="sub">2026-09-01 · Level B1</div>
+  <nav class="nav">
+    <a href="#read"><span class="ic">📖</span>Full Text</a>
+    <a href="#vocab"><span class="ic">🔤</span>Vocabulary</a>
+    <a href="#pattern"><span class="ic">🗣️</span>Sentence Patterns</a>
+    <a href="#grammar"><span class="ic">📐</span>Grammar</a>
+    <a href="#quiz"><span class="ic">✅</span>Quiz</a>
+    <a href="#more"><span class="ic">💡</span>知识扩展</a>
+    <a href="#about"><span class="ic">ℹ️</span>About</a>
+  </nav>
+</aside>
+<main class="content">
+<header class="top">
+  <span class="kicker">💎 SCIENCE · MATERIALS · HONG KONG</span>
+  <h1>The Diamond That Makes Electricity</h1>
+  <div class="meta">
+    <span>📅 <b>2026-09-01</b></span>
+    <span>🎧 <b>B1 · ages 10–12</b></span>
+    <span>⏱ <b>~4 × 15s</b></span>
+    <span>📍 <b>University of Hong Kong</b></span>
+  </div>
+</header>
+<section id="read">
+  <h2><span class="num">1</span>📖 Full Text · 全文阅读</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:8px">点击 ▶ 听 Pola 朗读；点击带虚线的蓝色单词查看中文释义。</p>
+
+  <div class="seg">
+    <div class="badge">1</div>
+    <div class="txt">Hi everyone, I'm Pola — and I'm holding a <span class="kw" data-def="钻石" data-en="a very hard, clear, precious stone">diamond</span>, one of the <span class="kw" data-def="最坚硬的（hard 的最高级）" data-en="most difficult to scratch or break">hardest</span> things on Earth. Quick question: can a diamond make <span class="kw" data-def="电；电力" data-en="a form of energy that powers lights and machines">electricity</span>? For over a hundred years, textbooks said no. But <span class="kw" data-def="科学家（复数）" data-en="people who study the world in a careful way">scientists</span> in Hong Kong just <span class="kw" data-def="发现（discover 的过去式）" data-en="found something for the first time">discovered</span> the answer is yes.</div>
+    <button class="play" data-seg="0" title="Play">▶</button>
+    <div class="zh">大家好，我是 Pola——我手里拿着一颗钻石，地球上最坚硬的东西之一。一个小问题：钻石能发电吗？一百多年来，教科书都说不能。但香港的科学家刚刚发现，答案是：能。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">2</div>
+    <div class="txt">The team peeled off a diamond film just five micrometres <span class="kw" data-def="薄的" data-en="having a small distance between two sides">thin</span> — one tenth of a human hair. When they <span class="kw" data-def="使弯曲（bend 的过去式）" data-en="forced something straight into a curve">bent</span> it, a tiny voltage appeared again and again. The secret hides in grain boundaries: the tiny seams between the <span class="kw" data-def="晶体（复数）" data-en="tiny pieces of a solid with atoms in a neat pattern">crystals</span> inside the film.</div>
+    <button class="play" data-seg="1" title="Play">▶</button>
+    <div class="zh">研究团队剥下一层只有 5 微米厚的钻石薄膜——大约是人类头发直径的十分之一。当他们把它弯折时，微小电压一次又一次地出现。秘密藏在"晶界"里：也就是薄膜内部微小晶体之间的接缝处。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">3</div>
+    <div class="txt">Why does this matter? Diamond is safe for the human body: it's non-toxic, and it never wears out. So one day, a diamond film could take the <span class="kw" data-def="能量" data-en="the power to do work or make things move">energy</span> of your heartbeat and turn it into <span class="kw" data-def="电力；驱动" data-en="electricity, or to make a machine run">power</span> — no more surgery just to change a battery.</div>
+    <button class="play" data-seg="2" title="Play">▶</button>
+    <div class="zh">这为什么重要？钻石对人体是安全的：它无毒，而且永远不会损耗。所以将来某一天，一层钻石薄膜可以把你心跳的能量转化成电力——再也不用为了换电池而做一次手术了。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">4</div>
+    <div class="txt">For a hundred years, everyone was sure diamonds couldn't do this. Then one thin, bendy film changed the answer. So keep asking, are we sure? That's how science moves forward. I'm Pola, and this is POLA NEWS. See you next time!</div>
+    <button class="play" data-seg="3" title="Play">▶</button>
+    <div class="zh">一百年来，所有人都确信钻石做不到这件事。然后，一层又薄又柔软的薄膜改变了答案。所以，继续追问：我们确定吗？科学就是这样前进的。我是 Pola，这里是 POLA NEWS。下次见！</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">5 μm</div><div class="l">钻石膜厚度 · 约人发的 1/10</div></div>
+    <div class="stat"><div class="n">100+</div><div class="l">年被推翻的旧认知</div></div>
+    <div class="stat"><div class="n">82.2</div><div class="l">mV·m/N 压电电压系数</div></div>
+    <div class="stat"><div class="n">HKU</div><div class="l">香港大学工程学院</div></div>
+  </div>
+</section>
+
+<section id="vocab">
+  <h2><span class="num">2</span>🔤 Vocabulary · 词汇表</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 10 个核心词。点击右上角 🔊 听发音。</p>
+  <div class="vgrid">
+    <div class="vcard">
+      <button class="spk" data-word="diamond">🔊</button>
+      <div class="w">diamond</div><div class="pos">noun /ˈdaɪəmənd/</div>
+      <div class="zh">钻石</div>
+      <div class="en">A diamond is one of the hardest materials on Earth.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="electricity">🔊</button>
+      <div class="w">electricity</div><div class="pos">noun /ɪˌlekˈtrɪsəti/</div>
+      <div class="zh">电；电力</div>
+      <div class="en">We use electricity to light our homes.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="bend">🔊</button>
+      <div class="w">bend</div><div class="pos">verb /bend/ (past: bent)</div>
+      <div class="zh">弯曲；使弯曲</div>
+      <div class="en">When they bent the film, it made a voltage.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="thin">🔊</button>
+      <div class="w">thin</div><div class="pos">adjective /θɪn/</div>
+      <div class="zh">薄的</div>
+      <div class="en">The film is thin enough to bend like paper.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="scientist">🔊</button>
+      <div class="w">scientist</div><div class="pos">noun /ˈsaɪəntɪst/</div>
+      <div class="zh">科学家</div>
+      <div class="en">A scientist asks questions and tests the answers.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="energy">🔊</button>
+      <div class="w">energy</div><div class="pos">noun /ˈenədʒi/</div>
+      <div class="zh">能量</div>
+      <div class="en">Your heartbeat is a kind of energy.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="discover">🔊</button>
+      <div class="w">discover</div><div class="pos">verb /dɪˈskʌvə(r)/</div>
+      <div class="zh">发现</div>
+      <div class="en">They discovered something no one expected.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="crystal">🔊</button>
+      <div class="w">crystal</div><div class="pos">noun /ˈkrɪstl/</div>
+      <div class="zh">晶体</div>
+      <div class="en">The film is made of many tiny crystals.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="hard">🔊</button>
+      <div class="w">hard</div><div class="pos">adjective /hɑːd/</div>
+      <div class="zh">坚硬的</div>
+      <div class="en">Diamond is the hardest natural material.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="power">🔊</button>
+      <div class="w">power</div><div class="pos">noun &amp; verb /ˈpaʊə(r)/</div>
+      <div class="zh">电力；驱动</div>
+      <div class="en">One day it could power a pacemaker.</div>
+    </div>
+  </div>
+</section>
+<section id="pattern">
+  <h2><span class="num">3</span>🗣️ Sentence Patterns · 句型练习</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">先读句子，再填空，点"检查"看答案。</p>
+
+  <div class="pat">
+    <div class="en">Can a diamond <b>make</b> electricity?</div>
+    <div class="zh">钻石能发电吗？—— <b>can + 动词原形</b>，用来问"有没有能力做某事"。</div>
+    <div class="fill">Can a diamond <input id="f1" type="text" placeholder="动词" autocomplete="off"> electricity? <button onclick="check('f1',['make'],'make')">检查</button></div>
+    <div class="ans" id="a1"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">When they bent it, a tiny voltage <b>appeared</b>.</div>
+    <div class="zh">当他们把它弯折时，一个微小电压出现了。—— <b>When + 过去时从句</b>，主句也用过去时。</div>
+    <div class="fill">When they bent it, a tiny voltage <input id="f2" type="text" placeholder="动词过去式" autocomplete="off">. <button onclick="check('f2',['appeared'],'appeared')">检查</button></div>
+    <div class="ans" id="a2"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">If you make a diamond thin <b>enough</b>, it can bend.</div>
+    <div class="zh">如果你把钻石做得足够薄，它就能弯曲。—— <b>enough 放在形容词后面</b>，不能说 enough thin。</div>
+    <div class="fill">If you make a diamond thin <input id="f3" type="text" placeholder="?" autocomplete="off">, it can bend. <button onclick="check('f3',['enough'],'enough')">检查</button></div>
+    <div class="ans" id="a3"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">It could turn the energy of your heartbeat <b>into</b> power.</div>
+    <div class="zh">它能把你心跳的能量转化成电力。—— <b>turn A into B</b>，把 A 变成 B。</div>
+    <div class="fill">It could turn the energy of your heartbeat <input id="f4" type="text" placeholder="介词" autocomplete="off"> power. <button onclick="check('f4',['into'],'into')">检查</button></div>
+    <div class="ans" id="a4"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Scientists believed this <b>for</b> over a hundred years.</div>
+    <div class="zh">科学家们相信这件事超过一百年。—— <b>for + 一段时间</b>，表示动作或状态持续多久。</div>
+    <div class="fill">Scientists believed this <input id="f5" type="text" placeholder="介词" autocomplete="off"> over a hundred years. <button onclick="check('f5',['for'],'for')">检查</button></div>
+    <div class="ans" id="a5"></div>
+  </div>
+</section>
+
+<section id="grammar">
+  <h2><span class="num">4</span>📐 Grammar · 语法点</h2>
+
+  <div class="gbox">
+    <h3>1. 一般过去时 vs. 一般现在时：讲"那次实验"和讲"科学事实"</h3>
+    <div class="rule">过去：bent / appeared / discovered　　现在：is / never wears out</div>
+    <ul>
+      <li>讲<b>某一次已经发生的实验</b>，用过去时：<i>When they <b>bent</b> it, a tiny voltage <b>appeared</b>.</i></li>
+      <li>讲<b>一直成立的事实</b>，用一般现在时：<i>Diamond <b>is</b> safe for the human body.</i></li>
+      <li>小技巧：一段话里，如果突然从过去时切到一般现在时，通常是在从"讲故事"切换到"讲道理"。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>2. enough 的位置：形容词 + enough</h3>
+    <div class="rule">thin enough ✅　　　enough thin ❌</div>
+    <ul>
+      <li><b>enough 修饰形容词/副词时要放在后面</b>：big enough, old enough, thin enough。</li>
+      <li>但 <b>enough 修饰名词时可以放在前面</b>：enough time, enough energy。</li>
+      <li>课文原句：<i>If you make a diamond thin <b>enough</b>, it can bend.</i></li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>3. When 引导的时间状语从句：时态要"配对"</h3>
+    <div class="rule">When they bent it（过去）, a voltage appeared（过去）.</div>
+    <ul>
+      <li>主句和从句都发生在过去时，两边都用过去时。</li>
+      <li>如果讲的是习惯/真理，两边都用一般现在时：<i>When I <b>bend</b> this, it <b>makes</b> a spark.</i></li>
+      <li>把 When 从句放在句首时，中间要加<b>逗号</b>：<i>When they bent it, a voltage appeared.</i></li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>4. could 表示"将来的可能性"（不是过去！）</h3>
+    <div class="rule">a diamond film could power a pacemaker</div>
+    <ul>
+      <li>这里 <b>could</b> 不是"过去能"，而是"将来<b>有可能</b>"，语气比 will 更谨慎。</li>
+      <li>科学家喜欢用 could / may / might，因为他们说的是<b>可能性</b>，不是保证。</li>
+      <li>对比：<i>It <b>will</b> power it.</i>（一定会） vs. <i>It <b>could</b> power it.</i>（有可能）。</li>
+    </ul>
+    <table>
+      <tr><th>表达</th><th>语气</th><th>中文</th></tr>
+      <tr><td>It will power it.</td><td>很确定</td><td>它将会供电</td></tr>
+      <tr><td>It could power it.</td><td>有可能</td><td>它有可能供电</td></tr>
+      <tr><td>It might power it.</td><td>更不确定</td><td>它也许能供电</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2><span class="num">5</span>✅ Quiz · 练习测验</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">5 道选择题，选一个答案，会立刻显示解析。</p>
+
+  <div class="q" data-ans="0">
+    <div class="qt">1. How thick was the diamond film?</div>
+    <div class="opts">
+      <div class="opt">A. About 5 micrometres</div>
+      <div class="opt">B. About 5 millimetres</div>
+      <div class="opt">C. About 5 centimetres</div>
+      <div class="opt">D. About 5 metres</div>
+    </div>
+    <div class="exp">✅ 正确答案 A。钻石膜约 <b>5 微米</b>厚。人类头发直径大约是 50–70 微米，所以它只有头发的十分之一左右。millimetre（毫米）要比它大 1000 倍。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">2. What did the scientists do to make electricity appear?</div>
+    <div class="opts">
+      <div class="opt">A. They heated it until it melted</div>
+      <div class="opt">B. They bent it</div>
+      <div class="opt">C. They painted it black</div>
+      <div class="opt">D. They dropped it on the floor</div>
+    </div>
+    <div class="exp">✅ 正确答案 B。压电效应的关键就是<b>形变</b>——把膜弯曲，上下表面就会出现电位差。不是靠加热，也不是靠光照。</div>
+  </div>
+
+  <div class="q" data-ans="2">
+    <div class="qt">3. Where does the electricity come from?</div>
+    <div class="opts">
+      <div class="opt">A. From a battery hidden inside</div>
+      <div class="opt">B. From sunlight hitting the surface</div>
+      <div class="opt">C. From charge building up at the grain boundaries</div>
+      <div class="opt">D. From the metal wires around it</div>
+    </div>
+    <div class="exp">✅ 正确答案 C。这种钻石膜是<b>多晶</b>的，内部有很多"晶界"。弯曲时电荷在晶界处不对称地堆积（极化），于是膜的上表面和下表面之间产生了电压。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">4. Why is diamond especially good for medical implants?</div>
+    <div class="opts">
+      <div class="opt">A. Because it is very cheap</div>
+      <div class="opt">B. Because it is non-toxic and never wears out</div>
+      <div class="opt">C. Because it is very heavy</div>
+      <div class="opt">D. Because it changes colour in the body</div>
+    </div>
+    <div class="exp">✅ 正确答案 B。钻石<b>生物相容性好</b>、无毒、化学性质非常稳定，放进人体不会腐败也不会被腐蚀，所以特别适合需要长期留在体内的器件。注意：它一点也不便宜！</div>
+  </div>
+
+  <div class="q" data-ans="2">
+    <div class="qt">5. How long did scientists believe diamonds could NOT do this?</div>
+    <div class="opts">
+      <div class="opt">A. About 10 years</div>
+      <div class="opt">B. Since last year</div>
+      <div class="opt">C. For over a hundred years</div>
+      <div class="opt">D. For two days</div>
+    </div>
+    <div class="exp">✅ 正确答案 C。从<b>20 世纪初</b>开始，钻石一直被归类为"非压电材料",这个结论持续了一百多年，直到这次实验才被推翻。</div>
+  </div>
+
+  <div id="score"></div>
+  <button id="resetq">🔄 再做一次</button>
+</section>
+
+<section id="more" class="cn">
+  <h2><span class="num">6</span>💡 中文知识扩展</h2>
+
+  <h3>一、什么是"压电效应"？</h3>
+  <p><b>压电效应（piezoelectric effect）</b>说的是：某些材料被挤压或弯曲时，表面会产生电压；反过来，给它通电，它也会轻微变形。英文 <i>piezo</i> 来自希腊语，意思是"压"。</p>
+  <p>这个现象在 1880 年由法国物理学家居里兄弟（皮埃尔·居里与雅克·居里）发现——没错，就是后来研究放射性、获得诺贝尔奖的那位皮埃尔·居里，他在很年轻的时候就和哥哥一起发现了压电效应。</p>
+  <div class="flow">
+    <span class="step">弯曲钻石膜</span><span class="arw">→</span>
+    <span class="step">晶界处电荷极化</span><span class="arw">→</span>
+    <span class="step">上下表面出现电位差</span><span class="arw">→</span>
+    <span class="step">输出稳定电压</span><span class="arw">→</span>
+    <span class="step">驱动器件</span>
+  </div>
+
+  <h3>二、压电效应其实就在你身边</h3>
+  <ul>
+    <li><b>打火机</b>：按下点火键时，里面的压电陶瓷被小锤子敲一下，瞬间产生上万伏高压，打出火花。</li>
+    <li><b>石英钟表</b>：通电后石英晶体规律振动，反过来帮钟表精确计时。</li>
+    <li><b>麦克风与吉他拾音器</b>：把声音的振动变成电信号。</li>
+    <li><b>医院 B 超探头</b>：通电产生超声波，再接收回声变成图像。</li>
+    <li><b>蜂鸣器、电子贺卡</b>：里面那片会响的小圆片也是压电陶瓷。</li>
+  </ul>
+
+  <h3>三、为什么钻石"一直被认为不行"？</h3>
+  <p>一块<b>完美的单晶钻石</b>，内部原子排列高度对称。你把它压一下，正电荷中心和负电荷中心还是重合在一起，不会产生极化，所以测不到电压——这就是一百多年来教科书上的结论。</p>
+  <p>这次的关键有两点：</p>
+  <ul>
+    <li><b>材料不是单晶，而是多晶。</b>多晶钻石膜由无数个极小的钻石晶粒拼成，晶粒之间有"晶界"。晶界处的原子排列是不对称的。</li>
+    <li><b>做成超薄膜，才能大幅弯曲。</b>团队用自主研发的"边缘剥离法（edge-exfoliation）"，从钻石边缘剥下一层超薄膜，让这个以坚硬著称的材料第一次可以明显地弯折。</li>
+  </ul>
+  <div class="fact">
+    <b>关键数字：</b>约 <b>5 微米</b>厚（人发直径约 50–70 微米）；压电电压系数约 <b>82.2 mV·m/N</b>，超过许多常规压电材料；被推翻的旧认知持续了 <b>100 多年</b>。
+  </div>
+
+  <h3>四、这项发现能用来做什么？</h3>
+  <ul>
+    <li><b>自供电的植入式医疗器件</b>：例如心脏起搏器。现在起搏器电池用完需要再开一次刀更换；如果钻石膜能靠心跳本身发电，也许就不用换电池了。</li>
+    <li><b>长期心率传感器</b>：贴在体内，靠身体的微小运动供电，持续监测。</li>
+    <li><b>可穿戴电子与能量采集</b>：把走路、弯曲这些机械运动收集起来变成电。</li>
+    <li><b>极端环境下的高可靠传感</b>：钻石耐高温、抗腐蚀，适合普通材料撑不住的地方。</li>
+  </ul>
+
+  <h3>五、研究团队与论文</h3>
+  <p>这项研究由<b>香港大学工程学院</b>完成，电机与计算机工程系副教授<b>褚智勤</b>与机械工程系教授<b>林原</b>共同领导。论文题为 <i>Uncovering piezoelectric effect in polycrystalline diamond membranes</i>（揭示多晶钻石膜中的压电效应），发表于国际期刊 <b>《Science Advances》（科学·进展）</b>，2026 年 3 月 18 日上线。2026 年 8 月 31 日，多家科学媒体集中报道了这项成果。</p>
+
+  <h3>六、科学素养小提醒</h3>
+  <ul>
+    <li><b>"教科书说不行"不等于"永远不行"。</b>很多结论只是"<b>在当时的条件下</b>测出来的最好答案"。新工具出现（这次是能做出超薄膜的边缘剥离法），旧结论就可能被改写。这不是科学出错，而是科学正常工作的方式。</li>
+    <li><b>要区分"实验室发现"和"明天就能买到产品"。</b>这次是材料物理上的重要突破，但从实验室的一层膜，到真正装进人体的医疗器械，中间还有很长的工程化、安全性和临床试验的路要走。所以新闻里用的是 <i>could</i>（有可能），不是 <i>will</i>（一定会）。</li>
+    <li><b>敢于问"我们确定吗？"</b>——这是每一项重大发现共同的起点。</li>
+  </ul>
+</section>
+
+<section id="about" class="cn">
+  <h2><span class="num">7</span>ℹ️ 关于本课</h2>
+  <div class="fact">
+    <b>期名：</b>The Diamond That Makes Electricity（会发电的钻石）<br>
+    <b>日期：</b>2026-09-01　<b>等级：</b>B1（适合 10–12 岁）　<b>时长：</b>4 段 × 约 15 秒<br>
+    <b>主播：</b>Pola，一只来自 POLA NEWS 的短尾矮袋鼠记者 🐾
+  </div>
+  <h3>建议的学习顺序</h3>
+  <ul>
+    <li><b>第一步：</b>不看文字，先点 ▶ 把四段音频连着听一遍，能听懂多少算多少。</li>
+    <li><b>第二步：</b>打开"全文阅读"，边听边看，重点看刚才没听清的地方。</li>
+    <li><b>第三步：</b>过一遍"词汇表"，把 10 个词读熟。</li>
+    <li><b>第四步：</b>做"句型练习"和"语法点"，注意 <b>enough</b> 的位置。</li>
+    <li><b>第五步：</b>完成"练习测验"，然后读"中文知识扩展"。</li>
+    <li><b>第六步：</b>用自己的话，把"钻石为什么能发电"讲给爸爸妈妈听一遍。</li>
+  </ul>
+  <h3>今日一句</h3>
+  <p><b>Keep asking, are we sure? That's how science moves forward.</b><br>
+  <span style="color:var(--muted)">继续追问：我们确定吗？科学就是这样前进的。</span></p>
+</section>
+</main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hi everyone, I'm Pola — and I'm holding a diamond, one of the hardest things on Earth. Quick question: can a diamond make electricity? For over a hundred years, textbooks said no. But scientists in Hong Kong just discovered the answer is yes.",
+  "The team peeled off a diamond film just five micrometres thin — one tenth of a human hair. When they bent it, a tiny voltage appeared again and again. The secret hides in grain boundaries: the tiny seams between the crystals inside the film.",
+  "Why does this matter? Diamond is safe for the human body: it's non-toxic, and it never wears out. So one day, a diamond film could take the energy of your heartbeat and turn it into power — no more surgery just to change a battery.",
+  "For a hundred years, everyone was sure diamonds couldn't do this. Then one thin, bendy film changed the answer. So keep asking, are we sure? That's how science moves forward. I'm Pola, and this is POLA NEWS. See you next time!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 句型练习 - 单空 ===== */
+function check(inputId, answers, display){
+  const el = document.getElementById(inputId);
+  const ansEl = document.getElementById(inputId.replace('f','a'));
+  if(!el || !ansEl) return;
+  const val = (el.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(answers.indexOf(val) !== -1){
+    ansEl.innerHTML = '✅ 答对啦！<b>' + display + '</b>';
+    ansEl.style.color = 'var(--good)';
+  }else if(val === ''){
+    ansEl.textContent = '✏️ 先填一个答案试试。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 正确答案是 <b>' + display + '</b>';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 测验 ===== */
+const scoreEl = document.getElementById('score');
+let answered = 0;
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = '已作答 ' + answered + ' / 5';
+}
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans, 10);
+  const exp = q.querySelector('.exp');
+  const opts = q.querySelectorAll('.opt');
+  opts.forEach(function(opt, i){
+    opt.addEventListener('click', function(){
+      if(q.dataset.done === '1') return;
+      q.dataset.done = '1';
+      answered++;
+      opts.forEach(function(o){ o.style.cursor = 'default'; });
+      if(i === ans){
+        opt.classList.add('right');
+      }else{
+        opt.classList.add('wrong');
+        if(opts[ans]) opts[ans].classList.add('right');
+      }
+      if(exp) exp.classList.add('show');
+      updateScore();
+    });
+  });
+});
+document.getElementById('resetq').addEventListener('click', function(){
+  answered = 0;
+  updateScore();
+  document.querySelectorAll('.q').forEach(function(q){
+    q.dataset.done = '0';
+    q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('right','wrong');
+      o.style.cursor = 'pointer';
+    });
+    const exp = q.querySelector('.exp');
+    if(exp) exp.classList.remove('show');
+  });
+  const inputs = ['f1','f2','f3','f4','f5'];
+  inputs.forEach(function(id){ const e=document.getElementById(id); if(e) e.value=''; });
+  ['a1','a2','a3','a4','a5'].forEach(function(id){ const e=document.getElementById(id); if(e){ e.textContent=''; e.style.color=''; } });
+});
+updateScore();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

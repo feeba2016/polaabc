@@ -1768,6 +1768,254 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-08-31",
+    "title": "Eight Giants Walked Here",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-08-31-eight-giants-walked-here",
+    "url": "lessons/b1/2026-08-31-eight-giants-walked-here.html",
+    "vocab": [
+      {
+        "word": "footprint",
+        "zh": "古老的",
+        "ex": ""
+      },
+      {
+        "word": "ancient",
+        "zh": "亲缘物种；亲戚",
+        "ex": ""
+      },
+      {
+        "word": "relative",
+        "zh": "湖岸",
+        "ex": ""
+      },
+      {
+        "word": "lakeshore",
+        "zh": "科学家",
+        "ex": ""
+      },
+      {
+        "word": "scientist",
+        "zh": "惊喜",
+        "ex": ""
+      },
+      {
+        "word": "surprise",
+        "zh": "瞬间",
+        "ex": ""
+      },
+      {
+        "word": "moment",
+        "zh": "群体",
+        "ex": ""
+      },
+      {
+        "word": "group",
+        "zh": "发现",
+        "ex": ""
+      },
+      {
+        "word": "discover",
+        "zh": "保存",
+        "ex": ""
+      },
+      {
+        "word": "preserve",
+        "zh": "科学家<b>发现</b>了八组巨大的脚印。→ 讲故事用「主语 + 动词过去式 + 宾语」。",
+        "ex": ""
+      }
+    ]
+  },
+  {
+    "level": "B1",
+    "date": "2026-09-01",
+    "title": "The Diamond That Makes Electricity",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-09-01-the-diamond-that-makes-electricity",
+    "url": "lessons/b1/2026-09-01-the-diamond-that-makes-electricity.html",
+    "vocab": [
+      {
+        "word": "diamond",
+        "zh": "钻石",
+        "ex": ""
+      },
+      {
+        "word": "electricity",
+        "zh": "电；电力",
+        "ex": ""
+      },
+      {
+        "word": "bend",
+        "zh": "弯曲；使弯曲",
+        "ex": ""
+      },
+      {
+        "word": "thin",
+        "zh": "薄的",
+        "ex": ""
+      },
+      {
+        "word": "scientist",
+        "zh": "科学家",
+        "ex": ""
+      },
+      {
+        "word": "energy",
+        "zh": "能量",
+        "ex": ""
+      },
+      {
+        "word": "discover",
+        "zh": "发现",
+        "ex": ""
+      },
+      {
+        "word": "crystal",
+        "zh": "晶体",
+        "ex": ""
+      },
+      {
+        "word": "hard",
+        "zh": "坚硬的",
+        "ex": ""
+      },
+      {
+        "word": "power",
+        "zh": "电力；驱动",
+        "ex": ""
+      }
+    ]
+  },
+  {
+    "level": "B1",
+    "date": "2026-09-02",
+    "title": "The Spiral Inside the Egg",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-09-02-the-spiral-inside-the-egg",
+    "url": "lessons/b1/2026-09-02-the-spiral-inside-the-egg.html",
+    "vocab": [
+      {
+        "word": "snake",
+        "zh": "蛇",
+        "ex": ""
+      },
+      {
+        "word": "embryo",
+        "zh": "胚胎",
+        "ex": ""
+      },
+      {
+        "word": "spiral",
+        "zh": "螺旋（形）",
+        "ex": ""
+      },
+      {
+        "word": "coil",
+        "zh": "盘绕；卷成圈",
+        "ex": ""
+      },
+      {
+        "word": "gut",
+        "zh": "肠道",
+        "ex": ""
+      },
+      {
+        "word": "yolk",
+        "zh": "蛋黄",
+        "ex": ""
+      },
+      {
+        "word": "species",
+        "zh": "物种（单复数同形）",
+        "ex": ""
+      },
+      {
+        "word": "scientist",
+        "zh": "科学家",
+        "ex": ""
+      },
+      {
+        "word": "direction",
+        "zh": "方向",
+        "ex": ""
+      },
+      {
+        "word": "hatch",
+        "zh": "孵化；破壳而出",
+        "ex": ""
+      }
+    ]
+  },
+  {
+    "level": "B1",
+    "date": "2026-09-03",
+    "title": "The Giant Scorpion Before the Trees",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-09-03-the-giant-scorpion-before-the-trees",
+    "url": "lessons/b1/2026-09-03-the-giant-scorpion-before-the-trees.html",
+    "vocab": [
+      {
+        "word": "scorpion",
+        "zh": "蝎子",
+        "ex": ""
+      },
+      {
+        "word": "pincer",
+        "zh": "螯；钳子",
+        "ex": ""
+      },
+      {
+        "word": "giant",
+        "zh": "巨兽；巨大的",
+        "ex": ""
+      },
+      {
+        "word": "fossil",
+        "zh": "化石",
+        "ex": ""
+      },
+      {
+        "word": "predator",
+        "zh": "捕食者；掠食动物",
+        "ex": ""
+      },
+      {
+        "word": "museum",
+        "zh": "博物馆",
+        "ex": ""
+      },
+      {
+        "word": "oxygen",
+        "zh": "氧气",
+        "ex": ""
+      },
+      {
+        "word": "ancient",
+        "zh": "古老的；远古的",
+        "ex": ""
+      },
+      {
+        "word": "floodplain",
+        "zh": "泛滥平原；河漫滩",
+        "ex": ""
+      },
+      {
+        "word": "crustacean",
+        "zh": "甲壳类动物（虾、蟹等）",
+        "ex": ""
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -2394,6 +2642,90 @@ const EPISODES = [
         "word": "flower",
         "zh": "花",
         "ex": "\"A pretty flower opens.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-08-31",
+    "title": "The Ugly Duckling",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-08-31-the-ugly-duckling",
+    "url": "lessons/a1/2026-08-31-the-ugly-duckling.html",
+    "vocab": [
+      {
+        "word": "duck",
+        "zh": "鸭子",
+        "ex": "\"Mother duck sits on her eggs.\""
+      },
+      {
+        "word": "egg",
+        "zh": "蛋",
+        "ex": "\"One egg is very big.\""
+      },
+      {
+        "word": "swan",
+        "zh": "天鹅",
+        "ex": "\"He is a big white swan.\""
+      },
+      {
+        "word": "water",
+        "zh": "水",
+        "ex": "\"He looks in the water.\""
+      },
+      {
+        "word": "winter",
+        "zh": "冬天",
+        "ex": "\"Winter comes. It is cold.\""
+      },
+      {
+        "word": "beautiful",
+        "zh": "美丽的",
+        "ex": "\"The white swan is beautiful.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-09-02",
+    "title": "Why Is the Sky Blue",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-02-why-is-the-sky-blue",
+    "url": "lessons/a1/2026-09-02-why-is-the-sky-blue.html",
+    "vocab": [
+      {
+        "word": "sky",
+        "zh": "天空",
+        "ex": "\"The sky is blue.\""
+      },
+      {
+        "word": "blue",
+        "zh": "蓝色的",
+        "ex": "\"I like the blue sky.\""
+      },
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "\"The sun is big.\""
+      },
+      {
+        "word": "light",
+        "zh": "光 / 光线",
+        "ex": "\"The sun makes light.\""
+      },
+      {
+        "word": "air",
+        "zh": "空气",
+        "ex": "\"Air is all around us.\""
+      },
+      {
+        "word": "white",
+        "zh": "白色的",
+        "ex": "\"Sunlight looks white.\""
       }
     ]
   },
@@ -3226,6 +3558,162 @@ const EPISODES = [
         "word": "night",
         "zh": "夜晚",
         "ex": "\"Look up at the night sky.\""
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-08-31",
+    "title": "The First Balloon Adventure",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-08-31-the-first-balloon-adventure",
+    "url": "lessons/a2/2026-08-31-the-first-balloon-adventure.html",
+    "vocab": [
+      {
+        "word": "dream",
+        "zh": "很久以前，人们只能梦想飞行。1783 年，两位法国兄弟让这个梦想成真。他们看到烟从火里升起，于是问：“一个大袋子也能飞起来吗？”",
+        "ex": "The big balloon went up into the sky."
+      },
+      {
+        "word": "adventure",
+        "zh": "冒险；奇遇",
+        "ex": "Flying in a balloon was a great adventure."
+      },
+      {
+        "word": "basket",
+        "zh": "篮子；（气球）吊篮",
+        "ex": "The animals sat in a basket under the balloon."
+      },
+      {
+        "word": "brave",
+        "zh": "勇敢的",
+        "ex": "The two brave men flew over Paris."
+      },
+      {
+        "word": "dream",
+        "zh": "梦想；做梦",
+        "ex": "Her dream is to fly in a hot-air balloon."
+      },
+      {
+        "word": "fly",
+        "zh": "飞（过去式 flew）",
+        "ex": "Birds fly, and now people can fly too."
+      },
+      {
+        "word": "sky",
+        "zh": "天空",
+        "ex": "The sky is blue and very big."
+      },
+      {
+        "word": "paper",
+        "zh": "纸",
+        "ex": "The brothers made paper in their family factory."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-01",
+    "title": "The Boy Who Found a Tiny Footprint",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-01-the-boy-who-found-a-tiny-footprint",
+    "url": "lessons/a2/2026-09-01-the-boy-who-found-a-tiny-footprint.html",
+    "vocab": [
+      {
+        "word": "stone",
+        "zh": "十二岁的倪景辰很喜欢石头。2025 年 1 月，他和父母去北京的一座小山。他敲开一块灰色的石头，看到了四个小小的脚趾。这会是一个脚印吗？",
+        "ex": "The footprint is very small."
+      },
+      {
+        "word": "stone",
+        "zh": "石头；石块",
+        "ex": "He opened a grey stone."
+      },
+      {
+        "word": "tiny",
+        "zh": "极小的；微小的",
+        "ex": "The baby has tiny hands."
+      },
+      {
+        "word": "scientist",
+        "zh": "科学家",
+        "ex": "A scientist came to look."
+      },
+      {
+        "word": "million",
+        "zh": "百万",
+        "ex": "It is 160 million years old."
+      },
+      {
+        "word": "animal",
+        "zh": "动物",
+        "ex": "A small animal lived near the lake."
+      },
+      {
+        "word": "discover",
+        "zh": "发现；发觉",
+        "ex": "You may discover something new."
+      },
+      {
+        "word": "amazing",
+        "zh": "惊人的；了不起的",
+        "ex": "What an amazing find!"
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-02",
+    "title": "The Moon Festival",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-02-the-moon-festival",
+    "url": "lessons/a2/2026-09-02-the-moon-festival.html",
+    "vocab": [
+      {
+        "word": "festival",
+        "zh": "中秋节是中国一个欢乐的节日。家人们用美食和故事来庆祝它。2026 年，它在 9 月 25 日这一天到来。那天晚上，月亮看起来又大又圆又亮。",
+        "ex": "The Mid-Autumn Festival is in September."
+      },
+      {
+        "word": "celebrate",
+        "zh": "庆祝",
+        "ex": "We celebrate with our family."
+      },
+      {
+        "word": "moon",
+        "zh": "月亮",
+        "ex": "The moon is round and bright."
+      },
+      {
+        "word": "mooncake",
+        "zh": "月饼",
+        "ex": "I share a mooncake with my sister."
+      },
+      {
+        "word": "round",
+        "zh": "圆形的",
+        "ex": "The mooncake is round like the moon."
+      },
+      {
+        "word": "bright",
+        "zh": "明亮的",
+        "ex": "The full moon is very bright."
+      },
+      {
+        "word": "family",
+        "zh": "家庭；家人",
+        "ex": "My family sits together at night."
+      },
+      {
+        "word": "lantern",
+        "zh": "灯笼",
+        "ex": "Children carry colorful lanterns."
       }
     ]
   },
@@ -4094,6 +4582,130 @@ const EPISODES = [
         "word": "transcend",
         "zh": "超越；超出",
         "ex": "\"It is a human need that no machine can transcend.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-08-31",
+    "title": "Frankenstein and the Duty of the Creator",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-08-31-frankenstein-and-the-duty-of-the-creator",
+    "url": "lessons/b2/2026-08-31-frankenstein-and-the-duty-of-the-creator.html",
+    "vocab": [
+      {
+        "word": "anonymous",
+        "zh": "匿名的；不署名出版的",
+        "ex": "\"The novel was published anonymously in 1818, without the author's name.\""
+      },
+      {
+        "word": "accomplishment",
+        "zh": "完成；成就",
+        "ex": "\"Victor beheld the accomplishment of his toils on a dreary night.\""
+      },
+      {
+        "word": "toil",
+        "zh": "辛劳；苦工",
+        "ex": "\"Two years of toil ended in horror rather than triumph.\""
+      },
+      {
+        "word": "glimmer",
+        "zh": "微光；一丝（希望）",
+        "ex": "\"By the glimmer of a dying candle, the creature opened its eye.\""
+      },
+      {
+        "word": "benevolent",
+        "zh": "仁慈的；善良的",
+        "ex": "\"The creature insists that it was benevolent before it was cruel.\""
+      },
+      {
+        "word": "fiend",
+        "zh": "恶魔；恶人",
+        "ex": "\"'Misery made me a fiend,' the creature tells its creator.\""
+      },
+      {
+        "word": "reject",
+        "zh": "拒绝；排斥",
+        "ex": "\"Rejected by everyone it met, the creature turned to violence.\""
+      },
+      {
+        "word": "abandon",
+        "zh": "抛弃；遗弃",
+        "ex": "\"Victor's tragedy is that he abandoned what he had made.\""
+      },
+      {
+        "word": "consequence",
+        "zh": "后果；结果",
+        "ex": "\"The consequences of his silence destroyed everyone he loved.\""
+      },
+      {
+        "word": "accountable",
+        "zh": "负有责任的；应作解释的",
+        "ex": "\"Who is accountable for what an intelligent system does?\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-09-02",
+    "title": "The Camera That Thinks on the Chip",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-09-02-the-camera-that-thinks-on-the-chip",
+    "url": "lessons/b2/2026-09-02-the-camera-that-thinks-on-the-chip.html",
+    "vocab": [
+      {
+        "word": "hyperspectral",
+        "zh": "高光谱的（记录成百上千个窄波段）",
+        "ex": "\"Hyperspectral cameras record hundreds of narrow bands, not just red, green and blue.\""
+      },
+      {
+        "word": "signature",
+        "zh": "特征签名；标志性特征",
+        "ex": "\"Every material leaves a spectral signature as distinctive as a fingerprint.\""
+      },
+      {
+        "word": "cumbersome",
+        "zh": "笨重的；繁琐不便的",
+        "ex": "\"Cumbersome as the old workflow is, it remained standard for decades.\""
+      },
+      {
+        "word": "reconstruct",
+        "zh": "重建；还原",
+        "ex": "\"The chip reconstructs a full spectrum from what a single sensor captures.\""
+      },
+      {
+        "word": "eliminate",
+        "zh": "消除；排除",
+        "ex": "\"Computing on the chip eliminates the need to shuttle data to a server.\""
+      },
+      {
+        "word": "paradigm",
+        "zh": "范式；根本性的思维与做法模式",
+        "ex": "\"The team did not improve the old paradigm; it overturned it.\""
+      },
+      {
+        "word": "latency",
+        "zh": "延迟；等待时间",
+        "ex": "\"On-chip computing collapses latency from hours to milliseconds.\""
+      },
+      {
+        "word": "discern",
+        "zh": "辨别；分辨（细微差别）",
+        "ex": "\"A hyperspectral sensor can discern real stone from a painted copy.\""
+      },
+      {
+        "word": "compact",
+        "zh": "紧凑的；小型的",
+        "ex": "\"The whole system is compact enough to be held in one hand.\""
+      },
+      {
+        "word": "deploy",
+        "zh": "部署；投入使用",
+        "ex": "\"Cheaper chips would let engineers deploy such cameras by the million.\""
       }
     ]
   },
@@ -5086,6 +5698,68 @@ const EPISODES = [
         "word": "correlational",
         "zh": "相关性的；只显示变量共变，不能证明因果",
         "ex": "\"The design is correlational, so causal claims remain premature.\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-08-31",
+    "title": "The Lie in Plain Sight",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-08-31-the-lie-in-plain-sight",
+    "url": "lessons/c1/2026-08-31-the-lie-in-plain-sight.html",
+    "vocab": [
+      {
+        "word": "candour",
+        "zh": "坦率、直白；不加掩饰的诚实口吻（英式拼写，美式作 candor）",
+        "ex": "\"He records the murder hunt with a Watson's modest candour.\""
+      },
+      {
+        "word": "artifice",
+        "zh": "机巧、巧妙的人工安排；文学上的设计手法（中性词，非贬义）",
+        "ex": "\"The artifice lay not in omission but in arrangement.\""
+      },
+      {
+        "word": "tenet",
+        "zh": "（学说、流派或团体的）信条、基本原则",
+        "ex": "\"Ronald Knox codified the tenets of fair play in 1928.\""
+      },
+      {
+        "word": "impugn",
+        "zh": "质疑、指责、抨击（某人的诚信、动机或能力）；语气远重于 question",
+        "ex": "\"Critics who impugned her fairness were objecting that she had hollowed out its spirit.\""
+      },
+      {
+        "word": "exegesis",
+        "zh": "（对文本的）阐释、细读、解经；文学批评中指逐层解读",
+        "ex": "\"A century of exegesis has kept the case open.\""
+      },
+      {
+        "word": "canonicity",
+        "zh": "经典性、正典地位；作品被承认为「经典」的属性",
+        "ex": "\"No major critic now doubts the book's canonicity.\""
+      },
+      {
+        "word": "veracity",
+        "zh": "真实性、诚实性；叙述或证词的可信程度",
+        "ex": "\"What they dispute is where its veracity resides.\""
+      },
+      {
+        "word": "equivocate",
+        "zh": "含糊其辞、闪烁其词；用模棱两可的话回避明确表态",
+        "ex": "\"Sheppard never lies outright; he equivocates.\""
+      },
+      {
+        "word": "reticence",
+        "zh": "缄默、有所保留；该说而不说",
+        "ex": "\"His reticence supplies the alibi he cannot otherwise afford.\""
+      },
+      {
+        "word": "duplicity",
+        "zh": "表里不一、欺瞒；言行背离的双重性",
+        "ex": "\"The duplicity is structural, not moral.\""
       }
     ]
   }

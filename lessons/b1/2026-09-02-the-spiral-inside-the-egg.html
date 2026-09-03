@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Spiral Inside the Egg · Pola News</title>
+<style>
+:root{
+  --accent:#166534;
+  --accent2:#0d9488;
+  --glow:#6ee7b7;
+  --yolk:#d97706;
+  --bg:#f4fbf7;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#12261c;
+  --muted:#5b7a6b;
+  --line:#d5efe2;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(22,101,52,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#eafff6;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.85;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#dcf5ea;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.12)}
+.nav a.active{background:rgba(255,255,255,.20);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(22,101,52,.30)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(22,101,52,.10);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px;min-width:220px}
+.seg .zh{flex-basis:100%;margin-left:50px;font-size:14px;color:var(--muted);line-height:1.65;margin-top:6px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(22,101,52,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(110,231,183,.70)}70%{box-shadow:0 0 0 14px rgba(110,231,183,0)}100%{box-shadow:0 0 0 0 rgba(110,231,183,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(110,231,183,.35)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#12261c;color:#eafff6;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.vcard{background:linear-gradient(160deg,#f4fbf8,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(22,101,52,.14)}
+.vcard .w{font-size:19px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:4px}
+.vcard .en{font-size:13px;color:var(--muted);line-height:1.5}
+.vcard .spk{position:absolute;top:10px;right:10px;border:none;background:rgba(13,148,136,.14);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;transition:.2s}
+.vcard .spk:hover{background:var(--accent2);transform:scale(1.1)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 4px}
+.stat{background:linear-gradient(160deg,#f4fbf8,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent);line-height:1.15}
+.stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+.pat{background:#f4fbf8;border-left:4px solid var(--accent2);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.pat .en{font-size:17px;font-weight:600;margin-bottom:4px}
+.pat .zh{font-size:14px;color:var(--muted);margin-bottom:8px}
+.pat .fill{background:#fff;border:1px dashed var(--accent2);border-radius:8px;padding:8px 12px;font-size:15px;margin-top:6px}
+.pat .fill input{border:none;border-bottom:2px solid var(--accent2);background:transparent;font-size:15px;outline:none;min-width:110px;text-align:center;color:var(--accent);font-weight:700;font-family:inherit}
+.pat .fill button{margin-left:8px;border:none;background:var(--accent);color:#fff;border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer}
+.pat .ans{font-size:14px;margin-top:6px;font-weight:700;min-height:20px}
+.gbox{background:#f4fbf8;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.gbox h3{font-size:18px;color:var(--accent);margin-bottom:8px}
+.gbox .rule{background:#fff;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--accent);margin-bottom:10px;border:1px dashed var(--accent2)}
+.gbox ul{margin-left:20px;font-size:15px}
+.gbox li{margin-bottom:6px}
+.gbox table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.gbox th,.gbox td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.gbox th{background:rgba(22,101,52,.08);color:var(--accent)}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.q .qt{font-size:16px;font-weight:600;margin-bottom:10px}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q .opt{border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:15px;transition:.15s;background:#f4fbf8}
+.q .opt:hover{background:rgba(110,231,183,.30)}
+.q .opt.right{background:rgba(15,157,88,.14);border-color:var(--good);color:var(--good);font-weight:700}
+.q .opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad)}
+.q .exp{font-size:14px;color:var(--muted);margin-top:9px;display:none;line-height:1.6}
+.q .exp.show{display:block}
+#score{text-align:center;font-size:18px;font-weight:700;color:var(--accent);margin-top:10px}
+#resetq{display:block;margin:14px auto 0;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:9px 24px;border-radius:999px;font-size:15px;cursor:pointer;font-weight:700}
+.cn{background:linear-gradient(160deg,#f4fbf8,#fff)}
+.cn h3{font-size:19px;color:var(--accent);margin:16px 0 8px}
+.cn h3:first-child{margin-top:0}
+.cn p{font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn ul{margin-left:22px;font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn li{margin-bottom:7px}
+.cn .fact{background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:15px}
+.cn .fact b{color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:15px}
+.flow .step{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:5px 14px;font-size:14px;font-weight:700}
+.flow .step.yolk{background:linear-gradient(135deg,var(--yolk),#f59e0b)}
+.flow .arw{color:var(--accent2);font-weight:800}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.cmp .box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cmp .box h4{font-size:16px;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.cmp .box .big{font-size:22px;font-weight:800;color:var(--accent2);line-height:1.2}
+.cmp .box p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.7}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;min-width:0;padding:14px}
+  .nav{display:flex;overflow-x:auto;gap:6px}
+  .nav a{margin-bottom:0;white-space:nowrap}
+  .content{padding:22px 16px}
+  .q .opts{grid-template-columns:1fr}
+  .seg .zh{margin-left:0}
+  .cmp{grid-template-columns:1fr}
+}
+@media print{
+  .sidebar,#progress,.play,.spk,#resetq{display:none!important}
+  body{background:#fff;font-size:12pt}
+  section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span>POLA NEWS</div>
+  <div class="sub">2026-09-02 · Level B1</div>
+  <nav class="nav">
+    <a href="#read"><span class="ic">📖</span>Full Text</a>
+    <a href="#vocab"><span class="ic">🔤</span>Vocabulary</a>
+    <a href="#pattern"><span class="ic">🗣️</span>Sentence Patterns</a>
+    <a href="#grammar"><span class="ic">📐</span>Grammar</a>
+    <a href="#quiz"><span class="ic">✅</span>Quiz</a>
+    <a href="#more"><span class="ic">💡</span>知识扩展</a>
+    <a href="#about"><span class="ic">ℹ️</span>About</a>
+  </nav>
+</aside>
+<main class="content">
+<header class="top">
+  <span class="kicker">🐍 SCIENCE · NATURE · EMBRYOS</span>
+  <h1>The Spiral Inside the Egg</h1>
+  <div class="meta">
+    <span>📅 <b>2026-09-02</b></span>
+    <span>🎧 <b>B1 · ages 10–12</b></span>
+    <span>⏱ <b>~4 × 15s</b></span>
+    <span>📍 <b>Canadian Museum of Nature</b></span>
+  </div>
+</header>
+<section id="read">
+  <h2><span class="num">1</span>📖 Full Text · 全文阅读</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:8px">点击 ▶ 听 Pola 朗读；点击带虚线的绿色单词查看中文释义。</p>
+
+  <div class="seg">
+    <div class="badge">1</div>
+    <div class="txt">Hi everyone, I'm Pola. Inside this egg is a baby <span class="kw" data-def="蛇" data-en="a long thin animal with no legs that slides along the ground">snake</span>, weeks before it <span class="kw" data-def="孵化；破壳而出（第三人称单数 hatches）" data-en="breaks out of an egg">hatches</span>. But look closely — it isn't straight at all. It's curled into a tight <span class="kw" data-def="螺旋（形）" data-en="a shape that winds around a centre, getting wider or tighter">spiral</span>. And here's the puzzle: they nearly all spiral in the same <span class="kw" data-def="方向" data-en="the way someone or something faces or moves">direction</span> — to the right.</div>
+    <button class="play" data-seg="0" title="Play">▶</button>
+    <div class="zh">大家好，我是 Pola。这颗蛋里有一条蛇宝宝，还有好几周才会孵化。但仔细看——它一点都不直。它蜷成了一个紧紧的螺旋。而谜题就在这里：它们几乎全都朝同一个方向盘绕——向右。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">2</div>
+    <div class="txt"><span class="kw" data-def="科学家（复数）" data-en="people who study the world in a careful way">Scientists</span> in Canada and the United States studied more than nine hundred <span class="kw" data-def="胚胎（复数，单数是 embryo）" data-en="a baby animal or plant before it is born or hatches">embryos</span> from thirty-nine <span class="kw" data-def="物种（单复数同形）" data-en="a group of living things of the same kind">species</span>. Then they put one inside a CT scanner. And they saw something never seen before: a tiny <span class="kw" data-def="肠道" data-en="the long tube inside the body that digests food">gut</span>, standing like a pillar inside the coil.</div>
+    <button class="play" data-seg="1" title="Play">▶</button>
+    <div class="zh">加拿大和美国的科学家研究了来自 39 个物种的 900 多个胚胎。然后他们把一个胚胎放进了 CT 扫描仪。接着，他们看到了从未见过的东西：一段小小的肠道，像一根柱子一样立在螺旋的中央。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">3</div>
+    <div class="txt">Why does this matter? The body grows fast, but the gut can't keep up. So the body buckles and wraps around it, like a strap that twists when you pull it tight. And the <span class="kw" data-def="蛋黄" data-en="the yellow part inside an egg that feeds the growing baby">yolk</span> sits on the left — so the coil starts to the right.</div>
+    <button class="play" data-seg="2" title="Play">▶</button>
+    <div class="zh">这为什么重要？身体长得很快，但肠道跟不上。于是身体就弯折起来、缠绕住它，就像你拉紧背包带时，长出来的那一段会自己扭转一样。而蛋黄在左边——所以螺旋总是从右边开始。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">4</div>
+    <div class="txt">This discovery began in 2020, when a scientist was stuck at home during lockdown. He simply asked: which way do they <span class="kw" data-def="盘绕；卷成圈" data-en="to wind into rings or a spiral">coil</span>? One small question, one big answer. So keep looking closely. I'm Pola, and this is POLA NEWS. See you next time!</div>
+    <button class="play" data-seg="3" title="Play">▶</button>
+    <div class="zh">这个发现始于 2020 年，当时一位科学家在疫情封锁期间困在家里。他只是问了一句：它们朝哪个方向盘绕？一个小问题，一个大答案。所以，继续保持仔细观察。我是 Pola，这里是 POLA NEWS。下次见！</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">913</div><div class="l">个胚胎被研究</div></div>
+    <div class="stat"><div class="n">39</div><div class="l">种蛇与无腿蜥蜴</div></div>
+    <div class="stat"><div class="n">146/146</div><div class="l">非洲家蛇早期胚胎全右旋</div></div>
+    <div class="stat"><div class="n">300+</div><div class="l">体节要塞进一颗小蛋</div></div>
+  </div>
+</section>
+
+<section id="vocab">
+  <h2><span class="num">2</span>🔤 Vocabulary · 词汇表</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 10 个核心词。点击右上角 🔊 听发音。</p>
+  <div class="vgrid">
+    <div class="vcard">
+      <button class="spk" data-word="snake">🔊</button>
+      <div class="w">snake</div><div class="pos">noun /sneɪk/</div>
+      <div class="zh">蛇</div>
+      <div class="en">A snake has no legs and slides along the ground.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="embryo">🔊</button>
+      <div class="w">embryo</div><div class="pos">noun /ˈembriəʊ/ (plural: embryos)</div>
+      <div class="zh">胚胎</div>
+      <div class="en">The embryo grows inside the egg for many weeks.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="spiral">🔊</button>
+      <div class="w">spiral</div><div class="pos">noun /ˈspaɪərəl/</div>
+      <div class="zh">螺旋（形）</div>
+      <div class="en">The snake embryo curls into a tight spiral.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="coil">🔊</button>
+      <div class="w">coil</div><div class="pos">verb /kɔɪl/</div>
+      <div class="zh">盘绕；卷成圈</div>
+      <div class="en">The body buckles and coils around the gut.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="gut">🔊</button>
+      <div class="w">gut</div><div class="pos">noun /ɡʌt/</div>
+      <div class="zh">肠道</div>
+      <div class="en">The gut grows more slowly than the body.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="yolk">🔊</button>
+      <div class="w">yolk</div><div class="pos">noun /jəʊk/</div>
+      <div class="zh">蛋黄</div>
+      <div class="en">The yolk sits on the left side of the embryo.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="species">🔊</button>
+      <div class="w">species</div><div class="pos">noun /ˈspiːʃiːz/ (same in plural)</div>
+      <div class="zh">物种（单复数同形）</div>
+      <div class="en">They studied embryos from thirty-nine species.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="scientist">🔊</button>
+      <div class="w">scientist</div><div class="pos">noun /ˈsaɪəntɪst/</div>
+      <div class="zh">科学家</div>
+      <div class="en">A scientist asks a question and then tests it.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="direction">🔊</button>
+      <div class="w">direction</div><div class="pos">noun /dəˈrekʃn/</div>
+      <div class="zh">方向</div>
+      <div class="en">Nearly all of them coil in the same direction.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="hatch">🔊</button>
+      <div class="w">hatch</div><div class="pos">verb /hætʃ/ (3rd person: hatches)</div>
+      <div class="zh">孵化；破壳而出</div>
+      <div class="en">A baby snake hatches from its egg after some weeks.</div>
+    </div>
+  </div>
+</section>
+<section id="pattern">
+  <h2><span class="num">3</span>🗣️ Sentence Patterns · 句型练习</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">先读句子，再填空，点"检查"看答案。</p>
+
+  <div class="pat">
+    <div class="en">It isn't straight <b>at all</b>.</div>
+    <div class="zh">它一点都不直。—— <b>not ... at all</b> 放在句末，表示"一点也不"，语气比单独一个 not 强得多。</div>
+    <div class="fill">It isn't straight <input id="f1" type="text" placeholder="两个词" autocomplete="off">. <button onclick="check('f1',['at all'],'at all')">检查</button></div>
+    <div class="ans" id="a1"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">The body grows fast, but the gut can't <b>keep up</b>.</div>
+    <div class="zh">身体长得很快，但肠道跟不上。—— <b>keep up</b> 是动词短语，意思是"跟上、不落后"。</div>
+    <div class="fill">The body grows fast, but the gut can't <input id="f2" type="text" placeholder="两个词" autocomplete="off">. <button onclick="check('f2',['keep up'],'keep up')">检查</button></div>
+    <div class="ans" id="a2"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">They studied <b>more than</b> nine hundred embryos.</div>
+    <div class="zh">他们研究了 900 多个胚胎。—— <b>more than + 数字</b> 表示"超过"，口语里也可以说 over。</div>
+    <div class="fill">They studied <input id="f3" type="text" placeholder="more than / over" autocomplete="off"> nine hundred embryos. <button onclick="check('f3',['more than','over'],'more than')">检查</button></div>
+    <div class="ans" id="a3"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">The body buckles and coils <b>around</b> the gut.</div>
+    <div class="zh">身体弯折过来，缠绕在肠道周围。—— <b>coil around something</b>，表示绕着某个中心盘起来。</div>
+    <div class="fill">The body buckles and coils <input id="f4" type="text" placeholder="介词" autocomplete="off"> the gut. <button onclick="check('f4',['around'],'around')">检查</button></div>
+    <div class="ans" id="a4"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en"><b>Because</b> the yolk sits on the left, the coil starts to the right.</div>
+    <div class="zh">因为蛋黄在左边，所以螺旋从右边开始。—— <b>Because 从句放在句首</b>时，中间要用逗号隔开。</div>
+    <div class="fill"><input id="f5" type="text" placeholder="连词" autocomplete="off"> the yolk sits on the left, the coil starts to the right. <button onclick="check('f5',['because'],'Because')">检查</button></div>
+    <div class="ans" id="a5"></div>
+  </div>
+</section>
+
+<section id="grammar">
+  <h2><span class="num">4</span>📐 Grammar · 语法点</h2>
+
+  <div class="gbox">
+    <h3>1. 一般现在时的第三人称单数 -s</h3>
+    <div class="rule">主语 he / she / it 或单数名词 + 动词加 -s 或 -es</div>
+    <ul>
+      <li>The body <b>grows</b> fast. （身体长得很快。）</li>
+      <li>The yolk <b>sits</b> on the left. （蛋黄位于左边。）</li>
+      <li>A baby snake <b>hatches</b> from its egg. （蛇宝宝从蛋里孵出来。）</li>
+    </ul>
+    <table>
+      <tr><th>动词原形</th><th>第三人称单数</th><th>变化规则</th></tr>
+      <tr><td>grow</td><td>grows</td><td>一般情况直接加 -s</td></tr>
+      <tr><td>coil</td><td>coils</td><td>一般情况直接加 -s</td></tr>
+      <tr><td>hatch</td><td>hatches</td><td>以 ch / sh / s / x / o 结尾，加 -es</td></tr>
+    </table>
+  </div>
+
+  <div class="gbox">
+    <h3>2. because 引导的原因状语从句</h3>
+    <div class="rule">Because + 原因, + 结果　＝　结果 + because + 原因</div>
+    <ul>
+      <li><b>Because</b> the yolk sits on the left, the coil starts to the right.</li>
+      <li>The coil starts to the right <b>because</b> the yolk sits on the left.</li>
+      <li>⚠️ 英语里 <b>because 和 so 不能同时用</b>。中文可以说"因为……所以……"，英语只能选一个：<br>
+      正确：Because the gut is short, the body coils. ／ The gut is short, <b>so</b> the body coils.<br>
+      错误：Because the gut is short, <b>so</b> the body coils.</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>3. can / can't + 动词原形（能力）</h3>
+    <div class="rule">can / can't + 动词原形　（不受主语影响，永远是原形）</div>
+    <ul>
+      <li>The gut <b>can't keep</b> up. （肠道跟不上。）</li>
+      <li>The embryos <b>can't move</b> yet. （胚胎还不会动。）</li>
+      <li>Later, they <b>can</b> move, so the direction changes.</li>
+      <li>注意：第三人称也不用加 -s。要说 he can，不能说 he cans。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>4. hundred / thousand 前面有数字时不加 s</h3>
+    <div class="rule">具体数字 + hundred / thousand（不加 s）　｜　hundreds / thousands + of（加 s）</div>
+    <ul>
+      <li>They studied nine <b>hundred</b> embryos. （900 个胚胎——不加 s）</li>
+      <li>They looked at <b>hundreds of</b> pictures. （数百张照片——加 s，还要加 of）</li>
+      <li>同理：two <b>thousand</b> years ／ <b>thousands of</b> years</li>
+    </ul>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2><span class="num">5</span>✅ Quiz · 练习测验</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 5 题，点击选项即可作答，做完后可以看解析。</p>
+
+  <div class="q" data-ans="2">
+    <div class="qt">1. How many embryos did the scientists study?</div>
+    <div class="opts">
+      <div class="opt">A) 39</div>
+      <div class="opt">B) 146</div>
+      <div class="opt">C) more than 900</div>
+      <div class="opt">D) 300</div>
+    </div>
+    <div class="exp">✅ 正确答案：C。研究团队一共查看了 <b>913</b> 个胚胎。注意别被其他数字骗了：39 是物种的数量，146 是其中一种蛇（非洲家蛇）的胚胎数，300 是蛇胚胎要长出的体节数。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">2. What holds the embryo's body back, so that it buckles into a coil?</div>
+    <div class="opts">
+      <div class="opt">A) The egg shell</div>
+      <div class="opt">B) The slower-growing gut</div>
+      <div class="opt">C) The yolk</div>
+      <div class="opt">D) Its own muscles</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。身体长得快，肠道长得慢，慢的那一段就像绳子一样把身体拽住，身体没地方去，只好弯折盘绕。蛋黄决定的是"往哪边弯"，不是"弯不弯"。早期胚胎还没长出肌肉，所以不可能是 D。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">3. Why does the coil start to the right?</div>
+    <div class="opts">
+      <div class="opt">A) The embryo chooses that way</div>
+      <div class="opt">B) The yolk is on the left</div>
+      <div class="opt">C) The egg is round</div>
+      <div class="opt">D) The mother snake tells it</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。蛋黄总是待在胚胎的<b>左边</b>，身体弯折时只能朝远离蛋黄的一侧去，于是总是先向右盘绕。这是物理上的"被挡了一下"，不是胚胎自己的选择——那时候它还没有能动的肌肉。</div>
+  </div>
+
+  <div class="q" data-ans="0">
+    <div class="qt">4. What tool let the scientists see the pillar-like gut inside the embryo?</div>
+    <div class="opts">
+      <div class="opt">A) A CT scanner</div>
+      <div class="opt">B) A magnifying glass</div>
+      <div class="opt">C) A normal camera</div>
+      <div class="opt">D) A telescope</div>
+    </div>
+    <div class="exp">✅ 正确答案：A。合作者 Raul Diaz 把蛇胚胎放进微型 CT 扫描仪，第一次看到了这根从未被详细描述的"内脏柱"（科学家给它起名叫 <b>visceral pillar</b>）——一段脱离体壁、被血管缠绕的肠道。</div>
+  </div>
+
+  <div class="q" data-ans="2">
+    <div class="qt">5. What happens to the coiling direction just before hatching?</div>
+    <div class="opts">
+      <div class="opt">A) All of them stay right-handed</div>
+      <div class="opt">B) All of them turn left-handed</div>
+      <div class="opt">C) About half turn right, half turn left</div>
+      <div class="opt">D) All of them go straight</div>
+    </div>
+    <div class="exp">✅ 正确答案：C。到后期，蛋黄变小了，肌肉也长好了，胚胎终于能自己动一动、重新摆姿势。结果是 200 个向右、160 个向左——差不多一半一半，接近随机。</div>
+  </div>
+
+  <div id="score"></div>
+  <button id="resetq">🔄 再做一次</button>
+</section>
+
+<section id="more" class="cn">
+  <h2><span class="num">6</span>💡 中文知识扩展</h2>
+
+  <h3>一、一个"打包"难题：把超长身体塞进一颗小蛋</h3>
+  <p>蛇是脊椎动物里出生时身体最长的宝宝。一个蛇胚胎要造出 <b>300 多个体节</b>（就像一节一节拼起来的积木），可它们一开始全都挤在一颗小小的蛋里面。怎么办？</p>
+  <p><b>盘绕就是解决方案。</b>就像你把一副长长的耳机线绕成一圈塞进口袋——长度没变，但占用的空间小多了。</p>
+  <div class="fact">💡 <b>你身上也有同样的设计：</b>人的小肠大约有 6 米长，比一个成年人还高。它之所以能装进肚子里，靠的也是反复盘绕。研究团队说，螺旋是自然界最常用的"省空间方案"之一。</div>
+
+  <h3>二、为什么会向右？原来是蛋黄"挡了路"</h3>
+  <p>整个机制其实是一串连锁反应，一步推着一步走：</p>
+  <div class="flow">
+    <span class="step">身体快速变长</span><span class="arw">→</span>
+    <span class="step">肠道跟不上，被落下</span><span class="arw">→</span>
+    <span class="step">肠道像绳子一样拽住身体</span><span class="arw">→</span>
+    <span class="step">身体弯折扭转</span><span class="arw">→</span>
+    <span class="step yolk">蛋黄在左边挡着</span><span class="arw">→</span>
+    <span class="step">只能向右弯，螺旋开始</span>
+  </div>
+  <p>研究负责人宫下哲人打了个特别好懂的比方：<b>就像你调整背包带的长度，多出来的那一截会自己扭起来。</b>身体多出来的"长度"也没地方去，只好扭转成螺旋。</p>
+
+  <h3>三、不是所有"长得像蛇"的动物都这样</h3>
+  <p>科学家还看了一些<b>不是蛇、但同样没有腿的蜥蜴</b>（legless lizards）的胚胎。结果很有意思：它们向左、向右各占一半，<b>完全没有偏好</b>。</p>
+  <p>这个对比很关键——它说明"右旋"不是"细长身体"的必然结果，而是<b>蛇这一支特有的现象</b>，很可能跟它们超乎寻常的体长有关。</p>
+
+  <h3>四、这个发现，是从"困在家里"开始的</h3>
+  <p>2020 年疫情封锁期间，加拿大自然博物馆的进化生物学家<b>宫下哲人</b>（Tetsuto Miyashita）想找一个学生不用进实验室也能做的研究课题。他想起自己读博士时就着迷的一个问题：这些蛇胚胎照片，到底是右旋还是左旋？</p>
+  <p>于是当时还是本科生的 <b>Alexandra Weber</b> 和另外两名同学开始做一件看起来很笨的事：给世界各地的研究者和博物馆发邮件，翻论文和数据库，一张一张收集蛇胚胎的照片。最后攒到了 <b>900 多张</b>——样本量大到足够做统计了。</p>
+  <div class="fact">🌟 <b>这期的科学金句：</b>科学家一直在用昂贵的基因测序研究"蛇为什么这么长"。而这项研究没有测一个基因，只是把一堆旧照片按"向左还是向右"分了类，然后认真地看了看它们的解剖结构。宫下哲人说：<b>"我们从一场危机里，用一个简单得惊人的方法，挖出了蛇的秘密。"</b></div>
+
+  <h3>五、螺旋，在自然界到处都是</h3>
+  <ul>
+    <li>🐌 蜗牛壳和鹦鹉螺的壳</li>
+    <li>🍝 旋涡意面（rotini）、理发店门口的转筒</li>
+    <li>🌻 向日葵花盘上的种子排列</li>
+    <li>🌌 银河系的旋臂、地球上的热带气旋</li>
+    <li>🧬 DNA 的双螺旋</li>
+    <li>🫀 我们自己肚子里盘绕的肠子</li>
+  </ul>
+  <p>宫下哲人说：<b>"螺旋这种形状里，藏着一点神秘感。我们现在，才刚刚开始弄明白动物是怎么造出这些形状的。"</b>研究团队希望，他们提出的这个"生长速度不一致 + 被拽住"的模型，将来也能用来解释别的螺旋。</p>
+
+  <h3>六、动手试试：自己做一次"弯折"</h3>
+  <p><b>材料：</b>一根鞋带、一条长橡皮筋，或者一根扭扭棒。</p>
+  <ul>
+    <li><b>第 1 步：</b>两只手各抓住一端，固定住，<b>不要让它们转动</b>。</li>
+    <li><b>第 2 步：</b>把两只手慢慢往中间靠拢。</li>
+    <li><b>第 3 步：</b>观察中间发生了什么？</li>
+  </ul>
+  <p>你会发现：绳子中间<b>自己扭了起来</b>，形成一个螺旋。原因是——长度没变，但两端之间的距离变短了，多出来的长度没地方去，只能变弯。</p>
+  <div class="fact">🔬 这就是工程学里叫 <b>buckling（屈曲）</b>的现象，也是蛇胚胎里正在发生的事。你可以再试试：把绳子的一端贴一个小球当"蛋黄"，看看螺旋会不会总是朝远离小球的那一侧弯。</div>
+
+  <h3>七、科学素养提醒：一个解释，不等于全部解释</h3>
+  <ul>
+    <li>这项研究解释的是<b>物理层面</b>的力学机制。它<b>并不否定基因的作用</b>——科学家一直在研究 Hox 基因等如何决定蛇的身体蓝图。这两类解释是互补的：<b>基因给出指令，力学会把组织塑形。</b></li>
+    <li>另外，这是一项以<b>观察 + 解剖 + 成像</b>为主的研究。它非常有力地支持了这个解释，但科学结论永远欢迎新的证据、新的测量方法去再检验一遍。</li>
+    <li>还有一点很值得记住：研究者看到的是<b>早期胚胎</b>的规律。到快孵化时方向就随机了。说结论的时候，一定要说清楚<b>是哪个阶段</b>——这也是科学写作的好习惯。</li>
+  </ul>
+</section>
+
+<section id="about" class="cn">
+  <h2><span class="num">7</span>ℹ️ About · 关于本课</h2>
+  <h3>本期主角</h3>
+  <p><b>Pola</b>（宝拉）是一只短尾矮袋鼠（quokka），被称为"世界上最快乐的动物"。她是 POLA NEWS 的记者，会带着话筒跑到真实的现场——实验室、野外、博物馆、海边——把最新的科学发现讲给你听。她的招牌动作是：<b>双爪挥手告别 + 大大的笑脸</b>。</p>
+  <h3>难度与用法</h3>
+  <ul>
+    <li><b>等级：</b>B1（适合 10–12 岁）</li>
+    <li><b>结构：</b>4 段口播，每段约 15 秒：① 吸引注意 → ② 讲故事 → ③ 为什么重要 → ④ 告别</li>
+    <li><b>建议学习顺序：</b>先听全文（不看文字）→ 再看全文跟读 → 学词汇 → 练句型 → 做测验 → 读中文扩展</li>
+  </ul>
+  <h3>资料来源</h3>
+  <p>Weber, A., Watson, G., Arvanitis-Vigneault, A., Mesa, K., Williams, C. E., Di-Poï, N., Diaz, R. E., Jr., &amp; Miyashita, T. (2026). <i>How snake embryos coil.</i> <b>Current Biology</b>, 在线发表于 2026 年 8 月 31 日。DOI: 10.1016/j.cub.2026.07.078</p>
+  <p>研究机构：加拿大自然博物馆（Canadian Museum of Nature）、卡尔顿大学（Carleton University）、不列颠哥伦比亚大学（University of British Columbia）、渥太华大学（University of Ottawa）、美国加州州立大学洛杉矶分校（California State University, Los Angeles）、芬兰赫尔辛基大学（University of Helsinki）。</p>
+  <div class="fact">🐍 <b>本期分类：</b>动物世界 · 生命科学 · 自然科学<br>📅 制作日期：2026-09-02</div>
+</section>
+</main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hi everyone, I'm Pola. Inside this egg is a baby snake, weeks before it hatches. But look closely — it isn't straight at all. It's curled into a tight spiral. And here's the puzzle: they nearly all spiral in the same direction — to the right.",
+  "Scientists in Canada and the United States studied more than nine hundred embryos from thirty-nine species. Then they put one inside a CT scanner. And they saw something never seen before: a tiny gut, standing like a pillar inside the coil.",
+  "Why does this matter? The body grows fast, but the gut can't keep up. So the body buckles and wraps around it, like a strap that twists when you pull it tight. And the yolk sits on the left — so the coil starts to the right.",
+  "This discovery began in 2020, when a scientist was stuck at home during lockdown. He simply asked: which way do they coil? One small question, one big answer. So keep looking closely. I'm Pola, and this is POLA NEWS. See you next time!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 句型练习 - 单空 ===== */
+function check(inputId, answers, display){
+  const el = document.getElementById(inputId);
+  const ansEl = document.getElementById(inputId.replace('f','a'));
+  if(!el || !ansEl) return;
+  const val = (el.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(answers.indexOf(val) !== -1){
+    ansEl.innerHTML = '✅ 答对啦！<b>' + display + '</b>';
+    ansEl.style.color = 'var(--good)';
+  }else if(val === ''){
+    ansEl.textContent = '✏️ 先填一个答案试试。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 正确答案是 <b>' + display + '</b>';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 测验 ===== */
+const scoreEl = document.getElementById('score');
+let answered = 0;
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = '已作答 ' + answered + ' / 5';
+}
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans, 10);
+  const exp = q.querySelector('.exp');
+  const opts = q.querySelectorAll('.opt');
+  opts.forEach(function(opt, i){
+    opt.addEventListener('click', function(){
+      if(q.dataset.done === '1') return;
+      q.dataset.done = '1';
+      answered++;
+      opts.forEach(function(o){ o.style.cursor = 'default'; });
+      if(i === ans){
+        opt.classList.add('right');
+      }else{
+        opt.classList.add('wrong');
+        if(opts[ans]) opts[ans].classList.add('right');
+      }
+      if(exp) exp.classList.add('show');
+      updateScore();
+    });
+  });
+});
+document.getElementById('resetq').addEventListener('click', function(){
+  answered = 0;
+  updateScore();
+  document.querySelectorAll('.q').forEach(function(q){
+    q.dataset.done = '0';
+    q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('right','wrong');
+      o.style.cursor = 'pointer';
+    });
+    const exp = q.querySelector('.exp');
+    if(exp) exp.classList.remove('show');
+  });
+  const inputs = ['f1','f2','f3','f4','f5'];
+  inputs.forEach(function(id){ const e=document.getElementById(id); if(e) e.value=''; });
+  ['a1','a2','a3','a4','a5'].forEach(function(id){ const e=document.getElementById(id); if(e){ e.textContent=''; e.style.color=''; } });
+});
+updateScore();
+</script>
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Moon Festival — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#4338ca;
+  --accent2:#f59e0b;
+  --bg:#f5f3ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#e0e7ff;
+  --border:#c7d2fe;
+  --soft:#fafaff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#f59e0b);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(67,56,202,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg{flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(67,56,202,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(67,56,202,.55);}70%{box-shadow:0 0 0 12px rgba(67,56,202,0);}100%{box-shadow:0 0 0 0 rgba(67,56,202,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#c7d2fe;}
+#tip{position:fixed;z-index:1200;background:#1e1b4b;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),#f59e0b);color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(67,56,202,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE MOON FESTIVAL · 2026-09-02</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🌕 The Moon Festival</h1>
+  <div class="subtitle">中秋节 · CEFR A2 · 约 116 词 · 🌍 世界文化</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">Hook · 开场</div>
+        <p>The <span class="kw" data-word="festival">Mid-Autumn Festival</span> is a happy day in China. <span class="kw" data-word="family">Families</span> <span class="kw" data-word="celebrate">celebrate</span> it with food and stories. In 2026 it comes on September 25. On that night, the <span class="kw" data-word="moon">moon</span> looks big, <span class="kw" data-word="round">round</span> and <span class="kw" data-word="bright">bright</span>.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">中秋节是中国一个欢乐的节日。家人们用美食和故事来庆祝它。2026 年，它在 9 月 25 日这一天到来。那天晚上，月亮看起来又大又圆又亮。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">Story · 故事</div>
+        <p>Long ago, people thanked the <span class="kw" data-word="moon">moon</span> for a good harvest. There is an old story about Chang&#39;e. She flew up to the moon, and a kind rabbit lives with her.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">很久以前，人们感谢月亮带来好收成。有一个关于嫦娥的古老故事。她飞到了月亮上，一只善良的兔子和她住在一起。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">Customs · 习俗</div>
+        <p>Today, <span class="kw" data-word="family">families</span> sit together and share <span class="kw" data-word="mooncake">mooncakes</span>. A mooncake is <span class="kw" data-word="round">round</span> like the full <span class="kw" data-word="moon">moon</span>. Children carry colorful <span class="kw" data-word="lantern">lanterns</span> and laugh in the street.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">今天，家人们坐在一起分享月饼。月饼圆圆的，就像满月一样。孩子们提着彩色的灯笼，在街上欢笑。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Sign-off · 结尾</div>
+        <p>The <span class="kw" data-word="round">round</span> <span class="kw" data-word="moon">moon</span> means together in China. This year, look up at the sky with your <span class="kw" data-word="family">family</span>. You can make a wish and say Happy Mid-Autumn Festival to everyone.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">在中国，圆圆的月亮代表着「在一起」。今年，和你的家人一起抬头看看天空吧。你可以许个愿，对每个人说一声中秋快乐。</div>
+    </div>
+  </div>
+
+  <div class="tipbox">
+    <h3>🥮 文化小提示 Culture Tip</h3>
+    <ul>
+      <li>不同国家有不同的月亮节日，都很美。我们要<b>尊重不同的文化</b>，也热爱自己的传统。</li>
+      <li>月饼香甜但油和糖比较多，<b>切成小块和家人分享</b>，一次吃一小块最健康。</li>
+      <li>提灯笼时注意安全：使用电子蜡烛，<b>不玩火</b>；晚上赏月要牵着大人的手，<b>不靠近河边或池塘</b>。</li>
+      <li>今晚就和爸爸妈妈一起抬头找找月亮吧！</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Vocabulary</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="festival">🔊</button>
+        <div class="word">festival<span class="pos">n.</span></div>
+        <div class="zh">节日</div>
+        <div class="ex">The Mid-Autumn Festival is in September.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="celebrate">🔊</button>
+        <div class="word">celebrate<span class="pos">v.</span></div>
+        <div class="zh">庆祝</div>
+        <div class="ex">We celebrate with our family.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="moon">🔊</button>
+        <div class="word">moon<span class="pos">n.</span></div>
+        <div class="zh">月亮</div>
+        <div class="ex">The moon is round and bright.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="mooncake">🔊</button>
+        <div class="word">mooncake<span class="pos">n.</span></div>
+        <div class="zh">月饼</div>
+        <div class="ex">I share a mooncake with my sister.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="round">🔊</button>
+        <div class="word">round<span class="pos">adj.</span></div>
+        <div class="zh">圆形的</div>
+        <div class="ex">The mooncake is round like the moon.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="bright">🔊</button>
+        <div class="word">bright<span class="pos">adj.</span></div>
+        <div class="zh">明亮的</div>
+        <div class="ex">The full moon is very bright.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="family">🔊</button>
+        <div class="word">family<span class="pos">n.</span></div>
+        <div class="zh">家庭；家人</div>
+        <div class="ex">My family sits together at night.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="lantern">🔊</button>
+        <div class="word">lantern<span class="pos">n.</span></div>
+        <div class="zh">灯笼</div>
+        <div class="ex">Children carry colorful lanterns.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">The Mid-Autumn Festival comes on [September 25].</div>
+    <div class="zh">中秋节在[9 月 25 日]这一天到来。</div>
+    <div class="note">说节日、生日在哪一天，用 <b>on + 具体日期</b>。试着说：My birthday comes on June 3.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">Families sit together and share [mooncakes].</div>
+    <div class="zh">家人们坐在一起分享[月饼]。</div>
+    <div class="note">用 <b>and</b> 把两个动作连起来，表示先后或同时发生。试着说：We look at the moon and eat mooncakes.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">A mooncake is round like [the full moon].</div>
+    <div class="zh">月饼圆圆的，就像[满月]一样。</div>
+    <div class="note">用 <b>like + 名词</b> 表示「像……一样」，这里的 like 是介词，不是动词「喜欢」。试着说：The lantern is bright like a small sun.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">You can [make a wish] and say Happy Mid-Autumn Festival.</div>
+    <div class="zh">你可以[许个愿]，然后说一声中秋快乐。</div>
+    <div class="note">用 <b>can + 动词原形</b> 表示「可以、能够」。试着说：We can look at the moon together.</div>
+  </div>
+</section>
+
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 一般现在时（讲每年都会发生的事）</h3>
+    <ul>
+      <li>节日、习惯、事实都用一般现在时：<b>comes, celebrate, sit, share, look, means</b>。</li>
+      <li>第三人称单数（he / she / it / 单数名词）动词要加 <b>-s</b>。</li>
+      <li class="eg">The festival <span class="good">comes</span> in autumn. / My family <span class="good">sits</span> together.</li>
+      <li>注意：<span class="bad">The moon look big.</span> → <span class="good">The moon looks big.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. 一般过去时（讲很久以前的故事）</h3>
+    <ul>
+      <li>讲故事时动词要变成过去式。规则动词加 <b>-ed</b>：thank → thanked，look → looked。</li>
+      <li>不规则动词要特别记：<b>fly → flew</b>，go → went，is → was。</li>
+      <li class="eg">Long ago, people <span class="good">thanked</span> the moon. / She <span class="good">flew</span> up to the moon.</li>
+      <li>否定和疑问用 <b>did</b>：<span class="bad">She didn't flew.</span> → <span class="good">She didn't fly.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. be 动词 + 形容词（描述样子）</h3>
+    <ul>
+      <li>形容词放在 <b>be 动词（am / is / are）后面</b>，不放在名词前面时要加 be。</li>
+      <li class="eg">The moon <span class="good">is</span> round and bright. / Mooncakes <span class="good">are</span> sweet.</li>
+      <li>两个形容词用 <b>and</b> 连接：round and bright（又圆又亮）。</li>
+      <li>比较用 <b>like</b>：A mooncake is round <span class="good">like</span> the full moon.</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. 情态动词 can（可以／能够）</h3>
+    <ul>
+      <li><b>can + 动词原形</b>，而且 can 不分人称，he / she / we 都一样用 can。</li>
+      <li class="eg">You <span class="good">can make</span> a wish. / We <span class="good">can look</span> at the moon together.</li>
+      <li>否定是 <b>can&#39;t</b> / cannot，疑问把 can 提到句首：Can you see the moon?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz</h2>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">1. When is the Mid-Autumn Festival in 2026?</div>
+    <div class="qzh">2026 年的中秋节是哪一天？</div>
+    <button class="opt">A) January 1</button>
+    <button class="opt">B) September 25</button>
+    <button class="opt">C) December 25</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">2. What does the moon look like on that night?</div>
+    <div class="qzh">那天晚上月亮看起来是什么样？</div>
+    <button class="opt">A) Small and dark</button>
+    <button class="opt">B) Big, round and bright</button>
+    <button class="opt">C) Green and square</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">3. What do families share at the festival?</div>
+    <div class="qzh">家人们在节日里分享什么？</div>
+    <button class="opt">A) Mooncakes</button>
+    <button class="opt">B) Pizza</button>
+    <button class="opt">C) Hamburgers</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">4. In the old story, who lives with Chang&#39;e on the moon?</div>
+    <div class="qzh">在古老的故事里，谁和嫦娥一起住在月亮上？</div>
+    <button class="opt">A) A kind rabbit</button>
+    <button class="opt">B) A big tiger</button>
+    <button class="opt">C) A blue fish</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">5. What does the round moon mean in China?</div>
+    <div class="qzh">在中国，圆圆的月亮代表着什么？</div>
+    <button class="opt">A) Being together with your family</button>
+    <button class="opt">B) Going far away alone</button>
+    <button class="opt">C) Staying at school</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · 背景知识</h2>
+
+  <div class="know">
+    <h3>🌕 中秋节：月亮最圆的那一夜</h3>
+    <p>中秋节在<b>农历八月十五</b>。农历和公历不一样，所以每年的公历日期都会变——2026 年的中秋节是 <b>9 月 25 日</b>。它和春节、端午节一起，被称为<b>中国三大传统节日</b>。</p>
+    <p>中秋的来历很古老：早在三千多年前，人们就在秋天<b>祭拜月亮、感谢丰收</b>；到了唐代（公元 618—907 年），赏月成了一种固定的节日习俗；宋明清时期，中秋节变得越来越热闹，一直流传到今天。</p>
+  </div>
+
+  <div class="know">
+    <h3>🐰 嫦娥奔月的故事（尊重传说）</h3>
+    <ul>
+      <li>传说很久以前，天上一下子出现了<b>十个太阳</b>，大地被烤得滚烫。神箭手<b>后羿</b>拉开神弓，射下了九个太阳，救了大家。</li>
+      <li>有位仙人送给后羿一瓶<b>不死药</b>。后羿舍不得离开妻子<b>嫦娥</b>，就把药交给她保管。</li>
+      <li>后来有人来抢药，嫦娥情急之下把药喝了下去，身子变轻，<b>飞向了月亮</b>。</li>
+      <li>月亮上有一只<b>玉兔</b>，天天陪着嫦娥捣药。所以每次我们看到圆月上的影子，就会想起这个温柔又有点伤感的故事。</li>
+      <li>这只是<b>美丽的传说</b>，不是真实的历史。真实的中秋节，起源于古人对月亮和丰收的感谢。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🥮 月饼：圆圆的「团圆」</h3>
+    <ul>
+      <li>月饼是圆形的，就像天上的满月，象征着<b>团团圆圆、家人在一起</b>。</li>
+      <li>常见的馅料有<b>莲蓉、豆沙、枣泥、五仁、蛋黄</b>，甜的咸的都有。近年来还有冰皮月饼、冰淇淋月饼等新口味。</li>
+      <li>月饼油多、糖多，<b>切成小块全家人分着吃</b>，既健康又热闹。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🏮 赏月、灯笼与桂花</h3>
+    <ul>
+      <li><b>赏月</b>：中秋夜，一家人搬着小板凳坐在院子里或阳台上，一边看月亮一边聊天。</li>
+      <li><b>提灯笼</b>：小朋友提着兔子灯、月亮灯在街上跑，是最开心的记忆。</li>
+      <li><b>桂花与柚子</b>：中秋时节桂花飘香，人们喝桂花酒、吃柚子，「柚」和「佑」谐音，寓意平安。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🌏 别的国家也看月亮</h3>
+    <p>喜欢月亮的，不只有中国人。在亚洲，很多地方都有「月亮节」：</p>
+    <ul>
+      <li><b>越南</b>：也过中秋节，还把它当成<b>儿童节</b>，孩子们提着鲤鱼灯、看舞狮。</li>
+      <li><b>日本</b>：有观赏满月的习俗（<b>月见</b>），人们摆上芒草和团子，感谢秋天的收成。</li>
+      <li><b>朝鲜半岛</b>：有重要的秋夕（Chuseok），家人团聚、扫墓、吃松饼。</li>
+      <li>此外，<b>新加坡、马来西亚、泰国</b>等地的华人社区也会赏月、吃月饼；<b>中国台湾、中国香港、中国澳门</b>的同胞同样欢度中秋。</li>
+      <li>虽然习俗各不相同，但大家望着的，是<b>同一轮月亮</b>。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>✏️ 动手小活动：做一张「我的月亮卡」</h3>
+    <ul>
+      <li>拿出一张深蓝色或黑色的纸，用黄色画一个<b>又大又圆的满月</b>。</li>
+      <li>在月亮旁边画一只<b>玉兔</b>、一块<b>月饼</b>，再画一盏<b>小灯笼</b>。</li>
+      <li>在卡片下面写一句英语：<b>The moon is round and bright.</b></li>
+      <li>9 月 25 日那天晚上，把卡片举到窗边，和真月亮比一比，再对家人说一句：<b>Happy Mid-Autumn Festival!</b></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><div class="txt">读懂一篇 A2 水平的英文文化短文，理解中秋节的时间、习俗和传说。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">掌握 8 个节日核心词汇：festival, celebrate, moon, mooncake, round, bright, family, lantern。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">学会四个基础语法：一般现在时、一般过去时、be + 形容词、情态动词 can。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">能用 on + 日期、and 连接动作、like 打比方，说出完整的英文句子。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">了解中秋节的文化与传说，尊重不同国家赏月的习俗，热爱自己的传统。</div></div>
+
+    <h3 style="color:var(--accent);">📝 学习建议</h3>
+    <div class="goal"><span class="tick">🔊</span><div class="txt">点每段右侧的 ▶ 按钮，跟着朗读一遍，注意模仿语调和停顿。</div></div>
+    <div class="goal"><span class="tick">🔤</span><div class="txt">点词汇卡右上角的 🔊 听发音，再用每个词造一个自己的句子。</div></div>
+    <div class="goal"><span class="tick">💬</span><div class="txt">试试用英语介绍中秋：The Mid-Autumn Festival comes on September 25.</div></div>
+    <div class="goal"><span class="tick">🌕</span><div class="txt">9 月 25 日晚上，和爸爸妈妈一起赏月，说一句 Happy Mid-Autumn Festival!</div></div>
+    <div class="goal"><span class="tick">🖨️</span><div class="txt">点下方按钮打印本课，随身复习词汇、句型和语法。</div></div>
+
+    <div style="margin-top:18px;">
+      <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+    </div>
+  </div>
+</section>
+
+<footer>POLA NEWS · The Moon Festival · 2026-09-02 · Made for curious kids 🐾</footer>
+</main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+  "The Mid-Autumn Festival is a happy day in China. Families celebrate it with food and stories. In 2026 it comes on September 25. On that night, the moon looks big, round and bright.",
+  "Long ago, people thanked the moon for a good harvest. There is an old story about Chang'e. She flew up to the moon, and a kind rabbit lives with her.",
+  "Today, families sit together and share mooncakes. A mooncake is round like the full moon. Children carry colorful lanterns and laugh in the street.",
+  "The round moon means together in China. This year, look up at the sky with your family. You can make a wish and say Happy Mid-Autumn Festival to everyone."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'festival': '节日',
+  'celebrate': '庆祝',
+  'moon': '月亮',
+  'mooncake': '月饼',
+  'round': '圆形的；圆的',
+  'bright': '明亮的',
+  'family': '家庭；家人',
+  'lantern': '灯笼'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#', '');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

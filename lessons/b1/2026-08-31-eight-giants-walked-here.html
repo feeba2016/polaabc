@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Giants Walked Here · Pola News</title>
+<style>
+:root{
+  --accent:#a8442a;
+  --accent2:#c97b2c;
+  --glow:#f0c05a;
+  --bg:#fdf7f0;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#3d2718;
+  --muted:#8b7460;
+  --line:#ecd8c2;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(168,68,42,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#fdf3e3;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.82;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#fbe7cf;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.10)}
+.nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(168,68,42,.35)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(168,68,42,.12);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px;min-width:220px}
+.seg .zh{flex-basis:100%;margin-left:50px;font-size:14px;color:var(--muted);line-height:1.65}
+.seg .txt em{color:var(--accent);font-style:italic}
+.seg .zh{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.6}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(168,68,42,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(240,192,90,.65)}70%{box-shadow:0 0 0 14px rgba(240,192,90,0)}100%{box-shadow:0 0 0 0 rgba(240,192,90,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(240,192,90,.35)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#3d2718;color:#fdf3e3;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.vcard{background:linear-gradient(160deg,#fffaf3,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(168,68,42,.14)}
+.vcard .w{font-size:19px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:4px}
+.vcard .en{font-size:13px;color:var(--muted);line-height:1.5}
+.vcard .spk{position:absolute;top:10px;right:10px;border:none;background:rgba(201,123,44,.12);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;transition:.2s}
+.vcard .spk:hover{background:var(--accent2);transform:scale(1.1)}
+.pat{background:#fffaf3;border-left:4px solid var(--accent2);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.pat .en{font-size:17px;font-weight:600;margin-bottom:4px}
+.pat .zh{font-size:14px;color:var(--muted);margin-bottom:8px}
+.pat .fill{background:#fff;border:1px dashed var(--accent2);border-radius:8px;padding:8px 12px;font-size:15px;margin-top:6px}
+.pat .fill input{border:none;border-bottom:2px solid var(--accent2);background:transparent;font-size:15px;outline:none;min-width:90px;text-align:center;color:var(--accent);font-weight:700;font-family:inherit}
+.pat .fill button{margin-left:8px;border:none;background:var(--accent);color:#fff;border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer}
+.pat .ans{font-size:14px;margin-top:6px;font-weight:700;min-height:20px}
+.gbox{background:#fffaf3;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.gbox h3{font-size:18px;color:var(--accent);margin-bottom:8px}
+.gbox .rule{background:#fff;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--accent);margin-bottom:10px;border:1px dashed var(--accent2)}
+.gbox ul{margin-left:20px;font-size:15px}
+.gbox li{margin-bottom:6px}
+.gbox table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.gbox th,.gbox td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.gbox th{background:rgba(201,123,44,.10);color:var(--accent)}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.q .qt{font-size:16px;font-weight:600;margin-bottom:10px}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q .opt{border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:15px;transition:.15s;background:#fffaf3}
+.q .opt:hover{background:rgba(240,192,90,.25)}
+.q .opt.right{background:rgba(15,157,88,.14);border-color:var(--good);color:var(--good);font-weight:700}
+.q .opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad)}
+.q .exp{font-size:14px;color:var(--muted);margin-top:9px;display:none;line-height:1.6}
+.q .exp.show{display:block}
+#score{text-align:center;font-size:18px;font-weight:700;color:var(--accent);margin-top:10px}
+#resetq{display:block;margin:14px auto 0;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:9px 24px;border-radius:999px;font-size:15px;cursor:pointer;font-weight:700}
+.cn{background:linear-gradient(160deg,#fffaf3,#fff)}
+.cn h3{font-size:19px;color:var(--accent);margin:16px 0 8px}
+.cn h3:first-child{margin-top:0}
+.cn p{font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn ul{margin-left:22px;font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn li{margin-bottom:7px}
+.cn .fact{background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:15px}
+.cn .fact b{color:var(--accent)}
+.timeline{display:flex;flex-direction:column;gap:0;margin:14px 0}
+.timeline .row{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line)}
+.timeline .row:last-child{border-bottom:none}
+.timeline .yr{flex:none;min-width:96px;font-weight:800;color:var(--accent);font-size:15px}
+.timeline .ev{flex:1;font-size:15px}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;min-width:0;padding:14px}
+  .nav{display:flex;overflow-x:auto;gap:6px}
+  .nav a{margin-bottom:0;white-space:nowrap}
+  .content{padding:22px 16px}
+  .q .opts{grid-template-columns:1fr}
+}
+@media print{
+  .sidebar,#progress,.play,.spk,#resetq{display:none!important}
+  body{background:#fff;font-size:12pt}
+  section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span>Pola News</div>
+  <div class="sub">2026-08-31 · B1 · 儿童英语科普</div>
+  <nav class="nav">
+    <a href="#reading" class="active"><span class="ic">📖</span>全文阅读</a>
+    <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+    <a href="#patterns"><span class="ic">🧩</span>句型练习</a>
+    <a href="#grammar"><span class="ic">📐</span>语法点</a>
+    <a href="#quiz"><span class="ic">✅</span>练习测验</a>
+    <a href="#cn"><span class="ic">🌏</span>中文知识扩展</a>
+    <a href="#about"><span class="ic">ℹ️</span>关于本课</a>
+  </nav>
+</aside>
+<main class="content">
+    <header class="top">
+      <span class="kicker">🦴 人类演化 · Human Evolution</span>
+      <h1>Eight Giants Walked Here</h1>
+      <div class="meta">
+        <span>📅 <b>2026-08-31</b></span>
+        <span>🎙️ <b>Pola News</b></span>
+        <span>📊 <b>B1</b>（适合 10–12 岁）</span>
+        <span>⏱️ 约 60 秒 · 4 段</span>
+      </div>
+      <p style="margin-top:14px;font-size:16px;color:var(--muted);line-height:1.8">
+        科学家在肯尼亚图尔卡纳湖畔发现 <b>140 万年前</b>的八组巨大脚印。它们属于我们已灭绝的亲属——<b>鲍氏傍人</b>。脚印显示，其中一些家伙身高可达 <b>1.8 米</b>、体重约 <b>75 公斤</b>，和今天的成年人差不多大。
+      </p>
+    </header>
+
+    <!-- 1. READING -->
+    <section id="reading">
+      <h2><span class="num">1</span>全文阅读 · Full Story</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击每段右侧的 <b>▶</b> 按钮听 Pola 朗读（优先播放预生成语音，失败则用浏览器原声）。橙色虚线词可点击查看释义。</p>
+
+      <div class="seg">
+        <div class="badge">1</div>
+        <div class="txt">Hi, I'm Pola! I'm standing in <span class="kw" data-def="肯尼亚：东非国家，被称为「人类摇篮」" data-en="a country in East Africa, often called the cradle of humankind">Kenya</span>, on ground that's 1.4 <span class="kw" data-def="百万：很大的数字，1,000,000" data-en="a very big number: 1,000,000">million</span> years old. <span class="kw" data-def="科学家：研究世界如何运作的人" data-en="a person who studies how the world works">Scientists</span> just found eight sets of giant <span class="kw" data-def="脚印：脚在软地上留下的痕迹" data-en="a mark your foot leaves in soft ground">footprints</span> here — left by <span class="kw" data-def="古老的：非常非常久远的" data-en="very, very old; from long ago">ancient</span> <span class="kw" data-def="亲缘物种／亲戚：和我们关系很近的物种，或家族成员" data-en="a species close to ours, or a member of your family">relatives</span> of ours, walking together across a muddy <span class="kw" data-def="湖岸：湖泊边缘的陆地" data-en="the land along the edge of a lake">lakeshore</span>.</div>
+        <button class="play" data-seg="0" aria-label="Play segment 1">▶</button>
+        <div class="zh">大家好，我是 Pola！我现在站在肯尼亚，脚下的土地有 140 万年那么老。科学家刚刚在这里发现了八组巨大的脚印——它们是我们古老的亲属留下的，当年曾一起走过一片泥泞的湖岸。</div>
+      </div>
+
+      <div class="seg">
+        <div class="badge">2</div>
+        <div class="txt">The prints belong to Paranthropus boisei — a cousin of ours, famous for huge jaws and teeth. But here's the <span class="kw" data-def="惊喜：你完全没预料到的事" data-en="something you did not expect">surprise</span>: the footprints are huge too! Scientists think some stood 1.8 metres tall and weighed about 75 kilograms.</div>
+        <button class="play" data-seg="1" aria-label="Play segment 2">▶</button>
+        <div class="zh">这些脚印属于「鲍氏傍人」——我们的一个表亲，以巨大的下巴和牙齿闻名。但惊喜在这里：脚印本身也非常大！科学家认为，其中一些家伙身高达到 1.8 米，体重约 75 公斤。</div>
+      </div>
+
+      <div class="seg">
+        <div class="badge">3</div>
+        <div class="txt">Footprints are like photographs. Bones can pile up over thousands of years, but a footprint freezes just one <span class="kw" data-def="瞬间：非常短的一段时间" data-en="a very short time">moment</span>. And eight adults walking together tells us something new — they may have lived in big, complicated <span class="kw" data-def="群体：聚在一起的若干人或动物" data-en="a number of people or animals together">groups</span>, not small families.</div>
+        <button class="play" data-seg="2" aria-label="Play segment 3">▶</button>
+        <div class="zh">脚印就像照片。骨头可能是在几千年的时间里慢慢堆积起来的，可一枚脚印却只定格了某一个瞬间。而八个成年个体走在一起，还告诉我们一件新鲜事——它们也许生活在庞大而复杂的群体里，而不只是小小的家庭。</div>
+      </div>
+
+      <div class="seg">
+        <div class="badge">4</div>
+        <div class="txt">Scientists say they are building a photo album of our past. Every new footprint site is one more page. Who knows what the next one will show? Keep asking big questions, everyone. This is Pola, signing off!</div>
+        <button class="play" data-seg="3" aria-label="Play segment 4">▶</button>
+        <div class="zh">科学家说，他们正在为我们的过去制作一本相册。每一处新的脚印遗址，都是新的一页。谁知道下一页会展示什么呢？大家继续大胆提问吧。我是 Pola，今天的播报就到这里！</div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2><span class="num">2</span>词汇表 · Vocabulary</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 点击右下角 🔊 听单词发音；把鼠标移到卡片上会有轻微浮起效果。</p>
+      <div class="vgrid">
+        <div class="vcard"><div class="w">footprint</div><div class="pos">n.</div><div class="zh">脚印</div><div class="en">a mark your foot leaves in soft ground</div><button class="spk" data-word="footprint">🔊</button></div>
+        <div class="vcard"><div class="w">ancient</div><div class="pos">adj.</div><div class="zh">古老的</div><div class="en">very, very old; from long ago</div><button class="spk" data-word="ancient">🔊</button></div>
+        <div class="vcard"><div class="w">relative</div><div class="pos">n.</div><div class="zh">亲缘物种；亲戚</div><div class="en">a species close to ours, or a member of your family</div><button class="spk" data-word="relative">🔊</button></div>
+        <div class="vcard"><div class="w">lakeshore</div><div class="pos">n.</div><div class="zh">湖岸</div><div class="en">the land along the edge of a lake</div><button class="spk" data-word="lakeshore">🔊</button></div>
+        <div class="vcard"><div class="w">scientist</div><div class="pos">n.</div><div class="zh">科学家</div><div class="en">a person who studies how the world works</div><button class="spk" data-word="scientist">🔊</button></div>
+        <div class="vcard"><div class="w">surprise</div><div class="pos">n.</div><div class="zh">惊喜</div><div class="en">something you did not expect</div><button class="spk" data-word="surprise">🔊</button></div>
+        <div class="vcard"><div class="w">moment</div><div class="pos">n.</div><div class="zh">瞬间</div><div class="en">a very short time</div><button class="spk" data-word="moment">🔊</button></div>
+        <div class="vcard"><div class="w">group</div><div class="pos">n.</div><div class="zh">群体</div><div class="en">a number of people or animals together</div><button class="spk" data-word="group">🔊</button></div>
+        <div class="vcard"><div class="w">discover</div><div class="pos">v.</div><div class="zh">发现</div><div class="en">to find something for the first time</div><button class="spk" data-word="discover">🔊</button></div>
+        <div class="vcard"><div class="w">preserve</div><div class="pos">v.</div><div class="zh">保存</div><div class="en">to keep something safe so it does not disappear</div><button class="spk" data-word="preserve">🔊</button></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2><span class="num">3</span>句型练习 · Sentence Patterns</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 先读例句，再填空。填完点「检查」，看看你答对了吗。</p>
+
+      <div class="pat">
+        <div class="en">① Scientists <b>found</b> eight sets of giant footprints.</div>
+        <div class="zh">科学家<b>发现</b>了八组巨大的脚印。→ 讲故事用「主语 + 动词过去式 + 宾语」。</div>
+        <div class="fill">I <input id="f1" size="6" placeholder="see"> a big footprint in the mud yesterday. <button onclick="check('f1',['saw'],'saw')">检查</button></div>
+        <div class="ans" id="a1"></div>
+      </div>
+
+      <div class="pat">
+        <div class="en">② The footprints <b>are huge. Really huge.</b></div>
+        <div class="zh">脚印<b>很大。真的很大。</b>→ 把同一个词再说一遍，可以让语气更强。</div>
+        <div class="fill">The lake is <input id="f2" size="6" placeholder="big">. Really <input id="f2b" size="6" placeholder="big">. <button onclick="check2('f2','f2b',['big','big'])">检查</button></div>
+        <div class="ans" id="a2"></div>
+      </div>
+
+      <div class="pat">
+        <div class="en">③ Bones can pile up over thousands of years, <b>but</b> a footprint freezes just one moment.</div>
+        <div class="zh">骨头会在几千年里堆积，<b>但</b>一枚脚印只定格一个瞬间。→ 用 <b>but</b> 连接两个相反的想法。</div>
+        <div class="fill">Bones are hard, <input id="f3" size="6" placeholder="but / and"> footprints are only marks in mud. <button onclick="check('f3',['but'],'but')">检查</button></div>
+        <div class="ans" id="a3"></div>
+      </div>
+
+      <div class="pat">
+        <div class="en">④ <b>Who knows</b> what the next one will show?</div>
+        <div class="zh"><b>谁知道</b>下一页会展示什么呢？→ 用 <b>Who knows…?</b> 表示「谁也说不准」，语气很地道。</div>
+        <div class="fill">Who knows what we <input id="f4" size="8" placeholder="find"> tomorrow? <button onclick="check('f4',['will find'],'will find')">检查</button></div>
+        <div class="ans" id="a4"></div>
+      </div>
+    </section>
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2><span class="num">4</span>语法点 · Grammar</h2>
+
+      <div class="gbox">
+        <h3>① 一般过去时（Past Simple）—— 讲一个已经发生完的故事</h3>
+        <p style="font-size:15px;margin-bottom:8px">讲故事、说新闻里「过去发生的事」时，动词要变成过去式。本课里出现了好几个：</p>
+        <div class="rule">主语 + 动词过去式（+ 宾语 / 时间 / 地点）</div>
+        <table>
+          <tr><th>原形</th><th>过去式</th><th>本课例句</th></tr>
+          <tr><td>find</td><td><b>found</b></td><td>Scientists <b>found</b> eight sets of giant footprints.</td></tr>
+          <tr><td>leave</td><td><b>left</b></td><td>…<b>left</b> by ancient relatives of ours.</td></tr>
+          <tr><td>stand</td><td><b>stood</b></td><td>Some <b>stood</b> 1.8 metres tall.</td></tr>
+          <tr><td>weigh</td><td><b>weighed</b></td><td>…and <b>weighed</b> about 75 kilograms.</td></tr>
+          <tr><td>say</td><td><b>said</b></td><td>Scientists <b>said</b> they are building a photo album.</td></tr>
+        </table>
+        <ul style="margin-top:10px">
+          <li>这些动词的过去式<b>不是</b>加 -ed，属于「不规则动词」，需要单独记住。</li>
+          <li>规则动词则直接加 -ed，例如 walk → walked，freeze → froze（这个也是不规则的！）。</li>
+          <li>否定句用 <b>didn't + 原形</b>：They <b>didn't find</b> any children's footprints.（他们没有发现小孩的脚印。）</li>
+        </ul>
+      </div>
+
+      <div class="gbox">
+        <h3>② may / might + have + 过去分词 —— 对「过去」的推测</h3>
+        <p style="font-size:15px;margin-bottom:8px">科学家不会把话说死。当他们想表达「<b>当时可能……</b>」时，就用这个结构。</p>
+        <div class="rule">主语 + may / might + have + 动词过去分词</div>
+        <ul>
+          <li>They <b>may have lived</b> in big groups. — 它们<b>当时可能</b>生活在大的群体里。</li>
+          <li>They <b>might have travelled</b> together for safety. — 它们<b>也许</b>是为了安全才结伴同行。</li>
+          <li>They <b>may not have</b> lived in small families. — 它们<b>当时可能不</b>是生活在小家庭里。</li>
+        </ul>
+        <p style="font-size:14px;color:var(--muted);margin-top:8px">
+          💡 小提示：<b>may</b> 的把握比 <b>might</b> 稍大一点点，但两者都表示「不确定」。<br>
+          ⚠️ 别和 <b>may + 原形</b> 搞混：<i>They may live in big groups.</i>（它们<b>现在</b>可能生活在大群体里）说的是现在／未来。
+        </p>
+      </div>
+
+      <div class="gbox">
+        <h3>③ 一个小对比：freeze 的两种用法</h3>
+        <ul>
+          <li><b>A footprint freezes just one moment.</b> — 这里的 freeze 意思是「<b>定格</b>」，像按下相机快门一样把瞬间固定住。</li>
+          <li><b>Water freezes at 0°C.</b> — 这里的 freeze 是原本的意思「<b>结冰</b>」。</li>
+        </ul>
+        <p style="font-size:14px;color:var(--muted);margin-top:8px">💡 英文里很多词都可以这样「借用」到新场景，读的时候要根据上下文猜意思。</p>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2><span class="num">5</span>练习测验 · Quiz</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">👉 选出正确答案，选完会立刻显示解析。看看你能拿几分！</p>
+
+      <div class="q" data-ans="0">
+        <div class="qt">1. Where did scientists find the giant footprints?</div>
+        <div class="opts">
+          <div class="opt">A. In Kenya, near Lake Turkana</div>
+          <div class="opt">B. In Brazil</div>
+          <div class="opt">C. In China</div>
+          <div class="opt">D. In Australia</div>
+        </div>
+        <div class="exp">✅ 正确答案 <b>A</b>。这批脚印发现于<b>肯尼亚北部图尔卡纳湖</b>（Lake Turkana）畔的古湖滨沉积层。图尔卡纳地区是世界研究人类演化最丰富的地区之一。</div>
+      </div>
+
+      <div class="q" data-ans="0">
+        <div class="qt">2. How old are the footprints?</div>
+        <div class="opts">
+          <div class="opt">A. About 1.4 million years old</div>
+          <div class="opt">B. About 140,000 years old</div>
+          <div class="opt">C. About 14 million years old</div>
+          <div class="opt">D. About 1.4 billion years old</div>
+        </div>
+        <div class="exp">✅ 正确答案 <b>A</b>。约 <b>140 万年</b>前，属于地质学上的「<b>早更新世</b>」（Early Pleistocene）。注意英文里 1.4 million = 140 万，不是 14 万也不是 1400 万。</div>
+      </div>
+
+      <div class="q" data-ans="1">
+        <div class="qt">3. How many individuals probably made these tracks?</div>
+        <div class="opts">
+          <div class="opt">A. Two</div>
+          <div class="opt">B. Eight</div>
+          <div class="opt">C. Eighteen</div>
+          <div class="opt">D. Eighty</div>
+        </div>
+        <div class="exp">✅ 正确答案 <b>B</b>。<b>八个</b>个体，而且几乎都是<b>成年雄性</b>，没有发现雌性或幼年个体的脚印。这正是研究团队觉得它们的社群结构可能很「复杂」的原因。</div>
+      </div>
+
+      <div class="q" data-ans="2">
+        <div class="qt">4. What was the big surprise about <i>Paranthropus boisei</i>?</div>
+        <div class="opts">
+          <div class="opt">A. It was as small as a cat</div>
+          <div class="opt">B. It had no teeth at all</div>
+          <div class="opt">C. Some were as tall and heavy as modern humans</div>
+          <div class="opt">D. It could fly</div>
+        </div>
+        <div class="exp">✅ 正确答案 <b>C</b>。以前科学家主要只找到它们的<b>头骨</b>（以巨大的颌骨和牙齿闻名），一直以为它们比同期的直立人小得多。这批脚印显示，有些个体身高可达 <b>1.8 米</b>、体重约 <b>75 公斤</b>——和今天的成年人差不多。</div>
+      </div>
+
+      <div class="q" data-ans="1">
+        <div class="qt">5. Why are footprints special compared with bones?</div>
+        <div class="opts">
+          <div class="opt">A. They are much heavier</div>
+          <div class="opt">B. They freeze just one moment in time</div>
+          <div class="opt">C. They are made of stone</div>
+          <div class="opt">D. They only form inside caves</div>
+        </div>
+        <div class="exp">✅ 正确答案 <b>B</b>。骨头可能是几千年里慢慢堆积起来的，而一片脚印表面往往只用了<b>很短的时间</b>形成，就像一张<b>快照</b>。科学家把这叫作「<b>化石行为</b>」（fossil behavior）——它记录的是活生生的动作，而不只是一具尸体。</div>
+      </div>
+
+      <div id="score">已作答 0 / 5</div>
+      <button id="resetq">🔄 再做一次</button>
+    </section>
+
+    <!-- 6. CN -->
+    <section id="cn" class="cn">
+      <h2><span class="num">6</span>中文知识扩展 · 你知道吗？</h2>
+
+      <h3>🦴 谁是「鲍氏傍人」？</h3>
+      <p>鲍氏傍人（<i>Paranthropus boisei</i>）生活在大约 <b>230 万到 120 万年前</b>的东非。它最出名的特征是那副<b>超大号的颌骨和臼齿</b>——臼齿的面积大约是今天人类的 <b>4 倍</b>，所以古人类学家给它起了个外号叫「<b>胡桃钳人</b>」（Nutcracker Man）。</p>
+      <div class="fact">🍽️ <b>吃什么？</b>早期人们以为它靠咬碎坚硬的坚果和种子为生。但后来的化学分析显示，它的牙齿上更多留下的是<b>草本植物和莎草</b>的痕迹——原来这位「胡桃钳」其实更像个<b>吃草专家</b>。</div>
+
+      <h3>🌳 它不是我们的祖先，是我们的「表亲」</h3>
+      <p>人类的演化不是一条直线，而是一棵<b>有很多分叉的树</b>。在 140 万年前的东非，<b>至少有两种古人类同时生活</b>：</p>
+      <ul>
+        <li><b>直立人（Homo erectus）</b>——一般被认为是我们<b>人属</b>的直接祖先之一，脑容量更大、会用更复杂的石器。</li>
+        <li><b>鲍氏傍人（Paranthropus boisei）</b>——走上了另一条路：把「咀嚼机器」进化到极致。</li>
+      </ul>
+      <p>傍人这一支后来灭绝了，没有留下后代。所以准确地说，它们是我们的<b>远房表亲</b>，不是曾曾曾祖父。这也是为什么本课口播里用 <b>cousin（表亲）</b>和 <b>relative（亲属）</b>，而不是 ancestor（祖先）。</p>
+
+      <h3>👣 脚印会告诉我们什么？</h3>
+      <p>科学家把脚印这类化石叫作<b>「遗迹化石」</b>（trace fossil）——它们不是身体的一部分，而是<b>行为的痕迹</b>。从一枚脚印里，研究者能读出很多信息：</p>
+      <ul>
+        <li><b>体型</b>：脚印越大、陷得越深，主人通常越高越重。</li>
+        <li><b>速度</b>：步幅（两步之间的距离）大，说明走得快，甚至在跑。</li>
+        <li><b>脚的形状</b>：脚趾排列、足弓高低，能区分是哪种古人类。</li>
+        <li><b>方向和时间</b>：如果几串脚印叠在一起、边缘都还清晰，说明它们是在<b>很接近的时间</b>里留下的。</li>
+        <li><b>群体规模</b>：数一数同一层表面上有几串不同大小的脚印。</li>
+      </ul>
+      <div class="fact">🔬 <b>本课用到的新方法</b>：研究团队在 2024 年开发了一套分析技术，不只量脚印大小，还结合<b>足部解剖特征</b>和<b>走路的方式</b>（比如压力怎么分布）来判断是谁留下的。正是这套方法，让他们把这些脚印归到了鲍氏傍人名下。</div>
+
+      <h3>💧 为什么它们总在湖边？</h3>
+      <p>研究团队已经在图尔卡纳地区的<b>六个以上地点</b>，记录了<b>数百枚</b>古人类脚印，而且几乎都在<b>古湖滨环境</b>里。更巧的是，相距 <b>40 公里</b>的两处地方，湖滨沉积层的年代竟然差不多。</p>
+      <p>为什么？湖边有<b>淡水</b>、有<b>可吃的植物</b>、有被水吸引来的动物，也可能有做石器用的石头。古人类反复回到这里，一去就是<b>十多万年</b>。沉积物在脚印形成后迅速把它盖住、慢慢变硬，才让这些痕迹保存到今天。<b>保存条件</b>和<b>生活条件</b>碰巧是同一件事，这就是这批化石如此珍贵的原因。</p>
+
+      <h3>📖 科学家说：我们在做一本「相册」</h3>
+      <p>论文第一作者 Kevin Hatala 说了一句很美的话：每一处脚印遗址，都是我们过去的一张<b>快照</b>；他们正在快速搭建一本<b>相册</b>，用好几扇不同的窗口去观察早更新世古人类的身体结构、行走方式、行为和当时的环境。</p>
+      <p>换句话说：<b>骨头告诉我们「他们长什么样」，脚印告诉我们「他们怎么活着」。</b></p>
+
+      <h3>🕰️ 人类脚印小时间线</h3>
+      <div class="timeline">
+        <div class="row"><div class="yr">约 366 万年前</div><div class="ev">坦桑尼亚 <b>莱托里（Laetoli）</b>火山灰脚印——目前已知最古老的直立行走脚印之一，可能是南方古猿留下的。</div></div>
+        <div class="row"><div class="yr">约 150 万年前</div><div class="ev">肯尼亚伊莱雷特（Ileret）脚印——显示当时已有接近现代人的足弓和步态。</div></div>
+        <div class="row"><div class="yr">约 140 万年前</div><div class="ev">⭐ <b>本课的图尔卡纳湖畔脚印</b>——八只鲍氏傍人同行，体格比想象中大得多。</div></div>
+        <div class="row"><div class="yr">约 70 万年前</div><div class="ev">西班牙阿塔普埃尔卡「海德堡人」脚印。</div></div>
+        <div class="row"><div class="yr">约 2.3 万年前</div><div class="ev">美国白沙国家公园——目前美洲最古老的人类脚印之一。</div></div>
+      </div>
+
+      <h3>🧠 一个科学素养小提醒</h3>
+      <p>新闻里说这八只「几乎都是成年雄性，没有雌性和幼崽」，于是推测它们可能有<b>复杂的社群结构</b>。注意：这是一个<b>合理的猜测</b>，不是已经证实的事实——毕竟我们只看到了<b>一次</b>散步留下的痕迹。</p>
+      <p>科学就是这样：先有证据，再提出<b>假说</b>，然后去找更多脚印来验证或推翻它。研究团队今年就会重返肯尼亚继续挖掘。也许下一个发现，会让今天的说法再改一遍——<b>这恰恰是科学最迷人的地方。</b></p>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2><span class="num">7</span>关于本课 · About</h2>
+      <ul style="margin-left:20px;font-size:16px;line-height:1.9">
+        <li><b>课程标题</b>：Eight Giants Walked Here（八个巨人曾走过这里）</li>
+        <li><b>播出日期</b>：2026 年 8 月 31 日</li>
+        <li><b>英语等级</b>：B1（适合 10–12 岁学习者）</li>
+        <li><b>主题分类</b>：🦴 人类演化 / 古人类学</li>
+        <li><b>核心词汇</b>：footprint · ancient · relative · lakeshore · scientist · surprise · moment · group · discover · preserve</li>
+        <li><b>核心语法</b>：一般过去时（不规则动词）；may / might + have + 过去分词（对过去的推测）</li>
+        <li><b>主要来源</b>：ScienceDaily（2026-08-30）／Max Planck Institute for Evolutionary Anthropology；研究团队含 Chatham University（Kevin Hatala）、Harvard University（Neil Roach）、Smithsonian Institution（Kay Behrensmeyer）、National Museums of Kenya（Purity Kiura）</li>
+        <li><b>主播</b>：Pola —— 一只爱问问题的短尾矮袋鼠（Quokka）</li>
+      </ul>
+      <p style="margin-top:16px;font-size:15px;color:var(--muted);line-height:1.8">
+        💡 <b>给家长和老师</b>：本页支持打印（Ctrl/Cmd + P），打印时会自动隐藏导航和按钮，方便当纸质练习册用。建议学习顺序：先听全文 → 学生词 → 练句型 → 看语法 → 做测验 → 最后读中文扩展。
+      </p>
+    </section>
+</main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hi, I'm Pola! I'm standing in Kenya, on ground that's 1.4 million years old. Scientists just found eight sets of giant footprints here — left by ancient relatives of ours, walking together across a muddy lakeshore.",
+  "The prints belong to Paranthropus boisei — a cousin of ours, famous for huge jaws and teeth. But here's the surprise: the footprints are huge too! Scientists think some stood 1.8 metres tall and weighed about 75 kilograms.",
+  "Footprints are like photographs. Bones can pile up over thousands of years, but a footprint freezes just one moment. And eight adults walking together tells us something new — they may have lived in big, complicated groups, not small families.",
+  "Scientists say they are building a photo album of our past. Every new footprint site is one more page. Who knows what the next one will show? Keep asking big questions, everyone. This is Pola, signing off!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 句型练习 - 单空 ===== */
+function check(inputId, answers, display){
+  const el = document.getElementById(inputId);
+  const ansEl = document.getElementById(inputId.replace('f','a'));
+  if(!el || !ansEl) return;
+  const val = (el.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(answers.indexOf(val) !== -1){
+    ansEl.innerHTML = '✅ 答对啦！<b>' + display + '</b>';
+    ansEl.style.color = 'var(--good)';
+  }else if(val === ''){
+    ansEl.textContent = '✏️ 先填一个答案试试。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 正确答案是 <b>' + display + '</b>';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 句型练习 - 双空 ===== */
+function check2(idA, idB, answers){
+  const a = document.getElementById(idA);
+  const b = document.getElementById(idB);
+  const ansEl = document.getElementById('a2');
+  if(!a || !b || !ansEl) return;
+  const va = (a.value||'').trim().toLowerCase();
+  const vb = (b.value||'').trim().toLowerCase();
+  if(va === answers[0] && vb === answers[1]){
+    ansEl.innerHTML = '✅ 答对啦！重复同一个形容词，语气立刻变强。';
+    ansEl.style.color = 'var(--good)';
+  }else if(va === '' || vb === ''){
+    ansEl.textContent = '✏️ 两个空都要填哦。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 两空都填 <b>big</b>，用重复来强调。';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 测验 ===== */
+const scoreEl = document.getElementById('score');
+let answered = 0;
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = '已作答 ' + answered + ' / 5';
+}
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans, 10);
+  const exp = q.querySelector('.exp');
+  const opts = q.querySelectorAll('.opt');
+  opts.forEach(function(opt, i){
+    opt.addEventListener('click', function(){
+      if(q.dataset.done === '1') return;
+      q.dataset.done = '1';
+      answered++;
+      opts.forEach(function(o){ o.style.cursor = 'default'; });
+      if(i === ans){
+        opt.classList.add('right');
+      }else{
+        opt.classList.add('wrong');
+        if(opts[ans]) opts[ans].classList.add('right');
+      }
+      if(exp) exp.classList.add('show');
+      updateScore();
+    });
+  });
+});
+document.getElementById('resetq').addEventListener('click', function(){
+  answered = 0;
+  updateScore();
+  document.querySelectorAll('.q').forEach(function(q){
+    q.dataset.done = '0';
+    q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('right','wrong');
+      o.style.cursor = 'pointer';
+    });
+    const exp = q.querySelector('.exp');
+    if(exp) exp.classList.remove('show');
+  });
+  const inputs = ['f1','f2','f2b','f3','f4'];
+  inputs.forEach(function(id){ const e=document.getElementById(id); if(e) e.value=''; });
+  ['a1','a2','a3','a4'].forEach(function(id){ const e=document.getElementById(id); if(e){ e.textContent=''; e.style.color=''; } });
+});
+updateScore();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
