@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Verdict Before the Evidence — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#0f766e;
+  --accent2:#7c3aed;
+  --bg:#f5f8f8;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#ccfbf1;
+  --border:#d9e7e6;
+  --soft:#eef7f6;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{display:block;flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;margin-top:6px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(15,118,110,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(15,118,110,.55);}70%{box-shadow:0 0 0 12px rgba(15,118,110,0);}100%{box-shadow:0 0 0 0 rgba(15,118,110,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#99f6e4;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#5eead4;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ccfbf1;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 学术论文 Academic Papers</span>
+      <h1 class="title">The Verdict Before the Evidence</h1>
+      <p class="subtitle">How registered reports promise publication before the data arrive — and what that promise costs · 全文阅读（点蓝绿词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Wager</div>
+            <p>In May 2026 Nature extended its registered reports track to every discipline it covers. Under the format, a team submits its question, design and analysis plan for peer review before any data are gathered. Should referees deem the question important and the method sound, the journal issues an in-principle acceptance — a promise <span class="kw" data-def="依条件而定的、视……而定的（contingent on/upon = depending on something else; 此处指『承诺的兑现只取决于是否遵守方案，而不取决于结果好坏』）">contingent</span> not on the outcome but on fidelity to a <span class="kw" data-def="预先注册的（preregistered = registered in a public repository before data collection; 名词形式 preregistration 预注册）">preregistered</span> protocol.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Pathology</div>
+            <p>The reform targets a pathology metascience has documented for a decade. Because journals have traditionally prized novel, positive findings, researchers face a <span class="kw" data-def="有悖常理的、事与愿违的（perverse incentive = 逆向激励，即制度反而诱导出它本想避免的行为）">perverse</span> incentive: to run <span class="kw" data-def="统计效力不足的（underpowered = 样本量太小，难以稳定检出真实存在的效应）">underpowered</span> studies, to try analyses until one clears the significance threshold, and to <span class="kw" data-def="事后改装、事后套配（retrofit = to add or adapt something after the fact; 此处指 HARKing：看到结果后才倒推出一个『假设』）">retrofit</span> a hypothesis to whatever survived. Registered reports remove the payoff. With publication guaranteed, a null result becomes a finding rather than a career hazard.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Evidence</div>
+            <p>The evidence is encouraging. Meta-researchers find registered reports support their hypotheses at roughly half the rate of conventional papers — proof, proponents argue, that ordinary journals publish a distorted sample of reality. Reviewers, blind to outcome, judge design rather than drama, and protocols drafted before data exist tend to specify larger samples. Since the format's debut in 2013 it has reached more than 300 journals; Nature's expansion <span class="kw" data-def="佐证、确证（corroborate = to confirm or give support to a claim, theory or finding）">corroborates</span> the case its advocates long made.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Cost</div>
+            <p>Yet the cure is not free. Pre-specification <span class="kw" data-def="限制、约束（circumscribe = to restrict something within limits; 比 limit 更书面）">circumscribes</span> the exploratory work from which <span class="kw" data-def="意外发现珍宝的好运、机缘巧合（serendipity = the occurrence of valuable discoveries by chance；形容词 serendipitous）">serendipity</span> has often sprung, and Stage 1 review can add a year to projects already staffed by researchers in <span class="kw" data-def="不稳的、岌岌可危的（precarious = dependent on chance; insecure；precarious employment 非稳定雇佣）">precarious</span> employment. Nor can the format police every <span class="kw" data-def="偏离（deviation = a departure from an agreed plan；protocol deviation 方案偏离，注册报告须逐条说明并论证）">deviation</span>. Registered reports are best read not as a verdict on truth but as a wager on better questions.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="preregistered">🔊</button><div class="word">preregistered<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">预先注册的（registered in a public repository before data collection；名词 preregistration 预注册）</div><div class="ex">"fidelity to a preregistered protocol"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="contingent">🔊</button><div class="word">contingent<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">依条件而定的（contingent on/upon = depending on something else；文中指承诺只取决于是否遵守方案）</div><div class="ex">"a promise contingent not on the outcome but on fidelity"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="perverse">🔊</button><div class="word">perverse<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">有悖常理的、事与愿违的（perverse incentive 逆向激励 = 制度诱导出它本想避免的行为）</div><div class="ex">"researchers face a perverse incentive"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="underpowered">🔊</button><div class="word">underpowered<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">统计效力不足的（样本量过小，难以稳定检出真实存在的效应；反义 well-powered）</div><div class="ex">"to run underpowered studies"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="retrofit">🔊</button><div class="word">retrofit<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">事后改装、事后套配（to adapt something after the fact；文中指 HARKing：见结果后才倒推假设）</div><div class="ex">"to retrofit a hypothesis to whatever survived"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="corroborate">🔊</button><div class="word">corroborate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">佐证、确证（to confirm or give support to a claim；比 confirm 更正式，常用于学术/法律语域）</div><div class="ex">"Nature's expansion corroborates the case its advocates long made"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="circumscribe">🔊</button><div class="word">circumscribe<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">限制、约束（to restrict within limits；比 limit 更书面，含『划圈限定』之意）</div><div class="ex">"Pre-specification circumscribes the exploratory work"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="serendipity">🔊</button><div class="word">serendipity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">机缘巧合的意外收获（valuable discoveries made by chance；形容词 serendipitous）</div><div class="ex">"the exploratory work from which serendipity has often sprung"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="precarious">🔊</button><div class="word">precarious<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">不稳的、岌岌可危的（dependent on chance; insecure；precarious employment 非稳定雇佣）</div><div class="ex">"researchers in precarious employment"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="deviation">🔊</button><div class="word">deviation<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">偏离（a departure from an agreed plan；protocol deviation 方案偏离，须逐条说明并论证）</div><div class="ex">"Nor can the format police every deviation"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Should [subject] [base verb], [clause].</h3>
+          <div class="zh">「倘若……，就……。」省略 if 的虚拟条件倒装：Should 提至句首，主语后接动词原形。语气比 If … should … 更正式、更紧凑，是学术写作中表述「一旦条件满足」的高级写法（同类还有 Were / Had 倒装）。</div>
+          <div class="eg">Should referees deem the question important and the method sound, the journal issues an in-principle acceptance.</div>
+          <div class="practice">练习：用 "the data / contradict the model / the authors must report it" → Should the data contradict the model, <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>2. [Because clause], [subject] face(s) a [adj.] incentive: to [V1], to [V2], and to [V3].</h3>
+          <div class="zh">「由于……，某方面临一种……的激励：做 A、做 B、以及做 C。」冒号后接三项并列不定式（tricolon），把抽象诱因具体化为三个动作，节奏铿锵，是社论与议论文剖析动机（motive）的利器。</div>
+          <div class="eg">Because journals have traditionally prized novel, positive findings, researchers face a perverse incentive: to run underpowered studies, to try analyses until one clears the significance threshold, and to retrofit a hypothesis to whatever survived.</div>
+          <div class="practice">练习：用 "universities count publications above all / a young scholar / publish quickly / slice one study into four / chase fashionable topics" → Because universities count publications above all, a young scholar faces a perverse incentive: to publish quickly, to <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>3. With [noun + past participle], [clause].</h3>
+          <div class="zh">「既然／在……（已）……的情况下，……。」with + 名词 + 过去分词构成独立主格（nominative absolute），作原因或伴随状语。比 Because 从句更凝练，且能避免主句主语被状语绑架，是学术英语的标志性结构。</div>
+          <div class="eg">With publication guaranteed, a null result becomes a finding rather than a career hazard.</div>
+          <div class="practice">练习：用 "the protocol / lock in advance / the temptation to p-hack disappears" → With the protocol locked in advance, <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>4. [Researchers] find [that clause] — [noun], [sb] argue(s), that [clause].</h3>
+          <div class="zh">「研究者发现……——某方主张，这正是……的证据。」破折号后接同位名词（proof / evidence / sign），中间插入评注性状语（proponents argue），再以 that 从句展开。一句话完成「数据 → 解读 → 论证」三层推进。</div>
+          <div class="eg">Meta-researchers find registered reports support their hypotheses at roughly half the rate of conventional papers — proof, proponents argue, that ordinary journals publish a distorted sample of reality.</div>
+          <div class="practice">练习：用 "auditors / one in four records was missing / evidence / the commission maintains / oversight has failed" → Auditors found one in four records was missing — evidence, the commission maintains, <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>5. [X] is/are best read not as [A] but as [B].</h3>
+          <div class="zh">「X 与其说是 A，不如说是 B。」not as A but as B 的严格平行结构，用于段末重新框定（reframe）议题：先否定读者的常见误读，再给出更精确的理解。是雅思 / 托福写作结尾段的高级收束句。</div>
+          <div class="eg">Registered reports are best read not as a verdict on truth but as a wager on better questions.</div>
+          <div class="practice">练习：用 "the reform / a constraint on freedom / an invitation to think harder" → The reform is best read not as a constraint on freedom but as <input placeholder="your answer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 省略 if 的虚拟条件倒装（Inversion in conditional clauses）</h3>
+          <div class="zh">「Should referees deem the question important…」= If referees should deem… 当条件从句含 should / were / had 时，可省略 if 并将其提至句首形成倒装。注意：主语后的动词必须是原形（deem，非 deems）；这种倒装只用于从句，主句语序不变。</div>
+          <div class="eg"><b>Should referees deem</b> the question important and the method sound, the journal issues an in-principle acceptance.</div>
+        </div>
+        <div class="item">
+          <h3>2. 冒号引导的三项并列不定式（Colon + tricolon of infinitives）</h3>
+          <div class="zh">「a perverse incentive: to run…, to try…, and to retrofit…」冒号后的三个不定式并列（tricolon）对 incentive 作具体说明。写作要点：三项结构必须语法对等（同为 to + 动词原形），最后一项前加 and；节奏上常由短到长，形成递进（cumulative climax）。</div>
+          <div class="eg">researchers face a perverse incentive: <b>to run</b> underpowered studies, <b>to try</b> analyses until one clears the significance threshold, and <b>to retrofit</b> a hypothesis to whatever survived.</div>
+        </div>
+        <div class="item">
+          <h3>3. with + 名词 + 过去分词：独立主格（Nominative absolute with 'with'）</h3>
+          <div class="zh">「With publication guaranteed, a null result becomes…」中 publication 是 with 的宾语，guaranteed 是过去分词补足语，二者构成独立主格，表原因/条件。它的好处是可以自带逻辑主语（publication），不必与主句主语（a null result）一致——这是分词短语作状语做不到的。</div>
+          <div class="eg"><b>With publication guaranteed,</b> a null result becomes a finding rather than a career hazard.</div>
+        </div>
+        <div class="item">
+          <h3>4. not A but B 平行结构（Parallel 'not A but B'）</h3>
+          <div class="zh">「a promise contingent not on the outcome but on fidelity to a preregistered protocol」中 not on X but on Y 严格平行（介词 on 前后一致）。判断标准：把 not 后的成分与 but 后的成分对调，句子仍应成立。常见错误是前后成分词性不一致（如 not on the outcome but because they followed the plan）。</div>
+          <div class="eg">a promise contingent <b>not on the outcome but on fidelity</b> to a preregistered protocol</div>
+        </div>
+        <div class="item">
+          <h3>5. 破折号 + 评注性插入语 + 同位从句（Dash, comment clause, appositive clause）</h3>
+          <div class="zh">「— proof, proponents argue, that ordinary journals publish…」破折号后 proof 是前面整句的同位概括（an appositive in summary），proponents argue 是评注性插入语（comment clause，可挪到句尾），that 从句则是 proof 的同位语从句，说明 proof 的内容。三层嵌套是 C2 阅读的典型难点，拆句时从里向外。</div>
+          <div class="eg">…at roughly half the rate of conventional papers — <b>proof, proponents argue, that</b> ordinary journals publish a distorted sample of reality.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇文章在说什么？（事实背景）</h3>
+        <p>本课源自已发生、可查证的真实学术出版改革。2026 年 5 月 27 日，《自然》（<i>Nature</i>）宣布把其「注册报告」（Registered Reports, RR）发表模式从原先的认知神经科学、行为科学与社会科学，<b>扩展到该刊覆盖的全部学科</b>——包括自然科学、社会科学、临床科学、工程学与公共卫生。此前（自 2023 年 2 月起）该格式仅限于上述少数领域，且主要针对验证性（confirmatory）研究。</p>
+        <ul>
+          <li><b>扩展后的新范围：</b>除假设驱动的定量研究外，还接受大规模数据采集、跨学科方法学比较，以及「作者尚未接触过数据」的既有数据集二次分析。</li>
+          <li><b>主编表态：</b>《自然》总编辑 Magdalena Skipper 表示，从早期支持预印本，到强制实行透明同行评审，再到把注册报告推向全学科，这一政策延续了《自然》对<b>透明度、严谨性与同行评议创新</b>的承诺。</li>
+          <li><b>姊妹刊经验：</b>Springer Nature 旗下的 <i>Nature Communications</i> 等刊物已在部分领域试行注册报告多年，为此次全面铺开提供了操作经验。</li>
+        </ul>
+        <div class="box">🧭 <b>事实与出处：</b>以上内容据《自然》编辑部声明（2026 年 5 月 27 日）、Springer Nature 官方说明，以及中国新闻网、中新经纬等媒体对上述声明的报道交叉印证（中科院的报道日期为 6 月 24 日，属中文媒体的后续转述）。本课尊重事实，未作虚构或改写。</div>
+
+        <h3>二、注册报告究竟怎么运作？</h3>
+        <p>传统投稿像「先盖楼、后审批」：数据收齐、结果出来后才送审，期刊据结果决定录用与否。注册报告则改为「先审图纸、再施工」，分两个阶段：</p>
+        <table>
+          <tr><th style="width:16%">阶段</th><th style="width:42%">提交什么</th><th>评审判据与后果</th></tr>
+          <tr><td><b>Stage 1</b><br>方案评审</td><td>研究问题与意义、理论基础、抽样方案与统计效力分析（power analysis）、数据收集流程、<b>预设的分析策略</b>（含剔除标准、异常值处理、模型选择）</td><td>评审人看不到结果，只判断「问题是否重要、方法是否可靠」。通过即获 <b>in-principle acceptance（原则性接受）</b>：只要照方案执行，期刊承诺发表。</td></tr>
+          <tr><td><b>Stage 2</b><br>结果评审</td><td>完整稿件（含结果、讨论），以及原始数据、代码与材料的公开存档</td><td>只核查是否忠实执行了注册方案。<b>无论结果是阳性、阴性还是不明确，均予发表。</b>探索性分析允许保留，但必须明确标注、单独报告，且不得作为主结论依据。</td></tr>
+        </table>
+        <p>两个硬性条件（据开放科学中心 COS 的定义）：① 同行评议必须发生在看到结果之前；② 通过 Stage 1 的稿件<b>不得因结果本身被拒稿</b>，拒稿理由只能是研究质量不达标或未能按注册方案执行。</p>
+
+        <h3>三、它要治的是什么病？</h3>
+        <ul>
+          <li><b>文件抽屉问题（file-drawer problem）：</b>阴性或不显著的结果被束之高阁，导致文献记录系统性失真。一项针对 480 名经济学家的调查显示，在样本量等条件相同的情况下，阴性结果的研究被认为更难发表、质量更低、意义更小。</li>
+          <li><b>p 值操纵（p-hacking）与研究者自由度（researcher degrees of freedom）：</b>反复尝试不同分析路径，直到 p &lt; 0.05，即所谓「分岔花园路径」（garden of forking paths）。</li>
+          <li><b>HARKing（结果后设假说）：</b>先挖数据、找到显著结果，再倒推出一个与之匹配的「假设」，包装成天衣无缝的故事——这正是课文中 retrofit 一词所指。</li>
+          <li><b>证据佐证：</b>2026 年 4 月发表于《自然》的三篇 SCORE 论文（865 名研究者协作）显示，社会科学与行为科学中仅约 <b>49%</b> 的发现可被成功重复；数据可公开获取的比例仅约 24%，而一旦作者共享数据与代码，可重复率便显著上升。另有元研究指出，注册报告的阳性结果率约为常规论文的一半（心理学比较研究：44% vs 96%），这被广泛解读为常规文献存在发表偏倚的有力证据。</li>
+        </ul>
+
+        <h3>四、争议与代价（考试最爱考的「让步—反驳」结构）</h3>
+        <ul>
+          <li><b>时间成本：</b>准备 Stage 1 方案需投入大量精力，且第一轮评审往往比传统评审更耗时。对处于求职、晋升关键期的青年学者，这可能拉长发表周期。</li>
+          <li><b>灵活性的丧失：</b>严格的事前设定可能压制<b>意外发现（serendipity）</b>。若探索性分析揭示出未预料到的模式，作者无法在不损害注册报告完整性的前提下转向。有统计学家质疑固定样本量设计会忽视「因明显获益或伤害而提前终止试验」的伦理要求（可通过预设中期分析部分缓解）。</li>
+          <li><b>选题偏向（question-selection bias）：</b>有早期证据显示，编辑可能更倾向于接受方法成熟、风险较低的「安全」问题，这反而可能抑制真正具有突破性的高风险探索。</li>
+          <li><b>适用范围有限：</b>该格式本为假设驱动（hypothesis-driven）研究设计，描述性研究、探索性质性研究与复杂临床试验较难适应严格的事前设定。</li>
+          <li><b>激励结构仍未改：</b>开放科学中心执行主任 Brian Nosek 本人即指出，预注册能让研究者遵守初衷，但解决不了期刊编辑与审稿人的发表偏倚；只要「以刊评人」的指标体系不变，改革就只能在局部生效。</li>
+        </ul>
+        <p>因此，学界较主流的共识是：<b>验证性研究用注册报告，探索性研究保留传统格式，且必须清楚标注二者之别。</b></p>
+
+        <h3>五、关键概念速查</h3>
+        <table>
+          <tr><th style="width:30%">概念</th><th>含义</th></tr>
+          <tr><td>Registered Report（注册报告）</td><td>两阶段发表模式：数据收集前评审研究方案，通过即获「原则性接受」，结果如何均予发表。</td></tr>
+          <tr><td>In-principle acceptance（原则性接受）</td><td>Stage 1 通过后期刊作出的发表承诺；其兑现条件是遵守注册方案，而非结果显著。</td></tr>
+          <tr><td>Preregistration（预注册）</td><td>在公开仓储（如 OSF）登记假设与分析计划；注册报告把预注册嵌入了同行评议流程，因此具备约束力。</td></tr>
+          <tr><td>Publication bias（发表偏倚）</td><td>阳性结果更易被发表，导致文献系统性偏离真实。</td></tr>
+          <tr><td>Null result（阴性/零结果）</td><td>未观察到预期效应的结果；本身具有信息价值，但传统体系下难以发表。</td></tr>
+          <tr><td>Statistical power（统计效力）</td><td>在效应真实存在时检出该效应的概率；效力不足（underpowered）的研究易产生不稳定结果。</td></tr>
+          <tr><td>Metascience / meta-research（元科学）</td><td>用科学方法研究「科学本身如何运作」的学科，复现危机、发表偏倚皆属其议题。</td></tr>
+        </table>
+        <div class="box">📌 <b>附赠思考：</b>注册报告最深刻的洞见，是它<b>不去要求研究者更诚实，而是改变激励结构，让诚实成为阻力最小的那条路</b>。当发表决定在结果产生之前就已作出，p-hacking 失去意义，阴性结果不再需要藏进抽屉。制度设计优于道德规劝——这一思路本身，就是一篇很好的雅思 / 托福写作素材。</div>
+
+        <h3>六、内容合规与立场说明</h3>
+        <p>本课聚焦学术出版制度与研究方法改革，所有机构、人物、年份、数据均据公开报道与官方声明，立场客观、尊重事实，不涉及任何敏感政治话题，亦未对任何国家现行政策作评判。涉及主权与领土表述时，一律使用规范名称：台湾称「<b>中国台湾</b>」、香港称「<b>中国香港</b>」、澳门称「<b>中国澳门</b>」，均为中国不可分割的一部分。文中提及的英国、美国、澳大利亚、瑞典、匈牙利等地名，均按其主权国家规范表述。</p>
+
+        <h3>七、对雅思／托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>本课是典型的「提出改革—给出证据—承认代价—重新框定」四段式议论文的压缩版。练习重点：区分<b>事实</b>（2026 年 5 月《自然》扩展注册报告、阳性结果率约为常规论文一半、已逾 300 本期刊采用）与<b>作者评价</b>（是 wager 而非 verdict、cure 并非 free）。托福「推理题」「作者态度题」必考此点。</li>
+          <li><b>写作 Task 2：</b>可直接套用本课框架写「制度改革是否有效」类题目：命名机制（Under the format, X submits… before any data are gathered）→ 剖析动机（Because…, researchers face a perverse incentive: to…, to…, and to…）→ 举证（Meta-researchers find… — proof… that…）→ 让步+升华（Yet the cure is not free… X is best read not as A but as B）。</li>
+          <li><b>口语 Part 3：</b>被问到「应如何评价科研成果」「大学该如何激励研究者」，可用本课三分法：改变激励结构比道德规劝更有效；验证性与探索性研究需分轨评价；但改革须兼顾非稳定雇佣状态下的青年学者。有事实、有让步、有立场，7+ 稳。</li>
+          <li><b>易错点：</b>Should 倒装后主句<b>不</b>用 would（本文主句是陈述语气 issues，因这是真实条件而非反事实虚拟）；not A but B 前后成分必须词性一致；with + 名词 + 过去分词的逻辑主语可与主句主语不同，这是它优于分词状语的地方。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 学术/研究方法核心词（preregistered, contingent, perverse, underpowered, retrofit, corroborate, circumscribe, serendipity, precarious, deviation）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是 Should + 主语 + 动词原形的倒装条件句、冒号后三项不定式并列，以及 X is best read not as A but as B 的段末重新框定式。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握省略 if 的虚拟条件倒装、独立主格（with + 名词 + 过去分词）、not A but B 平行结构、破折号同位 + 评注性插入语等 5 个高级语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语复述「注册报告」的两阶段流程，并解释它如何改变科研激励结构。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能在口语与写作中调用 in-principle acceptance、publication bias、null result、statistical power、metascience 等概念。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听自然英语朗读，注意重音：pre-RE-gis-tered、con-TIN-gent、per-VERSE、un-der-POW-ered、RE-tro-fit、cor-RO-bo-rate、CIR-cum-scribe、se-ren-DI-pi-ty、pre-CA-ri-ous、de-vi-A-tion。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音；每词各造一个学术句，优先套用本课五个句型。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：Name the mechanism (Under the format, X submits… before any data are gathered) → Diagnose the motive (a perverse incentive: to…, to…, and to…) → Cite the evidence (Meta-researchers find… — proof… that…) → Concede and reframe (Yet the cure is not free… best read not as A but as B).</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做题先分辨「事实 vs 评价」：本文前三段多为可核查的事实与数据，末段的 Yet the cure is not free 与 best read not as a verdict on truth but as a wager on better questions 才是作者真正的判断；雅思 True/False/Not Given 与托福「作者态度题」必考此点。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Verdict Before the Evidence · 2026-09-04 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In May 2026 Nature extended its registered reports track to every discipline it covers. Under the format, a team submits its question, design and analysis plan for peer review before any data are gathered. Should referees deem the question important and the method sound, the journal issues an in-principle acceptance — a promise contingent not on the outcome but on fidelity to a preregistered protocol.",
+  "The reform targets a pathology metascience has documented for a decade. Because journals have traditionally prized novel, positive findings, researchers face a perverse incentive: to run underpowered studies, to try analyses until one clears the significance threshold, and to retrofit a hypothesis to whatever survived. Registered reports remove the payoff. With publication guaranteed, a null result becomes a finding rather than a career hazard.",
+  "The evidence is encouraging. Meta-researchers find registered reports support their hypotheses at roughly half the rate of conventional papers — proof, proponents argue, that ordinary journals publish a distorted sample of reality. Reviewers, blind to outcome, judge design rather than drama, and protocols drafted before data exist tend to specify larger samples. Since the format's debut in 2013 it has reached more than 300 journals; Nature's expansion corroborates the case its advocates long made.",
+  "Yet the cure is not free. Pre-specification circumscribes the exploratory work from which serendipity has often sprung, and Stage 1 review can add a year to projects already staffed by researchers in precarious employment. Nor can the format police every deviation. Registered reports are best read not as a verdict on truth but as a wager on better questions."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["A new statistical technique for detecting fabricated data","The decision by Nature to publish only null results from 2026 onwards","The rise of registered reports — journals judging study designs before the data exist — together with the promise and the costs of that reform","The history of peer review from the seventeenth century to the present"],ans:2,
+   fb:"Correct. 全文围绕『注册报告』这一发表模式展开：第一段讲机制（结果出来前就评审方案、给出原则性接受），第二段讲它要治的病（逆向激励），第三段讲支持它的证据，第四段讲代价与重新框定。C 同时涵盖了『制度』与『承诺+代价』两层，是最完整的主旨概括。"},
+  {q:"2. According to paragraph 1, what does an in-principle acceptance depend on? 根据第一段，『原则性接受』取决于什么？",opts:["Whether the results reach statistical significance","Whether the researchers adhere to the preregistered protocol","Whether the paper is likely to be widely cited","Whether the journal has space in a forthcoming issue"],ans:1,
+   fb:"Yes. 原文说得很清楚：a promise contingent not on the outcome but on fidelity to a preregistered protocol —— 承诺所附加的条件不是结果好坏，而是是否忠实执行了预先注册的方案。这正是注册报告区别于传统投稿的关键：结果不能成为拒稿理由。"},
+  {q:"3. It can be inferred from paragraph 3 that registered reports support their hypotheses at roughly half the rate of conventional papers mainly because: 据第三段可推断，注册报告的假设成立率约为常规论文的一半，主要是因为：",opts:["Their authors are systematically less competent than conventional authors","Conventional journals publish a distorted sample of reality, favouring positive results, so registered reports reveal far more null findings","Registered reports are rarely peer reviewed","The format forbids the use of inferential statistics"],ans:1,
+   fb:"Correct — 推理题。原文把这一差距称为 proof… that ordinary journals publish a distorted sample of reality。逻辑链是：常规期刊偏爱阳性结果 → 阴性结果进不了文献 → 文献中的『阳性率』虚高；注册报告保证发表 → 阴性结果得以现身 → 阳性率回落到接近真实水平。这不是研究质量变差，而是失真被纠正。"},
+  {q:"4. In paragraph 4, 'circumscribes' most nearly means: 第四段中 circumscribes 最接近的意思是？",opts:["encourages and rewards（鼓励并奖赏）","restricts within limits（限制、约束在范围内）","measures with precision（精确测量）","eliminates completely（彻底消除）"],ans:1,
+   fb:"Right. circumscribe 意为『限制、约束』（to restrict something within limits），比 limit 更书面。Pre-specification circumscribes the exploratory work = 事前设定会限制探索性研究。注意 D：彻底消除语气过重，探索性分析在注册报告中仍被允许，只是必须标注并单独报告。"},
+  {q:"5. The author's attitude toward registered reports is best described as: 作者对注册报告的态度最准确的概括是？",opts:["Unqualified endorsement（毫无保留的拥护）","Outright rejection（彻底的否定）","Qualified approval — acknowledging the supporting evidence while registering real costs and limits（有保留的肯定：既承认支持性证据，也如实记录代价与局限）","Indifferent neutrality（漠不关心的中立）"],ans:2,
+   fb:"Yes. 作者先说 The evidence is encouraging、Nature's expansion corroborates the case（肯定），再用 Yet the cure is not free 转入让步，指出它限制意外发现、拉长周期、无法监管每一次方案偏离（保留），最后以 not as a verdict on truth but as a wager on better questions 收束。这是典型的 measured / balanced 学术语气，既非狂热也非敌视。"},
+  {q:"6. The final sentence primarily serves to: 全文最后一句的主要作用是？",opts:["Summarise the statistical findings listed in paragraph 3","Announce a brand-new experiment scheduled for 2026","Reframe the reform: its value lies less in guaranteeing true answers than in improving the questions researchers ask（重新框定改革：其价值与其说在于保证答案正确，不如说在于改善研究者提出的问题）","Criticise Nature for abandoning conventional peer review"],ans:2,
+   fb:"Correct. Registered reports are best read not as a verdict on truth but as a wager on better questions —— 用 not as A but as B 的平行结构把议题从『它能否保证真理』（一个无法兑现的承诺）重新框定为『它能否促使学界提出更好的问题』（一个可评估的目标）。这里的 wager 还呼应了第一段的 The Wager，形成首尾闭环。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

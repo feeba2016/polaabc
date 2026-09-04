@@ -6074,5 +6074,67 @@ const EPISODES = [
         "ex": "\"The duplicity is structural, not moral.\""
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-09-04",
+    "title": "The Verdict Before the Evidence",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-09-04-the-verdict-before-the-evidence",
+    "url": "lessons/c1/2026-09-04-the-verdict-before-the-evidence.html",
+    "vocab": [
+      {
+        "word": "preregistered",
+        "zh": "预先注册的（registered in a public repository before data collection；名词 preregistration 预注册）",
+        "ex": "\"fidelity to a preregistered protocol\""
+      },
+      {
+        "word": "contingent",
+        "zh": "依条件而定的（contingent on/upon = depending on something else；文中指承诺只取决于是否遵守方案）",
+        "ex": "\"a promise contingent not on the outcome but on fidelity\""
+      },
+      {
+        "word": "perverse",
+        "zh": "有悖常理的、事与愿违的（perverse incentive 逆向激励 = 制度诱导出它本想避免的行为）",
+        "ex": "\"researchers face a perverse incentive\""
+      },
+      {
+        "word": "underpowered",
+        "zh": "统计效力不足的（样本量过小，难以稳定检出真实存在的效应；反义 well-powered）",
+        "ex": "\"to run underpowered studies\""
+      },
+      {
+        "word": "retrofit",
+        "zh": "事后改装、事后套配（to adapt something after the fact；文中指 HARKing：见结果后才倒推假设）",
+        "ex": "\"to retrofit a hypothesis to whatever survived\""
+      },
+      {
+        "word": "corroborate",
+        "zh": "佐证、确证（to confirm or give support to a claim；比 confirm 更正式，常用于学术/法律语域）",
+        "ex": "\"Nature's expansion corroborates the case its advocates long made\""
+      },
+      {
+        "word": "circumscribe",
+        "zh": "限制、约束（to restrict within limits；比 limit 更书面，含『划圈限定』之意）",
+        "ex": "\"Pre-specification circumscribes the exploratory work\""
+      },
+      {
+        "word": "serendipity",
+        "zh": "机缘巧合的意外收获（valuable discoveries made by chance；形容词 serendipitous）",
+        "ex": "\"the exploratory work from which serendipity has often sprung\""
+      },
+      {
+        "word": "precarious",
+        "zh": "不稳的、岌岌可危的（dependent on chance; insecure；precarious employment 非稳定雇佣）",
+        "ex": "\"researchers in precarious employment\""
+      },
+      {
+        "word": "deviation",
+        "zh": "偏离（a departure from an agreed plan；protocol deviation 方案偏离，须逐条说明并论证）",
+        "ex": "\"Nor can the format police every deviation\""
+      }
+    ]
   }
 ];
