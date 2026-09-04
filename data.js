@@ -2016,6 +2016,68 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-09-04",
+    "title": "The Little Penguins Getting Vaccines",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-09-04-the-little-penguins-getting-vaccines",
+    "url": "lessons/b1/2026-09-04-the-little-penguins-getting-vaccines.html",
+    "vocab": [
+      {
+        "word": "penguin",
+        "zh": "企鹅",
+        "ex": ""
+      },
+      {
+        "word": "vaccine",
+        "zh": "疫苗",
+        "ex": ""
+      },
+      {
+        "word": "virus",
+        "zh": "病毒",
+        "ex": ""
+      },
+      {
+        "word": "colony",
+        "zh": "群落；聚居地",
+        "ex": ""
+      },
+      {
+        "word": "spread",
+        "zh": "传播；扩散",
+        "ex": ""
+      },
+      {
+        "word": "protect",
+        "zh": "保护",
+        "ex": ""
+      },
+      {
+        "word": "species",
+        "zh": "物种",
+        "ex": ""
+      },
+      {
+        "word": "ranger",
+        "zh": "保育员；护林员",
+        "ex": ""
+      },
+      {
+        "word": "microchip",
+        "zh": "微芯片；芯片",
+        "ex": ""
+      },
+      {
+        "word": "dose",
+        "zh": "一剂（药）；剂量",
+        "ex": ""
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -2726,6 +2788,90 @@ const EPISODES = [
         "word": "white",
         "zh": "白色的",
         "ex": "\"Sunlight looks white.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-09-03",
+    "title": "Brushing My Teeth",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-03-brushing-my-teeth",
+    "url": "lessons/a1/2026-09-03-brushing-my-teeth.html",
+    "vocab": [
+      {
+        "word": "teeth",
+        "zh": "牙齿（复数）",
+        "ex": "\"I have white teeth.\""
+      },
+      {
+        "word": "brush",
+        "zh": "刷",
+        "ex": "\"I brush my teeth.\""
+      },
+      {
+        "word": "toothbrush",
+        "zh": "牙刷",
+        "ex": "\"This is my toothbrush.\""
+      },
+      {
+        "word": "toothpaste",
+        "zh": "牙膏",
+        "ex": "\"I put toothpaste on it.\""
+      },
+      {
+        "word": "mouth",
+        "zh": "嘴巴",
+        "ex": "\"I rinse my mouth.\""
+      },
+      {
+        "word": "clean",
+        "zh": "干净的",
+        "ex": "\"My teeth are clean.\""
+      }
+    ]
+  },
+  {
+    "level": "A1",
+    "date": "2026-09-04",
+    "title": "Head Shoulders Knees and Toes",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-04-head-shoulders-knees-and-toes",
+    "url": "lessons/a1/2026-09-04-head-shoulders-knees-and-toes.html",
+    "vocab": [
+      {
+        "word": "head",
+        "zh": "头",
+        "ex": "\"This is my head.\""
+      },
+      {
+        "word": "nose",
+        "zh": "鼻子",
+        "ex": "\"This is my nose.\""
+      },
+      {
+        "word": "shoulders",
+        "zh": "肩膀（复数）",
+        "ex": "\"These are my shoulders.\""
+      },
+      {
+        "word": "knees",
+        "zh": "膝盖（复数）",
+        "ex": "\"These are my knees.\""
+      },
+      {
+        "word": "toes",
+        "zh": "脚趾（复数）",
+        "ex": "\"These are my toes.\""
+      },
+      {
+        "word": "sing",
+        "zh": "唱歌",
+        "ex": "\"I can sing a song.\""
       }
     ]
   },
@@ -3718,6 +3864,110 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A2",
+    "date": "2026-09-03",
+    "title": "The Little Plant That Saved Millions",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-03-the-little-plant-that-saved-millions",
+    "url": "lessons/a2/2026-09-03-the-little-plant-that-saved-millions.html",
+    "vocab": [
+      {
+        "word": "fever",
+        "zh": "蚊子会让人生很重的病。很久以前，许多人得了一种叫疟疾的严重发烧。一位名叫屠呦呦的科学家想要帮忙。",
+        "ex": "Tu Youyou is a famous scientist."
+      },
+      {
+        "word": "medicine",
+        "zh": "药；医学",
+        "ex": "This medicine saves many lives."
+      },
+      {
+        "word": "plant",
+        "zh": "植物",
+        "ex": "The green plant grows in China."
+      },
+      {
+        "word": "fever",
+        "zh": "发烧；发热",
+        "ex": "Malaria gives people a bad fever."
+      },
+      {
+        "word": "test",
+        "zh": "测试；试验",
+        "ex": "She tested the medicine on herself."
+      },
+      {
+        "word": "brave",
+        "zh": "勇敢的",
+        "ex": "Tu Youyou was very brave."
+      },
+      {
+        "word": "million",
+        "zh": "百万",
+        "ex": "The medicine saves millions of lives."
+      },
+      {
+        "word": "prize",
+        "zh": "奖；奖项",
+        "ex": "She won the Nobel Prize in 2015."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-04",
+    "title": "The Girl Who Got Back Up",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-04-the-girl-who-got-back-up",
+    "url": "lessons/a2/2026-09-04-the-girl-who-got-back-up.html",
+    "vocab": [
+      {
+        "word": "train",
+        "zh": "Amber 今年七岁。她住在巴哈马，一个由许多小岛组成的国家。她每周在一家武术学校训练五天，在学校里成绩也全是 A。",
+        "ex": "She trains five days every week."
+      },
+      {
+        "word": "martial arts",
+        "zh": "武术；搏击术",
+        "ex": "He learns martial arts after school."
+      },
+      {
+        "word": "champion",
+        "zh": "冠军（championships = 锦标赛）",
+        "ex": "She joined the world championships."
+      },
+      {
+        "word": "trophy",
+        "zh": "奖杯",
+        "ex": "Amber won three gold trophies."
+      },
+      {
+        "word": "knock",
+        "zh": "敲；击倒",
+        "ex": "She was knocked to the mat."
+      },
+      {
+        "word": "worried",
+        "zh": "担心的",
+        "ex": "Everyone was worried about her."
+      },
+      {
+        "word": "courage",
+        "zh": "勇气",
+        "ex": "It takes courage to keep going."
+      },
+      {
+        "word": "resilience",
+        "zh": "韧性；摔倒后重新站起来的力量",
+        "ex": "Resilience means you stand up again."
+      }
+    ]
+  },
+  {
     "level": "B2",
     "date": "2026-08-12",
     "title": "Beyond Lithium The Rise of Solid-State Batteries",
@@ -4706,6 +4956,68 @@ const EPISODES = [
         "word": "deploy",
         "zh": "部署；投入使用",
         "ex": "\"Cheaper chips would let engineers deploy such cameras by the million.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-09-04",
+    "title": "The Face That Refuses to Answer",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-09-04-the-face-that-refuses-to-answer",
+    "url": "lessons/b2/2026-09-04-the-face-that-refuses-to-answer.html",
+    "vocab": [
+      {
+        "word": "sitter",
+        "zh": "坐着供人画像的人；被画者",
+        "ex": "\"Whoever she was, she was almost certainly not a named sitter.\""
+      },
+      {
+        "word": "portrait",
+        "zh": "肖像画（须记录真实人物容貌）",
+        "ex": "\"Were the picture a true portrait, it would have recorded her features faithfully.\""
+      },
+      {
+        "word": "conservator",
+        "zh": "（艺术品）修复师；文物保护员",
+        "ex": "\"The conservator Abbie Vandivere led an international team of scientists.\""
+      },
+      {
+        "word": "canvas",
+        "zh": "画布；帆布",
+        "ex": "\"Small as the canvas is, it was painted out of three continents.\""
+      },
+      {
+        "word": "void",
+        "zh": "空白；虚空",
+        "ex": "\"The dark void behind the girl was once a painted green curtain.\""
+      },
+      {
+        "word": "poignant",
+        "zh": "令人感慨的；凄美动人的",
+        "ex": "\"Most poignant of all, the pearl barely exists as a painted object.\""
+      },
+      {
+        "word": "resolve",
+        "zh": "分辨；解析（极细微的结构）",
+        "ex": "\"The microscope resolves detail at roughly one micron per pixel.\""
+      },
+      {
+        "word": "pigment",
+        "zh": "颜料（研磨成粉的着色物质）",
+        "ex": "\"Ultramarine was the most expensive pigment Vermeer ever used.\""
+      },
+      {
+        "word": "ultramarine",
+        "zh": "群青（青金石研磨的深蓝颜料）",
+        "ex": "\"The blue in her turban is ultramarine, made from Afghan lapis lazuli.\""
+      },
+      {
+        "word": "enigmatic",
+        "zh": "神秘莫测的；难以解释的",
+        "ex": "\"That enigmatic half-turn is why viewers keep coming back.\""
       }
     ]
   },

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Little Penguins Getting Vaccines · Pola News</title>
+<style>
+:root{
+  --accent:#0b5c8a;
+  --accent2:#12a5a5;
+  --glow:#7dd3fc;
+  --ember:#f59e0b;
+  --bg:#f0f9ff;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#0d2b3e;
+  --muted:#5a7382;
+  --line:#bae6fd;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(11,92,138,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#f0fbff;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.85;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#e0f6ff;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.12)}
+.nav a.active{background:rgba(255,255,255,.20);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(11,92,138,.30)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(11,92,138,.10);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:none;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.seg .txt{flex:1;font-size:18px;min-width:220px}
+.seg .zh{flex-basis:100%;margin-left:50px;font-size:14px;color:var(--muted);line-height:1.65;margin-top:6px}
+.seg .txt em{color:var(--accent);font-style:italic}
+.play{flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(11,92,138,.35);transition:.2s}
+.play:hover{transform:scale(1.06)}
+.play.playing{animation:pulse 1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(125,211,252,.70)}70%{box-shadow:0 0 0 14px rgba(125,211,252,0)}100%{box-shadow:0 0 0 0 rgba(125,211,252,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(125,211,252,.45)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#0d2b3e;color:#f0fbff;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.vcard{background:linear-gradient(160deg,#f0f9ff,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(11,92,138,.14)}
+.vcard .w{font-size:19px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:4px}
+.vcard .en{font-size:13px;color:var(--muted);line-height:1.5}
+.vcard .spk{position:absolute;top:10px;right:10px;border:none;background:rgba(18,165,165,.14);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;transition:.2s}
+.vcard .spk:hover{background:var(--accent2);transform:scale(1.1)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 4px}
+.stat{background:linear-gradient(160deg,#f0f9ff,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent);line-height:1.15}
+.stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+.pat{background:#f0f9ff;border-left:4px solid var(--accent2);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.pat .en{font-size:17px;font-weight:600;margin-bottom:4px}
+.pat .zh{font-size:14px;color:var(--muted);margin-bottom:8px}
+.pat .fill{background:#fff;border:1px dashed var(--accent2);border-radius:8px;padding:8px 12px;font-size:15px;margin-top:6px}
+.pat .fill input{border:none;border-bottom:2px solid var(--accent2);background:transparent;font-size:15px;outline:none;min-width:110px;text-align:center;color:var(--accent);font-weight:700;font-family:inherit}
+.pat .fill button{margin-left:8px;border:none;background:var(--accent);color:#fff;border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer}
+.pat .ans{font-size:14px;margin-top:6px;font-weight:700;min-height:20px}
+.gbox{background:#f0f9ff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.gbox h3{font-size:18px;color:var(--accent);margin-bottom:8px}
+.gbox .rule{background:#fff;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--accent);margin-bottom:10px;border:1px dashed var(--accent2)}
+.gbox ul{margin-left:20px;font-size:15px}
+.gbox li{margin-bottom:6px}
+.gbox table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.gbox th,.gbox td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.gbox th{background:rgba(11,92,138,.08);color:var(--accent)}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.q .qt{font-size:16px;font-weight:600;margin-bottom:10px}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q .opt{border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:15px;transition:.15s;background:#f0f9ff}
+.q .opt:hover{background:rgba(125,211,252,.45)}
+.q .opt.right{background:rgba(15,157,88,.14);border-color:var(--good);color:var(--good);font-weight:700}
+.q .opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad)}
+.q .exp{font-size:14px;color:var(--muted);margin-top:9px;display:none;line-height:1.6}
+.q .exp.show{display:block}
+#score{text-align:center;font-size:18px;font-weight:700;color:var(--accent);margin-top:10px}
+#resetq{display:block;margin:14px auto 0;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:9px 24px;border-radius:999px;font-size:15px;cursor:pointer;font-weight:700}
+.cn{background:linear-gradient(160deg,#f0f9ff,#fff)}
+.cn h3{font-size:19px;color:var(--accent);margin:16px 0 8px}
+.cn h3:first-child{margin-top:0}
+.cn p{font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn ul{margin-left:22px;font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn li{margin-bottom:7px}
+.cn .fact{background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:15px}
+.cn .fact b{color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:15px}
+.flow .step{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:5px 14px;font-size:14px;font-weight:700}
+.flow .step.ember{background:linear-gradient(135deg,var(--ember),#fbbf24)}
+.flow .arw{color:var(--accent2);font-weight:800}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.cmp .box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cmp .box h4{font-size:16px;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.cmp .box .big{font-size:22px;font-weight:800;color:var(--accent2);line-height:1.2}
+.cmp .box p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.7}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;min-width:0;padding:14px}
+  .nav{display:flex;overflow-x:auto;gap:6px}
+  .nav a{margin-bottom:0;white-space:nowrap}
+  .content{padding:22px 16px}
+  .q .opts{grid-template-columns:1fr}
+  .seg .zh{margin-left:0}
+  .cmp{grid-template-columns:1fr}
+}
+@media print{
+  .sidebar,#progress,.play,.spk,#resetq{display:none!important}
+  body{background:#fff;font-size:12pt}
+  section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span>POLA NEWS</div>
+  <div class="sub">2026-09-04 · Level B1</div>
+  <nav class="nav">
+    <a href="#read"><span class="ic">📖</span>Full Text</a>
+    <a href="#vocab"><span class="ic">🔤</span>Vocabulary</a>
+    <a href="#pattern"><span class="ic">🗣️</span>Sentence Patterns</a>
+    <a href="#grammar"><span class="ic">📐</span>Grammar</a>
+    <a href="#quiz"><span class="ic">✅</span>Quiz</a>
+    <a href="#more"><span class="ic">💡</span>知识扩展</a>
+    <a href="#about"><span class="ic">ℹ️</span>About</a>
+  </nav>
+</aside>
+<main class="content">
+<header class="top">
+  <span class="kicker">🐧 WILDLIFE · CONSERVATION · SCIENCE</span>
+  <h1>The Little Penguins Getting Vaccines</h1>
+  <div class="meta">
+    <span>📅 <b>2026-09-04</b></span>
+    <span>🎧 <b>B1 · ages 10–12</b></span>
+    <span>⏱ <b>~4 × 15s</b></span>
+    <span>📍 <b>Phillip Island, Australia</b></span>
+  </div>
+</header>
+<section id="read">
+  <h2><span class="num">1</span>📖 Full Text · 全文阅读</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:8px">点击 ▶ 听 Pola 朗读；点击带虚线的蓝色单词查看中文释义。</p>
+
+  <div class="seg">
+    <div class="badge">1</div>
+    <div class="txt">Hello, Pola News here! In Australia, thousands of little <span class="kw" data-def="企鹅（复数，单数是 penguin）" data-en="a black-and-white sea bird that cannot fly, but swims beautifully underwater">penguins</span> are waiting in line for a very unusual reason. They are not looking for fish. They are waiting for a <span class="kw" data-def="疫苗" data-en="a medicine, usually a shot, that teaches the body to fight a disease before it arrives">vaccine</span> — a special shot that protects them from a deadly bird flu!</div>
+    <button class="play" data-seg="0" title="Play">▶</button>
+    <div class="zh">大家好，这里是 Pola News！在澳大利亚，成千上万只小企鹅正排着队，原因很不寻常。它们不是在找鱼。它们在等一种疫苗——一种特殊的针剂，可以保护它们免受致命禽流感的伤害！</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">2</div>
+    <div class="txt">Little penguins are the smallest penguins in the world, only about thirty centimetres tall. The bird flu reached Australia in June. Now, on Phillip Island, <span class="kw" data-def="保育员；护林员（复数，单数是 ranger）" data-en="a person whose job is to look after wild animals, parks and nature">rangers</span> guide the birds into small pens at night. Each one gets the vaccine and a tiny <span class="kw" data-def="微芯片；芯片" data-en="a very small electronic chip put under the skin so the animal can be identified later">microchip</span> under its skin. Every penguin needs two <span class="kw" data-def="一剂（药）；剂量（复数，单数是 dose）" data-en="one measured amount of a medicine that you take at one time">doses</span>, a few weeks apart.</div>
+    <button class="play" data-seg="1" title="Play">▶</button>
+    <div class="zh">小企鹅是世界上最小的企鹅，站立时只有大约 30 厘米高。禽流感在今年 6 月传到了澳大利亚。现在，在菲利普岛上，保育员们夜里把企鹅引导进小围挡里。每一只都会接种疫苗，并在皮下植入一枚小小的芯片。每只企鹅需要打两剂，中间间隔几周。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">3</div>
+    <div class="txt">Why does it matter? A <span class="kw" data-def="病毒" data-en="a tiny germ that gets inside living cells and makes people or animals sick">virus</span> called H5N1 has killed hundreds of thousands of wild birds around the world. Little penguins live close together in big <span class="kw" data-def="群落；聚居地（复数，单数是 colony）" data-en="a large group of animals of the same kind that live together in one place">colonies</span>, so the virus could <span class="kw" data-def="传播；扩散" data-en="to move from one place or one animal to more and more others">spread</span> very fast. This project is a race against time — and it may save a whole <span class="kw" data-def="物种" data-en="one particular kind of living thing; members can have babies together">species</span>.</div>
+    <button class="play" data-seg="2" title="Play">▶</button>
+    <div class="zh">这为什么重要？一种名叫 H5N1 的病毒，已经在全世界杀死了数十万只野生鸟类。小企鹅们在大群落里挤得很近地生活，所以病毒可能传播得非常快。这个项目是在和时间赛跑——而且它有可能拯救整个物种。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">4</div>
+    <div class="txt">Around five thousand penguins will get the vaccine in just a few weeks. Scientists hope this brave little experiment will also help other rare birds. That is all from Pola News — see you next time, and please <span class="kw" data-def="保护" data-en="to keep someone or something safe from harm">protect</span> the wild animals around you!</div>
+    <button class="play" data-seg="3" title="Play">▶</button>
+    <div class="zh">大约五千只企鹅将在短短几周内接种疫苗。科学家希望这个勇敢的小小尝试，也能帮助到其他稀有的鸟类。以上就是今天的 Pola News——下次见，也请你保护身边的野生动物！</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">30 cm</div><div class="l">小企鹅站立时的高度，约到你的膝盖</div></div>
+    <div class="stat"><div class="n">5,000</div><div class="l">数周内计划接种的企鹅数量</div></div>
+    <div class="stat"><div class="n">450</div><div class="l">澳大利亚已记录的禽流感“事件”数</div></div>
+    <div class="stat"><div class="n">43</div><div class="l">全球已被感染的哺乳动物物种数</div></div>
+  </div>
+</section>
+
+<section id="vocab">
+  <h2><span class="num">2</span>🔤 Vocabulary · 词汇表</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 10 个核心词。点击右上角 🔊 听发音。</p>
+  <div class="vgrid">
+    <div class="vcard">
+      <button class="spk" data-word="penguin">🔊</button>
+      <div class="w">penguin</div><div class="pos">noun /ˈpeŋɡwɪn/</div>
+      <div class="zh">企鹅</div>
+      <div class="en">A little penguin is only about thirty centimetres tall.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="vaccine">🔊</button>
+      <div class="w">vaccine</div><div class="pos">noun /ˈvæksiːn/</div>
+      <div class="zh">疫苗</div>
+      <div class="en">Each penguin gets a vaccine against the bird flu.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="virus">🔊</button>
+      <div class="w">virus</div><div class="pos">noun /ˈvaɪrəs/ (plural: viruses)</div>
+      <div class="zh">病毒</div>
+      <div class="en">A virus called H5N1 has killed many wild birds.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="colony">🔊</button>
+      <div class="w">colony</div><div class="pos">noun /ˈkɒləni/ (plural: colonies)</div>
+      <div class="zh">群落；聚居地</div>
+      <div class="en">They live close together in big colonies.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="spread">🔊</button>
+      <div class="w">spread</div><div class="pos">verb /spred/ (spread – spread – spread)</div>
+      <div class="zh">传播；扩散</div>
+      <div class="en">In a big colony, the virus could spread very fast.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="protect">🔊</button>
+      <div class="w">protect</div><div class="pos">verb /prəˈtekt/</div>
+      <div class="zh">保护</div>
+      <div class="en">The vaccine protects them from the deadly virus.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="species">🔊</button>
+      <div class="w">species</div><div class="pos">noun /ˈspiːʃiːz/ (单复数同形)</div>
+      <div class="zh">物种</div>
+      <div class="en">This project may save a whole species.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="ranger">🔊</button>
+      <div class="w">ranger</div><div class="pos">noun /ˈreɪndʒə(r)/</div>
+      <div class="zh">保育员；护林员</div>
+      <div class="en">Rangers guide the penguins into small pens at night.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="microchip">🔊</button>
+      <div class="w">microchip</div><div class="pos">noun /ˈmaɪkrəʊtʃɪp/</div>
+      <div class="zh">微芯片；芯片</div>
+      <div class="en">A tiny microchip goes under the penguin's skin.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="dose">🔊</button>
+      <div class="w">dose</div><div class="pos">noun /dəʊs/</div>
+      <div class="zh">一剂（药）；剂量</div>
+      <div class="en">Every penguin needs two doses, a few weeks apart.</div>
+    </div>
+  </div>
+</section>
+
+<section id="pattern">
+  <h2><span class="num">3</span>🗣️ Sentence Patterns · 句型练习</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">先读句子，再填空，点“检查”看答案。</p>
+
+  <div class="pat">
+    <div class="en">They are waiting for a vaccine <b>to protect</b> them from a deadly bird flu.</div>
+    <div class="zh">它们在等一种疫苗，<b>用来保护</b>它们免受致命禽流感的伤害。—— <b>to + 动词原形</b> 放在名词后面，说明“做这件事的目的是什么”。</div>
+    <div class="fill">They are waiting for a vaccine <input id="f1" type="text" placeholder="两个词" autocomplete="off"> them from a deadly bird flu. <button onclick="check('f1',['to protect'],'to protect')">检查</button></div>
+    <div class="ans" id="a1"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Little penguins are <b>the smallest</b> penguins in the world.</div>
+    <div class="zh">小企鹅是世界上<b>最小的</b>企鹅。—— 三者以上比较用最高级：<b>the + 形容词-est</b>，the 不能丢。</div>
+    <div class="fill">Little penguins are <input id="f2" type="text" placeholder="两个词" autocomplete="off"> penguins in the world. <button onclick="check('f2',['the smallest'],'the smallest')">检查</button></div>
+    <div class="ans" id="a2"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">They live close together, <b>so</b> the virus could spread very fast.</div>
+    <div class="zh">它们挤得很近地生活，<b>所以</b>病毒可能传播得非常快。—— <b>so</b> 连接“原因 → 结果”，前面要加逗号。</div>
+    <div class="fill">They live close together, <input id="f3" type="text" placeholder="一个词" autocomplete="off"> the virus could spread very fast. <button onclick="check('f3',['so'],'so')">检查</button></div>
+    <div class="ans" id="a3"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Every penguin needs two doses, a few weeks <b>apart</b>.</div>
+    <div class="zh">每只企鹅需要两剂，中间<b>相隔</b>几周。—— <b>时间 + apart</b> 表示“间隔多久”，apart 放在时间后面。</div>
+    <div class="fill">Every penguin needs two doses, a few weeks <input id="f4" type="text" placeholder="一个词" autocomplete="off">. <button onclick="check('f4',['apart'],'apart')">检查</button></div>
+    <div class="ans" id="a4"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Around five thousand penguins <b>will get</b> the vaccine in just a few weeks.</div>
+    <div class="zh">大约五千只企鹅<b>将会</b>在短短几周内接种疫苗。—— 一般将来时 <b>will + 动词原形</b>，will 后面永远不加 s、不加 to。</div>
+    <div class="fill">Around five thousand penguins <input id="f5" type="text" placeholder="两个词" autocomplete="off"> the vaccine in just a few weeks. <button onclick="check('f5',['will get'],'will get')">检查</button></div>
+    <div class="ans" id="a5"></div>
+  </div>
+</section>
+
+<section id="grammar">
+  <h2><span class="num">4</span>📐 Grammar · 语法点</h2>
+
+  <div class="gbox">
+    <h3>1. 一般将来时 will + 动词原形（预测与计划）</h3>
+    <div class="rule">肯定：主语 + will + 动词原形　｜　否定：主语 + won't + 动词原形　｜　疑问：Will + 主语 + 动词原形?</div>
+    <ul>
+      <li>Around five thousand penguins <b>will get</b> the vaccine. （大约五千只企鹅将会接种疫苗。）</li>
+      <li>It <b>will help</b> other rare birds too. （它也会帮助其他稀有鸟类。）</li>
+      <li>The vaccine <b>won't hurt</b> the penguins. （疫苗不会伤害企鹅。——won't = will not）</li>
+      <li><b>Will</b> the project <b>save</b> the whole species? （这个项目会拯救整个物种吗？）</li>
+      <li>⚠️ will 后面的动词<b>永远用原形</b>：要说 will get，不能说 will gets 或 will to get。</li>
+    </ul>
+    <table>
+      <tr><th>句型</th><th>结构</th><th>例句</th></tr>
+      <tr><td>肯定</td><td>will + 原形</td><td>The penguins will get the vaccine.</td></tr>
+      <tr><td>否定</td><td>won't + 原形</td><td>The virus won't spread so fast.</td></tr>
+      <tr><td>疑问</td><td>Will + 主语 + 原形?</td><td>Will this save the species?</td></tr>
+    </table>
+  </div>
+
+  <div class="gbox">
+    <h3>2. 形容词最高级 the + -est（三者以上比较）</h3>
+    <div class="rule">短形容词：the + 形容词-est　｜　长形容词：the most + 形容词　｜　不规则：good → the best</div>
+    <ul>
+      <li>Little penguins are <b>the smallest</b> penguins in the world. （最小的）</li>
+      <li>Phillip Island has <b>the largest</b> little penguin colony. （最大的）</li>
+      <li>This is <b>the most dangerous</b> bird flu ever seen in Australia. （最危险的——长形容词用 most）</li>
+      <li>⚠️ 最高级前面的 <b>the 不能丢</b>，因为说的是“唯一的那一个”。</li>
+      <li>💡 变化规则：small → smallest（直接加 -est）；large → largest（去 e 加 -est）；big → biggest（双写末尾辅音再加 -est）。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>3. 不定式 to + 动词原形，表示“目的”</h3>
+    <div class="rule">主句 + to + 动词原形　＝　为了……／用来……　｜　也可以说 in order to + 动词原形</div>
+    <ul>
+      <li>They are waiting for a vaccine <b>to protect</b> them. （用来保护它们）</li>
+      <li>Workers put a microchip under the skin <b>to identify</b> each bird later. （为了以后辨认每一只鸟）</li>
+      <li>Scientists work fast <b>in order to save</b> as many penguins as possible. （为了尽可能多地救企鹅）</li>
+      <li>⚠️ 这里的 to 是<b>不定式符号</b>，后面跟动词原形；不要和介词 to（后面跟名词或 -ing）搞混。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>4. 连词 so 表结果（so 与 because 的区别）</h3>
+    <div class="rule">原因, so 结果　｜　结果 because 原因　——　so 和 because <b>不能同时用</b></div>
+    <ul>
+      <li>They live close together, <b>so</b> the virus could spread very fast. （挤得近 → 传播快）</li>
+      <li>The virus could spread fast <b>because</b> they live close together. （传播快 ← 挤得近）</li>
+      <li>💡 记忆窍门：<b>so 后面跟“结果”</b>，<b>because 后面跟“原因”</b>。同一句话只选一个，不能说 Because..., so...</li>
+      <li>⚠️ so 连接两个完整句子时，so 前面<b>要加逗号</b>。</li>
+    </ul>
+  </div>
+</section>
+<section id="quiz">
+  <h2><span class="num">5</span>✅ Quiz · 练习测验</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 5 题，点击选项即可作答，做完后可以看解析。</p>
+
+  <div class="q" data-ans="1">
+    <div class="qt">1. How tall is a little penguin when it stands up?</div>
+    <div class="opts">
+      <div class="opt">A) About 10 centimetres</div>
+      <div class="opt">B) About 30 centimetres</div>
+      <div class="opt">C) About 1 metre</div>
+      <div class="opt">D) About 2 metres</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。小企鹅站起来大约 <b>30 厘米</b>高，差不多到小学生的膝盖，体重约 1.5 公斤——和一小袋米差不多。对比一下：A 选项 10 厘米跟一部手机差不多，那太小了；C 和 D 说的是<b>帝企鹅</b>（约 1 米）和更大的史前企鹅，它们跟小企鹅完全是两码事。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">2. When did the H5N1 bird flu first reach Australia?</div>
+    <div class="opts">
+      <div class="opt">A) In 1997</div>
+      <div class="opt">B) In June</div>
+      <div class="opt">C) Ten years ago</div>
+      <div class="opt">D) Last winter</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。H5N1 在 <b>2026 年 6 月</b>首次传入澳大利亚，这是历史上第一次。在那之前，澳大利亚和新西兰因为四面环海、地理位置偏远，一直是世界上<b>最后几个没有 H5N1 的地方</b>。选项 A 的 1997 年是 H5N1 首次在香港被发现的年份，但那次并没有传到澳洲。</div>
+  </div>
+
+  <div class="q" data-ans="0">
+    <div class="qt">3. Why does each penguin get a tiny microchip under its skin?</div>
+    <div class="opts">
+      <div class="opt">A) So workers know which birds still need their second dose</div>
+      <div class="opt">B) So tourists can follow them online</div>
+      <div class="opt">C) So they can swim faster</div>
+      <div class="opt">D) So scientists can hear them underwater</div>
+    </div>
+    <div class="exp">✅ 正确答案：A。每只企鹅需要打<b>两剂</b>疫苗，中间间隔几周。芯片就像一张“身份证”，工作人员扫一下就知道这只鸟打过第几针、有没有漏掉第二针。同一批流程里，他们还会<b>称体重、量喙的长度</b>，这些身体数据可以帮助科学家判断企鹅的健康状况。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">4. Why are little penguins in special danger from this virus?</div>
+    <div class="opts">
+      <div class="opt">A) Because they cannot swim</div>
+      <div class="opt">B) Because they live close together in big colonies</div>
+      <div class="opt">C) Because they only eat one kind of fish</div>
+      <div class="opt">D) Because they live in Antarctica</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。小企鹅在<b>大群落</b>里挤得很近地生活、繁殖和休息——这对病毒来说简直是“高速公路”。同一种病毒如果遇上一只独居的动物，可能就此停下；但如果遇上一大群挤在一起的动物，就能在几天内传遍全群。选项 D 也错了：小企鹅生活在澳大利亚和新西兰的<b>温带海岸</b>，不是冰天雪地的南极。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">5. How many penguins does Phillip Island hope to vaccinate in just a few weeks?</div>
+    <div class="opts">
+      <div class="opt">A) About 500</div>
+      <div class="opt">B) About 5,000</div>
+      <div class="opt">C) About 50,000</div>
+      <div class="opt">D) About 500,000</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。菲利普岛自然公园希望在短短几周内为约 <b>5,000 只</b>企鹅完成接种。项目负责人 Catherine Basterfield 说：“对每一只小企鹅来说，这个过程其实相当快。”选项 D 的 50 万容易被误选，因为那是每年到菲利普岛看<b>“企鹅归巢”的游客</b>人数（约 70 万）——注意题目问的是企鹅，不是人。</div>
+  </div>
+
+  <div id="score"></div>
+  <button id="resetq">🔄 再做一次</button>
+</section>
+
+<section id="more" class="cn">
+  <h2><span class="num">6</span>💡 中文知识扩展</h2>
+
+  <h3>一、小企鹅到底有多小？</h3>
+  <p>小企鹅（little penguin，也叫 little blue penguin，学名 <i>Eudyptula minor</i>）是<b>世界上最小的企鹅</b>。它们生活在澳大利亚南部和新西兰的海岸线上。</p>
+  <div class="cmp">
+    <div class="box">
+      <h4>🐧 最小的企鹅</h4>
+      <div class="big">约 30 cm</div>
+      <p>小企鹅。站立时大约到小学生的膝盖，体重约 1.5 公斤，和一袋 1.5 升的牛奶差不多重。</p>
+    </div>
+    <div class="box">
+      <h4>🐧 最大的企鹅</h4>
+      <div class="big">约 120 cm</div>
+      <p>帝企鹅。身高是小企鹅的 <b>4 倍</b>，体重可以达到 40 公斤——差不多是一个小学生的体重。</p>
+    </div>
+  </div>
+  <div class="fact">📏 <b>动手量一量：</b>30 厘米大约是<b>一支长尺子</b>的长度，或者两张 A4 纸短边接起来的长度。你现在就可以比划一下，看看它到你的哪个位置。</div>
+
+  <h3>二、H5N1 是什么？一场正在全球蔓延的禽流感</h3>
+  <p><b>H5N1</b> 是一种高致病性禽流感病毒。从 2020 年开始，它像一场风暴一样传遍了全球：</p>
+  <ul>
+    <li>🦆 已经导致<b>数十万只野生鸟类</b>死亡，还有数百万只养殖家禽被扑杀。</li>
+    <li>🦭 已经传播到至少 <b>43 种哺乳动物</b>身上。最惨烈的一次发生在 2023 年的南美洲：<b>超过 24,000 只海狮</b>因此死亡。</li>
+    <li>🌏 澳大利亚和新西兰一直因为四面环海而幸免，直到 <b>2026 年 6 月</b>，澳大利亚报告了第一例。</li>
+    <li>📊 此后短短几个月，澳大利亚已经记录了近 <b>450 起</b>涉及鸟类的禽流感“事件”，数千只鸟死亡。在澳大利亚，已经有一只海豚和两只长鼻海豹死于这种病毒。</li>
+  </ul>
+  <div class="fact">⚠️ <b>一个关键限制：</b>目前<b>还没有</b>给哺乳动物用的 H5N1 疫苗。所以澳大利亚的这笔拨款，主要用在监测、报告和追踪病毒上，而不是给所有动物打针。</div>
+
+  <h3>三、为什么企鹅特别危险？答案藏在它们的生活方式里</h3>
+  <p>小企鹅有两个特点，让它们在病毒面前格外脆弱：</p>
+  <div class="flow">
+    <span class="step">白天出海捕鱼</span><span class="arw">→</span>
+    <span class="step">天黑回到岸上</span><span class="arw">→</span>
+    <span class="step">成群挤在洞穴与巢区</span><span class="arw">→</span>
+    <span class="step ember">病毒在密集群体里快速扩散</span>
+  </div>
+  <ul>
+    <li>🏘️ <b>它们极度群居。</b>成千上万只企鹅住在同一个海岸的洞穴里，彼此挨得很近。对病毒来说，这就是一条高速公路。</li>
+    <li>🐣 <b>菲利普岛拥有全球最大的小企鹅栖息地。</b>一旦这里失守，损失的不是一小群，而是这个物种最重要的一支。</li>
+    <li>💡 这其实是一个普遍的流行病学规律：<b>population density（种群密度）越高，传染病传播越快。</b>人类城市会因此采取隔离措施，道理是相通的。</li>
+  </ul>
+
+  <h3>四、“企鹅归巢”变成了疫苗站</h3>
+  <p>菲利普岛有一个世界闻名的景观：<b>企鹅归巢（Penguin Parade）</b>。每天日落时分，出海捕鱼一天的小企鹅会成群结队地从海里走上来，摇摇摆摆地穿过沙滩，回到自己在草丛里的洞穴。每年有约 <b>70 万名游客</b>专程来看这一幕。</p>
+  <p>科学家想出了一个聪明的办法——<b>借着企鹅自己回家的习惯来给它们打针</b>：</p>
+  <ul>
+    <li><b>第 1 步：</b>在企鹅上岸的必经之路上设置<b>小型围挡</b>，一小群一小群地把企鹅引导进去。</li>
+    <li><b>第 2 步：</b>工作人员戴着手套，轻轻抱起企鹅，快速完成<b>疫苗注射</b>。</li>
+    <li><b>第 3 步：</b>在皮下植入一枚<b>微型芯片</b>，作为这只企鹅的身份证。</li>
+    <li><b>第 4 步：</b><b>称体重、量喙的长度</b>，记录健康数据。</li>
+    <li><b>第 5 步：</b>放开企鹅，让它回家。几周后，靠芯片认出它，再打<b>第二剂</b>。</li>
+  </ul>
+  <div class="fact">💬 <b>项目负责人 Catherine Basterfield 说：</b>“对每一只小企鹅来说，这个过程其实相当快。”整个团队把流程设计得尽量简短，就是为了<b>减少对企鹅的打扰</b>。</div>
+
+  <h3>五、为什么不能救所有的鸟？一个艰难的选择</h3>
+  <p>看到这里，你可能会问：既然有疫苗，为什么不把所有鸟都打一遍？</p>
+  <ul>
+    <li>💉 <b>疫苗数量有限。</b>不可能覆盖澳大利亚和新西兰的每一种鸟。</li>
+    <li>🎯 <b>所以必须“排优先级”。</b>科学家优先选择两类物种：一是<b>已经濒危、数量很少</b>的；二是<b>容易被捕捉和接种</b>的——像小企鹅这样每天固定从固定地点上岸的，正是最理想的接种对象。</li>
+    <li>😔 <b>也必须承认现实：</b>很多情况下，人类对这种病毒<b>几乎无能为力</b>。专家预计还会有大量动物死亡。</li>
+    <li>🤝 <b>新西兰也在行动。</b>他们正在为包括<b>鸮鹦鹉（kākāpō）</b>在内的几种数量稀少的鸟类接种疫苗。</li>
+  </ul>
+  <div class="fact">🧠 <b>想一想的进阶问题：</b>如果疫苗只够给 1000 只动物用，你会优先救“数量极少但很难抓到”的物种，还是“容易抓到但数量还比较多”的物种？为什么？——这个问题在保护生物学里被称为<b>“保护分诊”（conservation triage）</b>，真实世界里没有标准答案。</div>
+
+  <h3>六、动手试试：模拟一场“病毒传播实验”</h3>
+  <p><b>材料：</b>一小包彩色珠子（或豆子、纽扣）、两个碗、一张纸、一支笔。</p>
+  <ul>
+    <li><b>第 1 步：</b>把 30 颗珠子放进第一个碗，代表一个<b>有 30 只企鹅的小群落</b>。再拿 30 颗放进第二个碗，代表第二个群落。</li>
+    <li><b>第 2 步：</b>在第一个碗里放入 <b>1 颗</b>不同颜色的珠子，代表“第一只生病的企鹅”。</li>
+    <li><b>第 3 步（密集群落）：</b>蒙上眼睛，从第一个碗里一次抓出 <b>5 颗</b>珠子，把“病毒”的颜色传给它们（换成同色珠子），再放回去。重复 5 轮，数一数有几颗被“感染”。</li>
+    <li><b>第 4 步（分散群落）：</b>同样做 5 轮，但每次<b>只抓 1 颗</b>。再数一数有几颗被感染。</li>
+    <li><b>第 5 步：</b>比较两个结果。你会发现<b>接触越频繁，传播越快</b>。</li>
+  </ul>
+  <div class="fact">🔬 <b>把实验连回现实：</b>你的手就是“接触次数”，对应的正是企鹅的<b>种群密度</b>。这也解释了为什么在现实中，隔离、减少聚集、接种疫苗，是控制传染病的三个基本功。</div>
+
+  <h3>七、科学素养提醒：分清“希望”和“保证”</h3>
+  <ul>
+    <li>这个项目非常鼓舞人心，但请留意新闻里的用词：专家说的是疫苗<b>“可能”</b>帮助拯救这个物种，而不是<b>“一定会”</b>。科学结论需要时间来验证。</li>
+    <li>还有一个值得记住的事实：这次努力<b>只覆盖小企鹅的一小部分</b>。菲利普岛的目标是约 5000 只，而整个地区的企鹅远不止这个数字。疫苗是重要的工具，但不是万能的。</li>
+    <li>最后，留意一个容易混淆的地方：澳大利亚记录的“450 起事件”指的是<b>发现病例的事件</b>，不等于 450 只鸟——每一次事件里可能涉及多只鸟。</li>
+  </ul>
+  <div class="fact">🌟 <b>这期的科学金句：</b>人类不能救下每一只动物，但可以用智慧、耐心和科学，去保住最珍贵的那一部分。这就是保护生物学真正的样子。</div>
+</section>
+
+<section id="about" class="cn">
+  <h2><span class="num">7</span>ℹ️ About · 关于本课</h2>
+  <h3>本期主角</h3>
+  <p><b>Pola</b>（宝拉）是一只短尾矮袋鼠（quokka），被称为“世界上最快乐的动物”。她是 POLA NEWS 的记者，会带着话筒跑到真实的现场——实验室、野外、博物馆、海边——把最新的科学发现讲给你听。她的招牌动作是：<b>双爪挥手告别 + 大大的笑脸</b>。</p>
+  <h3>难度与用法</h3>
+  <ul>
+    <li><b>等级：</b>B1（适合 10–12 岁）</li>
+    <li><b>结构：</b>4 段口播，每段约 15 秒：① 吸引注意 → ② 讲故事 → ③ 为什么重要 → ④ 告别</li>
+    <li><b>建议学习顺序：</b>先听全文（不看文字）→ 再看全文跟读 → 学词汇 → 练句型 → 做测验 → 读中文扩展</li>
+  </ul>
+  <h3>资料来源</h3>
+  <p>NewsForKids.net（2026 年 9 月 2 日），<i>Protecting Little Penguins From Deadly Bird Flu</i>；原始数据来自菲利普岛自然公园（Phillip Island Nature Parks）的“小企鹅疫苗接种”项目更新，以及澳大利亚农业、渔业和林业部（Department of Agriculture, Fisheries and Forestry）的禽流感最新数据。</p>
+  <p>地点：澳大利亚维多利亚州<b>菲利普岛（Phillip Island）</b>与维多利亚州<b>圣基尔达（St Kilda）</b>。物种：小企鹅（<i>Eudyptula minor</i>）。</p>
+  <div class="fact">🐧 <b>本期分类：</b>动物世界 · 环境保护 · 科学方法<br>📅 制作日期：2026-09-04</div>
+</section>
+</main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hello, Pola News here! In Australia, thousands of little penguins are waiting in line for a very unusual reason. They are not looking for fish. They are waiting for a vaccine — a special shot that protects them from a deadly bird flu!",
+  "Little penguins are the smallest penguins in the world, only about thirty centimetres tall. The bird flu reached Australia in June. Now, on Phillip Island, rangers guide the birds into small pens at night. Each one gets the vaccine and a tiny microchip under its skin. Every penguin needs two doses, a few weeks apart.",
+  "Why does it matter? A virus called H5N1 has killed hundreds of thousands of wild birds around the world. Little penguins live close together in big colonies, so the virus could spread very fast. This project is a race against time — and it may save a whole species.",
+  "Around five thousand penguins will get the vaccine in just a few weeks. Scientists hope this brave little experiment will also help other rare birds. That is all from Pola News — see you next time, and please protect the wild animals around you!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 句型练习 - 单空 ===== */
+function check(inputId, answers, display){
+  const el = document.getElementById(inputId);
+  const ansEl = document.getElementById(inputId.replace('f','a'));
+  if(!el || !ansEl) return;
+  const val = (el.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(answers.indexOf(val) !== -1){
+    ansEl.innerHTML = '✅ 答对啦！<b>' + display + '</b>';
+    ansEl.style.color = 'var(--good)';
+  }else if(val === ''){
+    ansEl.textContent = '✏️ 先填一个答案试试。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 正确答案是 <b>' + display + '</b>';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 测验 ===== */
+const scoreEl = document.getElementById('score');
+let answered = 0;
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = '已作答 ' + answered + ' / 5';
+}
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans, 10);
+  const exp = q.querySelector('.exp');
+  const opts = q.querySelectorAll('.opt');
+  opts.forEach(function(opt, i){
+    opt.addEventListener('click', function(){
+      if(q.dataset.done === '1') return;
+      q.dataset.done = '1';
+      answered++;
+      opts.forEach(function(o){ o.style.cursor = 'default'; });
+      if(i === ans){
+        opt.classList.add('right');
+      }else{
+        opt.classList.add('wrong');
+        if(opts[ans]) opts[ans].classList.add('right');
+      }
+      if(exp) exp.classList.add('show');
+      updateScore();
+    });
+  });
+});
+document.getElementById('resetq').addEventListener('click', function(){
+  answered = 0;
+  updateScore();
+  document.querySelectorAll('.q').forEach(function(q){
+    q.dataset.done = '0';
+    q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('right','wrong');
+      o.style.cursor = 'pointer';
+    });
+    const exp = q.querySelector('.exp');
+    if(exp) exp.classList.remove('show');
+  });
+  const inputs = ['f1','f2','f3','f4','f5'];
+  inputs.forEach(function(id){ const e=document.getElementById(id); if(e) e.value=''; });
+  ['a1','a2','a3','a4','a5'].forEach(function(id){ const e=document.getElementById(id); if(e){ e.textContent=''; e.style.color=''; } });
+});
+updateScore();
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

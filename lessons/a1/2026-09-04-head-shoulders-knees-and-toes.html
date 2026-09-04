@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Head, Shoulders, Knees and Toes — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#8b5cf6;
+  --accent2:#f472b6;
+  --bg:#faf5ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b21a8;
+  --highlight:#fde68a;
+  --border:#e9d5ff;
+  --soft:#faf5ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#f472b6);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(139,92,246,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #ddd6fe;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#6b21a8;background:#ede9fe;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(139,92,246,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(139,92,246,.6);}70%{box-shadow:0 0 0 14px rgba(139,92,246,0);}100%{box-shadow:0 0 0 0 rgba(139,92,246,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(139,92,246,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Head, Shoulders, Knees and Toes 🎵🧒</h1>
+      <p class="subtitle">2026年9月4日 · 儿歌童谣｜身体部位歌 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · My Head 我的头</div>
+            <p>This is my <span class="kw" data-def="头：身体最上面的部分，上面有眼睛、鼻子、嘴巴和耳朵">head</span>. 🧠 This is my <span class="kw" data-def="鼻子：脸上凸出来的小东西，用来闻味道和呼吸">nose</span>. 👃 I have two eyes. 👀 I have two ears. 👂</p>
+          </div>
+          <div class="zh">这是我的头 🧠。这是我的鼻子 👃。我有两只眼睛 👀。我有两只耳朵 👂。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Down My Body 往身体下面看</div>
+            <p>These are my <span class="kw" data-def="肩膀：脖子两边平平的地方，手臂从这里长出来（复数）">shoulders</span>. 💪 These are my <span class="kw" data-def="膝盖：腿中间会弯曲的地方，蹲下时它会折起来（复数）">knees</span>. 🦵 These are my <span class="kw" data-def="脚趾：脚掌前面五个小小的指头（复数，单数是 toe）">toes</span>. 🦶 I can touch them all. ✋</p>
+          </div>
+          <div class="zh">这是我的肩膀 💪。这是我的膝盖 🦵。这是我的脚趾 🦶。我全都能摸到 ✋。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Let Us Sing 一起来唱</div>
+            <p>Now let us <span class="kw" data-def="唱歌：用嘴巴发出好听的、有高低变化的声音">sing</span>. 🎤 Head, shoulders, knees and toes. 🎶 Knees and toes. 👣 Head, shoulders, knees and toes. 🎶</p>
+          </div>
+          <div class="zh">现在我们来唱歌 🎤。头、肩膀、膝盖和脚趾 🎶。膝盖和脚趾 👣。头、肩膀、膝盖和脚趾 🎶。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Fast and Slow 快快和慢慢</div>
+            <p>Sing it fast. ⚡ Sing it slow. 🐢 Sing it with me. 🙌 I love this song. ❤️</p>
+          </div>
+          <div class="zh">唱快一点 ⚡。唱慢一点 🐢。和我一起唱 🙌。我好喜欢这首歌 ❤️。</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#faf5ff;border:2px solid #c4b5fd;">
+        <h3 style="margin:0 0 8px;color:#6d28d9;font-size:20px;">💡 一起唱！Sing With Pola</h3>
+        <p style="margin:0;font-size:16px;">这是一首可以<b>边唱边摸</b>的歌 🎵。唱到 head 就摸头 🧠，唱到 shoulders 就摸肩膀 💪，唱到 knees 就摸膝盖 🦵，唱到 toes 就弯腰摸脚趾 🦶。跟着 Pola 点 ▶ 按钮，一段一段大声唱出来吧！记得点黄色的词，看看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="head">🔊</button><div class="emoji">🧠</div><div class="word">head<span class="pos">n.</span></div><div class="zh">头</div><div class="ex">"This is my head."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="nose">🔊</button><div class="emoji">👃</div><div class="word">nose<span class="pos">n.</span></div><div class="zh">鼻子</div><div class="ex">"This is my nose."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="shoulders">🔊</button><div class="emoji">💪</div><div class="word">shoulders<span class="pos">n.</span></div><div class="zh">肩膀（复数）</div><div class="ex">"These are my shoulders."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="knees">🔊</button><div class="emoji">🦵</div><div class="word">knees<span class="pos">n.</span></div><div class="zh">膝盖（复数）</div><div class="ex">"These are my knees."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="toes">🔊</button><div class="emoji">🦶</div><div class="word">toes<span class="pos">n.</span></div><div class="zh">脚趾（复数）</div><div class="ex">"These are my toes."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sing">🔊</button><div class="emoji">🎤</div><div class="word">sing<span class="pos">v.</span></div><div class="zh">唱歌</div><div class="ex">"I can sing a song."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. This is my [noun].</h3>
+          <div class="zh">“这是我的……”。只有<b>一样东西</b>的时候用 This is。</div>
+          <div class="eg">This is my head. 🧠 / This is my nose. 👃 / This is my hand. ✋</div>
+          <div class="practice">练习：这是我的头 → This is my <input placeholder="noun">.</div>
+        </div>
+        <div class="item">
+          <h3>2. These are my [plural noun].</h3>
+          <div class="zh">“这些是我的……”。有<b>两样以上</b>的时候用 These are，名词后面记得加 s。</div>
+          <div class="eg">These are my shoulders. 💪 / These are my knees. 🦵 / These are my toes. 🦶</div>
+          <div class="practice">练习：这些是我的膝盖 → These are my <input placeholder="plural noun">.</div>
+        </div>
+        <div class="item">
+          <h3>3. I can [verb].</h3>
+          <div class="zh">“我会／我能……”。can 后面的动词<b>永远用原形</b>，不加 s，也不加 to。</div>
+          <div class="eg">I can sing. 🎤 / I can touch my toes. 🦶 / I can clap my hands. 👏</div>
+          <div class="practice">练习：我会唱歌 → I can <input placeholder="verb">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. this / these 和 is / are（单数 vs 复数）</h3>
+          <div class="zh">只有<b>一样</b>东西：this（这个）+ is。有<b>两样以上</b>：these（这些）+ are。它们一定要配对使用哦。</div>
+          <div class="eg">This is my head. 🧠 / These are my ears. 👂 / This is my nose. 👃</div>
+        </div>
+        <div class="item">
+          <h3>2. 名词加 -s 变复数（Plural Nouns）</h3>
+          <div class="zh">一个以上就要在词尾加 <b>-s</b>：eye → eyes，ear → ears，shoulder → shoulders，knee → knees，toe → toes。唱歌时你就是在数身体部位呢！</div>
+          <div class="eg">one eye 👁️ → two eyes 👀 / one toe → ten toes 🦶 / one knee → two knees 🦵</div>
+        </div>
+        <div class="item">
+          <h3>3. can（会 / 能）+ 动词原形</h3>
+          <div class="zh">can 表示“会做、能做”。不管前面是 I、you 还是 he，can 后面的动词都<b>不加 -s</b>：I can sing，He can sing，都对。</div>
+          <div class="eg">I can sing. 🎤 / You can touch your toes. 🦶 / We can clap. 👏</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#faf5ff;border:2px solid #c4b5fd;">
+        <div style="font-size:20px;font-weight:800;color:#6d28d9;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#6b21a8;margin-top:6px;">每做对一题得 1 分，全部做完就是身体部位小达人啦！🧒✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🎵 一首全世界小朋友都在唱的歌</h3>
+        <p>小朋友，你有没有发现，这首歌特别“<b>好玩</b>”？唱到哪儿，手就要摸到哪儿，唱得越快，手越忙，最后大家笑成一团 😂。今天我们就来聊聊这首歌的来历，还有藏在你身体里的小秘密。</p>
+
+        <h3>秘密一：它其实来自瑞典 🇸🇪</h3>
+        <p>和很多古老的童谣不一样，这首歌的<b>作者是能查到的</b>。它是一位瑞典牧师——<b>卡尔-阿克塞尔·埃尔姆奎斯特</b>（Karl-Axel Elmquist，1929—2023）在 <b>1950 年代</b>写下的，最早的歌词是瑞典语：<b>Huvud, axlar, knä och tår</b>，意思就是“头、肩膀、膝盖和脚趾”。</p>
+        <p>有意思的是，它的<b>旋律不是新写的</b>，而是借来的一首更老的民谣——《城里有一家小酒馆》（There Is a Tavern in the Town），这首歌早在 <b>1883 年</b>就被收录在一本美国学生歌曲集里。也就是说：<b>曲调有 140 多岁</b>，而歌词才 70 多岁。在童谣的世界里，这种“老调子配新词”的做法非常常见。</p>
+        <p>后来，这首歌通过<b>儿童合唱、夏令营和童子军活动</b>传到了世界各地，被翻译成很多种语言。今天，不管是在中国、英国还是美国的幼儿园，你都能听到小朋友一边唱一边摸自己的小脑袋 🧠。</p>
+
+        <h3>秘密二：为什么“边唱边摸”学得特别快？ 🧠✋</h3>
+        <p>科学家发现，小朋友学东西的时候，用的感官越多，记得越牢。光用<b>耳朵听</b>，是一个通道；一边听一边<b>用手摸</b>、<b>身体动起来</b>，就变成了好几个通道一起工作。</p>
+        <ul>
+          <li><b>记单词更牢</b>：嘴巴念 knee，手正好摸到膝盖，这个词就和真实的身体连在了一起，不再是一串陌生的字母。</li>
+          <li><b>练协调性</b>：唱得越来越快时，手要跟上节奏，这在悄悄训练你的反应速度和身体平衡。</li>
+          <li><b>认识自己的身体</b>：这种能力叫<b>身体认知</b>，是以后学穿衣、系鞋带、拍球、跳舞的基础。</li>
+        </ul>
+
+        <h3>秘密三：你的身体藏着这些数字 🔢</h3>
+        <ul>
+          <li><b>206 块骨头</b>：成年人全身一共有 206 块骨头。可是小宝宝刚出生时大约有 <b>300 块</b>！长大过程中，有些小骨头会慢慢长到一起，数量就变少了。</li>
+          <li><b>10 个脚趾</b>：每只脚 5 个，两只脚正好 10 个——所以歌里唱的是 toes（复数）。脚趾能帮你站稳，走路时还会帮你“抓”住地面。</li>
+          <li><b>膝盖是人体最大的关节</b> 🦵：膝盖前面那块能摸到、会滑动的圆骨头叫<b>髌骨</b>（也就是膝盖骨），它像一个小滑轮，帮你的腿省力地伸直。</li>
+          <li><b>耳朵还管平衡</b> 👂：耳朵里除了听声音的部分，还有一套管<b>平衡</b>的小结构。所以闭上眼睛，你也大概知道自己是不是站直了。这也是为什么原地转圈太久会头晕。</li>
+          <li><b>眼睛一直在“洗澡”</b> 👀：我们每分钟大约会眨 <b>15 到 20 次</b>眼，每一次眨眼都像给眼球轻轻擦一遍，让它保持湿润。</li>
+        </ul>
+
+        <h3>🎮 这首歌还能这样玩</h3>
+        <ul>
+          <li><b>慢速版</b> 🐢：刚学时慢慢唱，一个部位一个部位摸清楚，别着急。</li>
+          <li><b>加速版</b> ⚡：每一轮都比上一轮快一点，看谁能不出错——这是最经典的玩法。</li>
+          <li><b>静音版</b> 🤫：唱到某个词时<b>故意不出声</b>，只做动作，下次再换一个词“消失”。这比听起来难多了！</li>
+          <li><b>倒着唱</b> 🔄：从 toes 唱回 head，顺序全反过来，看看你会不会手忙脚乱 😆。</li>
+          <li><b>换词版</b> 🧩：把身体部位换成别的，比如 tummy（肚子）、chin（下巴）、fingers（手指），全家一起编一版属于你们自己的歌。</li>
+        </ul>
+
+        <p style="background:#fef3c7;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>玩游戏时请站在<b>空旷平坦</b>的地方，不要在桌子角、楼梯口或者湿滑的地板旁边唱跳 🏠。弯腰摸脚趾时动作要<b>慢慢来</b>，不要用猛力；唱“加速版”时如果觉得<b>头晕</b>，就停下来歇一歇、喝口水 💧。最好请爸爸妈妈陪你一起玩，全家一起唱會更开心 👨‍👩‍👧。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟唱一首经典英文儿歌《Head, Shoulders, Knees and Toes》，愿意边唱边做动作。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：head, nose, shoulders, knees, toes, sing。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “This is my head.”, “These are my knees.”, “I can sing.” 说句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 this / these 与 is / are 的配对、名词复数加 -s，以及 can 后面用动词原形。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>认识自己的身体部位，知道这首歌的来历，爱上用英语唱歌。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 大声唱这首身体部位歌。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，唱到哪个部位就用手摸哪里，记单词特别快。</div></div>
+        <div class="goal"><span class="ic">🎭</span><div>和爸爸妈妈一起玩“加速版”：一轮比一轮快，看谁最后一个还能摸对 😆。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>洗澡的时候可以指着身体问：“What is this?” 试着回答 “This is my nose!” 👃。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把歌词贴在墙上，每天唱一遍 🎵。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Head, Shoulders, Knees and Toes · 2026-09-04 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "This is my head. This is my nose. I have two eyes. I have two ears.",
+  "These are my shoulders. These are my knees. These are my toes. I can touch them all.",
+  "Now let us sing. Head, shoulders, knees and toes. Knees and toes. Head, shoulders, knees and toes.",
+  "Sing it fast. Sing it slow. Sing it with me. I love this song."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What is on top of my body? 我身体最上面是什么？",em:["🧠","🦶","✋"],opts:["Head (头)","Toes (脚趾)","Hands (手)"],ans:0,
+   fb:"Correct! 身体最上面的是 head 头 🧠。"},
+  {q:"How many eyes do I have? 我有几只眼睛？",em:["1️⃣","2️⃣","🔟"],opts:["One (一只)","Two (两只)","Ten (十只)"],ans:1,
+   fb:"Yes! 我有 two eyes 两只眼睛 👀。"},
+  {q:"Head, shoulders, knees and ___ 最后一个词是什么？",em:["👃","👂","🦶"],opts:["Nose (鼻子)","Ears (耳朵)","Toes (脚趾)"],ans:2,
+   fb:"Great! 完整的一句是 Head, shoulders, knees and toes 🦶。"},
+  {q:"What do we do in this song? 我们在这首歌里做什么？",em:["🛏️","🎤","🍚"],opts:["Sleep (睡觉)","Sing (唱歌)","Eat (吃饭)"],ans:1,
+   fb:"Right! 我们在 sing 唱歌，还要用手摸一摸 🎤。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

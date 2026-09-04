@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Little Plant That Saved Millions — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#4338ca;
+  --accent2:#f59e0b;
+  --bg:#f5f3ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#e0e7ff;
+  --border:#c7d2fe;
+  --soft:#fafaff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#f59e0b);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(67,56,202,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg{flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(67,56,202,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(67,56,202,.55);}70%{box-shadow:0 0 0 12px rgba(67,56,202,0);}100%{box-shadow:0 0 0 0 rgba(67,56,202,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#c7d2fe;}
+#tip{position:fixed;z-index:1200;background:#1e1b4b;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),#f59e0b);color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(67,56,202,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE LITTLE PLANT · 2026-09-03</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🌿 The Little Plant That Saved Millions</h1>
+  <div class="subtitle">屠呦呦与青蒿素 · CEFR A2 · 约 120 词 · 📖 人物传记</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">Hook · 开场</div>
+        <p>Mosquitoes can make people very sick. Long ago, many people got a bad <span class="kw" data-word="fever">fever</span> called malaria. A <span class="kw" data-word="scientist">scientist</span> named Tu Youyou wanted to help.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">蚊子会让人生很重的病。很久以前，许多人得了一种叫疟疾的严重发烧。一位名叫屠呦呦的科学家想要帮忙。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">Story · 故事</div>
+        <p>She read over 2,000 old Chinese <span class="kw" data-word="medicine">medicine</span> books. One book was 1,600 years old. It said: put this green <span class="kw" data-word="plant">plant</span> in cold water and drink the juice. Hot water was killing the <span class="kw" data-word="medicine">medicine</span>, so she used a cold method.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">她读了 2000 多本古老的中国医药书。其中一本书有一千六百年的历史。书里说：把这株绿色的植物放进冷水里，然后喝下它的汁液。热水会破坏药效，所以她改用了一种低温提取的方法。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">Brave · 勇敢</div>
+        <p>In 1972, her team found the <span class="kw" data-word="medicine">medicine</span>, artemisinin. Tu Youyou wanted to be sure it was safe. So she <span class="kw" data-word="test">tested</span> it on herself first. She was very <span class="kw" data-word="brave">brave</span>.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">1972 年，她的团队找到了这种药——青蒿素。屠呦呦想确认它是安全的。于是她先在自己身上做试验。她非常勇敢。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Sign-off · 结尾</div>
+        <p>Today this <span class="kw" data-word="medicine">medicine</span> saves <span class="kw" data-word="million">millions</span> of lives. In 2015, Tu Youyou won the Nobel <span class="kw" data-word="prize">Prize</span>. She was 85 years old. Her story tells us: read, think, and never give up.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">今天，这种药拯救了数百万人的生命。2015 年，屠呦呦获得了诺贝尔奖。那时她 85 岁。她的故事告诉我们：多读书、勤思考，永远不要放弃。</div>
+    </div>
+  </div>
+
+  <div class="tipbox">
+    <h3>🌿 学习小提示 Study Tip</h3>
+    <ul>
+      <li>读完课文后，试着用一句话介绍屠呦呦：<b>She found a medicine from a plant.</b></li>
+      <li>故事里出现了很多<b>过去式动词</b>：read, said, was, wanted, found, tested, won。边读边把它们圈出来。</li>
+      <li>安全提醒：课文里的植物是用来做药的，<b>小朋友绝对不能自己去野外采植物来吃</b>。生病一定要看医生、听医生的话。</li>
+      <li>猜一猜：为什么热水会把药「杀死」？答案在「中文知识扩展」里。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Vocabulary</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="scientist">🔊</button>
+        <div class="word">scientist<span class="pos">n.</span></div>
+        <div class="zh">科学家</div>
+        <div class="ex">Tu Youyou is a famous scientist.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="medicine">🔊</button>
+        <div class="word">medicine<span class="pos">n.</span></div>
+        <div class="zh">药；医学</div>
+        <div class="ex">This medicine saves many lives.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="plant">🔊</button>
+        <div class="word">plant<span class="pos">n.</span></div>
+        <div class="zh">植物</div>
+        <div class="ex">The green plant grows in China.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="fever">🔊</button>
+        <div class="word">fever<span class="pos">n.</span></div>
+        <div class="zh">发烧；发热</div>
+        <div class="ex">Malaria gives people a bad fever.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="test">🔊</button>
+        <div class="word">test<span class="pos">v.</span></div>
+        <div class="zh">测试；试验</div>
+        <div class="ex">She tested the medicine on herself.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="brave">🔊</button>
+        <div class="word">brave<span class="pos">adj.</span></div>
+        <div class="zh">勇敢的</div>
+        <div class="ex">Tu Youyou was very brave.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="million">🔊</button>
+        <div class="word">million<span class="pos">num.</span></div>
+        <div class="zh">百万</div>
+        <div class="ex">The medicine saves millions of lives.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="prize">🔊</button>
+        <div class="word">prize<span class="pos">n.</span></div>
+        <div class="zh">奖；奖项</div>
+        <div class="ex">She won the Nobel Prize in 2015.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">A scientist named [Tu Youyou] wanted to help.</div>
+    <div class="zh">一位名叫[屠呦呦]的科学家想要帮忙。</div>
+    <div class="note">用 <b>named + 名字</b> 表示「名叫……的」，放在名词后面。试着说：I read a book named Charlotte&#39;s Web.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">She read over [2,000] [books].</div>
+    <div class="zh">她读了[两千多本][书]。</div>
+    <div class="note">用 <b>over + 数字</b>（也可以说 more than）表示「超过、多于」。试着说：Our school has over 500 students.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">Hot water was killing the medicine, so she used cold water.</div>
+    <div class="zh">热水正在破坏药效，所以她改用了冷水。</div>
+    <div class="note">用 <b>so</b> 把「原因」和「结果」连成一句，so 前面通常加逗号。试着说：It was raining, so we stayed at home.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">Her story tells us: [read, think], and never give up.</div>
+    <div class="zh">她的故事告诉我们：[多读书、勤思考]，永不放弃。</div>
+    <div class="note">用 <b>never give up</b> 表示「永不放弃」，give up 是「放弃」。试着说：I will never give up on my dream.</div>
+  </div>
+</section>
+
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 一般过去时（讲已经发生的故事）</h3>
+    <ul>
+      <li>讲人物传记时，动词要用<b>过去式</b>。规则动词加 <b>-ed</b>：want → wanted，want 的过去式是 wanted；test → tested。</li>
+      <li>不规则动词要单独记：<b>read → read</b>（拼写一样，读音变成 /red/）、<b>find → found</b>、<b>win → won</b>、is → was、say → said。</li>
+      <li class="eg">She <span class="good">read</span> 2,000 books. / Her team <span class="good">found</span> the medicine. / She <span class="good">won</span> the Nobel Prize.</li>
+      <li>注意：<span class="bad">She winned the prize.</span> → <span class="good">She won the prize.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. so 连接原因和结果</h3>
+    <ul>
+      <li><b>so</b> 的意思是「所以」。它可以把两个完整的句子连成一句，<b>so 前面通常加逗号</b>。</li>
+      <li class="eg">原因：Hot water was killing the medicine. ＋ 结果：she used a cold method.</li>
+      <li class="eg">合起来：Hot water was killing the medicine<span class="good">, so</span> she used a cold method.</li>
+      <li>so 后面直接跟句子，<b>不要再加 because</b>。注意：<span class="bad">Because it was hot, so she used cold water.</span> → <span class="good">It was hot, so she used cold water.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. 反身代词 herself（她自己）</h3>
+    <ul>
+      <li>当「做动作的人」和「承受动作的人」是同一个时，用反身代词：<b>myself, yourself, himself, herself, ourselves, themselves</b>。</li>
+      <li class="eg">She tested it on <span class="good">herself</span>. / I can do it <span class="good">myself</span>. / The children did it <span class="good">themselves</span>.</li>
+      <li>注意：主语是 she，就要用 <b>herself</b>，不能用 herself 之外的人称。比较：<span class="bad">He tested it on herself.</span> → <span class="good">He tested it on himself.</span></li>
+      <li>反身代词前面常搭配介词：<b>by herself</b>（靠她自己）、<b>on herself</b>（在她自己身上）。</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. 概数表达：over 与 millions of</h3>
+    <ul>
+      <li><b>over + 数字</b> = 超过（也可以说 more than）：over 2,000 books（两千多本书）。</li>
+      <li>说「数百万」，要用 <b>millions of</b>，million 后面<b>加 s 再加 of</b>。</li>
+      <li class="eg">The medicine saves <span class="good">millions of</span> lives. / She read <span class="good">over</span> 2,000 books.</li>
+      <li>但如果有确切数字，就不加 s 也不加 of：<span class="good">two million</span> people。注意：<span class="bad">two millions of people</span> 是错的。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz</h2>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">1. What made many people very sick long ago?</div>
+    <div class="qzh">很久以前，是什么让很多人生了重病？</div>
+    <button class="opt">A) A fever called malaria</button>
+    <button class="opt">B) A cold called winter</button>
+    <button class="opt">C) A headache called study</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">2. How many old Chinese medicine books did Tu Youyou read?</div>
+    <div class="qzh">屠呦呦读了多少本古老的中国医药书？</div>
+    <button class="opt">A) Over 2,000 books</button>
+    <button class="opt">B) Only two books</button>
+    <button class="opt">C) About twenty books</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">3. Why did Tu Youyou stop using hot water?</div>
+    <div class="qzh">屠呦呦为什么不再使用热水？</div>
+    <button class="opt">A) Because hot water was too expensive</button>
+    <button class="opt">B) Because hot water was killing the medicine</button>
+    <button class="opt">C) Because she liked the taste of cold water</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">4. What did she do to be sure the medicine was safe?</div>
+    <div class="qzh">为了确认药是安全的，她做了什么？</div>
+    <button class="opt">A) She gave it to her cat first</button>
+    <button class="opt">B) She tested it on herself first</button>
+    <button class="opt">C) She threw the medicine away</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">5. When did Tu Youyou win the Nobel Prize?</div>
+    <div class="qzh">屠呦呦是哪一年获得诺贝尔奖的？</div>
+    <button class="opt">A) In 2015</button>
+    <button class="opt">B) In 1972</button>
+    <button class="opt">C) In 1930</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · 背景知识</h2>
+
+  <div class="know">
+    <h3>👩‍🔬 屠呦呦：从宁波走出来的科学家</h3>
+    <p>屠呦呦 <b>1930 年 12 月 30 日</b>出生于<b>浙江宁波</b>。她的名字出自《诗经》里的「呦呦鹿鸣，食野之蒿」——「蒿」就是蒿草。很多年后，她真的从一株蒿草（<b>青蒿</b>）里找到了灵药，这真是一个奇妙的巧合。</p>
+    <p>她高中毕业后考入<b>北京大学医学院药学系</b>，1955 年毕业，之后一直在<b>中国中医科学院</b>工作。她一辈子都在做同一件事：从中医药里寻找治病的良方。</p>
+  </div>
+
+  <div class="know">
+    <h3>🦟 疟疾：蚊子带来的可怕发烧</h3>
+    <ul>
+      <li>疟疾是一种由<b>疟原虫</b>引起的疾病，主要通过<b>蚊子叮咬</b>传播。病人会反复高烧、浑身发抖，严重的会在几天内失去生命。</li>
+      <li>过去，人们常用一种叫<b>氯喹</b>的药物治疗疟疾。但后来疟原虫产生了<b>抗药性</b>，这种药渐渐失效了。</li>
+      <li>1967 年，中国启动了一项代号为 <b>523</b> 的科研项目，希望从中草药里找到抗疟新药。1969 年，<b>39 岁</b>的屠呦呦被任命为课题组组长。</li>
+      <li>为了收集第一手资料，她曾到<b>海南</b>的疟区实地调查，亲眼看到疟疾给病人带来的痛苦。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>📖 一本一千六百年前的古书</h3>
+    <ul>
+      <li>屠呦呦和同事们先是收集了 <b>2000 多个</b>古代药方，试验了很多种草药，但效果都不理想。</li>
+      <li>后来，她在东晋医药学家<b>葛洪</b>的《肘后备急方》里读到一句话：「<b>青蒿一握，以水二升渍，绞取汁，尽服之</b>。」意思是一把青蒿，用两升水浸泡，把汁液绞出来喝下去。</li>
+      <li>这句话让她灵光一闪：<b>书里没有说要煮！</b>她想到，高温可能破坏了青蒿里的有效成分，于是改用<b>低温乙醚</b>来提取。</li>
+      <li>1971 年 10 月 4 日，实验结果显示：青蒿乙醚中性提取物对鼠疟的抑制率达到 <b>100%</b>。1972 年，团队成功提取出有效成分，命名为<b>青蒿素</b>。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>💪 她为什么先在自己身上试药？</h3>
+    <ul>
+      <li>动物实验后，还需要确认药物对人体是否安全。为了不耽误当年的临床观察季节，屠呦呦主动提交了志愿试药报告，说：<b>我是组长，我有责任第一个试药。</b></li>
+      <li>1972 年 7 月，她和另外两名科研人员成为<b>首批人体试验志愿者</b>，幸运的是没有发现明显的毒副作用。</li>
+      <li>1973 年，她的课题组又发现了疗效更好的<b>双氢青蒿素</b>。1992 年，双氢青蒿素片获得新药证书并投产。</li>
+      <li><b>小提醒：</b>屠呦呦的做法是科学家在严格科研条件下、为了救人而做的勇敢选择。<b>小朋友绝对不能模仿</b>——任何药物都要在医生指导下使用。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🏅 迟到了四十多年的诺贝尔奖</h3>
+    <ul>
+      <li><b>2011 年</b>：获得拉斯克临床医学奖，这是诺贝尔奖的重要风向标。</li>
+      <li><b>2015 年</b>：与另外两位科学家共同获得<b>诺贝尔生理学或医学奖</b>。她是中国首位获得科学类诺贝尔奖的科学家，也是首位获得诺贝尔奖的中国本土女科学家。</li>
+      <li><b>2016 年</b>：获得中国国家最高科学技术奖。</li>
+      <li><b>2019 年</b>：获得<b>共和国勋章</b>，这是中国的最高荣誉。</li>
+      <li>面对荣誉，她反复强调：<b>荣誉属于科研团队里的每一个人，属于中国科学家群体。</b></li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🌍 一株小草改变了世界</h3>
+    <ul>
+      <li>从 2000 年起，<b>世界卫生组织</b>把青蒿素类药物作为治疗疟疾的首选药物，在全球推广。</li>
+      <li>据世界卫生组织的数据，<b>2000 年至 2015 年</b>间，全球疟疾死亡率下降了约 <b>60%</b>，五岁以下儿童的疟疾死亡率下降了约 <b>65%</b>。</li>
+      <li>青蒿素挽救了数百万人的生命，尤其是在医疗条件比较薄弱的地区。它被称为<b>中医药送给世界的礼物</b>。</li>
+      <li>直到今天，已经<b>九十多岁</b>的屠呦呦仍然关注着青蒿素的后续研究，包括抗药性和新的用途。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>✏️ 动手小活动：画一株「我的发现草」</h3>
+    <ul>
+      <li>拿出一张白纸，画一株你想象中的植物，给它起一个英文名字，比如 <b>Hope Plant</b>（希望之草）。</li>
+      <li>在旁边写三句话介绍它：<b>This is the Hope Plant.</b> / <b>It grows in China.</b> / <b>It can help people.</b></li>
+      <li>再写一句你自己的「科学家宣言」：<b>I will read, think, and never give up.</b></li>
+      <li>把这张卡片贴在书桌前。下次遇到难题想放弃时，想一想屠呦呦读了 2000 多本书才找到答案——你也可以！</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><div class="txt">读懂一篇 A2 水平的人物传记短文，了解屠呦呦发现青蒿素的故事。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">掌握 8 个核心词汇：scientist, medicine, plant, fever, test, brave, million, prize。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">学会四个语法点：一般过去时、so 连接因果、反身代词 herself、概数 over 与 millions of。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">能用 named、over + 数字、so 等句型讲一个简单的科学家故事。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">感受中国科学家的坚持与担当，懂得「多读书、勤思考、永不放弃」的意义。</div></div>
+
+    <h3 style="color:var(--accent);">📝 学习建议</h3>
+    <div class="goal"><span class="tick">🔊</span><div class="txt">点每段右侧的 ▶ 按钮，跟着朗读一遍，注意模仿语调和停顿。</div></div>
+    <div class="goal"><span class="tick">🔤</span><div class="txt">点词汇卡右上角的 🔊 听发音，再用每个词造一个自己的句子。</div></div>
+    <div class="goal"><span class="tick">💬</span><div class="txt">试试用英语介绍她：Tu Youyou was a scientist. She found a medicine from a plant.</div></div>
+    <div class="goal"><span class="tick">🔍</span><div class="txt">找一找课文里所有的过去式动词，把它们抄在笔记本上，写出它们的原形。</div></div>
+    <div class="goal"><span class="tick">🖨️</span><div class="txt">点下方按钮打印本课，随身复习词汇、句型和语法。</div></div>
+
+    <div style="margin-top:18px;">
+      <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+    </div>
+  </div>
+</section>
+
+<footer>POLA NEWS · The Little Plant That Saved Millions · 2026-09-03 · Made for curious kids 🐾</footer>
+</main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+  "Mosquitoes can make people very sick. Long ago, many people got a bad fever called malaria. A scientist named Tu Youyou wanted to help.",
+  "She read over 2,000 old Chinese medicine books. One book was 1,600 years old. It said: put this green plant in cold water and drink the juice. Hot water was killing the medicine, so she used a cold method.",
+  "In 1972, her team found the medicine, artemisinin. Tu Youyou wanted to be sure it was safe. So she tested it on herself first. She was very brave.",
+  "Today this medicine saves millions of lives. In 2015, Tu Youyou won the Nobel Prize. She was 85 years old. Her story tells us: read, think, and never give up."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'fever': '发烧；发热',
+  'scientist': '科学家',
+  'medicine': '药；医学',
+  'plant': '植物',
+  'test': '测试；试验',
+  'brave': '勇敢的',
+  'million': '百万（millions of = 数百万）',
+  'prize': '奖；奖项'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#', '');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

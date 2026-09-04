@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Face That Refuses to Answer</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#c2740a;
+  --bg:#f7f9ff;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#dbeafe;
+  --border:#dde5fb;
+  --soft:#f1f5ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,78,216,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,78,216,.55);}70%{box-shadow:0 0 0 12px rgba(29,78,216,0);}100%{box-shadow:0 0 0 0 rgba(29,78,216,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Arts</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Face That Refuses to Answer</h1>
+      <p class="subtitle">维米尔《戴珍珠耳环的少女》：一幅四百年来拒绝自报姓名的画｜全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Face, Not a Name 一张脸，而非一个名字</div>
+            <p>She has been called the Mona Lisa of the North, though the comparison serves neither painting especially well. Painted in Delft around 1665, Johannes Vermeer's Girl with a Pearl Earring shows a young woman turning back over her shoulder, her lips parted as though about to speak. Whoever she was, she was almost certainly not a named <span class="kw" data-def="坐着让人画像的人；被画者">sitter</span>. Were the picture a true <span class="kw" data-def="肖像画（记录真实人物容貌）">portrait</span>, it would have recorded her features faithfully; instead it offers a type, a mood, a moment suspended between greeting and interruption. That refusal to explain itself, that <span class="kw" data-def="神秘莫测的；难以解释的">enigmatic</span> half-turn, is precisely why viewers have kept returning to it for four centuries.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · What the Scanners Found 扫描仪看见了什么</div>
+            <p>In 2018, the <span class="kw" data-def="（艺术品）修复师；文物保护员">conservator</span> Abbie Vandivere and an international team subjected the small <span class="kw" data-def="画布">canvas</span> to technologies Vermeer could never have imagined: macro X-ray fluorescence mapping, infrared reflectography, and a digital microscope capable of <span class="kw" data-def="分辨；解析（细微结构）">resolving</span> detail at roughly one micron per pixel. What emerged was startling. The dark <span class="kw" data-def="空白；虚空">void</span> behind the girl was once a green curtain. Her eyelashes, now invisible, had been painted in brown. Vermeer had also changed his mind as he worked, shifting the position of an ear and the line of a neck. Most <span class="kw" data-def="令人感慨的；凄美动人的">poignant</span> of all, the pearl barely exists: two strokes of white, a greyish reflection, no hook, no outline, no object at all.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · A Painting Made of Three Continents 由三个大洲画成的画</div>
+            <p>The materials told a second story. The lead white in her collar came from the Peak District in England; the red in her lips, from cochineal insects harvested in Mexico and South America; the <span class="kw" data-def="群青（由青金石研磨而成的深蓝色颜料）">ultramarine</span> flooding her turban, from lapis lazuli mined in what is now Afghanistan, a <span class="kw" data-def="颜料（研磨成粉的着色物质）">pigment</span> then worth more by weight than gold. Small as the canvas is, it was painted out of three continents. Not only does this reveal Vermeer's ambition, it also reminds us how thoroughly a quiet Dutch interior depended on global trade.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why It Matters 意义</div>
+            <p>None of this solves the puzzle, however. Asked whether the team had finally identified her, the museum's director admitted that they had come a little closer, and no further. Perhaps that is the point. A tronie was never meant to be solved, only looked at. Had Vermeer wished to tell us who she was, he could have written it down. What he left instead is an argument in oil: that attending carefully to a surface is itself a form of knowledge, and that a face need not name itself in order to be unforgettable.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sitter">🔊</button><div class="word">sitter<span class="pos">n.</span></div><div class="zh">坐着供人画像的人；被画者</div><div class="ex">"Whoever she was, she was almost certainly not a named sitter."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="portrait">🔊</button><div class="word">portrait<span class="pos">n.</span></div><div class="zh">肖像画（须记录真实人物容貌）</div><div class="ex">"Were the picture a true portrait, it would have recorded her features faithfully."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="conservator">🔊</button><div class="word">conservator<span class="pos">n.</span></div><div class="zh">（艺术品）修复师；文物保护员</div><div class="ex">"The conservator Abbie Vandivere led an international team of scientists."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="canvas">🔊</button><div class="word">canvas<span class="pos">n.</span></div><div class="zh">画布；帆布</div><div class="ex">"Small as the canvas is, it was painted out of three continents."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="void">🔊</button><div class="word">void<span class="pos">n.</span></div><div class="zh">空白；虚空</div><div class="ex">"The dark void behind the girl was once a painted green curtain."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="poignant">🔊</button><div class="word">poignant<span class="pos">adj.</span></div><div class="zh">令人感慨的；凄美动人的</div><div class="ex">"Most poignant of all, the pearl barely exists as a painted object."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="resolve">🔊</button><div class="word">resolve<span class="pos">v.</span></div><div class="zh">分辨；解析（极细微的结构）</div><div class="ex">"The microscope resolves detail at roughly one micron per pixel."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pigment">🔊</button><div class="word">pigment<span class="pos">n.</span></div><div class="zh">颜料（研磨成粉的着色物质）</div><div class="ex">"Ultramarine was the most expensive pigment Vermeer ever used."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ultramarine">🔊</button><div class="word">ultramarine<span class="pos">n.</span></div><div class="zh">群青（青金石研磨的深蓝颜料）</div><div class="ex">"The blue in her turban is ultramarine, made from Afghan lapis lazuli."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="enigmatic">🔊</button><div class="word">enigmatic<span class="pos">adj.</span></div><div class="zh">神秘莫测的；难以解释的</div><div class="ex">"That enigmatic half-turn is why viewers keep coming back."</div></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Were / Had / Should + 主语 + 表语（或过去分词）, 主句 (would / could / might have done).</h3>
+          <div class="zh">虚拟语气倒装：省略 if 并把 were / had / should 提到主语前，表示与事实相反。这是 B2 最值得掌握的书面结构之一，能立刻提升议论性写作的正式度。注意：were 可与单数主语连用（Were the picture...，而非 Was the picture...）。</div>
+          <div class="eg">Were the picture a true portrait, it would have recorded her features faithfully.</div>
+          <div class="practice">练习：用 “Vermeer / wish to tell us” → <input placeholder="Had Vermeer wished to tell us who she was">, he could have written it down.</div>
+        </div>
+        <div class="item">
+          <h3>2. Whoever / Whatever / However + 从句, 主句.</h3>
+          <div class="zh">-ever 引导的让步性从句，等于 “No matter who / what / how...”。特点是先承认某种不确定性，再在主句里推进自己的论点，非常适合用来做让步—转折的论证节奏。</div>
+          <div class="eg">Whoever she was, she was almost certainly not a named sitter.</div>
+          <div class="practice">练习：用 “the scans may reveal” → <input placeholder="Whatever the scans may reveal">, the identity of the girl will probably stay unknown.</div>
+        </div>
+        <div class="item">
+          <h3>3. 过去分词短语 (+ 状语), 主语 + 谓语.</h3>
+          <div class="zh">非谓语动词作状语。分词短语的逻辑主语必须是主句主语，且两者是被动关系。它可以一口气交代时间、原因或背景，避免写出两个松散的短句，是学术与艺术评论中最常见的开头方式。</div>
+          <div class="eg">Painted in Delft around 1665, the picture shows a young woman turning back over her shoulder.</div>
+          <div class="practice">练习：用 “the canvas / examine under infrared light” → <input placeholder="Examined under infrared light">, the canvas revealed a hidden green curtain.</div>
+        </div>
+        <div class="item">
+          <h3>4. Not only + 助动词 + 主语 + 谓语, but (also) + 主谓.</h3>
+          <div class="zh">否定副词（not only / never / rarely / seldom）置于句首时，主句必须部分倒装，即把助动词提到主语前。后半句 but also 不倒装；also 常可省略以使节奏更利落。</div>
+          <div class="eg">Not only does this reveal Vermeer's ambition, it also reminds us how thoroughly a Dutch interior depended on trade.</div>
+          <div class="practice">练习：用 “the pearl / be an illusion” → <input placeholder="Not only is the pearl an illusion">, but the entire background has also changed beyond recognition.</div>
+        </div>
+        <div class="item">
+          <h3>5. 形容词 / 名词 + as + 主语 + 谓语, 主句.</h3>
+          <div class="zh">让步倒装：把表语提到 as 之前表示“尽管……”。比 Although 更书面、更有力。若提前的是单数可数名词，冠词必须省略（Child as he was...，不可说 A child as he was）。</div>
+          <div class="eg">Small as the canvas is, it was painted out of three continents.</div>
+          <div class="practice">练习：用 “famous / the painting / be” → <input placeholder="Famous as the painting is">, almost nothing is known about the woman in it.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气倒装 (Inverted Conditionals)</h3>
+          <div class="zh">把 if 去掉、助动词提前，形成三种时态：<br>
+          · 现在/将来虚拟：<b>Were</b> + 主语 + 表语/ doing, 主语 + would / could / might do<br>
+          · 过去虚拟：<b>Had</b> + 主语 + 过去分词, 主语 + would have done<br>
+          · 将来虚拟：<b>Should</b> + 主语 + 动词原形, 主语 + would do</div>
+          <div class="eg">Had Vermeer wished to tell us who she was, he could have written it down.</div>
+        </div>
+        <div class="item">
+          <h3>2. 让步倒装 (Concessive Inversion with as / though)</h3>
+          <div class="zh">结构为“表语/状语 + as / though + 主语 + 谓语”。注意区分：as 表示“尽管”时必须倒装；表示“因为/随着”时不倒装。though 两种语序都可以，as 只能倒装。</div>
+          <div class="eg">Poignant as the discovery is, it does not tell us her name.</div>
+        </div>
+        <div class="item">
+          <h3>3. 非谓语动词：过去分词短语作状语 (Past Participles as Adverbials)</h3>
+          <div class="zh">过去分词短语表示被动且完成的动作，其逻辑主语必须是主句主语。误用会产生“悬垂分词”（dangling participle）。可以表示时间（Asked about..., she smiled）、原因、条件或伴随状态。</div>
+          <div class="eg">Asked whether the team had finally identified her, the museum's director admitted that they had come a little closer, and no further.</div>
+        </div>
+        <div class="item">
+          <h3>4. 名词性关系从句 (Nominal Relative Clauses with -ever)</h3>
+          <div class="zh">whoever / whatever / whichever / however 同时充当两种成分：既引导从句，又在从句中作主语、宾语或状语。它们可以换成 “anyone who...” 或 “no matter what...”，但语气更凝练、更书面。</div>
+          <div class="eg">Whatever the scanners uncover, the girl will keep her secret.</div>
+        </div>
+        <div class="item">
+          <h3>5. What 引导的主语从句 (What-clause as Subject)</h3>
+          <div class="zh">“What + 不及物谓语”整体作主语，相当于 “the thing that...”。这个结构能让你把读者的注意力先吊在“未知”上，再在主句里揭晓，是英文议论中极具张力的开头。</div>
+          <div class="eg">What emerged was startling. / What he left instead is an argument in oil.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+        <h3>一、它不是肖像，而是 tronie</h3>
+        <p>中文常把这幅画译成《戴珍珠耳环的少女》，听起来像某位具体少女的肖像。但荷兰黄金时代有一类特殊画种，荷兰语叫 <b>tronie</b>（复数 tronien），意思是“脸”“表情研究”。画家找来模特，让人穿上异域服装、戴上道具头巾，画的是一种<b>类型</b>和一种<b>神态</b>，而不是某人的容貌记录。</p>
+        <p>判断依据很实在：真正的肖像会留下痣、疤、雀斑等可辨认特征，而这幅画里一个都没有。所以“她到底是谁”这个问题，从画种上讲可能一开始就问错了——就像问一张表情包原型是谁，画家的本意并不在此。</p>
+
+        <h3>二、2018 年“少女聚焦”项目：扫描仪看见了什么</h3>
+        <p>荷兰莫瑞泰斯皇家美术馆（Mauritshuis）在 2018 年发起了名为 <i>Girl in the Spotlight</i> 的研究项目，由修复师 Abbie Vandivere 领衔，联合荷兰文化遗产局、代尔夫特理工大学、安特卫普大学、美国国家美术馆等机构，动用了多种无损检测手段：</p>
+        <table class="facts">
+          <tr><th>技术</th><th>作用</th><th>本次的关键发现</th></tr>
+          <tr><td>宏观 X 射线荧光成像<br>(MA-XRF)</td><td>逐点扫描，画出化学元素的分布图</td><td>发现眼周的褐色睫毛痕迹；定位铅白、朱红、群青的分布</td></tr>
+          <tr><td>红外反射成像<br>(Infrared Reflectography)</td><td>穿透表层颜料，看到底稿线</td><td>发现耳朵、头巾顶部、后颈的位置都曾被修改过</td></tr>
+          <tr><td>3D 数字显微镜<br>(Hirox)</td><td>以约 1 微米/像素的精度重建表面形貌</td><td>确认背景原为绿色帷幕，并还原“珍珠”的笔触结构</td></tr>
+          <tr><td>颜料来源追溯</td><td>比对矿石的同位素与杂质指纹</td><td>铅白来自英格兰峰区，胭脂虫红来自美洲，群青来自阿富汗</td></tr>
+        </table>
+        <p>最让人感慨的是两点。其一，我们今天看到的“深黑背景”其实是化学反应造成的：原本的绿色帷幕颜料随时间变褐变暗，衬得画面愈发幽深——也就是说，我们欣赏的“经典效果”，部分是三百五十年老化送的。其二，那颗举世闻名的珍珠，物理上几乎不存在：没有挂钩、没有轮廓，只有上方一小笔白色高光和下方一道偏灰的反射。它是一团被画出来的<b>光学错觉</b>。</p>
+        <blockquote>我们没能查出她是谁，也不确定她是否真的存在过。但我们确实离她更近了一点。<em>—— Martine Gosselink，莫瑞泰斯皇家美术馆馆长</em></blockquote>
+
+        <h3>三、一幅小画，三条全球贸易线</h3>
+        <p>画幅只有约 44.5 × 39 厘米，比一张 A3 纸还小，材料却横跨三大洲：</p>
+        <ul>
+          <li><b>铅白</b>（lead white）来自英格兰德比郡的峰区（Peak District），是当时欧洲最好的白颜料。</li>
+          <li><b>胭脂虫红</b>（cochineal）取自寄生在仙人掌上的胭脂虫，产地在墨西哥与南美，经西班牙商船运抵阿姆斯特丹。</li>
+          <li><b>群青</b>（ultramarine）由青金石研磨而成，矿源在今阿富汗巴达赫尚一带。<i>Ultramarine</i> 一词本义就是“来自海外”。在 17 世纪，它按重量计比黄金还贵。</li>
+        </ul>
+        <p>这提醒我们：荷兰黄金时代那些安静、体面、窗明几净的室内画，并不是与世隔绝的产物，而是建立在全球贸易网络之上的。维米尔本人一生并不富裕，用群青却毫不吝惜，甚至常常把它涂在底层当打底——一个画家的野心，有时就躲在这种看不见的地方。</p>
+
+        <h3>四、维米尔：一个几乎没有生平的画家</h3>
+        <p>约翰内斯·维米尔（Johannes Vermeer，1632—1675）终生生活在代尔夫特，留下约三十四至三十六幅作品，四十出头便去世，身后还欠着面包师的债。他在世时几乎默默无闻，两百年后才被 19 世纪的法国评论家重新“发现”。今天他被视为荷兰黄金时代最伟大的画家之一，可关于他的私人生活，史料少得惊人：没有日记，没有成套书信，没有自画像。</p>
+        <p>这种“生平空缺”反而给作品留出了空间。当我们无法用画家的八卦去解释一幅画时，就只能回到画本身——这或许正是这幅画最现代的地方。</p>
+
+        <h3>五、留给你的两个问题</h3>
+        <ul>
+          <li>如果扫描结果显示背景原本是绿色帷幕，博物馆是否应该“还原”它？修复应该忠于画家的原始意图，还是忠于作品流传至今的面貌？</li>
+          <li>数字化扫描让每个人都能在屏幕上放大到微米级细节。当一幅画被彻底“看穿”，它的神秘感是增加了，还是消失了？</li>
+        </ul>
+        <p class="source">资料来源：Mauritshuis（Girl in the Spotlight 研究项目官方发布）、New Scientist 相关报道、Rijksmuseum / NICAS 联合研究资料。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3>🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>阅读</b>：读懂一篇约 360 词的艺术评论短文，把握“现象—证据—意义”的论证结构。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>词汇</b>：掌握 10 个 CEFR B2 核心词（sitter, conservator, pigment, void, poignant, resolve, enigmatic 等），能在艺术与学术语境中主动使用。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>句型</b>：熟练运用 5 个高级句式，尤其是虚拟语气倒装、让步倒装与非谓语短语。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>语法</b>：系统复习虚拟语气倒装、让步倒装、过去分词作状语、-ever 名词性关系从句与 what 主语从句。</div></div>
+        <div class="goal"><span class="ic">✅</span><div><b>测验</b>：完成 6 道选择题，检验事实细节理解与语法识别能力。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>拓展</b>：了解 tronie 画种、无损检测技术与 17 世纪全球颜料贸易，形成跨学科视角。</div></div>
+        <h3 style="margin-top:20px;">🗣️ 口语输出建议</h3>
+        <p>用本课句型，口头描述一件你喜欢的艺术品（ paintings、歌曲、建筑均可），要求至少用上 1 个倒装句和 1 个 -ever 从句。例如：</p>
+        <div class="item"><div class="eg">Famous as the song is, no one seems to agree on what it means. Whatever the singer intended, listeners have made it their own.</div></div>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English Learning · Arts<br>Generated on 4 September 2026</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "She has been called the Mona Lisa of the North, though the comparison serves neither painting especially well. Painted in Delft around 1665, Johannes Vermeer's Girl with a Pearl Earring shows a young woman turning back over her shoulder, her lips parted as though about to speak. Whoever she was, she was almost certainly not a named sitter. Were the picture a true portrait, it would have recorded her features faithfully; instead it offers a type, a mood, a moment suspended between greeting and interruption. That refusal to explain itself, that enigmatic half-turn, is precisely why viewers have kept returning to it for four centuries.",
+  "In 2018, the conservator Abbie Vandivere and an international team subjected the small canvas to technologies Vermeer could never have imagined: macro X-ray fluorescence mapping, infrared reflectography, and a digital microscope capable of resolving detail at roughly one micron per pixel. What emerged was startling. The dark void behind the girl was once a green curtain. Her eyelashes, now invisible, had been painted in brown. Vermeer had also changed his mind as he worked, shifting the position of an ear and the line of a neck. Most poignant of all, the pearl barely exists: two strokes of white, a greyish reflection, no hook, no outline, no object at all.",
+  "The materials told a second story. The lead white in her collar came from the Peak District in England; the red in her lips, from cochineal insects harvested in Mexico and South America; the ultramarine flooding her turban, from lapis lazuli mined in what is now Afghanistan, a pigment then worth more by weight than gold. Small as the canvas is, it was painted out of three continents. Not only does this reveal Vermeer's ambition, it also reminds us how thoroughly a quiet Dutch interior depended on global trade.",
+  "None of this solves the puzzle, however. Asked whether the team had finally identified her, the museum's director admitted that they had come a little closer, and no further. Perhaps that is the point. A tronie was never meant to be solved, only looked at. Had Vermeer wished to tell us who she was, he could have written it down. What he left instead is an argument in oil: that attending carefully to a surface is itself a form of knowledge, and that a face need not name itself in order to be unforgettable."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What kind of picture is Girl with a Pearl Earring? 《戴珍珠耳环的少女》属于哪一类画？",opts:["A tronie: a study of a face in costume, not a portrait of a named person 荷兰黄金时代的“表情研究画”，画的是类型而非具体人物","A formal wedding portrait 正式的婚礼肖像","A religious altarpiece 宗教祭坛画","A self-portrait of Vermeer's wife 维米尔妻子的自画像"],ans:0,
+   fb:"正确！tronie 是荷兰黄金时代特有的画种，画模特穿上异域服饰、摆出某种神态，重点在“类型”与“表情”，而非记录真实身份。画中没有任何痣、疤或雀斑，这正是判断依据。"},
+  {q:"What did the 2018 scanning project reveal about the background? 2018 年的扫描项目对背景有何发现？",opts:["It was originally a green curtain 原本是一块绿色帷幕","It was originally a window 原本是一扇窗","It was always flat black 一直都是平涂的黑色","It was painted by a different artist 出自另一位画家之手"],ans:0,
+   fb:"正确！研究项目 Girl in the Spotlight 发现，背景原本是一块绿色帷幕；颜料随时间发生化学变化才变暗变褐，形成我们今天看到的深色虚空。"},
+  {q:"Where did the ultramarine in her turban come from? 头巾上的群青来自哪里？",opts:["From lapis lazuli mined in what is now Afghanistan 来自今阿富汗出产的青金石","From a factory in Delft 来自代尔夫特的一家工厂","From crushed beetles in Mexico 来自墨西哥的甲虫","From coal tar in England 来自英格兰的煤焦油"],ans:0,
+   fb:"正确！群青由青金石（lapis lazuli）研磨而成，17 世纪矿源在今阿富汗巴达赫尚。它按重量计比黄金还贵，维米尔却大量使用，甚至用来打底。"},
+  {q:"'Were the picture a true portrait, it would have recorded her features faithfully.' 这句话使用了什么语法结构？",opts:["Inverted unreal conditional 虚拟语气倒装（省略 if，were 提前）","Passive voice 被动语态","Cleft sentence 强调句","Relative clause 定语从句"],ans:0,
+   fb:"正确！相当于 If the picture were a true portrait...。省略 if 后把 were 提到主语前，是书面语中常见的虚拟语气倒装。"},
+  {q:"'Small as the canvas is, it was painted out of three continents.' 这句话的结构是？",opts:["Concessive inversion 让步倒装（表语提前 + as + 主谓）","Inverted conditional 虚拟语气倒装","Participle phrase 分词短语作状语","Nominal relative clause 名词性关系从句"],ans:0,
+   fb:"正确！相当于 Although the canvas is small...。形容词 small 提到 as 之前构成让步倒装，比 although 更书面有力。"},
+  {q:"According to the text, why has the painting stayed famous for four centuries? 按课文说法，这幅画为何四百年长盛不衰？",opts:["Because it refuses to explain itself 因为它拒绝解释自己","Because it is very large 因为它尺幅巨大","Because Vermeer wrote a diary about it 因为维米尔为它写过日记","Because the model was a queen 因为模特是一位王后"],ans:0,
+   fb:"正确！课文原句：That refusal to explain itself, that enigmatic half-turn, is precisely why viewers have kept returning to it for four centuries. 神秘本身构成了持久的吸引力。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#1d4ed8';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
