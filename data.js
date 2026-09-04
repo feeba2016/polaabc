@@ -6077,6 +6077,68 @@ const EPISODES = [
   },
   {
     "level": "C1",
+    "date": "2026-09-02",
+    "title": "The Reservoir That Didnt Run Dry",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-09-02-the-reservoir-that-didnt-run-dry",
+    "url": "lessons/c1/2026-09-02-the-reservoir-that-didnt-run-dry.html",
+    "vocab": [
+      {
+        "word": "twilight",
+        "zh": "（事物的）晚期、衰落期、暮年。原义为暮色，喻指一个过程接近尾声却尚未终结的阶段",
+        "ex": "For decades the twilight of cosmic star formation has been told as a story of exhaustion."
+      },
+      {
+        "word": "kindle",
+        "zh": "点燃（火）；引申为激起、引发（过程、情感、兴趣）。学术写作常用以标记因果链的起点",
+        "ex": "…the raw material from which stars are kindled."
+      },
+      {
+        "word": "sputter",
+        "zh": "（引擎）噼啪作响、断断续续运转后熄火；喻指勉强维持后衰败，带有「供不上劲」的画面感",
+        "ex": "…and its stellar foundries are sputtering for want of fuel."
+      },
+      {
+        "word": "depletion",
+        "zh": "消耗、枯竭、存量下降（动词 deplete）。与 exhaustion 之别：depletion 偏「存量下降」，exhaustion 偏「用尽」",
+        "ex": "Were depletion the culprit, the fall in star formation ought to be matched by…"
+      },
+      {
+        "word": "commensurate",
+        "zh": "相称的、相当的、成比例的。固定搭配 commensurate with / to，多作表语或后置修饰，少作前置定语",
+        "ex": "…a commensurate fall in the reserves feeding it."
+      },
+      {
+        "word": "circumvent",
+        "zh": "规避、绕开（困难、限制或规定）。较 avoid 正式，含「用巧办法绕过障碍」之意，不带明显贬义",
+        "ex": "An international team circumvented the impasse by pairing FAST with DESI."
+      },
+      {
+        "word": "impasse",
+        "zh": "僵局、死局、无从推进的困境。源自法语，原义「死胡同」；学术写作中常指方法或理论上的停滞",
+        "ex": "…circumvented the impasse by pairing FAST with DESI's survey in Arizona."
+      },
+      {
+        "word": "reservoir",
+        "zh": "水库、蓄水池；喻指资源、知识或劳动力的储备库。科技与社会类写作中极常用的隐喻",
+        "ex": "Star birth collapsed; the reservoir barely stirred."
+      },
+      {
+        "word": "condense",
+        "zh": "（气体）凝结成液体或固体；也指精简、压缩（文字）。物理义与修辞义在学术写作中均高频",
+        "ex": "…it must first condense into denser molecular clouds."
+      },
+      {
+        "word": "reframe",
+        "zh": "重新框定、换个视角界定（问题或争论）。名词 reframing；描述「问题意识转移」时极其好用的元话语动词",
+        "ex": "…a reframing that relocates the mystery from the warehouse to the workshop."
+      }
+    ]
+  },
+  {
+    "level": "C1",
     "date": "2026-09-04",
     "title": "The Verdict Before the Evidence",
     "category": "general",
