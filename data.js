@@ -4010,6 +4010,58 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A2",
+    "date": "2026-09-05",
+    "title": "The Wall Made of Trees",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-05-the-wall-made-of-trees",
+    "url": "lessons/a2/2026-09-05-the-wall-made-of-trees.html",
+    "vocab": [
+      {
+        "word": "desert",
+        "zh": "在非洲北部，土地非常干旱。撒哈拉沙漠正在一点点变大，农田被沙子掩埋、慢慢消失。2007 年，十一个国家决定用树木来反击。",
+        "ex": "The Sahara Desert is very hot and dry."
+      },
+      {
+        "word": "disappear",
+        "zh": "消失；不见",
+        "ex": "Farms are disappearing under the sand."
+      },
+      {
+        "word": "kilometre",
+        "zh": "公里；千米（美式拼法 kilometer）",
+        "ex": "The wall is about 8,000 kilometres long."
+      },
+      {
+        "word": "farmer",
+        "zh": "农民；农场主",
+        "ex": "Farmers dig half-moon shapes to catch rain."
+      },
+      {
+        "word": "ground",
+        "zh": "地面；土地",
+        "ex": "The little tree grows out of the dry ground."
+      },
+      {
+        "word": "plant",
+        "zh": "种植；栽种",
+        "ex": "They plant trees every rainy season."
+      },
+      {
+        "word": "restore",
+        "zh": "修复；使恢复原来的样子",
+        "ex": "30 million hectares of land have been restored."
+      },
+      {
+        "word": "hope",
+        "zh": "希望",
+        "ex": "We are not just planting trees, we are planting hope."
+      }
+    ]
+  },
+  {
     "level": "B2",
     "date": "2026-08-12",
     "title": "Beyond Lithium The Rise of Solid-State Batteries",
