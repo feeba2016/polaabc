@@ -6359,5 +6359,67 @@ const EPISODES = [
         "ex": "\"Nor can the format police every deviation\""
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-09-05",
+    "title": "The Hollow Yes",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-09-05-the-hollow-yes",
+    "url": "lessons/c1/2026-09-05-the-hollow-yes.html",
+    "vocab": [
+      {
+        "word": "constitute",
+        "zh": "构成、以……为构成要件（to be the elements or essence of；be constituted by 指『由……构成』，强调成立要件本身）",
+        "ex": "\"consent under the UK GDPR is constituted by an outward act\""
+      },
+      {
+        "word": "concur",
+        "zh": "（法官）意见一致、附议（to agree with another judge's reasoning；with whom X concurred = X 表示赞同；名词 concurrence）",
+        "ex": "\"with whom Sharp P and Lewison LJ concurred\""
+      },
+      {
+        "word": "anonymise",
+        "zh": "匿名化（to remove identifying details；anonymised as RTM = 化名为 RTM，用于保护当事人；美式拼写 anonymize）",
+        "ex": "\"a recovering gambling addict anonymised as RTM\""
+      },
+      {
+        "word": "impair",
+        "zh": "削弱、损害（to weaken or damage the functioning of；impaired autonomy 自主性受损；名词 impairment）",
+        "ex": "\"his addiction impaired the autonomous quality of his decision-making\""
+      },
+      {
+        "word": "unworkable",
+        "zh": "行不通的、无法运作的（not practical or feasible to implement；法律论证中指标准无法执行或无法举证）",
+        "ex": "\"a subjective enquiry would be unworkable\""
+      },
+      {
+        "word": "vitiate",
+        "zh": "使失效、败坏（to spoil or impair the effect of, especially to invalidate in law；法律英语高频词，近于 invalidate）",
+        "ex": "\"capable of vitiating an apparent agreement\""
+      },
+      {
+        "word": "remission",
+        "zh": "发回重审（sending a case back to a lower court；动词 remit：to remit a case to the High Court。另义『缓解』，如 remission of symptoms）",
+        "ex": "\"RTM's claim under the fairness principle survives remission\""
+      },
+      {
+        "word": "constructive",
+        "zh": "推定的、法律拟制的（imputed by law rather than actually held；constructive knowledge 推定知情，constructive notice 推定通知）",
+        "ex": "\"a controller's constructive knowledge of vulnerability\""
+      },
+      {
+        "word": "administrable",
+        "zh": "可执行的、便于管理的（capable of being administered or put into practice；反义 unadministrable；动词 administer）",
+        "ex": "\"Consent has been made administrable\""
+      },
+      {
+        "word": "hollow out",
+        "zh": "掏空（to strip something of its substance while leaving the form intact；hollowed out 为其过去分词，作补足语）",
+        "ex": "\"at the price of being hollowed out\""
+      }
+    ]
   }
 ];

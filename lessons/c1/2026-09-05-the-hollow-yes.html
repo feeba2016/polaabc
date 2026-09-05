@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Hollow Yes — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#1e3a8a;
+  --accent2:#b45309;
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#d9dff0;
+  --soft:#eef2fb;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(30,58,138,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{display:block;flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;margin-top:6px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(30,58,138,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,58,138,.55);}70%{box-shadow:0 0 0 12px rgba(30,58,138,0);}100%{box-shadow:0 0 0 0 rgba(30,58,138,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(30,58,138,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 法律伦理 Law &amp; Ethics</span>
+      <h1 class="title">The Hollow Yes</h1>
+      <p class="subtitle">When a ticked box counts as consent — and what the law loses by asking no further · 全文阅读（点蓝词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Ruling</div>
+            <p>In April 2026 the Court of Appeal of England and Wales settled a question that had vexed data protection lawyers for two years. In RTM v Bonne Terre, Warby LJ, with whom Sharp P and Lewison LJ <span class="kw" data-def="（法官）意见一致、附议（concur = to agree with another judge's reasoning；with whom X concurred = X 表示赞同；名词 concurrence 并存意见）">concurred</span>, held that consent under the UK GDPR is <span class="kw" data-def="构成、以……为构成要件（constitute = to be the elements or essence of；be constituted by 在法律英语中指『由……构成』，强调成立要件本身）">constituted</span> by an outward act — a clear affirmative action signifying agreement — and not by the state of mind behind it. The claimant, a recovering gambling addict <span class="kw" data-def="匿名化的（anonymise = to remove identifying details；法律报道中 anonymised as RTM 表示『化名为 RTM』，保护当事人身份）">anonymised</span> as RTM, had ticked boxes. That was the end of the matter.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Innovation</div>
+            <p>At first instance Collins Rice J had devised something bolder. Conceding that RTM retained capacity and even welcomed the marketing, she held that his addiction <span class="kw" data-def="削弱、损害（impair = to weaken or damage the functioning of something；impaired autonomy 自主性受损；名词 impairment）">impaired</span> the autonomous quality of his decision-making, leaving his consent below the relatively high standard the legislation demands. Her three-part test — subjective consent, autonomy, evidential quality — had been pleaded by neither party.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Rejection</div>
+            <p>The Court of Appeal dismantled it twice over. Procedurally, a judge may not decide a case on a test no one argued. Substantively, a subjective enquiry would be <span class="kw" data-def="行不通的、无法运作的（unworkable = not practical or feasible to implement；法律论证中指某项标准在实践中无法执行、无法举证）">unworkable</span>: were the test to turn on a person's inner state, no controller could verify compliance, since any data subject might harbour an undisclosed condition capable of <span class="kw" data-def="使失效、败坏（vitiate = to spoil or impair the effect of something, especially to invalidate it in law；法律英语高频词，近于 invalidate）">vitiating</span> an apparent agreement. Recital 7 promises legal certainty; that promise cannot survive such an inquiry.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Cost</div>
+            <p>The ruling is narrower than it looks. It decided whether consent was given, not whether the processing was fair: RTM's claim under the fairness principle survives <span class="kw" data-def="发回重审（remission = the sending of a case back to a lower court for reconsideration；动词 remit：to remit a case to the High Court 将案件发回高等法院重审）">remission</span>, and the Court refused the Information Commissioner's invitation to weigh a controller's <span class="kw" data-def="推定的、法律拟制的（constructive = imputed by law rather than actually held；constructive knowledge 推定知情，即『虽非实际知晓，但稍加注意即应知晓』）">constructive</span> knowledge of vulnerability. Consent has been made <span class="kw" data-def="可执行的、可管理的（administrable = capable of being administered or put into practice；反义 unadministrable）">administrable</span> at the price of being <span class="kw" data-def="被掏空的（hollow out = to strip something of its substance while leaving the form intact；hollowed out 为其过去分词形式）">hollowed out</span> — an objective tick, defensible in court, indifferent to whether anyone meant it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="constitute">🔊</button><div class="word">constitute<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">构成、以……为构成要件（to be the elements or essence of；be constituted by 指『由……构成』，强调成立要件本身）</div><div class="ex">"consent under the UK GDPR is constituted by an outward act"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="concur">🔊</button><div class="word">concur<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">（法官）意见一致、附议（to agree with another judge's reasoning；with whom X concurred = X 表示赞同；名词 concurrence）</div><div class="ex">"with whom Sharp P and Lewison LJ concurred"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="anonymise">🔊</button><div class="word">anonymise<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">匿名化（to remove identifying details；anonymised as RTM = 化名为 RTM，用于保护当事人；美式拼写 anonymize）</div><div class="ex">"a recovering gambling addict anonymised as RTM"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="impair">🔊</button><div class="word">impair<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">削弱、损害（to weaken or damage the functioning of；impaired autonomy 自主性受损；名词 impairment）</div><div class="ex">"his addiction impaired the autonomous quality of his decision-making"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="unworkable">🔊</button><div class="word">unworkable<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">行不通的、无法运作的（not practical or feasible to implement；法律论证中指标准无法执行或无法举证）</div><div class="ex">"a subjective enquiry would be unworkable"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="vitiate">🔊</button><div class="word">vitiate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">使失效、败坏（to spoil or impair the effect of, especially to invalidate in law；法律英语高频词，近于 invalidate）</div><div class="ex">"capable of vitiating an apparent agreement"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="remission">🔊</button><div class="word">remission<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">发回重审（sending a case back to a lower court；动词 remit：to remit a case to the High Court。另义『缓解』，如 remission of symptoms）</div><div class="ex">"RTM's claim under the fairness principle survives remission"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="constructive">🔊</button><div class="word">constructive<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">推定的、法律拟制的（imputed by law rather than actually held；constructive knowledge 推定知情，constructive notice 推定通知）</div><div class="ex">"a controller's constructive knowledge of vulnerability"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="administrable">🔊</button><div class="word">administrable<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">可执行的、便于管理的（capable of being administered or put into practice；反义 unadministrable；动词 administer）</div><div class="ex">"Consent has been made administrable"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hollow out">🔊</button><div class="word">hollow out<span class="pos">phr. v.</span></div><span class="lvl">C1</span><div class="zh">掏空（to strip something of its substance while leaving the form intact；hollowed out 为其过去分词，作补足语）</div><div class="ex">"at the price of being hollowed out"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (Academic)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [Court] held that X is constituted by A — [appositive] — and not by B.</h3>
+          <div class="zh">「法院认定 X 由 A 构成——即……——而非由 B 构成。」先用被动式给出裁判结论，破折号内插入对 A 的精确定义（同位语），再以 and not by B 作强否定平行。法律与学术写作界定概念的标准写法。</div>
+          <div class="eg">Warby LJ held that consent under the UK GDPR is constituted by an outward act — a clear affirmative action signifying agreement — and not by the state of mind behind it.</div>
+          <div class="practice">练习：用 "the tribunal / a contract / formed by conduct / an offer accepted by performance / the parties' unspoken intentions" → The tribunal held that the contract was <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>2. Conceding that [clause], [subject] [verb] that [clause].</h3>
+          <div class="zh">「虽承认……，某人仍主张……。」现在分词短语置于句首作让步状语，暗含「即便如此，结论仍然」的转折张力。关键在于：它承认的是对己方不利的事实，从而让主句的主张更显克制、更有说服力。</div>
+          <div class="eg">Conceding that RTM retained capacity and even welcomed the marketing, she held that his addiction impaired the autonomous quality of his decision-making.</div>
+          <div class="practice">练习：用 "the data set was small / the researchers maintained / the trend was robust" → Conceding that the data set was small, <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>3. Procedurally, [clause]. Substantively, [clause].</h3>
+          <div class="zh">「程序上……。实体上……。」成对的句首评注性状语（disjuncts），把一个论证劈成两条并列攻击线。比 First / Second 更凝练，且自带分类框架，是判例评析与议论文剖析「两重理由」的利器。</div>
+          <div class="eg">Procedurally, a judge may not decide a case on a test no one argued. Substantively, a subjective enquiry would be unworkable.</div>
+          <div class="practice">练习：用 "the notice was served late / the claim itself fails on the merits" → Procedurally, the notice was served late; <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>4. Were the [test / rule] to [verb], [subject] could/would [verb].</h3>
+          <div class="zh">「倘若该标准竟要……，那么……将无法……。」were + 主语 + to do 是省略 if 的倒装虚拟条件，专用于对尚未发生或与事实相反的情形作假设推演。语气比 If the test were to… 更紧凑、更书面。</div>
+          <div class="eg">Were the test to turn on a person's inner state, no controller could verify compliance.</div>
+          <div class="practice">练习：用 "the court / adopt a purely subjective standard / no insurer ever / be able to price the risk" → Were the court to adopt a purely subjective standard, <input placeholder="your answer"></div>
+        </div>
+        <div class="item">
+          <h3>5. [X] has been made [adj.] at the price of being [past participle].</h3>
+          <div class="zh">「X 得以变得……，代价却是被……。」at the price of + 动名词，把「所得」与「所失」压进同一句，是段末权衡式收束的高级结构。注意 of 后须用动名词；被动含义则用 being + 过去分词。</div>
+          <div class="eg">Consent has been made administrable at the price of being hollowed out.</div>
+          <div class="practice">练习：用 "the system / efficient / stripped of its discretion" → The system has been made efficient at <input placeholder="your answer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 破折号插入同位定义 + and not by 否定平行</h3>
+          <div class="zh">「…is constituted by an outward act — a clear affirmative action signifying agreement — and not by the state of mind behind it」中，双破折号之间是对 act 的同位解释（可整段删去而句子仍成立）；and not by 与前面的 by 构成严格的介词平行。判断方法：把 and not by 后的成分与 constituted by 后的成分对调，句子应依然通顺。</div>
+          <div class="eg">consent … is constituted by an outward act — a clear affirmative action signifying agreement — <b>and not by</b> the state of mind behind it.</div>
+        </div>
+        <div class="item">
+          <h3>2. 现在分词短语作让步状语（Conceding that…）</h3>
+          <div class="zh">「Conceding that RTM retained capacity…, she held that…」中 Conceding 的逻辑主语必须与主句主语一致（此处为 she，即 Collins Rice J）。若不一致则成悬垂分词（dangling participle）。语义上它相当于 Although she conceded that…，但分词形式更凝练，且把让步压缩为背景信息。</div>
+          <div class="eg"><b>Conceding that</b> RTM retained capacity and even welcomed the marketing, she held that his addiction impaired the autonomous quality of his decision-making.</div>
+        </div>
+        <div class="item">
+          <h3>3. 成对句首评注性状语（Procedurally, … Substantively, …）</h3>
+          <div class="zh">评注性状语（disjunct）修饰的是整个句子而非某个动词，表达说话人对命题的组织方式或评价。此处 Procedurally / Substantively 把裁判理由分成两类并逐一击破。同类高频词还有 Formally、Economically、Morally、Legally。注意其后必须加逗号。</div>
+          <div class="eg"><b>Procedurally,</b> a judge may not decide a case on a test no one argued. <b>Substantively,</b> a subjective enquiry would be unworkable.</div>
+        </div>
+        <div class="item">
+          <h3>4. were + 主语 + to do：倒装虚拟条件</h3>
+          <div class="zh">「Were the test to turn on a person's inner state, no controller could verify compliance.」= If the test were to turn on… 当条件从句含 were / had / should 时可省略 if 并倒装。语义上 were to do 比一般过去式虚拟更强调「假设性的未来走向」。主句用 could / would + 动词原形。</div>
+          <div class="eg"><b>Were the test to turn on</b> a person's inner state, no controller could verify compliance.</div>
+        </div>
+        <div class="item">
+          <h3>5. 介词 + being + 过去分词（被动动名词）</h3>
+          <div class="zh">「at the price of being hollowed out」中 of 是介词，后接动名词；因主语 consent 是「被掏空」的承受者，故用被动式 being + 过去分词。同类结构：without being told、for having been ignored、instead of being punished。常见错误是写成 at the price of hollowed out（缺 being）。</div>
+          <div class="eg">Consent has been made administrable at the price of <b>being hollowed out</b>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这个案子在说什么？（事实背景）</h3>
+        <p>本课取材于一起真实的英国判例：<b>RTM v Bonne Terre Ltd &amp; Anor [2026] EWCA Civ 488</b>，英格兰及威尔士上诉法院（民事庭）于 <b>2026 年 4 月 21 日</b>作出判决，由 Warby LJ 主笔，Sharp P 与 Lewison LJ 一致同意。</p>
+        <ul>
+          <li><b>当事人：</b>被上诉人 RTM 是一位匿名化的戒赌康复者；上诉人是博彩公司 Sky Betting and Gaming（下称 SBG）的运营主体 Bonne Terre Ltd 与 Hestview Ltd。</li>
+          <li><b>诉求：</b>RTM 主张，在截至 2019 年初的两年间，SBG 投放 cookie、处理其个人数据（含用户画像 profiling）并发送定向营销，均未经有效同意，违反英国《一般数据保护条例》（UK GDPR）与《隐私与电子通信条例》（PECR），要求赔偿经济损失与精神损害。</li>
+          <li><b>争议焦点：</b>数据保护法上的「同意」究竟是<u>客观</u>的——只看有没有一个明确的外部表示行为；还是<u>主观</u>的——还要追问当事人内心是否真正自愿、自主。</li>
+        </ul>
+        <div class="box">🧭 <b>事实与出处：</b>以上内容据上诉法院判决书摘要、Lewis Silkin 与 Clifford Chance 两家律所的判决评析（2026 年 5—6 月）、Solicitors Journal 报道及 CaseMine 判例评注交叉印证。本课尊重事实，未作虚构或戏剧化改写。</div>
+
+        <h3>二、两审裁判的分歧</h3>
+        <table>
+          <tr><th style="width:16%">审级</th><th style="width:42%">裁判要旨</th><th>理由</th></tr>
+          <tr><td><b>高等法院</b><br>（Collins Rice J，2025 年 1 月）</td><td>同意须含主观要素。法院自创三步检验：<b>主观同意</b>＋<b>决策的自主性</b>＋<b>证据充分性</b>。认定 RTM 的赌瘾削弱了其决策的自主品质，故其同意达不到立法所要求的较高标准。</td><td>法官承认 RTM 具备行为能力，甚至<u>欢迎</u>这些营销信息；但她认为对这一小群人而言，同意机制与告知义务不过是「需要绕过的障碍」。该三步检验<u>并非任何一方当事人所主张</u>，系法官自行建构。</td></tr>
+          <tr><td><b>上诉法院</b><br>（Warby LJ，2026 年 4 月）</td><td>同意是<b>客观</b>的：由一项陈述或明确的肯定性行为构成，须为「自由给出、具体、知情且不含歧义」的意思表示；四要件同样按客观标准衡量，不探问当事人的内心状态或其自主性是否受损。</td><td>①程序上：法官不得以未经辩论的检验标准定案，剥夺了 SBG 公平回应的机会。②实体上：主观标准无法运作——若须证明内心真意，任何数据控制者都无法确保合规，因为任何人都可能藏着一处未披露的隐疾。</td></tr>
+        </table>
+        <p>上诉法院还一并纠正了高等法院在另外三项事实认定上的错误（RTM 是否曾勾选营销同意框、cookie 与涉案定向营销之间是否存在证据关联、SBG 能否就部分画像活动主张「正当利益」），最终<b>五项上诉理由全部成立</b>，责任认定被撤销，案件发回高等法院重审。</p>
+
+        <h3>三、为什么主观标准「行不通」？</h3>
+        <ul>
+          <li><b>法条的措辞：</b>UK GDPR 第 4 条第 11 项把同意定义为「数据主体……通过一项陈述或一项明确的肯定性行为，作出的自由给出、具体、知情且不含歧义的意愿表示」。Warby LJ 指出，法条指向的是<u>一个行为</u>，而非<u>一种心智状态</u>。</li>
+          <li><b>举证责任：</b>第 7 条第 1 项把证明同意成立的责任放在数据控制者身上。若证明对象包含「对方内心是否真的自主」，这一责任便几乎无法履行。</li>
+          <li><b>立法目的（Recital 7）：</b>GDPR 序言第 7 段明确要求该条例为经营者提供「<b>法律与实践上的确定性</b>」（legal and practical certainty）。主观标准会以牺牲确定性为代价换取控制权的扩张，与立法平衡不符。</li>
+          <li><b>比较法支撑：</b>法院援引欧盟法院 Planet 49（C-673/17，不得预设勾选框）、Orange Romania（C-61/19，同意请求须清晰可辨）与 Meta Platforms v Bundeskartellamt（C-252/21，市场支配地位本身不当然否定同意）三案，认为它们关注的一律是<u>外部情境</u>，而非个体心智。英国上诉法院自身在 Cooper v National Crime Agency [2019] 中亦曾明言同意是「取决于外部表示的客观问题」。</li>
+        </ul>
+
+        <h3>四、判决的真正边界：它没说什么</h3>
+        <p>这一点最容易被误读，也是考试最爱考的「让步—限定」结构：</p>
+        <ul>
+          <li><b>它判的是「同意是否成立」，不是「处理是否公平」。</b>RTM 依据<b>公平原则</b>（fairness principle）提出的独立主张并未被驳回，将随案件发回继续审理。换言之，一家公司完全可能拥有客观上有效的同意，却仍因处理行为本身不公平而违法。</li>
+          <li><b>法院拒绝了「推定知情」这一折中方案。</b>SBG 与介入诉讼的信息专员办公室（ICO）曾共同主张：若控制者实际知晓或理应知晓对方处于弱势，同意即应受影响。上诉法院认为这会把两项新的主观调查重新引入分析，既无法律依据，也会使标准再度失灵。</li>
+          <li><b>弱者保护并未被宣告无关，只是被移到了别处。</b>法院的立场是：脆弱性并非与同意无关，而是<u>不由同意制度来处理</u>；它属于公平原则、行业监管与消费者保护法的领域。</li>
+        </ul>
+        <div class="box">📌 <b>附赠思考：</b>这恰恰是本文标题 The Hollow Yes 的来历。上诉法院的推理在技术上无懈可击：法律若要求企业证明亿万用户的内心真意， consent 制度将立即瘫痪。但代价也随之而来——同意成了一个<u>可管理的形式</u>，一个能在法庭上站得住、却与「是否有人真心愿意」无关的勾选。法律常常要在「可执行的规则」与「忠实的道德描述」之间二选一；本案选了前者，并诚实地说出了代价。</div>
+
+        <h3>五、关键概念速查</h3>
+        <table>
+          <tr><th style="width:30%">概念</th><th>含义</th></tr>
+          <tr><td>UK GDPR Art. 4(11)</td><td>同意的法定定义：自由给出、具体、知情、不含歧义的意愿表示，须以陈述或明确肯定性行为作出。</td></tr>
+          <tr><td>UK GDPR Art. 7(1)</td><td>举证责任分配：控制者须能证明已取得同意。</td></tr>
+          <tr><td>Recital 7（序言第 7 段）</td><td>要求条例为自然人、企业与公共机构提供「法律与实践上的确定性」。</td></tr>
+          <tr><td>Fairness principle（公平原则）</td><td>数据处理的六项基本原则之一；处理行为即使取得有效同意，仍可能因不公平而违法。</td></tr>
+          <tr><td>Constructive knowledge（推定知情）</td><td>法律拟制的知情：虽非实际知晓，但稍加注意即应知晓。</td></tr>
+          <tr><td>Remission（发回重审）</td><td>上级法院将案件退回下级法院重新审理；本案的责任认定已被撤销。</td></tr>
+          <tr><td>PECR 2003</td><td>《隐私与电子通信（欧共体指令）条例 2003》，规制 cookie 与未经请求的电子营销，其同意定义与 GDPR 第 4(11) 条一致。</td></tr>
+          <tr><td>ICO（Information Commissioner's Office）</td><td>英国信息专员办公室，数据保护监管机构；本案中以介入人身份支持客观标准。</td></tr>
+        </table>
+
+        <h3>六、内容合规与立场说明</h3>
+        <p>本课聚焦英国数据保护法上的同意制度与裁判推理，属法律技术与伦理讨论范畴。所有机构、人名、年份、条文与判例编号均据公开判决与专业评析，立场客观、尊重事实，不涉及任何敏感政治话题，亦未对任何国家或地区的现行政策作评判。涉及领土与主权表述时，一律使用规范名称：台湾称「<b>中国台湾</b>」、香港称「<b>中国香港</b>」、澳门称「<b>中国澳门</b>」，均为中国不可分割的一部分。</p>
+
+        <h3>七、对雅思／托福备考的启发</h3>
+        <ul>
+          <li><b>阅读：</b>本课是典型的「判例—创新—推翻—限定」四段式法律评论文的压缩版。练习重点：区分<b>事实</b>（2026 年 4 月上诉法院判决、高等法院三步检验、发回重审）与<b>作者评价</b>（narrower than it looks、at the price of being hollowed out、indifferent to whether anyone meant it）。雅思 True/False/Not Given 与托福「作者态度题」必考此点。</li>
+          <li><b>写作 Task 2：</b>可直接套用本课框架写「规则应当务实还是应当忠实」类题目：界定制度（X is constituted by A — appositive — and not by B）→ 承认对方立场（Conceding that…, she held that…）→ 双重反驳（Procedurally,… Substantively,…）→ 假设推演（Were the test to…, no one could…）→ 权衡收束（X has been made administrable at the price of being hollowed out）。</li>
+          <li><b>口语 Part 3：</b>被问到「法律是否应保护人们免于自己的冲动决定」「点击同意是否等于真正同意」，可用本课三分法：可执行性要求客观标准；公平原则与行业监管承担弱者保护；但形式化的同意确实掏空了「同意」的道德内涵。有事实、有让步、有立场，7+ 稳。</li>
+          <li><b>易错点：</b>were + 主语 + to do 是倒装虚拟，主句须用 could / would + 原形，不可写成 was / is；Conceding 分词短语的逻辑主语必须与主句主语一致；at the price of 后须接动名词，被动含义要用 being + 过去分词。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">🌟</span><div>掌握 10 个 C1–C2 法律／学术核心词（constitute, concur, anonymise, impair, unworkable, vitiate, remission, constructive, administrable, hollow out）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 5 个高级学术句型，尤其是「X is constituted by A — 同位定义 — and not by B」的概念界定式、「Conceding that…, [主语] held that…」的让步式，以及「X has been made adj. at the price of being done」的权衡收束式。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>掌握破折号同位 + 否定平行、现在分词短语作让步状语、成对句首评注性状语、were + 主语 + to do 的倒装虚拟、以及介词 + being + 过去分词等 5 个高级语法点。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能用英语复述 RTM v Bonne Terre 案的争议焦点，并解释「客观的同意」与「内心的真意」之间的张力。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>能在口语与写作中调用 consent, fairness principle, constructive knowledge, remission, data controller 等概念。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Tips</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点 ▶ 听自然英语朗读，注意重音：CON-sti-tute、con-CUR、a-NON-y-mise、im-PAIR、un-WORK-a-ble、VI-ti-ate、re-MIS-sion、con-STRUC-tive、ad-MI-ni-stra-ble、HOLL-ow OUT。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇 🔊 听发音；每词各造一个学术句，优先套用本课五个句型。</div></div>
+        <div class="goal"><span class="ic">✍️</span><div>写作模板：Define the concept (X is constituted by A — appositive — and not by B) → Concede the other side (Conceding that…, she held that…) → Attack on two fronts (Procedurally,… Substantively,…) → Test the consequence (Were the test to…, no one could…) → Weigh and conclude (X has been made administrable at the price of being hollowed out).</div></div>
+        <div class="goal"><span class="ic">🧠</span><div>做题先分辨「事实 vs 评价」：前三段多为可核查的裁判事实与推理，第四段的 narrower than it looks、at the price of being hollowed out、indifferent to whether anyone meant it 才是作者真正的判断；雅思 True/False/Not Given 与托福「作者态度题」必考此点。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印，随身复习词汇与句型（打印已隐藏按钮与侧栏）。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Hollow Yes · 2026-09-05 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In April 2026 the Court of Appeal of England and Wales settled a question that had vexed data protection lawyers for two years. In RTM v Bonne Terre, Warby LJ, with whom Sharp P and Lewison LJ concurred, held that consent under the UK GDPR is constituted by an outward act — a clear affirmative action signifying agreement — and not by the state of mind behind it. The claimant, a recovering gambling addict anonymised as RTM, had ticked boxes. That was the end of the matter.",
+  "At first instance Collins Rice J had devised something bolder. Conceding that RTM retained capacity and even welcomed the marketing, she held that his addiction impaired the autonomous quality of his decision-making, leaving his consent below the relatively high standard the legislation demands. Her three-part test — subjective consent, autonomy, evidential quality — had been pleaded by neither party.",
+  "The Court of Appeal dismantled it twice over. Procedurally, a judge may not decide a case on a test no one argued. Substantively, a subjective enquiry would be unworkable: were the test to turn on a person's inner state, no controller could verify compliance, since any data subject might harbour an undisclosed condition capable of vitiating an apparent agreement. Recital 7 promises legal certainty; that promise cannot survive such an inquiry.",
+  "The ruling is narrower than it looks. It decided whether consent was given, not whether the processing was fair: RTM's claim under the fairness principle survives remission, and the Court refused the Information Commissioner's invitation to weigh a controller's constructive knowledge of vulnerability. Consent has been made administrable at the price of being hollowed out — an objective tick, defensible in court, indifferent to whether anyone meant it."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["Whether gambling should be prohibited outright in the United Kingdom","The Court of Appeal's ruling that consent in data protection law is judged by outward acts rather than by the mind behind them, together with what that ruling costs","A legislative history of the GDPR from its enactment to the present day","New clinical treatments for gambling addiction"],ans:1,
+   fb:"Correct. 全文围绕上诉法院对「同意」的界定展开：第一段给出裁判结论（同意由外部行为构成，而非内心状态），第二段交代高等法院被推翻的主观标准，第三段说明推翻的两重理由，第四段指出判决的边界与代价。B 同时涵盖『裁判』与『代价』两层，是最完整的主旨概括。"},
+  {q:"2. According to paragraph 2, what did Collins Rice J concede about RTM? 根据第二段，Collins Rice 法官对 RTM 作出了哪项让步？",opts:["That he had never in fact received any marketing from the company","That he retained capacity and even welcomed the marketing","That he lacked the mental capacity to gamble at all","That the company had forged his signature on a consent form"],ans:1,
+   fb:"Yes. 原文 Conceding that RTM retained capacity and even welcomed the marketing —— 法官承认 RTM 具备行为能力，甚至欢迎这些营销。正是这一让步使她的裁判显得反常：承认对方「想要」，却仍认定其同意因自主性受损而无效，这也成为上诉法院推翻她的着力点之一。"},
+  {q:"3. It can be inferred from paragraph 3 that the Court of Appeal's central objection to a subjective test was that it would: 据第三段可推断，上诉法院反对主观标准的核心理由是它会：",opts:["Make compliance impossible to guarantee, since any data subject might harbour an undisclosed condition, and thereby defeat the certainty the GDPR promises","Require every company to employ a qualified psychologist before sending any marketing","Allow data controllers to disregard consent altogether","Conflict directly with the judgment of the Court of Justice in Planet 49"],ans:0,
+   fb:"Correct —— 推理题。逻辑链是：若同意取决于内心真意 → 控制者必须证明对方当时在想什么 → 而任何人身上都可能藏着一处未披露的隐疾 → 合规永远无法被证实 → GDPR 序言第 7 段所承诺的『法律与实践上的确定性』落空。注意 D：Planet 49 等欧盟判例是被援引来<u>支持</u>客观标准的，不是被抵触的对象。"},
+  {q:"4. In paragraph 3, vitiating most nearly means: 第三段中 vitiating 最接近的意思是？",opts:["Confirming and strengthening（确认并加强）","Invalidating or impairing the legal force of（使丧失效力、损害其法律效力）","Delaying for a period of years（延宕数年）","Publishing without permission（未经许可公布）"],ans:1,
+   fb:"Right. vitiate 意为「使失效、败坏」（to spoil or impair the effect of something, especially to invalidate it in law）。原文 a condition capable of vitiating an apparent agreement = 一种足以使表面有效的合意归于无效的情形（此处指赌瘾）。A 恰为反义，C、D 均属无关联想。"},
+  {q:"5. The author's attitude toward the Court of Appeal's ruling is best described as: 作者对上诉法院判决的态度最准确的概括是？",opts:["Unqualified endorsement of the reasoning in every respect（毫无保留的全面赞同）","Measured criticism: the ruling is defensible as an administrative necessity, yet it secures certainty at the cost of emptying consent of moral content（有分寸的批评：判决作为行政上的必要之举可以成立，但它以确定性的取得换取了同意的道德内涵被抽空）","Outraged condemnation of a decision that betrays vulnerable people（对背叛弱势群体的判决表示愤慨谴责）","Indifferent neutrality towards a purely technical question（对纯技术问题的漠然中立）"],ans:1,
+   fb:"Yes. 作者先以 dismantled it twice over、cannot survive such an inquiry 承认法院推理的力度（肯定其必要性），再用 The ruling is narrower than it looks 转入限定，最后以 administrable at the price of being hollowed out、indifferent to whether anyone meant it 收束。语气是 measured / critical but fair，既非喝彩也非控诉。"},
+  {q:"6. The final sentence primarily serves to: 全文最后一句的主要作用是？",opts:["Summarise the procedural history of the litigation（概述诉讼的程序经过）","Reframe the ruling: it has made consent workable in practice, but only by emptying it of moral substance（重新框定判决：它使同意在实践中可操作，代价却是抽空了其道德内涵）","Announce that the case will now be heard by the Supreme Court（宣布案件将提交最高法院审理）","Praise the Information Commissioner for intervening in the appeal（赞扬信息专员办公室介入上诉）"],ans:1,
+   fb:"Correct. 末句用 at the price of 把「所得」（administrable，可管理、可执行）与「所失」（hollowed out，被掏空）压进同一句，再以破折号后的 an objective tick, defensible in court, indifferent to whether anyone meant it 三重并列补足语点题。它不提供新事实，而是对全篇作道德层面的重新框定——这正是标题 The Hollow Yes 的由来。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
