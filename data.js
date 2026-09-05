@@ -2078,6 +2078,68 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-09-05",
+    "title": "The City Under the Trees",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-09-05-the-city-under-the-trees",
+    "url": "lessons/b1/2026-09-05-the-city-under-the-trees.html",
+    "vocab": [
+      {
+        "word": "rainforest",
+        "zh": "（热带）雨林",
+        "ex": ""
+      },
+      {
+        "word": "laser",
+        "zh": "激光",
+        "ex": ""
+      },
+      {
+        "word": "canopy",
+        "zh": "树冠层；树冠",
+        "ex": ""
+      },
+      {
+        "word": "civilisation",
+        "zh": "文明",
+        "ex": ""
+      },
+      {
+        "word": "ancient",
+        "zh": "古老的；古代的",
+        "ex": ""
+      },
+      {
+        "word": "ditch",
+        "zh": "沟；沟渠",
+        "ex": ""
+      },
+      {
+        "word": "earthwork",
+        "zh": "土方工程；土垒",
+        "ex": ""
+      },
+      {
+        "word": "survey",
+        "zh": "勘测；调查",
+        "ex": ""
+      },
+      {
+        "word": "wilderness",
+        "zh": "荒野；原始自然地带",
+        "ex": ""
+      },
+      {
+        "word": "population",
+        "zh": "人口",
+        "ex": ""
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",

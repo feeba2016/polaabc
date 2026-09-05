@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The City Under the Trees · Pola News</title>
+<style>
+:root{
+  --accent:#166534;
+  --accent2:#0d9488;
+  --glow:#86efac;
+  --ember:#f59e0b;
+  --bg:#f0fdf4;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#0b2b1d;
+  --muted:#5b6f63;
+  --line:#bbf7d0;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(22,101,52,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#f0fff6;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.85;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#e2fff0;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.12)}
+.nav a.active{background:rgba(255,255,255,.20);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(22,101,52,.30)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(22,101,52,.10);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.seg .txt{flex:1;min-width:220px;font-size:17px;line-height:1.85}
+.seg .zh{flex-basis:100%;margin-left:44px;font-size:15px;color:var(--muted);background:#f0fdf4;border-left:3px solid var(--glow);border-radius:0 10px 10px 0;padding:8px 12px;line-height:1.8}
+.play{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:50%;width:38px;height:38px;flex:0 0 38px;cursor:pointer;font-size:15px;transition:.2s;box-shadow:0 4px 12px rgba(22,101,52,.25)}
+.play:hover{transform:scale(1.08)}
+.play.playing{background:linear-gradient(135deg,var(--ember),#fbbf24);animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(245,158,11,.55)}70%{box-shadow:0 0 0 12px rgba(245,158,11,0)}100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(134,239,172,.45)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#0b2b1d;color:#f0fff6;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.vcard{background:linear-gradient(160deg,#f0fdf4,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(22,101,52,.14)}
+.vcard .w{font-size:19px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:4px}
+.vcard .en{font-size:13px;color:var(--muted);line-height:1.5}
+.vcard .spk{position:absolute;top:10px;right:10px;border:none;background:rgba(13,148,136,.14);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;transition:.2s}
+.vcard .spk:hover{background:var(--accent2);transform:scale(1.1)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 4px}
+.stat{background:linear-gradient(160deg,#f0fdf4,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent);line-height:1.15}
+.stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+.pat{background:#f0fdf4;border-left:4px solid var(--accent2);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.pat .en{font-size:17px;font-weight:600;margin-bottom:4px}
+.pat .zh{font-size:14px;color:var(--muted);margin-bottom:8px}
+.pat .fill{background:#fff;border:1px dashed var(--accent2);border-radius:8px;padding:8px 12px;font-size:15px;margin-top:6px}
+.pat .fill input{border:none;border-bottom:2px solid var(--accent2);background:transparent;font-size:15px;outline:none;min-width:110px;text-align:center;color:var(--accent);font-weight:700;font-family:inherit}
+.pat .fill button{margin-left:8px;border:none;background:var(--accent);color:#fff;border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer}
+.pat .ans{font-size:14px;margin-top:6px;font-weight:700;min-height:20px}
+.gbox{background:#f0fdf4;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.gbox h3{font-size:18px;color:var(--accent);margin-bottom:8px}
+.gbox .rule{background:#fff;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--accent);margin-bottom:10px;border:1px dashed var(--accent2)}
+.gbox ul{margin-left:20px;font-size:15px}
+.gbox li{margin-bottom:6px}
+.gbox table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.gbox th,.gbox td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.gbox th{background:rgba(22,101,52,.08);color:var(--accent)}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.q .qt{font-size:16px;font-weight:600;margin-bottom:10px}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q .opt{border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:15px;transition:.15s;background:#f0fdf4}
+.q .opt:hover{background:rgba(134,239,172,.45)}
+.q .opt.right{background:rgba(15,157,88,.14);border-color:var(--good);color:var(--good);font-weight:700}
+.q .opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad)}
+.q .exp{font-size:14px;color:var(--muted);margin-top:9px;display:none;line-height:1.6}
+.q .exp.show{display:block}
+#score{text-align:center;font-size:18px;font-weight:700;color:var(--accent);margin-top:10px}
+#resetq{display:block;margin:14px auto 0;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:9px 24px;border-radius:999px;font-size:15px;cursor:pointer;font-weight:700}
+.cn{background:linear-gradient(160deg,#f0fdf4,#fff)}
+.cn h3{font-size:19px;color:var(--accent);margin:16px 0 8px}
+.cn h3:first-child{margin-top:0}
+.cn p{font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn ul{margin-left:22px;font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn li{margin-bottom:7px}
+.cn .fact{background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:15px}
+.cn .fact b{color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:15px}
+.flow .step{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:5px 14px;font-size:14px;font-weight:700}
+.flow .step.ember{background:linear-gradient(135deg,var(--ember),#fbbf24)}
+.flow .arw{color:var(--accent2);font-weight:800}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.cmp .box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cmp .box h4{font-size:16px;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.cmp .box .big{font-size:22px;font-weight:800;color:var(--accent2);line-height:1.2}
+.cmp .box p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.7}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;min-width:0;padding:14px}
+  .nav{display:flex;overflow-x:auto;gap:6px}
+  .nav a{margin-bottom:0;white-space:nowrap}
+  .content{padding:22px 16px}
+  .q .opts{grid-template-columns:1fr}
+  .seg .zh{margin-left:0}
+  .cmp{grid-template-columns:1fr}
+}
+@media print{
+  .sidebar,#progress,.play,.spk,#resetq{display:none!important}
+  body{background:#fff;font-size:12pt}
+  section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span>POLA NEWS</div>
+  <div class="sub">2026-09-05 · Level B1</div>
+  <nav class="nav">
+    <a href="#read"><span class="ic">📖</span>Full Text</a>
+    <a href="#vocab"><span class="ic">🔤</span>Vocabulary</a>
+    <a href="#pattern"><span class="ic">🗣️</span>Sentence Patterns</a>
+    <a href="#grammar"><span class="ic">📐</span>Grammar</a>
+    <a href="#quiz"><span class="ic">✅</span>Quiz</a>
+    <a href="#more"><span class="ic">💡</span>知识扩展</a>
+    <a href="#about"><span class="ic">ℹ️</span>About</a>
+  </nav>
+</aside>
+<main class="content">
+<header class="top">
+  <span class="kicker">🌳 ARCHAEOLOGY · TECHNOLOGY · RAINFOREST</span>
+  <h1>The City Under the Trees</h1>
+  <div class="meta">
+    <span>📅 <b>2026-09-05</b></span>
+    <span>🎧 <b>B1 · ages 10–12</b></span>
+    <span>⏱ <b>~4 × 15s</b></span>
+    <span>📍 <b>Acre, Brazil &amp; Bolivia</b></span>
+  </div>
+</header>
+<section id="read">
+  <h2><span class="num">1</span>📖 Full Text · 全文阅读</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:8px">点击 ▶ 听 Pola 朗读；点击带虚线的绿色单词查看中文释义。</p>
+
+  <div class="seg">
+    <div class="badge">1</div>
+    <div class="txt">Hello, Pola News here! High above the Amazon <span class="kw" data-def="（热带）雨林" data-en="a thick forest in a hot wet place, with very tall trees and heavy rain all year">rainforest</span>, a small plane fired millions of <span class="kw" data-def="激光" data-en="a very thin, very strong beam of light that travels in a straight line">laser</span> pulses down through the trees. What came back was a real shock. Hidden under the green <span class="kw" data-def="树冠层；树冠（森林里由树顶枝叶组成的那一层）" data-en="the roof of leaves and branches formed by the tops of forest trees">canopy</span> were huge geometric shapes — squares, circles and perfectly straight roads. A lost <span class="kw" data-def="文明" data-en="a human society with its own cities, farms, laws and way of life">civilisation</span> was hiding in plain sight!</div>
+    <button class="play" data-seg="0" title="Play">▶</button>
+    <div class="zh">大家好，这里是 Pola News！在亚马逊雨林上空，一架小飞机向树林里发射了数百万道激光脉冲。传回来的结果令人震惊。绿色树冠下藏着巨大的几何图形——正方形、圆形，还有笔直的道路。一个失落的文明，一直就在众目睽睽之下藏着！</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">2</div>
+    <div class="txt">The <span class="kw" data-def="古老的；古代的" data-en="very old; belonging to a time thousands of years ago">ancient</span> Aquiry people lived here from about 600 BC to 850 AD. They dug deep <span class="kw" data-def="沟；沟渠（复数，单数是 ditch）" data-en="a long narrow hole dug in the ground, often to carry water or to mark a border">ditches</span> and raised banks of earth to build enormous <span class="kw" data-def="土方工程；土垒（人们挖土、堆土造出来的大型结构，复数）" data-en="a large structure made by moving soil: ditches, banks and mounds shaped into patterns">earthworks</span>, then linked them with straight roads. Their wooden houses rotted away centuries ago, but the shapes in the ground survived. In one small <span class="kw" data-def="勘测；调查（指对一片区域做系统性的查看和记录）" data-en="a careful study of an area, done by measuring, photographing or mapping it">survey</span>, scientists found 432 earthworks — and 396 were completely new to science.</div>
+    <button class="play" data-seg="1" title="Play">▶</button>
+    <div class="zh">古老的阿克里人从大约公元前 600 年一直生活到这里，直到公元 850 年。他们挖出深沟、堆起土垄，建成了巨大的土方工程，又用笔直的道路把它们连起来。他们的木屋几百年前就腐烂了，但留在地面上的形状活了下来。在一次小范围勘测中，科学家发现了 432 处土方工程——其中 396 处是科学界从未见过的。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">3</div>
+    <div class="txt">Why does it matter? Scientists once believed the Amazon was almost an untouched <span class="kw" data-def="荒野；原始自然地带（没有人居住、没有被开发过的地方）" data-en="a wild area of land where almost no people live and nature is left alone">wilderness</span>, where only small tribes lived. Now it looks as if up to three million people may have lived here at its peak — a huge <span class="kw" data-def="人口（某一地区里居住的人的总数）" data-en="the total number of people who live in one area">population</span> for a rainforest. They farmed maize, squash and Brazil nuts, and they cared for the forest instead of destroying it.</div>
+    <button class="play" data-seg="2" title="Play">▶</button>
+    <div class="zh">这为什么重要？科学家曾经以为亚马逊几乎是片无人触碰的荒野，只住着一些小部落。现在看来，鼎盛时期这里可能住过多达三百万人——对一片雨林来说，这是个庞大的人口。他们种玉米、南瓜，采集巴西坚果，他们照料森林，而不是毁掉它。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">4</div>
+    <div class="txt">The team says this is only the beginning — their survey covered less than three percent of the whole region. Who knows what else is sleeping under the trees? That is all from Pola News. See you next time, and keep asking big questions!</div>
+    <button class="play" data-seg="3" title="Play">▶</button>
+    <div class="zh">研究团队说，这只是一个开始——他们的勘测面积还不到整个地区的百分之三。谁知道树林下面还睡着什么？以上就是今天的 Pola News。下次见，继续大胆提问！</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">432</div><div class="l">一次勘测发现的土方工程数量，其中 396 个是首次发现</div></div>
+    <div class="stat"><div class="n">24,000–30,000</div><div class="l">整个地区可能存在的土方工程总数（此前全亚马逊估计仅约 1 万）</div></div>
+    <div class="stat"><div class="n">1.25–3 million</div><div class="l">鼎盛时期（公元 100–300 年）可能生活在这里的人口</div></div>
+    <div class="stat"><div class="n">183,000 km²</div><div class="l">阿克里文明覆盖的面积，约相当于中国广东省大小</div></div>
+  </div>
+</section>
+
+<section id="vocab">
+  <h2><span class="num">2</span>🔤 Vocabulary · 词汇表</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 10 个核心词。点击右上角 🔊 听发音。</p>
+  <div class="vgrid">
+    <div class="vcard">
+      <button class="spk" data-word="rainforest">🔊</button>
+      <div class="w">rainforest</div><div class="pos">noun /ˈreɪnfɒrɪst/</div>
+      <div class="zh">（热带）雨林</div>
+      <div class="en">High above the Amazon rainforest, a small plane flew.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="laser">🔊</button>
+      <div class="w">laser</div><div class="pos">noun /ˈleɪzə(r)/</div>
+      <div class="zh">激光</div>
+      <div class="en">The plane fired millions of laser pulses at the ground.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="canopy">🔊</button>
+      <div class="w">canopy</div><div class="pos">noun /ˈkænəpi/ (plural: canopies)</div>
+      <div class="zh">树冠层；树冠</div>
+      <div class="en">The shapes were hidden under the green canopy.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="civilisation">🔊</button>
+      <div class="w">civilisation</div><div class="pos">noun /ˌsɪvəlaɪˈzeɪʃn/ (美式拼法 civilization)</div>
+      <div class="zh">文明</div>
+      <div class="en">A lost civilisation was hiding in plain sight.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="ancient">🔊</button>
+      <div class="w">ancient</div><div class="pos">adjective /ˈeɪnʃənt/</div>
+      <div class="zh">古老的；古代的</div>
+      <div class="en">The ancient Aquiry people lived here for over 1,000 years.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="ditch">🔊</button>
+      <div class="w">ditch</div><div class="pos">noun /dɪtʃ/ (plural: ditches)</div>
+      <div class="zh">沟；沟渠</div>
+      <div class="en">They dug deep ditches around the enclosures.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="earthwork">🔊</button>
+      <div class="w">earthwork</div><div class="pos">noun /ˈɜːθwɜːk/ (常用复数 earthworks)</div>
+      <div class="zh">土方工程；土垒</div>
+      <div class="en">Scientists found 432 earthworks in one small area.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="survey">🔊</button>
+      <div class="w">survey</div><div class="pos">noun /ˈsɜːveɪ/</div>
+      <div class="zh">勘测；调查</div>
+      <div class="en">Their survey covered less than three percent of the region.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="wilderness">🔊</button>
+      <div class="w">wilderness</div><div class="pos">noun /ˈwɪldənəs/</div>
+      <div class="zh">荒野；原始自然地带</div>
+      <div class="en">People once thought the Amazon was an untouched wilderness.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="population">🔊</button>
+      <div class="w">population</div><div class="pos">noun /ˌpɒpjuˈleɪʃn/</div>
+      <div class="zh">人口</div>
+      <div class="en">Three million people is a huge population for a rainforest.</div>
+    </div>
+  </div>
+</section>
+
+<section id="pattern">
+  <h2><span class="num">3</span>🗣️ Sentence Patterns · 句型练习</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">先读句子，再填空，点「检查」看答案。</p>
+
+  <div class="pat">
+    <div class="en">Millions of laser pulses <b>were fired</b> down through the trees.</div>
+    <div class="zh">数百万道激光脉冲<b>被发射</b>穿过树林。—— 一般过去时的被动语态：<b>was / were + 过去分词</b>。这里「激光脉冲」是<b>被</b>发射的，所以用被动。</div>
+    <div class="fill">Millions of laser pulses <input id="f1" type="text" placeholder="两个词" autocomplete="off"> down through the trees. <button onclick="check('f1',['were fired'],'were fired')">检查</button></div>
+    <div class="ans" id="a1"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Scientists <b>used to believe</b> the Amazon was an untouched wilderness.</div>
+    <div class="zh">科学家<b>过去曾经相信</b>亚马逊是一片无人触碰的荒野。—— <b>used to + 动词原形</b> 表示「过去常常／过去曾经，但现在不再如此」，正好用来讲「旧观点被推翻」。</div>
+    <div class="fill">Scientists <input id="f2" type="text" placeholder="两个词" autocomplete="off"> the Amazon was an untouched wilderness. <button onclick="check('f2',['used to believe'],'used to believe')">检查</button></div>
+    <div class="ans" id="a2"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">It looks <b>as if</b> up to three million people may have lived here.</div>
+    <div class="zh">看起来<b>好像</b>这里曾经住过多达三百万人。—— <b>It looks as if + 句子</b> 表示「看起来好像……」，说的是根据证据得出的印象，不是百分之百的确定。</div>
+    <div class="fill">It looks <input id="f3" type="text" placeholder="两个词" autocomplete="off"> up to three million people may have lived here. <button onclick="check('f3',['as if'],'as if')">检查</button></div>
+    <div class="ans" id="a3"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">They cared for the forest <b>instead of</b> destroying it.</div>
+    <div class="zh">他们照料森林，<b>而不是</b>毁掉它。—— <b>instead of + 名词／动名词（-ing）</b> 表示「而不是……」。因为 of 是介词，后面跟动词时一定要变成 <b>-ing</b>。</div>
+    <div class="fill">They cared for the forest <input id="f4" type="text" placeholder="两个词" autocomplete="off"> destroying it. <button onclick="check('f4',['instead of'],'instead of')">检查</button></div>
+    <div class="ans" id="a4"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Their survey covered <b>less than</b> three percent of the whole region.</div>
+    <div class="zh">他们的勘测面积<b>不到</b>整个地区的百分之三。—— <b>less than + 数字</b> 表示「少于／不到……」；反义词是 <b>more than</b>（超过）。</div>
+    <div class="fill">Their survey covered <input id="f5" type="text" placeholder="两个词" autocomplete="off"> three percent of the whole region. <button onclick="check('f5',['less than'],'less than')">检查</button></div>
+    <div class="ans" id="a5"></div>
+  </div>
+</section>
+
+<section id="grammar">
+  <h2><span class="num">4</span>📐 Grammar · 语法点</h2>
+
+  <div class="gbox">
+    <h3>1. 一般过去时的被动语态 was / were + 过去分词</h3>
+    <div class="rule">肯定：主语 + was/were + 过去分词　｜　否定：wasn't/weren't + 过去分词　｜　疑问：Was/Were + 主语 + 过去分词?</div>
+    <ul>
+      <li>Millions of laser pulses <b>were fired</b> down through the trees. （激光脉冲被发射下去。）</li>
+      <li>The earthworks <b>were built</b> without metal tools or animals. （这些土方工程是在没有金属工具和牲畜的情况下被建造的。）</li>
+      <li>The 396 new sites <b>were not seen</b> by anyone before. （这 396 处新地点以前从未被人看到过。）</li>
+      <li><b>Were</b> the shapes <b>made</b> by nature? No, they <b>were made</b> by people. （这些形状是大自然造的吗？不，是人造的。）</li>
+      <li>💡 什么时候用被动？<b>不知道谁做的</b>、或者<b>做的那个人不重要</b>的时候。这则新闻里，我们关心的是「地画被发现了」，而不是「被谁发现的」。</li>
+      <li>⚠️ 别漏掉 be 动词：要说 were built，不能只说 built。</li>
+    </ul>
+    <table>
+      <tr><th>句型</th><th>结构</th><th>例句</th></tr>
+      <tr><td>肯定</td><td>was/were + 过去分词</td><td>The ditch was dug by hand.</td></tr>
+      <tr><td>否定</td><td>wasn't/weren't + 过去分词</td><td>The sites weren't found earlier.</td></tr>
+      <tr><td>疑问</td><td>Was/Were + 主语 + 过去分词?</td><td>Were the roads built on purpose?</td></tr>
+    </table>
+  </div>
+
+  <div class="gbox">
+    <h3>2. used to + 动词原形（过去的习惯或状态，现在已经改变）</h3>
+    <div class="rule">肯定：主语 + used to + 动词原形　｜　否定：didn't use to + 动词原形　｜　疑问：Did + 主语 + use to + 动词原形?</div>
+    <ul>
+      <li>Scientists <b>used to believe</b> the Amazon was an untouched wilderness. （过去相信，现在不这么想了。）</li>
+      <li>People <b>used to think</b> only small tribes lived there. （过去以为只有小部落住在那儿。）</li>
+      <li>Archaeologists <b>didn't use to have</b> LiDAR, so they could only study cleared land. （过去没有 LiDAR，只能研究被砍光的地块。）</li>
+      <li>⚠️ <b>否定和疑问里要把 used 变回 use</b>：didn't <b>use</b> to ... / Did they <b>use</b> to ...? 因为前面已经有 did 表示过去时了。</li>
+      <li>⚠️ 别和 be used to（习惯于……）搞混：be used to 后面跟名词或 -ing。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>3. instead of + 名词／动名词（而不是……）</h3>
+    <div class="rule">instead of + 名词/代词/-ing　｜　instead 单独用：放句首或句尾，后面不加东西</div>
+    <ul>
+      <li>They cared for the forest <b>instead of destroying</b> it. （而不是毁掉它——of 是介词，动词要变 -ing。）</li>
+      <li>They farmed maize <b>instead of</b> rice. （他们种玉米而不是水稻。——后面是名词，直接跟。）</li>
+      <li>They did not cut the forest down. <b>Instead</b>, they planted useful trees. （他们没有砍光森林，<b>相反</b>，他们种下了有用的树。——instead 单独放句首，后面加逗号。）</li>
+      <li>💡 记忆窍门：后面<b>有东西</b>跟着 → 用 instead of；<b>没有东西</b>跟着 → 用 instead。</li>
+      <li>⚠️ 常见错误：<s>instead of destroy</s> → 正确是 instead of <b>destroying</b>。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>4. 情态动词表推测：may / might / could</h3>
+    <div class="rule">对现在或将来推测：may/might/could + 动词原形　｜　对过去推测：may/might/could + have + 过去分词</div>
+    <ul>
+      <li>Up to three million people <b>may have lived</b> here. （这里<b>可能曾经住过</b>多达三百万人。——对过去的推测。）</li>
+      <li>There <b>might be</b> thousands more earthworks under the trees. （树林下<b>可能还有</b>数千处土方工程。——对现在的推测。）</li>
+      <li>Other parts of the Amazon <b>could be</b> just as crowded. （亚马逊的其他部分<b>可能同样</b>人口稠密。）</li>
+      <li>💡 语气强度：<b>might</b> 最不确定，<b>may</b> 居中，<b>could</b> 表示「有可能」。</li>
+      <li>⚠️ 对过去推测要用 <b>have + 过去分词</b>：may have lived，不能说 may lived。</li>
+      <li>🔬 为什么新闻里要用推测？因为科学家<b>没有人口普查记录</b>。他们的数字来自放射性碳测年、聚落对比和统计推算——是<b>估算</b>，不是清点。科学的诚实，就体现在这些 may 和 might 上。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2><span class="num">5</span>✅ Quiz · 练习测验</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 5 题，点击选项即可作答，做完后可以看解析。</p>
+
+  <div class="q" data-ans="1">
+    <div class="qt">1. How did scientists discover the hidden geometric shapes?</div>
+    <div class="opts">
+      <div class="opt">A) They dug holes all over the forest floor</div>
+      <div class="opt">B) They fired laser pulses from a plane (LiDAR)</div>
+      <div class="opt">C) They read maps drawn by early European explorers</div>
+      <div class="opt">D) They followed the roads that are still used today</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。这项技术叫 <b>LiDAR</b>（Light Detection and Ranging，激光探测与测距）。飞机向下发射<b>数百万道激光脉冲</b>，一部分从树冠的缝隙里钻下去、碰到地面再弹回来。计算机把每一次回波的时间差算成距离，就能「剥掉」树冠，画出一张地面的三维地图。选项 A 行不通——在 18 万平方公里的雨林里挖洞，几乎是不可能完成的任务。</div>
+  </div>
+
+  <div class="q" data-ans="0">
+    <div class="qt">2. When did the Aquiry people live in this region?</div>
+    <div class="opts">
+      <div class="opt">A) From about 600 BC to 850 AD</div>
+      <div class="opt">B) From 1492 to 1600</div>
+      <div class="opt">C) Only during the last 200 years</div>
+      <div class="opt">D) About 20,000 years ago</div>
+    </div>
+    <div class="exp">✅ 正确答案：A。阿克里人从大约<b>公元前 600 年</b>一直生活到<b>公元 850 年</b>，前后超过 1400 年。他们的鼎盛期在<b>公元 100 到 300 年</b>之间。作为对比：选项 B 的 1492 年是哥伦布到达美洲的年份，比阿克里文明的出现<b>晚了整整 2000 多年</b>——也就是说，当欧洲人「发现」美洲时，阿克里人已经离开这片土地六百多年了。</div>
+  </div>
+
+  <div class="q" data-ans="2">
+    <div class="qt">3. What were the geometric earthworks most likely used for?</div>
+    <div class="opts">
+      <div class="opt">A) Car parks for wild animals</div>
+      <div class="opt">B) Swimming pools for fish</div>
+      <div class="opt">C) Places for gatherings, rituals and decision-making</div>
+      <div class="opt">D) Underground houses for thousands of families</div>
+    </div>
+    <div class="exp">✅ 正确答案：C。研究者认为这些几何土垒是<b>偶尔使用的公共空间</b>——人们在这里聚会、做决定、跳舞、奏乐、宴饮、比赛和玩游戏。它们<b>不是</b>日常住所：阿克里人的房子是木头造的，早就腐烂消失了，只留下地面上的形状。选项 D 也很容易被误选，但考古学家在这些土垒<b>内部</b>并没有找到大规模居住的证据。</div>
+  </div>
+
+  <div class="q" data-ans="3">
+    <div class="qt">4. How many earthworks might the whole Aquiry region contain?</div>
+    <div class="opts">
+      <div class="opt">A) About 40</div>
+      <div class="opt">B) About 2,000</div>
+      <div class="opt">C) About 10,000</div>
+      <div class="opt">D) Between 24,000 and 30,000</div>
+    </div>
+    <div class="exp">✅ 正确答案：D。研究团队在 <b>4,497 平方公里</b>的样区里找到 432 处，其中 396 处是全新的；再按密度推算到整个 18.3 万平方公里的范围，得出 <b>24,000 到 30,000 处</b>。这里有个关键对比：<b>选项 C 的「约 1 万」是过去对整个亚马逊全境的最高估计</b>——现在光是西南一隅就可能超出这个数字。选项 A、B 都太小，不构成干扰量级。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">5. What did the Aquiry people do to the rainforest?</div>
+    <div class="opts">
+      <div class="opt">A) They cut down every single tree</div>
+      <div class="opt">B) They farmed crops and managed useful trees</div>
+      <div class="opt">C) They never touched the forest at all</div>
+      <div class="opt">D) They burned it to make open farmland</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。阿克里人种玉米、南瓜，很可能还有木薯、红薯、豆类、花生和辣椒；同时大量利用<b>巴西坚果树</b>和好几种棕榈。研究者认为，他们不是把森林「砍光」，而是<b>长期管理</b>它——今天在考古遗址周围，依然能找到这些有用树种集中生长。这正是本期最重要的一句话：<b>雨林不是空无一人的荒野，而是一座被人精心照料过的花园。</b>这个发现也提醒今天的我们：人类与自然并不必然对立。</div>
+  </div>
+
+  <div id="score"></div>
+  <button id="resetq">🔄 再做一次</button>
+</section>
+
+<section id="more" class="cn">
+  <h2><span class="num">6</span>💡 中文知识扩展</h2>
+
+  <h3>一、LiDAR 是怎么「看穿」森林的？</h3>
+  <p><b>LiDAR</b> 是 <i>Light Detection and Ranging</i>（激光探测与测距）的缩写。它的原理其实特别像<b>蝙蝠的回声定位</b>，只不过把声音换成了光：</p>
+  <div class="flow">
+    <span class="step">飞机向下发射激光脉冲</span><span class="arw">→</span>
+    <span class="step">部分脉冲穿过树冠缝隙</span><span class="arw">→</span>
+    <span class="step">碰到地面后反射回来</span><span class="arw">→</span>
+    <span class="step ember">按时间差算出距离，拼成地面三维地图</span>
+  </div>
+  <ul>
+    <li>✈️ 研究团队在西南亚马逊上空飞了约 <b>450 公里</b>的测线，覆盖 <b>4,497 平方公里</b>——还不到整个大亚马逊地区的 <b>3%</b>。</li>
+    <li>📍 就在这 3% 里，他们找到 <b>432 处</b>土方工程，其中 <b>396 处</b>此前从未被记录过。</li>
+    <li>🌳 为什么以前看不到？因为卫星照片和地面调查都只能看见<b>树冠</b>，看不见树冠底下的地面。只有被砍伐清理过的地块才露得出来，于是科学家一度误以为「只有稀疏的地方才有人住」。</li>
+  </ul>
+  <div class="fact">🔦 <b>类比一下：</b>LiDAR 就像你隔着一条有很多缝隙的百叶窗，用手电筒往屋里照。光从缝隙挤进去，照亮了屋里的家具——你虽然没进门，却「看」清了屋里有什么。</div>
+
+  <h3>二、地画长什么样？</h3>
+  <p>这些土方工程在学术上被称为<b>地画（geoglyph）</b>——人们在地面上挖沟、堆土，做出巨大的几何图案。阿克里人的地画有这些特点：</p>
+  <ul>
+    <li>🔷 <b>形状：</b>从简单的圆形、正方形、长方形，到更复杂的八边形、五角星形，还有「圆中套方」。</li>
+    <li>📏 <b>尺寸：</b>平均约 7 英亩（差不多 4 个标准足球场），最大的一处约 <b>123 英亩</b>；外围沟渠最宽约 <b>12 米</b>、最深约 <b>5 米</b>——比一层楼还深。</li>
+    <li>🛣️ <b>道路：</b>宽窄不一的笔直古道把这些地画一座座连起来，形成一张覆盖数百公里的路网。</li>
+    <li>🔨 <b>没有金属工具，也没有牲畜。</b>全部靠人力挖出来。「这些建筑的规模和精度简直令人惊叹，」论文第一作者、赫尔辛基大学考古学家 <b>Martti Pärssinen</b> 教授说。</li>
+  </ul>
+  <div class="cmp">
+    <div class="box">
+      <h4>📦 平均一座地画</h4>
+      <div class="big">约 7 英亩</div>
+      <p>≈ 4 个足球场。走一圈大概要 5 分钟。</p>
+    </div>
+    <div class="box">
+      <h4>🏟️ 最大的一座地画</h4>
+      <div class="big">约 123 英亩</div>
+      <p>≈ 65 个足球场。沟渠宽约 12 米、深约 5 米。</p>
+    </div>
+  </div>
+
+  <h3>三、阿克里人是谁？他们怎么过日子？</h3>
+  <p><b>「Aquiry」（阿克里）</b>这个名字来自当地原住民语言里对<b>阿克里河（Acre River）</b>的称呼，这条河流经秘鲁、玻利维亚和巴西的阿克里州。需要澄清的是：</p>
+  <ul>
+    <li>🏘️ 它<b>不是一个王国或帝国</b>，而是一群彼此有联系、共享传统与道路网的社区，分布在今天的巴西阿克里州，以及相邻的玻利维亚、秘鲁境内。</li>
+    <li>📜 他们<b>没有留下文字记录</b>；房子是木头造的，几百年前就腐烂消失了。唯一活下来的，是他们搬动过的土的形状。</li>
+    <li>🌽 他们的餐桌上有什么？考古证据显示有<b>玉米、南瓜</b>，很可能还有木薯、红薯、豆类、花生和辣椒；植物遗存里还能看到大量的<b>巴西坚果</b>和几种棕榈。</li>
+    <li>🤝 地画可能是<b>聚会、做决定、仪式舞蹈、音乐、宴饮、竞技和球赛</b>的场所——有点像今天的「社区中心」或「节日广场」，只是人们一年才来几次。</li>
+  </ul>
+  <div class="fact">🗣️ <b>Pärssinen 这样描述公元 200 年前后的景象：</b>「在许多这样的空地中央，会矗立着巨大的几何土方工程，宽路和窄路把它们连在一起。」</div>
+
+  <h3>四、这个发现改写了什么？</h3>
+  <p>过去很长一段时间，主流观点认为亚马逊的密林地区<b>人口稀疏、几乎没有被人类改动过</b>，是一片「原始荒野」。新的证据把这个说法彻底翻转了：</p>
+  <div class="cmp">
+    <div class="box">
+      <h4>📉 过去的看法</h4>
+      <div class="big">整个亚马逊约 200 万人</div>
+      <p>欧洲人到来之前，整个亚马逊盆地的人口估计约 200 万；全境土方工程可能只有 1 万处左右。</p>
+    </div>
+    <div class="box">
+      <h4>📈 现在的看法</h4>
+      <div class="big">仅西南一隅就 125 万–300 万人</div>
+      <p>光是阿克里地区（占盆地一小部分）在公元 100–300 年间就可能有 125 万到 300 万人；土方工程可能多达 2.4 万到 3 万处。</p>
+    </div>
+  </div>
+  <ul>
+    <li>🔢 这个数字怎么算出来的？研究者综合了三条独立证据：来自 <b>32 处遗址的 162 份放射性碳测年样本</b>、公元 1000 年以后同区域土丘村落的人口对比、以及关于原住民聚集空间的民族志记录。</li>
+    <li>🎯 鼎盛期在<b>公元 100 到 300 年</b>之间，当时大约有 <b>25% 到 60%</b> 的礼仪性地画在同时使用。</li>
+    <li>🌱 <b>最重要的一层意义：</b>他们没有耗尽森林，而是在<b>长期管理</b>它。今天，考古遗址周围依然密集生长着被人类驯化或半驯化的树种。研究者因此提出：这个文明留下的痕迹不只刻在土里，也刻在<b>土壤成分、森林结构和生物多样性</b>里——换句话说，今天的亚马逊雨林，有一部分本身就是人类世世代代照料出来的。</li>
+  </ul>
+
+  <h3>五、他们后来去哪儿了？</h3>
+  <p>阿克里文明的地画在<b>公元 850 到 950 年之间</b>被彻底废弃。为什么？老实说，<b>科学家还没有确定的答案</b>。</p>
+  <ul>
+    <li>🌍 但有一个耐人寻味的巧合：同一时期，<b>玛雅文明、蒂瓦纳科（Tiwanaku）文明和瓦里（Wari）文明</b>也在衰落。Pärssinen 认为，这暗示着一次<b>「相对快速的崩溃」</b>，背后可能有更大范围的区域性问题。</li>
+    <li>🌳 文明消失后，雨林一点点把空地、沟渠和道路重新吞没。有些地画在近代因开垦土地才重新露出地面，但它们的<b>真实规模</b>一直隐藏到 LiDAR 出现才为人所知。</li>
+    <li>❓ 还有一个谜：这些地画<b>远离大河</b>。历史上，大型古代聚落通常依大河而生——阿克里人却在没有大河的<b>高地雨林</b>里建起了这一切，这也是研究者最意外的地方之一。</li>
+  </ul>
+
+  <h3>六、动手试试：用竹签做一次「迷你 LiDAR 勘测」</h3>
+  <p><b>材料：</b>一个纸箱或塑料盒、橡皮泥或积木、一大把牙签（或细竹签）、一把尺子、方格纸、彩笔、一堆碎纸屑（当「树叶」）。</p>
+  <ul>
+    <li><b>第 1 步（造地形）：</b>在盒底用橡皮泥搭出几个形状——一个正方形、一个圆形、一条直路。这就是你的「古代地画」。</li>
+    <li><b>第 2 步（盖上树冠）：</b>把碎纸屑厚厚地撒在盒子上方（可以垫在几根横放的筷子上），让下面的地形完全看不见。这就是「树冠层」。</li>
+    <li><b>第 3 步（发射激光）：</b>捏起一根牙签，从纸屑上方<b>垂直</b>往下插，直到笔尖碰到橡皮泥或盒底，然后用尺子量出「露在外面的长度」。在方格纸上对应的位置记下这个数字。反复插 <b>40 到 60 次</b>。</li>
+    <li><b>第 4 步（画地图）：</b>用彩笔把数字接近的格子涂成同一种颜色。你会看到正方形、圆形和那条直路自己「浮现」出来。</li>
+    <li><b>第 5 步（找漏洞）：</b>故意把纸屑撒得特别厚的一角，再插一次。你会发现那里的数据又少又不准——这正是真实 LiDAR 遇到的难题：<b>树冠太密，激光脉冲下不去，遗迹就可能被漏掉。</b></li>
+  </ul>
+  <div class="fact">🔬 <b>把实验连回现实：</b>你的牙签就是激光脉冲，露出的长度就是「飞行时间」，方格纸就是计算机生成的三维地形图。而第 5 步解释了为什么科学家说 24,000–30,000 只是<b>估算的下限</b>——真实数字可能更接近上限。</div>
+
+  <h3>七、科学素养提醒：分清「估算」和「确数」</h3>
+  <ul>
+    <li>⚠️ <b>「125 万到 300 万人」不是人口普查的结果。</b>阿克里人没有文字，更没有人头记录。这个数字来自碳十四测年、聚落对比和统计推算。作者在论文里明确说：这是<b>估算（estimate）</b>，不是直接清点。</li>
+    <li>🧩 <b>换个假设，数字就会变。</b>比如「每处礼仪中心由多少人维护」「有多少遗址是同时使用的」——这些前提一改，总数也会跟着改。这正是科学讨论的正常状态。</li>
+    <li>📐 <b>地区边界也还没定。</b>由于巴西朗多尼亚州部分区域研究不足，阿克里文明的<b>东南边界</b>至今仍未确定（unresolved）。</li>
+    <li>🔭 <b>下一步做什么？</b>研究团队打算用同样的激光技术去识别早期社会驯化的树种（比如结坚果和水果的树），再研究它们的分布与生态系统、地画、古道网络之间的关系。</li>
+  </ul>
+  <div class="fact">🌟 <b>这期的科学金句：</b>Pärssinen 说：「人们忍不住会想：<b>树冠下面还藏着什么？</b>」——科学的迷人之处，往往不在于答案，而在于一个更好的问题。</div>
+</section>
+
+<section id="about" class="cn">
+  <h2><span class="num">7</span>ℹ️ About · 关于本课</h2>
+  <h3>本期主角</h3>
+  <p><b>Pola</b>（宝拉）是一只短尾矮袋鼠（quokka），被称为「世界上最快乐的动物」。她是 POLA NEWS 的记者，会带着话筒跑到真实的现场——实验室、野外、博物馆、雨林——把最新的科学发现讲给你听。她的招牌动作是：<b>双爪挥手告别 + 大大的笑脸</b>。</p>
+  <h3>难度与用法</h3>
+  <ul>
+    <li><b>等级：</b>B1（适合 10–12 岁）</li>
+    <li><b>结构：</b>4 段口播，每段约 15 秒：① 吸引注意 → ② 讲故事 → ③ 为什么重要 → ④ 告别</li>
+    <li><b>建议学习顺序：</b>先听全文（不看文字）→ 再看全文跟读 → 学词汇 → 练句型 → 做测验 → 读中文扩展</li>
+  </ul>
+  <h3>资料来源</h3>
+  <p>Martti Pärssinen 等，<i>Over 20,000 precolonial earthworks in the Southwest Amazonia</i>（西南亚马逊超过两万处前哥伦布时期土方工程），发表于《自然》（<i>Nature</i>），2026 年 7 月 29 日。研究由赫尔辛基大学团队牵头，调查区域位于巴西阿克里州及相邻的玻利维亚、秘鲁境内。</p>
+  <p>补充报道来源：Smithsonian Magazine、BBC Science Focus、Live Science、Scientific American 对该论文的相关访谈与解读。</p>
+  <div class="fact">🌳 <b>本期分类：</b>考古发现 · 激光技术 · 雨林生态<br>📅 制作日期：2026-09-05</div>
+</section>
+</main>
+</div>
+<div id="tip"></div>
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hello, Pola News here! High above the Amazon rainforest, a small plane fired millions of laser pulses down through the trees. What came back was a real shock. Hidden under the green canopy were huge geometric shapes — squares, circles and perfectly straight roads. A lost civilisation was hiding in plain sight!",
+  "The ancient Aquiry people lived here from about 600 BC to 850 AD. They dug deep ditches and raised banks of earth to build enormous earthworks, then linked them with straight roads. Their wooden houses rotted away centuries ago, but the shapes in the ground survived. In one small survey, scientists found 432 earthworks — and 396 were completely new to science.",
+  "Why does it matter? Scientists once believed the Amazon was almost an untouched wilderness, where only small tribes lived. Now it looks as if up to three million people may have lived here at its peak — a huge population for a rainforest. They farmed maize, squash and Brazil nuts, and they cared for the forest instead of destroying it.",
+  "The team says this is only the beginning — their survey covered less than three percent of the whole region. Who knows what else is sleeping under the trees? That is all from Pola News. See you next time, and keep asking big questions!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 句型练习 - 单空 ===== */
+function check(inputId, answers, display){
+  const el = document.getElementById(inputId);
+  const ansEl = document.getElementById(inputId.replace('f','a'));
+  if(!el || !ansEl) return;
+  const val = (el.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(answers.indexOf(val) !== -1){
+    ansEl.innerHTML = '✅ 答对啦！<b>' + display + '</b>';
+    ansEl.style.color = 'var(--good)';
+  }else if(val === ''){
+    ansEl.textContent = '✏️ 先填一个答案试试。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 正确答案是 <b>' + display + '</b>';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 测验 ===== */
+const scoreEl = document.getElementById('score');
+let answered = 0;
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = '已作答 ' + answered + ' / 5';
+}
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans, 10);
+  const exp = q.querySelector('.exp');
+  const opts = q.querySelectorAll('.opt');
+  opts.forEach(function(opt, i){
+    opt.addEventListener('click', function(){
+      if(q.dataset.done === '1') return;
+      q.dataset.done = '1';
+      answered++;
+      opts.forEach(function(o){ o.style.cursor = 'default'; });
+      if(i === ans){
+        opt.classList.add('right');
+      }else{
+        opt.classList.add('wrong');
+        if(opts[ans]) opts[ans].classList.add('right');
+      }
+      if(exp) exp.classList.add('show');
+      updateScore();
+    });
+  });
+});
+document.getElementById('resetq').addEventListener('click', function(){
+  answered = 0;
+  updateScore();
+  document.querySelectorAll('.q').forEach(function(q){
+    q.dataset.done = '0';
+    q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('right','wrong');
+      o.style.cursor = 'pointer';
+    });
+    const exp = q.querySelector('.exp');
+    if(exp) exp.classList.remove('show');
+  });
+  const inputs = ['f1','f2','f3','f4','f5'];
+  inputs.forEach(function(id){ const e=document.getElementById(id); if(e) e.value=''; });
+  ['a1','a2','a3','a4','a5'].forEach(function(id){ const e=document.getElementById(id); if(e){ e.textContent=''; e.style.color=''; } });
+});
+updateScore();
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
