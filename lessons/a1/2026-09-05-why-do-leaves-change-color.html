@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Why Do Leaves Change Color — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#ea580c;
+  --accent2:#f59e0b;
+  --bg:#fff7ed;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#9a3412;
+  --highlight:#fde68a;
+  --border:#fed7aa;
+  --soft:#fff7ed;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#f59e0b);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(234,88,12,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #fdba74;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#9a3412;background:#ffedd5;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(234,88,12,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(234,88,12,.6);}70%{box-shadow:0 0 0 14px rgba(234,88,12,0);}100%{box-shadow:0 0 0 0 rgba(234,88,12,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(234,88,12,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Why Do Leaves Change Color 🍁🌳</h1>
+      <p class="subtitle">2026年9月5日 · 自然探索｜树叶为什么会变色 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · A Green Tree 一棵绿色的树</div>
+            <p>Look at the big <span class="kw" data-def="树：有树干、树枝和叶子的大植物，比花草高很多">tree</span>. 🌳 The <span class="kw" data-def="绿色：像青草和树叶一样的颜色">green</span> leaves make food for the tree. The sun helps them. ☀️</p>
+          </div>
+          <div class="zh">看那棵大树 🌳。绿色的叶子给大树做食物。太阳来帮忙 ☀️。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Autumn Comes 秋天来了</div>
+            <p>Now it is <span class="kw" data-def="秋天：夏天和冬天之间的季节，天气变凉，树叶会变色落下">autumn</span>. 🍂 The days get short. The air gets cool. The green goes away. 👋</p>
+          </div>
+          <div class="zh">现在是秋天了 🍂。白天变短了。空气变凉了。绿色就悄悄走开了 👋。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Colors Come Out 颜色跑出来啦</div>
+            <p>The leaves turn <span class="kw" data-def="黄色：像香蕉和银杏叶一样的颜色">yellow</span>. 💛 Some turn <span class="kw" data-def="红色：像苹果和枫叶一样的颜色">red</span>. ❤️ Some turn orange. 🧡 The tree is so pretty. 😍</p>
+          </div>
+          <div class="zh">叶子变成黄色 💛。有的变成红色 ❤️。有的变成橙色 🧡。大树好漂亮 😍。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Leaves Fall Down 叶子落下来</div>
+            <p>Then the leaves <span class="kw" data-def="落下、掉落：从上面掉到下面。fall 也可以指秋天（美式英语）">fall</span> down. 🍁 They land on the ground. I can jump in the leaves. I love autumn!</p>
+          </div>
+          <div class="zh">然后叶子就落下来 🍁。它们落在地上。我可以在叶子里跳来跳去。我好喜欢秋天！</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#fff7ed;border:2px solid #fdba74;">
+        <h3 style="margin:0 0 8px;color:#c2410c;font-size:20px;">🍂 和 Pola 一起去找秋天！</h3>
+        <p style="margin:0;font-size:16px;">今天放学路上，和爸爸妈妈一起抬头看看树 🌳。找一片<b>绿色的</b>叶子 🍃，再找一片<b>黄色</b>的 💛 或<b>红色</b>的 ❤️。捡一片最喜欢的落叶，用英语说一说：<b>“This leaf is red!”</b>（这片叶子是红色的！）。记得点黄色的词，看看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="tree">🔊</button><div class="emoji">🌳</div><div class="word">tree<span class="pos">n.</span></div><div class="zh">树</div><div class="ex">"Look at the big tree."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="green">🔊</button><div class="emoji">🍃</div><div class="word">green<span class="pos">adj.</span></div><div class="zh">绿色的</div><div class="ex">"The leaves are green."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="autumn">🔊</button><div class="emoji">🍂</div><div class="word">autumn<span class="pos">n.</span></div><div class="zh">秋天</div><div class="ex">"I love autumn."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="yellow">🔊</button><div class="emoji">💛</div><div class="word">yellow<span class="pos">adj.</span></div><div class="zh">黄色的</div><div class="ex">"This leaf is yellow."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="red">🔊</button><div class="emoji">❤️</div><div class="word">red<span class="pos">adj.</span></div><div class="zh">红色的</div><div class="ex">"Some leaves are red."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fall">🔊</button><div class="emoji">🍁</div><div class="word">fall<span class="pos">v.</span></div><div class="zh">落下；秋天</div><div class="ex">"The leaves fall down."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. The [noun] is [color].</h3>
+          <div class="zh">“这个……是……色的”。说<b>颜色</b>的时候，颜色词要放在 <b>is</b> 的后面。</div>
+          <div class="eg">The leaf is green. 🍃 / The leaf is yellow. 💛 / The leaf is red. ❤️</div>
+          <div class="practice">练习：这片叶子是黄色的 → The leaf is <input placeholder="color">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Look at the [noun].</h3>
+          <div class="zh">“快看这个……”。想叫爸爸妈妈或小伙伴<b>一起看</b>的时候用这句话。</div>
+          <div class="eg">Look at the tree. 🌳 / Look at the leaves. 🍁 / Look at the sky. ☀️</div>
+          <div class="practice">练习：快看那棵大树 → Look at the <input placeholder="noun">.</div>
+        </div>
+        <div class="item">
+          <h3>3. I can [verb].</h3>
+          <div class="zh">“我会／我能……”。can 后面的动词<b>永远用原形</b>，不加 s，也不加 to。</div>
+          <div class="eg">I can jump in the leaves. 🍁 / I can see a red leaf. ❤️ / I can pick up a leaf. 🍃</div>
+          <div class="practice">练习：我能在叶子里跳 → I can <input placeholder="verb"> in the leaves.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. a / an（一个）</h3>
+          <div class="zh">只有<b>一样</b>东西的时候，前面要加 a 或 an。单词以<b>辅音</b>开头用 <b>a</b>（a tree 🌳、a leaf 🍃）；以<b>元音</b>开头用 <b>an</b>（an apple 🍎、an orange 🍊）。</div>
+          <div class="eg">a tree 🌳 / a leaf 🍃 / an apple 🍎 / an orange leaf 🧡</div>
+        </div>
+        <div class="item">
+          <h3>2. 颜色词放在 is / are 后面</h3>
+          <div class="zh">英语里说颜色，要用 <b>is / are + 颜色词</b>。只有一片叶子用 is，两片以上用 are。</div>
+          <div class="eg">The leaf is green. 🍃 / The leaves are yellow. 💛 / The tree is red. ❤️</div>
+        </div>
+        <div class="item">
+          <h3>3. 名词变复数（Plural Nouns）</h3>
+          <div class="zh">一个以上就要变样子：大多数词直接加 <b>-s</b>，tree → trees 🌳。可是以 <b>f</b> 结尾的词，要把 f 变成 <b>v</b> 再加 <b>-es</b>：leaf → <b>leaves</b> 🍁。今天这篇课文里到处都是 leaves 呢！</div>
+          <div class="eg">one tree → two trees 🌳 / one leaf → many leaves 🍁 / one day → short days 📅</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#fff7ed;border:2px solid #fdba74;">
+        <div style="font-size:20px;font-weight:800;color:#c2410c;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#9a3412;margin-top:6px;">每做对一题得 1 分，全部做完就是秋天小侦探啦！🍁✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🍂 树叶的“变色魔法”</h3>
+        <p>小朋友，每年秋天，树林就像被谁悄悄调了颜色 🎨。前几天还是一片绿油油，没多久就变成金黄、橙红、深褐，风一吹，叶子哗啦啦地落下来，踩上去还<b>咔嚓咔嚓</b>响。这个魔法到底是怎么变的呢？今天 Pola 带你钻进一片小叶子里看一看 🔍。</p>
+
+        <h3>秘密一：绿色，是叶子在“做菜” 🍳</h3>
+        <p>叶子里住着一种绿色的东西，叫<b>叶绿素</b>。它的工作特别重要：把<b>阳光、空气里的二氧化碳和从根部吸上来的水</b>合在一起，做出树要吃的“饭菜”（糖分）。这个过程叫<b>光合作用</b>。因为叶子里全是叶绿素，所以我们看到的叶子是<b>绿色</b>的 🍃。</p>
+        <p>简单说：<b>夏天叶子绿得发亮，是因为它正在拼命做饭</b>。</p>
+
+        <h3>秘密二：黄色和橙色，早就藏在里面了 🥕</h3>
+        <p>神奇的地方来了：叶子里面<b>一直都有</b>黄色和橙色的颜料（叫<b>类胡萝卜素</b>），只不过夏天的绿色太浓，把它们<b>盖住</b>了，我们看不见。</p>
+        <p>到了秋天，白天变短、天气变凉，树就知道“冬天快来了”，于是<b>停止生产叶绿素</b>，旧的叶绿素慢慢分解消失。</p>
+        <ul>
+          <li><b>绿色一退场</b>，藏了好久的黄色、橙色就露出来了 💛🧡。</li>
+          <li>有趣的是，这种让叶子变橙的颜料，和让<b>胡萝卜</b>变橙的是<b>同一种</b>！所以它们名字长得很像：胡萝卜素、类胡萝卜素 🥕。</li>
+          <li><b>银杏</b>树叶变成明亮的金黄色，就是这个原因 🌟。</li>
+        </ul>
+
+        <h3>秘密三：红色，是秋天“新做”出来的 🍁</h3>
+        <p>红色和黄色不一样。红色不是藏着的，而是<b>秋天现做的</b>。天气一冷，叶子里的糖分不太容易运走，就<b>留在叶子里</b>。糖遇到阳光，会变成一种新的红色颜料，叫<b>花青素</b>。</p>
+        <p>所以：<b>糖越多、白天越晒、夜晚越凉（但别冻冰），叶子就越红</b> ❤️。枫树、黄栌这些树，秋天就特别容易红。</p>
+
+        <h3>秘密四：叶子为什么要掉下来？ 🍂</h3>
+        <p>这不是树“生病”了，反而是树在<b>保护自己</b>，是一种聪明的<b>省钱过冬法</b>：</p>
+        <ul>
+          <li><b>冬天日照少</b>：叶子没法好好做饭，留着反而是负担。</li>
+          <li><b>叶子会丢水分</b>：冬天土地冻住，树根吸水困难。叶子面积大，会白白蒸发掉很多水。</li>
+          <li><b>落叶太重</b>：如果叶子留着，冬天一场大雪压在上面，树枝很容易被压断。</li>
+        </ul>
+        <p>所以在落叶之前，树会做一件很细心的事：在叶柄和树枝之间<b>建一道“隔离墙”</b>，先把叶子里还剩下的养分<b>收回树干和树根</b>存起来，留着明年春天长新叶用。养分收完了，风一吹，叶子就掉了 🌬️。</p>
+
+        <h3>秘密五：为什么有的树还是绿的？ 🌲</h3>
+        <p>不是所有的树都落叶。像<b>松树、杉树、冬青</b>这样的<b>常绿树</b>，一年四季都是绿的。它们的叶子大多又细又硬，像针一样，表面还<b>有一层蜡</b>，水分不容易跑掉，所以冬天也能留住叶子。不过它们也会<b>慢慢换叶</b>，只是不是一下子全掉光，所以我们看不出来 🌲。</p>
+
+        <h3>🇨🇳 在中国，去哪里看秋天？</h3>
+        <ul>
+          <li><b>银杏</b> 🌟：一种非常古老的树，科学家叫它<b>“活化石”</b>，它的家族在地球上已经生活了很久很久。秋天一树金黄，非常壮观。</li>
+          <li><b>北京香山</b> 🏔️：秋天满山红叶，最有名的是<b>黄栌</b>，远远望去像一片红色的云。</li>
+          <li><b>南京栖霞山</b> 🍁：以<b>枫树</b>闻名，古诗里说“霜叶红于二月花”，说的就是这样的景色。</li>
+          <li><b>四川九寨沟</b> 🏞️：秋天时彩林倒映在湖水里，一层绿一层黄一层红，像打翻了调色盘。</li>
+          <li><b>你身边的小区、公园、上学路上</b> 🚶：其实不用去远方，只要蹲下来仔细看，就能找到属于你的那一片秋天。</li>
+        </ul>
+
+        <h3>🎮 落叶可以这样玩</h3>
+        <ul>
+          <li><b>树叶拓印</b> 🖍️：把叶子反面朝上，上面盖一张白纸，用蜡笔侧面轻轻涂，叶脉就会“长”到纸上，特别清楚。</li>
+          <li><b>颜色收集卡</b> 🎨：捡 5 片不同颜色的叶子，从浅黄排到深红，做成一张“秋天色卡”。</li>
+          <li><b>英语小导游</b> 🗣️：捡起叶子说一说：<b>“This leaf is red.”</b>（这片叶子是红色的）、<b>“This leaf is yellow.”</b>、<b>“Look at the big tree!”</b>。</li>
+          <li><b>听声音</b> 👂：干叶子脆，湿叶子闷。踩一踩，比一比，说说它们有什么不一样。</li>
+          <li><b>数一数</b> 🔢：一片（one leaf）、两片（two leaves）、很多片（many leaves）——记得两片以上要变成 <b>leaves</b> 哦！</li>
+        </ul>
+
+        <p style="background:#fef3c7;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>户外活动一定要有<b>爸爸妈妈陪着</b> 👨‍👩‍👧。<b>不要随便把叶子、野果、蘑菇放进嘴里</b> 🚫，路边和公园里的植物都不要尝，更不要吃捡来的果子。落叶下面可能<b>很滑</b>，或有小虫、刺和碎玻璃，走路要看清楚脚下 👟。<b>不要爬树、不要摇晃树干</b>，也不要站在树下抬头看太久，免得叶子掉进眼睛里 🌳。捡完叶子回家，记得<b>用肥皂把手洗干净</b> 🧼。如果碰过叶子后皮肤发痒、打喷嚏或觉得不舒服，要马上告诉爸爸妈妈。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读一篇关于秋天树叶的小短文，知道叶子会由绿变黄、变红再落下。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：tree, green, autumn, yellow, red, fall。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “The leaf is green.”, “Look at the tree.”, “I can jump in the leaves.” 说句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 a / an 的用法、颜色词放在 is / are 后面，以及名词变复数（tree → trees，leaf → leaves）。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>对身边的自然变化产生兴趣，愿意和爸爸妈妈一起去户外观察秋天。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读，注意模仿语调。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，读到颜色词时就指一指身边相同颜色的东西。</div></div>
+        <div class="goal"><span class="ic">🍁</span><div>出门捡 3 片不同颜色的落叶，用英语说出它们的颜色，做成一张秋天色卡。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>散步时和爸爸妈妈玩“我指你说”：指着树说 “Look at the tree!”，再说说它是什么颜色 🌳。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把颜色卡贴在墙上，每天认一认 🎨。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Why Do Leaves Change Color · 2026-09-05 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Look at the big tree. The green leaves make food for the tree. The sun helps them.",
+  "Now it is autumn. The days get short. The air gets cool. The green goes away.",
+  "The leaves turn yellow. Some turn red. Some turn orange. The tree is so pretty.",
+  "Then the leaves fall down. They land on the ground. I can jump in the leaves. I love autumn!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What color are leaves in summer? 夏天的叶子是什么颜色？",em:["🍃","❤️","💛"],opts:["Green (绿色)","Red (红色)","Yellow (黄色)"],ans:0,
+   fb:"Correct! 夏天叶子里有叶绿素，所以是 green 绿色 🍃。"},
+  {q:"When do leaves turn red and yellow? 叶子什么时候变红变黄？",em:["🌸","🍂","❄️"],opts:["Spring (春天)","Autumn (秋天)","Winter (冬天)"],ans:1,
+   fb:"Yes! 是 autumn 秋天，白天变短、天气变凉的时候 🍂。"},
+  {q:"What do the leaves do at the end? 最后叶子会怎么样？",em:["🍁","🌳","☀️"],opts:["They fall down (落下来)","They fly up (飞上天)","They sing (唱歌)"],ans:0,
+   fb:"Great! 叶子会 fall down 落下来，落在地上 🍁。"},
+  {q:"What do I love? 我喜欢什么？",em:["🍂","🌧️","🍦"],opts:["Autumn (秋天)","Rain (下雨)","Ice cream (冰淇淋)"],ans:0,
+   fb:"Right! 课文最后一句是 I love autumn，我好喜欢秋天 🍂。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

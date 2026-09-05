@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Day of Two Noons</title>
+<style>
+:root{
+  --accent:#0f766e;
+  --accent2:#b45309;
+  --bg:#f6fbfb;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#ccfbf1;
+  --border:#cdeae7;
+  --soft:#f0fdfa;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(15,118,110,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(15,118,110,.55);}70%{box-shadow:0 0 0 12px rgba(15,118,110,0);}100%{box-shadow:0 0 0 0 rgba(15,118,110,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#99f6e4;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#5eead4;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ccfbf1;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · History</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Day of Two Noons</h1>
+      <p class="subtitle">1883 年 11 月 18 日：铁路如何把时间从太阳手里夺走｜全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Thousands of Local Noons 上千个各自为政的“正午”</div>
+            <p>For most of human history, time was a local possession. A town set its clock by the sun: when the sun stood highest, it was noon — in that town, and in no other. Judged by the sun alone, every one of those clocks was perfectly correct. Collectively, they were chaos. By the 1870s the situation had become intolerable. The United States alone is said to have kept more than three hundred local times, while its railways, struggling to <span class="kw" data-def="强加；把…加之于人（impose order 维持秩序、推行统一规则）">impose</span> order, had settled on some fifty regional standards of their own.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Railways Take Charge 铁路接管时间</div>
+            <p>To a railway company this was not picturesque but perilous. Two trains approaching each other on a single track require a shared clock if <span class="kw" data-def="大灾难；严重事故">catastrophe</span> is to be avoided. In 1881 the companies <span class="kw" data-def="委托；正式委任（某人承担某项工作）">commissioned</span> William Frederick Allen, editor of the Traveler's Official Railway Guide, to <span class="kw" data-def="设计；构想出（方法、方案）">devise</span> a simpler plan. Allen proposed five zones, each fifteen degrees of longitude — one hour — apart. On 18 November 1883, as noon struck on the seventy-fifth <span class="kw" data-def="子午线；经线">meridian</span> west of Greenwich, the new system took effect. Where station clocks ran ahead of the sun, communities duly experienced two noons that day.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The World Follows, Reluctantly 世界跟上了，却心有不甘</div>
+            <p>Not everyone welcomed the change. Astonishing as it may seem to a modern reader, the objections were not merely sentimental: to many people, standard time was an offence against nature and against the God who had hung the sun in the sky to mark the hours. A year later, at the International Meridian Conference in Washington, <span class="kw" data-def="（会议）代表">delegates</span> from twenty-five nations voted twenty-two to one to make Greenwich the prime meridian. France <span class="kw" data-def="弃权（投票时不表态）">abstained</span>. For nearly three decades afterwards, French law defined national time as Paris Mean Time <span class="kw" data-def="（此处）拨慢；延后（retard 的过去分词）">retarded</span> by nine minutes and twenty-one seconds — a formula that <span class="kw" data-def="产生；得出（某一结果）">yielded</span> precisely Greenwich time while never once naming it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why It Matters 意义</div>
+            <p>What happened that November was not really about clocks. It was a transfer of authority: time ceased to be read off the sky and became something a committee could fix. Congress did not <span class="kw" data-def="正式批准（条约、法案等）">ratify</span> the zones until 1918, thirty-five years after they were already in force; by then <span class="kw" data-def="惯例；约定俗成的规则">convention</span> had done the work of law. Were time purely a fact, no committee could have altered it; were it purely a convention, the sun would long ago have stopped mattering. Your phone now sets itself from atomic clocks in orbit. The older argument, whatever we decide, quietly continues.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="impose">🔊</button><div class="word">impose<span class="pos">v.</span></div><div class="zh">强加；推行（impose order 建立秩序）</div><div class="ex">"The railways struggled to impose order on hundreds of local times."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="catastrophe">🔊</button><div class="word">catastrophe<span class="pos">n.</span></div><div class="zh">大灾难；严重事故</div><div class="ex">"Two trains on one track need a shared clock if catastrophe is to be avoided."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="commission">🔊</button><div class="word">commission<span class="pos">v.</span></div><div class="zh">委托；正式委任（某人做某项工作）</div><div class="ex">"The companies commissioned Allen to devise a simpler plan."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="devise">🔊</button><div class="word">devise<span class="pos">v.</span></div><div class="zh">设计；构想出（方案、方法）</div><div class="ex">"Allen devised a system of five zones, each one hour apart."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="meridian">🔊</button><div class="word">meridian<span class="pos">n.</span></div><div class="zh">子午线；经线</div><div class="ex">"Noon struck on the seventy-fifth meridian west of Greenwich."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="delegate">🔊</button><div class="word">delegate<span class="pos">n.</span></div><div class="zh">（会议的）代表</div><div class="ex">"Delegates from twenty-five nations met in Washington in 1884."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="abstain">🔊</button><div class="word">abstain<span class="pos">v.</span></div><div class="zh">弃权；不参与投票</div><div class="ex">"France abstained from the vote on the prime meridian."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="retard">🔊</button><div class="word">retard<span class="pos">v.</span></div><div class="zh">拨慢（钟表）；使延迟</div><div class="ex">"French time was defined as Paris Mean Time retarded by nine minutes twenty-one seconds."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="yield">🔊</button><div class="word">yield<span class="pos">v.</span></div><div class="zh">产生；得出（某一结果）</div><div class="ex">"The formula yielded precisely Greenwich time under a French name."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ratify">🔊</button><div class="word">ratify<span class="pos">v.</span></div><div class="zh">正式批准（条约、法案、决议）</div><div class="ex">"Congress did not ratify the time zones until 1918."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="convention">🔊</button><div class="word">convention<span class="pos">n.</span></div><div class="zh">惯例；约定俗成的规则</div><div class="ex">"By 1918 convention had already done the work of law."</div></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Were / Had / Should + 主语 + 表语（或过去分词）, 主句 (would / could / might + do / have done).</h3>
+          <div class="zh">虚拟语气倒装：删掉 if，把 were、had 或 should 提到主语之前。它比普通 if 从句更凝练、更书面，尤其适合在议论性段落的收尾处做“反事实推演”。注意 were 可用于单数主语（Were time...，不写 Was time...）。</div>
+          <div class="eg">Were time purely a fact, no committee could have altered it; were it purely a convention, the sun would long ago have stopped mattering.</div>
+          <div class="practice">练习：用 “the railways / act sooner” → <input placeholder="Had the railways acted sooner">, thousands of accidents might have been avoided.</div>
+        </div>
+        <div class="item">
+          <h3>2. 形容词 / 名词 + as + 主语 + 谓语, 主句.</h3>
+          <div class="zh">让步倒装：把表语提到 as 之前，表示“尽管……”。比 Although 更书面、更有节奏感。若提前的是单数可数名词，冠词必须省略（Child as he was...，不可说 A child as he was...）。</div>
+          <div class="eg">Astonishing as it may seem to a modern reader, the objections were not merely sentimental.</div>
+          <div class="practice">练习：用 “odd / the old system / be” → <input placeholder="Odd as the old system was">, some towns refused to give it up for another thirty years.</div>
+        </div>
+        <div class="item">
+          <h3>3. 过去分词短语 (+ 状语), 主语 + 谓语.</h3>
+          <div class="zh">非谓语动词作状语。分词短语与主句主语是被动关系，可一口气交代判断标准、时间或原因，避免写成两个松散短句。这是历史与评论写作里最常用的句首结构之一。</div>
+          <div class="eg">Judged by the sun alone, every one of those clocks was perfectly correct.</div>
+          <div class="practice">练习：用 “the timetable / publish in 1883” → <input placeholder="Published in 1883">, the new timetable made every local time look absurd.</div>
+        </div>
+        <div class="item">
+          <h3>4. What + 谓语, 主句（What 引导的主语从句）.</h3>
+          <div class="zh">“What + 谓语”整体充当主语，相当于 “the thing that...”。它先把读者的注意力吊在“未知”上，再在主句里揭晓，是英文议论中极具张力的开头；也可用来纠正读者的预期。</div>
+          <div class="eg">What happened that November was not really about clocks.</div>
+          <div class="practice">练习：用 “Allen really propose” → <input placeholder="What Allen really proposed"> was not a new clock but a new agreement.</div>
+        </div>
+        <div class="item">
+          <h3>5. Whatever / Whoever / However + 从句, 主句（-ever 名词性关系从句）.</h3>
+          <div class="zh">-ever 词同时充当两种成分：既引导从句，又在从句中作主语、宾语或状语。它先承认某种不确定性，再在主句里推进论点，让步—转折一步到位。Whatever + 名词 时，名词直接跟在 whatever 之后。</div>
+          <div class="eg">The older argument, whatever we decide, quietly continues.</div>
+          <div class="practice">练习：用 “the French government / motive” → <input placeholder="Whatever the French government's motive was">, the effect was identical: Paris and London kept the same time under different names.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气倒装 (Inverted Conditionals)</h3>
+          <div class="zh">去掉 if、助动词提前，形成三种时态：<br>
+          · 现在 / 将来虚拟：<b>Were</b> + 主语 + 表语 / doing, 主语 + would / could / might + 动词原形<br>
+          · 过去虚拟：<b>Had</b> + 主语 + 过去分词, 主语 + would have done<br>
+          · 将来虚拟：<b>Should</b> + 主语 + 动词原形, 主语 + would + 动词原形<br>
+          常见错误：把 were 误写成 was，或在主句里重复用 will。</div>
+          <div class="eg">Were time purely a fact, no committee could have altered it. / Had Congress acted sooner, the confusion would have ended years earlier.</div>
+        </div>
+        <div class="item">
+          <h3>2. 让步倒装 (Concessive Inversion with as / though)</h3>
+          <div class="zh">结构为“表语 / 状语 + as / though + 主语 + 谓语”。注意区分：<b>as</b> 表示“尽管”时必须倒装，表示“因为 / 随着”时不倒装；<b>though</b> 两种语序都可以。若提前的是动词，需保留助动词（Try as he might...）。</div>
+          <div class="eg">Astonishing as it may seem, the objections were serious. / Perilous as the old system was, some towns preferred it.</div>
+        </div>
+        <div class="item">
+          <h3>3. 过去分词短语作状语 (Past Participles as Adverbials)</h3>
+          <div class="zh">过去分词表示被动且完成的动作，其逻辑主语必须是主句主语；否则会产生“悬垂分词”（dangling participle）。可表示条件（Judged by...）、时间（Asked about...）、原因或伴随状态。</div>
+          <div class="eg">Judged by the sun alone, every one of those clocks was perfectly correct. / Asked why he objected, the farmer said the sun, not a railway, marked the hours.</div>
+        </div>
+        <div class="item">
+          <h3>4. What 主语从句 + 同位语从句 (What-clause & Appositive Clause)</h3>
+          <div class="zh">what 引导的从句整体作主语，谓语通常用单数。与之常一起出现的是<b>同位语从句</b>：抽象名词（fact / idea / argument / belief）后接 that 从句，说明该名词的具体内容——that 不可省略，也不可用 which 替换。</div>
+          <div class="eg">What happened that November was not really about clocks. / The idea that a committee could fix the hour struck many people as absurd.</div>
+        </div>
+        <div class="item">
+          <h3>5. 关系副词 where 与“介词 + which”定语从句</h3>
+          <div class="zh">where 引导定语从句时修饰表示地点的先行词；但当 where 位于句首引导从句时，它相当于 “in the place where / in cases where”，表示“在……的地方 / 情况下”。正式文体中，地点以外的搭配常用“介词 + which”（the meridian <b>on which</b> every zone depends）。</div>
+          <div class="eg">Where station clocks ran ahead of the sun, communities duly experienced two noons that day. / Greenwich is the meridian on which all the world's time zones depend.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+        <h3>一、在铁路之前，时间属于天空</h3>
+        <p>机械钟在 13 世纪末出现在欧洲，此后五百年里，每座城市都按自己的太阳校时：日晷指向最高点的那一刻，就是当地的正午。往东或往西走一段路，正午就提前或推后一点——经度每差 1 度，时间差 4 分钟。伦敦与布里斯托尔相距约 2.5 度，两地的正午就相差约 10 分钟。</p>
+        <p>在很长时间里这根本不是问题。驿马一天只能跑几十公里，出发地和目的地之间那点时间差，比不上马匹状态带来的误差。人们的作息由教堂钟声和日出日落决定，谁也没有“全国同一时刻”这种需求。</p>
+        <p>改变这一切的是速度。火车一天能跑几百公里，电报几乎瞬间抵达。人和信息的移动第一次快过了太阳在天空中的移动，“当地时间”随即从常识变成了麻烦。</p>
+
+        <h3>二、铁路：人类第一件必须精确到分钟的事物</h3>
+        <p>世界上第一个实用的标准时区不是政府划定的，而是一家铁路公司自己定的。英国的做法走在最前面：</p>
+        <table class="facts">
+          <tr><th>时间</th><th>事件</th><th>意义</th></tr>
+          <tr><td>1675 年</td><td>英王查理二世设立格林尼治皇家天文台</td><td>为航海测定经度提供天文数据，1767 年起出版《航海天文历》</td></tr>
+          <tr><td>1840 年 11 月</td><td>大西部铁路（Great Western Railway）全线采用格林尼治时间</td><td>用便携式精密计时器把统一时间送到沿线各站，开创“铁路时间”</td></tr>
+          <tr><td>1852 年 8 月 23 日</td><td>皇家天文台首次通过电报对外发布时间信号</td><td>时间第一次可以“远距离复制”，而不必靠人搬钟</td></tr>
+          <tr><td>1855 年</td><td>全英约 98% 的公共时钟已拨到格林尼治时间</td><td>事实上的国家标准已经形成，比立法早了 25 年</td></tr>
+          <tr><td>1880 年</td><td>英国立法确认格林尼治时间为法定时间</td><td>法律追认了既成事实</td></tr>
+        </table>
+        <p>过渡期留下了一个很有意思的物件：有些英国钟表装了<b>两根分针</b>，一根指地方太阳时，一根指格林尼治铁路时间。人们一边按旧钟下地干活，一边按新钟赶火车——两种时间在同一块表盘上并存了几十年的日常生活。</p>
+
+        <h3>三、1883 年 11 月 18 日：“两个正午之日”</h3>
+        <p>北美的情况比英国混乱得多。到 19 世纪 80 年代初，各铁路公司使用着约 50 多种各自为政的标准时；全国地方太阳时据估计超过 300 个。有的车站挂着好几面钟，一面钟对应一家铁路公司，各指各的时间。</p>
+        <p>1881 年，铁路公司担心政府介入，抢先委托《旅行者官方铁路指南》主编威廉·弗雷德里克·艾伦（William Frederick Allen）设计一个简化方案。艾伦提出五个时区，彼此相隔 15 度经度，正好一小时。1883 年 11 月 18 日，当西经 75 度子午线（约在费城一带）走到正午时，各站同时拨钟，标准铁路时间生效。</p>
+        <p>那些原本地方时快于新标准时的城镇，当天经历了<b>两个正午</b>：先按老太阳时敲了一次中午，几分钟后再按新铁路时间敲了一次。一年之内，人口超过一万的两百来个城市中，约 85% 已经改用标准时。但底特律拖到了 1900 年才开始试验，几经反复，直到 1915 年才由市民投票锁定东部时间；而美国国会要到 1918 年才通过《标准时间法案》，正式追认这套已经运行了三十五年的制度。</p>
+        <p>请注意这个顺序：<b>先是铁路自己定了时间，再是全社会接受了时间，最后才是法律承认时间。</b>制度往往不是被颁布的，而是被习惯的。</p>
+
+        <h3>四、1884 年国际子午线会议：法国投下的那张弃权票</h3>
+        <p>1884 年 10 月，来自 25 个国家的代表在华盛顿开会，决定把哪条经线定为全球零度基准。表决结果是 22 票赞成以格林尼治为本初子午线，1 票反对（圣多明各），<b>法国与巴西弃权</b>。</p>
+        <p>法国人的抵制持续了很久。既然不承认格林尼治，他们就把本国时间定义成下面这句话：</p>
+        <blockquote>巴黎平太阳时，拨慢 9 分 21 秒。<em>—— 1911 年以前法国法律对国家时间的正式表述。这个数值与格林尼治时间分毫不差，唯一的作用是永远不必说出那个名字。</em></blockquote>
+        <p>法国直到 1911 年才正式改用格林尼治时间。而许多法国地图在此后多年里，仍把零度标在巴黎。到了 1972 年，格林尼治时间本身又被更精确的协调世界时（UTC）取代——这一次，基准不再是一颗行星的自转，而是原子内部的振荡。</p>
+
+        <h3>五、时区如何来到中国</h3>
+        <p>标准时区在 1900 年前后已基本覆盖全球有人居住的地区，中国也不例外，但走的是另一条路。清末民初，沿海通商口岸、铁路与海关各自采用过不同的时间标准。1918 年，民国政府中央观象台首次提出全国划分为五个时区——中原、陇蜀、回藏、长白、昆仑，其中部分地区采用半小时的偏移量。此后历经战乱，实际执行并不整齐。</p>
+        <p>1949 年之后，全国统一采用东经 120 度的地方平太阳时，也就是今天所说的<b>北京时间（UTC+8）</b>。中国香港、中国澳门同样使用 UTC+8。这意味着：中国东西横跨约 60 个经度、五个地理时区，却只用一个法定时间。当北京时间上午十点时，新疆西部的太阳其实才刚过早上七点——于是当地又并行着一套民间使用的“新疆时间”（UTC+6）。</p>
+
+        <h3>六、留给你的两个问题</h3>
+        <ul>
+          <li>标准时间让火车、航班和互联网得以运转，代价是“正午”不再是太阳最高的那一刻。你觉得这是一次划算的交易吗？如果让你选，你愿意住在“太阳时正确但全国不同步”的世界里吗？</li>
+          <li>课文中说，这件事的本质是“权威的转移”：时间从天空交到了委员会手上。今天，你的手机从卫星上的原子钟获取时间——当时间彻底脱离太阳，我们究竟得到了什么，又失去了什么？</li>
+        </ul>
+        <p class="source">资料来源：美国史密森尼学会国家历史博物馆 On Time 展览（铁路时区与 1883 年标准时间）、timeanddate.com 时区史、1884 年华盛顿国际子午线会议表决记录、英国皇家博物馆格林尼治（RMG）关于铁路时间与电报时间信号的史料。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3>🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>阅读</b>：读懂一篇约 380 词的历史评论短文，把握“问题—方案—阻力—意义”的四段论证结构。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>词汇</b>：掌握 11 个 CEFR B2 核心词（impose, catastrophe, commission, devise, meridian, delegate, abstain, retard, yield, ratify, convention），能在历史与学术语境中主动使用。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>句型</b>：熟练运用 5 个高级句式，重点突破虚拟语气倒装、让步倒装与过去分词短语作状语。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>语法</b>：系统复习虚拟语气倒装、让步倒装、过去分词作状语、What 主语从句与同位语从句、关系副词 where 与“介词 + which”。</div></div>
+        <div class="goal"><span class="ic">✅</span><div><b>测验</b>：完成 6 道选择题，检验历史细节、推理判断与语法识别能力。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>拓展</b>：理解标准时区背后的技术、商业与政治博弈，以及中国时区制度的历史沿革。</div></div>
+        <h3 style="margin-top:20px;">🗣️ 口语输出建议</h3>
+        <p>用本课句型，口头描述一项“你习以为常、其实是被设计出来的”制度（如公历、红绿灯、邮政编码、手机时区自动校准），要求至少用上 1 个倒装句和 1 个 -ever 从句。例如：</p>
+        <div class="item"><div class="eg">Convenient as the calendar is, it was imposed by decree rather than by nature. Whatever its origin, we have all agreed to live inside it.</div></div>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English Learning · History<br>Generated on 5 September 2026</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "For most of human history, time was a local possession. A town set its clock by the sun: when the sun stood highest, it was noon — in that town, and in no other. Judged by the sun alone, every one of those clocks was perfectly correct. Collectively, they were chaos. By the 1870s the situation had become intolerable. The United States alone is said to have kept more than three hundred local times, while its railways, struggling to impose order, had settled on some fifty regional standards of their own.",
+  "To a railway company this was not picturesque but perilous. Two trains approaching each other on a single track require a shared clock if catastrophe is to be avoided. In 1881 the companies commissioned William Frederick Allen, editor of the Traveler's Official Railway Guide, to devise a simpler plan. Allen proposed five zones, each fifteen degrees of longitude — one hour — apart. On 18 November 1883, as noon struck on the seventy-fifth meridian west of Greenwich, the new system took effect. Where station clocks ran ahead of the sun, communities duly experienced two noons that day.",
+  "Not everyone welcomed the change. Astonishing as it may seem to a modern reader, the objections were not merely sentimental: to many people, standard time was an offence against nature and against the God who had hung the sun in the sky to mark the hours. A year later, at the International Meridian Conference in Washington, delegates from twenty-five nations voted twenty-two to one to make Greenwich the prime meridian. France abstained. For nearly three decades afterwards, French law defined national time as Paris Mean Time retarded by nine minutes and twenty-one seconds — a formula that yielded precisely Greenwich time while never once naming it.",
+  "What happened that November was not really about clocks. It was a transfer of authority: time ceased to be read off the sky and became something a committee could fix. Congress did not ratify the zones until 1918, thirty-five years after they were already in force; by then convention had done the work of law. Were time purely a fact, no committee could have altered it; were it purely a convention, the sun would long ago have stopped mattering. Your phone now sets itself from atomic clocks in orbit. The older argument, whatever we decide, quietly continues."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"How many local times is the United States said to have kept before 1883? 1883 年以前，美国据说存在多少个不同的地方时间？",opts:["About fifty 约五十个","Exactly five 正好五个","More than three hundred 超过三百个","Only one 只有一个"],ans:2,
+   fb:"正确！课文说美国当时有 300 多个地方太阳时；铁路公司自己另设了约 50 个区域性标准——50 是铁路的数目，300 才是全国的。"},
+  {q:"What did William Frederick Allen propose in 1881? 1881 年艾伦提出了什么方案？",opts:["A return to local sun time 回到地方太阳时","One single time for the whole country 全国统一用同一个时间","Five zones, each fifteen degrees of longitude apart 五个时区，彼此相隔 15 度经度（即一小时）","Twenty-four zones of thirty minutes each 24 个半小时时区"],ans:2,
+   fb:"正确！地球自转一周 360 度用 24 小时，平均每小时转 15 度。所以按 15 度经度划一个区，区内统一时间，与太阳的偏差就不会超过半小时。"},
+  {q:"What did France do at the 1884 International Meridian Conference, and afterwards? 法国在 1884 年会议上及之后做了什么？",opts:["It voted against Greenwich 投票反对格林尼治","It proposed Washington as the prime meridian 提议以华盛顿为本初子午线","It immediately adopted Greenwich time 立即采用了格林尼治时间","It abstained, then defined its time as Paris Mean Time retarded by 9 minutes 21 seconds 弃权，随后把本国时间定义为“巴黎平太阳时拨慢 9 分 21 秒”"],ans:3,
+   fb:"正确！法国弃权而非反对（反对票来自圣多明各）。此后近三十年，法国法律用“巴黎平太阳时减 9 分 21 秒”来表述——数值与格林尼治完全一致，却始终不肯说出那个名字，直到 1911 年才正式改用。"},
+  {q:"Why does the writer call the episode 'a transfer of authority'? 作者为何称此事为“权威的转移”？",opts:["Because the government took the clocks away from the churches 因为政府从教堂手中没收了钟表","Because railway companies were nationalised 因为铁路被收归国有","Because time stopped being read off the sky and became something a committee could fix 因为时间不再靠观测天空获得，而成了委员会可以决定的东西","Because the sun changed its position 因为太阳改变了位置"],ans:2,
+   fb:"正确！这是全文的论点：时间从一种被观测的自然事实，变成了一种被约定的社会制度。注意课文后半句——若是纯粹的事实，委员会改不了；若是纯粹的约定，太阳早就不重要了。作者认为答案在两者之间。"},
+  {q:"'Astonishing as it may seem to a modern reader, the objections were not merely sentimental.' 这句话使用了什么结构？",opts:["Inverted unreal conditional 虚拟语气倒装","Concessive inversion 让步倒装（表语提前 + as + 主谓）","Past participle phrase 过去分词短语作状语","Appositive clause 同位语从句"],ans:1,
+   fb:"正确！相当于 Although it may seem astonishing...。形容词 astonishing 提到 as 之前构成让步倒装。注意：as 表示“尽管”时必须倒装，表示“因为 / 随着”时则不倒装。"},
+  {q:"'Were time purely a fact, no committee could have altered it.' 这句话的语法是？",opts:["Relative adverb clause 关系副词从句","Cleft sentence 强调句","Concessive inversion 让步倒装","Inverted unreal conditional 虚拟语气倒装（省略 if，were 提前）"],ans:3,
+   fb:"正确！相当于 If time were purely a fact...。删去 if 后把 were 提到主语 time 之前，构成虚拟语气倒装。注意这里必须用 were，不能用 was。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#0f766e';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>

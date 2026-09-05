@@ -2876,6 +2876,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-05",
+    "title": "Why Do Leaves Change Color",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-05-why-do-leaves-change-color",
+    "url": "lessons/a1/2026-09-05-why-do-leaves-change-color.html",
+    "vocab": [
+      {
+        "word": "tree",
+        "zh": "树",
+        "ex": "\"Look at the big tree.\""
+      },
+      {
+        "word": "green",
+        "zh": "绿色的",
+        "ex": "\"The leaves are green.\""
+      },
+      {
+        "word": "autumn",
+        "zh": "秋天",
+        "ex": "\"I love autumn.\""
+      },
+      {
+        "word": "yellow",
+        "zh": "黄色的",
+        "ex": "\"This leaf is yellow.\""
+      },
+      {
+        "word": "red",
+        "zh": "红色的",
+        "ex": "\"Some leaves are red.\""
+      },
+      {
+        "word": "fall",
+        "zh": "落下；秋天",
+        "ex": "\"The leaves fall down.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -5018,6 +5060,73 @@ const EPISODES = [
         "word": "enigmatic",
         "zh": "神秘莫测的；难以解释的",
         "ex": "\"That enigmatic half-turn is why viewers keep coming back.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-09-05",
+    "title": "The Day of Two Noons",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-09-05-the-day-of-two-noons",
+    "url": "lessons/b2/2026-09-05-the-day-of-two-noons.html",
+    "vocab": [
+      {
+        "word": "impose",
+        "zh": "强加；推行（impose order 建立秩序）",
+        "ex": "\"The railways struggled to impose order on hundreds of local times.\""
+      },
+      {
+        "word": "catastrophe",
+        "zh": "大灾难；严重事故",
+        "ex": "\"Two trains on one track need a shared clock if catastrophe is to be avoided.\""
+      },
+      {
+        "word": "commission",
+        "zh": "委托；正式委任（某人做某项工作）",
+        "ex": "\"The companies commissioned Allen to devise a simpler plan.\""
+      },
+      {
+        "word": "devise",
+        "zh": "设计；构想出（方案、方法）",
+        "ex": "\"Allen devised a system of five zones, each one hour apart.\""
+      },
+      {
+        "word": "meridian",
+        "zh": "子午线；经线",
+        "ex": "\"Noon struck on the seventy-fifth meridian west of Greenwich.\""
+      },
+      {
+        "word": "delegate",
+        "zh": "（会议的）代表",
+        "ex": "\"Delegates from twenty-five nations met in Washington in 1884.\""
+      },
+      {
+        "word": "abstain",
+        "zh": "弃权；不参与投票",
+        "ex": "\"France abstained from the vote on the prime meridian.\""
+      },
+      {
+        "word": "retard",
+        "zh": "拨慢（钟表）；使延迟",
+        "ex": "\"French time was defined as Paris Mean Time retarded by nine minutes twenty-one seconds.\""
+      },
+      {
+        "word": "yield",
+        "zh": "产生；得出（某一结果）",
+        "ex": "\"The formula yielded precisely Greenwich time under a French name.\""
+      },
+      {
+        "word": "ratify",
+        "zh": "正式批准（条约、法案、决议）",
+        "ex": "\"Congress did not ratify the time zones until 1918.\""
+      },
+      {
+        "word": "convention",
+        "zh": "惯例；约定俗成的规则",
+        "ex": "\"By 1918 convention had already done the work of law.\""
       }
     ]
   },
