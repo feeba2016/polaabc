@@ -2980,6 +2980,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-06",
+    "title": "Where Is the Zoo",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-06-where-is-the-zoo",
+    "url": "lessons/a1/2026-09-06-where-is-the-zoo.html",
+    "vocab": [
+      {
+        "word": "zoo",
+        "zh": "动物园",
+        "ex": "\"Where is the zoo?\""
+      },
+      {
+        "word": "straight",
+        "zh": "笔直地；一直",
+        "ex": "\"Go straight down this road.\""
+      },
+      {
+        "word": "left",
+        "zh": "左边",
+        "ex": "\"Then turn left.\""
+      },
+      {
+        "word": "right",
+        "zh": "右边",
+        "ex": "\"Turn right at the park.\""
+      },
+      {
+        "word": "near",
+        "zh": "在……附近；近的",
+        "ex": "\"Is it near here?\""
+      },
+      {
+        "word": "welcome",
+        "zh": "受欢迎的；不客气",
+        "ex": "\"You are welcome.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4124,6 +4166,58 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A2",
+    "date": "2026-09-06",
+    "title": "The Shuffle That Makes History",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-06-the-shuffle-that-makes-history",
+    "url": "lessons/a2/2026-09-06-the-shuffle-that-makes-history.html",
+    "vocab": [
+      {
+        "word": "deck",
+        "zh": "拿出一副五十二张的扑克牌，好好洗一洗。现在看看牌的顺序。这个一模一样的顺序，很可能在此之前从来没有出现过——在整个人类历史上都没有。",
+        "ex": "Take a deck of 52 cards and shuffle it."
+      },
+      {
+        "word": "shuffle",
+        "zh": "洗牌；把牌打乱",
+        "ex": "Please shuffle the cards before the game."
+      },
+      {
+        "word": "order",
+        "zh": "顺序；次序",
+        "ex": "Look at the order of the cards."
+      },
+      {
+        "word": "exact",
+        "zh": "确切的；完全一样的",
+        "ex": "That exact order has never existed before."
+      },
+      {
+        "word": "arrange",
+        "zh": "排列；安排",
+        "ex": "The cards can be arranged in many ways."
+      },
+      {
+        "word": "huge",
+        "zh": "巨大的；庞大得吓人的",
+        "ex": "There is a huge number of possible orders."
+      },
+      {
+        "word": "universe",
+        "zh": "宇宙",
+        "ex": "Our universe is 13.8 billion years old."
+      },
+      {
+        "word": "random",
+        "zh": "随机的；没有规律的",
+        "ex": "Seven good shuffles make a deck truly random."
+      }
+    ]
+  },
+  {
     "level": "B2",
     "date": "2026-08-12",
     "title": "Beyond Lithium The Rise of Solid-State Batteries",
@@ -5241,6 +5335,73 @@ const EPISODES = [
         "word": "convention",
         "zh": "惯例；约定俗成的规则",
         "ex": "\"By 1918 convention had already done the work of law.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-09-06",
+    "title": "The Ring That Hides You",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-09-06-the-ring-that-hides-you",
+    "url": "lessons/b2/2026-09-06-the-ring-that-hides-you.html",
+    "vocab": [
+      {
+        "word": "hypothesis",
+        "zh": "假说；有待检验的推测（复数 hypotheses）",
+        "ex": "\"The tale is really a hypothesis: it predicts that unobserved people cheat.\""
+      },
+      {
+        "word": "allege",
+        "zh": "（未经证实而）声称；断言",
+        "ex": "\"Glaucon alleges that no one is just by nature.\""
+      },
+      {
+        "word": "comply",
+        "zh": "遵守；服从（comply with rules 遵守规则）",
+        "ex": "\"We comply with the rules only because we fear being caught.\""
+      },
+      {
+        "word": "commodity",
+        "zh": "商品；可用来交换的东西",
+        "ex": "\"On his account morality is a commodity bought with good behaviour.\""
+      },
+      {
+        "word": "temptation",
+        "zh": "诱惑；引诱（resist temptation 抵制诱惑）",
+        "ex": "\"No one is of such iron nature that he would resist the temptation.\""
+      },
+      {
+        "word": "impunity",
+        "zh": "免于惩罚；不受制裁（with impunity 逍遥法外）",
+        "ex": "\"Given impunity, the just man and the unjust would act exactly alike.\""
+      },
+      {
+        "word": "empirical",
+        "zh": "实证的；以观察和实验为依据的",
+        "ex": "\"Glaucon's claim is empirical, so it can be tested in the field.\""
+      },
+      {
+        "word": "incur",
+        "zh": "招致；蒙受（incur a cost / a loss 付出代价 / 蒙受损失）",
+        "ex": "\"People were unwilling to incur the cost of seeing themselves as thieves.\""
+      },
+      {
+        "word": "anonymous",
+        "zh": "匿名的；不具名的",
+        "ex": "\"Much of modern life is anonymous by design.\""
+      },
+      {
+        "word": "indispensable",
+        "zh": "不可或缺的；必不可少的",
+        "ex": "\"Fear of punishment may be indispensable to public order.\""
+      },
+      {
+        "word": "suffice",
+        "zh": "足够；足以（suffice to do 足以做某事）",
+        "ex": "\"Fear of punishment does not suffice to explain why most of us are decent.\""
       }
     ]
   },

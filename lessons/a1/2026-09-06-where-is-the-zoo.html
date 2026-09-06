@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Where Is the Zoo — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#0284c7;
+  --accent2:#38bdf8;
+  --bg:#f0f9ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#075985;
+  --highlight:#fde68a;
+  --border:#bae6fd;
+  --soft:#f0f9ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#38bdf8);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(2,132,199,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #7dd3fc;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.seg .ln{display:block;position:relative;background:#fff;border:2px solid var(--border);border-radius:14px;padding:10px 14px 10px 82px;margin:8px 0;font-size:19px;}
+.seg .ln:before{content:attr(data-who);position:absolute;left:10px;top:11px;font-size:12px;font-weight:800;color:#fff;background:var(--accent);border-radius:8px;padding:2px 8px;letter-spacing:.3px;}
+.seg .ln.b{background:#f0f9ff;border-color:#7dd3fc;}
+.seg .ln.b:before{background:#0e7490;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#075985;background:#e0f2fe;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(2,132,199,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(2,132,199,.6);}70%{box-shadow:0 0 0 14px rgba(2,132,199,0);}100%{box-shadow:0 0 0 0 rgba(2,132,199,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid #f59e0b;transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid #f59e0b;padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:#f59e0b;color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(2,132,199,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+  .seg .ln{padding-left:14px;padding-top:34px;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Where Is the Zoo? 🗣️🦁</h1>
+      <p class="subtitle">2026年9月6日 · 简单对话｜请问动物园在哪里 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · Ask Politely 有礼貌地问路</div>
+            <p><span class="ln" data-who="Tom">Excuse me. Where is the <span class="kw" data-def="动物园：很多动物住在一起、大家可以去参观的地方">zoo</span>, please? 🎒</span><span class="ln b" data-who="Anna">Go <span class="kw" data-def="笔直地、一直地：不拐弯，沿着同一条路往前走">straight</span> down this road. ⬆️ Then turn <span class="kw" data-def="左边：和右边相反的方向。左手就叫 left hand">left</span>. ⬅️</span></p>
+          </div>
+          <div class="zh">汤姆：打扰一下。请问动物园在哪里呀？🎒<br>安娜：沿着这条路一直走 ⬆️。然后向左转 ⬅️。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Is It Near? 离这里近吗</div>
+            <p><span class="ln" data-who="Tom">Is it <span class="kw" data-def="近的、在附近：走路用不了多久就能到">near</span> here? 🗺️</span><span class="ln b" data-who="Anna">Yes, it is. It is near the park. 🌳 Turn <span class="kw" data-def="右边：和左边相反的方向。右手就叫 right hand">right</span> at the park. ➡️</span></p>
+          </div>
+          <div class="zh">汤姆：它离这儿近吗？🗺️<br>安娜：是的，很近。它在公园旁边 🌳。到公园那里向右转 ➡️。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Say Thank You 说声谢谢你</div>
+            <p><span class="ln" data-who="Tom">Thank you very much! 🙏</span><span class="ln b" data-who="Anna">You are <span class="kw" data-def="受欢迎的。“You are welcome.” 就是别人道谢时回答的「不客气」">welcome</span>. 😊 You can walk to the zoo. 🚶</span></p>
+          </div>
+          <div class="zh">汤姆：太谢谢您了！🙏<br>安娜：不客气 😊。你可以走到动物园去 🚶。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · We Are Here 我们到啦</div>
+            <p><span class="ln" data-who="Tom">Look! The zoo is here. 👀 I can see the big gate. 🎪 I am so happy. 😄 I love the zoo! 🦁</span></p>
+          </div>
+          <div class="zh">汤姆：看！动物园到啦 👀。我看见大门了 🎪。我好开心 😄。我好喜欢动物园！🦁</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#f0f9ff;border:2px solid #7dd3fc;">
+        <h3 style="margin:0 0 8px;color:#0369a1;font-size:20px;">🗺️ 和 Pola 一起玩「问路小游戏」！</h3>
+        <p style="margin:0;font-size:16px;">在家里和爸爸妈妈玩一玩：假装你要去<b>厨房</b>（kitchen）、<b>厕所</b>（bathroom）或者<b>你的房间</b>（my room）。先说 <b>“Excuse me. Where is the kitchen, please?”</b>，让爸爸妈妈用英语回答：<b>“Go straight. Then turn left.”</b> 🧭 找到地方以后，记得说 <b>“Thank you very much!”</b> 🙏。别忘了点黄色词看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="zoo">🔊</button><div class="emoji">🦁</div><div class="word">zoo<span class="pos">n.</span></div><div class="zh">动物园</div><div class="ex">"Where is the zoo?"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="straight">🔊</button><div class="emoji">⬆️</div><div class="word">straight<span class="pos">adv.</span></div><div class="zh">笔直地；一直</div><div class="ex">"Go straight down this road."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="left">🔊</button><div class="emoji">⬅️</div><div class="word">left<span class="pos">n.</span></div><div class="zh">左边</div><div class="ex">"Then turn left."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="right">🔊</button><div class="emoji">➡️</div><div class="word">right<span class="pos">n.</span></div><div class="zh">右边</div><div class="ex">"Turn right at the park."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="near">🔊</button><div class="emoji">📍</div><div class="word">near<span class="pos">prep.</span></div><div class="zh">在……附近；近的</div><div class="ex">"Is it near here?"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="welcome">🔊</button><div class="emoji">🙏</div><div class="word">welcome<span class="pos">adj.</span></div><div class="zh">受欢迎的；不客气</div><div class="ex">"You are welcome."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Where is the [place]?</h3>
+          <div class="zh">“请问……在哪里？”这是<b>问路</b>最有用的一句话。前面加一句 <b>Excuse me</b>（打扰一下），会显得特别有礼貌 🙋。</div>
+          <div class="eg">Where is the zoo? 🦁 / Where is the park? 🌳 / Where is the bathroom? 🚻</div>
+          <div class="practice">练习：请问图书馆（library）在哪里？ → Where is the <input placeholder="place">?</div>
+        </div>
+        <div class="item">
+          <h3>2. Go straight. / Turn left. / Turn right.</h3>
+          <div class="zh">“一直走。／向左转。／向右转。”这是<b>给别人指路</b>的三句话。它们的动词都用<b>原形</b>，因为是在“下指令”。</div>
+          <div class="eg">Go straight. ⬆️ / Turn left. ⬅️ / Turn right at the park. ➡️</div>
+          <div class="practice">练习：一直走，然后向右转 → Go <input placeholder="direction">. Then turn <input placeholder="left / right">.</div>
+        </div>
+        <div class="item">
+          <h3>3. Thank you very much! — You are welcome.</h3>
+          <div class="zh">“太谢谢您了！——不客气。”这两句像一对好朋友，<b>总是连在一起用</b>。别人帮你之后说 Thank you，对方就会回答 You are welcome 🙏。</div>
+          <div class="eg">Thank you very much! 🙏 / You are welcome. 😊 / Thanks! — You are welcome. 💛</div>
+          <div class="practice">练习：别人说 Thank you very much! 你应该回答 → You are <input placeholder="?">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 祈使句：动词原形打头</h3>
+          <div class="zh">叫别人做一件事的时候，句子开头直接放<b>动词原形</b>，不用加主语，也不用加 s。<b>Go</b> straight!（一直走！）<b>Turn</b> left!（向左转！）想更客气一点，就在最后加上 <b>please</b>：Turn left, <b>please</b>. 🙏</div>
+          <div class="eg">Go straight. ⬆️ / Turn left. ⬅️ / Turn right, please. ➡️ / Look at the map. 🗺️</div>
+        </div>
+        <div class="item">
+          <h3>2. the = 你我心里都知道的那个</h3>
+          <div class="zh">我们说 <b>the zoo</b>（那个动物园）、<b>the park</b>（那个公园），是因为<b>说话的人和听话的人都知道</b>说的是哪一个。如果是第一次提到、随便哪一个都行，就用 <b>a</b>：There is <b>a</b> park near here. 🌳</div>
+          <div class="eg">the zoo 🦁 / the park 🌳 / the big gate 🎪 / a park near here 🌳</div>
+        </div>
+        <div class="item">
+          <h3>3. Is it ...? 的一般疑问句</h3>
+          <div class="zh">把 <b>is</b> 提到句子前面，就变成了问句：<b>Is it near here?</b>（它离这儿近吗？）回答要用 <b>Yes, it is.</b>（是的，很近）或者 <b>No, it is not.</b>（不，不近）。注意回答里的 <b>it</b> 不能丢掉哦。</div>
+          <div class="eg">Is it near here? — Yes, it is. 📍 / Is it far? — No, it is not. 🚶 / Is the zoo big? — Yes, it is. 🦁</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#f0f9ff;border:2px solid #7dd3fc;">
+        <div style="font-size:20px;font-weight:800;color:#0369a1;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#075985;margin-top:6px;">每做对一题得 1 分，全做完就是「问路小达人」啦！🗺️✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🙋 为什么问路要先说 “Excuse me”？</h3>
+        <p>小朋友，想象一下：你正在专心搭积木 🧱，突然有人拍拍你的肩膀问“哎，路怎么走？”你会不会吓一跳？</p>
+        <p>英语里的 <b>Excuse me</b> 就像一句<b>轻轻的敲门声</b> 🚪。它的意思不是“对不起”（那是 Sorry），而是<b>“打扰一下，可以请你帮个忙吗？”</b>。只要你想找陌生人说话——问路、借东西、请别人让一让——先说一句 Excuse me，对方就会停下来看着你，微笑着听你说 😊。</p>
+        <p>再加一个 <b>please</b>（请），就更有礼貌啦：<b>“Excuse me. Where is the zoo, please?”</b> 🙏</p>
+
+        <h3>🧭 指路其实只需要三个词</h3>
+        <p>不管在哪一个国家，给人指路基本都离不开这三句话：</p>
+        <ul>
+          <li><b>Go straight.</b> ⬆️ 一直走、直着走。也可以说 <b>Go straight on.</b></li>
+          <li><b>Turn left.</b> ⬅️ 向左转。</li>
+          <li><b>Turn right.</b> ➡️ 向右转。</li>
+        </ul>
+        <p>想说“在……那里转弯”，就在后面加 <b>at</b>：Turn right <b>at</b> the park.（到公园那里向右转）。想说“沿着这条路走”，就用 <b>down</b> 或 <b>along</b>：Go straight <b>down</b> this road. 🛣️</p>
+
+        <h3>💡 分不清 left 和 right？试试这两个小办法</h3>
+        <ul>
+          <li><b>写字的手</b> ✏️：大多数小朋友用右手写字。写字那只手是 <b>right</b>，另一只手就是 <b>left</b>。</li>
+          <li><b>做个 L</b> 👍：把左手的大拇指和食指伸出来，其他手指握住，摆出的形状就像一个字母 <b>L</b> —— 这个 <b>L</b> 就是 <b>Left</b>（左边）的开头字母！能做出 L 的那只手，就是左手 ⬅️。</li>
+        </ul>
+
+        <h3>🙇 别人帮了你，一定要说 Thank you</h3>
+        <p>在英语里，别人帮完忙之后，你要说 <b>Thank you!</b> 或者 <b>Thank you very much!</b> 对方最常回答的是 <b>You are welcome.</b>（不客气）。</p>
+        <p>还有几种回答也很常见，听懂了可以点点头：<b>No problem.</b>（没事儿）、<b>You are welcome.</b>（不客气）、<b>Have fun!</b>（玩得开心！）。今天课文里的安娜阿姨，最后说的就是 <b>Have fun at the zoo!</b> 的同款心意 🎉。</p>
+
+        <h3>🇨🇳 在中国迷路了，可以找谁帮忙？</h3>
+        <ul>
+          <li><b>警察叔叔阿姨</b> 👮：穿制服的警察是最可靠的人，马路边的岗亭、巡逻车都可以找他们。</li>
+          <li><b>地铁站、火车站、机场的工作人员</b> 🚇：他们都穿着统一的工作服，戴着工牌，很熟悉周围的路线。</li>
+          <li><b>商店、超市、银行的店员</b> 🏪：柜台后面的叔叔阿姨通常就在附近上班。</li>
+          <li><b>带着小朋友的爸爸妈妈</b> 👨‍👩‍👧：向有孩子的家长求助，会让人觉得更安全、更放心。</li>
+          <li><b>志愿者</b> 🚩：在很多城市的景区、地铁站，会看到穿红色或蓝色马甲的志愿者，他们专门负责指路。</li>
+        </ul>
+
+        <h3>🎮 在家就能玩的三个小游戏</h3>
+        <ul>
+          <li><b>藏宝地图</b> 🗺️：和爸爸妈妈一起画一张从沙发到书架的“地图”，用英语标出 <b>go straight / turn left / turn right</b>，然后照着走一遍。</li>
+          <li><b>蒙眼指路</b> 🙈：一个人蒙上眼睛，另一个人用英语喊 <b>“Go straight! Turn left!”</b>，看能不能走到终点。</li>
+          <li><b>礼貌小剧场</b> 🎭：轮流演“问路的人”和“指路的人”，把 <b>Excuse me → Where is…? → Go straight → Thank you → You are welcome</b> 这五步连起来说一遍 🗣️。</li>
+        </ul>
+
+        <p style="background:#fef3c7;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>问路的时候，一定要<b>站在原地等对方说话</b>，不要跟着陌生人走 🚫。如果有不认识的人请你<b>上车带路、去别的地方、或者要牵你的手</b>，要大声说 <b>“No!”</b> 并马上走开，去找警察、工作人员或爸爸妈妈 👮。<b>出门一定要有大人陪着</b> 👨‍👩‍👧，最好记住爸爸妈妈的<b>电话号码</b>和自己的<b>家庭住址</b> 📞。在马路上问路时，先走到<b>人行道或路边安全的地方</b>再开口，不要站在车来车往的中间 🚗。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读一段「问路」的小对话，知道问路要先说 Excuse me，最后说 Thank you。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：zoo, straight, left, right, near, welcome。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “Where is the zoo?”, “Go straight. Turn left.”, “You are welcome.” 说句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得祈使句用动词原形、the 的用法，以及 Is it...? 的问与答。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>愿意在真实生活里有礼貌地用英语开口问路、道谢。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Tom 和 Anna 一句一句读，注意模仿问句上扬的语调。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，说到 left / right 时就举起对应的手 🖐️。</div></div>
+        <div class="goal"><span class="ic">🗺️</span><div>在家里和爸爸妈妈玩「问路小游戏」，用英语说 go straight / turn left / turn right。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>今天至少对爸爸妈妈说一次 <b>Thank you very much!</b>，看他们会怎么回答 😊。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把「指路三步」贴在门口，出门前认一认 🚪。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Where Is the Zoo · 2026-09-06 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Excuse me. Where is the zoo, please? Go straight down this road. Then turn left.",
+  "Is it near here? Yes, it is. It is near the park. Turn right at the park.",
+  "Thank you very much! You are welcome. You can walk to the zoo.",
+  "Look! The zoo is here. I can see the big gate. I am so happy. I love the zoo!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"How do you ask for the zoo? 你想问「动物园在哪里？」，应该怎么说？",em:["🙋","⬆️","😴"],opts:["The zoo is here.","Where is the zoo?","I like the zoo."],ans:1,
+   fb:"Correct! 问路要用 Where is the zoo? 说问句时句尾要往上扬 🦁。"},
+  {q:"Someone says: Go straight. 别人说这句话，是让你做什么？",em:["⬅️","⬆️","➡️"],opts:["Turn left (向左转)","Go straight (一直走)","Turn right (向右转)"],ans:1,
+   fb:"Yes! Go straight. 就是「一直往前走」，中间不拐弯 ⬆️。"},
+  {q:"turn right 是什么意思？",em:["⬆️","⬅️","➡️"],opts:["Go straight (一直走)","Turn left (向左转)","Turn right (向右转)"],ans:2,
+   fb:"Right! right 是「右边」，turn right 就是「向右转」➡️。"},
+  {q:"Someone helps you. 别人帮了你一个大忙，你应该说什么？",em:["🙏","😴","🏃"],opts:["Thank you very much.","Go straight.","Turn left."],ans:0,
+   fb:"Great! 得到帮助要说 Thank you very much.，意思是「太谢谢您了」🙏。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

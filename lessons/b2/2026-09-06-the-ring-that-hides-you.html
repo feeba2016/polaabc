@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Ring That Hides You</title>
+<style>
+:root{
+  --accent:#5b21b6;
+  --accent2:#b45309;
+  --bg:#fbfaff;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#e9d5ff;
+  --border:#e5d9fb;
+  --soft:#f6f2ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(91,33,182,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(91,33,182,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(91,33,182,.55);}70%{box-shadow:0 0 0 12px rgba(91,33,182,0);}100%{box-shadow:0 0 0 0 rgba(91,33,182,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#d8b4fe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#d8b4fe;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(91,33,182,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e9d5ff;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Philosophy</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Ring That Hides You</h1>
+      <p class="subtitle">如果没人看得见你，你还会做一个好人吗？——柏拉图的“盖吉斯之戒”与一场 17,303 个钱包的实验｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Shepherd in the Chasm 地裂中的牧羊人</div>
+            <p>In the second book of Plato's Republic, the philosopher's brother Glaucon tells a story. Gyges, a shepherd serving the king of Lydia, watches the ground split after an earthquake. He climbs into the chasm and finds a bronze horse, and inside it a corpse larger than any man, wearing a gold ring. Gyges pockets the ring, twists it, and vanishes. What follows is swift: he seduces the queen, murders the king, and takes the throne.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Glaucon's Wager 格劳孔的赌注</div>
+            <p>The tale is really a <span class="kw" data-def="假说；有待检验的推测（复数 hypotheses）">hypothesis</span>. Glaucon <span class="kw" data-def="（未经证实而）声称；断言">alleges</span> that no one is just by nature: we <span class="kw" data-def="遵守；服从（comply with rules 遵守规则）">comply</span> with the rules only because we fear being caught and value our reputations. On his account morality is a bargain, a <span class="kw" data-def="商品；这里指可以拿来交换的东西">commodity</span> bought with good behaviour. Suppose, he says, that there were two such rings, one given to a just man and one to an unjust. No one, he insists, is of such iron nature that he would resist the <span class="kw" data-def="诱惑；引诱（resist temptation 抵制诱惑）">temptation</span>. Given <span class="kw" data-def="免于惩罚；不受制裁（with impunity 逍遥法外）">impunity</span>, both men would act exactly alike.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Seventeen Thousand Wallets 一万七千个钱包</div>
+            <p>Glaucon's claim is <span class="kw" data-def="实证的；以观察和实验为依据的">empirical</span>: it predicts that unobserved people cheat. In 2019 a team of behavioural scientists tested it on a remarkable scale, handing 17,303 'lost' wallets to staff in 355 cities across 40 countries. Each held a key, a shopping list, and sometimes money. Nobody watching, the finders could have kept everything. Asked in advance, economists predicted that more cash would mean fewer returns. Not only were they wrong; the effect ran the other way. Reports rose from 40 per cent for empty wallets to 51 per cent at thirteen dollars and 72 per cent at ninety-four — people were unwilling to <span class="kw" data-def="招致；蒙受（incur a cost 付出代价）">incur</span> the cost of seeing themselves as thieves.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Why It Matters 意义</div>
+            <p>What Glaucon really asked was whether decency survives the disappearance of witnesses. The wallets suggest it partly does — but for an internal reason: what restrained those strangers was not the police but self-regard. That is close to Plato's own verdict, that injustice disorders the soul. Nor has the ring stayed fiction. Much of modern life is <span class="kw" data-def="匿名的；不具名的">anonymous</span> by design, and wherever we are anonymous, character grows cheap. Fear of punishment may be <span class="kw" data-def="不可或缺的；必不可少的">indispensable</span> to public order, but it does not <span class="kw" data-def="足够；足以（suffice to do 足以做某事）">suffice</span> to explain why most of us are decent. Had Glaucon been right, the fullest wallets would have vanished first.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hypothesis">🔊</button><div class="word">hypothesis<span class="pos">n.</span></div><div class="zh">假说；有待检验的推测（复数 hypotheses）</div><div class="ex">"The tale is really a hypothesis: it predicts that unobserved people cheat."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="allege">🔊</button><div class="word">allege<span class="pos">v.</span></div><div class="zh">（未经证实而）声称；断言</div><div class="ex">"Glaucon alleges that no one is just by nature."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="comply">🔊</button><div class="word">comply<span class="pos">v.</span></div><div class="zh">遵守；服从（comply with rules 遵守规则）</div><div class="ex">"We comply with the rules only because we fear being caught."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="commodity">🔊</button><div class="word">commodity<span class="pos">n.</span></div><div class="zh">商品；可用来交换的东西</div><div class="ex">"On his account morality is a commodity bought with good behaviour."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="temptation">🔊</button><div class="word">temptation<span class="pos">n.</span></div><div class="zh">诱惑；引诱（resist temptation 抵制诱惑）</div><div class="ex">"No one is of such iron nature that he would resist the temptation."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="impunity">🔊</button><div class="word">impunity<span class="pos">n.</span></div><div class="zh">免于惩罚；不受制裁（with impunity 逍遥法外）</div><div class="ex">"Given impunity, the just man and the unjust would act exactly alike."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="empirical">🔊</button><div class="word">empirical<span class="pos">adj.</span></div><div class="zh">实证的；以观察和实验为依据的</div><div class="ex">"Glaucon's claim is empirical, so it can be tested in the field."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="incur">🔊</button><div class="word">incur<span class="pos">v.</span></div><div class="zh">招致；蒙受（incur a cost / a loss 付出代价 / 蒙受损失）</div><div class="ex">"People were unwilling to incur the cost of seeing themselves as thieves."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="anonymous">🔊</button><div class="word">anonymous<span class="pos">adj.</span></div><div class="zh">匿名的；不具名的</div><div class="ex">"Much of modern life is anonymous by design."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="indispensable">🔊</button><div class="word">indispensable<span class="pos">adj.</span></div><div class="zh">不可或缺的；必不可少的</div><div class="ex">"Fear of punishment may be indispensable to public order."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="suffice">🔊</button><div class="word">suffice<span class="pos">v.</span></div><div class="zh">足够；足以（suffice to do 足以做某事）</div><div class="ex">"Fear of punishment does not suffice to explain why most of us are decent."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 形容词 / 名词 + as + 主语 + 谓语, 主句.</h3>
+          <div class="zh">让步倒装：把表语提到 as 之前，表示“尽管……”。比 Although 更书面、更有节奏感。若提前的是单数可数名词，冠词必须省略（Child as he was...，不可说 A child as he was...）。</div>
+          <div class="eg">Simple as the story sounds, it has resisted an answer for more than two thousand years.</div>
+          <div class="practice">练习：用 “the claim / bold” → <input placeholder="Bold as the claim was">, it turned out to be testable after all.</div>
+        </div>
+        <div class="item">
+          <h3>2. 过去分词短语 (+ 状语), 主语 + 谓语.</h3>
+          <div class="zh">非谓语动词作状语。分词短语与主句主语是被动关系，可一口气交代条件、时间或原因，避免写成两个松散短句。这是议论性写作里最常用的句首结构之一。</div>
+          <div class="eg">Asked in advance, economists predicted that more cash would mean fewer returns.</div>
+          <div class="practice">练习：用 “Glaucon / challenge by Socrates” → <input placeholder="Challenged by Socrates">, Glaucon admitted that he could not define justice.</div>
+        </div>
+        <div class="item">
+          <h3>3. Not only + 助动词 + 主语 + 谓语; ... (but) ... also / as well.</h3>
+          <div class="zh">否定或半否定状语置于句首时，主句必须部分倒装（把 be / 助动词 / 情态动词提到主语前）。Not only 分句中，若谓语是实义动词的一般现在时或一般过去时，需另加助动词 do / does / did。</div>
+          <div class="eg">Not only were they wrong; the effect ran the other way.</div>
+          <div class="practice">练习：用 “the fullest wallets / survive most often” → <input placeholder="Not only did the fullest wallets survive most often">; they were returned at nearly twice the rate of the empty ones.</div>
+        </div>
+        <div class="item">
+          <h3>4. 名词 + 现在分词 / 过去分词 / 形容词 / 介词短语, 主句（独立主格）.</h3>
+          <div class="zh">独立主格（nominative absolute）：自带逻辑主语的非谓语结构，用逗号与主句隔开，多表示伴随状况、原因或条件。它没有连词，因此能把“背景”压缩成一个短语，是高级书面语的标志。注意：独立主格的逻辑主语与主句主语<b>不一致</b>。</div>
+          <div class="eg">Nobody watching, the finders could have kept everything.</div>
+          <div class="practice">练习：用 “the evidence / be inconclusive” → <input placeholder="The evidence inconclusive">, the debate moved from facts to first principles.</div>
+        </div>
+        <div class="item">
+          <h3>5. Whatever / Whoever / Wherever / However + 从句, 主句.</h3>
+          <div class="zh">-ever 词同时充当两种成分：既引导从句，又在从句中作主语、宾语、状语或表语。它先承认某种不确定性，再在主句里推进论点，让步—转折一步到位。Wherever 引导地点，Wherever we are anonymous = 在我们保持匿名的任何地方。</div>
+          <div class="eg">Wherever we are anonymous, character grows cheap.</div>
+          <div class="practice">练习：用 “we conclude about Gyges” → <input placeholder="Whatever we conclude about Gyges">, the experiment is one we now run on ourselves daily.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气倒装 (Inverted Unreal Conditionals)</h3>
+          <div class="zh">去掉 if、助动词提前，形成三种时态：<br>
+          · 现在 / 将来虚拟：<b>Were</b> + 主语 + 表语 / doing, 主语 + would / could / might + 动词原形<br>
+          · 过去虚拟：<b>Had</b> + 主语 + 过去分词, 主语 + would have done<br>
+          · 将来虚拟：<b>Should</b> + 主语 + 动词原形, 主语 + would + 动词原形<br>
+          常见错误：把 were 误写成 was，或在主句里重复用 will。本课结尾的 “Had Glaucon been right, the fullest wallets would have vanished first.” 正属于过去虚拟。</div>
+          <div class="eg">Had Glaucon been right, the fullest wallets would have vanished first. / Were the ring real, few of us would dare to test ourselves.</div>
+        </div>
+        <div class="item">
+          <h3>2. 让步倒装 (Concessive Inversion with as / though)</h3>
+          <div class="zh">结构为“表语 / 状语 + as / though + 主语 + 谓语”。注意区分：<b>as</b> 表示“尽管”时必须倒装，表示“因为 / 随着”时不倒装；<b>though</b> 两种语序都可以。若提前的是动词，需保留助动词（Try as he might...）。</div>
+          <div class="eg">Simple as the story sounds, it has resisted an answer for two thousand years. / Much as we dislike the conclusion, the data point one way.</div>
+        </div>
+        <div class="item">
+          <h3>3. 过去分词短语作状语 (Past Participles as Adverbials)</h3>
+          <div class="zh">过去分词表示被动且完成的动作，其逻辑主语必须是主句主语；否则会产生“悬垂分词”（dangling participle）。可表示条件（Given impunity...）、时间（Asked in advance...）、原因或伴随状态。对比：本课中的 <b>Given impunity</b>, both men would act alike 是标准的条件状语。</div>
+          <div class="eg">Asked in advance, economists predicted the opposite. / Given impunity, the just man would behave no better than the unjust.</div>
+        </div>
+        <div class="item">
+          <h3>4. 独立主格 (The Nominative Absolute)</h3>
+          <div class="zh">结构为“名词 / 代词 + 现在分词 / 过去分词 / 形容词 / 副词 / 介词短语”，用逗号与主句隔开。关键是它<b>自带逻辑主语</b>，因此不受“悬垂分词”规则限制。功能上相当于一个省略了连词的状语从句，常译为“由于……”“在……的情况下”。</div>
+          <div class="eg">Nobody watching, the finders could have kept everything. / The experiment concluded, the researchers turned to the question of motive.</div>
+        </div>
+        <div class="item">
+          <h3>5. 部分倒装：Not only 等否定 / 半否定状语提前</h3>
+          <div class="zh">当句首出现 <b>not only, never, rarely, seldom, hardly, no sooner, under no circumstances, on no account</b> 等否定或半否定成分时，主句必须部分倒装。若谓语为实义动词且无助动词，须补 do / does / did 并把动词退回原形。</div>
+          <div class="eg">Not only were they wrong; the effect ran the other way. / Not only did the wallets with money come back more often; the rate rose with the sum.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+        <h3>一、故事的出处：两千三百年前的一次挑衅</h3>
+        <p>盖吉斯之戒出现在柏拉图《理想国》第二卷（359a–360d）。说话的人是格劳孔——柏拉图的哥哥，也是对话中苏格拉底最认真的对手之一。故事讲的是吕底亚的一个牧羊人：地震后大地裂开，他走进地缝，看见一匹青铜马，马腹里有一具比常人更大的尸体，手上戴着一枚金戒指。牧羊人转动戒指，人就不见了。他随后勾引王后、杀死国王、夺取王位。</p>
+        <p>吕底亚的盖吉斯在历史上确有其人，希罗多德《历史》记载过他如何上位，但没有戒指——那是柏拉图加的。加这一笔的目的很清楚：把“运气”和“隐身”区分开。一个人靠运气夺得王位，说明不了什么；一个人明知无人看见仍然作恶，才触到了道德的本质。</p>
+        <p>这个故事的生命力极强。古罗马的西塞罗在《论义务》（公元前 44 年）里重写过它，结论更冷：一个好人如果相信自己的行为永远不会被发现，他也会违法。近两千年后，托尔金的《指环王》从中借走了“戴上戒指就隐身、隐身就腐化”的核心设定。</p>
+
+        <h3>二、格劳孔真正要问的：不是“你会不会”，而是“为什么值得”</h3>
+        <p>很多人把戒指读成一个简单的测试——“给你隐身能力，你还会不会守规矩？”但格劳孔的问题更锋利。他接着提出了两个极端人物（360e–362c）：</p>
+        <table class="facts">
+          <tr><th>人物</th><th>行为</th><th>名声</th></tr>
+          <tr><td>完全不义的人</td><td>干尽坏事</td><td>享有正义的美名，受人尊敬</td></tr>
+          <tr><td>完全正义的人</td><td>只做正确的事</td><td>被当作不义之徒，遭鞭打、拷问，最终被钉死</td></tr>
+        </table>
+        <p>格劳孔要苏格拉底证明：即便第二种人落得如此下场，做正义的人仍然更好。也就是说，正义的价值必须来自正义<b>本身</b>，而不是它带来的名声、财富或回报。这个要求在逻辑上非常苛刻——它把“好人会有好报”这条退路彻底堵死了。</p>
+        <p>苏格拉底用整整九卷书来回答。他的核心论证是：正义的人灵魂是<b>有序的</b>，不义的人灵魂是<b>混乱的</b>；混乱的灵魂不可能幸福，哪怕它拥有全世界的财富与权力（612b）。请注意这个回答的方向——它不在外部奖赏上，而在人格的内部结构上。这一点，恰恰和两千三百年后的实验数据产生了呼应。</p>
+
+        <h3>三、2019 年的那场实验：给格劳孔的赌注一个数据表</h3>
+        <p>格劳孔的理论其实是一个<b>可证伪的经验命题</b>：如果道德只是对惩罚的恐惧，那么在没有观众的地方，人就会欺骗。2019 年 6 月 20 日，密歇根大学的 Alain Cohn、苏黎世大学的 Michel André Maréchal 与 Christian Zünd、犹他大学的 David Tannenbaum 在《科学》（Science）杂志上发表了一项规模罕见的实地实验。</p>
+        <table class="facts">
+          <tr><th>项目</th><th>设计</th></tr>
+          <tr><td>样本</td><td>17,303 个“遗失”钱包，分布在 40 个国家的 355 座城市</td></tr>
+          <tr><td>投放点</td><td>银行、剧院与博物馆、邮局、酒店、警察局与法院等公共机构的前台</td></tr>
+          <tr><td>钱包内容</td><td>透明卡包：购物清单、一把钥匙、三张当地语言的名片（含邮箱），部分有钱</td></tr>
+          <tr><td>金额梯度</td><td>没钱 / 约 13.45 美元 / 约 94.15 美元（按购买力折算为当地货币）</td></tr>
+          <tr><td>判定标准</td><td>100 天内有人发邮件联系“失主”即记为归还</td></tr>
+        </table>
+        <p>结果是：没钱的钱包归还率约 40%，装了 13.45 美元的约 51%，装了 94.15 美元的约 72%。在 40 个国家里有 38 个呈现同一趋势。研究者事先调查了 279 位经济学家与一批普通公众，<b>两组的预测都与结果相反</b>——他们一致认为钱越多，人们越可能留下。</p>
+
+        <h3>四、为什么钱越多，反而越多人还？</h3>
+        <p>研究者提出了两个互补的机制。</p>
+        <ul>
+          <li><b>利他（altruism）。</b>钱对捡到的人有用，但对失主更有用——因为失主失去的更多。为验证这一点，团队在部分钱包里放了<b>一把钥匙</b>：它对捡到者几乎一文不值，却对失主很重要。结果装着“钱 + 钥匙”的钱包归还率（61%）显著高于只有钱的（52%）。</li>
+          <li><b>自我形象（self-image）。</b>后续在美、英、波三国对近三千人的问卷调查显示：钱包里的钱越多，人们越觉得“不联系失主”就等于偷。钱越多，留给自己的心理余地越小——你越难说服自己仍然是个好人。</li>
+        </ul>
+        <p>研究者还排除了另一种解释：他们记录前台附近是否有监控摄像头、是否有旁人在场、当地法律是否禁止侵占遗失物，发现这些<b>都不能</b>解释归还率随金额上升的现象。也就是说，驱使人们归还的确实不是“怕被抓”。</p>
+        <blockquote>金钱诱惑越大，撒谎的收益越高，但这远不及“不愿把自己看成小偷”的心理代价大。当两者都很高时，心理成本压过了经济收益。<em>—— 研究团队对实验结果的解释</em></blockquote>
+        <p>这里必须提醒一点：实验测量的是“是否联系失主”这一行为，不能直接等同于一个国家的国民道德水平，各国之间的差异还可能受到制度、语言、机构类型与执行细节的影响。研究者本人也强调，跨国比较需要谨慎解读。</p>
+
+        <h3>五、今天的隐身戒指</h3>
+        <p>格劳孔的戒指从来没有成真，但“没人看见我”这件事，在今天比历史上任何时候都更容易做到。匿名的评论区、一次性的账号、无人值守的自助结账——它们都是局部的戒指。</p>
+        <p>有意思的是，把“观众”放回去，行为就会变。2006 年，英国纽卡斯尔大学的 Melissa Bateson、Daniel Nettle 与 Gilbert Roberts 在一间大学咖啡室的诚实付款箱上方轮流贴两种图片：一双眼睛，或者一盆花。十周的结果显示，贴眼睛的那些周里，人们为饮料付的钱是贴花时的 <b>2.76 倍</b>。没有人真的在看；一双印刷的眼睛就够了。</p>
+        <p>于是问题呈现出两副面孔。一方面，人被注视时会更守规矩，说明外部监督有效；另一方面，钱包实验里那 72% 的人是在无人注视的情况下做对的，说明内部约束也有效。格劳孔猜对了一半：我们确实在乎别人怎么看。但他猜错了另一半——我们也在乎自己怎么看自己。</p>
+
+        <h3>六、留给你的三个问题</h3>
+        <ul>
+          <li>如果真有这样一枚戒指，你会戴上它吗？如果你回答“永远不会”，请接着问自己：你想要的是诚实本身，还是“我是一个诚实的人”这个形象？这两者有区别吗？</li>
+          <li>钱包实验里，钱越多归还率越高。如果换成一部最新款的手机呢？换成一张写着巨额密码的纸条呢？在你心里，这个效应会在哪个点上反转？</li>
+          <li>柏拉图的答案是“不义会扰乱灵魂”。你觉得这是一种道德论证，还是一种心理学论证？如果是后者，它和 2019 年的实验数据是什么关系？</li>
+        </ul>
+        <p class="source">资料来源：柏拉图《理想国》第二卷（359a–362c）与第十卷（612b）；希罗多德《历史》第一卷；西塞罗《论义务》第三卷；A. Cohn, M. A. Maréchal, D. Tannenbaum, C. Zünd, “Civic honesty around the globe”, Science 365 (2019), 70–73；M. Bateson, D. Nettle, G. Roberts, “Cues of being watched enhance cooperation in a real-world setting”, Biology Letters (2006)。</p>
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3>🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>阅读</b>：读懂一篇约 390 词的哲学随笔，把握“故事—命题—实验—反思”的四段论证结构。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>词汇</b>：掌握 11 个 CEFR B2 核心词（hypothesis, allege, comply, commodity, temptation, impunity, empirical, incur, anonymous, indispensable, suffice），能在议论与学术语境中主动使用。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>句型</b>：熟练运用 5 个高级句式，重点突破让步倒装、独立主格与 Not only 部分倒装。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>语法</b>：系统复习虚拟语气倒装、让步倒装、过去分词短语作状语、独立主格结构以及 Not only 引起的部分倒装。</div></div>
+        <div class="goal"><span class="ic">✅</span><div><b>测验</b>：完成 6 道选择题，检验细节理解、推理判断与语法识别能力。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>拓展</b>：理解盖吉斯之戒在哲学史中的位置，以及 2019 年“丢失钱包”实验的方法、结果与局限。</div></div>
+        <h3 style="margin-top:20px;">🗣️ 口语输出建议</h3>
+        <p>用本课句型，口头回答一个问题：<b>在你自己的生活中，什么时候“没人看见”？那时的你和有人看见时的你，是同一个人吗？</b>要求至少用上 1 个独立主格和 1 个 -ever 从句。例如：</p>
+        <div class="item"><div class="eg">Nobody checking, I could hand in work that is not really mine. Wherever I am unseen, however, I still want to be the person I claim to be — and that, I suspect, is the whole argument.</div></div>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English Learning · Philosophy<br>Generated on 6 September 2026</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In the second book of Plato's Republic, the philosopher's brother Glaucon tells a story. Gyges, a shepherd serving the king of Lydia, watches the ground split after an earthquake. He climbs into the chasm and finds a bronze horse, and inside it a corpse larger than any man, wearing a gold ring. Gyges pockets the ring, twists it, and vanishes. What follows is swift: he seduces the queen, murders the king, and takes the throne.",
+  "The tale is really a hypothesis. Glaucon alleges that no one is just by nature: we comply with the rules only because we fear being caught and value our reputations. On his account morality is a bargain, a commodity bought with good behaviour. Suppose, he says, that there were two such rings, one given to a just man and one to an unjust. No one, he insists, is of such iron nature that he would resist the temptation. Given impunity, both men would act exactly alike.",
+  "Glaucon's claim is empirical: it predicts that unobserved people cheat. In 2019 a team of behavioural scientists tested it on a remarkable scale, handing 17,303 'lost' wallets to staff in 355 cities across 40 countries. Each held a key, a shopping list, and sometimes money. Nobody watching, the finders could have kept everything. Asked in advance, economists predicted that more cash would mean fewer returns. Not only were they wrong; the effect ran the other way. Reports rose from 40 per cent for empty wallets to 51 per cent at thirteen dollars and 72 per cent at ninety-four — people were unwilling to incur the cost of seeing themselves as thieves.",
+  "What Glaucon really asked was whether decency survives the disappearance of witnesses. The wallets suggest it partly does — but for an internal reason: what restrained those strangers was not the police but self-regard. That is close to Plato's own verdict, that injustice disorders the soul. Nor has the ring stayed fiction. Much of modern life is anonymous by design, and wherever we are anonymous, character grows cheap. Fear of punishment may be indispensable to public order, but it does not suffice to explain why most of us are decent. Had Glaucon been right, the fullest wallets would have vanished first."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What does Gyges do after he discovers that the ring makes him invisible? 牧羊人发现戒指能隐身之后做了什么？",opts:["He returns the ring to the tomb 他把戒指放回墓中","He reports the discovery to the king 他把发现报告给国王","He vanishes, then returns it after a year 他隐身一年后归还了戒指","He seduces the queen, murders the king and takes the throne 他勾引王后、杀死国王、夺取王位"],ans:3,
+   fb:"正确！这正是格劳孔要的：戒指没有强迫他作恶，它只是撤走了目击者。故事的力量在于——没有人需要教他怎么用它。"},
+  {q:"According to Glaucon, why do people comply with moral rules? 格劳孔认为，人们为什么遵守道德规则？",opts:["Because justice is written into human nature 因为正义写在人的本性里","Because they fear being caught and value their reputations 因为他们害怕被抓、看重自己的名声","Because the gods punish injustice 因为神明会惩罚不义之举","Because schools and laws have taught them to 因为学校和法律如此教导"],ans:1,
+   fb:"正确！这是格劳孔的核心断言：道德不是出于本性，而是一场交易——我克制自己，换取别人也克制自己。注意选项 A 恰恰是他要反驳的观点。"},
+  {q:"In the 2019 field experiment, what happened to return rates as the amount of money in the wallet increased? 在 2019 年的实地实验中，钱包里的钱越多，归还率如何变化？",opts:["They rose: about 40% when empty, 51% at 13 dollars, 72% at 94 dollars 上升：空的约 40%，13 美元约 51%，94 美元约 72%","They fell sharply in every country 在所有国家都大幅下降","They stayed exactly the same 完全不变","They rose only in countries with strict laws 只在法律严格的国家上升"],ans:0,
+   fb:"正确！40 → 51 → 72 是本文最关键的一组数据。研究者事先询问的 279 位经济学家预测的方向完全相反，这也从侧面说明这个结果有多反直觉。"},
+  {q:"What did the researchers conclude about cameras, bystanders and local laws? 关于监控摄像头、旁观者与当地法律，研究者得出了什么结论？",opts:["They fully explained the rise in return rates 它们完全解释了归还率的上升","They made return rates fall 它们使归还率下降","They were not recorded in the study at all 研究完全没有记录这些因素","They could not explain why return rates rose with the amount of money 它们无法解释归还率随金额上升的现象"],ans:3,
+   fb:"正确！研究者专门记录了这些变量，结果发现都解释不了。这很重要：它排除了“怕被抓”，从而支持了“不愿把自己看成小偷”这个内部机制。"},
+  {q:"'Nobody watching, the finders could have kept everything.' 这句话使用了什么结构？",opts:["Dangling participle 悬垂分词","Inverted unreal conditional 虚拟语气倒装","Nominative absolute 独立主格（名词 + 现在分词，自带逻辑主语）","Appositive clause 同位语从句"],ans:2,
+   fb:"正确！独立主格自带逻辑主语 Nobody，与主句主语 the finders 不一致，因此不受悬垂分词规则限制。相当于 Because nobody was watching...，但更凝练。"},
+  {q:"'Not only were they wrong; the effect ran the other way.' 这句话的语法是？",opts:["Concessive inversion 让步倒装","Partial inversion after a negative fronted adverbial 否定状语提前引起的部分倒装","Past participle phrase 过去分词短语作状语","Nominative absolute 独立主格"],ans:1,
+   fb:"正确！Not only 置于句首时主句必须部分倒装，be 动词 were 提到主语 they 之前。若谓语是实义动词，则需补 do / does / did，例如 Not only did the rate rise..."}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#5b21b6';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

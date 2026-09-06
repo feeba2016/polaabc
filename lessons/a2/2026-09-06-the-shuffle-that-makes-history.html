@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Shuffle That Makes History — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#6d28d9;
+  --accent2:#f59e0b;
+  --bg:#faf5ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#ede9fe;
+  --border:#ddd6fe;
+  --soft:#f8f6ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#f59e0b);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg{flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(109,40,217,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(109,40,217,.55);}70%{box-shadow:0 0 0 12px rgba(109,40,217,0);}100%{box-shadow:0 0 0 0 rgba(109,40,217,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#ddd6fe;}
+#tip{position:fixed;z-index:1200;background:#4c1d95;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),#f59e0b);color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE SHUFFLE THAT MAKES HISTORY · 2026-09-06</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🃏 The Shuffle That Makes History</h1>
+  <div class="subtitle">一次洗牌，就是一段历史 · CEFR A2 · 约 122 词 · 🔢 趣味知识</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">Hook · 开场</div>
+        <p>Take a <span class="kw" data-word="deck">deck</span> of 52 cards and <span class="kw" data-word="shuffle">shuffle</span> it well. Now look at the <span class="kw" data-word="order">order</span>. That <span class="kw" data-word="exact">exact</span> order has probably never existed before in the whole history of the world.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">拿出一副五十二张的扑克牌，好好洗一洗。现在看看牌的顺序。这个一模一样的顺序，很可能在此之前从来没有出现过——在整个人类历史上都没有。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">Why · 为什么</div>
+        <p>Why? Because 52 cards can be <span class="kw" data-word="arrange">arranged</span> in a <span class="kw" data-word="huge">huge</span> number of orders. Mathematicians write this number as 52!. It means 52 times 51 times 50, and so on, down to 1.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">为什么呢？因为五十二张牌可以被排列出多得吓人的顺序。数学家把这个数字写成 52!（读作 fifty-two factorial）。它的意思是 52 × 51 × 50，一直乘下去，直到 1。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">How big · 有多大</div>
+        <p>The answer is about 8 followed by 67 zeros. Our <span class="kw" data-word="universe">universe</span> is 13.8 billion years old. If you shuffled once every second since the beginning, you would still not see every order.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">算出来的答案大约是 8 后面跟着 67 个零。我们的宇宙已经有一百三十八亿岁了。就算你从宇宙诞生那天起，每一秒洗一次牌，到今天也远远看不完所有的顺序。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Sign-off · 结尾</div>
+        <p>But you must shuffle well. Two mathematicians found that seven good riffle shuffles make a deck truly <span class="kw" data-word="random">random</span>. Next time you shuffle, you are holding something brand new.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">不过牌一定要洗得够好。两位数学家发现，大约七次漂亮的「鸽尾式洗牌」（把牌分成两叠、交错落下），才能让一副牌真正变得随机。所以下次洗牌时请记住：你手里拿着的，是全世界都没见过的东西。</div>
+    </div>
+  </div>
+
+  <div class="tipbox">
+    <h3>🃏 学习小提示 Study Tip</h3>
+    <ul>
+      <li>读完后试着用一句话说出这个冷知识：<b>Every shuffle makes a new order that the world has never seen.</b></li>
+      <li>注意本课的高频结构 <b>has probably never existed</b>（可能从来没有存在过）和 <b>would still not see</b>（仍然看不到）。</li>
+      <li>数字要会读：<b>52! = fifty-two factorial</b>，<b>13.8 billion = thirteen point eight billion</b>，中文是「一百三十八亿」，可不要看成十三点八亿。</li>
+      <li>动手试一试：拿三张牌，把它们<b>所有</b>的排法都摆出来（一共 6 种），感受一下「阶乘」长得多快。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Vocabulary</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="deck">🔊</button>
+        <div class="word">deck<span class="pos">n.</span></div>
+        <div class="zh">一副（扑克牌）</div>
+        <div class="ex">Take a deck of 52 cards and shuffle it.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="shuffle">🔊</button>
+        <div class="word">shuffle<span class="pos">v.</span></div>
+        <div class="zh">洗牌；把牌打乱</div>
+        <div class="ex">Please shuffle the cards before the game.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="order">🔊</button>
+        <div class="word">order<span class="pos">n.</span></div>
+        <div class="zh">顺序；次序</div>
+        <div class="ex">Look at the order of the cards.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="exact">🔊</button>
+        <div class="word">exact<span class="pos">adj.</span></div>
+        <div class="zh">确切的；完全一样的</div>
+        <div class="ex">That exact order has never existed before.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="arrange">🔊</button>
+        <div class="word">arrange<span class="pos">v.</span></div>
+        <div class="zh">排列；安排</div>
+        <div class="ex">The cards can be arranged in many ways.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="huge">🔊</button>
+        <div class="word">huge<span class="pos">adj.</span></div>
+        <div class="zh">巨大的；庞大得吓人的</div>
+        <div class="ex">There is a huge number of possible orders.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="universe">🔊</button>
+        <div class="word">universe<span class="pos">n.</span></div>
+        <div class="zh">宇宙</div>
+        <div class="ex">Our universe is 13.8 billion years old.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="random">🔊</button>
+        <div class="word">random<span class="pos">adj.</span></div>
+        <div class="zh">随机的；没有规律的</div>
+        <div class="ex">Seven good shuffles make a deck truly random.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">There are more ways to [arrange 52 cards] than [seconds since the universe began].</div>
+    <div class="zh">[排列 52 张牌]的方法，比[宇宙诞生以来的秒数]还要多。</div>
+    <div class="note">这是英语里比较两样东西的经典句型：<b>more ... than ...</b>。试着说：There are more stars in the sky than grains of sand on Earth.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">It means [52 times 51 times 50, and so on, down to 1].</div>
+    <div class="zh">它的意思是[52 乘 51 乘 50，依此类推，一直乘到 1]。</div>
+    <div class="note">解释一个难懂的说法时，用 <b>It means ...</b> 开头。乘法的 <b>times</b> 在这里不是「次数」，是「乘以」。试着说：3 times 2 means 6.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">If you [shuffled once every second], you would [still not see every order].</div>
+    <div class="zh">如果[你每秒洗一次牌]，你[仍然看不到所有的顺序]。</div>
+    <div class="note">这个句型用来讲「<b>想象中的</b>事情」，动词要用过去式（shuffled），后面跟 <b>would + 动词原形</b>。试着说：If I had a million cards, I would be very happy.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">The number is [bigger] than [all the grains of sand on Earth].</div>
+    <div class="zh">这个数字比[地球上所有的沙粒]还要[大]。</div>
+    <div class="note">比较级 <b>bigger than</b> 用来形容「大到没法比」。想不出具体的东西时，可以拿熟悉的事物打比方。试着说：This box is bigger than my school bag.</div>
+  </div>
+</section>
+
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 现在完成时：have / has + 过去分词</h3>
+    <ul>
+      <li>想说「<b>从过去到现在一直</b>怎样」或者「<b>曾经 / 从未</b>做过某事」，用 <b>have / has + 过去分词</b>。</li>
+      <li class="eg">That exact order <span class="good">has probably never existed</span> before.（那个顺序以前很可能从来没有存在过。）</li>
+      <li class="eg">I <span class="good">have never seen</span> this order before.（我以前从没见过这个顺序。）</li>
+      <li>主语是 he / she / it 或单数名词时用 <b>has</b>，其余用 <b>have</b>：The order <b>has</b> never existed. / The cards <b>have</b> never been in this order.</li>
+      <li>注意 <b>never</b> 要放在 have / has 之后、过去分词之前。<span class="bad">The order never has existed.</span> → <span class="good">The order has never existed.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. 大数字怎么说：billion, million 与 followed by ... zeros</h3>
+    <ul>
+      <li>英语数字是<b>三位一组</b>：<b>1,000 = one thousand</b>（千）；<b>1,000,000 = one million</b>（百万）；<b>1,000,000,000 = one billion</b>（十亿）。</li>
+      <li class="eg">Our universe is <span class="good">13.8 billion</span> years old.（读作 thirteen point eight billion，也就是 138 亿年。）</li>
+      <li>遇到大到写不下的数，可以说 <b>数字 + followed by + 多少个 + zeros</b>：<span class="good">8 followed by 67 zeros</span>（8 后面跟着 67 个零）。</li>
+      <li>注意别把中文和英文的位数搞混：中文说「<b>一百三十八亿</b>」，英文要说 <b>13.8 billion</b>，<b>不能</b>说成 1.38 billion。<span class="bad">1.38 billion</span> 其实是十三点八亿。</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. if 条件句：想象出来的事（If + 过去式, ... would + 动词原形）</h3>
+    <ul>
+      <li>讲一件<b>现在并不真实、只是想象</b>的事，if 后面的动词用<b>过去式</b>，主句用 <b>would + 动词原形</b>。</li>
+      <li class="eg">If you <span class="good">shuffled</span> once every second, you <span class="good">would still not see</span> every order.</li>
+      <li class="eg">If I <span class="good">had</span> a deck of cards, I <span class="good">would shuffle</span> it seven times.</li>
+      <li>两半句可以调换顺序，意思不变：<b>You would still not see every order if you shuffled once every second.</b>（逗号要去掉。）</li>
+      <li>常见错误：主句里 would 后面不能再加过去式。<span class="bad">I would shuffled it.</span> → <span class="good">I would shuffle it.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. 比较级：-er than 与 more ... than ...</h3>
+    <ul>
+      <li>短形容词在词尾加 <b>-er</b>，后面跟 <b>than</b>（比……）：<b>big → bigger</b>、<b>old → older</b>、<b>fast → faster</b>。</li>
+      <li class="eg">The number is <span class="good">bigger than</span> all the grains of sand on Earth.</li>
+      <li>想比较「<b>数量多少</b>」，用 <b>more ... than ...</b>：<span class="good">There are more ways to arrange the cards than seconds in 13.8 billion years.</span></li>
+      <li>注意 <b>big</b> 要先双写 g 再加 -er：<span class="bad">biger</span> → <span class="good">bigger</span>。</li>
+      <li>比较两个东西时，than 后面可以用代词：<b>bigger than me</b>、<b>older than you</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz</h2>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">1. How many cards are in a normal deck?</div>
+    <div class="qzh">一副普通的扑克牌有多少张？</div>
+    <button class="opt">A) 36 cards</button>
+    <button class="opt">B) 52 cards</button>
+    <button class="opt">C) 100 cards</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">2. Why is a well-shuffled deck special?</div>
+    <div class="qzh">为什么一副洗好的牌很特别？</div>
+    <button class="opt">A) Its exact order has probably never existed before</button>
+    <button class="opt">B) The cards become much lighter</button>
+    <button class="opt">C) The cards can fly by themselves</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">3. What does 52! mean in this lesson?</div>
+    <div class="qzh">课文中 52! 是什么意思？</div>
+    <button class="opt">A) 52 plus 51 plus 50, and so on</button>
+    <button class="opt">B) 52 times 51 times 50, and so on, down to 1</button>
+    <button class="opt">C) The number 52 with a loud voice</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">4. How many good riffle shuffles make a deck truly random?</div>
+    <div class="qzh">洗多少次漂亮的鸽尾式洗牌，才能让一副牌真正随机？</div>
+    <button class="opt">A) One shuffle</button>
+    <button class="opt">B) Three shuffles</button>
+    <button class="opt">C) About seven shuffles</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">5. What is this lesson trying to tell us?</div>
+    <div class="qzh">这篇课文想告诉我们什么？</div>
+    <button class="opt">A) Card games are better than maths</button>
+    <button class="opt">B) Big surprises can hide in small, everyday things</button>
+    <button class="opt">C) We should never use playing cards again</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · 背景知识</h2>
+
+  <div class="know">
+    <h3>🃏 一副牌到底有多少种排法</h3>
+    <p>要算出一副牌有多少种排法，其实只要问一个问题：<b>第一张牌有几种选择？</b>答案是 52 种。第一张定下来后，第二张就只剩 51 种，第三张 50 种……一直到最后一张只剩 1 种。把它们全部乘起来，就是数学里说的「<b>阶乘</b>」。</p>
+    <ul>
+      <li>这个数字写作 <b>52!</b>，读成 <b>fifty-two factorial</b>（五十二的阶乘）。算出大约是 <b>8 后面跟 67 个零</b>，也就是 8 × 10⁶⁷。</li>
+      <li>它比地球上所有沙滩和沙漠里的<b>沙粒总数</b>（大约 7.5 × 10¹⁸）还要大得多得多。</li>
+      <li>它也远远超过<b>可观测宇宙里的恒星数量</b>（大约 10²² 到 10²⁴ 颗）。</li>
+      <li>换句话说：<b>把宇宙里每一颗星星都变成一副牌</b>，让它们从宇宙诞生那天起每秒洗一次，到今天也远远洗不完所有可能的顺序。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>⏳ 用「时间」来理解这个数字</h3>
+    <ul>
+      <li>科学家估计，我们的宇宙诞生于大约 <b>138 亿年前</b>。把 138 年换算成秒，大约是 <b>4.3 × 10¹⁷ 秒</b>（也就是 43 后面跟 16 个零）。</li>
+      <li>而一副牌的排法有 <b>8 × 10⁶⁷</b> 种。两个数相差了大约 <b>10⁵⁰ 倍</b>——这个倍数本身，就已经大到没法想象了。</li>
+      <li>所以课文里那句 <b>「每秒洗一次，也看不完」</b> 并不是夸张，它其实还是<b>非常保守</b>的说法。</li>
+      <li>数学里有一个专门的词形容这种感觉，叫<b>组合爆炸</b>：每多一张牌，可能性就再乘一次，数字会飞快地冲上天空。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🎲 为什么一定要洗七次</h3>
+    <ul>
+      <li>刚买回来的新牌，每一副的排列都是<b>完全一样</b>的：按花色、按点数排好。所以「没洗过的牌」反而是<b>最不特别</b>的。</li>
+      <li>如果只随便洗两三下，很多牌还保持着原来的<b>先后顺序</b>，这样的排列很可能早就被别人洗出来过。</li>
+      <li>1992 年，美国数学家（同时也是一位魔术师）<b>珀西·迪亚科尼斯（Persi Diaconis）</b>和同事 <b>戴夫·拜尔（Dave Bayer）</b>仔细研究了这个问题。他们发现：用常见的<b>鸽尾式洗牌</b>（把牌分成两叠，让它们交错落下），大约 <b>7 次</b>之后，一副牌才算真正被打乱。</li>
+      <li>少于 7 次，牌里还留着「上次的痕迹」；洗到第 7 次，各种排列出现的可能性才真正变得差不多<b>均匀</b>。</li>
+      <li>有意思的是，第 7 次其实是一个<b>转折点</b>：再多洗几次，牌并不会「更乱」，只是继续保持随机而已。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🚀 生活里还有哪些「大到想不出来」的数字</h3>
+    <ul>
+      <li><b>googol（古戈尔）</b>：1 后面跟 <b>100 个零</b>。著名的搜索引擎 Google 这个名字，就是从 googol 来的（还是拼错的那个版本）。</li>
+      <li><b>围棋的棋盘</b>：一个 19 × 19 的围棋盘上，可能出现的局面数大约是 10¹⁷⁰，比可观测宇宙里的<b>原子总数</b>（大约 10⁸⁰）还要多得多。</li>
+      <li><b>地球上的蚂蚁</b>：科学家估计大约有 2 亿亿只（2 × 10¹⁶），把它们排成一队，长度可以绕地球好多圈。</li>
+      <li><b>你的指纹</b>：全世界有八十多亿人，但几乎没有两个人的指纹完全相同——这也是「可能性多到用不完」的一个例子。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🇨🇳 中国古代数学里的「大数」智慧</h3>
+    <p>在没有计算器的年代，中国人早就开始思考「<b>很大的数</b>」了，而且留下了了不起的成绩。</p>
+    <ul>
+      <li>中国是世界上最早使用<b>十进位值制</b>记数法的地区之一。商代的甲骨文里已经有了「一、十、百、千、万」这样的记数单位；后来用小小的竹棍——<b>算筹</b>——摆放位置来表示数字，非常聪明。</li>
+      <li>成书于汉代的《<b>九章算术</b>》是中国古代最重要的数学著作之一，里面记载了分数运算、面积体积计算等方法，比世界其他地区早了很多年。</li>
+      <li>南北朝时期的数学家<b>祖冲之</b>把圆周率 π 精确计算到 <b>3.1415926 与 3.1415927 之间</b>，也就是小数点后第七位。这个纪录在世界上保持了<b>将近一千年</b>。</li>
+      <li>中文里还有一套自己的大数单位：<b>万（10⁴）、亿（10⁸）、兆</b>……所以中国人说「亿」的时候，英语要说 <b>hundred million</b>，这就是两种语言<b>进位方式不同</b>的地方，也是我们学英语数字时最容易弄混的地方。</li>
+      <li>这些历史告诉我们：数学不是某个人的天才闪念，而是<b>一代又一代人慢慢积累出来的</b>。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>✏️ 动手小活动：用小牌堆感受「阶乘」</h3>
+    <ul>
+      <li>拿 <b>3 张牌</b>（比如 A、2、3），把它们<b>所有</b>的排法都摆出来：A23、A32、2A3、23A、3A2、32A，一共 <b>6 种</b>。这就是 3! = 3 × 2 × 1。</li>
+      <li>再加一张，变成 <b>4 张牌</b>，排法会变成 <b>24 种</b>（4 × 3 × 2 × 1）。是不是一下子就多得数不过来了？</li>
+      <li><b>5 张牌</b>是 <b>120 种</b>，<b>6 张牌</b>是 <b>720 种</b>，<b>10 张牌</b>就已经有 <b>三百多万种</b>了。</li>
+      <li>现在想一想：从 3 张到 52 张，中间还要再乘 49 次。这下你就能明白，为什么 52! 会大到<b>连宇宙都装不下</b>了。</li>
+      <li>用英语记下你的发现：<b>Three cards have six orders. Four cards have twenty-four orders.</b></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><div class="txt">读懂一篇 A2 水平的趣味数学短文，明白为什么「每次洗牌都可能是在创造历史」。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">掌握 8 个核心词汇：deck, shuffle, order, exact, arrange, huge, universe, random。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">学会四个语法点：现在完成时 have / has + 过去分词、大数字的说法、if 想象条件句、比较级 -er than 与 more ... than ...。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">能用 There are more ... than ...、It means ...、If ... would ... 解释一件听起来不可思议的事。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">认识「阶乘」和「组合爆炸」，了解洗七次牌的由来，以及中国古代数学的成就。</div></div>
+
+    <h3 style="color:var(--accent);">📝 学习建议</h3>
+    <div class="goal"><span class="tick">🔊</span><div class="txt">点每段右侧的 ▶ 按钮跟读一遍，特别注意 52!、13.8 billion 这类数字的读法。</div></div>
+    <div class="goal"><span class="tick">🔤</span><div class="txt">点词汇卡右上角的 🔊 听发音，再用每个词造一个自己的句子。</div></div>
+    <div class="goal"><span class="tick">💬</span><div class="txt">试试用英语向家人解释这个冷知识：52 cards can be arranged in a huge number of orders.</div></div>
+    <div class="goal"><span class="tick">🃏</span><div class="txt">真的拿一副牌洗七次，然后对自己说：This order has probably never existed before.</div></div>
+    <div class="goal"><span class="tick">🖨️</span><div class="txt">点下方按钮打印本课，随身复习词汇、句型和语法。</div></div>
+
+    <div style="margin-top:18px;">
+      <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+    </div>
+  </div>
+</section>
+
+<footer>POLA NEWS · The Shuffle That Makes History · 2026-09-06 · Made for curious kids 🐾</footer>
+</main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+  "Take a deck of 52 cards and shuffle it well. Now look at the order. That exact order has probably never existed before in the whole history of the world.",
+  "Why? Because 52 cards can be arranged in a huge number of orders. Mathematicians write this number as 52!. It means 52 times 51 times 50, and so on, down to 1.",
+  "The answer is about 8 followed by 67 zeros. Our universe is 13.8 billion years old. If you shuffled once every second since the beginning, you would still not see every order.",
+  "But you must shuffle well. Two mathematicians found that seven good riffle shuffles make a deck truly random. Next time you shuffle, you are holding something brand new."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'deck': '一副（扑克牌） n.',
+  'shuffle': '洗牌；把牌打乱 v.',
+  'order': '顺序；次序 n.',
+  'exact': '确切的；完全一样的 adj.',
+  'arrange': '排列；安排 v.',
+  'huge': '巨大的；庞大得吓人的 adj.',
+  'universe': '宇宙 n.',
+  'random': '随机的；没有规律的 adj.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#', '');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
