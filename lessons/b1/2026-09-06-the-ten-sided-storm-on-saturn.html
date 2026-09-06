@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ten-Sided Storm on Saturn · Pola News</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#7c3aed;
+  --glow:#c4b5fd;
+  --ember:#f59e0b;
+  --bg:#eef2ff;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#1e1b4b;
+  --muted:#5b5f7a;
+  --line:#c7d2fe;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(29,78,216,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#f2f4ff;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.85;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#e8ecff;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.12)}
+.nav a.active{background:rgba(255,255,255,.20);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(29,78,216,.30)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(29,78,216,.10);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.seg .txt{flex:1;min-width:220px;font-size:17px;line-height:1.85}
+.seg .zh{flex-basis:100%;margin-left:44px;font-size:15px;color:var(--muted);background:#eef2ff;border-left:3px solid var(--glow);border-radius:0 10px 10px 0;padding:8px 12px;line-height:1.8}
+.play{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:50%;width:38px;height:38px;flex:0 0 38px;cursor:pointer;font-size:15px;transition:.2s;box-shadow:0 4px 12px rgba(29,78,216,.25)}
+.play:hover{transform:scale(1.08)}
+.play.playing{background:linear-gradient(135deg,var(--ember),#fbbf24);animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(245,158,11,.55)}70%{box-shadow:0 0 0 12px rgba(245,158,11,0)}100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(196,181,253,.45)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#1e1b4b;color:#f2f4ff;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.vcard{background:linear-gradient(160deg,#eef2ff,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,78,216,.14)}
+.vcard .w{font-size:19px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:4px}
+.vcard .en{font-size:13px;color:var(--muted);line-height:1.5}
+.vcard .spk{position:absolute;top:10px;right:10px;border:none;background:rgba(124,58,237,.14);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;transition:.2s}
+.vcard .spk:hover{background:var(--accent2);transform:scale(1.1)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 4px}
+.stat{background:linear-gradient(160deg,#eef2ff,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent);line-height:1.15}
+.stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+.pat{background:#eef2ff;border-left:4px solid var(--accent2);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.pat .en{font-size:17px;font-weight:600;margin-bottom:4px}
+.pat .zh{font-size:14px;color:var(--muted);margin-bottom:8px}
+.pat .fill{background:#fff;border:1px dashed var(--accent2);border-radius:8px;padding:8px 12px;font-size:15px;margin-top:6px}
+.pat .fill input{border:none;border-bottom:2px solid var(--accent2);background:transparent;font-size:15px;outline:none;min-width:110px;text-align:center;color:var(--accent);font-weight:700;font-family:inherit}
+.pat .fill button{margin-left:8px;border:none;background:var(--accent);color:#fff;border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer}
+.pat .ans{font-size:14px;margin-top:6px;font-weight:700;min-height:20px}
+.gbox{background:#eef2ff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.gbox h3{font-size:18px;color:var(--accent);margin-bottom:8px}
+.gbox .rule{background:#fff;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--accent);margin-bottom:10px;border:1px dashed var(--accent2)}
+.gbox ul{margin-left:20px;font-size:15px}
+.gbox li{margin-bottom:6px}
+.gbox table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.gbox th,.gbox td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.gbox th{background:rgba(29,78,216,.08);color:var(--accent)}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.q .qt{font-size:16px;font-weight:600;margin-bottom:10px}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q .opt{border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:15px;transition:.15s;background:#eef2ff}
+.q .opt:hover{background:rgba(196,181,253,.45)}
+.q .opt.right{background:rgba(15,157,88,.14);border-color:var(--good);color:var(--good);font-weight:700}
+.q .opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad)}
+.q .exp{font-size:14px;color:var(--muted);margin-top:9px;display:none;line-height:1.6}
+.q .exp.show{display:block}
+#score{text-align:center;font-size:18px;font-weight:700;color:var(--accent);margin-top:10px}
+#resetq{display:block;margin:14px auto 0;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:9px 24px;border-radius:999px;font-size:15px;cursor:pointer;font-weight:700}
+.cn{background:linear-gradient(160deg,#eef2ff,#fff)}
+.cn h3{font-size:19px;color:var(--accent);margin:16px 0 8px}
+.cn h3:first-child{margin-top:0}
+.cn p{font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn ul{margin-left:22px;font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn li{margin-bottom:7px}
+.cn .fact{background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:15px}
+.cn .fact b{color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:15px}
+.flow .step{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:5px 14px;font-size:14px;font-weight:700}
+.flow .step.ember{background:linear-gradient(135deg,var(--ember),#fbbf24)}
+.flow .arw{color:var(--accent2);font-weight:800}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.cmp .box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cmp .box h4{font-size:16px;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.cmp .box .big{font-size:22px;font-weight:800;color:var(--accent2);line-height:1.2}
+.cmp .box p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.7}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;min-width:0;padding:14px}
+  .nav{display:flex;overflow-x:auto;gap:6px}
+  .nav a{margin-bottom:0;white-space:nowrap}
+  .content{padding:22px 16px}
+  .q .opts{grid-template-columns:1fr}
+  .seg .zh{margin-left:0}
+  .cmp{grid-template-columns:1fr}
+}
+@media print{
+  .sidebar,#progress,.play,.spk,#resetq{display:none!important}
+  body{background:#fff;font-size:12pt}
+  section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span>POLA NEWS</div>
+  <div class="sub">2026-09-06 · Level B1</div>
+  <nav class="nav">
+    <a href="#read"><span class="ic">📖</span>Full Text</a>
+    <a href="#vocab"><span class="ic">🔤</span>Vocabulary</a>
+    <a href="#pattern"><span class="ic">🗣️</span>Sentence Patterns</a>
+    <a href="#grammar"><span class="ic">📐</span>Grammar</a>
+    <a href="#quiz"><span class="ic">✅</span>Quiz</a>
+    <a href="#more"><span class="ic">💡</span>知识扩展</a>
+    <a href="#about"><span class="ic">ℹ️</span>About</a>
+  </nav>
+</aside>
+<main class="content">
+<header class="top">
+  <span class="kicker">🪐 SPACE · ASTRONOMY · SOLAR SYSTEM</span>
+  <h1>The Ten-Sided Storm on Saturn</h1>
+  <div class="meta">
+    <span>📅 <b>2026-09-06</b></span>
+    <span>🎧 <b>B1 · ages 10–12</b></span>
+    <span>⏱ <b>~4 × 15s</b></span>
+    <span>📍 <b>Saturn's south pole</b></span>
+  </div>
+</header>
+<section id="read">
+  <h2><span class="num">1</span>📖 Full Text · 全文阅读</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:8px">点击 ▶ 听 Pola 朗读；点击带虚线的高亮单词查看中文释义。</p>
+
+  <div class="seg">
+    <div class="badge">1</div>
+    <div class="txt">Hello, Pola News here! Saturn is a <span class="kw" data-def="气态巨行星（像木星、土星这样主要由气体组成、没有固体表面的巨大行星）" data-en="a huge planet made mostly of gas, with no solid surface, such as Jupiter or Saturn">gas giant</span>, and it already has a famous six-sided storm at its north <span class="kw" data-def="（地球的）极地；南极或北极地区；（行星的）极点" data-en="one of the two ends of a planet's axis; the area around the very top or very bottom">pole</span>. But now look at the south pole. The Hubble Space Telescope has found something brand new — a giant ten-sided <span class="kw" data-def="波；波浪（这里指大气中像波一样起伏运动的结构）" data-en="a moving pattern that rises and falls, like the shape of water rolling across a sea">wave</span>, spinning high above the clouds. Scientists call it a <span class="kw" data-def="十边形（有十条边的形状）" data-en="a flat shape with ten straight sides and ten corners">decagon</span>!</div>
+    <button class="play" data-seg="0" title="Play">▶</button>
+    <div class="zh">大家好，这里是 Pola News！土星是一颗气态巨行星，它的北极早就有一个著名的六边形风暴。现在，把目光转向南极。哈勃太空望远镜在那里发现了一个全新的东西——一道巨大的十边形波，在云层高处旋转。科学家把它叫做「十边形」！</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">2</div>
+    <div class="txt">It started with <span class="kw" data-def="业余的；业余爱好者（不为钱、只为爱好而做某件事的人）" data-en="doing something as a hobby, not as a paid job; a person who does something for love, not money">amateur</span> astronomers. In 2024, they were the first to <span class="kw" data-def="看见；发现；注意到（尤其指看到不容易发现的东西）" data-en="to see or notice something, especially something small or hard to find">spot</span> a wobbly band near Saturn's south pole, using their own backyard <span class="kw" data-def="望远镜（复数，单数是 telescope）" data-en="an instrument that uses lenses or mirrors to make faraway things look bigger and closer">telescopes</span>. Hubble then took a much sharper look. Going back through old images, the team traced the shape to 2023 — and it keeps getting clearer every year.</div>
+    <button class="play" data-seg="1" title="Play">▶</button>
+    <div class="zh">这个故事是从业余天文爱好者开始的。2024 年，他们最先在自家后院的望远镜里，注意到土星南极附近有一条起伏摆动的带子。接着哈勃拍下了清晰得多的画面。研究人员回头翻旧图像，一路追到 2023 年——而且它一年比一年清楚。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">3</div>
+    <div class="txt">Why does it matter? Saturn's northern <span class="kw" data-def="六边形（有六条边的形状）" data-en="a flat shape with six straight sides and six corners">hexagon</span> has been sitting there for more than forty years. This one is different — it seems to be forming right now, right before our eyes. That gives scientists a rare chance to watch a giant weather pattern being built from scratch.</div>
+    <button class="play" data-seg="2" title="Play">▶</button>
+    <div class="zh">这为什么重要？土星北极的那个六边形，已经在那里待了四十多年。南极这个不一样——它似乎正在形成，就在我们眼前。这让科学家得到一个难得的机会：从头看着一个巨大的天气图案被一点点造出来。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">4</div>
+    <div class="txt">The wave sits inside one of Saturn's powerful <span class="kw" data-def="急流；喷射气流（大气高层里速度很快、像一条河一样流动的风带）" data-en="a fast, narrow river of wind high in a planet's atmosphere that blows in one direction">jet streams</span>, and it reaches deep into the <span class="kw" data-def="大气层；大气（包围一颗行星的气体层）" data-en="the layer of gases that surrounds a planet and that we breathe through on Earth">atmosphere</span>. Will it stay, or fade away? Only time and more telescopes will tell. That is all from Pola News. See you next time — and keep looking up!</div>
+    <button class="play" data-seg="3" title="Play">▶</button>
+    <div class="zh">这道波位于土星一条强大急流的内部，并且深深伸进大气层。它会留下来，还是会消失？只有时间，加上更多望远镜，才能给出答案。以上就是今天的 Pola News。下次见——记得常常抬头看天！</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">10</div><div class="l">新形状的边数 —— 所以叫 decagon（十边形）</div></div>
+    <div class="stat"><div class="n">63°S</div><div class="l">这道波的中心纬度（南纬 63 度），位于土星南极附近</div></div>
+    <div class="stat"><div class="n">40+ years</div><div class="l">北极六边形风暴被持续观测到的年数，从旅行者号时代至今</div></div>
+    <div class="stat"><div class="n">2023</div><div class="l">哈勃存档图像里能追到的最早年份，此后一年比一年清晰</div></div>
+  </div>
+</section>
+
+<section id="vocab">
+  <h2><span class="num">2</span>🔤 Vocabulary · 词汇表</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 10 个核心词。点击右上角 🔊 听发音。</p>
+  <div class="vgrid">
+    <div class="vcard">
+      <button class="spk" data-word="gas giant">🔊</button>
+      <div class="w">gas giant</div><div class="pos">noun phrase /ˈɡæs ˌdʒaɪənt/</div>
+      <div class="zh">气态巨行星</div>
+      <div class="en">Saturn is a gas giant with no solid surface.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="pole">🔊</button>
+      <div class="w">pole</div><div class="pos">noun /pəʊl/</div>
+      <div class="zh">极地；极点</div>
+      <div class="en">Hubble looked at Saturn's south pole.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="wave">🔊</button>
+      <div class="w">wave</div><div class="pos">noun /weɪv/</div>
+      <div class="zh">波；波浪</div>
+      <div class="en">A giant ten-sided wave spins above the clouds.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="decagon">🔊</button>
+      <div class="w">decagon</div><div class="pos">noun /ˈdekəɡən/</div>
+      <div class="zh">十边形</div>
+      <div class="en">Scientists call the new shape a decagon.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="hexagon">🔊</button>
+      <div class="w">hexagon</div><div class="pos">noun /ˈheksəɡən/</div>
+      <div class="zh">六边形</div>
+      <div class="en">Saturn's northern hexagon has been there for over forty years.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="amateur">🔊</button>
+      <div class="w">amateur</div><div class="pos">adjective &amp; noun /ˈæmətə(r)/</div>
+      <div class="zh">业余的；业余爱好者</div>
+      <div class="en">It started with amateur astronomers.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="spot">🔊</button>
+      <div class="w">spot</div><div class="pos">verb /spɒt/</div>
+      <div class="zh">看见；发现；注意到</div>
+      <div class="en">They were the first to spot the wobbly band.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="telescope">🔊</button>
+      <div class="w">telescope</div><div class="pos">noun /ˈtelɪskəʊp/ (plural: telescopes)</div>
+      <div class="zh">望远镜</div>
+      <div class="en">They used their own backyard telescopes.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="jet stream">🔊</button>
+      <div class="w">jet stream</div><div class="pos">noun phrase /ˈdʒet striːm/</div>
+      <div class="zh">急流；喷射气流</div>
+      <div class="en">The wave sits inside one of Saturn's jet streams.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="atmosphere">🔊</button>
+      <div class="w">atmosphere</div><div class="pos">noun /ˈætməsfɪə(r)/</div>
+      <div class="zh">大气层；大气</div>
+      <div class="en">The wave reaches deep into the atmosphere.</div>
+    </div>
+  </div>
+</section>
+<section id="pattern">
+  <h2><span class="num">3</span>🗣️ Sentence Patterns · 句型练习</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">先读句子，再填空，点「检查」看答案。</p>
+
+  <div class="pat">
+    <div class="en">It <b>seems to be</b> forming right now.</div>
+    <div class="zh">它<b>似乎</b>正在形成。—— <b>seem to be + 动词-ing</b> 表示「看起来／似乎正在做某事」，说的是根据观察得出的印象，不是百分之百确定。</div>
+    <div class="fill">It <input id="f1" type="text" placeholder="三个词" autocomplete="off"> forming right now. <button onclick="check('f1',['seems to be'],'seems to be')">检查</button></div>
+    <div class="ans" id="a1"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">It <b>started with</b> amateur astronomers.</div>
+    <div class="zh">这件事<b>是从</b>业余天文爱好者<b>开始的</b>。—— <b>start with + 名词</b> 表示「以……开始／从……起步」，很适合用来讲一个发现的来龙去脉。</div>
+    <div class="fill">It <input id="f2" type="text" placeholder="两个词" autocomplete="off"> amateur astronomers. <button onclick="check('f2',['started with'],'started with')">检查</button></div>
+    <div class="ans" id="a2"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">They were the first <b>to spot</b> the wobbly band.</div>
+    <div class="zh">他们是第一个<b>发现</b>那条摆动带子的。—— <b>the first / the last / the only + to do</b> 表示「第一个／最后一个／唯一一个做某事的人」。</div>
+    <div class="fill">They were the first <input id="f3" type="text" placeholder="两个词" autocomplete="off"> the wobbly band. <button onclick="check('f3',['to spot'],'to spot')">检查</button></div>
+    <div class="ans" id="a3"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">The hexagon has been sitting there <b>for</b> more than forty years.</div>
+    <div class="zh">那个六边形<b>已经</b>在那里待了四十多年了。—— <b>for + 一段时间</b>（for two hours / for forty years）表示动作或状态<b>持续了多久</b>。</div>
+    <div class="fill">The hexagon has been sitting there <input id="f4" type="text" placeholder="一个词" autocomplete="off"> more than forty years. <button onclick="check('f4',['for'],'for')">检查</button></div>
+    <div class="ans" id="a4"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">That gives scientists a rare chance <b>to watch</b> it happen.</div>
+    <div class="zh">这给了科学家一个难得的机会，<b>去亲眼看着</b>它发生。—— <b>give someone a chance to do something</b> 表示「给某人一个做某事的机会」。</div>
+    <div class="fill">That gives scientists a rare chance <input id="f5" type="text" placeholder="两个词" autocomplete="off"> it happen. <button onclick="check('f5',['to watch'],'to watch')">检查</button></div>
+    <div class="ans" id="a5"></div>
+  </div>
+</section>
+
+<section id="grammar">
+  <h2><span class="num">4</span>📐 Grammar · 语法点</h2>
+
+  <div class="gbox">
+    <h3>1. 现在完成进行时：have / has been + 动词-ing</h3>
+    <div class="rule">肯定：主语 + have/has been + 动词-ing　｜　否定：haven't/hasn't been + 动词-ing　｜　疑问：Have/Has + 主语 + been + 动词-ing?</div>
+    <ul>
+      <li>Saturn's northern hexagon <b>has been sitting</b> there for more than forty years. （一直在那儿待着，现在还在。）</li>
+      <li>Scientists <b>have been watching</b> the south pole closely since 2023. （从 2023 年一直密切观察到现在。）</li>
+      <li>The shape <b>has been getting</b> clearer every year. （一年比一年清晰——强调「持续变化」。）</li>
+      <li>💡 和一般过去时的区别：<b>It started in 2023.</b> 只说「过去某时开始了」；<b>It has been getting clearer.</b> 强调「从过去持续到现在，还在继续」。</li>
+      <li>⚠️ 常见错误：<s>has been sit</s> → 正确是 has been <b>sitting</b>；be 动词后面永远跟 -ing。</li>
+    </ul>
+    <table>
+      <tr><th>时态</th><th>结构</th><th>例句</th></tr>
+      <tr><td>现在完成进行时</td><td>has been + -ing</td><td>It has been forming for two years.</td></tr>
+      <tr><td>现在完成时</td><td>has + 过去分词</td><td>Hubble has taken many images.</td></tr>
+      <tr><td>一般过去时</td><td>动词过去式</td><td>Hubble took the images in 2025.</td></tr>
+    </table>
+  </div>
+
+  <div class="gbox">
+    <h3>2. for 与 since 的区别（都回答「多久」）</h3>
+    <div class="rule">for + 一段时间（for three years）　｜　since + 某个时间点（since 2023 / since Monday）</div>
+    <ul>
+      <li>The hexagon has been there <b>for</b> more than forty years. （四十多年——一段时间。）</li>
+      <li>The team has studied the shape <b>since</b> 2023. （自 2023 年起——时间点。）</li>
+      <li>Amateur astronomers have watched Saturn <b>since</b> they were at school. （后面跟一整个句子也可以。）</li>
+      <li>💡 判断小窍门：能换成「多长时间」→ 用 for；能换成「从什么时候」→ 用 since。</li>
+      <li>⚠️ 常见错误：<s>since three years</s> → 正确是 <b>for</b> three years；<s>for 2023</s> → 正确是 <b>since</b> 2023。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>3. seem 的三种常见用法</h3>
+    <div class="rule">seem + 形容词　｜　seem to be + 动词-ing / 名词　｜　It seems that + 句子</div>
+    <ul>
+      <li>The decagon <b>seems</b> new. （seem + 形容词：看起来是新的。）</li>
+      <li>It <b>seems to be forming</b> right now. （seem to be + -ing：似乎正在形成。）</li>
+      <li><b>It seems that</b> the shape appeared only recently. （It seems that + 句子：看来……）</li>
+      <li>💡 为什么新闻里爱用 seem？因为科学家<b>还不能下定论</b>。seem 保留了「证据指向这里，但我留一点余地」的诚实。</li>
+      <li>⚠️ 常见错误：<s>It seems be forming.</s> → 正确是 seems <b>to be</b> forming。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>4. 复合形容词：数词 + 名词单数（six-sided, ten-sided）</h3>
+    <div class="rule">a six-sided storm　｜　a ten-sided wave　｜　a ten-year-old camera　（名词永远用单数，中间加连字符）</div>
+    <ul>
+      <li>a <b>six-sided</b> storm （一场六边的风暴）</li>
+      <li>a <b>ten-sided</b> wave （一道十边的波）</li>
+      <li>a <b>five-metre</b> telescope （一台五米的望远镜）</li>
+      <li>💡 放在名词<b>前面</b>当形容词时，名词要变单数并加连字符：a ten-sided wave。放在<b>后面</b>时不用连字符，名词照常用复数：The wave has ten sides.</li>
+      <li>⚠️ 常见错误：<s>a ten-sides wave</s> → 正确是 a ten-<b>sided</b> wave。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>5. the first / the last / the only + to do（第一个做某事的人）</h3>
+    <div class="rule">the first/last/only (+ 名词) + to + 动词原形</div>
+    <ul>
+      <li>They were the first <b>to spot</b> the wobbly band. （他们最先发现它。）</li>
+      <li>Hubble was the first telescope <b>to take</b> such a sharp image. （第一台拍下这么清晰照片的望远镜。）</li>
+      <li>She was the only student <b>to answer</b> all five questions. （唯一一个答对全部五题的学生。）</li>
+      <li>💡 这里的 to 是不定式符号，后面永远跟<b>动词原形</b>。</li>
+      <li>⚠️ 常见错误：<s>the first spotting</s> → 正确是 the first <b>to spot</b>。</li>
+    </ul>
+  </div>
+</section>
+<section id="quiz">
+  <h2><span class="num">5</span>✅ Quiz · 练习测验</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 5 题，点击选项即可作答，做完后可以看解析。</p>
+
+  <div class="q" data-ans="1">
+    <div class="qt">1. What is the new shape at Saturn's south pole called?</div>
+    <div class="opts">
+      <div class="opt">A) A hexagon</div>
+      <div class="opt">B) A decagon</div>
+      <div class="opt">C) A square</div>
+      <div class="opt">D) A spiral</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。科学家的正式叫法就是 <b>decagon</b>（十边形）。这个词来自希腊语：<i>deka</i> 是「十」，<i>gonia</i> 是「角」。选项 A 的 hexagon 是土星<b>北极</b>那个著名的六边形风暴——它还在，只是这则新闻的主角不是它。这两个词很容易记混，记住前缀就行：<b>hex-</b> 六（hexagon 六边形），<b>deca-</b> 十（decagon 十边形、decade 十年）。</div>
+  </div>
+
+  <div class="q" data-ans="2">
+    <div class="qt">2. How many sides does a decagon have?</div>
+    <div class="opts">
+      <div class="opt">A) Six</div>
+      <div class="opt">B) Eight</div>
+      <div class="opt">C) Ten</div>
+      <div class="opt">D) Twelve</div>
+    </div>
+    <div class="exp">✅ 正确答案：C。<b>十条边、十个角</b>。对比一下：三角形 3 条边（triangle）、正方形 4 条（square）、五边形 5 条（pentagon）、六边形 6 条（hexagon）、八边形 8 条（octagon）、十边形 10 条（decagon）。小提示：<b>octopus</b>（章鱼）有八条腿，所以八边形是 <b>oct</b>agon；<b>decade</b>（十年）里有「十」，所以十边形是 <b>dec</b>agon。</div>
+  </div>
+
+  <div class="q" data-ans="0">
+    <div class="qt">3. Who first noticed the wobbly band near Saturn's south pole?</div>
+    <div class="opts">
+      <div class="opt">A) Amateur astronomers with backyard telescopes</div>
+      <div class="opt">B) Astronauts on the International Space Station</div>
+      <div class="opt">C) The Cassini spacecraft</div>
+      <div class="opt">D) Students on a school trip</div>
+    </div>
+    <div class="exp">✅ 正确答案：A。2024 年，<b>特雷弗·巴里（Trevor Barry）</b>和<b>让-保罗·奥热（Jean-Paul Oger）</b>这两位业余天文爱好者，通过一项「行星虚拟天文台实验室」计划提交了自己拍的土星照片，最先注意到南极附近那条起伏摆动的带子。选项 C 的卡西尼号探测器曾在 2004 到 2017 年环绕土星，却<b>没有</b>发现任何长期存在的类似结构——这正说明南极这个形状很可能是最近才出现的。</div>
+  </div>
+
+  <div class="q" data-ans="3">
+    <div class="qt">4. How is the southern shape different from Saturn's northern hexagon?</div>
+    <div class="opts">
+      <div class="opt">A) It is much smaller and rounder</div>
+      <div class="opt">B) It only appears during eclipses</div>
+      <div class="opt">C) It is made of ice, not clouds</div>
+      <div class="opt">D) It seems to be forming right now and is getting stronger</div>
+    </div>
+    <div class="exp">✅ 正确答案：D。北极的六边形四十多年来<b>每次去看都在那儿</b>；南极这个却在<b>逐年变清晰、变强</b>。研究团队成员、NASA 戈达德太空飞行中心的艾米·西蒙（Amy Simon）说：「最让我着迷的是，它似乎是<b>刚刚才形成</b>的。问题是，为什么偏偏是现在？」这正是它珍贵的原因——科学家很少能「抓拍」到一个巨大大气图案的形成过程。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">5. How long has Saturn's northern hexagon been observed?</div>
+    <div class="opts">
+      <div class="opt">A) Since 2023</div>
+      <div class="opt">B) For more than forty years</div>
+      <div class="opt">C) For about ten years</div>
+      <div class="opt">D) Only since 2024</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。北极六边形最早由<b>旅行者号</b>探测器在 1980 年代初拍到，此后<b>四十多年里每次观测都在</b>，是一个非常稳定的结构。选项 A 和 D 是南极新形状的年份（哈勃图像可追溯到 2023 年，业余爱好者在 2024 年注意到），不要搞混。顺带复习语法：回答「多久」用 <b>for + 一段时间</b>（for more than forty years）；回答「从什么时候」用 <b>since + 时间点</b>（since 2023）。</div>
+  </div>
+
+  <div id="score"></div>
+  <button id="resetq">🔄 再做一次</button>
+</section>
+<section id="more" class="cn">
+  <h2><span class="num">6</span>💡 中文知识扩展</h2>
+
+  <h3>一、什么是「十边形」？先从北极的六边形说起</h3>
+  <p>土星北极有一个很出名的景象：一圈<b>六边形</b>的风带，稳稳地绕着极点转。它不是画上去的，而是大气自己流动的产物——一条强劲的急流被极地涡旋「挤」成了规则的六边形。它最早由旅行者号在 1980 年代拍到，此后四十多年一直在。</p>
+  <p>南极的这个新形状，道理类似，但边数不同：<b>十条边</b>，所以叫 <b>decagon</b>（十边形）。</p>
+  <div class="cmp">
+    <div class="box">
+      <h4>⬡ 北极 · 六边形</h4>
+      <div class="big">hexagon · 6 sides</div>
+      <p>1980 年代就被发现，稳定存在四十多年，几乎没变过。</p>
+    </div>
+    <div class="box">
+      <h4>🔟 南极 · 十边形</h4>
+      <div class="big">decagon · 10 sides</div>
+      <p>哈勃图像可追溯到 2023 年，此后逐年变清晰，似乎仍在形成中。</p>
+    </div>
+  </div>
+  <div class="fact">🔤 <b>词根小课堂：</b>hex-（六）→ hexagon 六边形；oct-（八）→ octagon 八边形、octopus 章鱼；deca-（十）→ decagon 十边形、decade 十年。</div>
+
+  <h3>二、它是怎么被发现的？—— 业余爱好者的功劳</h3>
+  <p>这次发现不是某一位大科学家在某个深夜突然喊出来的，而是<b>很多人一起看出来的</b>：</p>
+  <div class="flow">
+    <span class="step">爱好者拍土星</span><span class="arw">→</span>
+    <span class="step">2024 年看到摆动暗带</span><span class="arw">→</span>
+    <span class="step">2025 年地面图像更明显</span><span class="arw">→</span>
+    <span class="step ember">哈勃拍下清晰十边形</span><span class="arw">→</span>
+    <span class="step ember">回翻档案追到 2023 年</span>
+  </div>
+  <ul>
+    <li>🔭 西班牙巴斯克地区大学的<b>阿古斯丁·桑切斯-拉韦加（Agustín Sánchez-Lavega）</b>是论文第一作者，他主持的「行星虚拟天文台实验室」网站收集全世界观测者发来的行星照片。</li>
+    <li>👀 正是在这些照片里，他和两位业余天文爱好者——<b>Trevor Barry</b> 与 <b>Jean-Paul Oger</b>——在 2024 年注意到南极附近有一条<b>起伏摆动的带子</b>。</li>
+    <li>🛰️ 2025 年的地面图像暗示更明显，于是<b>哈勃</b>接手。太空里没有大气抖动，画面锐利得多，最终确认了十边形结构。</li>
+    <li>📅 团队回翻哈勃的存档，发现这个形状<b>早在 2023 年就已存在</b>，只是那时还很模糊。</li>
+  </ul>
+  <div class="fact">🌟 <b>这一点最值得记住：</b>你不需要一座天文台才能参与科学。用一台后院望远镜拍下清晰的照片，也可能成为重大发现的第一块拼图。</div>
+
+  <h3>三、为什么偏偏是现在才看见？</h3>
+  <p>答案藏在土星的<b>季节</b>里。</p>
+  <ul>
+    <li>🪐 土星绕太阳一圈要<b>大约 29 个地球年</b>，所以它的每一个季节长达七年多。它的自转轴也是倾斜的，和地球一样。</li>
+    <li>☀️ 在土星漫长的冬季，南极背对太阳、也背对地球，我们根本看不见它。随着季节推进，<b>南极一点点转进视野</b>，天文学家才终于有机会看清那里。</li>
+    <li>🕰️ 桑切斯-拉韦加说，他们<b>从 1990 年起</b>就在哈勃图像里寻找北极六边形的「南极对应物」，一直没找到；卡西尼号 2004–2017 年环绕土星期间，也没看到任何长期结构的迹象。</li>
+    <li>❓ 所以最合理的解释是：<b>它不是一直都在，只是我们没看见——而是它最近才形成。</b>这正是科学家最兴奋的地方。</li>
+  </ul>
+
+  <h3>四、它到底是个什么样的结构？</h3>
+  <ul>
+    <li>📍 这道波的中心位于<b>南纬约 63 度</b>，嵌在土星一条强大的<b>急流</b>内部。</li>
+    <li>🎚️ 它<b>不止存在于云顶</b>。哈勃用不同波长的光观测，而不同波长能探测不同高度，结果发现这个结构<b>贯穿了大气的多个层次</b>——说明它是一个立体的、纵向延伸的大气结构，不是表面的一层花纹。</li>
+    <li>📐 也因为波长不同、探测高度不同，它在图像上的位置会<b>轻微偏移</b>。这不是拍错了，恰恰是「它有多层」的证据。</li>
+    <li>🧊 它<b>不是固体的</b>。土星是气态巨行星，没有地面可以站。所谓「十边形」，是几千公里宽的气体在快速流动时形成的一个稳定波形。</li>
+  </ul>
+
+  <h3>五、动手试试：用一盆水做一个「旋转的多边形」</h3>
+  <p><b>材料：</b>一个透明的圆盆或大玻璃碗、水、几滴食用色素（或一点点奶粉）、一把勺子、一个手电筒、一部能拍慢动作的手机。</p>
+  <ul>
+    <li><b>第 1 步：</b>在盆里装<b>大约半盆水</b>，静置一分钟，等水面完全平静。</li>
+    <li><b>第 2 步：</b>轻轻滴入一两滴色素，不要搅拌——你会看到颜色慢慢散开，这就是「大气里的示踪物」。</li>
+    <li><b>第 3 步：</b>用勺子沿盆边<b>快速、匀速地搅一整圈</b>，然后立刻把勺子拿开。</li>
+    <li><b>第 4 步：</b>把手电筒从<b>正上方</b>往下照，从侧面观察水面和色素的形状。<b>关键观察：</b>漩涡的边缘是不是从圆形慢慢变成了有棱角的形状？</li>
+    <li><b>第 5 步（对照实验）：</b>搅得慢一点，再来一次；然后把水加满到接近盆口，再试一次。<b>转速不同、水深不同，出现的形状就不一样。</b></li>
+  </ul>
+  <div class="fact">🔬 <b>把实验连回现实：</b>你的盆就是土星的极地涡旋，勺子带起的旋转就是那条急流，水面上冒出来的棱角就是「多边形波」。科学家在实验室里正是用这种<b>旋转水槽实验</b>，研究为什么快速旋转的流体会自己组织成三边、四边、五边、六边的图案。土星的六边形和十边形，本质上是同一个物理规律在<b>一颗真实行星</b>上的版本。</div>
+
+  <h3>六、科学素养提醒：「正在发生」不等于「已经搞懂」</h3>
+  <ul>
+    <li>⚠️ <b>现在还没有人知道它为什么会形成。</b>论文只说它存在、它在变强、它跨越多层大气；至于成因，需要更多观测和计算机模型才能回答。</li>
+    <li>🧩 <b>也还不确定它能存在多久。</b>它会像北极六边形那样稳定几十年，还是过几年就散掉？团队会继续用哈勃和韦布望远镜盯着看。</li>
+    <li>🔭 <b>下一步：</b>继续观测，判断它究竟会「定型」还是继续演变；同时研究它背后的驱动力，以及它和地球大气、和其他巨行星大气之间有没有共通规律。</li>
+    <li>🗣️ 研究团队之一的 Mike Wong（加州大学伯克利分校）说得很好：OPAL 计划启动时，「我们就期待会有惊喜，只是不知道会是什么」。很多发现<b>不是来自某一次观测，而是来自一年又一年的坚持记录</b>。</li>
+  </ul>
+  <div class="fact">🌟 <b>这期的科学金句：</b>「这个图案似乎正在形成——问题是，为什么偏偏是现在？」——科学的迷人之处，有时不在于答案，而在于<b>恰好赶上了一个问题刚刚诞生的时刻</b>。</div>
+</section>
+
+<section id="about" class="cn">
+  <h2><span class="num">7</span>ℹ️ About · 关于本课</h2>
+  <h3>本期主角</h3>
+  <p><b>Pola</b>（宝拉）是一只短尾矮袋鼠（quokka），被称为「世界上最快乐的动物」。她是 POLA NEWS 的记者，会带着话筒跑到真实的现场——实验室、野外、天文台、雨林——把最新的科学发现讲给你听。她的招牌动作是：<b>双爪挥手告别 + 大大的笑脸</b>。</p>
+  <h3>难度与用法</h3>
+  <ul>
+    <li><b>等级：</b>B1（适合 10–12 岁）</li>
+    <li><b>结构：</b>4 段口播，每段约 15 秒：① 吸引注意 → ② 讲故事 → ③ 为什么重要 → ④ 告别</li>
+    <li><b>建议学习顺序：</b>先听全文（不看文字）→ 再看全文跟读 → 学词汇 → 练句型 → 做测验 → 读中文扩展</li>
+  </ul>
+  <h3>资料来源</h3>
+  <p>Agustín Sánchez-Lavega 等，<i>A decagon wave around Saturn's south pole</i>（土星南极周围的十边形波），发表于《科学·进展》（<i>Science Advances</i>），2026 年 9 月 2 日。研究由西班牙巴斯克地区大学团队牵头，使用 NASA / ESA 哈勃太空望远镜「外行星大气遗产计划」（OPAL）的观测数据，并整合了全球业余与专业天文爱好者提交的地面观测图像。</p>
+  <p>补充报道来源：NASA 戈达德太空飞行中心新闻稿（2026 年 9 月 2 日）、phys.org、EarthSky、Science News 对论文的报道与解读。</p>
+  <div class="fact">🪐 <b>本期分类：</b>太空探索 · 行星大气 · 天文发现<br>📅 制作日期：2026-09-06</div>
+</section>
+</main>
+</div>
+<div id="tip"></div>
+
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hello, Pola News here! Saturn is a gas giant, and it already has a famous six-sided storm at its north pole. But now look at the south pole. The Hubble Space Telescope has found something brand new — a giant ten-sided wave, spinning high above the clouds. Scientists call it a decagon!",
+  "It started with amateur astronomers. In 2024, they were the first to spot a wobbly band near Saturn's south pole, using their own backyard telescopes. Hubble then took a much sharper look. Going back through old images, the team traced the shape to 2023 — and it keeps getting clearer every year.",
+  "Why does it matter? Saturn's northern hexagon has been sitting there for more than forty years. This one is different — it seems to be forming right now, right before our eyes. That gives scientists a rare chance to watch a giant weather pattern being built from scratch.",
+  "The wave sits inside one of Saturn's powerful jet streams, and it reaches deep into the atmosphere. Will it stay, or fade away? Only time and more telescopes will tell. That is all from Pola News. See you next time — and keep looking up!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 句型练习 - 单空 ===== */
+function check(inputId, answers, display){
+  const el = document.getElementById(inputId);
+  const ansEl = document.getElementById(inputId.replace('f','a'));
+  if(!el || !ansEl) return;
+  const val = (el.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(answers.indexOf(val) !== -1){
+    ansEl.innerHTML = '✅ 答对啦！<b>' + display + '</b>';
+    ansEl.style.color = 'var(--good)';
+  }else if(val === ''){
+    ansEl.textContent = '✏️ 先填一个答案试试。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 正确答案是 <b>' + display + '</b>';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 测验 ===== */
+const scoreEl = document.getElementById('score');
+let answered = 0;
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = '已作答 ' + answered + ' / 5';
+}
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans, 10);
+  const exp = q.querySelector('.exp');
+  const opts = q.querySelectorAll('.opt');
+  opts.forEach(function(opt, i){
+    opt.addEventListener('click', function(){
+      if(q.dataset.done === '1') return;
+      q.dataset.done = '1';
+      answered++;
+      opts.forEach(function(o){ o.style.cursor = 'default'; });
+      if(i === ans){
+        opt.classList.add('right');
+      }else{
+        opt.classList.add('wrong');
+        if(opts[ans]) opts[ans].classList.add('right');
+      }
+      if(exp) exp.classList.add('show');
+      updateScore();
+    });
+  });
+});
+document.getElementById('resetq').addEventListener('click', function(){
+  answered = 0;
+  updateScore();
+  document.querySelectorAll('.q').forEach(function(q){
+    q.dataset.done = '0';
+    q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('right','wrong');
+      o.style.cursor = 'pointer';
+    });
+    const exp = q.querySelector('.exp');
+    if(exp) exp.classList.remove('show');
+  });
+  const inputs = ['f1','f2','f3','f4','f5'];
+  inputs.forEach(function(id){ const e=document.getElementById(id); if(e) e.value=''; });
+  ['a1','a2','a3','a4','a5'].forEach(function(id){ const e=document.getElementById(id); if(e){ e.textContent=''; e.style.color=''; } });
+});
+updateScore();
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

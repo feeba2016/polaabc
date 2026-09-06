@@ -2140,6 +2140,68 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-09-06",
+    "title": "The Ten-Sided Storm on Saturn",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-09-06-the-ten-sided-storm-on-saturn",
+    "url": "lessons/b1/2026-09-06-the-ten-sided-storm-on-saturn.html",
+    "vocab": [
+      {
+        "word": "gas giant",
+        "zh": "气态巨行星",
+        "ex": ""
+      },
+      {
+        "word": "pole",
+        "zh": "极地；极点",
+        "ex": ""
+      },
+      {
+        "word": "wave",
+        "zh": "波；波浪",
+        "ex": ""
+      },
+      {
+        "word": "decagon",
+        "zh": "十边形",
+        "ex": ""
+      },
+      {
+        "word": "hexagon",
+        "zh": "六边形",
+        "ex": ""
+      },
+      {
+        "word": "amateur",
+        "zh": "业余的；业余爱好者",
+        "ex": ""
+      },
+      {
+        "word": "spot",
+        "zh": "看见；发现；注意到",
+        "ex": ""
+      },
+      {
+        "word": "telescope",
+        "zh": "望远镜",
+        "ex": ""
+      },
+      {
+        "word": "jet stream",
+        "zh": "急流；喷射气流",
+        "ex": ""
+      },
+      {
+        "word": "atmosphere",
+        "zh": "大气层；大气",
+        "ex": ""
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",
@@ -6642,6 +6704,68 @@ const EPISODES = [
         "word": "hollow out",
         "zh": "掏空（to strip something of its substance while leaving the form intact；hollowed out 为其过去分词，作补足语）",
         "ex": "\"at the price of being hollowed out\""
+      }
+    ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-09-06",
+    "title": "The Witness Who Said Less",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-09-06-the-witness-who-said-less",
+    "url": "lessons/c1/2026-09-06-the-witness-who-said-less.html",
+    "vocab": [
+      {
+        "word": "replicate",
+        "zh": "复制、复现（研究结果）（to repeat a study and obtain the same result；名词 replication；replicate a finding 指再次验证出同一发现）",
+        "ex": "\"replicating a decade of findings\""
+      },
+      {
+        "word": "invoke",
+        "zh": "援引、诉诸（to cite or appeal to something as an authority or explanation；invoke a distinction / theory 为学术写作高频搭配）",
+        "ex": "\"the usual explanation invokes Hall's distinction\""
+      },
+      {
+        "word": "brevity",
+        "zh": "简短、简洁（conciseness of expression；形容词 brief。注意与『缺陷』对举：brevity is a convention, not a deficit）",
+        "ex": "\"brevity here is a convention, not a deficit\""
+      },
+      {
+        "word": "inhibit",
+        "zh": "抑制、阻碍（to hold back or restrain a process or behaviour；inhibit disclosure 使信息披露受抑；名词 inhibition）",
+        "ex": "\"loyalty to one's group inhibits disclosure\""
+      },
+      {
+        "word": "volubility",
+        "zh": "健谈、滔滔不绝（the quality of talking a great deal；形容词 voluble；文中指法庭把『话多』误当作可信的替代指标）",
+        "ex": "\"courts routinely treat volubility as a proxy for honesty\""
+      },
+      {
+        "word": "evasive",
+        "zh": "回避的、含糊其辞的（avoiding giving direct answers or commitments；名词 evasion，动词 evade）",
+        "ex": "\"the witness who answers only what is asked reads as evasive\""
+      },
+      {
+        "word": "entrenched",
+        "zh": "根深蒂固的、难以改变的（firmly established and difficult to change；常用于观念、制度、偏见，如 an entrenched assumption）",
+        "ex": "\"so entrenched is this heuristic that…\""
+      },
+      {
+        "word": "heuristic",
+        "zh": "启发法、经验法则（a mental shortcut enabling quick judgement；心理学与法学交叉高频词，常带『高效但会系统性偏误』的意味）",
+        "ex": "\"a credibility heuristic can misread style as character\""
+      },
+      {
+        "word": "asymmetry",
+        "zh": "不对称（lack of equality or equivalence between parts；information asymmetry 信息不对称；形容词 asymmetric）",
+        "ex": "\"an asymmetry that returns the burden to the listener\""
+      },
+      {
+        "word": "pre-registered",
+        "zh": "预注册的（研究开始前预先登记假设与分析方案，以防事后挑选结果；开放科学核心做法，名词 pre-registration）",
+        "ex": "\"in a pre-registered study published in September 2026\""
       }
     ]
   }

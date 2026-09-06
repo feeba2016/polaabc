@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Witness Who Said Less — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#0f766e;
+  --accent2:#c2410c;
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#ccfbf1;
+  --border:#d3e3e6;
+  --soft:#f0fdfa;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{display:block;flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;margin-top:6px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(15,118,110,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(15,118,110,.55);}70%{box-shadow:0 0 0 12px rgba(30,58,138,0);}100%{box-shadow:0 0 0 0 rgba(30,58,138,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#99f6e4;}
+#tip{position:fixed;z-index:1200;background:#0f172a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ccfbf1;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 跨文化比较 Cross-cultural</span>
+            <h1 class="title">The Witness Who Said Less</h1>
+      <p class="subtitle">When silence is read as evasion — and what a court mistakes for unreliability · 全文阅读（点青色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Experiment</div>
+            <p>Two people watch the same collision. Both are honest; both <span class="kw" data-def="（心智、法律上）有能力的、适格的（competent = having the necessary ability or capacity；competent to testify 指具备作证资格）">competent</span>; neither has a stake in the outcome. Yet one account runs twice as long as the other, and the difference has nothing to do with what was seen. In a <span class="kw" data-def="预注册的（研究开始前即公开登记假设与分析方案，以防事后挑选结果；开放科学的核心做法，名词 pre-registration）">pre-registered</span> study published in September 2026, 163 participants in Britain and China reported a filmed traffic incident; the British witnesses supplied significantly more correct information, <span class="kw" data-def="复制、复现（研究结果）（replicate = to repeat a study and obtain the same result；名词 replication；此处指再次得到同一发现）">replicating</span> a decade of findings.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Framework</div>
+            <p>The usual explanation <span class="kw" data-def="援引、诉诸（invoke = to cite or appeal to something as an authority or explanation；invoke a distinction / theory 为学术写作高频搭配）">invokes</span> Edward Hall's distinction between low-context and high-context communication. In <span class="kw" data-def="低语境的（low-context = 意义主要承载于明说的言辞；与 high-context『高语境、意义依赖共享背景』相对，由人类学家 Edward T. Hall 于 1976 年提出）">low-context</span> cultures meaning rides on the words themselves, and the speaker must be explicit. In high-context cultures it rests on what is shared, and the burden shifts to the listener. <span class="kw" data-def="照此解释、依此说（on this account = according to this explanation；用于引出某一理论框架的解释，而非作者自己的主张）">On this account</span>, the Chinese witnesses were not withholding; they supplied what they took to be sufficient. <span class="kw" data-def="简短、简洁（brevity = conciseness of expression；形容词 brief。注意与『缺陷』对举：a convention, not a deficit）">Brevity</span> here is a convention, not a deficit.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Null Result</div>
+            <p>A second finding is more <span class="kw" data-def="发人深省的、暴露问题的（revealing = showing something previously hidden；revealing for being negative 指『正因为是零结果反而更有信息量』）">revealing</span> for being negative. The researchers had supposed that witnesses would disclose more about a stranger from another culture than about someone close, since loyalty to one's group <span class="kw" data-def="抑制、阻碍（inhibit = to hold back or restrain；inhibit disclosure 使信息披露受抑；名词 inhibition）">inhibits</span> disclosure. Disclosure did rise, but not <span class="kw" data-def="在统计上地（statistically significantly = 差异不太可能由随机误差造成；学术写作中必须区分『方向一致』与『达到显著』）">statistically significantly</span> so; the interaction between culture and relationship proximity likewise failed to reach significance. The authors report this plainly rather than <span class="kw" data-def="夸大、把……说得比实际更有分量（overstate = to describe something as more important or larger than it is）">overstate</span> it — a restraint a literature rarely rewards.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Cost of Misreading</div>
+            <p>Why should this matter outside a laboratory? Because courts routinely treat <span class="kw" data-def="健谈、滔滔不绝（volubility = the quality of talking a great deal；形容词 voluble。文中指出法院常把『话多』当作诚实的替代指标）">volubility</span> as a proxy for honesty; the witness who answers only what is asked reads as <span class="kw" data-def="回避的、支吾的（evasive = avoiding giving direct answers；名词 evasion，动词 evade）">evasive</span>. <span class="kw" data-def="根深蒂固的（entrenched = firmly established and difficult to change；so entrenched is X that… 为程度倒装结构）">So entrenched</span> is this <span class="kw" data-def="经验法则、启发式（heuristic = a mental shortcut enabling quick judgement；常带『有效但会系统偏误』的意味）">heuristic</span> that a difference in narrative style can be <span class="kw" data-def="误读（misread = to interpret incorrectly；过去分词与原形拼写相同）">misread</span> as a defect of character. The remedy lies not in coaching witnesses to speak more but in training interviewers to ask better — an <span class="kw" data-def="不对称（asymmetry = lack of equality or equivalence between parts；information asymmetry 信息不对称；形容词 asymmetric）">asymmetry</span> that returns the burden to the listener.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="replicate">🔊</button><div class="word">replicate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">复制、复现（研究结果）（to repeat a study and obtain the same result；名词 replication；replicate a finding 指再次验证出同一发现）</div><div class="ex">"replicating a decade of findings"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="invoke">🔊</button><div class="word">invoke<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">援引、诉诸（to cite or appeal to something as an authority or explanation；invoke a distinction / theory 为学术写作高频搭配）</div><div class="ex">"the usual explanation invokes Hall's distinction"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="brevity">🔊</button><div class="word">brevity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">简短、简洁（conciseness of expression；形容词 brief。注意与『缺陷』对举：brevity is a convention, not a deficit）</div><div class="ex">"brevity here is a convention, not a deficit"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="inhibit">🔊</button><div class="word">inhibit<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">抑制、阻碍（to hold back or restrain a process or behaviour；inhibit disclosure 使信息披露受抑；名词 inhibition）</div><div class="ex">"loyalty to one's group inhibits disclosure"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="volubility">🔊</button><div class="word">volubility<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">健谈、滔滔不绝（the quality of talking a great deal；形容词 voluble；文中指法庭把『话多』误当作可信的替代指标）</div><div class="ex">"courts routinely treat volubility as a proxy for honesty"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="evasive">🔊</button><div class="word">evasive<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">回避的、含糊其辞的（avoiding giving direct answers or commitments；名词 evasion，动词 evade）</div><div class="ex">"the witness who answers only what is asked reads as evasive"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="entrenched">🔊</button><div class="word">entrenched<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">根深蒂固的、难以改变的（firmly established and difficult to change；常用于观念、制度、偏见，如 an entrenched assumption）</div><div class="ex">"so entrenched is this heuristic that…"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="heuristic">🔊</button><div class="word">heuristic<span class="pos">n./adj.</span></div><span class="lvl">C2</span><div class="zh">启发法、经验法则（a mental shortcut enabling quick judgement；心理学与法学交叉高频词，常带『高效但会系统性偏误』的意味）</div><div class="ex">"a credibility heuristic can misread style as character"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="asymmetry">🔊</button><div class="word">asymmetry<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">不对称（lack of equality or equivalence between parts；information asymmetry 信息不对称；形容词 asymmetric）</div><div class="ex">"an asymmetry that returns the burden to the listener"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pre-registered">🔊</button><div class="word">pre-registered<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">预注册的（研究开始前预先登记假设与分析方案，以防事后挑选结果；开放科学核心做法，名词 pre-registration）</div><div class="ex">"in a pre-registered study published in September 2026"</div></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Nothing to do with… / have nothing to do with</h3>
+          <div class="zh">「与……毫无关系」——用于排除一种解释、引出另一种，是学术反驳的标准起手式。</div>
+          <div class="eg">The difference has nothing to do with what was seen.</div>
+          <div class="practice">✍️ 仿写：这种差异与能力无关。<input type="text" placeholder="The difference has nothing to do with..."></div>
+        </div>
+        <div class="item">
+          <h3>2. It is not that…, but that…（对照式分裂句变体）</h3>
+          <div class="zh">「并非……而是……」——先否定一个常见误解，再给出正确解释，比简单 but 更有学术分量。</div>
+          <div class="eg">It is not that the Chinese witnesses withheld information, but that they supplied what they took to be sufficient.</div>
+          <div class="practice">✍️ 仿写：并非她不愿说，而是她以为已经说清楚了。<input type="text" placeholder="It is not that she..., but that she..."></div>
+        </div>
+        <div class="item">
+          <h3>3. So + 形容词 + 助动词 + 主语 + that…（程度倒装）</h3>
+          <div class="zh">「如此……以至于……」——把 so 短语提到句首触发部分倒装，强调程度，是 C2 写作的加分结构。</div>
+          <div class="eg">So entrenched is this heuristic that a cultural difference can be misread as a defect of character.</div>
+          <div class="practice">✍️ 仿写：这一假设如此普遍，以至于几乎无人质疑。<input type="text" placeholder="So widespread is this assumption that..."></div>
+        </div>
+        <div class="item">
+          <h3>4. A is to B what C is to D（类比结构）</h3>
+          <div class="zh">「A 之于 B 犹如 C 之于 D」——用于建立类比，常见于人文社科论证。</div>
+          <div class="eg">Volubility is to the courtroom what fluency is to the job interview: a proxy, and a poor one.</div>
+          <div class="practice">✍️ 仿写：沉默之于高语境文化，犹如直白之于低语境文化。<input type="text" placeholder="Silence is to ... what ... is to ..."></div>
+        </div>
+        <div class="item">
+          <h3>5. The remedy lies not in… but in…</h3>
+          <div class="zh">「解决之道不在于……而在于……」——提出对策时的高级对照结构，比 should 更有论证力度。</div>
+          <div class="eg">The remedy lies not in coaching witnesses to speak more but in training interviewers to ask better.</div>
+          <div class="practice">✍️ 仿写：对策不在于增加篇幅，而在于提高精度。<input type="text" placeholder="The remedy lies not in ... but in ..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 部分倒装：So + Adj + be + 主语 + that</h3>
+          <div class="zh">so 引导的形容词短语置于句首时，主谓必须部分倒装（助动词提前）。否定词 never / rarely / not only 置首同理。</div>
+          <div class="eg">So entrenched is this heuristic that …（比较：This heuristic is so entrenched that …）</div>
+        </div>
+        <div class="item">
+          <h3>2. 虚拟语气：supposed that + would（推测性假设）</h3>
+          <div class="zh">主句动词为过去时的「假定」类动词（suppose, assume, hypothesise）时，从句用 would + 原形表示当时的预期——注意它描述的是研究者的<b>事前预期</b>，而非事实。</div>
+          <div class="eg">The researchers had supposed that witnesses would disclose more freely.</div>
+        </div>
+        <div class="item">
+          <h3>3. 介词短语独立结构：for being + 形容词/名词</h3>
+          <div class="zh">for being X 表示「正因为 X」，构成让步或原因的紧缩结构，比 because it is X 更凝练。类似用法：for all its faults。</div>
+          <div class="eg">A finding more revealing for being negative.（正因为是零结果，反而更有信息量）</div>
+        </div>
+        <div class="item">
+          <h3>4. 名词化（Nominalisation）：动词 → 抽象名词主语</h3>
+          <div class="zh">学术英语倾向把动作名词化作主语：disclosure did rise / a cultural difference in narrative style can be misread。这让论述更客观、更紧凑，是雅思写作 Task 2 拿 7 分以上的关键特征。</div>
+          <div class="eg">Disclosure did rise in that condition, but not significantly so.</div>
+        </div>
+        <div class="item">
+          <h3>5. 助动词 do 的强调用法（do + 原形）</h3>
+          <div class="zh">在肯定句中使用 do/did + 原形，表示「确实、的确」，常与 but 搭配形成「确实……但……」的学术让步。</div>
+          <div class="eg">Disclosure <b>did</b> rise, but not statistically significantly so.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、这篇论文在说什么（事实背景）</h3>
+        <p>本课取材于 2026 年 9 月 1 日发表于 <i>Behavioral Sciences</i> 的一项跨文化证词研究：<b>《Culture of Silence: Examining the Influence of Culture in Mock-Eyewitness Reports》</b>（Behav. Sci. 2026, 16(9), 1540），作者为英国朴茨茅斯大学的 Alejandra De La Fuente Vilar、Lorraine Hope、Feni Kontogianni 与温彻斯特大学的 Amunra Layal。</p>
+        <ul>
+          <li><b>设计：</b>预注册（pre-registered）在线准实验，<b>N = 163</b>。参与者为英国籍与中国籍（英语流利）成年人，观看同一段道路交通事故视频后以「目击者」身份提交陈述。</li>
+          <li><b>操纵变量：</b>加害者与目击者的关系亲疏分三档——<u>同文化熟人</u>（close–same culture）、<u>同文化陌生人</u>（stranger–same culture）、<u>异文化陌生人</u>（stranger–different culture）。</li>
+          <li><b>主要发现：</b>文化组别对「正确信息报告量」有显著影响，英国组显著高于中国组，这与低语境／高语境沟通偏好一致，也重复了 Anakwah、Hope 等人既有研究。</li>
+          <li><b>次要发现（零结果）：</b>目击者在描述「异文化陌生人」时披露量确有上升，但<b>未达统计显著</b>；文化与关系亲疏的<b>交互作用同样不显著</b>。作者如实报告，未作夸大。</li>
+        </ul>
+        <div class="box">🧭 <b>事实与出处：</b>以上内容据 <i>Behavioral Sciences</i> 论文摘要与正文（MDPI，2026 年 9 月）、<i>Legal and Criminological Psychology</i>（Wiley，BPS）关于高／低语境与可信度评估的综述，以及 Hall（1976）语境理论的标准表述交叉印证。本课尊重事实，未作虚构或戏剧化改写；文中「四百词／二百四十词」为便于理解的示意性换算，非原始数据。</div>
+
+        <h3>二、高语境 vs 低语境（Hall, 1976）</h3>
+        <table>
+          <tr><th style="width:18%">维度</th><th style="width:41%">低语境 Low-context</th><th>高语境 High-context</th></tr>
+          <tr><td><b>意义的载体</b></td><td>意义主要承载于明说的言辞本身；说清楚是说话人的责任</td><td>意义依赖共享背景、关系与非语言线索；读懂是听话人的责任</td></tr>
+          <tr><td><b>典型社会</b></td><td>英国、美国、德国、北欧等偏个人主义社会</td><td>中国、日本、韩国及部分阿拉伯、拉美社会</td></tr>
+          <tr><td><b>沉默的含义</b></td><td>易被解读为不了解、不合作甚至隐瞒</td><td>可能是礼貌、给对方面子，或认为「已说够了」</td></tr>
+          <tr><td><b>风险</b></td><td>被视为粗鲁、咄咄逼人、缺乏分寸</td><td>被视为含糊、闪躲、缺乏可信度</td></tr>
+        </table>
+        <p><b>注意：</b>这是<b>群体层面的统计倾向</b>，不是对任何个人的判断。把文化维度当成个体标签，本身就是一种刻板印象——这也是此类研究最常被误用的地方。</p>
+
+        <h3>三、为什么「零结果」值得写进论文</h3>
+        <p>研究者在实验前就公开登记了假设与分析方案（pre-registration），因此无论结果显著与否都必须报告。这种做法直接对抗学术界的<b>发表偏倚</b>（publication bias）：只发显著结果、把不显著的锁进抽屉，会让整个文献高估效应的存在与强度。本文第二个假设没得到支持，作者仍然照实写出并讨论，反而是方法学上更值得称道的部分。</p>
+
+        <h3>四、对司法与面谈实践的影响</h3>
+        <ul>
+          <li><b>可信度评估（credibility assessment）：</b>在庇护申请、跨境取证等场景中，面谈官若以低语境规范为默认标准，可能系统性地把高语境陈述者的简洁误判为「含糊」或「不可信」。</li>
+          <li><b>追问的代价：</b>研究显示追问（tell / explain / describe）能额外引出 18–22% 的信息，但追问所得信息的<b>准确率显著低于</b>初始自由陈述（Kontogianni 等，2020）。因此「多问」并不等于「更好」。</li>
+          <li><b>创伤表达的文化差异：</b>不同文化中创伤症状的表达方式不同——例如部分中国幸存者更多以躯体症状（心肺、眩晕）表述，而美国幸存者较少如此（Yeung 等，2005；Zheng &amp; Gray, 2015）。若面谈官不熟悉这些差异，同样会误读。</li>
+          <li><b>谁该改变：</b>本文作者的立场很清楚——问题不在目击者身上。培训面谈官、改进提问技术，比要求证人「多说一点」更公平，也更有效。</li>
+        </ul>
+
+        <h3>五、可用于雅思 / 托福的思考题</h3>
+        <ul>
+          <li>Should legal systems adapt their credibility standards to accommodate cultural differences in communication? Discuss both views.</li>
+          <li>「跨文化误解」更多是语言问题，还是预期问题？给出你的理由与例子。</li>
+          <li>为什么科学研究应当发表「零结果」？这对公众理解科学有什么意义？</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课</h2>
+      <div class="card">
+        <h3>🎯 学习目标</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇：</b>掌握 10 个 C1–C2 学术词汇（replicate, invoke, brevity, inhibit, volubility, evasive, entrenched, heuristic, asymmetry, pre-registered），能在写作中替换掉 make again / talk a lot / avoid 这类基础表达。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句法：</b>能仿写 5 个高级学术句型，尤其是 <i>so entrenched is X that…</i> 倒装与 <i>the remedy lies not in… but in…</i> 对照结构。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法：</b>掌握部分倒装、do 的强调用法、名词化与 <i>for being</i> 紧缩结构在议论文中的功能。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>批判思维：</b>能区分「方向一致」与「统计显著」，理解预注册与零结果对科学可信度的意义。</div></div>
+      </div>
+      <div class="card">
+        <h3>📝 考试技巧</h3>
+        <ul>
+          <li><b>雅思阅读判断题（TRUE/FALSE/NOT GIVEN）：</b>本课第 3 段是典型出题区——「披露量有上升」是 TRUE，「上升达到显著」是 FALSE，「研究者放弃了假设」是 NOT GIVEN。务必分清<b>事实</b>与<b>统计推断</b>。</li>
+          <li><b>托福推断题：</b>遇到 <i>it can be inferred that…</i>，答案一定是原文的<b>必然推论</b>而非合理联想。练习时先定位原句，再检验「能否被原文直接推翻」。</li>
+          <li><b>写作 Task 2：</b>本课的 <i>It is not that… but that…</i> 与 <i>The remedy lies not in… but in…</i> 可直接用于「提出并反驳一个常见观点」的段落，比 however / but 更能体现论证层次。</li>
+          <li><b>口语 Part 3：</b>被问到文化差异时，避免绝对化表述（Chinese people always…），改用 <i>tend to</i> / <i>on average</i> / <i>research suggests that</i>，既准确又显语言成熟。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🐾 关于 Pola News</h3>
+        <p>Pola News 每天为 C1–C2 学习者提供一篇有学术深度、有辩论价值的英文短文，覆盖文学评论、经济分析、前沿科技、国际政治、学术论文、法律伦理与跨文化比较七大主题。全文不提供逐段中文翻译，中文仅出现在关键词释义与背景扩展中——这是刻意设计：在 C1 以上阶段，依赖翻译会阻碍你建立英语思维。</p>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Witness Who Said Less · 2026-09-06 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Two people watch the same collision. Both are honest; both competent; neither has a stake in the outcome. Yet one account runs twice as long as the other, and the difference has nothing to do with what was seen. In a pre-registered study published in September 2026, 163 participants in Britain and China reported a filmed traffic incident; the British witnesses supplied significantly more correct information, replicating a decade of findings.", "The usual explanation invokes Edward Hall's distinction between low-context and high-context communication. In low-context cultures meaning rides on the words themselves, and the speaker must be explicit. In high-context cultures it rests on what is shared, and the burden shifts to the listener. On this account, the Chinese witnesses were not withholding; they supplied what they took to be sufficient. Brevity here is a convention, not a deficit.", "A second finding is more revealing for being negative. The researchers had supposed that witnesses would disclose more about a stranger from another culture than about someone close, since loyalty to one's group inhibits disclosure. Disclosure did rise, but not statistically significantly so; the interaction between culture and relationship proximity likewise failed to reach significance. The authors report this plainly rather than overstate it — a restraint a literature rarely rewards.", "Why should this matter outside a laboratory? Because courts routinely treat volubility as a proxy for honesty; the witness who answers only what is asked reads as evasive. So entrenched is this heuristic that a difference in narrative style can be misread as a defect of character. The remedy lies not in coaching witnesses to speak more but in training interviewers to ask better — an asymmetry that returns the burden to the listener."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["A comparison of how frequently road traffic collisions occur in the United Kingdom and China","Why witnesses from high-context cultures report less information than those from low-context cultures, and what it costs when courts mistake that brevity for dishonesty","A criticism of Edward Hall's theory of high- and low-context communication","New police procedures for interviewing eyewitnesses after traffic collisions"],ans:1,
+   fb:"Correct. 全文四段呈递进结构：第一段给出实验与发现（英国目击者报告的正确信息显著更多），第二段用 Hall 的高／低语境框架解释该差异，第三段补充一个未达显著的零结果，第四段落到司法实践的后果。B 同时涵盖『解释』与『代价』两层，概括最完整。A 把『报告信息量』偷换为『事故率』；C、D 都只触及局部。"},
+  {q:"2. According to paragraph 1, which of the following was true of the study's participants? 根据第一段，参与者符合下列哪项描述？",opts:["They were all professional police officers undergoing training","They had been involved in a real road traffic collision themselves","They were dishonest and had a personal stake in the outcome","They were honest, competent to testify, and had no stake in the outcome"],ans:3,
+   fb:"Yes. 原文 Both are honest; both competent; neither has a stake in the outcome. 作者特意先排除『能力』与『动机』两种解释，为第二段的『沟通规范差异』留出论证空间——这正是雅思判断题最爱考的排除性表述。A、B、C 均与原文相反。"},
+  {q:"3. The word 'volubility' in paragraph 4 is closest in meaning to: 第四段中的 volubility 最接近下列哪个词？",opts:["Reluctance to speak","Talkativeness","Accuracy of memory","Emotional distress"],ans:1,
+   fb:"Correct. volubility = 健谈、话多（形容词 voluble）。原文说法院常把 volubility 当作 honesty 的 proxy（替代指标）——即『说得越多越可信』。A 是其反义词 reticence（缄默）。词汇题技巧：看搭配对象，a proxy for honesty 只能是『话多』，不可能是『准确』或『痛苦』。"},
+  {q:"4. It can be inferred from paragraph 3 that the researchers had predicted which of the following? 据第三段可推断，研究者事先预测了什么？",opts:["That witnesses would disclose more about a stranger from another culture than about someone close to them","That British witnesses would report less information than Chinese witnesses","That relationship proximity would have no measurable effect at all","That the study would fail to replicate earlier cross-cultural findings"],ans:0,
+   fb:"Yes. 原文 The researchers had supposed that witnesses would disclose more about a stranger from another culture than about someone close, since loyalty to one's group inhibits disclosure —— 这正是 pre-registered（预注册）假设。注意：该假设方向上成立但未达统计显著，所以『预测内容』为 TRUE，『预测被证实』为 FALSE。这类区分是托福推断题的高频陷阱。"},
+  {q:"5. Which of the following best describes the author's attitude towards the study's null result? 作者对研究中零结果的态度最接近下列哪一项？",opts:["Dismissive — the result is too weak to be worth reporting","Confused — the authors cannot explain why the effect disappeared","Approving — the authors reported it honestly rather than overstating it","Critical — the study should have been redesigned"],ans:2,
+   fb:"Correct. 原文 The authors report this plainly rather than overstate it — a restraint worth noting in a literature that rarely rewards null results. 其中 restraint（克制）与 worth noting（值得注意）是明确的褒义态度信号。态度题做法：先圈出评价性形容词，排除 neutral 与极端选项。"},
+  {q:"6. What is the rhetorical function of the final sentence of paragraph 4? 第四段末句（The remedy … placed it.）的修辞作用是什么？",opts:["To concede that the study's findings have no practical application","To close the argument by returning to the burden-of-interpretation point raised in paragraph 2, thereby framing the remedy as a matter of fairness","To introduce a new objection that will be developed in a later section","To summarise the statistical results presented in paragraph 3"],ans:1,
+   fb:"Yes. 第二段说高语境文化中『理解的负担在听者身上』；末句 an asymmetry that returns the burden to the listener 与之呼应——救济方案把负担重新放回『听者／面谈官』一侧。这种首尾回环（ring composition）是学术短文常见的收束手法，也是托福修辞目的题的典型考点。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
