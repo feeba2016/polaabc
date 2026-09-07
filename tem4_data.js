@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：F1 已上线（5 Part / 30 词），其余主题 status:"soon" 待生产
+ * 状态：F1/F2/F3/G1 已上线（4 主题 / 20 Part / 120 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -147,10 +147,253 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"F2", cat:"F", zh:"城乡对比",   name:"City vs Country",  status:"soon", words:70,  desc:"高楼、田野、街道"},
-  {id:"F3", cat:"F", zh:"地理与地貌", name:"Geography",        status:"soon", words:60,  desc:"山海、河流、气候"},
+  {
+    id:"F2", cat:"F", zh:"城乡对比", name:"City vs Country", status:"live",
+    date:"2026-09-07", words:30, desc:"都市的喧嚣与田园的安宁：通勤、农耕、污染、变迁、安居",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"F2-P1", slug:"tem4-F2-P1", title:"都市脉搏", shape:"拱门",
+        poster:"assets/tem4/posters/F2_P1.png",
+        sentence:"Block after block, the morning hustle never stops downtown: crowds of civil servants commute by subway, and the new transit facility has finally eased the congestion.",
+        sentenceCn:"市中心，清晨的奔忙涌动在每一个街区：大批城市公务员乘地铁通勤，新的交通设施终于缓解了拥堵。",
+        scene:"小叶学姐站在早高峰的路口，人流与地铁通勤大军从她身旁涌过。",
+        words:[
+          {word:"block",      ipa:"/blɒk/",        pos:"n.",  zh:"街区；大块 v. 阻塞", forms:["Block","block"]},
+          {word:"hustle",     ipa:"/ˈhʌsl/",       pos:"n.",  zh:"奔忙，忙碌 v. 催促", forms:["hustle"]},
+          {word:"civil",      ipa:"/ˈsɪvl/",       pos:"adj.", zh:"城市的；公民的",    forms:["civil"]},
+          {word:"commute",    ipa:"/kəˈmjuːt/",    pos:"v.",  zh:"定时往返两地；通勤", forms:["commute"]},
+          {word:"facility",   ipa:"/fəˈsɪləti/",   pos:"n.",  zh:"[pl.] 设备，设施",  forms:["facility"]},
+          {word:"congestion", ipa:"/kənˈdʒestʃən/", pos:"n.", zh:"阻塞，拥挤",        forms:["congestion"]}
+        ]
+      },
+      {
+        id:"F2-P2", slug:"tem4-F2-P2", title:"田园牧歌", shape:"叶形",
+        poster:"assets/tem4/posters/F2_P2.png",
+        sentence:"Fertile fields cover the valley: farmers cultivate golden wheat, breed hardy sheep, watch the flock graze on the slopes, pick tender sprouts after rain, and enjoy a rich autumn yield.",
+        sentenceCn:"肥沃的田野铺满山谷：农人耕种金黄的麦子、饲养健壮的羊群，看羊儿在坡上吃草，雨后采摘嫩芽，享受丰收的秋天。",
+        scene:"小叶学姐走在金色麦田间的田埂上，山坡上羊群正在吃草。",
+        words:[
+          {word:"fertile",   ipa:"/ˈfɜːtaɪl/",    pos:"adj.", zh:"肥沃的，富饶的",           forms:["Fertile"]},
+          {word:"cultivate", ipa:"/ˈkʌltɪveɪt/",  pos:"v.",  zh:"耕作；栽培；培养",          forms:["cultivate"]},
+          {word:"breed",     ipa:"/briːd/",       pos:"v.",  zh:"饲养；繁殖 n. 品种",        forms:["breed"]},
+          {word:"flock",     ipa:"/flɒk/",        pos:"n.",  zh:"羊群；（禽畜的）群 v. 聚集", forms:["flock"]},
+          {word:"sprout",    ipa:"/spraʊt/",      pos:"v.",  zh:"发芽 n. 新芽，籽苗",        forms:["sprouts"]},
+          {word:"yield",     ipa:"/jiːld/",       pos:"v.",  zh:"结出（果实）；产出 n. 产量", forms:["yield"]}
+        ]
+      },
+      {
+        id:"F2-P3", slug:"tem4-F2-P3", title:"喧嚣与宁静", shape:"椭圆",
+        poster:"assets/tem4/posters/F2_P3.png",
+        sentence:"Contaminated by traffic fumes, the city feels heavy: waste is dumped at the roadside and litter lies along the streets; the serene countryside, by contrast, soothes the tired heart.",
+        sentenceCn:"被尾气污染的城市空气令人窒闷；垃圾倒在路边、废弃物散落街头——相比之下，宁静的乡村抚慰疲惫的心灵。",
+        scene:"画面一分为二：左侧车流尾气笼罩的街道，右侧小叶学姐在宁静乡野小憩。",
+        words:[
+          {word:"contaminate", ipa:"/kənˈtæmɪneɪt/", pos:"vt.", zh:"污染，玷污",            forms:["Contaminated"]},
+          {word:"fume",        ipa:"/fjuːm/",        pos:"n.",  zh:"[pl.] （浓烈难闻的）烟，气", forms:["fumes"]},
+          {word:"dump",        ipa:"/dʌmp/",         pos:"v.",  zh:"倾倒，倾卸；丢弃",       forms:["dumped"]},
+          {word:"litter",      ipa:"/ˈlɪtə/",        pos:"n.",  zh:"乱丢的废弃物 v. 乱丢",   forms:["litter"]},
+          {word:"serene",      ipa:"/səˈriːn/",      pos:"adj.", zh:"安详的，平静的，宁谧的", forms:["serene"]},
+          {word:"soothe",      ipa:"/suːð/",         pos:"v.",  zh:"抚慰；使（痛苦）减轻",   forms:["soothes"]}
+        ]
+      },
+      {
+        id:"F2-P4", slug:"tem4-F2-P4", title:"城乡变迁", shape:"超圆角",
+        poster:"assets/tem4/posters/F2_P4.png",
+        sentence:"Booming all over, the town renews itself: shabby old houses are demolished, historic streets renovated, new apartments erected along the avenues, and the once-poor village grows prosperous and affluent.",
+        sentenceCn:"全镇一片繁荣：破旧的老屋被拆除，历史街道被整修，新公寓沿街竖起，曾经贫困的村庄变得繁荣富裕。",
+        scene:"小叶学姐站在塔吊与脚手架之间，见证老屋拆除、新楼拔地而起。",
+        words:[
+          {word:"boom",       ipa:"/buːm/",        pos:"v.",  zh:"迅速发展，繁荣 n. 激增", forms:["Booming"]},
+          {word:"demolish",   ipa:"/dɪˈmɒlɪʃ/",    pos:"vt.", zh:"拆毁；废除",             forms:["demolished"]},
+          {word:"renovate",   ipa:"/ˈrenəveɪt/",   pos:"vt.", zh:"修复，整修；革新",        forms:["renovated"]},
+          {word:"erect",      ipa:"/ɪˈrekt/",      pos:"vt.", zh:"建造；竖立 adj. 直立的",  forms:["erected"]},
+          {word:"prosperous", ipa:"/ˈprɒspərəs/",  pos:"adj.", zh:"繁荣的，昌盛的",         forms:["prosperous"]},
+          {word:"affluent",   ipa:"/ˈæfluənt/",    pos:"adj.", zh:"富裕的，富有的",         forms:["affluent"]}
+        ]
+      },
+      {
+        id:"F2-P5", slug:"tem4-F2-P5", title:"安居乐业", shape:"波浪",
+        poster:"assets/tem4/posters/F2_P5.png",
+        sentence:"More families now dwell in the countryside: every household keeps a cosy garden, villagers stroll along the river after supper, people live in harmony with nature, and small shops flourish.",
+        sentenceCn:"越来越多家庭迁居乡村：家家户户打理着温馨的花园，村民晚饭后在河边漫步，人与自然和谐相处，小店处处兴旺。",
+        scene:"小叶学姐在乡村小河边悠闲漫步，身后是花园民宅与兴旺的小店。",
+        words:[
+          {word:"dwell",     ipa:"/dwel/",        pos:"v.",  zh:"居住，生活于，栖息", forms:["dwell"]},
+          {word:"household", ipa:"/ˈhaʊshəʊld/",  pos:"n.",  zh:"家庭，户 adj. 家庭的", forms:["household"]},
+          {word:"cosy",      ipa:"/ˈkəʊzi/",      pos:"adj.", zh:"温暖舒适的，安逸的", forms:["cosy"]},
+          {word:"stroll",    ipa:"/strəʊl/",      pos:"n./v.", zh:"漫步，闲逛，遨游", forms:["stroll"]},
+          {word:"harmony",   ipa:"/ˈhɑːməni/",    pos:"n.",  zh:"调和，和谐；和睦",   forms:["harmony"]},
+          {word:"flourish",  ipa:"/ˈflʌrɪʃ/",     pos:"v.",  zh:"茂盛；繁荣，兴旺",   forms:["flourish"]}
+        ]
+      }
+    ]
+  },
+  {
+    id:"F3", cat:"F", zh:"地理奇观", name:"Geography", status:"live",
+    date:"2026-09-07", words:30, desc:"山峡、大漠、江河、四季与星空：一部地理词汇小百科",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"F3-P1", slug:"tem4-F3-P1", title:"高山峡谷", shape:"拱门",
+        poster:"assets/tem4/posters/F3_P1.png",
+        sentence:"Abrupt cliffs rise along the mountain range: a stone bridge spans the deep gorge, mist gathers in every hollow below, and eagles soar over the brink into the clouds.",
+        sentenceCn:"陡峭的悬崖沿山脉耸立：一座石桥横跨深谷，雾气在下方每一处凹陷中聚拢，雄鹰越过崖边翱翔入云。",
+        scene:"小叶学姐站在峡谷观景台，石桥横跨深谷，雄鹰在崖边盘旋。",
+        words:[
+          {word:"abrupt", ipa:"/əˈbrʌpt/",  pos:"adj.", zh:"陡峭的；突然的",          forms:["Abrupt"]},
+          {word:"range",  ipa:"/reɪndʒ/",   pos:"n.",  zh:"山脉；范围 v. 变化",       forms:["range"]},
+          {word:"span",   ipa:"/spæn/",     pos:"v.",  zh:"横跨，架桥于 n. 跨度",     forms:["spans"]},
+          {word:"hollow", ipa:"/ˈhɒləʊ/",   pos:"adj.", zh:"中空的；凹陷的",          forms:["hollow"]},
+          {word:"soar",   ipa:"/sɔː/",      pos:"vi.", zh:"高飞，翱翔；骤升",         forms:["soar"]},
+          {word:"brink",  ipa:"/brɪŋk/",    pos:"n.",  zh:"（峭壁等的）边沿，边缘",   forms:["brink"]}
+        ]
+      },
+      {
+        id:"F3-P2", slug:"tem4-F3-P2", title:"大漠孤烟", shape:"叶形",
+        poster:"assets/tem4/posters/F3_P2.png",
+        sentence:"Across the arid desert the ground lies barren and sterile, painfully desolate beneath a bleak sky, while thin cattle starve beside the dry well.",
+        sentenceCn:"干旱的沙丘绵延在贫瘠的荒原上：不长草木的土地显得荒凉，天空阴沉，牛群在枯井旁挨饿。",
+        scene:"小叶学姐披着斗篷走在连绵沙丘间，枯井旁的牛群无精打采。",
+        words:[
+          {word:"arid",     ipa:"/ˈærɪd/",     pos:"adj.", zh:"干旱的；贫瘠的",        forms:["arid"]},
+          {word:"barren",   ipa:"/ˈbærən/",    pos:"adj.", zh:"贫瘠的；不毛的",        forms:["barren"]},
+          {word:"sterile",  ipa:"/ˈsteraɪl/",  pos:"adj.", zh:"不毛的；无菌的",        forms:["sterile"]},
+          {word:"desolate", ipa:"/ˈdesələt/",  pos:"adj.", zh:"荒凉的，荒废的",        forms:["desolate"]},
+          {word:"bleak",    ipa:"/bliːk/",     pos:"adj.", zh:"荒凉的；阴沉的",        forms:["bleak"]},
+          {word:"starve",   ipa:"/stɑːv/",     pos:"v.",  zh:"（使）挨饿，饿死",       forms:["starve"]}
+        ]
+      },
+      {
+        id:"F3-P3", slug:"tem4-F3-P3", title:"江河湖海", shape:"椭圆",
+        poster:"assets/tem4/posters/F3_P3.png",
+        sentence:"When the tides ebb, boats ford the channel by the buoy; but storms make rivers overflow their banks, submerge the fields and engulf the village.",
+        sentenceCn:"退潮后浅滩露出水面：小船在红色浮标旁涉水过河道；但暴雨后河水漫过堤岸，洪水淹没田野，吞没了村庄。",
+        scene:"小叶学姐在河口灯塔下看潮水退去，小船贴着红色浮标驶过浅滩。",
+        words:[
+          {word:"ebb",      ipa:"/eb/",          pos:"n./vi.", zh:"退潮，落潮",          forms:["ebb"]},
+          {word:"ford",     ipa:"/fɔːd/",        pos:"n.",  zh:"浅滩 v. 涉水，涉过",      forms:["ford"]},
+          {word:"buoy",     ipa:"/bɔɪ/",         pos:"n.",  zh:"浮标 v. 鼓励，支持",      forms:["buoy"]},
+          {word:"overflow", ipa:"/ˌəʊvəˈfləʊ/",  pos:"v.",  zh:"（使）溢出，（使）泛滥",  forms:["overflow"]},
+          {word:"submerge", ipa:"/səbˈmɜːdʒ/",   pos:"v.",  zh:"浸没，淹没",              forms:["submerge"]},
+          {word:"engulf",   ipa:"/ɪnˈɡʌlf/",     pos:"vt.", zh:"吞没，淹没",              forms:["engulf"]}
+        ]
+      },
+      {
+        id:"F3-P4", slug:"tem4-F3-P4", title:"四季天候", shape:"超圆角",
+        poster:"assets/tem4/posters/F3_P4.png",
+        sentence:"The climate softens in spring: light drizzle drenches the hills, frosty mornings thaw into mist, and the air stays temperate all April.",
+        sentenceCn:"谷地的气候早春转温和：清晨的霜冻融化成蒙蒙细雨，四月的阵雨浸透了苏醒的山丘。",
+        scene:"小叶学姐撑伞走在春雨润湿的山丘小路上，远山刚从霜冻中苏醒。",
+        words:[
+          {word:"climate",   ipa:"/ˈklaɪmət/",   pos:"n.",  zh:"气候；（社会）风气", forms:["climate"]},
+          {word:"temperate", ipa:"/ˈtempərət/",  pos:"adj.", zh:"（气候）温和的",     forms:["temperate"]},
+          {word:"frosty",    ipa:"/ˈfrɒsti/",    pos:"adj.", zh:"霜冻的，严寒的",     forms:["frosty"]},
+          {word:"thaw",      ipa:"/θɔː/",        pos:"v.",  zh:"解冻，融化；变得温和", forms:["thaw"]},
+          {word:"drizzle",   ipa:"/ˈdrɪzl/",     pos:"n./vi.", zh:"毛毛雨",          forms:["drizzle"]},
+          {word:"drench",    ipa:"/drentʃ/",     pos:"vt.", zh:"使湿透，浸湿",        forms:["drenches"]}
+        ]
+      },
+      {
+        id:"F3-P5", slug:"tem4-F3-P5", title:"仰望星空", shape:"波浪",
+        poster:"assets/tem4/posters/F3_P5.png",
+        sentence:"Above the lake the galaxy appears: countless stars glitter and twinkle over the southern hemisphere, until a lunar eclipse gives campers a rare glimpse of shadow.",
+        sentenceCn:"繁星闪烁在湖面上空：银河横贯南半天球，直到月食开始，营员们得以一睹月影奇观。",
+        scene:"小叶学姐在湖边营地仰望星空，银河横贯天际，月食悄然开始。",
+        words:[
+          {word:"glitter",    ipa:"/ˈɡlɪtə/",     pos:"n./vi.", zh:"闪光，反光",           forms:["glitter"]},
+          {word:"twinkle",    ipa:"/ˈtwɪŋkl/",    pos:"v.",  zh:"闪烁，闪耀",              forms:["twinkle"]},
+          {word:"galaxy",     ipa:"/ˈɡæləksi/",   pos:"n.",  zh:"星系；[G-] 银河系",       forms:["galaxy"]},
+          {word:"hemisphere", ipa:"/ˈhemɪsfɪə/",  pos:"n.",  zh:"（地球的）半球",          forms:["hemisphere"]},
+          {word:"eclipse",    ipa:"/ɪˈklɪps/",    pos:"n.",  zh:"日食，月食 v. 使黯然失色", forms:["eclipse"]},
+          {word:"glimpse",    ipa:"/ɡlɪmps/",     pos:"n.",  zh:"一瞥，一看",              forms:["glimpse"]}
+        ]
+      }
+    ]
+  },
   /* ===== G 兴趣与文化 ===== */
-  {id:"G1", cat:"G", zh:"音乐与艺术", name:"Music & Arts",     status:"soon", words:90,  desc:"乐器、画室、展览"},
+  {
+    id:"G1", cat:"G", zh:"音乐与艺术", name:"Music & Arts", status:"live",
+    date:"2026-09-07", words:30, desc:"从舞台首演到美术馆巡礼：演奏、作曲、鉴展、创作、策展",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"G1-P1", slug:"tem4-G1-P1", title:"舞台首演", shape:"拱门",
+        poster:"assets/tem4/posters/G1_P1.png",
+        sentence:"Tonight she will perform on stage: every beat and string resounds as fans applaud, fingers gently pluck the silk of a classic melody.",
+        sentenceCn:"今晚古筝登台演奏：每个节拍都赢得满场掌声，她的手指拨动琴弦，弹奏一曲经典名曲。",
+        scene:"小叶学姐抱古筝登上舞台，聚光灯下拨动琴弦，台下掌声雷动。",
+        words:[
+          {word:"perform", ipa:"/pəˈfɔːm/",  pos:"v.",  zh:"表演；实行",            forms:["perform"]},
+          {word:"applaud", ipa:"/əˈplɔːd/",  pos:"v.",  zh:"鼓掌，喝彩；称赞",       forms:["applaud"]},
+          {word:"beat",    ipa:"/biːt/",     pos:"v.",  zh:"敲打；打败 n. 节拍",     forms:["beat"]},
+          {word:"string",  ipa:"/strɪŋ/",    pos:"n.",  zh:"细绳；（乐器的）弦",     forms:["string"]},
+          {word:"pluck",   ipa:"/plʌk/",     pos:"v.",  zh:"拨（弦）；采，摘",       forms:["pluck"]},
+          {word:"classic", ipa:"/ˈklæsɪk/",  pos:"adj.", zh:"第一流的；古典的 n. 杰作", forms:["classic"]}
+        ]
+      },
+      {
+        id:"G1-P2", slug:"tem4-G1-P2", title:"作曲大师", shape:"叶形",
+        poster:"assets/tem4/posters/G1_P2.png",
+        sentence:"A genius can compose pop hits and symphonies that inspire millions; one vivid melody can fascinate the world.",
+        sentenceCn:"天才作曲家既写流行金曲也写交响乐：一段鲜活的旋律能鼓舞千万人，令每位听众着迷。",
+        scene:"小叶学姐在琴房伏案谱曲，钢琴上摊开写满音符的手稿。",
+        words:[
+          {word:"genius",    ipa:"/ˈdʒiːniəs/",   pos:"n.",  zh:"天才，天资，天赋",   forms:["genius"]},
+          {word:"compose",   ipa:"/kəmˈpəʊz/",    pos:"v.",  zh:"作曲；组成；使安定", forms:["compose"]},
+          {word:"pop",       ipa:"/pɒp/",         pos:"n.",  zh:"流行音乐 adj. 流行的", forms:["pop"]},
+          {word:"inspire",   ipa:"/ɪnˈspaɪə/",    pos:"v.",  zh:"鼓舞；激起灵感",     forms:["inspire"]},
+          {word:"vivid",     ipa:"/ˈvɪvɪd/",      pos:"adj.", zh:"鲜明的；生动的",     forms:["vivid"]},
+          {word:"fascinate", ipa:"/ˈfæsɪneɪt/",   pos:"v.",  zh:"迷住，使着迷",        forms:["fascinate"]}
+        ]
+      },
+      {
+        id:"G1-P3", slug:"tem4-G1-P3", title:"画廊鉴赏", shape:"椭圆",
+        poster:"assets/tem4/posters/G1_P3.png",
+        sentence:"The gallery will display these abstract and contemporary works: experts check each is authentic, not a fake, before the auction opens.",
+        sentenceCn:"画廊展出当代艺术家的抽象作品：拍卖开始前，专家逐一鉴定每件展品是真迹还是赝品。",
+        scene:"小叶学姐与伙伴们在画廊里看展，专家正用放大镜鉴定画作真伪。",
+        words:[
+          {word:"display",     ipa:"/dɪˈspleɪ/",      pos:"n./vt.", zh:"陈列，展示，展览",   forms:["display"]},
+          {word:"abstract",    ipa:"/ˈæbstrækt/",     pos:"adj.", zh:"抽象的 n. 摘要",       forms:["abstract"]},
+          {word:"contemporary", ipa:"/kənˈtempərəri/", pos:"adj.", zh:"当代的；同时代的",    forms:["contemporary"]},
+          {word:"authentic",   ipa:"/ɔːˈθentɪk/",     pos:"adj.", zh:"真迹的，正宗的",       forms:["authentic"]},
+          {word:"fake",        ipa:"/feɪk/",          pos:"n.",  zh:"赝品 adj. 假的 v. 伪造", forms:["fake"]},
+          {word:"auction",     ipa:"/ˈɔːkʃən/",       pos:"n./vt.", zh:"拍卖",              forms:["auction"]}
+        ]
+      },
+      {
+        id:"G1-P4", slug:"tem4-G1-P4", title:"画室创作", shape:"超圆角",
+        poster:"assets/tem4/posters/G1_P4.png",
+        sentence:"Every master was once a student who learned to sketch and portray the hero, then depict the exquisite lace with grace and ease.",
+        sentenceCn:"绘画大师先打素描草稿：粗犷的笔触描绘英雄，柔和的线条优雅地画出精致的蕾丝。",
+        scene:"小叶学姐在画室里执笔素描，画架上是一幅英雄肖像草稿。",
+        words:[
+          {word:"master",    ipa:"/ˈmɑːstə/",     pos:"n.",  zh:"大师，名家 vt. 精通", forms:["master"]},
+          {word:"sketch",    ipa:"/sketʃ/",       pos:"n.",  zh:"素描，草图 v. 速写",  forms:["sketch"]},
+          {word:"portray",   ipa:"/pɔːˈtreɪ/",    pos:"vt.", zh:"描绘，描写；扮演",    forms:["portray"]},
+          {word:"depict",    ipa:"/dɪˈpɪkt/",     pos:"vt.", zh:"（用图画）描绘，描述", forms:["depict"]},
+          {word:"exquisite", ipa:"/ˈekskwɪzɪt/",  pos:"adj.", zh:"精美的，精湛的",      forms:["exquisite"]},
+          {word:"grace",     ipa:"/ɡreɪs/",       pos:"n.",  zh:"优美，雅致；风度",    forms:["grace"]}
+        ]
+      },
+      {
+        id:"G1-P5", slug:"tem4-G1-P5", title:"美术馆巡礼", shape:"波浪",
+        poster:"assets/tem4/posters/G1_P5.png",
+        sentence:"Golden ornaments cover the jade crown: visitors adore and cherish such treasures, whose dragons symbolize power; scholars imitate the craft as guides narrate its legends.",
+        sentenceCn:"玉冠上的饰物象征王权：参观者珍爱这些宝藏，学者仿制工艺，讲解员讲述它的传说。",
+        scene:"小叶学姐在美术馆展柜前端详鎏金玉冠，讲解员正向观众讲述传说。",
+        words:[
+          {word:"ornament",  ipa:"/ˈɔːnəmənt/",   pos:"n.",  zh:"装饰品，饰物；装饰",  forms:["ornaments"]},
+          {word:"symbolize", ipa:"/ˈsɪmbəlaɪz/",  pos:"v.",  zh:"象征，代表",           forms:["symbolize"]},
+          {word:"adore",     ipa:"/əˈdɔː/",       pos:"vt.", zh:"敬慕，钟爱，崇拜",     forms:["adore"]},
+          {word:"cherish",   ipa:"/ˈtʃerɪʃ/",     pos:"vt.", zh:"珍爱；怀有（希望）",   forms:["cherish"]},
+          {word:"imitate",   ipa:"/ˈɪmɪteɪt/",    pos:"vt.", zh:"模仿，仿效；仿制",     forms:["imitate"]},
+          {word:"narrate",   ipa:"/næˈreɪt/",     pos:"v.",  zh:"叙述，描述",           forms:["narrate"]}
+        ]
+      }
+    ]
+  },
   {id:"G2", cat:"G", zh:"影视与电视", name:"Movies & TV",      status:"soon", words:80,  desc:"影院、追剧、导演"},
   {id:"G3", cat:"G", zh:"运动与健身", name:"Sports & Fitness", status:"soon", words:90,  desc:"球场、跑步、瑜伽"},
   {id:"G4", cat:"G", zh:"节日与庆典", name:"Festival & Celebration", status:"soon", words:70, desc:"圣诞、新年、生日"},
