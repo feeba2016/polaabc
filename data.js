@@ -2202,6 +2202,68 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B1",
+    "date": "2026-09-07",
+    "title": "The Devil Flower Under the Leaves",
+    "category": "science",
+    "emoji": "🔬",
+    "desc": "A Pola News science story.",
+    "slug": "2026-09-07-the-devil-flower-under-the-leaves",
+    "url": "lessons/b1/2026-09-07-the-devil-flower-under-the-leaves.html",
+    "vocab": [
+      {
+        "word": "leaf litter",
+        "zh": "落叶层；枯枝落叶层",
+        "ex": ""
+      },
+      {
+        "word": "devil flower",
+        "zh": "恶魔花（本期主角的俗称）",
+        "ex": ""
+      },
+      {
+        "word": "chlorophyll",
+        "zh": "叶绿素",
+        "ex": ""
+      },
+      {
+        "word": "photosynthesis",
+        "zh": "光合作用",
+        "ex": ""
+      },
+      {
+        "word": "nutrients",
+        "zh": "养分；营养",
+        "ex": ""
+      },
+      {
+        "word": "fungi",
+        "zh": "真菌（单数 fungus）",
+        "ex": ""
+      },
+      {
+        "word": "horns",
+        "zh": "角；角状突起",
+        "ex": ""
+      },
+      {
+        "word": "botanists",
+        "zh": "植物学家",
+        "ex": ""
+      },
+      {
+        "word": "endangered",
+        "zh": "濒危的（极危 = critically endangered）",
+        "ex": ""
+      },
+      {
+        "word": "species",
+        "zh": "物种",
+        "ex": ""
+      }
+    ]
+  },
+  {
     "level": "A1",
     "date": "2026-08-12",
     "title": "Where Rain Comes From",

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Devil Flower Under the Leaves · Pola News</title>
+<style>
+:root{
+  --accent:#15803d;
+  --accent2:#a16207;
+  --glow:#bbf7d0;
+  --ember:#f59e0b;
+  --bg:#f0fdf4;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --ink:#14532d;
+  --muted:#55655b;
+  --line:#bbf7d0;
+  --good:#0f9d58;
+  --bad:#e0566b;
+  --shadow:0 6px 22px rgba(21,128,61,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink);line-height:1.7;font-size:17px;
+}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .15s ease}
+.layout{display:flex;min-height:100vh;align-items:flex-start}
+.sidebar{position:sticky;top:0;align-self:flex-start;width:236px;min-width:236px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));color:#f2f4ff;padding:22px 14px}
+.sidebar .brand{font-weight:800;font-size:20px;letter-spacing:.3px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.sidebar .sub{font-size:12px;opacity:.85;margin-bottom:18px}
+.nav a{display:flex;align-items:center;gap:10px;color:#e8ecff;text-decoration:none;padding:11px 12px;border-radius:10px;font-size:15px;margin-bottom:4px;transition:.2s}
+.nav a .ic{width:24px;text-align:center;font-size:16px}
+.nav a:hover{background:rgba(255,255,255,.12)}
+.nav a.active{background:rgba(255,255,255,.20);color:#fff;font-weight:700;box-shadow:0 4px 14px rgba(29,78,216,.30)}
+.content{flex:1;padding:34px clamp(18px,4vw,56px);max-width:980px;margin:0 auto}
+header.top{margin-bottom:26px}
+header.top .kicker{display:inline-block;background:rgba(29,78,216,.10);color:var(--accent);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+header.top h1{font-size:clamp(28px,4vw,42px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+header.top .meta{margin-top:10px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:14px}
+header.top .meta b{color:var(--ink)}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:var(--shadow)}
+section h2{font-size:23px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+section h2 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.seg:last-child{border-bottom:none}
+.seg .badge{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.seg .txt{flex:1;min-width:220px;font-size:17px;line-height:1.85}
+.seg .zh{flex-basis:100%;margin-left:44px;font-size:15px;color:var(--muted);background:#eef2ff;border-left:3px solid var(--glow);border-radius:0 10px 10px 0;padding:8px 12px;line-height:1.8}
+.play{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:50%;width:38px;height:38px;flex:0 0 38px;cursor:pointer;font-size:15px;transition:.2s;box-shadow:0 4px 12px rgba(29,78,216,.25)}
+.play:hover{transform:scale(1.08)}
+.play.playing{background:linear-gradient(135deg,var(--ember),#fbbf24);animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(245,158,11,.55)}70%{box-shadow:0 0 0 12px rgba(245,158,11,0)}100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}}
+.kw{color:var(--accent);font-weight:700;cursor:pointer;border-bottom:2px dotted var(--accent2);position:relative}
+.kw:hover{background:rgba(196,181,253,.45)}
+#tip{position:fixed;z-index:1000;max-width:280px;background:#1e1b4b;color:#f2f4ff;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.vcard{background:linear-gradient(160deg,#eef2ff,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;position:relative;transition:.2s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(29,78,216,.14)}
+.vcard .w{font-size:19px;font-weight:800;color:var(--accent)}
+.vcard .pos{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.vcard .zh{font-size:15px;font-weight:600;margin-bottom:4px}
+.vcard .en{font-size:13px;color:var(--muted);line-height:1.5}
+.vcard .spk{position:absolute;top:10px;right:10px;border:none;background:rgba(124,58,237,.14);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;transition:.2s}
+.vcard .spk:hover{background:var(--accent2);transform:scale(1.1)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 4px}
+.stat{background:linear-gradient(160deg,#eef2ff,#fff);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent);line-height:1.15}
+.stat .l{font-size:13px;color:var(--muted);margin-top:4px}
+.pat{background:#eef2ff;border-left:4px solid var(--accent2);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.pat .en{font-size:17px;font-weight:600;margin-bottom:4px}
+.pat .zh{font-size:14px;color:var(--muted);margin-bottom:8px}
+.pat .fill{background:#fff;border:1px dashed var(--accent2);border-radius:8px;padding:8px 12px;font-size:15px;margin-top:6px}
+.pat .fill input{border:none;border-bottom:2px solid var(--accent2);background:transparent;font-size:15px;outline:none;min-width:110px;text-align:center;color:var(--accent);font-weight:700;font-family:inherit}
+.pat .fill button{margin-left:8px;border:none;background:var(--accent);color:#fff;border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer}
+.pat .ans{font-size:14px;margin-top:6px;font-weight:700;min-height:20px}
+.gbox{background:#eef2ff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.gbox h3{font-size:18px;color:var(--accent);margin-bottom:8px}
+.gbox .rule{background:#fff;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--accent);margin-bottom:10px;border:1px dashed var(--accent2)}
+.gbox ul{margin-left:20px;font-size:15px}
+.gbox li{margin-bottom:6px}
+.gbox table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.gbox th,.gbox td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.gbox th{background:rgba(29,78,216,.08);color:var(--accent)}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.q .qt{font-size:16px;font-weight:600;margin-bottom:10px}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.q .opt{border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-size:15px;transition:.15s;background:#eef2ff}
+.q .opt:hover{background:rgba(196,181,253,.45)}
+.q .opt.right{background:rgba(15,157,88,.14);border-color:var(--good);color:var(--good);font-weight:700}
+.q .opt.wrong{background:rgba(224,86,107,.12);border-color:var(--bad);color:var(--bad)}
+.q .exp{font-size:14px;color:var(--muted);margin-top:9px;display:none;line-height:1.6}
+.q .exp.show{display:block}
+#score{text-align:center;font-size:18px;font-weight:700;color:var(--accent);margin-top:10px}
+#resetq{display:block;margin:14px auto 0;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:9px 24px;border-radius:999px;font-size:15px;cursor:pointer;font-weight:700}
+.cn{background:linear-gradient(160deg,#eef2ff,#fff)}
+.cn h3{font-size:19px;color:var(--accent);margin:16px 0 8px}
+.cn h3:first-child{margin-top:0}
+.cn p{font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn ul{margin-left:22px;font-size:16px;margin-bottom:10px;line-height:1.85}
+.cn li{margin-bottom:7px}
+.cn .fact{background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 16px;margin:12px 0;font-size:15px}
+.cn .fact b{color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#fff;border:1px dashed var(--accent2);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:15px}
+.flow .step{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:5px 14px;font-size:14px;font-weight:700}
+.flow .step.ember{background:linear-gradient(135deg,var(--ember),#fbbf24)}
+.flow .arw{color:var(--accent2);font-weight:800}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.cmp .box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.cmp .box h4{font-size:16px;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.cmp .box .big{font-size:22px;font-weight:800;color:var(--accent2);line-height:1.2}
+.cmp .box p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.7}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;min-width:0;padding:14px}
+  .nav{display:flex;overflow-x:auto;gap:6px}
+  .nav a{margin-bottom:0;white-space:nowrap}
+  .content{padding:22px 16px}
+  .q .opts{grid-template-columns:1fr}
+  .seg .zh{margin-left:0}
+  .cmp{grid-template-columns:1fr}
+}
+@media print{
+  .sidebar,#progress,.play,.spk,#resetq{display:none!important}
+  body{background:#fff;font-size:12pt}
+  section{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span>POLA NEWS</div>
+  <div class="sub">2026-09-07 · Level B1</div>
+  <nav class="nav">
+    <a href="#read"><span class="ic">📖</span>Full Text</a>
+    <a href="#vocab"><span class="ic">🔤</span>Vocabulary</a>
+    <a href="#pattern"><span class="ic">🗣️</span>Sentence Patterns</a>
+    <a href="#grammar"><span class="ic">📐</span>Grammar</a>
+    <a href="#quiz"><span class="ic">✅</span>Quiz</a>
+    <a href="#more"><span class="ic">💡</span>知识扩展</a>
+    <a href="#about"><span class="ic">ℹ️</span>About</a>
+  </nav>
+</aside>
+<main class="content">
+<header class="top">
+  <span class="kicker">🌿 NATURE · BOTANY · BIODIVERSITY</span>
+  <h1>The Devil Flower Under the Leaves</h1>
+  <div class="meta">
+    <span>📅 <b>2026-09-07</b></span>
+    <span>🎧 <b>B1 · ages 10–12</b></span>
+    <span>⏱ <b>~4 × 15s</b></span>
+    <span>📍 <b>Thong Pha Phum National Park, Thailand</b></span>
+  </div>
+</header>
+<section id="read">
+  <h2><span class="num">1</span>📖 Full Text · 全文阅读</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:8px">点击 ▶ 听 Pola 朗读；点击带虚线的高亮单词查看中文释义。</p>
+
+  <div class="seg">
+    <div class="badge">1</div>
+    <div class="txt">Hello, Pola News here! Deep in a forest in Thailand, scientists have found a flower that breaks almost every rule. It has no leaves. It is not green. And it spends nearly its whole life hidden under the <span class="kw" data-def="落叶层；枯枝落叶层（森林地面上由落叶、枯枝和苔藓铺成的一层）" data-en="the layer of dead leaves, twigs and moss covering the ground in a forest">leaf litter</span>. Its name is Thismia daemona — the <span class="kw" data-def="恶魔花（本期主角 Thismia daemona 的英文俗称，因为它通体近黑、像长了角）" data-en="the nickname of this plant; a flower that looks dark and horned, like a little devil">devil flower</span>!</div>
+    <button class="play" data-seg="0" title="Play">▶</button>
+    <div class="zh">大家好，这里是 Pola News！在泰国的一片森林深处，科学家发现了一种几乎打破所有规矩的花。它没有叶子，也不是绿色的。它一生中几乎全部时间，都藏在落叶层底下。它的名字是 Thismia daemona——「恶魔花」！</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">2</div>
+    <div class="txt">Most plants use sunlight to make food. Not this one. It has no <span class="kw" data-def="叶绿素（植物里让叶子变绿、并用来捕捉阳光的物质）" data-en="the green substance in plants that captures sunlight to make food">chlorophyll</span>, so it cannot do <span class="kw" data-def="光合作用（植物用阳光、水和二氧化碳制造养分的过程）" data-en="the process by which plants use sunlight, water and air to make their own food">photosynthesis</span> at all. Instead, it quietly steals its <span class="kw" data-def="养分；营养（生物生长所需要的物质）" data-en="substances that a living thing needs in order to grow and stay healthy">nutrients</span> from <span class="kw" data-def="真菌（fungus 的复数；蘑菇、霉菌和土壤里的菌丝都属于真菌，它们不是植物）" data-en="living things such as mushrooms, moulds and underground threads; they are not plants">fungi</span> under the soil. And when its black flower comes up, it has little <span class="kw" data-def="角；角状突起（这里指花顶端像小角一样的附属物）" data-en="hard pointed parts on an animal's head; here, the small pointed parts on top of the flower">horns</span> and two glowing orange patches — like a pair of eyes.</div>
+    <button class="play" data-seg="1" title="Play">▶</button>
+    <div class="zh">大多数植物用阳光来制造自己的食物。这一种不是。它没有叶绿素，所以完全无法进行光合作用。相反，它悄悄地从一个生活在土壤里的真菌那里偷走养分。当它那朵黑色的花终于冒出地面时，顶上长着小小的角，还有两片发光的橙色斑块——就像一双眼睛。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">3</div>
+    <div class="txt">Why does it matter? <span class="kw" data-def="植物学家（专门研究植物的科学家）" data-en="scientists who study plants">Botanists</span> know of only one group of these plants, with fewer than fifty of them, in an area smaller than a football pitch. That makes it critically <span class="kw" data-def="濒危的（有灭绝危险的）；critically endangered 是最高警戒级别，意思是「极危」" data-en="in danger of disappearing from the world forever">endangered</span>. The find also pushes the whole plant family farther north than anyone expected — proof that the forest floor still holds big surprises.</div>
+    <button class="play" data-seg="2" title="Play">▶</button>
+    <div class="zh">这为什么重要？植物学家只知道一个这样的种群，数量不到五十株，全部挤在一块比足球场还小的地方。这让它成为「极危」物种。这次发现还把整个植物家族的分布往北推了一大截，超出了所有人的预料——这也证明，森林地面下面仍然藏着大惊喜。</div>
+  </div>
+
+  <div class="seg">
+    <div class="badge">4</div>
+    <div class="txt">The team wants nearby villages to help protect it, so tourists can visit without harming the forest floor. With this new <span class="kw" data-def="物种（生物分类的基本单位；species 单复数同形，所以「一个物种」是 a species，「十六个物种」是 sixteen species）" data-en="a group of living things that can breed together; the word is the same in singular and plural">species</span>, Thailand is now home to sixteen kinds of fairy lanterns. That is all from Pola News. See you next time — and keep looking down at the little things!</div>
+    <button class="play" data-seg="3" title="Play">▶</button>
+    <div class="zh">研究团队希望附近的村庄一起参与保护，这样游客来参观时，就不会伤害到森林地面。加上这个新物种，泰国现在一共有十六种「仙女灯笼」了。以上就是今天的 Pola News。下次见——记得常常低头看看那些小小的东西！</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">&lt;50</div><div class="l">全世界已知的植株数量，只此一个种群</div></div>
+    <div class="stat"><div class="n">16</div><div class="l">泰国现已知的 Thismia（仙女灯笼）物种总数</div></div>
+    <div class="stat"><div class="n">~1,000 m</div><div class="l">发现地的海拔，比这类植物通常生活的低地雨林高得多</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">已知种群数量 —— 面积比一个足球场还小</div></div>
+  </div>
+</section>
+
+<section id="vocab">
+  <h2><span class="num">2</span>🔤 Vocabulary · 词汇表</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 10 个核心词。点击右上角 🔊 听发音。</p>
+  <div class="vgrid">
+    <div class="vcard">
+      <button class="spk" data-word="leaf litter">🔊</button>
+      <div class="w">leaf litter</div><div class="pos">noun phrase /ˈliːf ˌlɪtə(r)/</div>
+      <div class="zh">落叶层；枯枝落叶层</div>
+      <div class="en">The flower hides under the leaf litter.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="devil flower">🔊</button>
+      <div class="w">devil flower</div><div class="pos">noun phrase /ˈdevl ˌflaʊə(r)/</div>
+      <div class="zh">恶魔花（本期主角的俗称）</div>
+      <div class="en">Scientists call Thismia daemona the devil flower.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="chlorophyll">🔊</button>
+      <div class="w">chlorophyll</div><div class="pos">noun /ˈklɒrəfɪl/</div>
+      <div class="zh">叶绿素</div>
+      <div class="en">It has no chlorophyll, so it is not green.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="photosynthesis">🔊</button>
+      <div class="w">photosynthesis</div><div class="pos">noun /ˌfəʊtəʊˈsɪnθəsɪs/</div>
+      <div class="zh">光合作用</div>
+      <div class="en">Most plants use photosynthesis to make food.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="nutrients">🔊</button>
+      <div class="w">nutrients</div><div class="pos">noun (plural) /ˈnjuːtriənts/</div>
+      <div class="zh">养分；营养</div>
+      <div class="en">It steals its nutrients from fungi.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="fungi">🔊</button>
+      <div class="w">fungi</div><div class="pos">noun (plural of fungus) /ˈfʌŋɡaɪ/</div>
+      <div class="zh">真菌（单数 fungus）</div>
+      <div class="en">The fungi live quietly under the soil.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="horns">🔊</button>
+      <div class="w">horns</div><div class="pos">noun (plural) /hɔːnz/</div>
+      <div class="zh">角；角状突起</div>
+      <div class="en">The black flower has little horns on top.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="botanists">🔊</button>
+      <div class="w">botanists</div><div class="pos">noun (plural) /ˈbɒtənɪsts/</div>
+      <div class="zh">植物学家</div>
+      <div class="en">Botanists found it in a national park.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="endangered">🔊</button>
+      <div class="w">endangered</div><div class="pos">adjective /ɪnˈdeɪndʒəd/</div>
+      <div class="zh">濒危的（极危 = critically endangered）</div>
+      <div class="en">That makes it critically endangered.</div>
+    </div>
+    <div class="vcard">
+      <button class="spk" data-word="species">🔊</button>
+      <div class="w">species</div><div class="pos">noun /ˈspiːʃiːz/ (单复数同形)</div>
+      <div class="zh">物种</div>
+      <div class="en">This new species lives in only one place.</div>
+    </div>
+  </div>
+</section>
+<section id="pattern">
+  <h2><span class="num">3</span>🗣️ Sentence Patterns · 句型练习</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">先读句子，再填空，点「检查」看答案。</p>
+
+  <div class="pat">
+    <div class="en">Most plants <b>use</b> sunlight <b>to make</b> their food.</div>
+    <div class="zh">大多数植物<b>用</b>阳光<b>来制造</b>食物。—— <b>use A to do B</b> 表示「用 A 来做 B」，to 后面永远跟动词原形。</div>
+    <div class="fill">Most plants use sunlight <input id="f1" type="text" placeholder="两个词" autocomplete="off"> their food. <button onclick="check('f1',['to make'],'to make')">检查</button></div>
+    <div class="ans" id="a1"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">It has no chlorophyll, <b>so</b> it cannot do photosynthesis at all.</div>
+    <div class="zh">它没有叶绿素，<b>所以</b>完全无法进行光合作用。—— <b>so</b> 用来引出<b>结果</b>：前面是原因，后面是结果。</div>
+    <div class="fill">It has no chlorophyll, <input id="f2" type="text" placeholder="一个词" autocomplete="off"> it cannot do photosynthesis at all. <button onclick="check('f2',['so'],'so')">检查</button></div>
+    <div class="ans" id="a2"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en"><b>Instead of</b> making its own food, it steals nutrients from fungi.</div>
+    <div class="zh">它<b>不</b>自己制造食物，<b>而是</b>从真菌那里偷养分。—— <b>instead of + 名词 / 动词-ing</b> 表示「不做 A，而做 B」。</div>
+    <div class="fill"><input id="f3" type="text" placeholder="两个词" autocomplete="off"> making its own food, it steals nutrients from fungi. <button onclick="check('f3',['Instead of'],'Instead of')">检查</button></div>
+    <div class="ans" id="a3"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">That <b>makes</b> it critically <b>endangered</b>.</div>
+    <div class="zh">这<b>使</b>它成为极危物种。—— <b>make + 宾语 + 形容词</b> 表示「使某人／某物变得……」。</div>
+    <div class="fill">That makes it critically <input id="f4" type="text" placeholder="一个词" autocomplete="off">. <button onclick="check('f4',['endangered'],'endangered')">检查</button></div>
+    <div class="ans" id="a4"></div>
+  </div>
+
+  <div class="pat">
+    <div class="en">Thailand is now <b>home to</b> sixteen kinds of fairy lanterns.</div>
+    <div class="zh">泰国现在是十六种仙女灯笼的<b>家园</b>。—— <b>be home to + 名词</b> 表示「是……的栖息地／所在地」，不只是「家」。</div>
+    <div class="fill">Thailand is now <input id="f5" type="text" placeholder="两个词" autocomplete="off"> sixteen kinds of fairy lanterns. <button onclick="check('f5',['home to'],'home to')">检查</button></div>
+    <div class="ans" id="a5"></div>
+  </div>
+</section>
+
+<section id="grammar">
+  <h2><span class="num">4</span>📐 Grammar · 语法点</h2>
+
+  <div class="gbox">
+    <h3>1. so 与 because：别把「原因」和「结果」说反</h3>
+    <div class="rule">because + 原因　｜　so + 结果　（两个词不能同时用在一个句子里）</div>
+    <ul>
+      <li>It has no chlorophyll, <b>so</b> it cannot do photosynthesis. （没有叶绿素是<b>原因</b>，不能光合作用是<b>结果</b>。）</li>
+      <li>It cannot do photosynthesis <b>because</b> it has no chlorophyll. （同一个意思，换个方向说。）</li>
+      <li>The forest is quiet, <b>so</b> the tiny flower is easy to miss. （林子安静 → 花容易被漏掉。）</li>
+      <li>💡 判断小窍门：把句子翻译成中文，「因为」后面用 because，「所以」后面用 so。</li>
+      <li>⚠️ 常见错误：<s>Because it has no chlorophyll, so it cannot...</s> ——英语里 because 和 so <b>不能成对出现</b>，二选一。</li>
+    </ul>
+    <table>
+      <tr><th>连接词</th><th>作用</th><th>例句</th></tr>
+      <tr><td>because</td><td>引出原因（因为）</td><td>It is dark because it has no chlorophyll.</td></tr>
+      <tr><td>so</td><td>引出结果（所以）</td><td>It has no chlorophyll, so it is not green.</td></tr>
+      <tr><td>so that</td><td>引出目的（以便）</td><td>They built a fence so that tourists stay out.</td></tr>
+    </table>
+  </div>
+
+  <div class="gbox">
+    <h3>2. instead 与 instead of：一字之差，用法不同</h3>
+    <div class="rule">instead（副词，单独放句首或句尾）　｜　instead of + 名词 / 代词 / 动词-ing</div>
+    <ul>
+      <li><b>Instead of</b> making its own food, it steals nutrients from fungi. （后面跟动词-ing。）</li>
+      <li>Most plants make their own food. This one does not. <b>Instead</b>, it steals nutrients. （单独用，前后常有句号。）</li>
+      <li>It lives under the leaves <b>instead of</b> in the sunlight. （后面跟介词短语也可以。）</li>
+      <li>💡 判断小窍门：instead <b>后面紧跟着被替换掉的东西</b>时，一定要加 of；单独放在句首／句尾、后面没有宾语时，用 instead。</li>
+      <li>⚠️ 常见错误：<s>instead of make food</s> → of 是介词，后面要用 <b>making</b>。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>3. make + 宾语 + 形容词（让某物变得……）</h3>
+    <div class="rule">主语 + make(s) + 宾语 + 形容词　｜　也可以用 make + 宾语 + 名词</div>
+    <ul>
+      <li>That <b>makes it</b> critically <b>endangered</b>. （这使它成为极危物种。）</li>
+      <li>The dark colour <b>makes the flower</b> hard <b>to see</b>. （深色让这朵花很难被发现。）</li>
+      <li>The discovery <b>made Thailand</b> <b>home</b> to sixteen species. （这一发现让泰国成为十六个物种的家园。）</li>
+      <li>💡 这个结构里的形容词叫<b>宾语补足语</b>，它描述的是宾语的状态：<i>it</i> 是极危的，不是「主语」极危。</li>
+      <li>⚠️ 常见错误：<s>makes it critically endanger</s> → 这里要形容词 <b>endangered</b>，不是动词原形。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>4. 不定式表目的：use A to do B / ...enough to do</h3>
+    <div class="rule">use + 名词 + to + 动词原形　｜　动词 + to + 动词原形（说明「为了什么」）</div>
+    <ul>
+      <li>Most plants <b>use</b> sunlight <b>to make</b> their food. （用阳光，<b>为了</b>制造食物。）</li>
+      <li>Scientists <b>use</b> a magnifier <b>to study</b> the tiny flower. （用放大镜，为了研究小花。）</li>
+      <li>The team <b>works</b> with villages <b>to protect</b> the plant. （和村子合作，为了保护它。）</li>
+      <li>💡 想判断是不是表目的，可以在 to 前面偷偷加上「in order」：use sunlight <b>in order</b> to make food → 通顺，就是表目的。</li>
+      <li>⚠️ 常见错误：<s>use sunlight for make food</s> → 表目的用 <b>to make</b>；for 后面要跟名词（for making food）。</li>
+    </ul>
+  </div>
+
+  <div class="gbox">
+    <h3>5. fewer than 与 less than：数得清 vs 数不清</h3>
+    <div class="rule">fewer than + 可数名词复数　｜　less than + 不可数名词</div>
+    <ul>
+      <li><b>Fewer than</b> fifty plants are known. （plants 数得清 → fewer。）</li>
+      <li>The plant gets <b>less than</b> one hour of direct sun a day. （sunlight/time 数不清 → less。）</li>
+      <li><b>Fewer than</b> fifty of them live in an area <b>less than</b> a football pitch. （一句里两个都用上了。）</li>
+      <li>💡 快速判断：前面能不能加数字「1, 2, 3」？能 → fewer；不能（水、光、时间、空间）→ less。</li>
+      <li>⚠️ 常见错误：<s>less than fifty plants</s> → plants 可数，要用 <b>fewer than</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2><span class="num">5</span>✅ Quiz · 练习测验</h2>
+  <p style="color:var(--muted);font-size:15px;margin-bottom:14px">共 5 题，点击选项即可作答，做完后可以看解析。</p>
+
+  <div class="q" data-ans="2">
+    <div class="qt">1. How does the devil flower get its food?</div>
+    <div class="opts">
+      <div class="opt">A) From sunlight, like most plants</div>
+      <div class="opt">B) From insects that it catches</div>
+      <div class="opt">C) From fungi living under the soil</div>
+      <div class="opt">D) From the leaves of nearby trees</div>
+    </div>
+    <div class="exp">✅ 正确答案：C。它<b>完全没有叶绿素</b>，所以做不了光合作用，只能从土壤里的真菌那里获取养分。这种生活方式有个专门的名字：<b>mycoheterotrophy</b>（真菌异养）——前缀 <i>myco-</i> 是「真菌」，<i>hetero-</i> 是「别的、异」，<i>-trophy</i> 是「营养」，合起来就是「靠别的生物（真菌）养活自己」。选项 A 正好说反了：绝大多数植物靠阳光，它偏偏不靠。</div>
+  </div>
+
+  <div class="q" data-ans="0">
+    <div class="qt">2. Why did scientists call it the "devil flower"?</div>
+    <div class="opts">
+      <div class="opt">A) Its black flower has little horns and two glowing orange patches</div>
+      <div class="opt">B) It only opens at midnight</div>
+      <div class="opt">C) It smells like burnt sugar</div>
+      <div class="opt">D) It grows next to an old temple</div>
+    </div>
+    <div class="exp">✅ 正确答案：A。这朵花<b>几乎全黑</b>，花冠像一顶圆顶的「主教冠」（miter），上面竖着几个<b>角状突起</b>；基部还有两片<b>橙红色斑块</b>，看起来像一对发光的眼睛。再加上它一辈子躲在落叶底下、神秘兮兮，研究团队一致同意：这个名字太合适了。它的学名 <i>daemona</i> 就来自「daemon」——在古希腊语里本意是「精灵、神灵」，后来才有了「恶魔」的意思。</div>
+  </div>
+
+  <div class="q" data-ans="3">
+    <div class="qt">3. How many of these plants do scientists know about?</div>
+    <div class="opts">
+      <div class="opt">A) About five hundred</div>
+      <div class="opt">B) More than a thousand</div>
+      <div class="opt">C) Exactly one hundred</div>
+      <div class="opt">D) Fewer than fifty</div>
+    </div>
+    <div class="exp">✅ 正确答案：D。全世界只知道<b>一个种群</b>，总数<b>不到五十株</b>，全部挤在一块比足球场还小的地方。正因为它这么少，研究人员把它初步评估为<b>极危（Critically Endangered）</b>——这是濒危等级里最高的一档，再往上就是「野外灭绝」。顺带复习语法：植株数得清，所以用 <b>fewer than</b> fifty。</div>
+  </div>
+
+  <div class="q" data-ans="1">
+    <div class="qt">4. Where was the devil flower found, and why was that a surprise?</div>
+    <div class="opts">
+      <div class="opt">A) In a desert in Africa, because it needs no water</div>
+      <div class="opt">B) In a national park in Thailand, nearly 1,000 metres up in a seasonal forest</div>
+      <div class="opt">C) In a greenhouse in London, among old museum plants</div>
+      <div class="opt">D) In a rainforest in Brazil, next to a big river</div>
+    </div>
+    <div class="exp">✅ 正确答案：B。它发现于泰国西部的<b>通帕蓬国家公园</b>（Thong Pha Phum National Park），海拔<b>接近一千米</b>。意外之处在于：Thismia 这一类植物通常被认为只长在<b>常年潮湿的低地雨林</b>里，而这里却是<b>季节性、会变干的山地常绿林</b>，而且位置偏北。在此之前，它所属的 Geomitra 组只在马来半岛、婆罗洲和苏门答腊被记录过——泰国这一笔，把整组的分布往北推进了一大步。</div>
+  </div>
+
+  <div class="q" data-ans="2">
+    <div class="qt">5. What does "critically endangered" tell us about the plant?</div>
+    <div class="opts">
+      <div class="opt">A) The plant is very dangerous to people</div>
+      <div class="opt">B) The plant is extremely old</div>
+      <div class="opt">C) The plant could disappear from the world very soon</div>
+      <div class="opt">D) The plant has a very strong smell</div>
+    </div>
+    <div class="exp">✅ 正确答案：C。<b>endangered</b> 说的是「这个物种自己处在危险中」，<b>不是</b>「它会伤害别人」。英语里 -ed 结尾的形容词常表示「被……的」：it is endangered = 它被危及了。想说「危险的」要用 <b>dangerous</b>：a dangerous plant = 一株会伤人的植物。这类词还有 bored（感到无聊的）/ boring（令人无聊的）、excited（感到兴奋的）/ exciting（令人兴奋的）——别搞混。</div>
+  </div>
+
+  <div id="score"></div>
+  <button id="resetq">🔄 再做一次</button>
+</section>
+<section id="more" class="cn">
+  <h2><span class="num">6</span>💡 中文知识扩展</h2>
+
+  <h3>一、先复习一下：植物到底靠什么活？</h3>
+  <p>我们在小学就学过一句话：植物用阳光制造养料。这句话对<b>绝大多数</b>植物成立，但总有例外。本期的主角就是一个例外。</p>
+  <div class="cmp">
+    <div class="box">
+      <h4>🌱 普通植物</h4>
+      <div class="big">photosynthesis</div>
+      <p>有叶绿素 → 叶子是绿的 → 用阳光、水、二氧化碳自己造糖。</p>
+    </div>
+    <div class="box">
+      <h4>🖤 恶魔花</h4>
+      <div class="big">mycoheterotrophy</div>
+      <p>没有叶绿素 → 不是绿的 → 从地下的真菌网络里「取」养分。</p>
+    </div>
+  </div>
+  <ul>
+    <li>🍃 它<b>没有真正的叶子</b>。我们平时看到的叶子，主要工作就是「晒太阳做饭」；不做饭，叶子也就没用了，于是在漫长的演化中被丢掉。</li>
+    <li>🍄 它和土壤里的真菌连在一起。这些真菌本来和树木做着公平交易（树给糖，真菌给水和矿物质），而恶魔花相当于<b>搭在这条管道上的第三条线</b>，从真菌那里取走自己需要的部分。</li>
+    <li>🌑 它一生中<b>绝大部分时间都待在地下或落叶层里</b>，只在开花结果的那短短一段时间才冒出地面。所以哪怕你走在它旁边，也完全不会注意到它。</li>
+  </ul>
+  <div class="fact">🔤 <b>词根小课堂：</b><i>myco-</i>（真菌）＋ <i>hetero-</i>（别的、异）＋ <i>-trophy</i>（营养）＝ mycoheterotrophy，真菌异养。同族词：mushroom 蘑菇、heterogeneous 混杂的、photography 摄影（<i>photo-</i> 光 ＋ <i>-graphy</i> 记录）。</div>
+
+  <h3>二、它到底长什么样？</h3>
+  <p>学名是 <b><i>Thismia daemona</i></b>。属名 <i>Thismia</i> 的英文俗名特别美——<b>fairy lanterns</b>（仙女灯笼）：想象一串挂在森林地面上的小灯笼。种加词 <i>daemona</i> 指的是它的长相。</p>
+  <ul>
+    <li>🖤 <b>近黑色</b>：花冠几乎全黑，在深色的落叶里非常不显眼。</li>
+    <li>🤘 <b>有角</b>：花冠顶端竖着几个角状附属物，从一顶圆顶状的「主教冠」（miter）上伸出来。</li>
+    <li>👀 <b>有两只「眼睛」</b>：靠近基部有两片橙红色斑块，像暗处发光的眼睛。</li>
+    <li>📏 <b>极小</b>：整株植物只有几厘米高，必须蹲下来、拨开落叶才能看见。</li>
+  </ul>
+  <div class="fact">🌟 <b>一点小提醒：</b>名字里的 daemon 在古希腊语中原本是「精灵、守护神」的意思，并不带有邪恶色彩；后来在欧洲语言里才逐渐变成「恶魔」。所以「恶魔花」听上去吓人，其实它只是<b>长得有点酷</b>而已。</div>
+
+  <h3>三、为什么这次发现让植物学家意外？</h3>
+  <p>两个「没想到」：</p>
+  <div class="flow">
+    <span class="step">通常住在潮湿低地雨林</span><span class="arw">→</span>
+    <span class="step ember">这次在海拔约千米的山地林</span><span class="arw">→</span>
+    <span class="step">以往只到马来半岛、婆罗洲、苏门答腊</span><span class="arw">→</span>
+    <span class="step ember">泰国把这个家族的分布推向北边</span>
+  </div>
+  <ul>
+    <li>🏔️ <b>地点：</b>泰国西部通帕蓬国家公园，海拔<b>接近一千米</b>，而且是<b>有干湿季之分</b>的山地常绿林。Thismia 属的成员以前基本都在常年湿润的低地雨林里被找到。</li>
+    <li>🧭 <b>分布：</b>它所属的 Geomitra 组，此前只在马来半岛、婆罗洲和苏门答腊有记录。泰国这一笔，把整组的已知分布<b>第一次往北推进</b>。</li>
+    <li>🇹🇭 加上这个新种，泰国的 Thismia 属已知物种达到 <b>16 种</b>。研究由<b>朱拉隆功大学</b>与<b>宋卡王子大学</b>的植物学家合作完成。</li>
+  </ul>
+
+  <h3>四、为什么它刚被命名，就已经被列为「极危」？</h3>
+  <ul>
+    <li>📍 <b>只有一个家。</b>目前已知的只有一个种群，不到五十株，全部生长在比足球场还小的一块地方。</li>
+    <li>🚶 <b>它住在游客会来的地方。</b>发现地位于国家公园内，人流量不小。对一株只有几厘米高的植物来说，被踩一脚就是灭顶之灾。</li>
+    <li>🧩 <b>它依赖一整套地下系统。</b>它需要的不是一块土，而是「树—真菌—它」这条完整的链条。任何一个环节被破坏（比如周围的大树被砍掉），它都活不下去。</li>
+    <li>🤝 <b>所以保护方案里有人。</b>研究团队提出，要让附近村庄参与进来，让当地人为这份自然遗产感到骄傲，同时发展可持续的社区生态旅游——<b>保护与生计不是二选一</b>。</li>
+  </ul>
+
+  <h3>五、动手试试：五分钟的「落叶层观察」</h3>
+  <p><b>材料：</b>一个放大镜（或手机的微距模式）、一把小尺子、一张白纸、一支笔、一双劳保手套。</p>
+  <ul>
+    <li><b>第 1 步：</b>在公园或小区树林里，找一片<b>没有被扫过</b>的落叶地。先别动手，蹲下来看一分钟：你能看见几层？</li>
+    <li><b>第 2 步：</b>戴上手套，轻轻拨开最上面一层落叶，把看到的分成三类：<b>叶子</b>、<b>小树枝</b>、<b>白色细丝</b>（那多半就是真菌的菌丝）。</li>
+    <li><b>第 3 步：</b>用尺子量一量落叶层有多厚，记在纸上。再找一处经常被清扫的地方量一次，对比一下。</li>
+    <li><b>第 4 步（关键）：</b>找一找有没有<b>不是绿色</b>的小植物——白色、淡黄、褐色的都算。发现它们，就说明你很可能遇到了和恶魔花同类的「不打光合作用的玩家」。</li>
+    <li><b>第 5 步：</b>观察结束，<b>把落叶原样盖回去</b>。你掀开的，是别人的屋顶。</li>
+  </ul>
+  <div class="fact">🔬 <b>把观察连回现实：</b>你蹲下去的那一小块地，就是一个完整的生态系统。恶魔花之所以难被发现，不是因为它稀少得不可思议，而是因为<b>几乎没有人用这个视角看过森林地面</b>。很多发现的第一步，只是换一个高度看世界。</div>
+
+  <h3>六、科学素养提醒：给了名字，不等于了解了它</h3>
+  <ul>
+    <li>⚠️ <b>现在还有很多不知道的事。</b>它靠哪一种真菌生活？靠什么昆虫传粉？种子怎么传播？这些问题都还没有答案。</li>
+    <li>🧪 <b>这篇论文做了什么：</b>研究者用<b>形态学</b>（仔细量它的每一部分）加<b>分子证据</b>（比对 DNA）两条路互相印证，才敢宣布这是一个新种。这就是现代分类学的标准做法——<b>两条独立证据指向同一个结论</b>。</li>
+    <li>🧭 <b>下一步：</b>继续在同一片山地寻找更多种群，摸清它真实的分布范围；同时和周边社区一起做长期监测。</li>
+    <li>🗣️ 参与研究的 Sahut Chantanaorrapint 博士说，在通帕蓬国家公园找到它「确实是个大惊喜」。而这样的惊喜说明一件事：<b>我们对脚下这块地面，了解得还远远不够。</b></li>
+  </ul>
+  <div class="fact">🌟 <b>这期的科学金句：</b>「它不靠阳光活着，也不靠被发现而存在。」——科学的任务不是让万物都被我们看见，而是<b>在我们偶然看见的时候，认真地把它记下来，并且守住它</b>。</div>
+</section>
+
+<section id="about" class="cn">
+  <h2><span class="num">7</span>ℹ️ About · 关于本课</h2>
+  <h3>本期主角</h3>
+  <p><b>Pola</b>（宝拉）是一只短尾矮袋鼠（quokka），被称为「世界上最快乐的动物」。她是 POLA NEWS 的记者，会带着话筒跑到真实的现场——实验室、野外、天文台、雨林——把最新的科学发现讲给你听。她的招牌动作是：<b>双爪挥手告别 + 大大的笑脸</b>。</p>
+  <h3>难度与用法</h3>
+  <ul>
+    <li><b>等级：</b>B1（适合 10–12 岁）</li>
+    <li><b>结构：</b>4 段口播，每段约 15 秒：① 吸引注意 → ② 讲故事 → ③ 为什么重要 → ④ 告别</li>
+    <li><b>建议学习顺序：</b>先听全文（不看文字）→ 再看全文跟读 → 学词汇 → 练句型 → 做测验 → 读中文扩展</li>
+  </ul>
+  <h3>资料来源</h3>
+  <p>Tosak Seelanan、Isareyakorn Chantapram、Neeranuch Taosiri、Chanachon Chuchuea、Sahut Chantanaorrapint，<i>Thismia daemona</i> (Thismiaceae), a new species from Thailand supported by morphological and molecular evidence（泰国一新种：基于形态学与分子证据），发表于 <i>PhytoKeys</i> 278: 177，2026 年。研究由泰国朱拉隆功大学与宋卡王子大学的植物学家共同完成，发现地为泰国西部通帕蓬国家公园，初步评估为极危（Critically Endangered）。</p>
+  <p>补充报道来源：ScienceDaily、Pensoft Publishers 官方新闻稿（2026 年 9 月 3 日）对该论文的报道与解读。</p>
+  <div class="fact">🌿 <b>本期分类：</b>自然 · 植物学 · 生物多样性<br>📅 制作日期：2026-09-07</div>
+</section>
+</main>
+</div>
+<div id="tip"></div>
+
+<script>
+/* ===== 朗读文本（与口播文案一致，供 TTS 预生成 & 播放匹配） ===== */
+const segmentTexts = [
+  "Hello, Pola News here! Deep in a forest in Thailand, scientists have found a flower that breaks almost every rule. It has no leaves. It is not green. And it spends nearly its whole life hidden under the leaf litter. Its name is Thismia daemona — the devil flower!",
+  "Most plants use sunlight to make food. Not this one. It has no chlorophyll, so it cannot do photosynthesis at all. Instead, it quietly steals its nutrients from fungi under the soil. And when its black flower comes up, it has little horns and two glowing orange patches — like a pair of eyes.",
+  "Why does it matter? Botanists know of only one group of these plants, with fewer than fifty of them, in an area smaller than a football pitch. That makes it critically endangered. The find also pushes the whole plant family farther north than anyone expected — proof that the forest floor still holds big surprises.",
+  "The team wants nearby villages to help protect it, so tourists can visit without harming the forest floor. With this new species, Thailand is now home to sixteen kinds of fairy lanterns. That is all from Pola News. See you next time — and keep looking down at the little things!"
+];
+
+/* ===== 语音播放 ===== */
+let currentBtn = null;
+
+function clearBtn(){
+  if(currentBtn){
+    currentBtn.textContent = currentBtn.dataset.icon || "▶";
+    currentBtn.classList.remove("playing");
+    currentBtn = null;
+  }
+}
+function resetBtn(){ clearBtn(); }   // 供注入层调用
+
+function speakText(text, btn){
+  stopSpeech();
+  currentBtn = btn;
+  btn.dataset.icon = btn.dataset.icon || btn.textContent;
+  btn.textContent = "⏸";
+  btn.classList.add("playing");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.97;
+  u.pitch = 1.0;
+  u.onend = function(){ clearBtn(); };
+  u.onerror = function(){ clearBtn(); };
+  try { window.speechSynthesis.speak(u); } catch(e){ clearBtn(); }
+}
+
+function playSegment(i){
+  const btn = document.querySelector('.play[data-seg="'+i+'"]');
+  if(!btn) return;
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(segmentTexts[i], btn);
+}
+function playWord(word, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  speakText(word, btn);
+}
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearBtn();
+}
+
+document.querySelectorAll('.play').forEach(function(b){
+  b.addEventListener('click', function(){ playSegment(parseInt(b.dataset.seg,10)); });
+});
+document.querySelectorAll('.spk').forEach(function(b){
+  b.addEventListener('click', function(){ playWord(b.dataset.word, b); });
+});
+
+/* ===== 阅读进度条 ===== */
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop || document.body.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  progress.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+updateProgress();
+
+/* ===== 侧边导航高亮 ===== */
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); });
+function onScrollNav(){
+  let idx = 0;
+  const y = window.scrollY + 120;
+  sections.forEach(function(s,i){ if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+onScrollNav();
+
+/* ===== 关键词释义气泡 ===== */
+const tip = document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(function(k){
+  k.addEventListener('click', function(e){
+    e.stopPropagation();
+    tip.innerHTML = '<b>'+(k.textContent)+'</b><br>'+(k.dataset.def||'')+'<br><span style="opacity:.7">'+(k.dataset.en||'')+'</span>';
+    tip.style.display = 'block';
+    const r = k.getBoundingClientRect();
+    let top = r.bottom + 8;
+    let left = r.left;
+    if(left + 280 > window.innerWidth) left = window.innerWidth - 288;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8,left) + 'px';
+  });
+});
+document.addEventListener('click', function(){ tip.style.display='none'; });
+
+/* ===== 句型练习 - 单空 ===== */
+function check(inputId, answers, display){
+  const el = document.getElementById(inputId);
+  const ansEl = document.getElementById(inputId.replace('f','a'));
+  if(!el || !ansEl) return;
+  const val = (el.value||'').trim().toLowerCase().replace(/\s+/g,' ');
+  if(answers.indexOf(val) !== -1){
+    ansEl.innerHTML = '✅ 答对啦！<b>' + display + '</b>';
+    ansEl.style.color = 'var(--good)';
+  }else if(val === ''){
+    ansEl.textContent = '✏️ 先填一个答案试试。';
+    ansEl.style.color = 'var(--muted)';
+  }else{
+    ansEl.innerHTML = '❌ 再想想～ 正确答案是 <b>' + display + '</b>';
+    ansEl.style.color = 'var(--bad)';
+  }
+}
+
+/* ===== 测验 ===== */
+const scoreEl = document.getElementById('score');
+let answered = 0;
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = '已作答 ' + answered + ' / 5';
+}
+document.querySelectorAll('.q').forEach(function(q){
+  const ans = parseInt(q.dataset.ans, 10);
+  const exp = q.querySelector('.exp');
+  const opts = q.querySelectorAll('.opt');
+  opts.forEach(function(opt, i){
+    opt.addEventListener('click', function(){
+      if(q.dataset.done === '1') return;
+      q.dataset.done = '1';
+      answered++;
+      opts.forEach(function(o){ o.style.cursor = 'default'; });
+      if(i === ans){
+        opt.classList.add('right');
+      }else{
+        opt.classList.add('wrong');
+        if(opts[ans]) opts[ans].classList.add('right');
+      }
+      if(exp) exp.classList.add('show');
+      updateScore();
+    });
+  });
+});
+document.getElementById('resetq').addEventListener('click', function(){
+  answered = 0;
+  updateScore();
+  document.querySelectorAll('.q').forEach(function(q){
+    q.dataset.done = '0';
+    q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('right','wrong');
+      o.style.cursor = 'pointer';
+    });
+    const exp = q.querySelector('.exp');
+    if(exp) exp.classList.remove('show');
+  });
+  const inputs = ['f1','f2','f3','f4','f5'];
+  inputs.forEach(function(id){ const e=document.getElementById(id); if(e) e.value=''; });
+  ['a1','a2','a3','a4','a5'].forEach(function(id){ const e=document.getElementById(id); if(e){ e.textContent=''; e.style.color=''; } });
+});
+updateScore();
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
