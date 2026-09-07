@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Girl Who Skied Across the Ice — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#0e7490;
+  --accent2:#f97316;
+  --bg:#f0f9ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#cffafe;
+  --border:#a5f3fc;
+  --soft:#f5fdff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#f97316);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(14,116,144,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg{flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(14,116,144,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(14,116,144,.55);}70%{box-shadow:0 0 0 12px rgba(14,116,144,0);}100%{box-shadow:0 0 0 0 rgba(14,116,144,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#a5f3fc;}
+#tip{position:fixed;z-index:1200;background:#164e63;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),#f97316);color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(14,116,144,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE GIRL WHO SKIED ACROSS THE ICE · 2026-09-07</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🗺️ The Girl Who Skied Across the Ice</h1>
+  <div class="subtitle">滑雪穿越冰原的女孩 · CEFR A2 · 约 134 词 · 🗺️ 冒险故事</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">Hook · 开场</div>
+        <p>Ten-year-old Mina loves big <span class="kw" data-word="adventure">adventures</span>. In March 2026, she and her father went to Svalbard, a group of cold <span class="kw" data-word="island">islands</span> near the North Pole. They wanted to ski from south to north.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">十岁的 Mina 喜欢大冒险。2026 年 3 月，她和爸爸去了斯瓦尔巴群岛——北极附近一群寒冷的岛屿。他们想从南边一直滑雪，滑到最北边。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">Hard part · 困难</div>
+        <p>It was not an easy <span class="kw" data-word="journey">journey</span>. Mina pulled a heavy <span class="kw" data-word="sled">sled</span> with her tent and food. Some days the wind was very strong and the snow was deep. But she did not stop.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">这可不是一趟轻松的旅程。Mina 拉着一辆沉重的雪橇，里面装着她的帐篷和食物。有些日子风刮得特别猛，雪也很深。但她没有停下来。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">Science · 科学任务</div>
+        <p>Mina also helped <span class="kw" data-word="scientist">scientists</span>. She carried small bottles and <span class="kw" data-word="collect">collected</span> snow every day. Later, scientists will test the snow for 'forever chemicals'. These are bad for animals and people.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">Mina 还帮了科学家一个大忙。她随身带着许多小瓶子，每天收集雪。之后，科学家会检测这些雪里有没有「永久化学品」。这类化学品对动物和人类都有害。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Finish · 到达终点</div>
+        <p>On 5 May, Mina <span class="kw" data-word="reach">reached</span> the northern tip. In 44 days, she skied about 600 kilometres. She became the youngest person ever to cross Svalbard from south to north. She never saw a polar bear, but she saw its <span class="kw" data-word="track">tracks</span>!</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">5 月 5 日，Mina 到达了群岛的最北端。44 天里，她滑行了大约 600 公里。她成了有史以来从南到北穿越斯瓦尔巴最年轻的人。她最终没有看到北极熊，但她看到了它的脚印！</div>
+    </div>
+  </div>
+
+  <div class="tipbox">
+    <h3>🗺️ 学习小提示 Study Tip</h3>
+    <ul>
+      <li>读完后试着用一句话讲完这个故事：<b>Mina skied across Svalbard and became the youngest person ever to do it.</b></li>
+      <li>注意本课最常用的时态是<b>一般过去时</b>：went, wanted, pulled, skied, reached, became, saw。</li>
+      <li>课文中出现了两个表示时间的短语：<b>in 44 days</b>（44 天之内）和 <b>every day</b>（每天），别和 <b>for 44 days</b> 弄混。</li>
+      <li>数字要会读：<b>600 = six hundred</b>，<b>44 = forty-four</b>，<b>5 May = the fifth of May / May the fifth</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Vocabulary</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="adventure">🔊</button>
+        <div class="word">adventure<span class="pos">n.</span></div>
+        <div class="zh">冒险；奇遇</div>
+        <div class="ex">Mina loves big adventures.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="island">🔊</button>
+        <div class="word">island<span class="pos">n.</span></div>
+        <div class="zh">岛屿</div>
+        <div class="ex">Svalbard is a group of cold islands.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="journey">🔊</button>
+        <div class="word">journey<span class="pos">n.</span></div>
+        <div class="zh">旅程；行程</div>
+        <div class="ex">It was not an easy journey.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="sled">🔊</button>
+        <div class="word">sled<span class="pos">n.</span></div>
+        <div class="zh">雪橇</div>
+        <div class="ex">She pulled a heavy sled with her tent.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="scientist">🔊</button>
+        <div class="word">scientist<span class="pos">n.</span></div>
+        <div class="zh">科学家</div>
+        <div class="ex">Mina also helped scientists.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="collect">🔊</button>
+        <div class="word">collect<span class="pos">v.</span></div>
+        <div class="zh">收集；采集</div>
+        <div class="ex">She collected snow every day.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="reach">🔊</button>
+        <div class="word">reach<span class="pos">v.</span></div>
+        <div class="zh">到达；抵达</div>
+        <div class="ex">On 5 May, she reached the northern tip.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="track">🔊</button>
+        <div class="word">track<span class="pos">n.</span></div>
+        <div class="zh">足迹；踪迹</div>
+        <div class="ex">She saw polar bear tracks in the snow.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">[Someone] wanted to [ski from south to north].</div>
+    <div class="zh">[某人]想要[从南到北滑雪]。</div>
+    <div class="note">讲「<b>过去</b>想做什么事」时，把 want 变成 <b>wanted</b>，后面永远跟 <b>to + 动词原形</b>。试着说：I wanted to see a polar bear. / He wanted to go home.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">It was not an easy [journey].</div>
+    <div class="zh">这不是一趟轻松的[旅程]。</div>
+    <div class="note">It was / It was not 后面接「<b>a / an + 形容词 + 名词</b>」，可以用来评价任何事物。试着说：It was not an easy test. / It was a cold night.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">In [44 days], she skied about [600 kilometres].</div>
+    <div class="zh">在[44 天]里，她滑了大约[600 公里]。</div>
+    <div class="note">句首放「<b>In + 一段时间</b>」表示「<b>在这段时间之内</b>做完了一件事」。想说「做了多久」，要换成 <b>for</b>：She skied for 44 days.（她滑了整整 44 天。）试着说：In one week, I read three books.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">She became the youngest person ever to [cross Svalbard].</div>
+    <div class="zh">她成了有史以来[穿越斯瓦尔巴]最年轻的人。</div>
+    <div class="note">这是「<b>the + 最高级 + 名词 + ever</b>」的句型，ever 意思是「<b>有史以来</b>」，让语气更强。试着说：He is the tallest boy in our class. / This is the best day ever!</div>
+  </div>
+</section>
+
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 一般过去时：讲已经结束的事</h3>
+    <ul>
+      <li>发生在<b>过去</b>、而且现在已经结束的事，动词要用<b>过去式</b>。故事、游记、日记里几乎每句话都会用到它。</li>
+      <li>规则动词在词尾加 <b>-ed</b>：<span class="good">want → wanted</span>、<span class="good">pull → pulled</span>、<span class="good">help → helped</span>、<span class="good">collect → collected</span>、<span class="good">ski → skied</span>。</li>
+      <li>但很多常用动词是<b>不规则</b>的，要单独记住：<span class="good">go → went</span>、<span class="good">become → became</span>、<span class="good">see → saw</span>、<span class="good">do → did</span>。</li>
+      <li class="eg">She <span class="good">went</span> to Svalbard in March.（她三月去了斯瓦尔巴。）</li>
+      <li class="eg">She <span class="good">saw</span> polar bear tracks in the snow.（她在雪里看到了北极熊的脚印。）</li>
+      <li>常见错误：过去时句子里再加 didn't 时，动词要<b>变回原形</b>。<span class="bad">She didn't saw a bear.</span> → <span class="good">She didn't see a bear.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. in + 一段时间 与 for + 一段时间</h3>
+    <ul>
+      <li><b>in + 一段时间</b> 回答「<b>在多长时间之内</b>完成」：<span class="good">In 44 days, she skied 600 kilometres.</span>（44 天之内滑完了 600 公里。）</li>
+      <li><b>for + 一段时间</b> 回答「<b>持续了多久</b>」：<span class="good">She skied for 44 days.</span>（她滑了整整 44 天。）</li>
+      <li>两个句子都对，但意思不一样：in 强调「<b>用这么多时间做成了</b>」，for 强调「<b>动作延续了这么久</b>」。</li>
+      <li class="eg">I finished my homework <span class="good">in</span> one hour.（我一小时就写完了作业。）</li>
+      <li class="eg">I watched TV <span class="good">for</span> one hour.（我看了一小时电视。）</li>
+      <li>还有一个常见搭配：<b>every day</b>（每天），表示「一次接着一次反复发生」：She collected snow <span class="good">every day</span>.</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. 形容词最高级：the youngest person ever</h3>
+    <ul>
+      <li>三者或三者以上比较，用<b>最高级</b>：短词在词尾加 <b>-est</b>，前面一定要加 <b>the</b>：<span class="good">young → the youngest</span>、<span class="good">cold → the coldest</span>、<span class="good">long → the longest</span>。</li>
+      <li class="eg">She became <span class="good">the youngest</span> person ever to cross Svalbard.（她成了有史以来穿越斯瓦尔巴最年轻的人。）</li>
+      <li>最高级后面常跟一个范围：in my class / in the world / of the three；也可以跟 <b>ever</b>（有史以来）来加强语气：<span class="good">This is the best day ever!</span></li>
+      <li>几个必须记住的不规则变化：<b>good → the best</b>、<b>bad → the worst</b>、<b>far → the farthest / the furthest</b>。</li>
+      <li>常见错误：最高级前面漏掉 the。<span class="bad">She is youngest in her family.</span> → <span class="good">She is the youngest in her family.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. but 连接并列句：表示转折</h3>
+    <ul>
+      <li>想把两件<b>意思相反</b>的事放进一句话里，中间加 <b>but</b>（但是），but 前面通常写<b>逗号</b>。</li>
+      <li class="eg">She never saw a polar bear, <span class="good">but</span> she saw its tracks.（她没看到北极熊，<b>但</b>看到了它的脚印。）</li>
+      <li class="eg">The wind was strong, <span class="good">but</span> she did not stop.（风很大，<b>但</b>她没有停下来。）</li>
+      <li>but 连接的两半都可以单独成句，所以两半都要有<b>自己的主语和动词</b>。</li>
+      <li>注意中文常说「虽然……但是……」，英语里 <b>although</b> 和 <b>but</b> <b>不能</b>同时用。<span class="bad">Although it was cold, but she kept going.</span> → <span class="good">It was cold, but she kept going.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz</h2>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">1. How old was Mina when she crossed Svalbard?</div>
+    <div class="qzh">Mina 穿越斯瓦尔巴的时候几岁？</div>
+    <button class="opt">A) Eight years old</button>
+    <button class="opt">B) Ten years old</button>
+    <button class="opt">C) Sixteen years old</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">2. How long did the crossing take?</div>
+    <div class="qzh">这趟穿越花了多长时间？</div>
+    <button class="opt">A) About 7 days</button>
+    <button class="opt">B) About 14 days</button>
+    <button class="opt">C) About 44 days</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">3. What did Mina pull behind her?</div>
+    <div class="qzh">Mina 在身后拉着什么？</div>
+    <button class="opt">A) A heavy sled with her tent and food</button>
+    <button class="opt">B) A big wooden boat</button>
+    <button class="opt">C) A small dog on a rope</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">4. Why did Mina collect snow every day?</div>
+    <div class="qzh">Mina 为什么每天收集雪？</div>
+    <button class="opt">A) Because she wanted to make ice cream</button>
+    <button class="opt">B) Because she wanted to build a snow house</button>
+    <button class="opt">C) Because scientists will test it for 'forever chemicals'</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">5. What did Mina see in the snow?</div>
+    <div class="qzh">Mina 在雪地里看到了什么？</div>
+    <button class="opt">A) A polar bear</button>
+    <button class="opt">B) Polar bear tracks</button>
+    <button class="opt">C) A penguin</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · 背景知识</h2>
+
+  <div class="know">
+    <h3>🧭 斯瓦尔巴：北极圈里的一群冰岛</h3>
+    <p>斯瓦尔巴（Svalbard）是挪威在北冰洋上的一片群岛，位于北纬 74 度到 81 度之间，比我们熟悉的北欧国家还要往北很多。它的首府叫<b>朗伊尔城</b>（Longyearbyen），是世界上最北的定居点之一。</p>
+    <ul>
+      <li>最大的岛叫<b>斯匹次卑尔根岛</b>（Spitsbergen）。Mina 和爸爸就是从这座岛的<b>最南端</b>出发，一路滑雪到<b>最北端</b>。</li>
+      <li>那里一年中有很长时间是<b>极夜</b>（太阳一直不升起），也有很长时间是<b>极昼</b>（太阳一直不落下）。3 月到 5 月正是一天天变亮的季节。</li>
+      <li>岛上住着大约两千多人，但<b>北极熊的数量比人还多</b>。所以当地人出门常常要带枪，用来吓退北极熊——这是为了保护人，也是为了保护熊。</li>
+      <li>那里的动物还有<b>北极狐</b>（Arctic fox）、<b>驯鹿</b>（reindeer）、海象和各种海鸟。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🧪 「永久化学品」PFAS 是什么</h3>
+    <p>Mina 收集的雪样， scientists 会拿去检测一类叫 <b>PFAS</b> 的物质，中文常译成<b>全氟和多氟烷基物质</b>，也被通俗地叫做「<b>永久化学品</b>」（forever chemicals）。</p>
+    <ul>
+      <li>它们是<b>人工制造</b>的化学物质，被用在防水外套、不粘锅、食品包装纸、消防泡沫等很多日常用品里。</li>
+      <li>「永久」这两个字的意思是：它们在自然界里<b>几乎不会分解</b>，可以在土壤、海水和雪里停留非常久。</li>
+      <li>更麻烦的是，它们会沿着食物链<b>一层层累积</b>——从海水里的小生物，到鱼，再到海豹和北极熊，越往上浓度越高。</li>
+      <li>Mina 帮的是挪威北极大学（UiT）的 <b>CLEAN</b> 研究项目。她这样的小朋友帮忙收集资料，在科学上有个专门的名字，叫<b>公民科学</b>（citizen science）——普通人也能为真正的科研出力。</li>
+      <li>这件事告诉我们：<b>再远的地方也不是垃圾桶</b>。我们在城市里用掉的东西，最后可能出现在北极的雪里。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🛷 真正的极地穿越要靠什么</h3>
+    <ul>
+      <li><b>体力</b>：Mina 拉的那辆雪橇大约有 <b>24 公斤</b>重，里面装着帐篷、睡袋、食物和燃料。她在风雪里要拉着它走一整天。</li>
+      <li><b>经验</b>：她不是第一次出门。五岁时她就和爸爸滑雪穿过了挪威的<b>芬马克高原</b>，还走过冰岛最大的冰川。到十岁为止，她已经在帐篷里睡了<b>七百多个晚上</b>。</li>
+      <li><b>队伍</b>：这么长的路程一定要有经验的成年人和专业的极地探险家同行，还要提前准备好路线、食物补给和安全方案。</li>
+      <li><b>耐心</b>：44 天里不可能天天是好天气。遇到暴风雪时，他们就躲在帐篷里休息、看书、玩游戏，等天气好转再出发。</li>
+      <li>爸爸 Alexander 说，他们做这件事<b>不是为了破纪录</b>，而是因为一个十岁的孩子想和爸爸一起走一段很长的路。<b>「旅途的魔法」</b>就藏在这些一起度过的日子里。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🐧 小误会：北极其实没有企鹅</h3>
+    <ul>
+      <li>很多人以为「冰天雪地的地方就有企鹅」，其实<b>企鹅主要生活在南半球</b>，绝大多数在南极一带。北极没有野生企鹅。</li>
+      <li>北极的代表性大动物是<b>北极熊</b>（polar bear）；南极的代表性动物是<b>企鹅</b>（penguin）。一个是「北极」，一个是「南极」，不要搞混。</li>
+      <li>英文里这两个词的词头也可以帮你记：<b>polar</b> 是「极地的」，<b>Arctic</b> 指北极，<b>Antarctic</b> 指南极。</li>
+      <li>Mina 一路上<b>没有看到北极熊</b>，只看到了它的脚印。对探险者来说，这其实是个好消息——和北极熊面对面是很危险的。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🇨🇳 中国的极地考察：黄河站就在斯瓦尔巴</h3>
+    <p>读到 Mina 在斯瓦尔巴滑雪，你可能会觉得那是非常遥远的地方。其实<b>中国在那里也有一个科学考察站</b>。</p>
+    <ul>
+      <li><b>黄河站</b>：2004 年 7 月建成，位于斯瓦尔巴群岛的<b>新奥尔松</b>（Ny-Alesund），是中国在北极建立的<b>第一个</b>科学考察站。</li>
+      <li>为什么中国可以在挪威的群岛上建站？因为 1920 年签订的《<b>斯瓦尔巴条约</b>》规定，缔约国的公民可以<b>平等地</b>在那里开展科研、采矿和贸易活动。中国早在 1925 年就加入了这项条约。</li>
+      <li>中国在<b>南极</b>也建有多个考察站：1985 年的<b>长城站</b>、1989 年的<b>中山站</b>、2009 年的<b>昆仑站</b>（建在南极内陆冰盖最高处）、2014 年的<b>泰山站</b>，以及 2024 年建成的<b>秦岭站</b>。</li>
+      <li>中国的极地考察船有<b>雪龙号</b>和<b>雪龙 2 号</b>。雪龙 2 号是中国第一艘<b>自主建造</b>的极地科考破冰船，船头船尾都能破冰，非常厉害。</li>
+      <li>从 1984 年第一次南极考察算起，一代又一代中国科考队员在冰天雪地里工作了几十年。他们做的研究——大气、冰川、海洋、生物——和 Mina 采集雪样的目的是一样的：<b>弄清楚地球正在发生什么变化</b>。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>✏️ 动手小活动：用英语写三句「探险日记」</h3>
+    <ul>
+      <li>假设你就是 Mina，用<b>一般过去时</b>写三句话，讲讲今天在雪原上发生的事。</li>
+      <li>第一句写<b>天气</b>：It was very cold and windy today.</li>
+      <li>第二句写<b>你做了什么</b>：In the morning, I pulled my sled for five hours.</li>
+      <li>第三句用 <b>but</b> 写一个转折：I was very tired, but I did not stop.</li>
+      <li>再试试用上本课的最高级，夸一夸自己看到的东西：This is the most beautiful place I have ever seen.</li>
+      <li>最后用英语读出这三句，录下来，和今天的课程音频比一比。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><div class="txt">读懂一篇 A2 水平的真实冒险故事，了解十岁挪威女孩 Mina 滑雪穿越斯瓦尔巴的经历。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">掌握 8 个核心词汇：adventure, island, journey, sled, scientist, collect, reach, track。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">学会四个语法点：一般过去时、in 与 for 表示一段时间、形容词最高级 the youngest ... ever、but 连接并列句。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">能用 wanted to ...、It was not an easy ...、In 44 days, she ...、the youngest person ever to ... 讲一段自己的经历。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">了解斯瓦尔巴、「永久化学品」PFAS、公民科学，以及中国在北极和南极的考察站。</div></div>
+
+    <h3 style="color:var(--accent);">📝 学习建议</h3>
+    <div class="goal"><span class="tick">🔊</span><div class="txt">点每段右侧的 ▶ 按钮跟读一遍，特别注意 went, saw, became 这些不规则动词的发音。</div></div>
+    <div class="goal"><span class="tick">🔤</span><div class="txt">点词汇卡右上角的 🔊 听发音，再用每个词造一个自己的句子。</div></div>
+    <div class="goal"><span class="tick">💬</span><div class="txt">试着用英语向家人复述这个故事：Mina is ten. She skied across Svalbard in 44 days.</div></div>
+    <div class="goal"><span class="tick">🐾</span><div class="txt">想一想：为什么北极没有企鹅？用一句英语回答：Penguins live in the south.</div></div>
+    <div class="goal"><span class="tick">🖨️</span><div class="txt">点下方按钮打印本课，随身复习词汇、句型和语法。</div></div>
+
+    <div style="margin-top:18px;">
+      <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+    </div>
+  </div>
+</section>
+
+<footer>POLA NEWS · The Girl Who Skied Across the Ice · 2026-09-07 · Made for curious kids 🐾</footer>
+</main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+  "Ten-year-old Mina loves big adventures. In March 2026, she and her father went to Svalbard, a group of cold islands near the North Pole. They wanted to ski from south to north.",
+  "It was not an easy journey. Mina pulled a heavy sled with her tent and food. Some days the wind was very strong and the snow was deep. But she did not stop.",
+  "Mina also helped scientists. She carried small bottles and collected snow every day. Later, scientists will test the snow for 'forever chemicals'. These are bad for animals and people.",
+  "On 5 May, Mina reached the northern tip. In 44 days, she skied about 600 kilometres. She became the youngest person ever to cross Svalbard from south to north. She never saw a polar bear, but she saw its tracks!"
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'adventure': '冒险；奇遇 n.',
+  'island': '岛屿 n.',
+  'journey': '旅程；行程 n.',
+  'sled': '雪橇 n.',
+  'scientist': '科学家 n.',
+  'collect': '收集；采集 v.',
+  'reach': '到达；抵达 v.',
+  'track': '足迹；踪迹 n.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#', '');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

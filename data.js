@@ -3146,6 +3146,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-07",
+    "title": "The Tortoise and the Hare",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-07-the-tortoise-and-the-hare",
+    "url": "lessons/a1/2026-09-07-the-tortoise-and-the-hare.html",
+    "vocab": [
+      {
+        "word": "hare",
+        "zh": "野兔",
+        "ex": "\"Look at the hare.\""
+      },
+      {
+        "word": "tortoise",
+        "zh": "乌龟",
+        "ex": "\"The tortoise is slow.\""
+      },
+      {
+        "word": "fast",
+        "zh": "快的",
+        "ex": "\"The hare is fast.\""
+      },
+      {
+        "word": "slow",
+        "zh": "慢的",
+        "ex": "\"The tortoise is slow.\""
+      },
+      {
+        "word": "race",
+        "zh": "比赛",
+        "ex": "\"Let us have a race.\""
+      },
+      {
+        "word": "win",
+        "zh": "赢；获胜",
+        "ex": "\"The tortoise wins the race.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4342,6 +4384,58 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A2",
+    "date": "2026-09-07",
+    "title": "The Girl Who Skied Across the Ice",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-07-the-girl-who-skied-across-the-ice",
+    "url": "lessons/a2/2026-09-07-the-girl-who-skied-across-the-ice.html",
+    "vocab": [
+      {
+        "word": "adventure",
+        "zh": "十岁的 Mina 喜欢大冒险。2026 年 3 月，她和爸爸去了斯瓦尔巴群岛——北极附近一群寒冷的岛屿。他们想从南边一直滑雪，滑到最北边。",
+        "ex": "Mina loves big adventures."
+      },
+      {
+        "word": "island",
+        "zh": "岛屿",
+        "ex": "Svalbard is a group of cold islands."
+      },
+      {
+        "word": "journey",
+        "zh": "旅程；行程",
+        "ex": "It was not an easy journey."
+      },
+      {
+        "word": "sled",
+        "zh": "雪橇",
+        "ex": "She pulled a heavy sled with her tent."
+      },
+      {
+        "word": "scientist",
+        "zh": "科学家",
+        "ex": "Mina also helped scientists."
+      },
+      {
+        "word": "collect",
+        "zh": "收集；采集",
+        "ex": "She collected snow every day."
+      },
+      {
+        "word": "reach",
+        "zh": "到达；抵达",
+        "ex": "On 5 May, she reached the northern tip."
+      },
+      {
+        "word": "track",
+        "zh": "足迹；踪迹",
+        "ex": "She saw polar bear tracks in the snow."
+      }
+    ]
+  },
+  {
     "level": "B2",
     "date": "2026-08-12",
     "title": "Beyond Lithium The Rise of Solid-State Batteries",
@@ -5526,6 +5620,73 @@ const EPISODES = [
         "word": "suffice",
         "zh": "足够；足以（suffice to do 足以做某事）",
         "ex": "\"Fear of punishment does not suffice to explain why most of us are decent.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-09-07",
+    "title": "The Insect That Must Not Be Drawn",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-09-07-the-insect-that-must-not-be-drawn",
+    "url": "lessons/b2/2026-09-07-the-insect-that-must-not-be-drawn.html",
+    "vocab": [
+      {
+        "word": "render",
+        "zh": "翻译；表达；使成为（render a phrase into English 把一个短语译成英语）",
+        "ex": "\"English translators have rendered that phrase in more than sixteen ways.\""
+      },
+      {
+        "word": "connotation",
+        "zh": "涵义；言外之意（词所附带的情感与文化色彩）",
+        "ex": "\"Each of the sixteen versions carries a different connotation.\""
+      },
+      {
+        "word": "exterminate",
+        "zh": "消灭；根除（exterminate pests 消灭害虫）",
+        "ex": "\"Vermin names something to be exterminated.\""
+      },
+      {
+        "word": "envisage",
+        "zh": "设想；想象（envisage a scene 设想一个场景）",
+        "ex": "\"What Kafka himself envisaged remains a mystery.\""
+      },
+      {
+        "word": "vagueness",
+        "zh": "含糊；不明确（形容词 vague，副词 vaguely）",
+        "ex": "\"What is striking is the vagueness of the description.\""
+      },
+      {
+        "word": "derive",
+        "zh": "源于；来自（be derived from 源自，常用被动）",
+        "ex": "\"The word is derived from Middle High German ungezebere.\""
+      },
+      {
+        "word": "correspondence",
+        "zh": "通信；信件往来（correspondence with sb 与某人的通信）",
+        "ex": "\"Kafka's correspondence with his publisher shows how carefully he guarded the story.\""
+      },
+      {
+        "word": "depict",
+        "zh": "描绘；刻画（名词 depiction）",
+        "ex": "\"The insect itself must not be depicted, not even from a distance.\""
+      },
+      {
+        "word": "deliberate",
+        "zh": "蓄意的；有意为之的（a deliberate choice 一个刻意的选择）",
+        "ex": "\"The instruction was deliberate, not an afterthought.\""
+      },
+      {
+        "word": "omniscient",
+        "zh": "无所不知的（an omniscient narrator 全知叙述者）",
+        "ex": "\"To draw Gregor would be to claim an omniscient view of him.\""
+      },
+      {
+        "word": "ambiguity",
+        "zh": "歧义；含糊（可作可数名词：an ambiguity 一处含糊）",
+        "ex": "\"Ambiguity here is not evasion; it is the method.\""
       }
     ]
   },
