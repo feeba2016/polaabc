@@ -6991,5 +6991,67 @@ const EPISODES = [
         "ex": "\"in a pre-registered study published in September 2026\""
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-09-07",
+    "title": "The Author in the Function Words",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-09-07-the-author-in-the-function-words",
+    "url": "lessons/c1/2026-09-07-the-author-in-the-function-words.html",
+    "vocab": [
+      {
+        "word": "stylometry",
+        "zh": "文体计量学（the statistical study of writing style，用于判定作者归属、识别伪造；形容词 stylometric；stylometric attribution 以计量风格判定作者）",
+        "ex": "\"critics cite the journalism while ignoring the stylometry\""
+      },
+      {
+        "word": "pseudonym",
+        "zh": "笔名、化名（a fictitious name adopted by a writer；write under a pseudonym 以笔名写作；形容词 pseudonymous）",
+        "ex": "\"seven of them published under the pseudonym\""
+      },
+      {
+        "word": "corpus",
+        "zh": "语料库（a large, structured collection of texts assembled for linguistic analysis；复数 corpora；a corpus of 150 novels 由 150 部小说构成的语料库）",
+        "ex": "\"a corpus of 150 Italian novels by forty authors\""
+      },
+      {
+        "word": "converge",
+        "zh": "汇聚、趋于一致（of independent lines of evidence to arrive at the same conclusion；名词 convergence；convergent evidence 多条独立证据指向同一结论）",
+        "ex": "\"methods diverged widely, yet the results converged\""
+      },
+      {
+        "word": "inhabit",
+        "zh": "栖居于、占据（to live in or occupy；本课关键引申义：语言习惯不是被『选中』的，而是被无意识地栖居其中；名词 inhabitant）",
+        "ex": "\"content words are chosen; function words are inhabited\""
+      },
+      {
+        "word": "involuntary",
+        "zh": "非自主的、无意识的（done without conscious control；an involuntary rhythm / reflex；反义 voluntary，如 a voluntary choice）",
+        "ex": "\"in a rhythm as involuntary as a pulse\""
+      },
+      {
+        "word": "attribution",
+        "zh": "归属认定、作者归属（the act of assigning a work to its author；动词 attribute X to Y；authorship attribution 作者归属研究）",
+        "ex": "\"Mosteller and Wallace's 1964 attribution of the disputed Federalist Papers\""
+      },
+      {
+        "word": "discriminative",
+        "zh": "具区分力的、有鉴别作用的（able to distinguish between cases；discriminative evidence / features 统计上能把两组区分开的证据或特征；动词 discriminate between）",
+        "ex": "\"the discriminative evidence lying in function words and punctuation\""
+      },
+      {
+        "word": "uncanny",
+        "zh": "诡异的、不可思议的（strange in a way that seems to exceed rational explanation；文学理论中 the uncanny 专指『熟悉中的陌生感』，源自 Freud 1919 年同名论文）",
+        "ex": "\"returns as something more uncanny than a person\""
+      },
+      {
+        "word": "piety",
+        "zh": "虔诚；本课喻指『口惠而实不至的信条』（devotion to a belief；selective piety 选择性虔诚，指只在方便时才遵守某项原则；形容词 pious）",
+        "ex": "\"cite the journalism while ignoring the stylometry — a selective piety\""
+      }
+    ]
   }
 ];
