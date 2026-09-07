@@ -93,6 +93,25 @@ function updateNavButtons(){
   });
 }
 
+/* ===== 移动端导航菜单（汉堡按钮） ===== */
+function toggleMobileNav(){
+  var n = document.getElementById('navLinks');
+  if(!n) return;
+  var open = n.classList.toggle('open');
+  var btn = document.querySelector('.nav-toggle');
+  if(btn){
+    btn.textContent = open ? '✕' : '☰';
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+}
+document.addEventListener('click', function(e){
+  if(!e.target.closest('#navLinks a')) return;
+  var n = document.getElementById('navLinks');
+  var btn = document.querySelector('.nav-toggle');
+  if(n && n.classList.contains('open')) n.classList.remove('open');
+  if(btn){ btn.textContent = '☰'; btn.setAttribute('aria-expanded', 'false'); }
+});
+
 /* ===== 卡片渲染 ===== */
 function renderCard(e, showCheckbox){
   var c = CATS[e.category] || CATS.general;
@@ -153,7 +172,7 @@ var matchStartTime = 0;
 function startMatch(){
   var words = getSelectedWords();
   if(words.length < 3){
-    alert('请先在「全部课程」页面勾选至少 3 个词汇的课程（建议勾选 2-3 课）');
+    alert('请先在「全部课程」或「TEM-4 漫画学词汇」页面勾选至少 3 个词汇的课程/主题');
     return;
   }
   // 取最多 8 对（16 张牌）
@@ -238,8 +257,12 @@ function startSentenceBuilder(){
   var sentences = words.filter(function(w){return w.ex && w.ex.length > 10;}).map(function(w){
     return {text:w.ex.replace(/["']/g,''), word:w.word, zh:w.zh, from:w.from};
   });
+  /* 同一例句只练一次（TEM-4 一个 Part 的 6 词共享一句例句） */
+  sentences = sentences.filter(function(s, i, arr){
+    return arr.findIndex(function(x){return x.text === s.text;}) === i;
+  });
   if(sentences.length < 2){
-    alert('请先在「全部课程」页面勾选课程（需含有例句的词汇）');
+    alert('请先在「全部课程」或「TEM-4 漫画学词汇」页面勾选课程/主题（需含有例句的词汇）');
     return;
   }
   sbSentences = sentences;
@@ -322,7 +345,7 @@ function startFillBlank(){
     return {sentence:blanked, answer:w.word.toLowerCase(), zh:w.zh, from:w.from};
   });
   if(items.length < 2){
-    alert('请先在「全部课程」页面勾选课程');
+    alert('请先在「全部课程」或「TEM-4 漫画学词汇」页面勾选课程/主题');
     return;
   }
   fbItems = items;

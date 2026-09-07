@@ -15,7 +15,8 @@
     <img src="assets/pola.webp" alt="Pola">
     POLA ABC<small>全学段英语学习平台</small>
   </a>
-  <div class="nav-links">
+  <button class="nav-toggle" onclick="toggleMobileNav()" aria-label="菜单" aria-expanded="false">☰</button>
+  <div class="nav-links" id="navLinks">
     <a href="index.html">首页</a>
     <a href="episodes.html">全部课程</a>
     <a href="tem4.html" class="active nav-tem4">📚 TEM-4 漫画学词汇</a>
@@ -78,6 +79,15 @@ function speakText(t){
   u.lang = "en-US"; u.rate = 0.9;
   speechSynthesis.speak(u);
 }
+/* 优先播放豆包（小叶学姐 Jean 音色）合成的 MP3，音频缺失时回退浏览器语音合成 */
+var tem4AudioEl = null;
+function speakAudio(path, text){
+  if(tem4AudioEl){ tem4AudioEl.pause(); tem4AudioEl = null; }
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  var a = new Audio(path);
+  tem4AudioEl = a;
+  a.play().catch(function(){ speakText(text); });
+}
 function closeLightbox(e){
   if(e.target.id === "lightboxImg") return; /* 点图片本身不关，方便细看 */
   document.getElementById("posterLightbox").style.display = "none";
@@ -116,8 +126,9 @@ function closeLightbox(e){
   /* 渲染每个 Part */
   document.getElementById("partsWrap").innerHTML = theme.parts.map(function(p, i){
     var wordsHtml = p.words.map(function(w){
+      var audioWord = w.word.replace(/[^a-zA-Z0-9]/g, '_');
       return '<div class="tem4-word">'+
-        '<div class="tem4-word-head" onclick="speakText(\''+w.word+'\')" title="点击朗读">'+
+        '<div class="tem4-word-head" onclick="speakAudio(\'assets/tem4/audio/word_'+audioWord+'.mp3\', \''+w.word+'\')" title="点击朗读">'+
           '<b class="tem4-word-en">'+w.word+'</b>'+
           '<span class="tem4-word-ipa">'+w.ipa+'</span>'+
           '<span class="tem4-word-speak">🔊</span>'+
@@ -142,7 +153,7 @@ function closeLightbox(e){
         '</div>'+
         '<div class="tem4-part-right">'+
           '<div class="tem4-sentence">'+
-            '<p class="en" onclick="speakText(this.getAttribute(\'data-raw\'))" data-raw="'+p.sentence.replace(/"/g,"&quot;")+'" title="点击朗读">'+tem4HighlightSentence(p)+'</p>'+
+            '<p class="en" onclick="speakAudio(\'assets/tem4/audio/sent_'+p.id.replace(/-/g,'_')+'.mp3\', this.getAttribute(\'data-raw\'))" data-raw="'+p.sentence.replace(/"/g,"&quot;")+'" title="点击朗读">'+tem4HighlightSentence(p)+'</p>'+
             '<p class="cn">'+p.sentenceCn+'</p>'+
           '</div>'+
           '<div class="tem4-word-grid">'+wordsHtml+'</div>'+
