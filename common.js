@@ -47,6 +47,22 @@ function getSelectedWords(){
   var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   var words = [];
   saved.forEach(function(s){
+    /* TEM-4 词汇漫画：slug 形如 tem4-F1-P1，数据在 tem4_data.js */
+    if(s.level === 'TEM4'){
+      if(typeof TEM4_THEMES !== 'undefined'){
+        var part = null;
+        TEM4_THEMES.forEach(function(t){
+          if(part || t.status !== 'live' || !t.parts) return;
+          t.parts.forEach(function(p){ if(p.slug === s.slug) part = p; });
+        });
+        if(part){
+          part.words.forEach(function(v){
+            words.push({word:v.word, zh:v.zh, ex:part.sentence, from:part.title, level:'TEM-4'});
+          });
+        }
+      }
+      return;
+    }
     var ep = EPISODES.find(function(e){return e.slug===s.slug && e.level===s.level;});
     if(ep && ep.vocab){
       ep.vocab.forEach(function(v){

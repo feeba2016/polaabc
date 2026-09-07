@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEM-4 词汇漫画 · 主题 | Pola ABC</title>
+<meta name="description" content="TEM-4 核心词汇场景漫画：看图 · 听音 · 记词，勾选后自动进入消消乐与阅读练习复习。">
+<link rel="icon" href="assets/pola.webp">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="tem4-page">
+
+<nav class="top">
+  <a href="index.html" class="logo">
+    <img src="assets/pola.webp" alt="Pola">
+    POLA ABC<small>全学段英语学习平台</small>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">首页</a>
+    <a href="episodes.html">全部课程</a>
+    <a href="tem4.html" class="active nav-tem4">📚 TEM-4 漫画学词汇</a>
+    <a href="match.html" id="navMatch" class="nav-review">🎮 单词消消乐 <span class="review-badge"></span></a>
+    <a href="reading.html" id="navReading" class="nav-review">📖 阅读练习 <span class="review-badge"></span></a>
+    <a href="about.html">关于Pola</a>
+    <a href="tem4.html" class="btn-cta">全部主题</a>
+  </div>
+</nav>
+
+<header class="hero tem4-hero tem4-theme-hero" id="themeHero">
+  <div class="hero-bg"></div>
+  <div class="wrap hero-inner">
+    <div>
+      <a href="tem4.html" class="tem4-back">← 返回 TEM-4 专题</a>
+      <h1 id="themeTitle">…</h1>
+      <p class="lead" id="themeDesc"></p>
+      <div class="hero-stats" id="themeStats"></div>
+      <div class="hero-btns" id="themeBtns"></div>
+    </div>
+    <div class="mascot-wrap">
+      <img id="themePose" src="assets/tem4/mascot.png" alt="小叶学姐" class="tem4-mascot">
+      <div class="mascot-bubble" id="themeBubble">和小叶学姐一起看漫画！🐒</div>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap" id="partsWrap">
+    <!-- 每 Part 一个区块 -->
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">🦘 POLA ABC</div>
+  <p>全学段英语学习平台 · A1 到 C1-C2 全覆盖</p>
+  <p>TEM-4 词汇漫画 · 小叶学姐教英语 🐒</p>
+</footer>
+
+<!-- 海报灯箱 -->
+<div id="posterLightbox" class="review-modal" onclick="closeLightbox(event)">
+  <div class="review-backdrop"></div>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script src="data.js"></script>
+<script src="tem4_data.js"></script>
+<script src="common.js"></script>
+<script>
+var theme = tem4GetTheme(getParam("theme") || "F1");
+
+function getParam(k){
+  var m = new RegExp("[?&]"+k+"=([^&]*)").exec(location.search);
+  return m ? decodeURIComponent(m[1]) : null;
+}
+function speakText(t){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(t);
+  u.lang = "en-US"; u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+function closeLightbox(e){
+  if(e.target.id === "lightboxImg") return; /* 点图片本身不关，方便细看 */
+  document.getElementById("posterLightbox").style.display = "none";
+}
+
+(function(){
+  /* 主题尚未上线 */
+  if(!theme || theme.status !== "live"){
+    document.getElementById("themeTitle").textContent = theme ? (theme.id + " " + theme.zh + " · 即将上线") : "主题不存在";
+    document.getElementById("themeDesc").textContent = theme ? ("「" + theme.name + "」规划约 " + theme.words + " 个核心词，正在漫画制作中，敬请期待。") : "请从 TEM-4 专题首页选择主题。";
+    document.getElementById("partsWrap").innerHTML = '<div class="tem4-soon-box">🚧 该主题正在制作中<br><small>先去 <a href="tem4_theme.html?theme=F1">F1 旅行与观光</a> 看看已上线内容吧</small></div>';
+    if(theme){
+      var cat = TEM4_CATS[theme.cat];
+      document.getElementById("themePose").src = cat.pose;
+    }
+    return;
+  }
+
+  var cat = TEM4_CATS[theme.cat];
+  var color = theme.color || cat.color;
+  var nWords = theme.parts.reduce(function(n,p){return n+p.words.length;},0);
+
+  document.title = theme.id + " " + theme.zh + " · TEM-4 词汇漫画 | Pola ABC";
+  document.getElementById("themeTitle").innerHTML = theme.id + " " + theme.zh + '<br><span class="grad">' + theme.name + '</span>';
+  document.getElementById("themeDesc").textContent = theme.desc;
+  document.getElementById("themePose").src = cat.pose;
+  document.getElementById("themeStats").innerHTML =
+    '<div class="s"><b>'+theme.parts.length+'</b><span>期漫画</span></div>'+
+    '<div class="s"><b>'+nWords+'</b><span>个单词</span></div>'+
+    '<div class="s"><b>'+cat.emoji+" "+cat.label+'</b><span>主题分类</span></div>'+
+    '<div class="s"><b>'+fmtDate(theme.date)+'</b><span>最近更新</span></div>';
+  document.getElementById("themeBtns").innerHTML =
+    '<button class="btn btn-primary" onclick="selectAllParts(true)">✅ 全选加入复习</button>'+
+    '<a href="match.html" class="btn btn-ghost">🎮 去玩消消乐</a>';
+
+  /* 渲染每个 Part */
+  document.getElementById("partsWrap").innerHTML = theme.parts.map(function(p, i){
+    var wordsHtml = p.words.map(function(w){
+      return '<div class="tem4-word">'+
+        '<div class="tem4-word-head" onclick="speakText(\''+w.word+'\')" title="点击朗读">'+
+          '<b class="tem4-word-en">'+w.word+'</b>'+
+          '<span class="tem4-word-ipa">'+w.ipa+'</span>'+
+          '<span class="tem4-word-speak">🔊</span>'+
+        '</div>'+
+        '<div class="tem4-word-zh"><i>'+w.pos+'</i> '+w.zh+'</div>'+
+      '</div>';
+    }).join("");
+
+    return '<div class="tem4-part" id="'+p.id+'" style="--tc:'+color+'">'+
+      '<div class="tem4-part-head">'+
+        '<div>'+
+          '<div class="tem4-part-eyebrow">Part '+(i+1)+' · '+p.shape+'</div>'+
+          '<h3 class="tem4-part-title">'+p.title+'</h3>'+
+        '</div>'+
+        '<label class="card-select tem4-select">'+
+          '<input type="checkbox" class="vocab-cb" data-slug="'+p.slug+'" data-level="TEM4" onchange="saveSelection();updateNavButtons()"> 加入复习'+
+        '</label>'+
+      '</div>'+
+      '<div class="tem4-part-body">'+
+        '<div class="tem4-poster" onclick="openLightbox(\''+p.poster+'\')" title="点击放大">'+
+          '<img src="'+p.poster+'" alt="Part '+(i+1)+' '+p.title+'" loading="lazy">'+
+        '</div>'+
+        '<div class="tem4-part-right">'+
+          '<div class="tem4-sentence">'+
+            '<p class="en" onclick="speakText(this.getAttribute(\'data-raw\'))" data-raw="'+p.sentence.replace(/"/g,"&quot;")+'" title="点击朗读">'+tem4HighlightSentence(p)+'</p>'+
+            '<p class="cn">'+p.sentenceCn+'</p>'+
+          '</div>'+
+          '<div class="tem4-word-grid">'+wordsHtml+'</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join("");
+
+  restoreSelection();
+  updateNavButtons();
+})();
+
+function openLightbox(src){
+  document.getElementById("lightboxImg").src = src;
+  document.getElementById("posterLightbox").style.display = "flex";
+}
+
+function selectAllParts(on){
+  document.querySelectorAll('.vocab-cb[data-level="TEM4"]').forEach(function(cb){ cb.checked = on; });
+  saveSelection();
+  updateNavButtons();
+  if(on) alert("已把本主题 " + document.querySelectorAll('.vocab-cb[data-level="TEM4"]').length + " 期单词加入复习！\n现在可以去「单词消消乐」和「阅读练习」使用了。");
+}
+</script>
+</body>
+</html>
