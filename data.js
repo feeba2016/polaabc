@@ -3188,6 +3188,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-08",
+    "title": "The Thirsty Crow",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-08-the-thirsty-crow",
+    "url": "lessons/a1/2026-09-08-the-thirsty-crow.html",
+    "vocab": [
+      {
+        "word": "crow",
+        "zh": "乌鸦",
+        "ex": "\"Look at the crow.\""
+      },
+      {
+        "word": "thirsty",
+        "zh": "口渴的",
+        "ex": "\"He is very thirsty.\""
+      },
+      {
+        "word": "water",
+        "zh": "水",
+        "ex": "\"I want some water.\""
+      },
+      {
+        "word": "jar",
+        "zh": "罐子；广口瓶",
+        "ex": "\"The crow sees a jar.\""
+      },
+      {
+        "word": "stone",
+        "zh": "石头；小石子",
+        "ex": "\"He drops a stone.\""
+      },
+      {
+        "word": "clever",
+        "zh": "聪明的",
+        "ex": "\"The crow is clever.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4432,6 +4474,58 @@ const EPISODES = [
         "word": "track",
         "zh": "足迹；踪迹",
         "ex": "She saw polar bear tracks in the snow."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-08",
+    "title": "The Ten-Sided Storm on Saturn",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-08-the-ten-sided-storm-on-saturn",
+    "url": "lessons/a2/2026-09-08-the-ten-sided-storm-on-saturn.html",
+    "vocab": [
+      {
+        "word": "planet",
+        "zh": "土星是一颗带着美丽光环的巨大行星。四十多年来，科学家一直知道它的北极有一个奇怪的六边形形状。现在，他们在南极又发现了一个形状。它有十条边。",
+        "ex": "Saturn is a giant planet with beautiful rings."
+      },
+      {
+        "word": "shape",
+        "zh": "形状；样子",
+        "ex": "They found another shape at the south pole."
+      },
+      {
+        "word": "side",
+        "zh": "边；面；一侧",
+        "ex": "It has ten sides."
+      },
+      {
+        "word": "telescope",
+        "zh": "望远镜",
+        "ex": "They studied photos from the Hubble Space Telescope."
+      },
+      {
+        "word": "discover",
+        "zh": "发现；发觉",
+        "ex": "Now they have discovered another shape."
+      },
+      {
+        "word": "kilometre",
+        "zh": "公里；千米",
+        "ex": "Each side is about 16,800 kilometres long."
+      },
+      {
+        "word": "wave",
+        "zh": "波；波浪",
+        "ex": "The wave sits inside a fast wind."
+      },
+      {
+        "word": "hexagon",
+        "zh": "六边形",
+        "ex": "The northern hexagon has stayed the same for forty years."
       }
     ]
   },

@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：F1/F2/F3/G1 已上线（4 主题 / 20 Part / 120 词），其余主题 status:"soon" 待生产
+ * 状态：A1/F1/F2/F3/G1 已上线（5 主题 / 25 Part / 150 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -36,7 +36,89 @@ const TEM4_CATS = {
  */
 const TEM4_THEMES = [
   /* ===== A 学习与校园 ===== */
-  {id:"A1", cat:"A", zh:"校园生活",   name:"Campus Life",       status:"soon", words:100, desc:"教室、宿舍、食堂、操场"},
+  /* ===== A 校园生活 ===== */
+  {
+    id:"A1", cat:"A", zh:"校园生活", name:"Campus Life", status:"live",
+    date:"2026-09-08", words:30, desc:"一天的校园节奏：晨读课堂、自习笔记、专注分心、考试周、师长与毕业",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"A1-P1", slug:"tem4-A1-P1", title:"晨光课堂", shape:"拱门",
+        poster:"assets/tem4/posters/A1_P1.png",
+        sentence:"Every morning we attend the first class: our professor instructs us in grammar, educates us with stories, and hopes we comprehend, grasp and memorize each rule.",
+        sentenceCn:"每天早晨我们出席第一堂课：教授为我们讲授语法、用故事教导我们，盼我们领会、掌握并牢记每条规则。",
+        scene:"小叶学姐坐在洒满晨光的教室第一排，认真听讲并在笔记本上做记录。",
+        words:[
+          {word:"attend",     ipa:"/əˈtend/",       pos:"v.",  zh:"出席；注意听",        forms:["attend"]},
+          {word:"instruct",   ipa:"/ɪnˈstrʌkt/",    pos:"vt.", zh:"教育，指导，讲授",     forms:["instructs"]},
+          {word:"educate",    ipa:"/ˈedjuːkeɪt/",   pos:"vt.", zh:"教育，培养，训练",     forms:["educates"]},
+          {word:"comprehend", ipa:"/ˌkɒmpriˈhend/", pos:"v.",  zh:"了解，领会",          forms:["comprehend"]},
+          {word:"grasp",      ipa:"/ɡrɑːsp/",       pos:"vt.", zh:"抓住；掌握，领会",     forms:["grasp"]},
+          {word:"memorize",   ipa:"/ˈmeməraɪz/",    pos:"vt.", zh:"记住，熟记",          forms:["memorize"]}
+        ]
+      },
+      {
+        id:"A1-P2", slug:"tem4-A1-P2", title:"自习笔记", shape:"叶形",
+        poster:"assets/tem4/posters/A1_P2.png",
+        sentence:"In the library I draft an outline, scribble notes, compile materials, quote a famous scholar, then revise and review my essay before the deadline.",
+        sentenceCn:"在图书馆里，我先拟好提纲、记下笔记、汇编资料、引用一位名家，再在截止日前修订并复习我的文章。",
+        scene:"小叶学姐在图书馆的木桌前摊开草稿与资料卡片，埋头整理笔记。",
+        words:[
+          {word:"draft",    ipa:"/drɑːft/",    pos:"n./vt.", zh:"草稿；起草",         forms:["draft"]},
+          {word:"scribble", ipa:"/ˈskrɪbl/",   pos:"v.",  zh:"潦草地书写；乱涂",      forms:["scribble"]},
+          {word:"compile",  ipa:"/kəmˈpaɪl/",  pos:"v.",  zh:"编辑，汇编，编纂",      forms:["compile"]},
+          {word:"quote",    ipa:"/kwəʊt/",     pos:"v.",  zh:"引用，引证",           forms:["quote"]},
+          {word:"revise",   ipa:"/rɪˈvaɪz/",   pos:"v.",  zh:"修订；温习",           forms:["revise"]},
+          {word:"review",   ipa:"/rɪˈvjuː/",   pos:"v.",  zh:"复习，回顾 n. 评论",   forms:["review"]}
+        ]
+      },
+      {
+        id:"A1-P3", slug:"tem4-A1-P3", title:"专注与分心", shape:"椭圆",
+        poster:"assets/tem4/posters/A1_P3.png",
+        sentence:"To concentrate, I focus on one chapter at a time and never let my phone distract me; a hard question may confuse or perplex me, then a walk helps me absorb new ideas again.",
+        sentenceCn:"为了专注，我一次只钻研一个章节，绝不让手机分心；难题或许令我困惑难解，散个步便能重新专注、吸收新知。",
+        scene:"小叶学姐在书桌前专心读书，手机收进一旁的小盒子里。",
+        words:[
+          {word:"concentrate", ipa:"/ˈkɒnsəntreɪt/", pos:"v.",  zh:"聚精会神，集中精神",  forms:["concentrate"]},
+          {word:"focus",       ipa:"/ˈfəʊkəs/",      pos:"n./v.", zh:"焦点；聚焦，集中",  forms:["focus"]},
+          {word:"distract",    ipa:"/dɪsˈtrækt/",    pos:"vt.", zh:"转移（注意力），使分心", forms:["distract"]},
+          {word:"confuse",     ipa:"/kənˈfjuːz/",    pos:"vt.", zh:"混淆，弄错；使糊涂",   forms:["confuse"]},
+          {word:"perplex",     ipa:"/pəˈpleks/",     pos:"vt.", zh:"使困惑，难住",        forms:["perplex"]},
+          {word:"absorb",      ipa:"/əbˈsɔːb/",      pos:"vt.", zh:"吸收；使专心",        forms:["absorb"]}
+        ]
+      },
+      {
+        id:"A1-P4", slug:"tem4-A1-P4", title:"考试周", shape:"超圆角",
+        poster:"assets/tem4/posters/A1_P4.png",
+        sentence:"In exam week every candidate is examined in three papers: we mark key points, never omit a definition, and hope our effort earns credit and is awarded a prize.",
+        sentenceCn:"考试周里每位应试者要考三门：我们标出要点、不遗漏任何定义，盼努力换来学分、赢得奖励。",
+        scene:"小叶学姐在安静的考场里认真答题，窗外是初夏的绿树。",
+        words:[
+          {word:"examine",   ipa:"/ɪɡˈzæmɪn/",   pos:"v.",  zh:"对…进行考试；检查",   forms:["examined"]},
+          {word:"candidate", ipa:"/ˈkændɪdət/",  pos:"n.",  zh:"应试者，应考者；候选人", forms:["candidate"]},
+          {word:"mark",      ipa:"/mɑːk/",       pos:"n./v.", zh:"分数；标记，给予分数", forms:["mark"]},
+          {word:"omit",      ipa:"/əʊˈmɪt/",     pos:"vt.", zh:"省略，删除；遗漏",     forms:["omit"]},
+          {word:"credit",    ipa:"/ˈkredɪt/",    pos:"n.",  zh:"学分；信用，荣誉",     forms:["credit"]},
+          {word:"award",     ipa:"/əˈwɔːd/",     pos:"vt.", zh:"授予，给予奖励 n. 奖品", forms:["awarded"]}
+        ]
+      },
+      {
+        id:"A1-P5", slug:"tem4-A1-P5", title:"师长与毕业", shape:"波浪",
+        poster:"assets/tem4/posters/A1_P5.png",
+        sentence:"At the ceremony our principal praises the diligent seniors: guided by the whole faculty and strict discipline, they will graduate, each defending a thesis.",
+        sentenceCn:"典礼上校长表扬勤奋的毕业生：在全体教师与严格纪律的引领下，他们即将毕业，各自为自己的论文答辩。",
+        scene:"小叶学姐戴着学士帽站在礼堂前的樱花树下，师长们在身后鼓掌祝贺。",
+        words:[
+          {word:"faculty",   ipa:"/ˈfækəlti/",   pos:"n.",  zh:"全体教师；才能；学院",  forms:["faculty"]},
+          {word:"principal", ipa:"/ˈprɪnsəpəl/", pos:"n.",  zh:"校长 adj. 主要的",     forms:["principal"]},
+          {word:"graduate",  ipa:"/ˈɡrædʒueɪt/", pos:"v.",  zh:"毕业；取得资格",       forms:["graduate"]},
+          {word:"discipline",ipa:"/ˈdɪsɪplɪn/",  pos:"n.",  zh:"纪律；学科；训练",     forms:["discipline"]},
+          {word:"thesis",    ipa:"/ˈθiːsɪs/",    pos:"n.",  zh:"学位论文；论点",       forms:["thesis"]},
+          {word:"diligent",  ipa:"/ˈdɪlɪdʒənt/", pos:"adj.", zh:"勤勉的，勤奋的",       forms:["diligent"]}
+        ]
+      }
+    ]
+  },
   {id:"A2", cat:"A", zh:"学术阅读",   name:"Academic Reading",  status:"soon", words:80,  desc:"图书馆、书桌、笔记"},
   {id:"A3", cat:"A", zh:"考试与备考", name:"Exam & Study",      status:"soon", words:90,  desc:"考场、复习、笔记"},
   {id:"A4", cat:"A", zh:"图书馆与书籍", name:"Library & Books", status:"soon", words:70,  desc:"书架、借阅、阅读"},
