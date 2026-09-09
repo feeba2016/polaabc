@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Where Do Shadows Come From — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#c2410c;
+  --accent2:#f59e0b;
+  --bg:#fffbeb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#92400e;
+  --highlight:#fde68a;
+  --border:#fde68a;
+  --soft:#fef3c7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#fbbf24);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(194,65,12,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #fcd34d;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#92400e;background:#fef3c7;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(194,65,12,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(194,65,12,.6);}70%{box-shadow:0 0 0 14px rgba(194,65,12,0);}100%{box-shadow:0 0 0 0 rgba(194,65,12,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(194,65,12,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Where Do Shadows Come From? ☀️🌑</h1>
+      <p class="subtitle">2026年9月9日 · 简单科普｜影子是从哪里来的 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · The Sun 太阳公公</div>
+            <p>This is the <span class="kw" data-def="太阳：天上那个又大又亮、会发热的大火球">sun</span>. ☀️ It is very big and very hot. It gives us <span class="kw" data-def="光：有了它，我们的眼睛才能看见东西">light</span>. 💡 We need light to see.</p>
+          </div>
+          <div class="zh">这是太阳 ☀️。它又大又热。它给我们带来光 💡。我们需要光，才能看见东西。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · My Shadow 我的影子</div>
+            <p>Look at the <span class="kw" data-def="地面：我们脚下踩着的土地">ground</span>. 🟫 There is a dark shape. It is my <span class="kw" data-def="影子：光照到你身上，被挡住以后留下的黑黑的形状">shadow</span>. 🌑 It follows me everywhere.</p>
+          </div>
+          <div class="zh">看看地面 🟫。有一个黑黑的形状。那是我的影子 🌑。我走到哪儿，它就跟到哪儿。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Why? 为什么会这样</div>
+            <p>My body <span class="kw" data-def="挡住：站在中间，让光过不去。blocks 是 block 的第三人称单数">blocks</span> the light. 🧱 The light cannot pass. So we see a dark shape. It is a shadow.</p>
+          </div>
+          <div class="zh">我的身体把光挡住了 🧱。光过不去。于是我们就看到一个黑黑的形状，那就是影子。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Long and Short 长长短短</div>
+            <p>In the morning the shadow is <span class="kw" data-def="长的：从这一头到那一头距离很大。long 是形容词">long</span>. 📏 At noon it is short. Shadows change all day. 🌞</p>
+          </div>
+          <div class="zh">早上的影子是长长的 📏。到了中午，它就变短了。影子一整天都在变 🌞。</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#fef3c7;border:2px solid #fcd34d;">
+        <h3 style="margin:0 0 8px;color:#c2410c;font-size:20px;">🌑 和 Pola 一起玩一玩！</h3>
+        <p style="margin:0;font-size:16px;">在一个有太阳的白天 ☀️，站在空空的墙或地面前，看看自己的影子。早上和中午各看一次，比一比哪一次的影子<b>更长</b>？一边看一边说 <b>“My shadow is long!”</b>。也可以用手在灯光前做出<b>小鸟、小狗</b>的影子 🐦🐶。记住：<b>千万不要用眼睛直接看太阳</b>哦 🚫👀</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sun">🔊</button><div class="emoji">☀️</div><div class="word">sun<span class="pos">n.</span></div><div class="zh">太阳</div><div class="ex">"This is the sun."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="light">🔊</button><div class="emoji">💡</div><div class="word">light<span class="pos">n.</span></div><div class="zh">光；光线</div><div class="ex">"It gives us light."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="shadow">🔊</button><div class="emoji">🌑</div><div class="word">shadow<span class="pos">n.</span></div><div class="zh">影子</div><div class="ex">"It is my shadow."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ground">🔊</button><div class="emoji">🟫</div><div class="word">ground<span class="pos">n.</span></div><div class="zh">地面；地上</div><div class="ex">"Look at the ground."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="block">🔊</button><div class="emoji">🧱</div><div class="word">block<span class="pos">v.</span></div><div class="zh">挡住；阻挡</div><div class="ex">"My body blocks the light."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="long">🔊</button><div class="emoji">📏</div><div class="word">long<span class="pos">adj.</span></div><div class="zh">长的</div><div class="ex">"The shadow is long."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. This is the [noun].</h3>
+          <div class="zh">“这是……”。第一次把一样东西介绍给别人认识的时候，就用这句话。<b>this</b> 是“这个”，后面跟 <b>is</b>，再跟东西的名字。</div>
+          <div class="eg">This is the sun. ☀️ / This is the ground. 🟫 / This is my shadow. 🌑</div>
+          <div class="practice">练习：这是影子 → This is the <input placeholder="noun">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Look at the [noun].</h3>
+          <div class="zh">“快看这个……”。想叫爸爸妈妈或小伙伴<b>一起看</b>的时候，就用这句话开头。<b>Look at</b> 后面直接跟要看的东西。</div>
+          <div class="eg">Look at the ground. 🟫 / Look at the sun. ☀️ / Look at my shadow. 🌑</div>
+          <div class="practice">练习：快看这个影子 → Look at the <input placeholder="noun">.</div>
+        </div>
+        <div class="item">
+          <h3>3. The [noun] is [adjective].</h3>
+          <div class="zh">“这个……是……样的”。说一样东西<b>是什么样子</b>的时候，用 <b>is</b> 加一个<b>形容词</b>。形容词不用加 s，也不用变。</div>
+          <div class="eg">The shadow is long. 📏 / The sun is hot. ☀️ / The shadow is dark. 🌑</div>
+          <div class="practice">练习：影子是长长的 → The shadow is <input placeholder="adjective">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. a / an（一个）</h3>
+          <div class="zh">只有<b>一样</b>东西的时候，前面要加 a 或 an。单词以<b>辅音</b>开头用 <b>a</b>；以<b>元音</b>（a e i o u）开头用 <b>an</b>。注意看的是<b>发音</b>，不是字母哦。</div>
+          <div class="eg">a sun ☀️ / a shadow 🌑 / a stone 🪨 / an idea 💡 / an apple 🍎</div>
+        </div>
+        <div class="item">
+          <h3>2. is + 形容词（说“是什么样子的”）</h3>
+          <div class="zh">英语里说“谁是什么样的”，要用 <b>is / are + 形容词</b>。一个人、一样东西用 <b>is</b>；两个以上用 <b>are</b>。形容词<b>不用变化</b>，不会加 s。</div>
+          <div class="eg">The sun is hot. ☀️ / The shadow is long. 📏 / The shadows are dark. 🌑</div>
+        </div>
+        <div class="item">
+          <h3>3. can / cannot（能 / 不能）</h3>
+          <div class="zh">can 表示“会、能”，cannot 表示“不能、不会”。它们后面的动词<b>永远用原形</b>，不加 s，也不加 to。</div>
+          <div class="eg">The light cannot pass. 🚫 / I can see my shadow. 👀 / We can play. 🎮 / It cannot fly. 🐧</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#fef3c7;border:2px solid #fcd34d;">
+        <div style="font-size:20px;font-weight:800;color:#c2410c;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#92400e;margin-top:6px;">每做对一题得 1 分，全部做完就是科学小达人啦！🌑✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🌑 那个一直跟着你的“黑朋友”</h3>
+        <p>小朋友，你有没有发现，只要有太阳的日子，地上就会多出一个<b>黑黑的你</b>？你走，它走；你跑，它跑；你挥挥手，它也挥挥手 👋。它不会说话，也不会发出声音，可是它天天陪着你。它就是——<b>影子</b>。</p>
+        <p>影子到底是从哪儿来的呢？答案其实特别简单：<b>是光被挡住了。</b>太阳的光笔直地跑过来，一下子撞到了你的身上，跑不过去，就在你背后留出一块<b>照不到光的黑地方</b>。这块黑地方，就是你的影子 🧱。</p>
+
+        <h3>道理一：影子是“光走不过去”留下的痕迹 💡</h3>
+        <p>光有一个脾气：<b>它只会笔直地往前走。</b>你可以把它想成一群排着队、一直往前冲的小小人儿。前面要是空空的，它们就跑过去了；前面要是站着<b>你</b>，它们就被挡住了，只能停在你身后。</p>
+        <p>所以，想让影子出现，需要<b>三样东西</b>，一样都不能少：<b>光</b>（比如太阳或台灯）、<b>挡光的东西</b>（比如你的身体）、还有一块<b>接住影子的地方</b>（比如地面或墙壁）。缺了任何一样，影子就变不出来啦 🔍。</p>
+        <p>你可以试一试：把手放在台灯前面，墙上会出现一只<b>小狗</b> 🐶；再动一动手指，小狗还会“张嘴”呢！</p>
+
+        <h3>道理二：影子会自己“长高变矮” 📏</h3>
+        <p>为什么早上的影子<b>长长的</b>，中午的影子却<b>短短的</b>呢？</p>
+        <p>因为太阳在天上<b>一直在慢慢移动</b>。清晨和傍晚，太阳挂得<b>很低</b>，光是<b>斜斜地</b>照过来的，影子就被拉得很长很长；到了中午，太阳升到<b>高高的头顶上</b>，光是<b>直直地</b>照下来的，影子就缩成小小的一团了。</p>
+        <p>所以呀，看一眼影子的长短，就能大概知道<b>现在是什么时候</b>。我们自己，就是一根会走路的“小钟表”呢 🕰️。</p>
+
+        <h3>🇨🇳 中国古人和影子的故事</h3>
+        <ul>
+          <li><b>日晷：用影子看时间的钟</b> 🕰️：很久很久以前，中国古人就在石板上插一根针，看针影落在哪个刻度上，就知道是什么时辰了。这个聪明的工具叫<b>日晷</b>，是世界上最早的“太阳钟”之一。</li>
+          <li><b>皮影戏：会动的影子小人</b> 🎭：<b>皮影戏</b>是我们的国家级非物质文化遗产。艺人用兽皮刻出小小的彩色人偶，在白布后面一边操纵一边唱，灯光把影子的故事投到布上，就像最早的“动画片”。陕西、甘肃、河北、四川等地都有各自的皮影戏，各有味道。</li>
+          <li><b>手影游戏</b> 🐰：躲在灯前，用两只手变出兔子、小狗、小鸟，是很多中国小朋友都玩过的老游戏，玩的就是同一个道理。</li>
+          <li><b>成语里的影子</b> 📖：我们常说“<b>形影不离</b>”，意思是两个人好得像身体和影子一样，一刻也不分开；还有“<b>如影随形</b>”，说的也是影子紧紧跟着人不放的模样。</li>
+        </ul>
+
+        <h3>🔬 关于影子的小知识</h3>
+        <ul>
+          <li><b>影子是黑色的吗？</b> 🌑：其实影子只是<b>光比较少的地方</b>，并不是真的涂了黑色颜料。光越少，看起来越黑。</li>
+          <li><b>影子会一整天都在变</b> 🌞：不光长短会变，<b>方向</b>也会变。太阳在东边，影子就跑到西边去。</li>
+          <li><b>阴天影子会“消失”</b> ☁️：云把太阳挡住了，光变得又弱又散，影子就淡得几乎看不见了。</li>
+          <li><b>月亮下也有影子</b> 🌙：晚上月光很亮的时候，地上也会拖出一条淡淡的影子。</li>
+          <li><b>影子没有颜色</b> 🎨：不管你穿红色还是蓝色的衣服，影子都是黑乎乎的一团。</li>
+        </ul>
+
+        <h3>🎮 影子可以这样玩</h3>
+        <ul>
+          <li><b>踩影子</b> 👣：和爸爸妈妈在阳光下互相踩对方的影子，被踩到就换人，跑一跑、笑一笑，顺便说 <b>“Look at my shadow!”</b> 🌑。</li>
+          <li><b>影子尺子</b> 📏：早上和中午各站一次，让大人用粉笔在地上画出影子的头，比一比哪个长，说 <b>“The shadow is long!”</b> 或 <b>“The shadow is short!”</b>。</li>
+          <li><b>手影小剧场</b> 🎬：关上大灯，打开一盏小台灯，用手变出小鸟、小狗、小兔子，一边变一边说 <b>“This is a bird!”</b> 🐦。</li>
+          <li><b>影子画画</b> 🖍️：把小玩具放在太阳下，沿着它的影子描一圈，看看画出来像什么。</li>
+          <li><b>想一想</b> 🤔：如果站在两盏灯中间，会出现几个影子呢？和爸爸妈妈一起试一试、说一说。</li>
+        </ul>
+
+        <p style="background:#fef9c3;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b><b>千万不能用眼睛直接看太阳</b> 🚫👀，也不要用望远镜、放大镜去看，那样会伤到眼睛。做影子游戏最好在<b>早晨或傍晚</b>，阳光比较柔和的时候；中午太阳最晒，要记得戴帽子 🧢、多喝水 💧，别在太阳下待太久。玩手影用台灯时，<b>不要碰灯泡</b>，它会烫手 🔥。在户外追影子时，先看看周围有没有台阶、石头或水坑，<b>慢慢跑、不推人</b> 👣。和别人一起玩时，学会<b>排队轮流</b>，不抢玩具 🤝。玩完回家要记得<b>用肥皂把手洗干净</b> 🧼。如果眼睛不舒服、皮肤发红或觉得头晕，要马上告诉爸爸妈妈。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读《影子是从哪里来的》小科普，知道影子是“光被身体挡住”以后留下来的。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：sun, light, shadow, ground, block, long。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “This is the sun.”, “Look at the ground.”, “The shadow is long.” 说句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 a / an 的用法、is + 形容词的说法，以及 can / cannot 后面动词要用原形。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>对身边的科学现象产生好奇，愿意在阳光下自己试一试、看一看。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读，读到 “blocks the light” 时可以伸出小手做“挡住”的动作 🧱。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，说到 long 就把两只手拉得远远的，用身体记住单词 📏。</div></div>
+        <div class="goal"><span class="ic">🔬</span><div>在有太阳的白天和爸爸妈妈一起看影子，比一比早晚和中午哪一次的影子更长 🌞。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>和爸爸妈妈聊一聊：影子为什么会跟着我走？试着说 “It is my shadow.” 😄</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把影子图贴在墙上，每天说一遍 🎨。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Where Do Shadows Come From · 2026-09-09 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["This is the sun. It is very big and very hot. It gives us light. We need light to see.", "Look at the ground. There is a dark shape. It is my shadow. It follows me everywhere.", "My body blocks the light. The light cannot pass. So we see a dark shape. It is a shadow.", "In the morning the shadow is long. At noon it is short. Shadows change all day."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What gives us light? 什么东西给我们光？",em:["🌙","☀️","⭐"],opts:["Moon (月亮)","Sun (太阳)","Star (星星)"],ans:1,
+   fb:"Correct! 是太阳给我们光，课文里说 It gives us light ☀️。"},
+  {q:"What is the dark shape on the ground? 地上那个黑黑的形状是什么？",em:["🐱","🪨","🌑"],opts:["A cat (小猫)","A stone (石头)","A shadow (影子)"],ans:2,
+   fb:"Yes! 那是影子，It is my shadow 🌑。"},
+  {q:"When is the shadow short? 影子什么时候最短？",em:["🌞","🌅","🌙"],opts:["At noon (中午)","In the morning (早上)","At night (晚上)"],ans:0,
+   fb:"Right! 中午太阳在头顶上，影子最短，At noon it is short 🌞。"},
+  {q:"Why do we see a shadow? 我们为什么会看到影子？",em:["💨","🧱","🌈"],opts:["The wind blows (风吹)","The body blocks the light (身体挡住了光)","The rain falls (下雨)"],ans:1,
+   fb:"Great! 因为身体把光挡住了，My body blocks the light 🧱。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>

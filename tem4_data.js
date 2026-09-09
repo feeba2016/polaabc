@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1/F1/F2/F3/G1 已上线（5 主题 / 25 Part / 150 词），其余主题 status:"soon" 待生产
+ * 状态：A1/A2/F1/F2/F3/G1 已上线（6 主题 / 30 Part / 180 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -119,7 +119,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"A2", cat:"A", zh:"学术阅读",   name:"Academic Reading",  status:"soon", words:80,  desc:"图书馆、书桌、笔记"},
+  {
+    id:"A2", cat:"A", zh:"学术阅读", name:"Academic Reading", status:"live",
+    date:"2026-09-09", words:30, desc:"阅读方法全流程：泛读浏览、精读笔记、攻克难句、整理压缩、文献与收获",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"A2-P1", slug:"tem4-A2-P1", title:"泛读与浏览", shape:"拱门",
+        poster:"assets/tem4/posters/A2_P1.png",
+        sentence:"Every weekend I browse the campus bookshop, skim the openings of new titles, scan a few journals for fresh ideas, then devour one whole novel and slowly digest and interpret its meaning.",
+        sentenceCn:"每逢周末我都会逛校园书店：浏览新书的开头、翻阅几本期刊寻找新点子，然后一口气读完一整本小说，再慢慢消化、解读其中的意涵。",
+        scene:"小叶学姐坐在温馨书房的书桌前，开心地翻阅一摞书与期刊。",
+        words:[
+          {word:"browse",    ipa:"/braʊz/",      pos:"v.",  zh:"浏览（书刊）；随意翻阅", forms:["browse"]},
+          {word:"skim",      ipa:"/skɪm/",       pos:"v.",  zh:"略读，快读；掠过",      forms:["skim"]},
+          {word:"scan",      ipa:"/skæn/",       pos:"v.",  zh:"审视，扫描；浏览",      forms:["scan"]},
+          {word:"devour",    ipa:"/dɪˈvaʊə/",    pos:"vt.", zh:"贪婪地读；吞吃，吞噬",  forms:["devour"]},
+          {word:"digest",    ipa:"/dɪˈdʒest/",   pos:"v.",  zh:"消化；理解，吸收；摘要", forms:["digest"]},
+          {word:"interpret", ipa:"/ɪnˈtɜːprɪt/", pos:"v.",  zh:"解释，说明；理解；口译", forms:["interpret"]}
+        ]
+      },
+      {
+        id:"A2-P2", slug:"tem4-A2-P2", title:"精读与笔记", shape:"叶形",
+        poster:"assets/tem4/posters/A2_P2.png",
+        sentence:"As I read closely, I underline the key arguments, highlight memorable lines, jot questions in the margin, paraphrase difficult passages in my own words, summarize each section, and insert sticky notes to mark the best quotes.",
+        sentenceCn:"精读时，我会给核心论点画线、把精彩句子标亮、在页边写下疑问、用自己的话改述难懂的段落、概括每一节内容，并贴上便利贴标记佳句。",
+        scene:"小叶学姐伏在书桌前精读课本，手握荧光笔，书页贴满彩色便利贴。",
+        words:[
+          {word:"underline",  ipa:"/ˌʌndəˈlaɪn/",  pos:"vt.",    zh:"在…下面画线；强调",        forms:["underline"]},
+          {word:"highlight",  ipa:"/ˈhaɪlaɪt/",    pos:"vt.",    zh:"使突出，强调；最精彩的部分", forms:["highlight"]},
+          {word:"margin",     ipa:"/ˈmɑːdʒɪn/",    pos:"n.",     zh:"页边空白；边缘；余地",      forms:["margin"]},
+          {word:"paraphrase", ipa:"/ˈpærəfreɪz/",  pos:"n./v.",  zh:"释义，改述",              forms:["paraphrase"]},
+          {word:"summarize",  ipa:"/ˈsʌməraɪz/",   pos:"v.",     zh:"摘要，概述",              forms:["summarize"]},
+          {word:"insert",     ipa:"/ɪnˈsɜːt/",     pos:"vt.",    zh:"插入，嵌入 n. 插页",       forms:["insert"]}
+        ]
+      },
+      {
+        id:"A2-P3", slug:"tem4-A2-P3", title:"攻克难句", shape:"椭圆",
+        poster:"assets/tem4/posters/A2_P3.png",
+        sentence:"The aged manuscript is almost illegible, so I decode its abbreviations, clarify every confusing phrase, define the unfamiliar terms, and pay close attention to the footnotes, never overlooking a single clue.",
+        sentenceCn:"这份旧手稿几乎难以辨认，于是我先破译缩写、阐明每个费解的短语、给生僻术语下定义，并密切注意脚注，不放过任何一条隐藏线索。",
+        scene:"小叶学姐举着放大镜，专注研究桌上难以辨认的旧手稿。",
+        words:[
+          {word:"illegible", ipa:"/ɪˈledʒəbl/",  pos:"adj.", zh:"难以辨认的，（字迹）模糊的", forms:["illegible"]},
+          {word:"decode",    ipa:"/diːˈkəʊd/",   pos:"v.",   zh:"破译，解密",             forms:["decode"]},
+          {word:"clarify",   ipa:"/ˈklærɪfaɪ/",  pos:"v.",   zh:"澄清，阐明",             forms:["clarify"]},
+          {word:"define",    ipa:"/dɪˈfaɪn/",    pos:"vt.",  zh:"下定义；界定，确定范围",   forms:["define"]},
+          {word:"attention", ipa:"/əˈtenʃən/",   pos:"n.",   zh:"注意，专心",             forms:["attention"]},
+          {word:"overlook",  ipa:"/ˌəʊvəˈlʊk/",  pos:"vt.",  zh:"俯瞰；忽略；宽容",        forms:["overlooking"]}
+        ]
+      },
+      {
+        id:"A2-P4", slug:"tem4-A2-P4", title:"整理与压缩", shape:"超圆角",
+        poster:"assets/tem4/posters/A2_P4.png",
+        sentence:"To prepare my seminar handout, I compress the messy drafts, condense forty pages into two, keep the summary brief, format every heading neatly, add graphic charts, and remark on the trends I find.",
+        sentenceCn:"为了准备研讨课讲义，我把凌乱的草稿压缩、将四十页浓缩成两页、让摘要保持简短、把每个标题排版整齐，再配上形象的图表，并评论我发现的新趋势。",
+        scene:"小叶学姐在书桌前整理笔记卡片，纸上画着图表，准备研讨课讲义。",
+        words:[
+          {word:"compress", ipa:"/kəmˈpres/", pos:"v.",   zh:"压缩；（思想、文字）浓缩", forms:["compress"]},
+          {word:"condense", ipa:"/kənˈdens/", pos:"v.",   zh:"冷凝；压缩，缩写（文章）", forms:["condense"]},
+          {word:"brief",    ipa:"/briːf/",    pos:"adj.", zh:"简短的 n. 概要，摘要",    forms:["brief"]},
+          {word:"format",   ipa:"/ˈfɔːmæt/",  pos:"n.",   zh:"格式，版式 vt. 编排格式", forms:["format"]},
+          {word:"graphic",  ipa:"/ˈɡræfɪk/",  pos:"adj.", zh:"图解的；生动的",         forms:["graphic"]},
+          {word:"remark",   ipa:"/rɪˈmɑːk/",  pos:"v.",   zh:"评论，谈论 n. 话语",     forms:["remark"]}
+        ]
+      },
+      {
+        id:"A2-P5", slug:"tem4-A2-P5", title:"文献与收获", shape:"波浪",
+        poster:"assets/tem4/posters/A2_P5.png",
+        sentence:"Before the library closes, I check the catalog for a related title, trace my topic through the index, return a volume two days overdue, and walk home content, for this worthy book has aroused a real passion for research.",
+        sentenceCn:"图书馆闭馆前，我查了目录寻找相关书名、通过索引追查研究主题、归还一本过期两天的书，然后心满意足地走回家——因为这本值得一读的书唤起了我对研究的真正热情。",
+        scene:"夕阳下小叶学姐抱着一摞书走出图书馆，头顶闪着灵感的小星星。",
+        words:[
+          {word:"catalog", ipa:"/ˈkætəlɒɡ/",  pos:"n.",   zh:"目录 vt. 编目录",       forms:["catalog"]},
+          {word:"index",   ipa:"/ˈɪndeks/",   pos:"n.",   zh:"索引；指数；标志",      forms:["index"]},
+          {word:"overdue", ipa:"/ˌəʊvəˈdjuː/", pos:"adj.", zh:"过期的，延误的",        forms:["overdue"]},
+          {word:"content", ipa:"/kənˈtent/",  pos:"adj.", zh:"满足的，满意的",        forms:["content"]},
+          {word:"worthy",  ipa:"/ˈwɜːði/",    pos:"adj.", zh:"值得…的；值得尊敬的",   forms:["worthy"]},
+          {word:"arouse",  ipa:"/əˈraʊz/",    pos:"vt.",  zh:"唤起，激起；唤醒",      forms:["aroused"]}
+        ]
+      }
+    ]
+  },
   {id:"A3", cat:"A", zh:"考试与备考", name:"Exam & Study",      status:"soon", words:90,  desc:"考场、复习、笔记"},
   {id:"A4", cat:"A", zh:"图书馆与书籍", name:"Library & Books", status:"soon", words:70,  desc:"书架、借阅、阅读"},
   {id:"A5", cat:"A", zh:"学科与课程", name:"Class Subjects",     status:"soon", words:100, desc:"数学/历史/科学课堂"},

@@ -3230,6 +3230,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-09",
+    "title": "Where Do Shadows Come From",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-09-where-do-shadows-come-from",
+    "url": "lessons/a1/2026-09-09-where-do-shadows-come-from.html",
+    "vocab": [
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "\"This is the sun.\""
+      },
+      {
+        "word": "light",
+        "zh": "光；光线",
+        "ex": "\"It gives us light.\""
+      },
+      {
+        "word": "shadow",
+        "zh": "影子",
+        "ex": "\"It is my shadow.\""
+      },
+      {
+        "word": "ground",
+        "zh": "地面；地上",
+        "ex": "\"Look at the ground.\""
+      },
+      {
+        "word": "block",
+        "zh": "挡住；阻挡",
+        "ex": "\"My body blocks the light.\""
+      },
+      {
+        "word": "long",
+        "zh": "长的",
+        "ex": "\"The shadow is long.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4526,6 +4568,58 @@ const EPISODES = [
         "word": "hexagon",
         "zh": "六边形",
         "ex": "The northern hexagon has stayed the same for forty years."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-09",
+    "title": "The Tower Made of People",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-09-the-tower-made-of-people",
+    "url": "lessons/a2/2026-09-09-the-tower-made-of-people.html",
+    "vocab": [
+      {
+        "word": "tower",
+        "zh": "在加泰罗尼亚（西班牙东北部的一个地区），人们用自己的身体搭起高塔。这些塔叫做 castells（叠人塔）。有些有十层高，差不多有一栋小楼那么高。",
+        "ex": "People build towers with their own bodies."
+      },
+      {
+        "word": "level",
+        "zh": "层；级别",
+        "ex": "Some towers are ten levels high."
+      },
+      {
+        "word": "base",
+        "zh": "底部；底座；基础",
+        "ex": "The strongest members make a wide base."
+      },
+      {
+        "word": "circle",
+        "zh": "圆圈；圆形",
+        "ex": "They stand shoulder to shoulder in a tight circle."
+      },
+      {
+        "word": "climb",
+        "zh": "爬；攀登",
+        "ex": "Others climb onto their shoulders, level by level."
+      },
+      {
+        "word": "crowd",
+        "zh": "人群",
+        "ex": "She waved to a huge crowd."
+      },
+      {
+        "word": "teamwork",
+        "zh": "团队合作；配合",
+        "ex": "Castells need teamwork."
+      },
+      {
+        "word": "competition",
+        "zh": "比赛；竞赛",
+        "ex": "The biggest competition takes place in Tarragona."
       }
     ]
   },

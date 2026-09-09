@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Tower Made of People — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#c2410c;
+  --accent2:#0f766e;
+  --bg:#fdf4ec;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#ffedd5;
+  --border:#fed7aa;
+  --soft:#fff9f3;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#0f766e);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(194,65,12,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg{flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(194,65,12,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(194,65,12,.55);}70%{box-shadow:0 0 0 12px rgba(194,65,12,0);}100%{box-shadow:0 0 0 0 rgba(194,65,12,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fed7aa;}
+#tip{position:fixed;z-index:1200;background:#7c2d12;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),#0f766e);color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(194,65,12,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE TOWER MADE OF PEOPLE · 2026-09-09</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🌍 The Tower Made of People</h1>
+  <div class="subtitle">用身体搭起来的人塔 · CEFR A2 · 约 148 词 · 🌍 世界文化</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">Hook · 开场</div>
+        <p>In Catalonia, a region in the north-east of Spain, people build <span class="kw" data-word="tower">towers</span> with their own bodies. These towers are called castells. Some are ten <span class="kw" data-word="level">levels</span> high, as tall as a small building.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">在加泰罗尼亚（西班牙东北部的一个地区），人们用自己的身体搭起高塔。这些塔叫做 castells（叠人塔）。有些有十层高，差不多有一栋小楼那么高。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">How · 怎么搭</div>
+        <p>A team is called a colla. First, the strongest members make a wide <span class="kw" data-word="base">base</span>, the pinya. They stand shoulder to shoulder in a tight <span class="kw" data-word="circle">circle</span>. Then others <span class="kw" data-word="climb">climb</span> onto their shoulders, level by level.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">一支队伍叫做 colla。首先，最强壮的队员搭出一个宽宽的底座，叫做 pinya。他们肩并肩围成一个紧紧的圆圈。然后其他人一层一层爬上他们的肩膀。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">Who · 谁在顶端</div>
+        <p>The last person to climb is the smallest, usually a child of seven or eight. This child is called the anxaneta. In June 2026, an eight-year-old girl named Bruna reached the top of a nearly ten-metre tower in Barcelona and waved to a huge <span class="kw" data-word="crowd">crowd</span>.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">最后爬上去的那个人是个子最小的，通常是七八岁的孩子。这个孩子叫做 anxaneta（塔顶小人）。2026 年 6 月，一个叫 Bruna 的八岁女孩爬到巴塞罗那一座近十米高的塔顶，向一大群人挥手。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Why it matters · 为什么重要</div>
+        <p>Castells need <span class="kw" data-word="teamwork">teamwork</span>. Everyone has a place, young or old, big or small. UNESCO made castells part of the world's intangible heritage in 2010. The biggest <span class="kw" data-word="competition">competition</span> takes place in Tarragona on 3 and 4 October 2026.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">叠人塔需要团队合作。每个人都有自己的位置，无论年幼年长、个子大小。2010 年，联合国教科文组织把叠人塔列入世界非物质文化遗产。最大的比赛将于 2026 年 10 月 3 日和 4 日在塔拉戈纳举行。</div>
+    </div>
+  </div>
+
+  <div class="tipbox">
+    <h3>🌍 学习小提示 Study Tip</h3>
+    <ul>
+      <li>读完后试着用一句话讲完：<b>In Catalonia, people build towers with their own bodies.</b></li>
+      <li>本课出现了三个「被叫」：<b>are called castells</b>、<b>is called a colla</b>、<b>is called the anxaneta</b>——被动语态就是这么用的。</li>
+      <li>数字与单位要会读：<b>ten metres = 十米</b>；日期要会读：<b>3 and 4 October = the third and fourth of October</b>。</li>
+      <li>本课的反义词对：<b>young / old</b>、<b>big / small</b>、<b>strong / weak</b>。成对记忆更快。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Vocabulary</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="tower">🔊</button>
+        <div class="word">tower<span class="pos">n.</span></div>
+        <div class="zh">塔；高塔</div>
+        <div class="ex">People build towers with their own bodies.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="level">🔊</button>
+        <div class="word">level<span class="pos">n.</span></div>
+        <div class="zh">层；级别</div>
+        <div class="ex">Some towers are ten levels high.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="base">🔊</button>
+        <div class="word">base<span class="pos">n.</span></div>
+        <div class="zh">底部；底座；基础</div>
+        <div class="ex">The strongest members make a wide base.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="circle">🔊</button>
+        <div class="word">circle<span class="pos">n.</span></div>
+        <div class="zh">圆圈；圆形</div>
+        <div class="ex">They stand shoulder to shoulder in a tight circle.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="climb">🔊</button>
+        <div class="word">climb<span class="pos">v.</span></div>
+        <div class="zh">爬；攀登</div>
+        <div class="ex">Others climb onto their shoulders, level by level.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="crowd">🔊</button>
+        <div class="word">crowd<span class="pos">n.</span></div>
+        <div class="zh">人群</div>
+        <div class="ex">She waved to a huge crowd.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="teamwork">🔊</button>
+        <div class="word">teamwork<span class="pos">n.</span></div>
+        <div class="zh">团队合作；配合</div>
+        <div class="ex">Castells need teamwork.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="competition">🔊</button>
+        <div class="word">competition<span class="pos">n.</span></div>
+        <div class="zh">比赛；竞赛</div>
+        <div class="ex">The biggest competition takes place in Tarragona.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">These [towers] are called [castells].</div>
+    <div class="zh">这些[塔]被叫做[castells]。</div>
+    <div class="note">介绍一个新事物的名字时，用「<b>is / are called + 名字</b>」最省事，不用解释太多。试着说：This game is called football. / We are called Team Panda.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">Some [towers] are as tall as [a small building].</div>
+    <div class="zh">有些[塔]有[一栋小楼]那么高。</div>
+    <div class="note">「<b>as + 形容词 + as</b>」表示「<b>和……一样……</b>」。中间一定要用形容词<b>原形</b>，不能加 -er。试着说：He is as tall as his father. / This box is as heavy as a cat.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">[Everyone] has a place, [young or old, big or small].</div>
+    <div class="zh">[每个人]都有自己的位置，[无论年幼年长、个子大小]。</div>
+    <div class="note">注意：<b>everyone</b> 虽然意思是「大家」，但它是<b>单数</b>，后面的动词要用 <b>has</b> 而不是 have。试着说：Everyone has a job. / Everyone has a story.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">The biggest [competition] takes place in [Tarragona] on [3 and 4 October 2026].</div>
+    <div class="zh">最大的[比赛]于[2026 年 10 月 3 日和 4 日]在[塔拉戈纳]举行。</div>
+    <div class="note"><b>take place</b> 就是「<b>举行、发生</b>」，用来讲活动非常自然。地点用 <b>in + 城市</b>，日期用 <b>on + 具体某天</b>。试着说：The school sports day takes place on 20 October.</div>
+  </div>
+</section>
+
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 被动语态：is / are called（被叫做）</h3>
+    <ul>
+      <li>想说「<b>它叫什么</b>」，英语用「<b>be 动词 + called + 名字</b>」：<span class="good">These towers are called castells.</span></li>
+      <li>主语是单数用 <b>is</b>，复数用 <b>are</b>：<span class="good">A team is called a colla.</span> / <span class="good">They are called castellers.</span></li>
+      <li>被动的样子是「<b>be + 过去分词</b>」。讲过去的事就把 be 换成过去式：<span class="good">The tower was built in three minutes.</span>（这座塔三分钟就搭好了。）</li>
+      <li>想说「<b>被谁做的</b>」，在最后加 <b>by</b>：<span class="good">It was made by 200 people.</span></li>
+      <li>常见错误：被动里丢掉 be 动词。<span class="bad">These towers called castells.</span> → <span class="good">These towers are called castells.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. as + 形容词 + as：和……一样……</h3>
+    <ul>
+      <li>两个人或东西<b>一样</b>时用「<b>as + 形容词原级 + as</b>」：<span class="good">as tall as a small building</span>（和一栋小楼一样高）。</li>
+      <li class="eg">The tower is <span class="good">as tall as</span> a tree.（那座塔和一棵树一样高。）</li>
+      <li class="eg">He is <span class="good">as strong as</span> his brother.（他和他哥哥一样强壮。）</li>
+      <li>要注意：中间的形容词必须用<b>原形</b>，比较级（taller）和最高级（tallest）都不能放进去。<span class="bad">as taller as</span> → <span class="good">as tall as</span>。</li>
+      <li>想说「<b>不一样</b>」就把第一个 as 换成 <b>not so...as</b> 或 <b>not as...as</b>：<span class="good">It is not so tall as that one.</span></li>
+      <li>它和比较级的区别：<b>as tall as</b> 是「<b>一样高</b>」，<b>taller than</b> 是「<b>更高</b>」。一句话里别混用。</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. 最高级：the smallest / the biggest</h3>
+    <ul>
+      <li>三者以上比「<b>最……</b>」，用「<b>the + 形容词-est</b>」：<span class="good">small → the smallest</span>、<span class="good">tall → the tallest</span>、<span class="good">young → the youngest</span>。</li>
+      <li class="eg">The last person to climb is <span class="good">the smallest</span>.（最后爬上去的人是个子最小的。）</li>
+      <li class="eg">The <span class="good">biggest</span> competition takes place in Tarragona.（最大的比赛在塔拉戈纳举行。）</li>
+      <li>拼写规则：以「<b>辅音 + 元音 + 辅音</b>」结尾的短词要<b>双写最后一个字母</b>再加 -est，所以是 <b>big → biggest</b>，不是 bigest。</li>
+      <li>长形容词前面加 <b>most</b>：<span class="good">the most beautiful</span>、<span class="good">the most important</span>。</li>
+      <li>不规则三兄弟要背下来：<b>good → the best</b>、<b>bad → the worst</b>、<b>far → the farthest</b>。</li>
+      <li>最高级前面<b>通常要加 the</b>，因为它指的是「<b>唯一的那个最……</b>」。</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. 时间介词：in / on / at</h3>
+    <ul>
+      <li><b>on</b> 用在「<b>具体某一天</b>」或「<b>某几天</b>」前面：<span class="good">on 3 and 4 October</span>、<span class="good">on Monday</span>、<span class="good">on my birthday</span>。</li>
+      <li><b>in</b> 用在「<b>比较长的一段时间</b>」前面：<span class="good">in June 2026</span>（月份）、<span class="good">in 2010</span>（年份）、<span class="good">in the morning</span>（上午）。</li>
+      <li><b>at</b> 用在「<b>具体的时刻</b>」前面：<span class="good">at five o'clock</span>、<span class="good">at noon</span>（正午）、<span class="good">at night</span>（夜里）。</li>
+      <li>本课的三个例子正好凑齐：<span class="good">in June 2026</span> · <span class="good">in 2010</span> · <span class="good">on 3 and 4 October 2026</span>。</li>
+      <li>常见错误：<span class="bad">in 3 October</span> → <span class="good">on 3 October</span>；<span class="bad">on 2010</span> → <span class="good">in 2010</span>。</li>
+    </ul>
+  </div>
+</section>
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz</h2>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">1. What are the human towers of Catalonia called?</div>
+    <div class="qzh">加泰罗尼亚的人塔叫做什么？</div>
+    <button class="opt">A) Pinya</button>
+    <button class="opt">B) Castells</button>
+    <button class="opt">C) Collas</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">2. What is the wide base of a human tower called?</div>
+    <div class="qzh">人塔宽宽的底座叫做什么？</div>
+    <button class="opt">A) The pinya</button>
+    <button class="opt">B) The anxaneta</button>
+    <button class="opt">C) The tronc</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">3. Who is the anxaneta?</div>
+    <div class="qzh">谁是 anxaneta？</div>
+    <button class="opt">A) The child who climbs to the very top</button>
+    <button class="opt">B) The tallest man in the team</button>
+    <button class="opt">C) The person who plays the music</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">4. How tall was the tower that Bruna climbed in June 2026?</div>
+    <div class="qzh">Bruna 在 2026 年 6 月爬的那座塔有多高？</div>
+    <button class="opt">A) Nearly two metres</button>
+    <button class="opt">B) Nearly ten metres</button>
+    <button class="opt">C) Nearly one hundred metres</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">5. When does the biggest castells competition take place in 2026?</div>
+    <div class="qzh">2026 年最大的叠人塔比赛在什么时候举行？</div>
+    <button class="opt">A) In 2010</button>
+    <button class="opt">B) On 3 and 4 June 2026</button>
+    <button class="opt">C) On 3 and 4 October 2026</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · 背景知识</h2>
+
+  <div class="know">
+    <h3>🏰 用身体搭起来的「城堡」</h3>
+    <p>在西班牙东北部的<b>加泰罗尼亚</b>（首府是<b>巴塞罗那</b>），人们不用砖头，而是<b>用彼此的身体</b>搭起高塔。这种塔在加泰罗尼亚语里叫 <b>castell</b>，意思正是「<b>城堡</b>」，复数写成 <b>castells</b>。</p>
+    <ul>
+      <li>叠人塔大约起源于 <b>18 世纪</b>——最早是当地一种叫「<b>瓦伦西亚舞</b>」的舞蹈，舞跳到最后，人们会一层层爬上别人的肩膀。</li>
+      <li>慢慢地，跳舞的人开始比赛「<b>谁搭得更高</b>」，舞蹈就变成了今天的人塔。发源地是加泰罗尼亚的小城 <b>Valls</b>。</li>
+      <li><b>2010 年</b>，联合国教科文组织把叠人塔列入<b>人类非物质文化遗产代表作名录</b>。评审说它体现了「<b>团结、平衡、勇气和理智</b>」。</li>
+      <li>现在加泰罗尼亚有<b>一百多支队伍</b>，队员从几岁的小孩到七十多岁的老人都有。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🧱 一座人塔是怎么搭起来的</h3>
+    <ul>
+      <li><b>底座 pinya</b>：最下面是几十甚至几百个人紧紧挤在一起的大圆圈。他们肩并肩、手臂互相挽着，是整个塔的<b>地基</b>——也是最容易被观众忽略、却最累的一部分。</li>
+      <li><b>塔身 tronc</b>：底座之上，队员一层层站到下面人的肩膀上。越往上人数越少，塔身最高可以有 <b>7 层</b>。</li>
+      <li><b>塔顶 pom de dalt</b>：最上面三层由个子最小、体重最轻的人完成。先是两个人（<b>dosos</b>），再一个人蹲上去（<b>aixecador</b>），最后那个小孩（<b>enxaneta</b>，也拼作 anxaneta）爬到最顶端，举起一只手行礼，这个动作叫 <b>aleta</b>。</li>
+      <li>只有<b>举手礼完成、并且全员安全落地</b>，这座塔才算真正成功。所以最危险的时刻不是往上爬，而是<b>往下撤</b>。</li>
+      <li>队员的典型打扮是<b>深绿衬衫、白裤子、黑腰带</b>和<b>红底白点的方巾</b>。腰带和方巾不只是好看——它们给上面的人当<b>抓手和踩点</b>用。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>👧 塔顶那个八岁女孩</h3>
+    <p>2026 年 6 月 9 日晚上，巴塞罗那的<b>路易斯·孔帕尼斯奥林匹克体育场</b>里坐着大约<b>四万名观众</b>。一座近十米高的人塔在他们面前升起，爬到最顶端的，是一个 <b>8 岁</b>的女孩——<b>Bruna Vall Galán</b>。</p>
+    <ul>
+      <li>她来自加泰罗尼亚小镇 <b>Vilafranca del Penedès</b> 的队伍「<b>Castellers de Vilafranca</b>」，这是当地最著名的队伍之一。当天全队有一百三十多人一起出发。</li>
+      <li>Bruna 的妈妈年轻时就在这支队伍里，还在这里认识了她的丈夫。对很多加泰罗尼亚家庭来说，叠人塔是<b>一代传一代的家事</b>。</li>
+      <li>队伍的主席 Ernest Gallart 说过一句话很打动人：「<b>人塔最宝贵的一点，是任何人都能参加</b>——不论年龄、身高、体重、信仰或想法。<b>每个人在结构里都有自己的位置。</b>」</li>
+      <li>塔成功搭完又安全拆下来时，队员们会互相拥抱。有人形容那一刻的心情是「<b>团结、家庭、力量</b>」。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🏆 十月，塔拉戈纳见</h3>
+    <ul>
+      <li>最重要的比赛叫 <b>Concurs de Castells</b>（叠人塔大赛），举办地是<b>塔拉戈纳</b>的 Tarraco Arena——一座由<b>老斗牛场</b>改建的场地。</li>
+      <li>第一届比赛在 <b>1932 年</b>举行，背后推动者之一是著名大提琴家 <b>Pau Casals</b>。从 <b>1980 年</b>开始固定为<b>每两年一届</b>（只在双数年办）。</li>
+      <li><b>2026 年是第 30 届</b>，时间是 <b>10 月 3 日和 4 日</b>。全加泰罗尼亚最强的队伍都会来，最高的塔能到<b>十层</b>。</li>
+      <li>安全也很重要：<b>2006 年</b>曾有一名小队员坠落后不幸去世，此后规定塔顶的孩子<b>必须戴头盔</b>。如今重大活动都配有医护人员和厚厚的保护垫。</li>
+      <li><b>⚠️ 绝对不要自己模仿！</b>叠人塔需要几个月的训练、成百人的配合和专业保护。想体验的话，可以先玩「<b>纸杯搭塔</b>」：30 秒内看你能搭几层，再和同学比一比。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🇨🇳 中国也有「人搭人」的传统</h3>
+    <p>看到加泰罗尼亚的人塔，你可能会想起中国民间的一些老手艺——原来，用身体叠出造型这件事，我们的祖先也很在行。</p>
+    <ul>
+      <li><b>湛江人龙舞</b>：广东省湛江市东海岛的传统舞蹈，已列入<b>国家级非物质文化遗产名录</b>。几十个壮汉用肩膀和手搭起一条「<b>人龙</b>」，龙头、龙身、龙尾都由人组成，龙身上还常常坐着小孩。</li>
+      <li><b>叠罗汉</b>：中国民间杂技和武术表演里的经典项目，人们一层层踩在肩上，摆出各种造型，讲究的同样是<b>平衡与信任</b>。</li>
+      <li><b>抬阁与飘色</b>：广东、福建等地节庆巡游中的绝活。孩子被巧妙地托举在<b>几米高的空中</b>，看上去像「飘」在半空，靠的是藏在衣服里的铁架和下面壮汉的肩膀。</li>
+      <li>有意思的是，这些中国民间艺术和加泰罗尼亚的人塔有一个共同点：<b>都不是一个人的功夫，而是一群人的默契</b>。</li>
+      <li>用英语可以这样介绍：<b>In China, people also build human shapes. The dragon dance of Zhanjiang is made of people.</b></li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>✏️ 动手小活动：数一数，说一说</h3>
+    <ul>
+      <li>数一数本课的数字：<b>ten levels</b>、<b>ten metres</b>、<b>seven or eight years old</b>、<b>3 and 4 October 2026</b>。把这些数字用英语大声读三遍。</li>
+      <li>玩「比一比」游戏：用 <b>as tall as</b> 造三个句子——比如 <b>My desk is as tall as my knee.</b></li>
+      <li>练最高级：写下你班上 <b>the tallest</b>、<b>the youngest</b>、<b>the fastest</b> 分别是谁，用英语说给同桌听。</li>
+      <li>画一座人塔：画 1 个 anxaneta 在最上面，下面 2 个人，再下面 4 个人，最下面 8 个人——数一数一共多少人？用英语回答：<b>There are fifteen people in my tower.</b></li>
+      <li>想一想并写下答案：<b>Why is everyone important in a human tower?</b>（为什么人塔里每个人都很重要？）可以用这句开头：<b>Everyone is important because ...</b></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><div class="txt">读懂一篇 A2 水平的世界文化短文，了解西班牙加泰罗尼亚的「叠人塔」传统。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">掌握 8 个核心词汇：tower, level, base, circle, climb, crowd, teamwork, competition。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">学会四个语法点：被动语态 are called、as + 形容词 + as、最高级 the smallest、时间介词 in / on / at。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">能用 are called、as tall as、takes place in ... 介绍一种文化现象或一个活动。</div></div>
+    <div class="goal"><span class="tick">✓</span><div class="txt">了解人塔的结构与历史、2026 年 6 月巴塞罗那那位 8 岁的塔顶女孩，以及中国的湛江人龙舞、叠罗汉、抬阁飘色。</div></div>
+
+    <h3 style="color:var(--accent);">📝 学习建议</h3>
+    <div class="goal"><span class="tick">🔊</span><div class="txt">点每段右侧的 ▶ 按钮跟读一遍，特别注意 climb、crowd、competition 的发音。</div></div>
+    <div class="goal"><span class="tick">🔤</span><div class="txt">点词汇卡右上角的 🔊 听发音，再用每个词造一个自己的句子。</div></div>
+    <div class="goal"><span class="tick">💬</span><div class="txt">试着用英语向家人介绍：In Catalonia, people build towers with their own bodies.</div></div>
+    <div class="goal"><span class="tick">📅</span><div class="txt">练一练日期读法：3 and 4 October 2026 = the third and fourth of October, twenty twenty-six。</div></div>
+    <div class="goal"><span class="tick">🖨️</span><div class="txt">点下方按钮打印本课，随身复习词汇、句型和语法。</div></div>
+
+    <div style="margin-top:18px;">
+      <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+    </div>
+  </div>
+</section>
+
+<footer>POLA NEWS · The Tower Made of People · 2026-09-09 · Made for curious kids 🐾</footer>
+</main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+  "In Catalonia, a region in the north-east of Spain, people build towers with their own bodies. These towers are called castells. Some are ten levels high, as tall as a small building.",
+  "A team is called a colla. First, the strongest members make a wide base, the pinya. They stand shoulder to shoulder in a tight circle. Then others climb onto their shoulders, level by level.",
+  "The last person to climb is the smallest, usually a child of seven or eight. This child is called the anxaneta. In June 2026, an eight-year-old girl named Bruna reached the top of a nearly ten-metre tower in Barcelona and waved to a huge crowd.",
+  "Castells need teamwork. Everyone has a place, young or old, big or small. UNESCO made castells part of the world's intangible heritage in 2010. The biggest competition takes place in Tarragona on 3 and 4 October 2026."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'tower': '塔；高塔 n.',
+  'level': '层；级别 n.',
+  'base': '底部；底座；基础 n.',
+  'circle': '圆圈；圆形 n.',
+  'climb': '爬；攀登 v.',
+  'crowd': '人群 n.',
+  'teamwork': '团队合作；配合 n.',
+  'competition': '比赛；竞赛 n.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#', '');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
