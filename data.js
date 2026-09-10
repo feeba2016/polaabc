@@ -3272,6 +3272,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-10",
+    "title": "Riding the Bus to School",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-10-riding-the-bus-to-school",
+    "url": "lessons/a1/2026-09-10-riding-the-bus-to-school.html",
+    "vocab": [
+      {
+        "word": "bus",
+        "zh": "公共汽车；公交车",
+        "ex": "\"Here comes a big bus.\""
+      },
+      {
+        "word": "stop",
+        "zh": "车站",
+        "ex": "\"I wait at the stop.\""
+      },
+      {
+        "word": "driver",
+        "zh": "司机；驾驶员",
+        "ex": "\"I say hello to the driver.\""
+      },
+      {
+        "word": "seat",
+        "zh": "座位",
+        "ex": "\"I find a seat.\""
+      },
+      {
+        "word": "window",
+        "zh": "窗户",
+        "ex": "\"I look out of the window.\""
+      },
+      {
+        "word": "school",
+        "zh": "学校",
+        "ex": "\"The bus stops at my school.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4620,6 +4662,58 @@ const EPISODES = [
         "word": "competition",
         "zh": "比赛；竞赛",
         "ex": "The biggest competition takes place in Tarragona."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-10",
+    "title": "The Scientist Who Read an Old Book",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-10-the-scientist-who-read-an-old-book",
+    "url": "lessons/a2/2026-09-10-the-scientist-who-read-an-old-book.html",
+    "vocab": [
+      {
+        "word": "illness",
+        "zh": "屠呦呦 1930 年出生在中国宁波。十六岁那年，一场重病让她在家休养了两年。那段时间改变了她的一生：她决定去学医。",
+        "ex": "A serious illness kept her at home for two years."
+      },
+      {
+        "word": "medicine",
+        "zh": "药；医学",
+        "ex": "She decided to study medicine."
+      },
+      {
+        "word": "malaria",
+        "zh": "疟疾（由蚊子传播的疾病）",
+        "ex": "Their job was to find a medicine for malaria."
+      },
+      {
+        "word": "mosquitoes",
+        "zh": "蚊子（复数，单数是 mosquito）",
+        "ex": "Malaria is a disease carried by mosquitoes."
+      },
+      {
+        "word": "recipes",
+        "zh": "配方；药方；食谱（复数）",
+        "ex": "The team read more than two thousand old recipes."
+      },
+      {
+        "word": "soak",
+        "zh": "浸泡；泡在水里",
+        "ex": "Soak the plant in cold water."
+      },
+      {
+        "word": "destroys",
+        "zh": "破坏；毁坏（第三人称单数）",
+        "ex": "Heat destroys the medicine."
+      },
+      {
+        "word": "prize",
+        "zh": "奖；奖项",
+        "ex": "Tu won the Nobel Prize in Medicine."
       }
     ]
   },

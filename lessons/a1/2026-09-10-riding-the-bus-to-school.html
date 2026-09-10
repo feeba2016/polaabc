@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Riding the Bus to School — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#0369a1;
+  --accent2:#0ea5e9;
+  --bg:#f0f9ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#075985;
+  --highlight:#fde68a;
+  --border:#bae6fd;
+  --soft:#e0f2fe;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#38bdf8);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(3,105,161,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #7dd3fc;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#075985;background:#e0f2fe;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(3,105,161,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(3,105,161,.6);}70%{box-shadow:0 0 0 14px rgba(3,105,161,0);}100%{box-shadow:0 0 0 0 rgba(3,105,161,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(3,105,161,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Riding the Bus to School 🚌🏫</h1>
+      <p class="subtitle">2026年9月10日 · 日常生活｜坐公交车去上学 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · At the Stop 在车站</div>
+            <p>I wait at the <span class="kw" data-def="车站：路边立着牌子、大家在这里等公交车的地方">stop</span>. 🚏 Here comes a big <span class="kw" data-def="公交车：大大的、能坐很多人的车">bus</span>. 🚌 It is yellow. The door opens and I get on.</p>
+          </div>
+          <div class="zh">我在车站等车 🚏。一辆大大的公交车来啦 🚌。它是黄色的。车门开了，我上了车。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Hello, Driver 你好，司机叔叔</div>
+            <p>I say hello to the <span class="kw" data-def="司机：开车的人，大家的出行都靠他">driver</span>. 👋 He smiles at me. I find a <span class="kw" data-def="座位：车上可以坐下来的地方">seat</span> and I sit down. 💺</p>
+          </div>
+          <div class="zh">我跟司机叔叔问好 👋。他对我笑了笑。我找到一个座位，坐了下来 💺。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Out of the Window 车窗外面</div>
+            <p>I look out of the <span class="kw" data-def="窗户：车上那块透明的玻璃，从这儿能看见外面">window</span>. 🪟 I see trees and cars. 🌳 The bus goes past my park.</p>
+          </div>
+          <div class="zh">我看着车窗外面 🪟。我看见了树和小汽车 🌳。公交车开过了我家旁边的公园。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · We Are Here 到学校啦</div>
+            <p>The bus stops at my <span class="kw" data-def="学校：小朋友上课、读书、做游戏的地方">school</span>. 🏫 I say thank you to the driver. I wave goodbye and I go in.</p>
+          </div>
+          <div class="zh">公交车在我的学校门口停下了 🏫。我对司机叔叔说了谢谢。我挥挥手说再见，然后走进了学校。</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#e0f2fe;border:2px solid #7dd3fc;">
+        <h3 style="margin:0 0 8px;color:#0369a1;font-size:20px;">🚌 和 Pola 一起玩一玩！</h3>
+        <p style="margin:0;font-size:16px;">和爸爸妈妈一起用椅子摆成一排，当作<b>小公交车</b> 🚌。你当乘客，大人当司机，一边玩一边说 <b>“I say hello to the driver.”</b> 👋；到站了就说 <b>“The bus stops at my school!”</b> 🏫。出门真的坐车时，记得<b>排队上车、坐好扶稳</b>，下车前说一声 <b>“Thank you!”</b> 😄。</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bus">🔊</button><div class="emoji">🚌</div><div class="word">bus<span class="pos">n.</span></div><div class="zh">公共汽车；公交车</div><div class="ex">"Here comes a big bus."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="stop">🔊</button><div class="emoji">🚏</div><div class="word">stop<span class="pos">n.</span></div><div class="zh">车站</div><div class="ex">"I wait at the stop."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="driver">🔊</button><div class="emoji">🧑‍✈️</div><div class="word">driver<span class="pos">n.</span></div><div class="zh">司机；驾驶员</div><div class="ex">"I say hello to the driver."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="seat">🔊</button><div class="emoji">💺</div><div class="word">seat<span class="pos">n.</span></div><div class="zh">座位</div><div class="ex">"I find a seat."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="window">🔊</button><div class="emoji">🪟</div><div class="word">window<span class="pos">n.</span></div><div class="zh">窗户</div><div class="ex">"I look out of the window."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="school">🔊</button><div class="emoji">🏫</div><div class="word">school<span class="pos">n.</span></div><div class="zh">学校</div><div class="ex">"The bus stops at my school."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. I [verb].</h3>
+          <div class="zh">“我做……”。说自己<b>做了什么</b>的时候，就用 <b>I</b> 加上一个动作词（动词）。记住：I 后面的动词<b>不用加 s</b>。</div>
+          <div class="eg">I wait. ⏳ / I sit down. 💺 / I wave goodbye. 👋 / I go in. 🏫</div>
+          <div class="practice">练习：我坐下来 → I <input placeholder="verb"> down.</div>
+        </div>
+        <div class="item">
+          <h3>2. I see [noun].</h3>
+          <div class="zh">“我看见……”。看到什么就说什么，<b>see</b> 后面直接跟东西的名字。看到很多东西时，中间用 <b>and</b> 连起来。</div>
+          <div class="eg">I see trees. 🌳 / I see cars. 🚗 / I see trees and cars. 🌳🚗 / I see a big bus. 🚌</div>
+          <div class="practice">练习：我看见公交车 → I see a big <input placeholder="noun">.</div>
+        </div>
+        <div class="item">
+          <h3>3. I say [word] to [person].</h3>
+          <div class="zh">“我对……说……”。这是<b>非常有礼貌</b>的一句话。见到人说 <b>hello</b>，得到帮助说 <b>thank you</b>，走的时候说 <b>goodbye</b>。</div>
+          <div class="eg">I say hello to the driver. 👋 / I say thank you to the driver. 🙏 / I say goodbye to my mum. 👋</div>
+          <div class="practice">练习：我对司机说谢谢 → I say <input placeholder="word"> to the driver.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. I + 动词原形（我做什么）</h3>
+          <div class="zh">说自己或别人做一件事，用<b>一般现在时</b>。当主语是 <b>I / you / we / they</b> 时，动词用<b>原形</b>，不要加 s；只有 he / she / it 才要加 s。</div>
+          <div class="eg">I wait. ⏳ / I sit down. 💺 / We go to school. 🏫 / <b>He</b> smiles. 😊（he 后面要加 s）</div>
+        </div>
+        <div class="item">
+          <h3>2. a / an（一个）</h3>
+          <div class="zh">只有<b>一样</b>东西的时候，前面要加 a 或 an。单词以<b>辅音</b>发音开头用 <b>a</b>；以<b>元音</b>发音开头用 <b>an</b>。看的是<b>发音</b>，不是字母哦。</div>
+          <div class="eg">a bus 🚌 / a seat 💺 / a window 🪟 / an apple 🍎 / an egg 🥚 / an orange 🍊</div>
+        </div>
+        <div class="item">
+          <h3>3. 介词 on / at / to（上、在、对）</h3>
+          <div class="zh">这三个小词告诉我们<b>在哪里、去哪儿</b>。<b>get on</b> 是“上车”（大车用 on）；<b>at</b> 是一个<b>点</b>，比如车站；<b>to</b> 表示“对着谁、往哪里去”。</div>
+          <div class="eg">I get on the bus. 🚌 / I wait at the stop. 🚏 / I say thank you to the driver. 🙏 / I go to school. 🏫</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#e0f2fe;border:2px solid #7dd3fc;">
+        <div style="font-size:20px;font-weight:800;color:#0369a1;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#075985;margin-top:6px;">每做对一题得 1 分，全部做完就是文明小乘客啦！🚌✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🚌 嘀嘀——那辆会“呼吸”的大黄车</h3>
+        <p>小朋友，你有没有在路边等过<b>公交车</b>？远远地，先听见“嘀嘀”的声音 🚏，然后一个<b>大大的、方方的</b>家伙慢慢靠过来，车门“哧——”地一声打开，像一张大嘴巴 🚌。你扶着扶手，一步一步踩上去，投币箱“叮当”一响，你就成了这辆车上的小乘客啦。</p>
+        <p>公交车是我们生活里最常见的<b>大朋友</b>。它一次能装下好几十个人，把大家从一个地方送到另一个地方。它不挑乘客：上学的小朋友、上班的叔叔阿姨、买菜的爷爷奶奶，都可以坐 🧒🧑‍💼👵。</p>
+
+        <h3>道理一：上车有顺序，先下后上才安全 🚏</h3>
+        <p>你有没有想过，为什么大家都要<b>排成一队</b>上车，而不是一起挤上去呢？</p>
+        <p>因为车门只有<b>那么宽</b>。如果所有人同时往里冲，就会堵在门口，谁也上不去，还容易摔倒。所以公交车有一个很重要的规矩，叫<b>“先下后上”</b>：车上的人先从<b>后门</b>（或中门）下来，等人都下完了，下面的人再排好队，从<b>前门</b>上去。这样一进一出，像两条小溪各自流，又快又安全 💡。</p>
+        <p>排队还有一层意思：它表示<b>“我不抢，我等你”</b>。先来的人站在前面，后来的人站在后面，谁也不着急。这在全世界都一样，是一种看不见的礼貌 🤝。</p>
+
+        <h3>道理二：三句小小的英文，让世界变温柔 👋</h3>
+        <p>坐车的时候，我们会遇到一个人——<b>司机叔叔或阿姨</b>。他一大早就出门，一整天都握着方向盘，把每一个人平安送到地方 🧑‍✈️。</p>
+        <p>所以，上车时说一句 <b>“Hello!”</b> 👋，下车时说一句 <b>“Thank you!”</b> 🙏，再挥挥手说 <b>“Goodbye!”</b>。这三句话很短很短，却能让开车的人心里暖暖的。英语里，这就叫 <b>polite</b>（有礼貌）。我们今天学的 <b>“I say thank you to the driver.”</b>，说的就是这件事。</p>
+
+        <h3>🇨🇳 中国的公交车与“让座”的美德</h3>
+        <ul>
+          <li><b>越来越干净的大公交</b> 🚌：现在中国的很多城市里，公交车换成了<b>电车和新能源车</b>，跑起来安安静静，还没有难闻的尾气。有的城市还有<b>快速公交（BRT）</b>，它有自己的专用车道，像在地面上跑的“小地铁”，又快又准时。</li>
+          <li><b>让座是我们的老传统</b> 💺：在中国的公交车和地铁上，广播里常常会响起一句话：<b>“请给老、弱、病、残、孕及抱小孩的乘客让个座，谢谢！”</b>。给爷爷奶奶、小宝宝和身体不舒服的人让座，是我们从小就被教导的<b>尊老爱幼</b>的美德，也是很多小朋友最自豪的时刻 👵👶。</li>
+          <li><b>小朋友的身高线</b> 📏：在很多城市，身高<b>不到 1.2 米或 1.3 米</b>的小朋友坐公交是<b>不用买票</b>的。上车时，大人会让你站在标尺旁边比一比，这也是一种“长大的仪式” 😄。</li>
+          <li><b>黄色的校车</b> 🟡：不少学校有专门的<b>校车</b>，车身是醒目的黄色，因为黄色在雾天、雨天最容易被人看见。车上还有老师或阿姨照看，一趟一趟把小朋友安全送到学校门口 🏫。</li>
+          <li><b>公交优先</b> 🚦：很多马路最右边的一条道，写着“公交专用”。这是让大家<b>多坐大车、少开小车</b>，路上就不那么堵，空气也更清新 🌿。</li>
+        </ul>
+
+        <h3>🔍 关于公交车的小知识</h3>
+        <ul>
+          <li><b>公交车为什么那么大？</b> 📦：因为要装下很多人。人越多，<b>每个人占的路就越少</b>，马路也就越通畅。</li>
+          <li><b>为什么有的车有两节？</b> 🔗：那叫<b>铰接式公交车</b>，中间有一圈像手风琴一样的“关节”，转弯时车身能弯过来，就能装下更多人了。</li>
+          <li><b>扶手和拉环是做什么的？</b> 🪢：车一开一停，人会<b>往前冲或往后倒</b>。抓紧扶手，就不会摔倒啦。</li>
+          <li><b>为什么窗户打不开？</b> 🪟：很多公交车有空调，车窗是密封的。遇到紧急情况，可以用<b>安全锤</b>敲碎玻璃逃生 🔨。</li>
+          <li><b>站牌上的数字是什么？</b> 🔢：那是<b>线路号</b>，比如“3 路”“52 路”。每条线路的路线不一样，看清数字就不会坐错车。</li>
+        </ul>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>椅子公交车</b> 🪑：把家里的椅子排成一排，爸爸当司机，你当乘客。上车说 <b>“Hello!”</b>，坐好说 <b>“I find a seat.”</b> 💺，下车说 <b>“Thank you!”</b>。</li>
+          <li><b>窗外寻宝</b> 🔎：真的坐车时，看着窗外，数一数看到了几棵树、几辆车，说 <b>“I see trees and cars.”</b> 🌳🚗。</li>
+          <li><b>报站小游戏</b> 📢：让大人报站名，到你的“学校站”就举手说 <b>“The bus stops at my school!”</b> 🏫。</li>
+          <li><b>画一张车票</b> 🎨：画一张属于自己的小车票，写上自己的名字和 <b>BUS</b> 三个字母，贴在书包上 🚌。</li>
+          <li><b>想一想</b> 🤔：如果车上上来一位抱着小宝宝的阿姨，你会怎么做呢？和爸爸妈妈说一说。</li>
+        </ul>
+
+        <p style="background:#fef9c3;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>等车时要站在<b>站台或人行道</b>上，<b>不要踩到马路牙子下面</b>，更不能追着还没停稳的车跑 🚫🏃。上车一定要<b>牵紧大人的手</b> 🤝，先下后上、不推不挤。坐好后<b>抓紧扶手</b>，不要把头、手或玩具伸出窗外 🪟。车开动时<b>不要在车厢里走动、打闹</b>，不吃带竹签或棒棒的食物 🍡。下车后<b>不要从车前面绕过去</b>，因为司机叔叔看不见你；要等车开走了，走<b>斑马线或天桥</b>过马路 🚦。如果不小心和大人走散了，<b>待在原地别乱跑</b>，找穿制服的工作人员或警察叔叔帮忙 👮。坐在车上觉得不舒服，要马上告诉大人。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读《坐公交车去上学》，记住坐车的小流程：等车 → 上车 → 问好 → 坐下 → 看窗外 → 到站说谢谢。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：bus, stop, driver, seat, window, school。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “I say hello to the driver.”, “I see trees and cars.”, “The bus stops at my school.” 说句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 I 后面的动词要用原形、a / an 怎么选，以及 on / at / to 三个小介词的意思。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>养成排队上车、礼貌问好、主动说谢谢的好习惯，做个文明的小乘客 🚌。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读，读到 “I wave goodbye” 时真的挥一挥手 👋。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，说到 window 就指一指窗户，说到 seat 就拍一拍椅子 🪟💺。</div></div>
+        <div class="goal"><span class="ic">🚌</span><div>和爸爸妈妈用椅子摆一辆“小公交车”，把上车、坐好、到站整个流程演一遍 🎭。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>真的坐车时说一说：I say hello to the driver. / Thank you! 让英语在生活里用起来 😄。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把公交车图贴在门口，每天出门前说一遍 🎨。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Riding the Bus to School · 2026-09-10 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["I wait at the stop. Here comes a big bus. It is yellow. The door opens and I get on.", "I say hello to the driver. He smiles at me. I find a seat and I sit down.", "I look out of the window. I see trees and cars. The bus goes past my park.", "The bus stops at my school. I say thank you to the driver. I wave goodbye and I go in."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"How do we go to school? 我们怎么去学校？",em:["🚌","✈️","🚲"],opts:["By bus (坐公交车)","By plane (坐飞机)","By bike (骑自行车)"],ans:0,
+   fb:"Correct! 我们坐公交车去学校，Here comes a big bus 🚌。"},
+  {q:"Where do we wait for the bus? 我们在哪儿等车？",em:["🏫","🚏","🌳"],opts:["At school (在学校)","At the stop (在车站)","In the park (在公园)"],ans:1,
+   fb:"Yes! 我们在车站等车，I wait at the stop 🚏。"},
+  {q:"Who drives the bus? 谁开公交车？",em:["👮","🧑‍🍳","🧑‍✈️"],opts:["A police officer (警察)","A cook (厨师)","The driver (司机)"],ans:2,
+   fb:"Right! 是司机开车，I say hello to the driver 🧑‍✈️。"},
+  {q:"What do we say when we get off? 下车时我们说什么？",em:["😴","👋","🪟"],opts:["Good night (晚安)","Thank you (谢谢)","Window (窗户)"],ans:1,
+   fb:"Great! 要说谢谢，I say thank you to the driver 🙏。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
