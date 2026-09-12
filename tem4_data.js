@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1/A2/F1/F2/F3/G1 已上线（6 主题 / 30 Part / 180 词），其余主题 status:"soon" 待生产
+ * 状态：A1/A2/A3/A4/F1/F2/F3/G1 已上线（8 主题 / 40 Part / 240 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -201,8 +201,170 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"A3", cat:"A", zh:"考试与备考", name:"Exam & Study",      status:"soon", words:90,  desc:"考场、复习、笔记"},
-  {id:"A4", cat:"A", zh:"图书馆与书籍", name:"Library & Books", status:"soon", words:70,  desc:"书架、借阅、阅读"},
+  {
+    id:"A3", cat:"A", zh:"考试与备考", name:"Exam & Study", status:"live",
+    date:"2026-09-10", words:30, desc:"考试全流程：制定复习计划、考前心态调适、考场规则与诚信、答题技巧与检查、坚持与收获",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"A3-P1", slug:"tem4-A3-P1", title:"制定复习计划", shape:"拱门",
+        poster:"assets/tem4/posters/A3_P1.png",
+        sentence:"A month before the exam, I schedule two study sessions every day, set a clear target for each subject, estimate how long each chapter will take, and pick a smarter approach and strategy before I attempt my first practice paper.",
+        sentenceCn:"考前一个月，我会安排好每天两个学习时段、给每个科目定下明确目标、估算每一章要花的时间，并在初次尝试做模拟卷之前，选出更聪明的应对方法和策略。",
+        scene:"小叶学姐坐在书桌前规划复习日程，墙上贴着彩色圆点月历，桌上放着计划卡片。",
+        words:[
+          {word:"schedule", ipa:"/ˈʃedjuːəl/",  pos:"n./v.",  zh:"进度表，计划；时刻表 vt. 安排", forms:["schedule"]},
+          {word:"target",   ipa:"/ˈtɑːɡɪt/",    pos:"n./v.",  zh:"目标，指标 vt. 把…作为目标",   forms:["target"]},
+          {word:"estimate", ipa:"/ˈestɪmeɪt/",  pos:"vt.",    zh:"估计，估算；评价",            forms:["estimate"]},
+          {word:"approach", ipa:"/əˈprəʊtʃ/",   pos:"v./n.",  zh:"接近；处理，对付 n. 方法",     forms:["approach"]},
+          {word:"strategy", ipa:"/ˈstrætɪdʒi/", pos:"n.",     zh:"战略；策略，谋略",            forms:["strategy"]},
+          {word:"attempt",  ipa:"/əˈtempt/",    pos:"vt./n.", zh:"尝试，企图",                  forms:["attempt"]}
+        ]
+      },
+      {
+        id:"A3-P2", slug:"tem4-A3-P2", title:"考前心态调适", shape:"叶形",
+        poster:"assets/tem4/posters/A3_P2.png",
+        sentence:"The night before the exam, anxiety creeps in and small things make me anxious, so I put the heavy stress down, breathe slowly to stay calm, and sleep early to refresh my mind and wake up with quiet confidence.",
+        sentenceCn:"考前一晚，焦虑悄悄袭来，一点小事就让我心神不安；于是我放下沉重的压力、放慢呼吸保持镇定，早早入睡让头脑焕然一新，醒来时带着从容的自信。",
+        scene:"夜晚温馨卧室，小叶学姐盘腿坐在床上闭眼深呼吸，窗外月亮与星星相伴。",
+        words:[
+          {word:"anxiety",    ipa:"/æŋˈzaɪəti/",  pos:"n.",     zh:"忧虑，担心，焦虑；渴望", forms:["anxiety"]},
+          {word:"anxious",    ipa:"/ˈæŋkʃəs/",    pos:"adj.",   zh:"忧虑的，不安的；渴望的", forms:["anxious"]},
+          {word:"stress",     ipa:"/stres/",      pos:"n./v.",  zh:"压力；强调 vt. 着重",    forms:["stress"]},
+          {word:"calm",       ipa:"/kɑːm/",       pos:"adj./v.",zh:"镇静的，平静的（使）平静", forms:["calm"]},
+          {word:"refresh",    ipa:"/rɪˈfreʃ/",    pos:"v.",     zh:"使精神振作，使清爽",     forms:["refresh"]},
+          {word:"confidence", ipa:"/ˈkɒnfɪdəns/", pos:"n.",     zh:"信心，自信；信任",       forms:["confidence"]}
+        ]
+      },
+      {
+        id:"A3-P3", slug:"tem4-A3-P3", title:"考场规则与诚信", shape:"椭圆",
+        poster:"assets/tem4/posters/A3_P3.png",
+        sentence:"In the exam hall, strict rules forbid phones and prohibit note cards, and anyone caught trying to cheat faces a heavy penalty and may even be disqualified, because honesty and integrity matter far more than one grade.",
+        sentenceCn:"考场上，严格的规则禁止携带手机和小抄；任何试图作弊的人都会面临严厉处罚，甚至被取消资格——因为诚实与正直远比一个分数重要。",
+        scene:"明亮考场里小叶学姐端正答题，戴圆框眼镜的猫头鹰老师在过道巡视。",
+        words:[
+          {word:"forbid",      ipa:"/fəˈbɪd/",       pos:"v.",  zh:"禁止，不许",           forms:["forbid"]},
+          {word:"prohibit",    ipa:"/prəˈhɪbɪt/",    pos:"vt.", zh:"禁止；阻止，妨碍",     forms:["prohibit"]},
+          {word:"cheat",       ipa:"/tʃiːt/",        pos:"v./n.",zh:"欺诈，骗取 n. 骗子",   forms:["cheat"]},
+          {word:"penalty",     ipa:"/ˈpenəlti/",     pos:"n.",  zh:"惩罚，处罚；罚款",     forms:["penalty"]},
+          {word:"disqualify",  ipa:"/dɪsˈkwɒlɪfaɪ/", pos:"vt.", zh:"使不合格，取消资格",   forms:["disqualified"]},
+          {word:"integrity",   ipa:"/ɪnˈteɡrəti/",   pos:"n.",  zh:"正直，诚实；完整",     forms:["integrity"]}
+        ]
+      },
+      {
+        id:"A3-P4", slug:"tem4-A3-P4", title:"答题技巧与检查", shape:"超圆角",
+        poster:"assets/tem4/posters/A3_P4.png",
+        sentence:"When a hard question makes my mind go blank, I leave a rough outline beside it, respond to the easier items first, solve each problem step by step, look for a hidden hint in the wording, and use the final minutes to correct every careless slip.",
+        sentenceCn:"当难题让我的大脑一片空白时，我会先在旁边列出粗略的提纲、先回答较容易的题目、一步步解开每道题、从措辞里寻找隐藏的提示，并用最后几分钟改正每一个粗心的失误。",
+        scene:"考场座位上小叶学姐托腮思考，笔尖点着试卷，头顶亮起小灯泡。",
+        words:[
+          {word:"blank",   ipa:"/blæŋk/",    pos:"adj./n.", zh:"空白的；茫然的 n. 空白，空格", forms:["blank"]},
+          {word:"rough",   ipa:"/rʌf/",      pos:"adj.",    zh:"粗糙的；概略的，粗略的",       forms:["rough"]},
+          {word:"respond", ipa:"/rɪˈspɒnd/", pos:"v.",      zh:"作答，回答；回应",            forms:["respond"]},
+          {word:"solve",   ipa:"/sɒlv/",     pos:"v.",      zh:"解决；解答",                  forms:["solve"]},
+          {word:"hint",    ipa:"/hɪnt/",     pos:"n./v.",   zh:"暗示；提示",                  forms:["hint"]},
+          {word:"correct", ipa:"/kəˈrekt/",  pos:"adj./v.", zh:"正确的 v. 改正，纠正",        forms:["correct"]}
+        ]
+      },
+      {
+        id:"A3-P5", slug:"tem4-A3-P5", title:"坚持与收获", shape:"波浪",
+        poster:"assets/tem4/posters/A3_P5.png",
+        sentence:"Looking back, the students who persevere and persist through the hardest weeks, striving a little every day, accomplish their plans, achieve real progress, and are rewarded with a confidence no exam can ever take away.",
+        sentenceCn:"回望来路，那些在最艰难的几周里坚持不懈、每天努力一点的同学们，完成了自己的计划、取得了真正的进步，并获得了一种任何考试都无法夺走的自信。",
+        scene:"夕阳校园草坪上小叶学姐高举金牌开心跳跃，彩带与金星飞舞。",
+        words:[
+          {word:"persevere",  ipa:"/ˌpɜːsɪˈvɪə/",  pos:"vi.",   zh:"坚持不懈，不屈不挠",           forms:["persevere"]},
+          {word:"persist",    ipa:"/pəˈsɪst/",     pos:"v.",    zh:"坚持；持续",                   forms:["persist"]},
+          {word:"strive",     ipa:"/straɪv/",      pos:"vi.",   zh:"奋勉，努力；抗争",             forms:["striving"]},
+          {word:"accomplish", ipa:"/əˈkʌmplɪʃ/",   pos:"vt.",   zh:"完成，实现，达到（目的）",     forms:["accomplish"]},
+          {word:"achieve",    ipa:"/əˈtʃiːv/",     pos:"v.",    zh:"取得（成绩等）；达到（目的）", forms:["achieve"]},
+          {word:"reward",     ipa:"/rɪˈwɔːd/",     pos:"n./vt.",zh:"报酬，奖赏 vt. 奖赏",          forms:["rewarded"]}
+        ]
+      }
+    ]
+  },
+  {
+    id:"A4", cat:"A", zh:"图书馆与书籍", name:"Library & Books", status:"live",
+    date:"2026-09-12", words:30, desc:"图书馆的一天：开馆检索、静读时光、借阅与归还、报刊之趣、爱书人的传承",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"A4-P1", slug:"tem4-A4-P1", title:"开馆检索", shape:"拱门",
+        poster:"assets/tem4/posters/A4_P1.png",
+        sentence:"At the start of term, new students enrol for a library card at the desk, while the librarian checks the inventory of fresh arrivals, lists the most popular titles, refers readers to the user manual, and helps everyone make a wise selection.",
+        sentenceCn:"开学伊始，新生们在服务台登记办理图书证；管理员清点新到书籍、把最受欢迎的书名列在卡片上、引导读者查阅使用手册，并帮助每个人做出明智的选择。",
+        scene:"图书馆服务台前小叶学姐翻阅木质卡片目录，身后是高高的书架与拱形窗。",
+        words:[
+          {word:"enrol",     ipa:"/ɪnˈrəʊl/",    pos:"v.",     zh:"登记，注册；使入会",        forms:["enrol"]},
+          {word:"inventory", ipa:"/ˈɪnvəntəri/", pos:"n.",     zh:"目录，清单；盘存",          forms:["inventory"]},
+          {word:"list",      ipa:"/lɪst/",       pos:"n./v.",  zh:"清单，名单 vt. 列出",       forms:["lists"]},
+          {word:"refer",     ipa:"/rɪˈfɜː/",     pos:"v.",     zh:"查阅，参考；谈及",          forms:["refers"]},
+          {word:"manual",    ipa:"/ˈmænjuəl/",   pos:"n./adj.",zh:"手册，指南 adj. 手工的",    forms:["manual"]},
+          {word:"selection", ipa:"/sɪˈlekʃən/",  pos:"n.",     zh:"选择；精选集，供选择之物",  forms:["selection"]}
+        ]
+      },
+      {
+        id:"A4-P2", slug:"tem4-A4-P2", title:"静读时光", shape:"叶形",
+        poster:"assets/tem4/posters/A4_P2.png",
+        sentence:"A gentle hush falls over the reading room as curious students dive into profound books, eager to acquire new knowledge and to catch a flash of insight between the lines.",
+        sentenceCn:"阅览室里一片静谧，好奇的同学们埋头钻研深奥的书籍，渴望习得新知，并在字里行间捕捉灵光一现的洞见。",
+        scene:"安静的阅览室里，小叶学姐蜷在薄荷绿扶手椅中捧读厚书，落地灯洒下暖光。",
+        words:[
+          {word:"hush",     ipa:"/hʌʃ/",        pos:"n./v.",  zh:"（使）安静，寂静",           forms:["hush"]},
+          {word:"curious",  ipa:"/ˈkjʊəriəs/",  pos:"adj.",   zh:"好奇的，有求知欲的",         forms:["curious"]},
+          {word:"dive",     ipa:"/daɪv/",       pos:"v./n.",  zh:"潜心钻研；跳水，俯冲",       forms:["dive"]},
+          {word:"profound", ipa:"/prəˈfaʊnd/",  pos:"adj.",   zh:"深刻的，深奥的；渊博的",     forms:["profound"]},
+          {word:"acquire",  ipa:"/əˈkwaɪə/",    pos:"vt.",    zh:"取得，获得；学到（知识）",   forms:["acquire"]},
+          {word:"insight",  ipa:"/ˈɪnsaɪt/",    pos:"n.",     zh:"洞察力，深入了解，洞悉",     forms:["insight"]}
+        ]
+      },
+      {
+        id:"A4-P3", slug:"tem4-A4-P3", title:"借阅与归还", shape:"椭圆",
+        poster:"assets/tem4/posters/A4_P3.png",
+        sentence:"To borrow a rare volume you deposit your student card at the desk, and the library will impose a small fine if you fail to restore the book on time, while only authorized staff may duplicate or retain the most precious copies.",
+        sentenceCn:"借阅珍贵书籍时，你要把学生卡押在服务台；如果未能按时归还，图书馆会处以小额罚款，而且只有经授权的工作人员才能复制或保留最珍贵的藏书。",
+        scene:"借还书服务台前，小叶学姐递上学生卡，戴圆框眼镜的猫头鹰管理员在盖章。",
+        words:[
+          {word:"deposit",   ipa:"/dɪˈpɒzɪt/",   pos:"v./n.",   zh:"存放，寄存 n. 押金",      forms:["deposit"]},
+          {word:"impose",    ipa:"/ɪmˈpəʊz/",    pos:"v.",      zh:"处以（罚款）；把…强加于", forms:["impose"]},
+          {word:"restore",   ipa:"/rɪˈstɔː/",    pos:"vt.",     zh:"归还，交还；修复",        forms:["restore"]},
+          {word:"authorize", ipa:"/ˈɔːθəraɪz/",  pos:"vt.",     zh:"授权，批准，允许",        forms:["authorized"]},
+          {word:"duplicate", ipa:"/ˈdjuːplɪkət/",pos:"n./adj.", zh:"复制（的），副本（的）",  forms:["duplicate"]},
+          {word:"retain",    ipa:"/rɪˈteɪn/",    pos:"vt.",     zh:"保存，保留；留住",        forms:["retain"]}
+        ]
+      },
+      {
+        id:"A4-P4", slug:"tem4-A4-P4", title:"报刊之趣", shape:"超圆角",
+        poster:"assets/tem4/posters/A4_P4.png",
+        sentence:"Xiaoye loves to subscribe to her favourite magazine, admire how the stories are illustrated in every new issue, enjoy the colourful weekend supplement, and share the articles that thrill and entertain her friends.",
+        sentenceCn:"小叶学姐喜欢订阅自己最爱的杂志，欣赏每一期新刊里配有插图的精彩故事，享受五彩缤纷的周末副刊，并把那些让朋友们既激动又开心的文章分享出去。",
+        scene:"阳光洒落的图书馆角落，小叶学姐窝在奶黄色沙发里翻看插图丰富的杂志。",
+        words:[
+          {word:"subscribe",  ipa:"/səbˈskraɪb/",  pos:"v.",     zh:"订阅；签署；捐助",        forms:["subscribe"]},
+          {word:"issue",      ipa:"/ˈɪʃuː/",       pos:"n./v.",  zh:"（报刊）期号；问题 vt. 发行", forms:["issue"]},
+          {word:"illustrate", ipa:"/ˈɪləstreɪt/",  pos:"vt.",    zh:"加插图于；说明，表明",    forms:["illustrated"]},
+          {word:"supplement", ipa:"/ˈsʌplɪmənt/",  pos:"n./v.",  zh:"增补；增刊，副刊，附录",  forms:["supplement"]},
+          {word:"thrill",     ipa:"/θrɪl/",        pos:"n./v.",  zh:"激动，震颤 v. 使激动",    forms:["thrill"]},
+          {word:"entertain",  ipa:"/ˌentəˈteɪn/",  pos:"v.",     zh:"使欢乐，给…娱乐；招待",   forms:["entertain"]}
+        ]
+      },
+      {
+        id:"A4-P5", slug:"tem4-A4-P5", title:"爱书人的传承", shape:"波浪",
+        poster:"assets/tem4/posters/A4_P5.png",
+        sentence:"True book lovers bind their favourite volumes in soft leather, preserve them for many years, cite them in careful essays, recommend them to close friends, remember how each chapter is entitled, and delight in every rereading.",
+        sentenceCn:"真正的爱书人会用柔软的皮革装订心爱的书卷并珍藏多年；他们在严谨的文章里引用书中内容、把好书推荐给挚友、记得每一章的标题，并在每次重读中获得欣喜。",
+        scene:"温馨的夜晚书房里，小叶学姐用丝带细心包扎一本心爱的旧皮面书。",
+        words:[
+          {word:"bind",      ipa:"/baɪnd/",      pos:"v.",    zh:"捆，绑；装订",             forms:["bind"]},
+          {word:"preserve",  ipa:"/prɪˈzɜːv/",   pos:"v.",    zh:"保存；保护，维护",         forms:["preserve"]},
+          {word:"cite",      ipa:"/saɪt/",       pos:"v.",    zh:"引用，引证，举（例）",     forms:["cite"]},
+          {word:"recommend", ipa:"/ˌrekəˈmend/", pos:"v.",    zh:"推荐，介绍；劝告，建议",   forms:["recommend"]},
+          {word:"entitle",   ipa:"/ɪnˈtaɪtl/",   pos:"vt.",   zh:"定标题，定名称；给权利",   forms:["entitled"]},
+          {word:"delight",   ipa:"/dɪˈlaɪt/",    pos:"n./v.", zh:"欣喜，乐趣 v. 使快乐",     forms:["delight"]}
+        ]
+      }
+    ]
+  },
   {id:"A5", cat:"A", zh:"学科与课程", name:"Class Subjects",     status:"soon", words:100, desc:"数学/历史/科学课堂"},
   {id:"A6", cat:"A", zh:"毕业季",     name:"Graduation",        status:"soon", words:60,  desc:"学士服、典礼、合影"},
   /* ===== B 工作与职业 ===== */

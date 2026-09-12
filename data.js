@@ -3314,6 +3314,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-12",
+    "title": "Morning Dew",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-12-morning-dew",
+    "url": "lessons/a1/2026-09-12-morning-dew.html",
+    "vocab": [
+      {
+        "word": "dew",
+        "zh": "露水；露珠",
+        "ex": "\"Dew is water.\""
+      },
+      {
+        "word": "grass",
+        "zh": "草；草地",
+        "ex": "\"I see the green grass.\""
+      },
+      {
+        "word": "drop",
+        "zh": "水珠；小水滴",
+        "ex": "\"There are little drops on it.\""
+      },
+      {
+        "word": "cool",
+        "zh": "凉的；凉爽的",
+        "ex": "\"The night is cool.\""
+      },
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "\"The sun comes up.\""
+      },
+      {
+        "word": "morning",
+        "zh": "早上；早晨",
+        "ex": "\"I get up early in the morning.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4714,6 +4756,58 @@ const EPISODES = [
         "word": "prize",
         "zh": "奖；奖项",
         "ex": "Tu won the Nobel Prize in Medicine."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-12",
+    "title": "The River's Smiling Angel",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-12-the-rivers-smiling-angel",
+    "url": "lessons/a2/2026-09-12-the-rivers-smiling-angel.html",
+    "vocab": [
+      {
+        "word": "porpoise",
+        "zh": "长江是中国最长的河流。江里住着一种灰色的小动物。它圆圆的脑袋上总带着一副笑脸。这就是长江江豚，人们称它为长江里的「微笑天使」。",
+        "ex": "This is the Yangtze finless porpoise."
+      },
+      {
+        "word": "angel",
+        "zh": "天使",
+        "ex": "People call it the smiling angel of the river."
+      },
+      {
+        "word": "danger",
+        "zh": "危险（in danger＝处于危险中）",
+        "ex": "Twenty years ago, it was in danger."
+      },
+      {
+        "word": "disappear",
+        "zh": "消失；不见",
+        "ex": "People were afraid they would disappear."
+      },
+      {
+        "word": "ban",
+        "zh": "禁令；禁止",
+        "ex": "China started a ten-year fishing ban."
+      },
+      {
+        "word": "fishermen",
+        "zh": "渔民（复数，单数是 fisherman）",
+        "ex": "Fishermen learned new jobs."
+      },
+      {
+        "word": "counted",
+        "zh": "数；统计（count 的过去式）",
+        "ex": "Scientists counted 1,426 porpoises."
+      },
+      {
+        "word": "mascot",
+        "zh": "吉祥物",
+        "ex": "Wuhan chose the porpoise as its city mascot."
       }
     ]
   },

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Morning Dew — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#15803d;
+  --accent2:#4ade80;
+  --bg:#f0fdf4;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#166534;
+  --highlight:#fde68a;
+  --border:#bbf7d0;
+  --soft:#dcfce7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#86efac);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(21,128,61,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #86efac;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#166534;background:#dcfce7;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(21,128,61,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(21,128,61,.6);}70%{box-shadow:0 0 0 14px rgba(21,128,61,0);}100%{box-shadow:0 0 0 0 rgba(21,128,61,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(21,128,61,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Morning Dew 💧🌿</h1>
+      <p class="subtitle">2026年9月12日 · 自然探索｜清晨的小露珠 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · In the Morning 清早</div>
+            <p>I get up early in the <span class="kw" data-def="早上：太阳刚刚出来、小鸟开始叫的时候">morning</span>. 🌅 I see the green <span class="kw" data-def="草；草地：地上绿绿的小植物，软软的">grass</span>. It is wet. There are little <span class="kw" data-def="水珠；小水滴：圆圆的、很小很小的一滴水">drops</span> on it. 🌿</p>
+          </div>
+          <div class="zh">我早上起得很早 🌅。我看见绿绿的草。它是湿的。草上面有小小的水珠 🌿。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Not Rain 不是雨</div>
+            <p>Is it rain? No. 🌧️ The drops come from the air. The night is <span class="kw" data-def="凉的；凉爽的：不热，有一点冷，很舒服">cool</span>. ❄️</p>
+          </div>
+          <div class="zh">是下雨了吗？不是 🌧️。这些水珠是从空气里来的。夜里很凉 ❄️。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Little Water Pearls 小水珍珠</div>
+            <p><span class="kw" data-def="露水；露珠：清晨草叶上、花瓣上那些亮晶晶的小水珠">Dew</span> is water. 💧 The drops are small and round. I touch one drop. It is cold. 👆</p>
+          </div>
+          <div class="zh">露水就是水 💧。水珠又小又圆。我摸了摸其中一颗。它凉凉的 👆。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Goodbye, Dew 露珠不见了</div>
+            <p>The <span class="kw" data-def="太阳：白天挂在天上、给我们光和热的那个大火球">sun</span> comes up. ☀️ It is warm now. The drops go away. Goodbye, little dew! 👋</p>
+          </div>
+          <div class="zh">太阳升起来了 ☀️。现在暖和了。水珠不见了。再见啦，小露珠！👋</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#dcfce7;border:2px solid #86efac;">
+        <h3 style="margin:0 0 8px;color:#15803d;font-size:20px;">💧 和 Pola 一起玩一玩！</h3>
+        <p style="margin:0;font-size:16px;">明天早上和爸爸妈妈一起去公园或小区草地，蹲下来找一找<b>露珠</b> 🌿。找到以后用手指轻轻碰一下，说 <b>“I touch one drop. It is cold.”</b> 👆；太阳出来后再去看一次，说 <b>“The drops go away.”</b> ☀️。也可以在家用喷壶在绿叶子上喷点水，自己做一颗“小露珠” 💧。</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="dew">🔊</button><div class="emoji">💧</div><div class="word">dew<span class="pos">n.</span></div><div class="zh">露水；露珠</div><div class="ex">"Dew is water."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="grass">🔊</button><div class="emoji">🌿</div><div class="word">grass<span class="pos">n.</span></div><div class="zh">草；草地</div><div class="ex">"I see the green grass."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="drop">🔊</button><div class="emoji">💦</div><div class="word">drop<span class="pos">n.</span></div><div class="zh">水珠；小水滴</div><div class="ex">"There are little drops on it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cool">🔊</button><div class="emoji">❄️</div><div class="word">cool<span class="pos">adj.</span></div><div class="zh">凉的；凉爽的</div><div class="ex">"The night is cool."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sun">🔊</button><div class="emoji">☀️</div><div class="word">sun<span class="pos">n.</span></div><div class="zh">太阳</div><div class="ex">"The sun comes up."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="morning">🔊</button><div class="emoji">🌅</div><div class="word">morning<span class="pos">n.</span></div><div class="zh">早上；早晨</div><div class="ex">"I get up early in the morning."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. I see [noun].</h3>
+          <div class="zh">“我看见……”。看到什么就说出来，<b>see</b> 后面直接跟东西的名字。看到很多东西时，中间用 <b>and</b> 连起来。</div>
+          <div class="eg">I see the grass. 🌿 / I see the sun. ☀️ / I see the grass and the sun. 🌿☀️ / I see a little drop. 💧</div>
+          <div class="practice">练习：我看见绿绿的草 → I see the green <input placeholder="noun">.</div>
+        </div>
+        <div class="item">
+          <h3>2. It is [adjective].</h3>
+          <div class="zh">“它是……的”。说一个东西<b>是什么样子的</b>，就用 <b>It is</b> 加上一个形容词。很多东西的时候，把 It is 换成 <b>They are</b>。</div>
+          <div class="eg">It is wet. 💧 / It is cold. ❄️ / It is warm. ☀️ / They are small and round. 💦</div>
+          <div class="practice">练习：它是凉的 → It is <input placeholder="adjective">.</div>
+        </div>
+        <div class="item">
+          <h3>3. There are [plural noun].</h3>
+          <div class="zh">“有（好多）……”。想说<b>某个地方有什么</b>，就用 <b>There are</b> 加<b>复数</b>（多数要加 s）。只有<b>一样</b>东西时，要说 <b>There is a ...</b>。</div>
+          <div class="eg">There are little drops. 💦 / There are green trees. 🌳 / There is a big sun. ☀️ / There are many flowers. 🌸</div>
+          <div class="practice">练习：草上面有小小的水珠 → There are little <input placeholder="plural noun"> on the grass.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. is / are（是）</h3>
+          <div class="zh">“是”在英语里有两副样子。<b>一个人或一样东西</b>（单数）用 <b>is</b>；<b>两个以上</b>（复数）用 <b>are</b>。记住：I 用 am，you / we / they 用 are，he / she / it 用 is。</div>
+          <div class="eg">It <b>is</b> wet. 💧 / The drops <b>are</b> small. 💦 / I <b>am</b> happy. 😊 / They <b>are</b> round. ⭕</div>
+        </div>
+        <div class="item">
+          <h3>2. 形容词跟在 is / are 后面</h3>
+          <div class="zh">英语里，说“<b>它是凉的</b>”要把形容词放在 <b>is</b> 的<b>后面</b>：It is cold。形容词就是“<b>什么样的</b>”的词，比如 big（大的）、small（小的）、wet（湿的）、cold（冷的）、warm（暖的）。形容词<b>不用加 s</b>。</div>
+          <div class="eg">The grass is wet. 🌿 / The night is cool. ❄️ / The drops are small and round. 💦</div>
+        </div>
+        <div class="item">
+          <h3>3. 介词 in / on / from（在……里 / 在……上 / 从……来）</h3>
+          <div class="zh">这三个小词告诉我们<b>在哪里、从哪儿来</b>。<b>in</b> 是在<b>里面</b>，如 in the morning（在早上）；<b>on</b> 是贴在<b>上面</b>，如 on the grass（在草上）；<b>from</b> 是<b>从哪儿来</b>，如 from the air（从空气里来）。</div>
+          <div class="eg">I get up early in the morning. 🌅 / There are drops on the grass. 🌿 / The drops come from the air. 💨</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#dcfce7;border:2px solid #86efac;">
+        <div style="font-size:20px;font-weight:800;color:#15803d;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#166534;margin-top:6px;">每做对一题得 1 分，全部做完就是小小自然观察家啦！🔍🌿</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>💧 草叶上的小珍珠，是谁放上去的？</h3>
+        <p>小朋友，你有没有起得很早，跟着大人去过公园或者小区的草地？那时候太阳刚露出一点点脸 🌅，草是<b>绿绿的、湿湿的</b>。你蹲下来仔细看——呀，每一根小草的尖尖上，都顶着一颗<b>圆圆的、亮亮的小水珠</b>，像谁在夜里给草地串了一串珍珠项链 💧。</p>
+        <p>这些小水珠叫<b>露水</b>，英文就是 <b>dew</b>。它们太小了，太阳一出来，没多久就不见了 ☀️。所以要看露珠，一定要<b>起得早</b>。</p>
+
+        <h3>道理一：露水不是从天上掉下来的 🌧️</h3>
+        <p>很多小朋友会猜：“是不是昨天下雨了？”其实<b>不是</b>。这就是今天课文里说的 <b>“Is it rain? No.”</b>。</p>
+        <p>那水珠是从哪儿来的呢？答案是——<b>从空气里来的</b> 💨。空气里飘着很多很多<b>看不见的小水汽</b>。白天太阳晒着，空气暖暖的，能“拿住”这些水汽；到了夜里，太阳走了，地面和草叶很快<b>凉下来</b> 🌙。暖空气一碰到凉凉的草叶，里面的水汽就<b>抱成团</b>，变成一颗颗小水珠，贴在草叶上——露水就是这样“长”出来的。</p>
+        <p>所以露水的形成要凑齐三件事：<b>夜里晴朗、风很小、空气里水汽多</b>。这跟下雨完全是两回事 💡。</p>
+
+        <h3>道理二：为什么太阳一出来，露水就没了？ ☀️</h3>
+        <p>因为太阳把草地<b>晒暖了</b>。暖和的时候，小水珠又变回看不见的水汽，悄悄飞回空气里。这个变化叫<b>蒸发</b>。</p>
+        <p>课文最后一句 <b>“The drops go away.”</b> 说的就是这件事。所以看露珠要赶早，<b>太阳越高，露水越少</b>——这是大自然给我们的小闹钟 ⏰。</p>
+
+        <h3>🇨🇳 中国的“白露”节气：一个用露珠命名的日子</h3>
+        <p>中国人很早很早以前就注意到露水了，还专门为它取了一个节气的名字 🌾。我们中国有<b>二十四节气</b>，这是古人根据太阳的运行，把一年分成二十四段，用来<b>种地、穿衣、过日子</b>的时间表，被称为中国的“第五大发明”，已经列入<b>联合国教科文组织人类非物质文化遗产代表作名录</b> 📜。</p>
+        <ul>
+          <li><b>白露是哪一天？</b> 📅：白露是二十四节气中的<b>第十五个</b>，也是<b>秋季的第三个</b>节气。2026 年的白露是 <b>9 月 7 日</b>（农历七月廿六），就在几天前刚刚过去。这时候太阳走到黄经 165 度。</li>
+          <li><b>为什么叫“白”露？</b> ⚪：古人说“<b>阴气渐重，露凝而白也</b>”——天气转凉，露水凝结，清晨的阳光斜斜地照在上面，看起来是<b>白白亮亮的</b>，所以叫“白露”。其实露水本身是没有颜色的，是<b>光</b>让它看起来发白 ✨。</li>
+          <li><b>白露三候，都和鸟有关</b> 🐦：古人把白露分成三候——<b>一候鸿雁来</b>（大雁排成队往南飞）、<b>二候玄鸟归</b>（燕子也回南方了）、<b>三候群鸟养羞</b>（留下来过冬的鸟开始储存食物）。鸟比人更早知道秋天来了 🍂。</li>
+          <li><b>白露的习俗</b> 🍵：老南京人爱喝<b>“白露茶”</b>，说“春茶苦，夏茶涩，要好喝，秋白露”；福建福州有“<b>白露必吃龙眼</b>”的说法；浙江温州苍南、平阳一带会采“<b>十样白</b>”炖鸡；湖南、江苏一些地方会酿甜甜的<b>白露米酒</b>；太湖的渔民还会在这天<b>祭禹王</b>，祈求湖面平安、渔获丰收。</li>
+          <li><b>古人还会“收清露”</b> 🏺：《本草纲目》里记载，古人会在清晨用盘子接草叶上的秋露。这既是养生，也是一种很美的仪式感。</li>
+          <li><b>一句老话</b> 🧥：“<b>白露身不露</b>”——白露之后白天还暖，早晚却凉了，不能再光着胳膊乱跑，要记得加一件小外套。还有“<b>白露秋分夜，一夜凉一夜</b>”，说的就是温差一天比一天大 🌡️。</li>
+        </ul>
+
+        <h3>🔍 关于露水的小知识</h3>
+        <ul>
+          <li><b>露水是沙漠里的小水源</b> 🌵：在很少下雨的地方，芦荟、仙人掌的小苗就靠夜里叶子上凝结的露水活下来。对它们来说，露水就是“<b>隐形的雨</b>”。</li>
+          <li><b>露珠为什么是圆的？</b> ⭕：因为水总是想把自己<b>抱得最紧</b>，抱紧以后就是圆球的样子。这也正是课文里 “small and round” 的意思 💦。</li>
+          <li><b>露水和雾不一样</b> 🌫️：雾是水汽飘在<b>空气中</b>，离地面高高的；露水是水汽直接<b>贴</b>在草叶、花瓣、石头上。</li>
+          <li><b>哪些地方露水最多？</b> 🌾：草地、菜地、河边、湿地边上水汽足，露水也最多；光秃秃的水泥地因为凉得慢、水汽少，露水就少。</li>
+          <li><b>露水会弄湿鞋子和裤脚</b> 👟：清晨在草地上走，鞋很快会湿。所以去“找露珠”的时候，最好穿一双<b>不怕湿的鞋</b>。</li>
+        </ul>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>清晨寻宝</b> 🔍：起个早，和大人去草地上找露珠，比一比谁找得多。找到就说 <b>“I see a little drop!”</b> 💧。</li>
+          <li><b>摸一摸</b> 👆：用指尖轻轻碰一颗露珠，说 <b>“It is cold.”</b> ❄️，再看看手指上是不是湿湿的。</li>
+          <li><b>自己做露珠</b> 🧪：把一片绿叶放进冰箱冷藏一会儿，拿出来放在空气里，等上几分钟，看看叶子上会不会“长”出小水珠 💦。</li>
+          <li><b>画一画</b> 🎨：画一片绿草地，用白色蜡笔或棉花点出一颗颗小露珠，在旁边写上 <b>DEW</b> 三个字母 🌿。</li>
+          <li><b>想一想</b> 🤔：为什么夏天的早上露水少，秋天的早上露水多呢？和爸爸妈妈一起猜一猜。</li>
+        </ul>
+
+        <p style="background:#fef9c3;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>看露珠一定要<b>有大人陪着</b>，不要一个人清早跑到草地上 🤝。不知道名字的草<b>不要摘、不要放进嘴里</b>，草地里可能有小虫或带刺的植物 🚫🐜。摸完露珠和泥土后，<b>一定要用肥皂把手洗干净</b> 🧼。清晨草地上可能有<b>碎玻璃、铁丝</b>等尖锐的东西，走路要看清脚下 👟。不要去<b>河边、池塘边</b>够水珠，更不能踩湿滑的石头 🌊。如果在公园里，要沿着<b>小路走</b>，不要踩踏草坪中间。觉得冷就马上告诉大人，回家加件衣服 🧥。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读《清晨的小露珠》，知道露水的小秘密：草上有水珠 → 不是雨 → 是从空气里来的 → 太阳出来就不见了。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：dew, grass, drop, cool, sun, morning。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “I see the green grass.”, “It is cold.”, “There are little drops on the grass.” 说句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 is / are 怎么选、形容词放在哪里，以及 in / on / from 三个小介词的意思。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>爱上早起观察大自然，认识中国的“白露”节气，做个爱提问的小小观察家 🔍🌿。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读，读到 “Goodbye, little dew!” 时真的挥一挥手 👋。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，说到 sun 就指一指天上，说到 grass 就蹲下来摸一摸草地 ☀️🌿。</div></div>
+        <div class="goal"><span class="ic">💧</span><div>明天早上真的去找一次露珠，把今天学的三句话对着草地各说一遍，印象最深 😄。</div></div>
+        <div class="goal"><span class="ic">🧪</span><div>和爸爸妈妈做“冰箱绿叶实验”，看看露珠是不是真的能“长”出来 🔬。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把露珠图贴在窗边，每天早起看一眼 🎨。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Morning Dew · 2026-09-12 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.05;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["I get up early in the morning. I see the green grass. It is wet. There are little drops on it.", "Is it rain? No. The drops come from the air. The night is cool.", "Dew is water. The drops are small and round. I touch one drop. It is cold.", "The sun comes up. It is warm now. The drops go away. Goodbye, little dew!"];;
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where do we see the little drops? 我们在哪里看见小水珠？",em:["🌿","☀️","🚌"],opts:["On the grass (在草地上)","On the sun (在太阳上)","On the bus (在公交车上)"],ans:0,
+   fb:"Correct! 露珠在草叶上，There are little drops on it 🌿。"},
+  {q:"Is dew rain? 露水是雨吗？",em:["🌧️","💧","❄️"],opts:["Yes, it is rain (是雨)","No, it is not (不是雨)","It is snow (是雪)"],ans:1,
+   fb:"Yes! 露水不是雨，Is it rain? No 💧。"},
+  {q:"When can we see dew? 我们什么时候能看到露水？",em:["🌅","🌙","🏫"],opts:["At school (在学校)","In the classroom (在教室)","In the morning (在早上)"],ans:2,
+   fb:"Right! 要起得早才看得到，I get up early in the morning 🌅。"},
+  {q:"What happens when the sun comes up? 太阳出来后水珠怎么了？",em:["☀️","👋","❄️"],opts:["They go away (它们不见了)","They get big (它们变大)","They turn to ice (变成冰)"],ans:0,
+   fb:"Great! 太阳一晒，露水就蒸发不见了，The drops go away ☀️。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
