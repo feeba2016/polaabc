@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Loop With Only One Side — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#6d28d9;
+  --accent2:#0891b2;
+  --bg:#faf5ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#ddd6fe;
+  --border:#e9e2fb;
+  --soft:#f7f4ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),#0891b2);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:8px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(109,40,217,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(109,40,217,.55);}70%{box-shadow:0 0 0 12px rgba(109,40,217,0);}100%{box-shadow:0 0 0 0 rgba(109,40,217,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#c4b5fd;}
+#tip{position:fixed;z-index:1200;background:#4c1d95;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),#0891b2);color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE LOOP WITH ONLY ONE SIDE · 2026-09-13</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🌀 The Loop With Only One Side</h1>
+  <div class="subtitle">只有一个面的纸环 · CEFR A2 · 约 145 词 · 🔢 趣味知识</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">Make it · 动手做</div>
+        <p>Take a <span class="kw" data-word="strip">strip</span> of paper. <span class="kw" data-word="twist">Twist</span> one end, then <span class="kw" data-word="tape">tape</span> the two ends together. You have just made a Möbius strip. It looks like a simple <span class="kw" data-word="loop">loop</span>, but it is one of the strangest shapes in mathematics.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">拿一条纸带。把一端扭一下，再把两端用胶带粘起来。你刚刚做好了一个莫比乌斯环。它看起来只是个普通的环，却是数学里最奇怪的形状之一。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">One side · 只有一个面</div>
+        <p>A normal loop has two sides and two <span class="kw" data-word="edge">edges</span>. A Möbius strip has only one of each. Draw a line along the middle and do not lift your pencil. You will go round twice and come back to where you began.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">普通的环有两个面、两条边。莫比乌斯环各只有一个。沿着中间画一条线，笔尖不要离开纸面。你会绕两圈，最后又回到起点。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">History · 它的来历</div>
+        <p>Two German mathematicians found this shape in 1858. Their names were August Ferdinand Möbius and Johann Benedict Listing, and they worked alone. The <span class="kw" data-word="strange">strange</span> loop later helped start a subject called <span class="kw" data-word="topology">topology</span>.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">1858 年，两位德国数学家各自独立发现了这个形状。他们是奥古斯特·费迪南德·莫比乌斯和约翰·本尼迪克特·利斯廷，两人并没有合作。后来，这个奇怪的环促成了一门叫「拓扑学」的新学科。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Cut it · 剪开试试</div>
+        <p>Now cut your strip along the line. Most people think they will get two loops, but they get one longer loop with two twists. Factories build conveyor belts this way, because one side wears <span class="kw" data-word="evenly">evenly</span>.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">现在沿着那条线把纸环剪开。大多数人以为会变成两个环，结果却得到一个长一倍、扭了两次的大环。工厂就是照这个思路做传送带的，因为只有一个面，磨损才均匀。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Vocabulary</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="strip">🔊</button>
+        <div class="word">strip<span class="pos">n.</span></div>
+        <div class="zh">长条；纸条（a strip of paper 一条纸）</div>
+        <div class="ex">Take a strip of paper.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="twist">🔊</button>
+        <div class="word">twist<span class="pos">v.</span></div>
+        <div class="zh">扭；扭转</div>
+        <div class="ex">Twist one end of the strip.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="tape">🔊</button>
+        <div class="word">tape<span class="pos">v.</span></div>
+        <div class="zh">用胶带粘贴</div>
+        <div class="ex">Tape the two ends together.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="loop">🔊</button>
+        <div class="word">loop<span class="pos">n.</span></div>
+        <div class="zh">环；圈</div>
+        <div class="ex">It looks like a simple loop.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="edge">🔊</button>
+        <div class="word">edge<span class="pos">n.</span></div>
+        <div class="zh">边；边缘（复数 edges）</div>
+        <div class="ex">A normal loop has two edges.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="strange">🔊</button>
+        <div class="word">strange<span class="pos">adj.</span></div>
+        <div class="zh">奇怪的；奇妙的（strangest 最奇怪的）</div>
+        <div class="ex">The strange loop helped start topology.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="topology">🔊</button>
+        <div class="word">topology<span class="pos">n.</span></div>
+        <div class="zh">拓扑学（研究拉伸、弯曲后不变的性质）</div>
+        <div class="ex">Topology is the study of shapes.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="evenly">🔊</button>
+        <div class="word">evenly<span class="pos">adv.</span></div>
+        <div class="zh">均匀地；平均地</div>
+        <div class="ex">One side wears evenly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">1. Take a strip of paper, twist one end, and tape the ends together.</div>
+    <div class="zh">拿一条纸带，把一端扭一下，再把两端粘起来。</div>
+    <div class="note">📌 讲步骤的万能句型：动词原形开头，几个动作用逗号 + and 串起来。<br>试着替换：Take a cup, pour the water, and drink it slowly.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">2. A Möbius strip has only one side and one edge.</div>
+    <div class="zh">莫比乌斯环只有一个面和一条边。</div>
+    <div class="note">📌 has / have + only + 数字：强调「只有这么少」，比单纯说 has one side 语气更强。<br>替换：My bag has only one pocket.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">3. Do not lift your pencil and you will go round twice.</div>
+    <div class="zh">别把笔抬起来，你会绕两圈。</div>
+    <div class="note">📌 祈使句 + and + 将来句：做某件事，就会有某个结果。<br>替换：Read the story and you will like the ending.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">4. Most people think they will get two loops, but they get one.</div>
+    <div class="zh">大多数人以为会得到两个环，但结果只得到一个。</div>
+    <div class="note">📌 think + 从句：表达「以为 / 认为」；再用 but 转折说出真相。<br>替换：I think it will rain, but the sun is out.</div>
+  </div>
+</section>
+
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 祈使句（Imperatives）：叫别人怎么做</h3>
+    <ul>
+      <li>动词原形开头，主语 you 省略：<span class="good">Take</span> a strip of paper. / <span class="good">Twist</span> one end.</li>
+      <li>否定形式在前面加 Do not（或 Don't）：<span class="good">Do not lift</span> your pencil.</li>
+      <li class="eg">例句：Cut your strip along the line. Now draw a line along the middle.</li>
+      <li>❌ 常见错误：<span class="bad">You take a strip of paper.</span>（讲步骤时一般不用 you）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. have / has 表示「有」</h3>
+    <ul>
+      <li>第三人称单数用 has，其余用 have：A Möbius strip <span class="good">has</span> one edge.</li>
+      <li>普通环：A normal loop <span class="good">has</span> two sides and two edges.</li>
+      <li class="eg">小练习：My desk ___ four legs.（答案：has）</li>
+      <li>❌ 常见错误：<span class="bad">A Möbius strip have one side.</span></li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. will 表示预测：说话人认为会发生什么</h3>
+    <ul>
+      <li>结构：主语 + will + 动词原形。You <span class="good">will go</span> round twice.</li>
+      <li>think 后面常常跟着 will：Most people think they <span class="good">will get</span> two loops.</li>
+      <li class="eg">小练习：Cut it again and you ___ see two linked loops.（答案：will）</li>
+      <li>❌ 常见错误：<span class="bad">You will goes round twice.</span>（will 后面的动词永远是原形）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. because 引导原因状语从句</h3>
+    <ul>
+      <li>结构：主句 + because + 原因。Factories build conveyor belts this way <span class="good">because one side wears evenly</span>.</li>
+      <li>because 回答的是 Why（为什么）的问题。</li>
+      <li class="eg">小练习：The belt lasts longer ___ both sides are the same side.（答案：because）</li>
+      <li>❌ 常见错误：<span class="bad">Because one side wears evenly, so factories use it.</span>（英语里 because 和 so 不能同时用）</li>
+    </ul>
+  </div>
+</section>
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz</h2>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">1. How many sides does a Möbius strip have?</div>
+    <div class="qzh">莫比乌斯环有几个面？</div>
+    <button class="opt">A) One</button>
+    <button class="opt">B) Two</button>
+    <button class="opt">C) Four</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">2. Who found this strange shape in 1858?</div>
+    <div class="qzh">谁在 1858 年发现了这个奇怪的形状？</div>
+    <button class="opt">A) Two school teachers</button>
+    <button class="opt">B) Two German mathematicians</button>
+    <button class="opt">C) Two doctors</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">3. What do you get when you cut a Möbius strip along the middle?</div>
+    <div class="qzh">沿中线剪开莫比乌斯环会得到什么？</div>
+    <button class="opt">A) Two small loops</button>
+    <button class="opt">B) Nothing at all</button>
+    <button class="opt">C) One longer loop with two twists</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">4. Which subject did the strange loop help start?</div>
+    <div class="qzh">这个奇怪的环促成了哪门学科？</div>
+    <button class="opt">A) Chemistry</button>
+    <button class="opt">B) Topology</button>
+    <button class="opt">C) Geography</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">5. Why do factories use this shape for conveyor belts?</div>
+    <div class="qzh">工厂为什么用这个形状做传送带？</div>
+    <button class="opt">A) Because it is lighter</button>
+    <button class="opt">B) Because it is cheaper to paint</button>
+    <button class="opt">C) Because one side wears evenly</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · More to Know</h2>
+
+  <div class="know">
+    <h3>🔍 一、扭一下，正反就合并了</h3>
+    <p>普通的纸环，正面和反面互不连通，是分开的两个面。做莫比乌斯环时把一端扭了 180 度，等于把原本对立的正面和反面接到了一起。于是两面打通，成了一个没有内外之分的整体。一只小蚂蚁不用跨过任何边缘，就能爬遍整条带子的每一个点。</p>
+  </div>
+
+  <div class="know">
+    <h3>📜 二、1858 年，两个人各自发现</h3>
+    <p>德国数学家奥古斯特·费迪南德·莫比乌斯（August Ferdinand Möbius，1790—1868）在研究曲面时发现了这个结构。同一年，另一位德国数学家约翰·本尼迪克特·利斯廷（Johann Benedict Listing）也独立发现了它。因为莫比乌斯的研究更系统，后世就用他的名字命名，叫「莫比乌斯环」。其实早在古罗马的镶嵌画里，就已经出现过类似形状的图案。</p>
+  </div>
+
+  <div class="know">
+    <h3>✂️ 三、剪开之后的三种魔法</h3>
+    <ul>
+      <li>沿中线剪开：不会一分为二，而是变成一个长度加倍、扭了两次的大环。</li>
+      <li>把这个新环再沿中线剪一次：会得到两个互相套在一起的环。</li>
+      <li>如果不从中间、而是从靠边三分之一处剪开：会得到一个短莫比乌斯环和一个长的双面环，两者套在一起。</li>
+    </ul>
+    <p>想真正弄明白，最好的办法是拿剪刀自己试一次——数学有时候就藏在手里那张纸上。</p>
+  </div>
+
+  <div class="know">
+    <h3>🧭 四、拓扑学：橡皮泥上的几何</h3>
+    <p>拓扑学研究的是「拉伸、弯曲、揉捏之后仍然不变」的性质。在拓扑学家眼里，圆、正方形和三角形是等价的，因为都可以连续变形互相转换；但球面和甜甜圈（环面）就不一样，球面上画线切出的块数规律，环面上并不成立。莫比乌斯环是拓扑学最有代表性的「明星」，它开启了一个全新的数学分支。</p>
+  </div>
+
+  <div class="know">
+    <h3>🏭 五、生活里的莫比乌斯环</h3>
+    <ul>
+      <li><b>工厂传送带</b>：做成莫比乌斯环形状后，整条带子受力均匀、磨损一致，使用寿命大约是普通传送带的两倍。</li>
+      <li><b>打印机色带</b>：同样利用单面特性，让碳带两面都被用到，墨量一点不浪费。</li>
+      <li><b>可回收标志</b>：我们熟悉的三个箭头循环标，原型正是莫比乌斯环，寓意资源循环、永续利用。</li>
+      <li><b>建筑与艺术</b>：荷兰版画家埃舍尔的名作《莫比乌斯带 II》画了蚂蚁在环上不停爬行；哈萨克斯坦国家图书馆等建筑也借用了这个造型，象征知识没有尽头。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🇨🇳 六、从科技馆展品到分子尺度</h3>
+    <p>在中国科学技术馆以及各地科技馆的基础科学展厅里，莫比乌斯环都是常设展品：按下按钮，灯带上的箭头匀速前进，全程不翻越边缘，却不知不觉从「正面」走到了「反面」，再回到起点，把单侧曲面的特性演示得一目了然。</p>
+    <p>科学家还在更小的尺度上复制了它。2022 年，日本名古屋大学等机构的研究团队首次合成出具有莫比乌斯带拓扑结构的带状碳纳米分子——<b>莫比乌斯碳纳米带</b>。这类分子在导电性和化学反应活性上表现出特殊性质，也为未来的分子器件与量子计算研究打开了想象空间。一张纸条的魔术，就这样一路走到了纳米世界。</p>
+  </div>
+
+  <div class="tipbox">
+    <h3>⚠️ 动手安全提示</h3>
+    <ul>
+      <li>用剪刀剪纸环时，请家长或老师在旁边陪同，注意手指。</li>
+      <li>纸带建议宽 3—5 厘米、长 30 厘米以上，太窄的纸带不容易看出效果。</li>
+      <li>先画线、再剪开，顺序不要颠倒；剪之前先猜一猜结果，猜错了反而印象最深。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--accent);font-size:17px;">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><span class="txt">读懂一篇约 145 词的英文短文，理解「只有一个面的环」是怎么回事。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">掌握 8 个核心词汇：strip, twist, tape, loop, edge, strange, topology, evenly。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用祈使句讲操作步骤（Take… Twist… Do not lift…）。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用 has / will / because 描述特征、做出预测、说明原因。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">知道莫比乌斯环的来历、剪开规律和它在生活中的应用。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--accent);font-size:17px;">📚 学习建议</h3>
+    <div class="know" style="border:none;padding:0;margin:0;">
+      <ul>
+        <li><b>边读边做</b>：准备一条纸带、一支笔和一把安全剪刀，读完一段就动手试一段，英文会记得特别牢。</li>
+        <li><b>先听后读</b>：点段落旁的播放键听一遍，再自己朗读；遇到长句在 and / but / because 前面稍作停顿。</li>
+        <li><b>猜一猜再剪</b>：剪开之前先说出自己的预测，用英语说 <i>I think I will get two loops.</i>，然后验证。</li>
+        <li><b>复述练习</b>：用四句话把做法讲给家人听——Take… Twist… Tape… Cut…</li>
+        <li><b>延伸观察</b>：在超市、垃圾桶或包装盒上找一找三个箭头的可回收标志，那就是莫比乌斯环。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 10px;color:var(--accent);font-size:17px;">🗣️ 今日口语小任务</h3>
+    <p style="font-size:14.5px;color:#374151;margin:0 0 8px;">用下面的句式，向同学介绍你的莫比乌斯环（说满 3 句就算完成）：</p>
+    <div class="pattern" style="margin:0;">
+      <div class="en">This is a Möbius strip. It has only one side. Do not lift your pen and you will go round twice.</div>
+      <div class="zh">这是一个莫比乌斯环。它只有一个面。别把笔抬起来，你会绕两圈。</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:24px 0 8px;">
+    <button class="print-btn" onclick="window.print()">🖨️ 打印本页练习</button>
+  </div>
+</section>
+
+<footer>POLA NEWS · The Loop With Only One Side · 2026-09-13</footer>
+</main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+  "Take a strip of paper. Twist one end, then tape the two ends together. You have just made a Möbius strip. It looks like a simple loop, but it is one of the strangest shapes in mathematics.",
+  "A normal loop has two sides and two edges. A Möbius strip has only one of each. Draw a line along the middle and do not lift your pencil. You will go round twice and come back to where you began.",
+  "Two German mathematicians found this shape in 1858. Their names were August Ferdinand Möbius and Johann Benedict Listing, and they worked alone. The strange loop later helped start a subject called topology.",
+  "Now cut your strip along the line. Most people think they will get two loops, but they get one longer loop with two twists. Factories build conveyor belts this way, because one side wears evenly."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'strip': '长条；纸条 n.',
+  'twist': '扭；扭转 v.',
+  'tape': '用胶带粘贴 v.',
+  'loop': '环；圈 n.',
+  'edge': '边；边缘 n.',
+  'mathematician': '数学家 n.',
+  'strange': '奇怪的；奇妙的 adj.',
+  'topology': '拓扑学 n.',
+  'evenly': '均匀地；平均地 adv.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#', '');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

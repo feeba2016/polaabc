@@ -3356,6 +3356,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-13",
+    "title": "Making a New Friend",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-13-making-a-new-friend",
+    "url": "lessons/a1/2026-09-13-making-a-new-friend.html",
+    "vocab": [
+      {
+        "word": "name",
+        "zh": "名字",
+        "ex": "\"What is your name?\""
+      },
+      {
+        "word": "new",
+        "zh": "新的；新来的",
+        "ex": "\"I am new here.\""
+      },
+      {
+        "word": "meet",
+        "zh": "遇见；认识",
+        "ex": "\"Nice to meet you!\""
+      },
+      {
+        "word": "ball",
+        "zh": "球",
+        "ex": "\"I have a red ball.\""
+      },
+      {
+        "word": "play",
+        "zh": "玩；玩耍",
+        "ex": "\"Can I play with you?\""
+      },
+      {
+        "word": "friend",
+        "zh": "朋友",
+        "ex": "\"You are a good friend.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4808,6 +4850,58 @@ const EPISODES = [
         "word": "mascot",
         "zh": "吉祥物",
         "ex": "Wuhan chose the porpoise as its city mascot."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-13",
+    "title": "The Loop With Only One Side",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-13-the-loop-with-only-one-side",
+    "url": "lessons/a2/2026-09-13-the-loop-with-only-one-side.html",
+    "vocab": [
+      {
+        "word": "strip",
+        "zh": "拿一条纸带。把一端扭一下，再把两端用胶带粘起来。你刚刚做好了一个莫比乌斯环。它看起来只是个普通的环，却是数学里最奇怪的形状之一。",
+        "ex": "Take a strip of paper."
+      },
+      {
+        "word": "twist",
+        "zh": "扭；扭转",
+        "ex": "Twist one end of the strip."
+      },
+      {
+        "word": "tape",
+        "zh": "用胶带粘贴",
+        "ex": "Tape the two ends together."
+      },
+      {
+        "word": "loop",
+        "zh": "环；圈",
+        "ex": "It looks like a simple loop."
+      },
+      {
+        "word": "edge",
+        "zh": "边；边缘（复数 edges）",
+        "ex": "A normal loop has two edges."
+      },
+      {
+        "word": "strange",
+        "zh": "奇怪的；奇妙的（strangest 最奇怪的）",
+        "ex": "The strange loop helped start topology."
+      },
+      {
+        "word": "topology",
+        "zh": "拓扑学（研究拉伸、弯曲后不变的性质）",
+        "ex": "Topology is the study of shapes."
+      },
+      {
+        "word": "evenly",
+        "zh": "均匀地；平均地",
+        "ex": "One side wears evenly."
       }
     ]
   },
