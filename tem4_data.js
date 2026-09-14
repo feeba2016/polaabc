@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1/A2/A3/A4/F1/F2/F3/G1 已上线（8 主题 / 40 Part / 240 词），其余主题 status:"soon" 待生产
+ * 状态：A1/A2/A3/A4/A5/A6/F1/F2/F3/G1 已上线（10 主题 / 50 Part / 300 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -365,10 +365,253 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"A5", cat:"A", zh:"学科与课程", name:"Class Subjects",     status:"soon", words:100, desc:"数学/历史/科学课堂"},
-  {id:"A6", cat:"A", zh:"毕业季",     name:"Graduation",        status:"soon", words:60,  desc:"学士服、典礼、合影"},
+  {
+    id:"A5", cat:"A", zh:"学科与课程", name:"Class Subjects", status:"live",
+    date:"2026-09-13", words:30, desc:"学科课堂巡礼：数字与计算、力与物质、文明的足迹、像科学家一样思考、新学期选课",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"A5-P1", slug:"tem4-A5-P1", title:"数字与计算", shape:"拱门",
+        poster:"assets/tem4/posters/A5_P1.png",
+        sentence:"On the blackboard the teacher asks us to calculate the total, compute the average, measure the window, compare the quantity of two jars, work out nine minus four, and find the smallest multiple of six.",
+        sentenceCn:"老师在黑板上要求我们算出总数、计算平均值、测量窗户、比较两个罐子的数量、算出九减四，并找出六的最小倍数。",
+        scene:"小叶学姐在数学课堂上用长尺认真测量木块模型，黑板上画满彩色几何图形。",
+        words:[
+          {word:"calculate", ipa:"/ˈkælkjuleɪt/", pos:"v.",        zh:"计算，核算；预测，推测",  forms:["calculate"]},
+          {word:"compute",   ipa:"/kəmˈpjuːt/",   pos:"v.",        zh:"计算，估算",             forms:["compute"]},
+          {word:"measure",   ipa:"/ˈmeʒə/",       pos:"n./v.",     zh:"度量，量度 n. 措施 v. 测量", forms:["measure"]},
+          {word:"quantity",  ipa:"/ˈkwɒntɪti/",   pos:"n.",        zh:"量，数量；大量",          forms:["quantity"]},
+          {word:"minus",     ipa:"/ˈmaɪnəs/",     pos:"prep./adj.",zh:"减去；负的，零下的",      forms:["minus"]},
+          {word:"multiple",  ipa:"/ˈmʌltɪpl/",    pos:"n./adj.",   zh:"倍数；多重的",            forms:["multiple"]}
+        ]
+      },
+      {
+        id:"A5-P2", slug:"tem4-A5-P2", title:"力与物质", shape:"叶形",
+        poster:"assets/tem4/posters/A5_P2.png",
+        sentence:"In the science room we watch a drop of acid react with the blue liquid, see a spark leap from the wire, and learn how gravity pulls on every element of matter.",
+        sentenceCn:"科学教室里，我们观察一滴酸液与蓝色液体发生反应、看火花从电线中跃出，并学习重力如何作用于物质的每一种成分。",
+        scene:"科学教室里小叶学姐戴着护目镜观察试管中冒泡的蓝色液体，一旁电线间迸出火花。",
+        words:[
+          {word:"gravity", ipa:"/ˈɡrævɪti/", pos:"n.",     zh:"重力，引力；严重性",          forms:["gravity"]},
+          {word:"element", ipa:"/ˈelɪmənt/", pos:"n.",     zh:"要素，成分；[pl.] 基本原理",  forms:["element"]},
+          {word:"acid",    ipa:"/ˈæsɪd/",    pos:"adj./n.",zh:"酸味的；尖刻的 n. 酸",        forms:["acid"]},
+          {word:"liquid",  ipa:"/ˈlɪkwɪd/",  pos:"n./adj.",zh:"液体；液体的，清澈的",        forms:["liquid"]},
+          {word:"react",   ipa:"/riˈækt/",   pos:"v.",     zh:"反应；起化学反应",            forms:["react"]},
+          {word:"spark",   ipa:"/spɑːk/",    pos:"n./v.",  zh:"火花，电花 v. 发出火花",      forms:["spark"]}
+        ]
+      },
+      {
+        id:"A5-P3", slug:"tem4-A5-P3", title:"文明的足迹", shape:"椭圆",
+        poster:"assets/tem4/posters/A5_P3.png",
+        sentence:"Our history teacher lines the events up in chronological order, tells how early people began to civilize the land, shows an antique coin unearthed from the ruins, and asks us to trace each milestone of the ancient kingdom.",
+        sentenceCn:"历史老师把事件按年代顺序排列，讲述早期人类如何开化这片土地，展示一枚从遗址出土的古币，并要我们追溯古王国的每一个里程碑。",
+        scene:"历史教室里小叶学姐举着放大镜细看绒布垫上的古币，身后墙上挂着长长的历史时间轴。",
+        words:[
+          {word:"chronological", ipa:"/ˌkrɒnəˈlɒdʒɪkəl/", pos:"adj.",   zh:"按年代顺序排列的",       forms:["chronological"]},
+          {word:"civilize",      ipa:"/ˈsɪvɪlaɪz/",       pos:"v.",     zh:"使文明，使开化；教化",   forms:["civilize"]},
+          {word:"unearth",       ipa:"/ʌnˈɜːθ/",          pos:"vt.",    zh:"发掘，挖出；披露",       forms:["unearthed"]},
+          {word:"antique",       ipa:"/ænˈtiːk/",         pos:"adj./n.",zh:"古时的 n. 古物，古玩",   forms:["antique"]},
+          {word:"trace",         ipa:"/treɪs/",           pos:"v./n.",  zh:"追溯，追踪 n. 踪迹，痕迹", forms:["trace"]},
+          {word:"milestone",     ipa:"/ˈmaɪlstəʊn/",      pos:"n.",     zh:"里程碑；重大事件",       forms:["milestone"]}
+        ]
+      },
+      {
+        id:"A5-P4", slug:"tem4-A5-P4", title:"像科学家一样思考", shape:"超圆角",
+        poster:"assets/tem4/posters/A5_P4.png",
+        sentence:"Good scientists investigate a question step by step, detect tiny errors in the data, devise a fair test, demonstrate the results to the class, and finally prove their ideas — that is how a small breakthrough is born.",
+        sentenceCn:"优秀的科学家一步步调查问题、察觉数据中的细微差错、设计出公正的实验、向全班演示结果，并最终证明自己的想法——小小的突破正是这样诞生的。",
+        scene:"温暖的台灯下，小叶学姐对着实验记录本皱眉思考，旁边立着她自制的小实验装置。",
+        words:[
+          {word:"investigate",  ipa:"/ɪnˈvestɪɡeɪt/", pos:"v.",  zh:"调查，调查研究，审查", forms:["investigate"]},
+          {word:"detect",       ipa:"/dɪˈtekt/",      pos:"vt.", zh:"发现，查明，测出",     forms:["detect"]},
+          {word:"devise",       ipa:"/dɪˈvaɪz/",      pos:"vt.", zh:"计划，发明，设计",     forms:["devise"]},
+          {word:"demonstrate",  ipa:"/ˈdemənstreɪt/", pos:"v.",  zh:"证明；示范",           forms:["demonstrate"]},
+          {word:"prove",        ipa:"/pruːv/",        pos:"v.",  zh:"证明，证实；表明是",   forms:["prove"]},
+          {word:"breakthrough", ipa:"/ˈbreɪkθruː/",   pos:"n.",  zh:"突破；重大发现",       forms:["breakthrough"]}
+        ]
+      },
+      {
+        id:"A5-P5", slug:"tem4-A5-P5", title:"新学期选课", shape:"波浪",
+        poster:"assets/tem4/posters/A5_P5.png",
+        sentence:"At the start of term, our institute makes logic a compulsory course for every freshman: we learn the basic concepts of reasoning, train our intelligence with puzzles, and pick which subject to specialize in next year.",
+        sentenceCn:"新学期伊始，学院把逻辑学定为每位新生的必修课：我们学习推理的基本概念、用谜题锻炼智力，并挑选明年要专攻的学科。",
+        scene:"走廊公告栏前，小叶学姐翻着课程手册，开心地选定了新学期的课程。",
+        words:[
+          {word:"institute",    ipa:"/ˈɪnstɪtjuːt/",  pos:"n./vt.", zh:"学院，研究院；协会 vt. 建立", forms:["institute"]},
+          {word:"compulsory",   ipa:"/kəmˈpʌlsəri/",  pos:"adj.",   zh:"强迫的，强制的，义务的",     forms:["compulsory"]},
+          {word:"logic",        ipa:"/ˈlɒdʒɪk/",      pos:"n.",     zh:"逻辑（学），逻辑性",         forms:["logic"]},
+          {word:"concept",      ipa:"/ˈkɒnsept/",     pos:"n.",     zh:"概念，观念，思想",           forms:["concepts"]},
+          {word:"intelligence", ipa:"/ɪnˈtelɪdʒəns/", pos:"n.",     zh:"智力，理解力，智慧；情报",   forms:["intelligence"]},
+          {word:"specialize",   ipa:"/ˈspeʃəlaɪz/",   pos:"v.",     zh:"专攻，专门研究，专门从事",   forms:["specialize"]}
+        ]
+      }
+    ]
+  },
+  {
+    id:"A6", cat:"A", zh:"毕业季", name:"Graduation", status:"live",
+    date:"2026-09-14", words:30, desc:"毕业季巡礼：盛大典礼、学士服与合影、告别与祝福、难忘的回忆、奔向新起点",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"A6-P1", slug:"tem4-A6-P1", title:"盛大典礼", shape:"拱门",
+        poster:"assets/tem4/posters/A6_P1.png",
+        sentence:"On this grand day the president presides over the closing ceremony and delivers a warm speech on behalf of all the teachers, while the graduates celebrate with cheers and flowers.",
+        sentenceCn:"在这盛大的一天，校长主持闭幕典礼并代表全体老师致辞，毕业生们用欢呼与鲜花庆祝。",
+        scene:"粉彩礼堂里彩带飞舞，穿学士袍的小叶学姐和动物毕业生们在舞台上庆祝，纸屑纷飞。",
+        words:[
+          {word:"grand",     ipa:"/ɡrænd/",      pos:"adj.", zh:"壮大的，堂皇的；伟大的",    forms:["grand"]},
+          {word:"ceremony",  ipa:"/ˈserɪməʊni/", pos:"n.",   zh:"典礼，仪式；礼节，礼仪",    forms:["ceremony"]},
+          {word:"preside",   ipa:"/prɪˈzaɪd/",   pos:"vi.",  zh:"主持（会议等），负责指挥",  forms:["presides"]},
+          {word:"deliver",   ipa:"/dɪˈlɪvə/",    pos:"v.",   zh:"发表（演讲）；送交，投递",  forms:["delivers"]},
+          {word:"behalf",    ipa:"/bɪˈhɑːf/",    pos:"n.",   zh:"[用于惯用语] 代表；利益",   forms:["behalf"]},
+          {word:"celebrate", ipa:"/ˈselɪbreɪt/", pos:"v.",   zh:"庆祝；歌颂",               forms:["celebrate"]}
+        ]
+      },
+      {
+        id:"A6-P2", slug:"tem4-A6-P2", title:"学士服与合影", shape:"叶形",
+        poster:"assets/tem4/posters/A6_P2.png",
+        sentence:"In the garden we clasp our gowns, pose beside the old tree, laugh at every camera click, and later enlarge the best photo to present it to our parents.",
+        sentenceCn:"花园里我们扣好学士服，在老树旁摆好姿势拍照，被相机的每一次咔嗒声逗得大笑，之后把最好的一张照片放大，送给我们的父母。",
+        scene:"阳光校园花园里，穿学士袍的小叶学姐和同学们在老树下摆姿势，兔子摄影师举着相机拍照，花瓣飘飞。",
+        words:[
+          {word:"clasp",   ipa:"/klɑːsp; klæsp/", pos:"v./n.", zh:"扣住，扣紧；紧握 n. 扣子，钩子",      forms:["clasp"]},
+          {word:"pose",    ipa:"/pəʊz/",          pos:"v.",    zh:"摆姿势；提出（问题）；造成",          forms:["pose"]},
+          {word:"laugh",   ipa:"/lɑːf; læf/",     pos:"n./v.", zh:"笑，笑声 v. 笑，发笑",               forms:["laugh"]},
+          {word:"click",   ipa:"/klɪk/",          pos:"n./v.", zh:"（摄影机等的）咔嗒声 v. 发出咔嗒声", forms:["click"]},
+          {word:"enlarge", ipa:"/ɪnˈlɑːdʒ/",      pos:"v.",    zh:"扩大，放大（照片），扩展",            forms:["enlarge"]},
+          {word:"present", ipa:"/prɪˈzent/",      pos:"vt.",   zh:"给予，赠送；呈递；上演",              forms:["present"]}
+        ]
+      },
+      {
+        id:"A6-P3", slug:"tem4-A6-P3", title:"告别与祝福", shape:"椭圆",
+        poster:"assets/tem4/posters/A6_P3.png",
+        sentence:"Before we separate, we share a sincere hug, cheer for each other\u2019s future, appreciate our teachers with all our hearts, and hope this album will always remind us of the good old days.",
+        sentenceCn:"分开之前，我们真诚地相拥，为彼此的未来欢呼，由衷地感谢老师，并希望这本相册能永远让我们想起美好的旧日时光。",
+        scene:"粉色夕阳下的校门口，小叶学姐与含泪的兔子同学拥抱告别，周围同学们挥手欢呼，鲜花盛开。",
+        words:[
+          {word:"separate",   ipa:"/ˈseprɪt/",     pos:"adj.",  zh:"分离的，分开的；各自的",   forms:["separate"]},
+          {word:"sincere",    ipa:"/sɪnˈsɪə/",     pos:"adj.",  zh:"真实的，真诚的；直率的",   forms:["sincere"]},
+          {word:"hug",        ipa:"/hʌɡ/",         pos:"v./n.", zh:"拥抱，紧抱 n. 热烈拥抱",   forms:["hug"]},
+          {word:"cheer",      ipa:"/tʃɪə/",        pos:"v./n.", zh:"使振奋；为…喝彩 n. 欢呼",  forms:["cheer"]},
+          {word:"appreciate", ipa:"/əˈpriːʃieɪt/", pos:"v.",    zh:"感谢，感激；欣赏，鉴赏",   forms:["appreciate"]},
+          {word:"remind",     ipa:"/rɪˈmaɪnd/",    pos:"vt.",   zh:"提醒，使想起",             forms:["remind"]}
+        ]
+      },
+      {
+        id:"A6-P4", slug:"tem4-A6-P4", title:"难忘的回忆", shape:"超圆角",
+        poster:"assets/tem4/posters/A6_P4.png",
+        sentence:"Years later we still recall our first class, recollect the sleepless nights before exams, acknowledge every teacher who guided us, and dedicate this page to the eternal memory of our campus days.",
+        sentenceCn:"多年以后，我们仍会忆起第一堂课，回想考试前的不眠之夜，感谢每一位指引过我们的老师，并把这一页献给校园岁月的永恒记忆。",
+        scene:"温馨的夜晚宿舍里，暖灯下小叶学姐坐在地毯上翻看大相册，四周散落着拍立得照片和干花。",
+        words:[
+          {word:"recall",      ipa:"/rɪˈkɔːl/",    pos:"v./n.", zh:"忆起，想起；召回 n. 回忆",       forms:["recall"]},
+          {word:"recollect",   ipa:"/ˌrekəˈlekt/", pos:"v.",    zh:"回忆，回想",                     forms:["recollect"]},
+          {word:"acknowledge", ipa:"/əkˈnɒlɪdʒ/",  pos:"v.",    zh:"承认；表示感谢；告知收到",       forms:["acknowledge"]},
+          {word:"dedicate",    ipa:"/ˈdedɪkeɪt/",  pos:"vt.",   zh:"把（时间、精力等）献给；奉献",   forms:["dedicate"]},
+          {word:"eternal",     ipa:"/ɪˈtɜːnl/",    pos:"adj.",  zh:"永远（不变）的，永恒的",         forms:["eternal"]},
+          {word:"memory",      ipa:"/ˈmeməri/",    pos:"n.",    zh:"记忆，记忆力；回忆，怀念",       forms:["memory"]}
+        ]
+      },
+      {
+        id:"A6-P5", slug:"tem4-A6-P5", title:"奔向新起点", shape:"波浪",
+        poster:"assets/tem4/posters/A6_P5.png",
+        sentence:"With great ambition and optimistic hearts, the graduates envision a promising future, view the world from a fresh perspective, and set out to realize their full potential.",
+        sentenceCn:"毕业生们满怀壮志与乐观，展望大有希望的未来，以全新的视角看待世界，并启程去实现自身的全部潜力。",
+        scene:"穿学士袍的小叶学姐拉着小行李箱，沿着小路走出敞开的校门，奔向粉彩色的朝阳，飞鸟相伴。",
+        words:[
+          {word:"ambition",    ipa:"/æmˈbɪʃən/",     pos:"n.",      zh:"志向，抱负，雄心；野心",     forms:["ambition"]},
+          {word:"optimistic",  ipa:"/ˌɒptɪˈmɪstɪk/", pos:"adj.",    zh:"乐观的，乐观主义的",         forms:["optimistic"]},
+          {word:"envision",    ipa:"/ɪnˈvɪʒən/",     pos:"vt.",     zh:"想象；展望",                 forms:["envision"]},
+          {word:"promising",   ipa:"/ˈprɒmɪsɪŋ/",    pos:"adj.",    zh:"有希望的，有前途的，有出息的", forms:["promising"]},
+          {word:"perspective", ipa:"/pəˈspektɪv/",   pos:"n.",      zh:"观点，看法；前景，展望",     forms:["perspective"]},
+          {word:"potential",   ipa:"/pəˈtenʃəl/",    pos:"n./adj.", zh:"潜力，潜能 adj. 潜在的",     forms:["potential"]}
+        ]
+      }
+    ]
+  },
   /* ===== B 工作与职业 ===== */
-  {id:"B1", cat:"B", zh:"职场日常",   name:"Office Daily",      status:"soon", words:90,  desc:"办公室、会议、邮件"},
+  {
+    id:"B1", cat:"B", zh:"职场日常", name:"Office Daily", status:"live",
+    date:"2026-09-14", words:30, desc:"职场一天：清晨到岗、部门会议、项目与合同、邮件与沟通、加班与收获",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"B1-P1", slug:"tem4-B1-P1", title:"清晨到岗", shape:"拱门",
+        poster:"assets/tem4/posters/B1_P1.png",
+        sentence:"Punctual as ever, the staff begin their morning routine in the bright office, and the superior assigns each task that will occupy everyone until dusk.",
+        sentenceCn:"和往常一样准时，职员们在明亮的办公室里开始晨间例行工作，上司分派好每一项任务，让大家一直忙碌到傍晚。",
+        scene:"清晨明亮的办公室里，背着小包的小叶学姐准时走进来，向工位上的动物同事们挥手问好，墙上挂钟指向早晨。",
+        words:[
+          {word:"punctual", ipa:"/ˈpʌŋktjuəl/",  pos:"adj.",    zh:"准时的，按时的",               forms:["Punctual"]},
+          {word:"routine",  ipa:"/ruːˈtiːn/",    pos:"n.",      zh:"常规，惯例；例行公事",         forms:["routine"]},
+          {word:"staff",    ipa:"/stɑːf; stæf/", pos:"n.",      zh:"全体职员，全体工作人员",       forms:["staff"]},
+          {word:"superior", ipa:"/sjuːˈpɪəriə/", pos:"adj./n.", zh:"优良的，卓越的 n. 上司，上级", forms:["superior"]},
+          {word:"assign",   ipa:"/əˈsaɪn/",      pos:"vt.",     zh:"分配（工作、任务等）；委派",   forms:["assigns"]},
+          {word:"occupy",   ipa:"/ˈɒkjupaɪ/",    pos:"vt.",     zh:"使忙碌；占据，占用",           forms:["occupy"]}
+        ]
+      },
+      {
+        id:"B1-P2", slug:"tem4-B1-P2", title:"部门会议", shape:"叶形",
+        poster:"assets/tem4/posters/B1_P2.png",
+        sentence:"In the meeting room the team arranges today\u2019s agenda, the manager proposes a new plan, everyone communicates ideas freely and cooperates on every detail, until the director finally confirms and approves the proposal.",
+        sentenceCn:"会议室里，团队安排好今天的议程，经理提出一个新方案，大家畅所欲言、在每个细节上通力合作，最后由主管确认并批准这项提议。",
+        scene:"温馨的会议室里，小叶学姐拿着教鞭在贴满便利贴的白板前讲解，动物同事们围坐椭圆桌认真听讲，笔记本电脑和茶杯摆放整齐。",
+        words:[
+          {word:"arrange",     ipa:"/əˈreɪndʒ/",      pos:"v.",  zh:"筹备，安排；整理，排列",       forms:["arranges"]},
+          {word:"propose",     ipa:"/prəˈpəʊz/",      pos:"v.",  zh:"建议，提议；企图，打算",       forms:["proposes"]},
+          {word:"approve",     ipa:"/əˈpruːv/",       pos:"v.",  zh:"批准，通过；赞成，称许",       forms:["approves"]},
+          {word:"communicate", ipa:"/kəˈmjuːnɪkeɪt/", pos:"v.",  zh:"传达（意见、消息等），交流",   forms:["communicates"]},
+          {word:"cooperate",   ipa:"/kəʊˈɒpəreɪt/",   pos:"v.",  zh:"合作，协力",                   forms:["cooperates"]},
+          {word:"confirm",     ipa:"/kənˈfɜːm/",      pos:"vt.", zh:"确认；证实；批准，使有效",     forms:["confirms"]}
+        ]
+      },
+      {
+        id:"B1-P3", slug:"tem4-B1-P3", title:"项目与合同", shape:"椭圆",
+        poster:"assets/tem4/posters/B1_P3.png",
+        sentence:"To complete the project on time, the team checks every budget item, studies the contract clause by clause, and negotiates each transaction carefully with the client before signing.",
+        sentenceCn:"为了按时完成项目，团队核对每一项预算条目，逐条研究合同，并在签署前与客户仔细商谈每笔交易。",
+        scene:"明亮的办公室里，小叶学姐坐在整洁的办公桌前用钢笔签署合同，动物合作伙伴竖起大拇指，桌上有计算器和预算图表。",
+        words:[
+          {word:"budget",      ipa:"/ˈbʌdʒɪt/",     pos:"n.",      zh:"预算；金额 v. 编制预算",       forms:["budget"]},
+          {word:"item",        ipa:"/ˈaɪtəm/",      pos:"n.",      zh:"条，项目，条款",               forms:["item"]},
+          {word:"contract",    ipa:"/ˈkɒntrækt/",   pos:"n.",      zh:"契约，合同",                   forms:["contract"]},
+          {word:"negotiate",   ipa:"/nɪˈɡəʊʃieɪt/", pos:"v.",      zh:"谈判，协商",                   forms:["negotiates"]},
+          {word:"transaction", ipa:"/trænˈzækʃən/", pos:"n.",      zh:"业务，交易；办理，处理",       forms:["transaction"]},
+          {word:"complete",    ipa:"/kəmˈpliːt/",   pos:"v./adj.", zh:"完成 adj. 完整的，全部的",     forms:["complete"]}
+        ]
+      },
+      {
+        id:"B1-P4", slug:"tem4-B1-P4", title:"邮件与沟通", shape:"超圆角",
+        poster:"assets/tem4/posters/B1_P4.png",
+        sentence:"Each morning the manager announces the day\u2019s plan by email, the assistant circulates the memo, colleagues correspond with clients, and the secretary conveys every change to inform and notify the whole team.",
+        sentenceCn:"每天早上，经理用电子邮件宣布当天的计划，助理传阅备忘录，同事们与客户通信往来，秘书传达每一处变动，告知整个团队。",
+        scene:"小叶学姐坐在办公桌前开心地敲笔记本电脑，粉彩信封和邮件图标从屏幕飞向背景里的动物同事，桌上有绿植和奶茶。",
+        words:[
+          {word:"announce",   ipa:"/əˈnaʊns/",     pos:"v.",  zh:"宣布；预告，通报",             forms:["announces"]},
+          {word:"circulate",  ipa:"/ˈsɜːkjuleɪt/", pos:"v.",  zh:"（使）循环；散布，传阅",       forms:["circulates"]},
+          {word:"correspond", ipa:"/ˌkɒrɪˈspɒnd/", pos:"v.",  zh:"通信；符合，一致",             forms:["correspond"]},
+          {word:"convey",     ipa:"/kənˈveɪ/",     pos:"v.",  zh:"传达，传递；运输，运送",       forms:["conveys"]},
+          {word:"inform",     ipa:"/ɪnˈfɔːm/",     pos:"v.",  zh:"通知，告知，使了解",           forms:["inform"]},
+          {word:"notify",     ipa:"/ˈnəʊtɪfaɪ/",   pos:"vt.", zh:"（正式）通知（某人），告知",   forms:["notify"]}
+        ]
+      },
+      {
+        id:"B1-P5", slug:"tem4-B1-P5", title:"加班与收获", shape:"波浪",
+        poster:"assets/tem4/posters/B1_P5.png",
+        sentence:"To meet the deadline she adjusts her heavy load of tasks, works out more efficient methods, toils late into the evening, and finally attains the goal she truly deserves.",
+        sentenceCn:"为了赶上截止日期，她调整繁重的任务量，想出更高效的方法，一直忙碌到深夜，最终实现了自己应得的目标。",
+        scene:"温馨的夜晚办公室，窗外是粉彩星空和月牙，小叶学姐伸着懒腰，桌上暖灯、金色小奖杯和亮着对勾的笔记本电脑。",
+        words:[
+          {word:"efficient", ipa:"/ɪˈfɪʃənt/", pos:"adj.",    zh:"效率高的；有能力的，能胜任的", forms:["efficient"]},
+          {word:"adjust",    ipa:"/əˈdʒʌst/",  pos:"v.",      zh:"调整，整顿；使适应",           forms:["adjusts"]},
+          {word:"load",      ipa:"/ləʊd/",     pos:"n.",      zh:"负担，负荷；工作量",           forms:["load"]},
+          {word:"toil",      ipa:"/tɔɪl/",     pos:"n./vi.",  zh:"苦工，苦活 vi. 辛苦工作",      forms:["toils"]},
+          {word:"attain",    ipa:"/əˈteɪn/",   pos:"v.",      zh:"达到，完成，获得，实现",       forms:["attains"]},
+          {word:"deserve",   ipa:"/dɪˈzɜːv/",  pos:"v.",      zh:"应得，应受，值得",             forms:["deserves"]}
+        ]
+      }
+    ]
+  },
   {id:"B2", cat:"B", zh:"求职面试",   name:"Job Interview",     status:"soon", words:80,  desc:"面试间、简历、问答"},
   {id:"B3", cat:"B", zh:"商务会议",   name:"Business Meeting",  status:"soon", words:70,  desc:"投影、白板、谈判"},
   {id:"B4", cat:"B", zh:"职业规划",   name:"Career Planning",   status:"soon", words:60,  desc:"简历、目标、白板"},

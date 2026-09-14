@@ -3398,6 +3398,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-14",
+    "title": "The Little Red Hen",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-14-the-little-red-hen",
+    "url": "lessons/a1/2026-09-14-the-little-red-hen.html",
+    "vocab": [
+      {
+        "word": "hen",
+        "zh": "母鸡",
+        "ex": "\"Look at the hen.\""
+      },
+      {
+        "word": "seed",
+        "zh": "种子",
+        "ex": "\"She finds a seed.\""
+      },
+      {
+        "word": "help",
+        "zh": "帮忙；帮助",
+        "ex": "\"Who will help me?\""
+      },
+      {
+        "word": "work",
+        "zh": "干活；劳动",
+        "ex": "\"The hen works and works.\""
+      },
+      {
+        "word": "wheat",
+        "zh": "麦子；小麦",
+        "ex": "\"She cuts the wheat.\""
+      },
+      {
+        "word": "bread",
+        "zh": "面包",
+        "ex": "\"The bread is hot.\""
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4902,6 +4944,58 @@ const EPISODES = [
         "word": "evenly",
         "zh": "均匀地；平均地",
         "ex": "One side wears evenly."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-14",
+    "title": "The Hidden Forest Deep Underground",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-14-the-hidden-forest-deep-underground",
+    "url": "lessons/a2/2026-09-14-the-hidden-forest-deep-underground.html",
+    "vocab": [
+      {
+        "word": "giant",
+        "zh": "在中国南方的广西，地上有一些巨大的洞。人们叫它们天坑，也就是「天上的坑」。其中一个天坑有 192 米深。",
+        "ex": "There are giant holes in the ground."
+      },
+      {
+        "word": "pit",
+        "zh": "深坑；天坑（复数 pits）",
+        "ex": "One of these pits is 192 metres deep."
+      },
+      {
+        "word": "limestone",
+        "zh": "石灰岩（容易被水溶蚀的岩石）",
+        "ex": "Rain wears away the soft limestone."
+      },
+      {
+        "word": "explorer",
+        "zh": "探险家；探险者",
+        "ex": "Explorers went down into the pit."
+      },
+      {
+        "word": "rope",
+        "zh": "绳子；绳索（复数 ropes）",
+        "ex": "They went down on long ropes."
+      },
+      {
+        "word": "forest",
+        "zh": "森林；林区",
+        "ex": "They found a real forest at the bottom."
+      },
+      {
+        "word": "blind",
+        "zh": "盲的；看不见的",
+        "ex": "The blind fish have no eyes."
+      },
+      {
+        "word": "discover",
+        "zh": "发现（过去式 discovered）",
+        "ex": "Scientists discovered two new fish."
       }
     ]
   },
