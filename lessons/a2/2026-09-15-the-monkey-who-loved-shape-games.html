@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Monkey Who Loved Shape Games — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#4338ca;
+  --accent2:#ea580c;
+  --bg:#f7f8fe;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#e2e5fb;
+  --soft:#eef1fe;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:8px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(67,56,202,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(67,56,202,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(67,56,202,.55);}70%{box-shadow:0 0 0 12px rgba(67,56,202,0);}100%{box-shadow:0 0 0 0 rgba(67,56,202,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#312e81;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(67,56,202,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE MONKEY WHO LOVED SHAPE GAMES · 2026-09-15</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🐒 The Monkey Who Loved Shape Games</h1>
+  <div class="subtitle">爱玩形状游戏的猴子 · CEFR A2 · 约 153 词 · 🔬 科学发现</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">The player · 动物园里的玩家</div>
+        <p>At a zoo in New York, a baboon named Kalamata sits in front of a <span class="kw" data-word="screen">screen</span>. A <span class="kw" data-word="shape">shape</span> comes up at the top. Below it are four more shapes. He must <span class="kw" data-word="choose">choose</span> the same one — but they are turned, or bigger, or smaller.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">在纽约的一家动物园里，一只名叫卡拉马塔（Kalamata）的狒狒坐在屏幕前。屏幕上方出现一个形状。下面还有四个形状。他必须选出相同的那一个——但这些形状有的被转了方向，有的更大，有的更小。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">The game · 游戏怎么玩</div>
+        <p>When he is right, a happy sound plays and he gets a fruit <span class="kw" data-word="snack">snack</span>. Kalamata can play for two or three hours! <span class="kw" data-word="scientist">Scientists</span> made the game. Nobody told the monkeys the rules, so they had to <span class="kw" data-word="guess">guess</span>.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">当他选对时，会响起一个欢快的声音，他还会得到一份水果零食。卡拉马塔能一连玩两三个小时！这个游戏是科学家做的。没有人告诉猴子规则，所以它们只能自己猜。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">Who played · 都有哪些玩家</div>
+        <p>Eight monkeys played: four baboons and four macaques. More than fifty children aged three to six played too, and they got a sticker when they were right. The monkeys did as well as the children, but the <span class="kw" data-word="adult">adults</span> did best of all.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">参加游戏的有八只猴子：四只狒狒和四只猕猴。五十多名三到六岁的孩子也玩了这个游戏，答对时会得到一张贴纸。猴子的表现和孩子们差不多，但成年人做得最好。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">What it means · 这说明什么</div>
+        <p>The scientists say our sense of shape is very old. Children are <span class="kw" data-word="born">born</span> with it, and monkeys have it too. School does not build it from nothing. It makes it stronger.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">科学家说，我们对形状的感觉非常古老。孩子天生就有，猴子也有。学校不是从零开始造出这种能力，而是让它变得更强。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Key Words（8 个）</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="shape">🔊</button>
+        <div class="word">shape<span class="pos">n.</span></div>
+        <div class="zh">形状；图形（复数 shapes）</div>
+        <div class="ex">A shape comes up at the top.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="screen">🔊</button>
+        <div class="word">screen<span class="pos">n.</span></div>
+        <div class="zh">屏幕；显示屏</div>
+        <div class="ex">He sits in front of a screen.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="choose">🔊</button>
+        <div class="word">choose<span class="pos">v.</span></div>
+        <div class="zh">选择；挑选（过去式 chose）</div>
+        <div class="ex">He must choose the same one.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="snack">🔊</button>
+        <div class="word">snack<span class="pos">n.</span></div>
+        <div class="zh">零食；小点心</div>
+        <div class="ex">He gets a fruit snack.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="scientist">🔊</button>
+        <div class="word">scientist<span class="pos">n.</span></div>
+        <div class="zh">科学家（复数 scientists）</div>
+        <div class="ex">Scientists made the game.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="guess">🔊</button>
+        <div class="word">guess<span class="pos">v.</span></div>
+        <div class="zh">猜；猜测</div>
+        <div class="ex">They had to guess the rule.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="adult">🔊</button>
+        <div class="word">adult<span class="pos">n.</span></div>
+        <div class="zh">成年人（复数 adults）</div>
+        <div class="ex">The adults did best of all.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="born">🔊</button>
+        <div class="word">born<span class="pos">adj.</span></div>
+        <div class="zh">天生的；be born with 天生就有</div>
+        <div class="ex">Children are born with it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">1. He must choose the same shape.</div>
+    <div class="zh">他必须选出相同的形状。</div>
+    <div class="note">📌 表示「必须」：must + 动词原形，后面的动词不加 s、不加 to。<br>替换：You must look at the screen first.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">2. The monkeys did as well as the children.</div>
+    <div class="zh">猴子做得和孩子们一样好。</div>
+    <div class="note">📌 同级比较：as + 形容词/副词 + as + 比较对象，意思是「和……一样……」。<br>替换：This game is as easy as that one.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">3. Nobody told the monkeys the rules, so they had to guess.</div>
+    <div class="zh">没有人告诉猴子规则，所以它们只能猜。</div>
+    <div class="note">📌 用 so 把「原因」和「结果」连成一句话：原因, so + 结果。<br>替换：It was dark, so we went home.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">4. Children are born with it.</div>
+    <div class="zh">孩子天生就有这种能力。</div>
+    <div class="note">📌 be born with + 名词：天生就带有……（能力、特征）。<br>替换：Babies are born with a love of faces.</div>
+  </div>
+</section>
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 一般过去时（Past Simple）：讲已经发生的事</h3>
+    <ul>
+      <li>讲故事、新闻用过去时。规则动词加 -ed：<span class="good">played</span>、<span class="good">guessed</span>、<span class="good">turned</span>。</li>
+      <li>这篇课文里几乎都是不规则动词，要单独记：sit → <span class="good">sat</span>，get → <span class="good">got</span>，tell → <span class="good">told</span>，make → <span class="good">made</span>，do → <span class="good">did</span>，have → <span class="good">had</span>。</li>
+      <li class="eg">课文例句：Kalamata <b>sat</b> in front of a screen. Scientists <b>made</b> the game.</li>
+      <li>❌ 常见错误：<span class="bad">He sitted in front of the screen.</span>（sit 的过去式是 sat）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. 同级比较：as + 形容词/副词 + as</h3>
+    <ul>
+      <li>表示「和……一样」：The monkeys did <span class="good">as well as</span> the children.</li>
+      <li>中间的词用原级，不加 er：as <span class="good">tall</span> as，不能写成 as taller as。</li>
+      <li>well 是不规则变化：well → <span class="good">better</span>（更好）→ <span class="good">best</span>（最好）。</li>
+      <li class="eg">小练习：The adults did ___ of all.（答案：best）</li>
+      <li>❌ 常见错误：<span class="bad">The monkeys did as better as the children.</span>（as … as 中间用原级 well）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. must 与 have to：都必须，但语气不同</h3>
+    <ul>
+      <li><span class="good">must</span> + 动词原形，常表示规定或说话人认为必须：He <span class="good">must choose</span> the same one.</li>
+      <li><span class="good">have to</span> + 动词原形（过去式 <span class="good">had to</span>），常表示客观情况逼着做：They <span class="good">had to guess</span>.</li>
+      <li class="eg">对比：I must go now.（我自己觉得该走了）／ I had to go.（情况让我不得不走）</li>
+      <li>❌ 常见错误：<span class="bad">He musts choose it.</span>（must 后面不加 s）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. can 表能力 + for 表示持续多久</h3>
+    <ul>
+      <li><span class="good">can</span> + 动词原形，表示「会、能」：Kalamata <span class="good">can play</span> for two or three hours.</li>
+      <li>动作持续一段时间，前面加 <span class="good">for</span>：for two hours，for three days，for a long time。</li>
+      <li class="eg">试试自己说：I can read English for twenty minutes.</li>
+      <li>❌ 常见错误：<span class="bad">He can plays for two hours.</span>（can 后面永远用动词原形）</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz（5 题）</h2>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">1. Where does Kalamata play the game?</div>
+    <div class="qzh">卡拉马塔在哪里玩游戏？</div>
+    <button class="opt">A) In a school in China</button>
+    <button class="opt">B) At a zoo in New York</button>
+    <button class="opt">C) In a forest</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">2. What does Kalamata get when he is right?</div>
+    <div class="qzh">卡拉马塔选对时得到什么？</div>
+    <button class="opt">A) A fruit snack</button>
+    <button class="opt">B) A sticker</button>
+    <button class="opt">C) A new ball</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">3. How many monkeys played the game?</div>
+    <div class="qzh">有多少只猴子玩了这个游戏？</div>
+    <button class="opt">A) Four</button>
+    <button class="opt">B) Fifty</button>
+    <button class="opt">C) Eight</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">4. Who did best of all?</div>
+    <div class="qzh">谁做得最好？</div>
+    <button class="opt">A) The monkeys</button>
+    <button class="opt">B) The adults</button>
+    <button class="opt">C) The babies</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">5. What did the scientists learn?</div>
+    <div class="qzh">科学家发现了什么？</div>
+    <button class="opt">A) Our sense of shape is very old</button>
+    <button class="opt">B) Monkeys can read books</button>
+    <button class="opt">C) Shapes are always blue</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · More to Know</h2>
+
+  <div class="know">
+    <h3>一、这项研究到底做了什么</h3>
+    <p>研究由美国<b>卡内基梅隆大学</b>的团队完成：认知神经科学家 <b> Jessica Cantlon</b> 是资深作者，博士生 <b>李嘉林（Jialin Li）</b> 是共同第一作者。论文于 2026 年发表在国际知名期刊《美国国家科学院院刊》（PNAS）上，题目是《人类与猴子之间几何直觉的连续性》。</p>
+    <p>参加实验的猴子住在纽约州罗切斯特的<b>塞尼卡公园动物园</b>。园里有一个叫「灵长类之门」（Primate Portal）的触摸屏装置，是园方与<b>罗切斯特理工学院</b>合作搭建的。猴子想玩的时候可以随时自己走过来，不想玩就走开，全程自愿。</p>
+  </div>
+
+  <div class="know">
+    <h3>二、这个游戏难在哪里</h3>
+    <ul>
+      <li>屏幕上方先出现一个样本形状，下面出现几个选项，要找出「几何上完全相同」的那一个——但它可能<b>被转了方向</b>，也可能<b>被放大或缩小</b>过。</li>
+      <li>题目故意去掉了颜色、大小、纹理这些一眼能看出来的线索，只能靠形状本身的性质去判断：边、角、平行、对称。</li>
+      <li>科学家把「转个方向还认得出是同一个形状」的能力，叫做<b>旋转不变性</b>。路上看到指示牌的三角形箭头，不管朝左还是朝右，你都知道那是三角形——用的就是它。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>三、和谁比？为什么要这样比</h3>
+    <p>参与者一共四类：<b>8 只成年猴子</b>（4 只东非狒狒、4 只普通猕猴）、<b>50 多名 3 至 6 岁的学龄前儿童</b>，以及成年人。</p>
+    <p>成年人里既有受过正规学校教育的美国成人，也有生活于玻利维亚的<b>提斯曼人（Tsimane'）</b>——他们以农耕和采集为生，没有接受过正式的几何教育。把这几组人放在一起比，科学家就能分清：<b>哪些能力是天生带来的，哪些是上学学出来的。</b></p>
+  </div>
+
+  <div class="know">
+    <h3>四、结论：抽象思维不是「全有或全无」</h3>
+    <p>结果是：猴子做得和学龄前儿童差不多，成年人最好。更有趣的是，当形状被旋转过以后，猴子「符号化思考」的迹象大约增加到原来的三倍，孩子们也出现了同样的变化。</p>
+    <p>Cantlon 说，最让人意外的是猴子、孩子和成年人<b>思考几何关系的方式在根本上是一样的</b>，这说明这些直觉是「灵长类心智的基本结构」的一部分。<b>抽象思维不是在人类身上突然出现的全有或全无的能力</b>，数学思维的一些基石早就存在于灵长类动物身上，学校教育和人类文化是在这块古老的地基上继续加盖。</p>
+  </div>
+
+  <div class="know">
+    <h3>🇨🇳 五、中国的几何：从「勾三股四弦五」说起</h3>
+    <p>人类认识形状的历史非常久远，中国也不例外。成书年代可追溯到西汉以前的《<b>周髀算经</b>》，记载了西周初年<b>商高</b>与周公的对话，其中提到直角三角形「勾三、股四、弦五」的关系——所以在我国，这条定理也叫<b>勾股定理</b>或<b>商高定理</b>；在西方它被称为毕达哥拉斯定理。</p>
+    <p>大约成书于东汉时期的《<b>九章算术</b>》，第九卷就直接叫「勾股」，专门讨论直角三角形与测量问题，是中国古代数学最重要的代表作之一。</p>
+    <p>如果去博物馆，还能看到几何直觉留下的痕迹：新石器时代彩陶上的三角纹、回纹与漩涡纹，青铜器上的云雷纹，还有传统建筑里的斗拱和窗格——几千年前的人，已经在认真地和形状打交道了。</p>
+  </div>
+
+  <div class="know">
+    <h3>六、在家也能做的小实验</h3>
+    <ul>
+      <li><b>准备</b>：在纸上画 6 个形状（三角形、正方形、梯形都可以），其中两个必须是同一个形状，但一个转了 90 度、一个大一个小。</li>
+      <li><b>玩法</b>：请家人或小伙伴找出「相同的那两个」，并说出理由。说不出理由也没关系，猜也是数据。</li>
+      <li><b>观察</b>：3 到 6 岁的小朋友是不是先被颜色和大小吸引，而不是形状？大人是不是一眼就看出来了？</li>
+      <li><b>升级</b>：把形状转 180 度，或者玩「找不同」——五个五边形里混进一个六边形。</li>
+      <li><b>记录</b>：谁最快、谁靠猜、谁说得出理由。记下来，你做的就是科学家做的事。</li>
+    </ul>
+  </div>
+
+  <div class="tipbox">
+    <h3>⚠️ 读懂科学新闻的两个提醒</h3>
+    <ul>
+      <li><b>猴子不是在做数学题。</b>研究者特别说明：人类的数学推理还包括语言、证明和一代代传下来的文化；猴子只是和人类共享了「看形状」这块地基，并不会解几何题。</li>
+      <li><b>游戏是自愿的。</b>猴子想玩才走过来，答对了给水果零食，答错没有惩罚，也不强迫。正规的动物研究都要通过伦理审查，小朋友也不要随意投喂动物园里的动物。</li>
+      <li><b>看到夸张标题先别信。</b>比如「猴子比人聪明」这类说法，去原文里找一找科学家究竟说了什么——这本身就是练习英语阅读的好机会。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--accent);font-size:17px;">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><span class="txt">读懂一篇约 153 词的英文短文，了解 2026 年这项关于猴子与形状的研究。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">掌握 8 个核心词汇：shape, screen, choose, snack, scientist, guess, adult, born。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用 as + 形容词/副词 + as 表达「和……一样」，并区分 well / better / best。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会区分 must 与 have to，并用 so 连接原因和结果。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">能记住 sit → sat、get → got、tell → told、make → made 等常用不规则过去式。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--accent);font-size:17px;">📚 学习建议</h3>
+    <div class="know" style="border:none;padding:0;margin:0;">
+      <ul>
+        <li><b>先听后读</b>：点段落旁的播放键听一遍，再自己朗读；读到破折号和句号时稍作停顿。</li>
+        <li><b>找过去式</b>：把课文里所有过去式动词圈出来，分成「加 -ed」和「不规则」两列，做成自己的小表。</li>
+        <li><b>比一比</b>：用 as … as 说三句话，比如 My bag is as big as yours.</li>
+        <li><b>画一画</b>：画一个三角形，再画一个转了 90 度的三角形，用英语告诉家人：They are the same shape.</li>
+        <li><b>做小实验</b>：按扩展部分第六节的玩法，和家人玩一轮「找相同形状」，用英语说出你的答案。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 10px;color:var(--accent);font-size:17px;">🗣️ 今日口语小任务</h3>
+    <p style="font-size:14.5px;color:#374151;margin:0 0 8px;">用下面的句式，向同学介绍这只猴子（说满 3 句就算完成）：</p>
+    <div class="pattern" style="margin:0;">
+      <div class="en">At a zoo in New York, a baboon plays a shape game. He must choose the same shape. The monkeys did as well as young children.</div>
+      <div class="zh">在纽约的一家动物园里，一只狒狒玩形状游戏。他必须选出相同的形状。猴子的表现和年幼的孩子一样好。</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:24px 0 8px;">
+    <button class="print-btn" onclick="window.print()">🖨️ 打印本页练习</button>
+  </div>
+</section>
+
+<footer>POLA NEWS · The Monkey Who Loved Shape Games · 2026-09-15</footer>
+</main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+  "At a zoo in New York, a baboon named Kalamata sits in front of a screen. A shape comes up at the top. Below it are four more shapes. He must choose the same one — but they are turned, or bigger, or smaller.",
+  "When he is right, a happy sound plays and he gets a fruit snack. Kalamata can play for two or three hours! Scientists made the game. Nobody told the monkeys the rules, so they had to guess.",
+  "Eight monkeys played: four baboons and four macaques. More than fifty children aged three to six played too, and they got a sticker when they were right. The monkeys did as well as the children, but the adults did best of all.",
+  "The scientists say our sense of shape is very old. Children are born with it, and monkeys have it too. School does not build it from nothing. It makes it stronger."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'shape': '形状；图形 n.',
+  'screen': '屏幕；显示屏 n.',
+  'choose': '选择；挑选 v.',
+  'snack': '零食；小点心 n.',
+  'scientist': '科学家 n.',
+  'guess': '猜；猜测 v.',
+  'adult': '成年人 n.',
+  'born': '天生的；be born with 天生就有'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#','');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

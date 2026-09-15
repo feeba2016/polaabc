@@ -3440,6 +3440,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-15",
+    "title": "The Squirrels Winter Store",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-15-the-squirrels-winter-store",
+    "url": "lessons/a1/2026-09-15-the-squirrels-winter-store.html",
+    "vocab": [
+      {
+        "word": "squirrel",
+        "zh": "松鼠",
+        "ex": "Look at the squirrel."
+      },
+      {
+        "word": "nut",
+        "zh": "坚果",
+        "ex": "She finds a nut."
+      },
+      {
+        "word": "hole",
+        "zh": "洞；小坑",
+        "ex": "She digs a hole."
+      },
+      {
+        "word": "hide",
+        "zh": "藏；藏起来",
+        "ex": "She hides many nuts."
+      },
+      {
+        "word": "ground",
+        "zh": "地面；泥土",
+        "ex": "They are in the ground."
+      },
+      {
+        "word": "winter",
+        "zh": "冬天",
+        "ex": "Winter comes."
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -4996,6 +5038,58 @@ const EPISODES = [
         "word": "discover",
         "zh": "发现（过去式 discovered）",
         "ex": "Scientists discovered two new fish."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-15",
+    "title": "The Monkey Who Loved Shape Games",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-15-the-monkey-who-loved-shape-games",
+    "url": "lessons/a2/2026-09-15-the-monkey-who-loved-shape-games.html",
+    "vocab": [
+      {
+        "word": "screen",
+        "zh": "在纽约的一家动物园里，一只名叫卡拉马塔（Kalamata）的狒狒坐在屏幕前。屏幕上方出现一个形状。下面还有四个形状。他必须选出相同的那一个——但这些形状有的被转了方向，有的更大，有的更小。",
+        "ex": "A shape comes up at the top."
+      },
+      {
+        "word": "screen",
+        "zh": "屏幕；显示屏",
+        "ex": "He sits in front of a screen."
+      },
+      {
+        "word": "choose",
+        "zh": "选择；挑选（过去式 chose）",
+        "ex": "He must choose the same one."
+      },
+      {
+        "word": "snack",
+        "zh": "零食；小点心",
+        "ex": "He gets a fruit snack."
+      },
+      {
+        "word": "scientist",
+        "zh": "科学家（复数 scientists）",
+        "ex": "Scientists made the game."
+      },
+      {
+        "word": "guess",
+        "zh": "猜；猜测",
+        "ex": "They had to guess the rule."
+      },
+      {
+        "word": "adult",
+        "zh": "成年人（复数 adults）",
+        "ex": "The adults did best of all."
+      },
+      {
+        "word": "born",
+        "zh": "天生的；be born with 天生就有",
+        "ex": "Children are born with it."
       }
     ]
   },

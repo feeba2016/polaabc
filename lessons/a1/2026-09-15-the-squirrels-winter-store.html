@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Squirrel's Winter Store — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#b45309;
+  --accent2:#f59e0b;
+  --bg:#fffbeb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#92400e;
+  --highlight:#fde68a;
+  --border:#fcd34d;
+  --soft:#fef3c7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#fbbf24);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(180,83,9,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #fbbf24;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#92400e;background:#fdf0c8;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(180,83,9,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(180,83,9,.6);}70%{box-shadow:0 0 0 14px rgba(180,83,9,0);}100%{box-shadow:0 0 0 0 rgba(180,83,9,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(180,83,9,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Squirrel's Winter Store 🐿️🌰</h1>
+      <p class="subtitle">2026年9月15日 · 动物故事｜松鼠的冬日粮仓 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · A Little Squirrel 一只小松鼠</div>
+            <p>Look at the <span class="kw" data-def="松鼠：一种小小的、尾巴毛茸茸的动物，最爱吃坚果">squirrel</span>. 🐿️ She is small. She has a big tail. Autumn is here. 🍂 She looks for <span class="kw" data-def="坚果：外面有硬硬外壳的食物，比如橡子、松子、核桃">nuts</span>. 🌰</p>
+          </div>
+          <div class="zh">看这只松鼠 🐿️。她个子小小的，有一条毛茸茸的大尾巴。秋天来了 🍂。她到处找坚果 🌰。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · One Nut Here 这里藏一颗</div>
+            <p>She finds a nut. She digs a <span class="kw" data-def="洞；小坑：在地上挖出来的小小凹坑">hole</span>. 🕳️ She puts the nut in it. She covers it. One nut here. One nut there. 👉</p>
+          </div>
+          <div class="zh">她找到一颗坚果。她挖了一个小洞 🕳️。她把坚果放进洞里，再用土盖好。这里藏一颗，那里藏一颗。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · She Forgets Some 有一些她忘了</div>
+            <p>She works all day. ☀️ She <span class="kw" data-def="藏；藏起来：把东西放到不容易被找到的地方">hides</span> many nuts. She forgets some. 😮 Where are they? They are in the <span class="kw" data-def="地面；泥土：我们脚下这片土地">ground</span>. 🟫</p>
+          </div>
+          <div class="zh">她忙了一整天 ☀️。她藏了好多好多的坚果。有一些，她后来就忘了 😮。它们在哪儿呢？它们都在泥土里 🟫。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · A Nut Becomes a Tree 坚果变成了小树</div>
+            <p><span class="kw" data-def="冬天：一年四季里最冷的季节，有时候会下雪">Winter</span> comes. ❄️ The squirrel is not hungry. She digs and eats. 😋 A forgotten nut grows. 🌳 It is a tree!</p>
+          </div>
+          <div class="zh">冬天来了 ❄️。松鼠一点都不饿。她挖呀挖，吃呀吃 😋。一颗被忘掉的坚果发了芽 🌳。它长成了一棵小树！</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#fef3c7;border:2px solid #fbbf24;">
+        <h3 style="margin:0 0 8px;color:#b45309;font-size:20px;">🐿️ 和 Pola 一起演一演！</h3>
+        <p style="margin:0;font-size:16px;">和爸爸妈妈一起做动作：说到 <b>“She digs a hole.”</b> 就蹲下来用手挖土 🕳️；说到 <b>“One nut here. One nut there.”</b> 就左右手轮流藏坚果 🌰；最后双手举高变成一棵树 <b>“It is a tree!”</b> 🌳。记得点黄色的词看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="squirrel">🔊</button><div class="emoji">🐿️</div><div class="word">squirrel<span class="pos">n.</span></div><div class="zh">松鼠</div><div class="ex">Look at the squirrel.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="nut">🔊</button><div class="emoji">🌰</div><div class="word">nut<span class="pos">n.</span></div><div class="zh">坚果</div><div class="ex">She finds a nut.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hole">🔊</button><div class="emoji">🕳️</div><div class="word">hole<span class="pos">n.</span></div><div class="zh">洞；小坑</div><div class="ex">She digs a hole.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hide">🔊</button><div class="emoji">🤫</div><div class="word">hide<span class="pos">v.</span></div><div class="zh">藏；藏起来</div><div class="ex">She hides many nuts.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ground">🔊</button><div class="emoji">🟫</div><div class="word">ground<span class="pos">n.</span></div><div class="zh">地面；泥土</div><div class="ex">They are in the ground.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="winter">🔊</button><div class="emoji">❄️</div><div class="word">winter<span class="pos">n.</span></div><div class="zh">冬天</div><div class="ex">Winter comes.</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. She has a [noun].</h3>
+          <div class="zh">“她有……”。想说<b>谁身上／手里有什么</b>就用 has。<b>she / he / it</b> 用 <b>has</b>；<b>I / you / we / they</b> 用 <b>have</b>。</div>
+          <div class="eg">She has a big tail. 🐿️ / She has a nut. 🌰 / I have a nut. / They have nuts.</div>
+          <div class="practice">练习：她有一条大尾巴 → She has <input placeholder="a big tail">.</div>
+        </div>
+        <div class="item">
+          <h3>2. She puts the [thing] in the [place].</h3>
+          <div class="zh">“她把……放进……里”。<b>put ... in ...</b> 是英文里最常用的一对搭档，前面放<b>东西</b>，in 后面放<b>地方</b>。</div>
+          <div class="eg">She puts the nut in the hole. 🕳️ / I put the book in the bag. 🎒 / He puts the toy in the box. 🧸</div>
+          <div class="practice">练习：我把苹果放进盒子里 → I put the apple <input placeholder="in the box">.</div>
+        </div>
+        <div class="item">
+          <h3>3. Where are they? — They are in the [place].</h3>
+          <div class="zh">“它们在哪儿？——它们在……里。”问东西在<b>哪里</b>用 <b>Where</b>；因为是<b>很多个</b>，所以要用 <b>are</b> 和 <b>they</b>。</div>
+          <div class="eg">Where are they? They are in the ground. 🟫 / Where are the nuts? They are in the hole. 🕳️</div>
+          <div class="practice">练习：它们在哪儿？ → Where <input placeholder="are they">?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. a / an（一个）</h3>
+          <div class="zh">只有<b>一样</b>东西时，前面要加 a 或 an。单词以<b>辅音</b>开头用 <b>a</b>；以<b>元音</b>（a e i o u）开头用 <b>an</b>。要看的是<b>发音</b>，不是字母哦。</div>
+          <div class="eg">a squirrel 🐿️ / a nut 🌰 / a hole 🕳️ / a tree 🌳 / an apple 🍎 / an acorn 🌰</div>
+        </div>
+        <div class="item">
+          <h3>2. 一个变多个：名词加 -s</h3>
+          <div class="zh">英文里<b>两颗以上</b>的东西，名词后面要加一个小尾巴 <b>-s</b>：一颗坚果 <b>a nut</b>，很多坚果 <b>nuts</b> 🌰🌰。表示“它们”时用 <b>they</b>，后面的 be 动词也要换成 <b>are</b>。</div>
+          <div class="eg">one nut → many nuts 🌰 / Where are they? / They are in the ground. 🟫</div>
+        </div>
+        <div class="item">
+          <h3>3. he / she / it 后面，动词要加 -s</h3>
+          <div class="zh">主语是 <b>he（他）</b>、<b>she（她）</b>、<b>it（它）</b> 时，动词要加 <b>-s</b>：dig → <b>digs</b>，hide → <b>hides</b>，work → <b>works</b>。可是 <b>I</b>、<b>you</b>、<b>we</b>、<b>they</b> 后面<b>不加</b>。</div>
+          <div class="eg">She digs a hole. 🕳️ / She hides many nuts. 🤫 / She works all day. ☀️ / They work. / I work.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#fef3c7;border:2px solid #fbbf24;">
+        <div style="font-size:20px;font-weight:800;color:#b45309;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#92400e;margin-top:6px;">每做对一题得 1 分，全部做完就是小小储藏家啦！🐿️✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🐿️ 秋天里最忙的小动物</h3>
+        <p>小朋友，秋天到啦 🍂。如果你在公园里看到一只小松鼠抱着东西飞快地跑，它可能正在做一件很重要的事——<b>为冬天存粮食</b>。</p>
+        <p>冬天又冷又长，树上没有果子，地上也找不到虫子。松鼠不会像熊那样睡一整个冬天，它要在冬天里照样吃饭。所以从秋天开始，它就得天天出去找坚果 🌰，一颗一颗地藏起来。科学家给这个本领起了个名字，叫<b>“分散储藏”</b>：不是把粮食堆在一个大仓库里，而是<b>分成几百个小地点，东藏一点、西藏一点</b>。</p>
+
+        <h3>🤫 为什么要东藏一点、西藏一点？</h3>
+        <p>这其实是松鼠的<b>聪明之处</b>。如果所有坚果都堆在一起，被别的动物发现了，就会<b>一次全被偷走</b> 😱。分开藏的话，就算丢了几处，剩下的还够吃一冬天。</p>
+        <p>更有趣的是：当松鼠发现<b>有别的动物在偷偷看它</b>时，它会耍一个“小把戏”——在地上挖个坑，做出埋东西的样子，其实<b>什么都没放进去</b>，然后再跑到真正的地点把坚果藏好。科学家把这个动作叫做<b>“假埋”</b> 🎭。你看，松鼠是不是很像在跟小伙伴玩捉迷藏？</p>
+
+        <h3>🌳 被忘掉的坚果，长成了森林</h3>
+        <p>松鼠藏的坚果很多，可它的小脑袋不可能记住每一个地方。研究人员发现，松鼠<b>相当一部分</b>埋下去的坚果，最后都没有被找回来。</p>
+        <p>这些被忘掉的坚果会怎么样呢？它们躺在温暖潮湿的泥土里，睡过整个冬天。春天一来，雨水一浇，<b>坚果就发芽了</b> 🌱。几年、几十年过去，它可能长成一棵高高的大树 🌳。</p>
+        <p>所以人们常说：松鼠是<b>“森林里最不小心的小园丁”</b> 👩‍🌾。它本来只是想给自己存粮食，结果一不小心，种出了一整片森林。这真是大自然里最奇妙的一次“合作”。</p>
+
+        <h3>🇨🇳 中国也有许多松鼠</h3>
+        <p>在中国，从温暖的南方到寒冷的北方，都能见到松鼠。城市公园和校园里最常见的，是肚子毛色发红的<b>赤腹松鼠</b>；华北的山地和岩石间住着<b>岩松鼠</b>；东北的森林里还有背上有条纹的<b>花鼠</b>（也叫花栗鼠）🐿️。</p>
+        <p>在东北的长白山、小兴安岭一带，生长着珍贵的<b>红松</b>。红松的种子叫松子，又香又营养。科学家发现，松鼠和一种叫<b>星鸦</b>的鸟，把吃不完的松子埋进土里，忘了的那些就在春天发芽——<b>它们是红松林天然的小帮手</b> 🌲。所以保护松鼠，其实也是在保护整片森林。</p>
+
+        <h3>🍂 快要到“秋分”了</h3>
+        <p>我们今天讲的故事，正好发生在<b>秋天</b>。每年 <b>9 月 22 日或 23 日</b>，就到了二十四节气里的<b>秋分</b>。秋分这一天，白天和黑夜一样长；秋分之后，白天越来越短，天气一天比一天凉 🍁。松鼠大概也感觉到了，所以才这么着急地藏坚果呀。</p>
+        <p>说到秋天，中国的小朋友一定读过唐代诗人<b>杜牧</b>的《山行》：</p>
+        <p style="background:#fef3c7;border-radius:12px;padding:12px 14px;font-size:19px;"><b>远上寒山石径斜，白云生处有人家。<br>停车坐爱枫林晚，霜叶红于二月花。</b></p>
+        <p>诗人沿着弯弯的石头小路上山，看见白云飘着的地方住着人家。他停下马车，是因为太喜欢傍晚的枫树林了——<b>被秋霜打过的枫叶，比春天的花还要红</b> 🍁。下次和爸爸妈妈去公园，看到变红变黄的树叶，就可以把这首诗念给他们听。</p>
+
+        <h3>🔬 关于松鼠的小知识</h3>
+        <ul>
+          <li><b>大尾巴是平衡器</b> 🐿️：松鼠在树枝间跳跃时，蓬松的大尾巴帮它保持平衡，像走钢丝的人手里的长杆。</li>
+          <li><b>尾巴还是被子</b> 🛏️：冬天睡觉时，松鼠会把大尾巴卷过来盖在身上保暖。</li>
+          <li><b>门牙一直在长</b> 🦷：松鼠的大门牙一辈子都在长，所以它要常常啃硬壳，把牙齿磨短一点。</li>
+          <li><b>靠鼻子找回宝藏</b> 👃：冬天地上有雪，看不出埋在哪儿，松鼠就用灵敏的嗅觉把坚果闻出来。</li>
+          <li><b>会上树也会游泳</b> 🌊：松鼠爬树飞快，遇到危险时还能游一小段水。</li>
+        </ul>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>藏宝游戏</b> 🗺️：把 5 颗花生或积木当“坚果”，让爸爸妈妈背过身，你把它们藏在房间的不同角落，然后说 <b>“Where are they?”</b>，请他们来找。</li>
+          <li><b>动作跟读</b> 🕳️：读故事时配上动作——dig（挖土）、hide（藏起来）、eat（吃）、grow（慢慢长高，从蹲下到站直）。</li>
+          <li><b>数一数</b> 🔢：拿 10 颗坚果，边藏边用英文数 <b>one nut, two nuts, three nuts...</b> 练练复数。</li>
+          <li><b>画一画</b> 🎨：画四格漫画：找坚果 → 挖洞藏 → 下雪的冬天 → 长出小树，每格下面写一句英文。</li>
+          <li><b>想一想</b> 🤔：如果你是一只小松鼠，你会把坚果藏在哪里？试着说 <b>“I put the nut in the box.”</b></li>
+        </ul>
+
+        <p style="background:#fee2e2;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>在公园里看到松鼠，<b>可以远远地看，不要追、不要抓，也不要用手去喂</b> 🐿️🚫。野生松鼠受到惊吓会咬人、抓人，还可能带有细菌。<b>不要自己随便喂坚果</b>：很多人吃的坚果加了盐和糖，对松鼠并不好；<b>花生、腰果等坚果也是常见的过敏原</b>，如果对坚果过敏，一定不要碰，也不要吃 😷。在小区绿化带或公园里，<b>不要挖土找“宝藏”</b>，土里可能有碎玻璃和脏东西；<b>玩完泥土、摸过落叶后，一定要用肥皂把手洗干净</b> 🧼。去山林里玩时，要<b>一直和大人在一起</b>，不要独自走远。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读《松鼠的冬日粮仓》的小故事，知道松鼠为什么要为冬天存粮食。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：squirrel, nut, hole, hide, ground, winter。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “She has a ...”, “She puts the ... in the ...”, “Where are they?” 说句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 a / an 的用法、名词复数加 -s，以及 he / she / it 后动词加 -s。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>喜欢观察身边的小动物，懂得为将来做准备，也愿意保护树木和小动物。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读；读到 “One nut here. One nut there.” 时左右手轮流藏坚果 🌰。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，把 6 个词做成小卡片，和爸爸妈妈玩“你说我指”的游戏。</div></div>
+        <div class="goal"><span class="ic">🎭</span><div>全家一起演一遍：一个人当松鼠挖洞藏坚果，其他人问 “Where are they?” 🕳️。</div></div>
+        <div class="goal"><span class="ic">💬</span><div>周末去公园找找松鼠和落叶 🍂，看到落叶时念一遍《山行》，再试着说 “Autumn is here!”</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把故事图贴在墙上，每天讲一遍 🎨。</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Squirrel's Winter Store · 2026-09-15 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Look at the squirrel. She is small. She has a big tail. Autumn is here. She looks for nuts.",
+  "She finds a nut. She digs a hole. She puts the nut in it. She covers it. One nut here. One nut there.",
+  "She works all day. She hides many nuts. She forgets some. Where are they? They are in the ground.",
+  "Winter comes. The squirrel is not hungry. She digs and eats. A forgotten nut grows. It is a tree!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What does the squirrel look for? 松鼠在找什么？",em:["🍎","🌰","🍌"],opts:["Apples (苹果)","Nuts (坚果)","Bananas (香蕉)"],ans:1,
+   fb:"Yes! 松鼠到处找坚果，She looks for nuts 🌰。"},
+  {q:"Where does the squirrel put the nut? 松鼠把坚果放进了哪里？",em:["🕳️","🌳","🏠"],opts:["In a hole (小洞里)","In a tree (树上)","In a house (房子里)"],ans:0,
+   fb:"Right! 她挖了一个小洞，把坚果放进去，She digs a hole 🕳️。"},
+  {q:"What does a forgotten nut grow into? 被忘掉的坚果长成了什么？",em:["🌸","🍄","🌳"],opts:["A flower (一朵花)","A mushroom (一朵蘑菇)","A tree (一棵树)"],ans:2,
+   fb:"Great! 它在泥土里发芽，长成了一棵小树，It is a tree 🌳。"},
+  {q:"Why is the squirrel not hungry in winter? 冬天松鼠为什么不饿？",em:["🌿","🌰","😴"],opts:["She eats grass. (她吃草)","She has many nuts. (她藏了很多坚果)","She sleeps all winter. (她睡一整个冬天)"],ans:1,
+   fb:"Correct! 因为她秋天藏了很多坚果，She hides many nuts 🐿️。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
