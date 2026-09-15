@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1/A2/A3/A4/A5/A6/F1/F2/F3/G1 已上线（10 主题 / 50 Part / 300 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1/B2/F1/F2/F3/G1 已上线（12 主题 / 60 Part / 360 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -612,7 +612,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"B2", cat:"B", zh:"求职面试",   name:"Job Interview",     status:"soon", words:80,  desc:"面试间、简历、问答"},
+  {
+    id:"B2", cat:"B", zh:"求职面试", name:"Job Interview", status:"live",
+    date:"2026-09-15", words:30, desc:"求职一天：职位空缺、面试前的准备、问答环节、面试官的青睐、录用与展望",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"B2-P1", slug:"tem4-B2-P1", title:"职位空缺", shape:"拱门",
+        poster:"assets/tem4/posters/B2_P1.png",
+        sentence:"Seeing that a post is vacant at a well-known company, she decides to apply for it, hoping that her solid ability and rich experience will qualify her to be engaged as a designer.",
+        sentenceCn:"看到一家知名公司的职位空缺，她决定立即申请，希望自己扎实的能力和丰富的经验能让她有资格受聘为一名设计师。",
+        scene:"粉彩蓝的公司公告栏前，小叶学姐抱着简历夹、背着电脑包驻足，公告栏上一张闪着星星的职位卡片正在发光。",
+        words:[
+          {word:"vacant",     ipa:"/ˈveɪkənt/",     pos:"adj.",   zh:"空的，未占用的；空缺的",       forms:["vacant"]},
+          {word:"apply",      ipa:"/əˈplaɪ/",       pos:"v.",     zh:"申请，请求；应用，施用",       forms:["apply"]},
+          {word:"ability",    ipa:"/əˈbɪlɪti/",     pos:"n.",     zh:"能力；才能，才智",             forms:["ability"]},
+          {word:"experience", ipa:"/ɪkˈspɪəriəns/", pos:"vt./n.", zh:"经历，体验；经验，阅历",       forms:["experience"]},
+          {word:"qualify",    ipa:"/ˈkwɒlɪfaɪ/",    pos:"v.",     zh:"使合适，（使）具有资格",       forms:["qualify"]},
+          {word:"engage",     ipa:"/ɪnˈɡeɪdʒ/",     pos:"v.",     zh:"雇用，聘；使从事，使参加",     forms:["engaged"]}
+        ]
+      },
+      {
+        id:"B2-P2", slug:"tem4-B2-P2", title:"面试前的准备", shape:"叶形",
+        poster:"assets/tem4/posters/B2_P2.png",
+        sentence:"The evening before the interview, she polishes her self-introduction again and again, picks an appropriate and elegant outfit, and reminds herself to keep a positive attitude and courteous manners.",
+        sentenceCn:"面试前的傍晚，她一遍遍润饰自我介绍，挑好一套得体又优雅的着装，并提醒自己保持积极的态度与礼貌的举止。",
+        scene:"温馨的粉彩卧室里，小叶学姐对着圆镜整理着装和红丝巾，小桌上摊着笔记本和钢笔，门口放着擦得锃亮的鞋子和整洁的包。",
+        words:[
+          {word:"polish",      ipa:"/ˈpɒlɪʃ/",              pos:"v.",   zh:"磨光，擦亮；使完善，润饰",     forms:["polishes"]},
+          {word:"appropriate", ipa:"/əˈprəʊpriət/",         pos:"adj.", zh:"适合的，适宜的",               forms:["appropriate"]},
+          {word:"elegant",     ipa:"/ˈelɪɡənt/",            pos:"adj.", zh:"优雅的；精美的",               forms:["elegant"]},
+          {word:"attitude",    ipa:"/ˈætɪtjuːd; ˈætɪtuːd/", pos:"n.",   zh:"态度，看法；姿势",             forms:["attitude"]},
+          {word:"courteous",   ipa:"/ˈkɜːtjəs/",            pos:"adj.", zh:"有礼貌的，谦恭的",             forms:["courteous"]},
+          {word:"manner",      ipa:"/ˈmænə/",               pos:"n.",   zh:"方式；态度，举止；[pl.] 礼貌", forms:["manners"]}
+        ]
+      },
+      {
+        id:"B2-P3", slug:"tem4-B2-P3", title:"问答环节", shape:"椭圆",
+        poster:"assets/tem4/posters/B2_P3.png",
+        sentence:"In the question round she answers in fluent English, explains the advantage of her teamwork and the drawback of being a perfectionist, reveals what she gained from her internship, and guarantees that she will keep learning.",
+        sentenceCn:"问答环节里，她用流利的英语作答，说明自己团队合作的优势和追求完美的小缺点，讲述实习中的收获，并保证会不断学习。",
+        scene:"明亮的粉彩面试间，小叶学姐端正地坐在圆桌前自信举手作答，对面两位穿西装的成年猴子面试官拿着问号卡和记录板。",
+        words:[
+          {word:"fluent",    ipa:"/ˈfluːənt/",                  pos:"adj.",   zh:"流畅的，流利的",               forms:["fluent"]},
+          {word:"advantage", ipa:"/ədˈvɑːntɪdʒ/",               pos:"n.",     zh:"优势，益处，利益",             forms:["advantage"]},
+          {word:"drawback",  ipa:"/ˈdrɔːbæk/",                  pos:"n.",     zh:"缺点，不利条件，短处",         forms:["drawback"]},
+          {word:"reveal",    ipa:"/rɪˈviːl/",                   pos:"v.",     zh:"展现，显露；揭露",             forms:["reveals"]},
+          {word:"gain",      ipa:"/ɡeɪn/",                      pos:"v.",     zh:"获得，博得；赢得，挣得",       forms:["gained"]},
+          {word:"guarantee", ipa:"/ˌɡɑːrənˈtiː; ˌɡærənˈtiː/",  pos:"n./v.",  zh:"保证，保证书 v. 保证，担保",   forms:["guarantees"]}
+        ]
+      },
+      {
+        id:"B2-P4", slug:"tem4-B2-P4", title:"面试官的青睐", shape:"超圆角",
+        poster:"assets/tem4/posters/B2_P4.png",
+        sentence:"The interviewers are cordial and hearty, which puts her at ease; she speaks with dignity about her competence in team projects, sounding enthusiastic and responsible throughout.",
+        sentenceCn:"面试官们热情友好，让她很快放松下来；她从容庄重地讲述自己在团队项目中的胜任能力，全程显得热情而可靠。",
+        scene:"同一间明亮的面试间，小叶学姐起身微笑握手，西装面试官竖起大拇指，另一位在身后开心鼓掌，四周金色星星与彩带飞舞。",
+        words:[
+          {word:"cordial",      ipa:"/ˈkɔːdjəl/",        pos:"adj.", zh:"热情友好的，热诚的",           forms:["cordial"]},
+          {word:"hearty",       ipa:"/ˈhɑːti/",          pos:"adj.", zh:"热情友好的；衷心的；健壮的",   forms:["hearty"]},
+          {word:"dignity",      ipa:"/ˈdɪɡnɪti/",        pos:"n.",   zh:"尊严，高贵，体面，庄严",       forms:["dignity"]},
+          {word:"competence",   ipa:"/ˈkɒmpɪtəns/",      pos:"n.",   zh:"能力，胜任某种工作的资格",     forms:["competence"]},
+          {word:"enthusiastic", ipa:"/ɪnˌθjuːzɪˈæstɪk/", pos:"adj.", zh:"热情的，热心的，热烈的",       forms:["enthusiastic"]},
+          {word:"responsible",  ipa:"/rɪˈspɒnsəbl/",     pos:"adj.", zh:"应负责的；可靠的；责任重大的", forms:["responsible"]}
+        ]
+      },
+      {
+        id:"B2-P5", slug:"tem4-B2-P5", title:"录用与展望", shape:"波浪",
+        poster:"assets/tem4/posters/B2_P5.png",
+        sentence:"A week later comes the good news: she is appointed to the post, the manager commends her zeal and careful preparation, and she believes this job will benefit her career and that she will keep improving until she is promoted.",
+        sentenceCn:"一周后传来好消息：她被录用了，经理称赞她的热情与用心准备；她相信这份工作将有益于自己的职业发展，她会不断进步，直到获得晋升。",
+        scene:"小叶学姐高举烫金录用信开心跳跃，身后是通向日出中粉彩办公楼的开阔大路，彩带与星星在空中飞舞，长尾愉快地卷起。",
+        words:[
+          {word:"appoint", ipa:"/əˈpɔɪnt/",  pos:"v.",    zh:"任命，（委）派；约定（时间、地点）", forms:["appointed"]},
+          {word:"commend", ipa:"/kəˈmend/",  pos:"vt.",   zh:"称赞，赞扬；推荐",                   forms:["commends"]},
+          {word:"zeal",    ipa:"/ziːl/",     pos:"n.",    zh:"热心，热情",                         forms:["zeal"]},
+          {word:"benefit", ipa:"/ˈbenɪfɪt/", pos:"n./v.", zh:"利益，好处；津贴 v. 有益于",         forms:["benefit"]},
+          {word:"improve", ipa:"/ɪmˈpruːv/", pos:"v.",    zh:"改进，提高，改善",                   forms:["improving"]},
+          {word:"promote", ipa:"/prəˈməʊt/", pos:"vt.",   zh:"提升；促进；宣传，促销",             forms:["promoted"]}
+        ]
+      }
+    ]
+  },
   {id:"B3", cat:"B", zh:"商务会议",   name:"Business Meeting",  status:"soon", words:70,  desc:"投影、白板、谈判"},
   {id:"B4", cat:"B", zh:"职业规划",   name:"Career Planning",   status:"soon", words:60,  desc:"简历、目标、白板"},
   {id:"B5", cat:"B", zh:"办公工具",   name:"Workplace Tools",   status:"soon", words:60,  desc:"电脑、电话、打印机"},
