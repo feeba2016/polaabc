@@ -694,7 +694,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"B3", cat:"B", zh:"商务会议",   name:"Business Meeting",  status:"soon", words:70,  desc:"投影、白板、谈判"},
+  {
+    id:"B3", cat:"B", zh:"商务会议", name:"Business Meeting", status:"live",
+    date:"2026-09-16", words:30, desc:"商务会议一天：紧急召集、会前准备、开场陈述、激烈讨论、妥协与决议",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"B3-P1", slug:"tem4-B3-P1", title:"紧急召集", shape:"拱门",
+        poster:"assets/tem4/posters/B3_P1.png",
+        sentence:"Reviewing the annual report, the manager finds that revenue has kept declining since spring; he treats it as a quiet crisis, summons all department heads to an emergency meeting, and asks each team to bring its own forecast.",
+        sentenceCn:"审阅年度报告时，经理发现收入自春季以来持续下滑；他把这一局面视为一场悄然逼近的危机，召集所有部门主管开紧急会议，并要求每个团队带上自己的预测。",
+        scene:"清晨的粉彩办公室里，小叶学姐坐在书桌前翻看厚厚的年度报告，一手举着听筒打电话，神情略带担忧，墙上挂着日历，窗边洒满晨光。",
+        words:[
+          {word:"summon",   ipa:"/ˈsʌmən/",    pos:"vt.",   zh:"召唤，传唤，召集；鼓起勇气",                    forms:["summons"]},
+          {word:"annual",   ipa:"/ˈænjuəl/",   pos:"adj.",  zh:"每年的，年度的",                                forms:["annual"]},
+          {word:"decline",  ipa:"/dɪˈklaɪn/",  pos:"v.",    zh:"衰退，下降，减少；拒绝，婉辞 n. 下降，减少；衰退，衰落期", forms:["declining"]},
+          {word:"crisis",   ipa:"/ˈkraɪsɪs/",  pos:"n.",    zh:"[pl. crises] 危机；危急存亡之际；转折点",       forms:["crisis"]},
+          {word:"forecast", ipa:"/ˈfɔːkɑːst/", pos:"n./v.", zh:"预测，预示，预报",                              forms:["forecast"]},
+          {word:"revenue",  ipa:"/ˈrevənjuː/", pos:"n.",    zh:"国家的税收，岁入；[pl.] 收入总额",              forms:["revenue"]}
+        ]
+      },
+      {
+        id:"B3-P2", slug:"tem4-B3-P2", title:"会前准备", shape:"叶形",
+        poster:"assets/tem4/posters/B3_P2.png",
+        sentence:"Before Friday, every department must submit a specific and concrete plan: the slides need to be clearly designed, and an elaborate outline of key points will be printed out so that no one walks into the meeting unprepared.",
+        sentenceCn:"周五之前，每个部门都必须提交一份具体而明确的方案：幻灯片要设计得清晰明了，还要印出一份详尽的重点提纲，确保没有人毫无准备地走进会场。",
+        scene:"粉彩办公室里，小叶学姐和同事们忙着准备会议材料，笔记本电脑上是一页页彩色幻灯片，打印机吐出整齐的资料，桌上的文件夹摆放有序。",
+        words:[
+          {word:"submit",    ipa:"/səbˈmɪt/",               pos:"v.",     zh:"服从，屈从；呈送，提交，提出",       forms:["submit"]},
+          {word:"specific",  ipa:"/spəˈsɪfɪk/",             pos:"adj.",   zh:"明确的，详尽的；特定的，特指的",     forms:["specific"]},
+          {word:"concrete",  ipa:"/ˈkɒnkriːt; kɒnˈkriːt/",  pos:"adj.",   zh:"具体的，有形的；明确的",             forms:["concrete"]},
+          {word:"outline",   ipa:"/ˈaʊtlaɪn/",              pos:"n./vt.", zh:"轮廓；提纲，要点，概括；画出…的轮廓，打出…的草图", forms:["outline"]},
+          {word:"elaborate", ipa:"/ɪˈlæbərɪt/",             pos:"adj.",   zh:"精心制作的；详尽阐述的；复杂的；精致的", forms:["elaborate"]},
+          {word:"design",    ipa:"/dɪˈzaɪn/",               pos:"n./v.",  zh:"设计，图样，图案 v. 计划，图谋，打算；构思设计", forms:["designed"]}
+        ]
+      },
+      {
+        id:"B3-P3", slug:"tem4-B3-P3", title:"开场陈述", shape:"椭圆",
+        poster:"assets/tem4/posters/B3_P3.png",
+        sentence:"Opening the meeting, the manager declares its purpose, emphasizes that time is short, explains the new sales policy with clear figures, expresses his trust in the team, indicates two possible directions, and finally convinces everyone that the target is within reach.",
+        sentenceCn:"会议开始，经理宣布会议目的，强调时间紧迫，用清晰的数据解释新的销售政策，表达了对团队的信任，指出两个可能的方向，最终让每个人都相信目标并非遥不可及。",
+        scene:"明亮的粉彩会议室，小叶学姐站在长桌一头指着大屏幕讲解彩色图表，小动物同事们围坐桌边认真记笔记，窗边绿植点缀。",
+        words:[
+          {word:"declare",   ipa:"/dɪˈkleə/",   pos:"v.",  zh:"宣告，公告；表明，断言；申报（纳税品等）", forms:["declares"]},
+          {word:"emphasize", ipa:"/ˈemfəsaɪz/", pos:"vt.", zh:"强调，着重，加强",                         forms:["emphasizes"]},
+          {word:"explain",   ipa:"/ɪkˈspleɪn/", pos:"vt.", zh:"解释，说明；为…辩解，说明…的理由",         forms:["explains"]},
+          {word:"express",   ipa:"/ɪkˈspres/",  pos:"vt.", zh:"表达，表示，表白 n. 快车 adj. 明白的，确切的；快速的", forms:["expresses"]},
+          {word:"indicate",  ipa:"/ˈɪndɪkeɪt/", pos:"v.",  zh:"标示，指示，指出；表明，暗示",             forms:["indicates"]},
+          {word:"convince",  ipa:"/kənˈvɪns/",  pos:"v.",  zh:"使确信，使信服；说服",                     forms:["convinces"]}
+        ]
+      },
+      {
+        id:"B3-P4", slug:"tem4-B3-P4", title:"激烈讨论", shape:"超圆角",
+        poster:"assets/tem4/posters/B3_P4.png",
+        sentence:"The free discussion soon turns heated: several managers challenge the forecast and dispute its figures, a few query the cost, the sales director insists on his own view and refutes the doubts one by one, though the two sides still disagree on timing.",
+        sentenceCn:"自由讨论很快变得热烈：几位经理对预测提出质疑，就数据展开争论，还有人追问成本；销售总监坚持己见，逐一反驳各种疑问，但双方在时间安排上仍有分歧。",
+        scene:"粉彩会议室里讨论正酣，小叶学姐站在涂满彩色标记的白板旁，两位同事举手热情发言，头顶飘着空白对话气泡，气氛热烈又可爱。",
+        words:[
+          {word:"challenge", ipa:"/ˈtʃælɪndʒ/",  pos:"n./vt.", zh:"挑战；异议，质疑；向…挑战，对…表示异议", forms:["challenge"]},
+          {word:"dispute",   ipa:"/dɪsˈpjuːt/",  pos:"n./v.",  zh:"争吵，争论，争夺；质疑，反对；阻止，反抗", forms:["dispute"]},
+          {word:"query",     ipa:"/ˈkwɪəri/",    pos:"n./v.",  zh:"质问，疑问，（提）问题",                   forms:["query"]},
+          {word:"insist",    ipa:"/ɪnˈsɪst/",    pos:"v.",     zh:"坚持，坚决认为；坚决要求；强调",           forms:["insists"]},
+          {word:"refute",    ipa:"/rɪˈfjuːt/",   pos:"vt.",    zh:"反驳，驳斥",                               forms:["refutes"]},
+          {word:"disagree",  ipa:"/ˌdɪsəˈɡriː/", pos:"vi.",    zh:"不一致，不符；意见不合，有分歧",           forms:["disagree"]}
+        ]
+      },
+      {
+        id:"B3-P5", slug:"tem4-B3-P5", title:"妥协与决议", shape:"波浪",
+        poster:"assets/tem4/posters/B3_P5.png",
+        sentence:"After hours of argument, both sides finally make a mutual compromise; the amended proposal wins unanimous consent, the board adopts it on the spot, and everyone leaves the room knowing exactly what to do next week.",
+        sentenceCn:"经过数小时的争论，双方终于做出相互的妥协；修正后的提案获得一致同意，董事会当场予以通过，每个人都清楚下周该做什么，才离开会议室。",
+        scene:"温馨的粉彩会议室，小叶学姐与同事握手，桌上放着盖章的文件和小金铃，其他同事鼓掌欢呼，彩纸与星星飞舞，窗外夕阳温暖。",
+        words:[
+          {word:"compromise", ipa:"/ˈkɒmprəmaɪz/", pos:"n./v.", zh:"妥协，折中办法；互让解决，折中处理；危及，连累", forms:["compromise"]},
+          {word:"mutual",     ipa:"/ˈmjuːtʃuəl/",  pos:"adj.",  zh:"相互的；共同的，共有的",                        forms:["mutual"]},
+          {word:"amend",      ipa:"/əˈmend/",      pos:"v.",    zh:"修改，修正，改进",                              forms:["amended"]},
+          {word:"unanimous",  ipa:"/juːˈnænɪməs/", pos:"adj.",  zh:"一致同意的，一致通过的",                        forms:["unanimous"]},
+          {word:"consent",    ipa:"/kənˈsent/",    pos:"vi.",   zh:"同意，答应；承诺",                              forms:["consent"]},
+          {word:"adopt",      ipa:"/əˈdɒpt/",      pos:"v.",    zh:"采用，采取（态度等）；收养；接受某种习俗；正式通过", forms:["adopts"]}
+        ]
+      }
+    ]
+  },
   {id:"B4", cat:"B", zh:"职业规划",   name:"Career Planning",   status:"soon", words:60,  desc:"简历、目标、白板"},
   {id:"B5", cat:"B", zh:"办公工具",   name:"Workplace Tools",   status:"soon", words:60,  desc:"电脑、电话、打印机"},
   /* ===== C 日常生活 ===== */
