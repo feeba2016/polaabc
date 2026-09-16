@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Round House for a Whole Family — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#92400e;
+  --accent2:#0d9488;
+  --bg:#fdfaf5;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#f0e4d4;
+  --soft:#fbf3e6;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:8px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(146,64,14,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(146,64,14,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(146,64,14,.55);}70%{box-shadow:0 0 0 12px rgba(146,64,14,0);}100%{box-shadow:0 0 0 0 rgba(146,64,14,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#4a2c12;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(146,64,14,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE ROUND HOUSE FOR A WHOLE FAMILY · 2026-09-16</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🏯 The Round House for a Whole Family</h1>
+  <div class="subtitle">能住下整个家族的圆房子 · CEFR A2 · 约 141 词 · 🌍 世界文化</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">A strange house · 山里的怪房子</div>
+        <p>In the mountains of Fujian in south-east China, there are big <span class="kw" data-word="round">round</span> houses made of <span class="kw" data-word="earth">earth</span>. They are called tulou. Some are four storeys tall and big enough for eight hundred people.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">在中国东南部的福建山区，有一些用泥土建成的大圆房子。它们叫做土楼。有的土楼有四层楼那么高，大得能住下八百人。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">Thick walls · 厚厚的外墙</div>
+        <p>The <span class="kw" data-word="wall">walls</span> are made of earth, and they are very <span class="kw" data-word="thick">thick</span> — one or two metres. There is only one big <span class="kw" data-word="door">door</span>. Windows on the outside start above the first floor, so it is hard to climb in.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">土楼的墙是用泥土筑成的，非常厚——有一到两米厚。整座楼只有一个大门。外墙上的窗户都开在二楼以上，所以很难爬进去。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">A little city · 楼里的小城市</div>
+        <p>Inside, there is an open <span class="kw" data-word="courtyard">courtyard</span> in the middle. Every family has rooms of the same size. There is a <span class="kw" data-word="well">well</span> for water, and there are places for rice. Long ago, people could stay inside for months.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">楼里面，中间是一个露天的院子。每个家族分到的房间都一样大。楼里有一口水井，还有存放粮食的地方。很久以前，人们可以在楼里一连住上几个月不出来。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Still standing · 今天仍然站着</div>
+        <p>Today the tulou are famous. In 2008, forty-six of them became a UNESCO World Heritage site. Families still live in some of them. Workers now use cameras and computers to <span class="kw" data-word="protect">protect</span> the old walls.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">今天，土楼已经很有名了。2008 年，其中四十六座被列入联合国教科文组织的《世界遗产名录》。有一些土楼里现在还住着人家。工作人员如今用相机和电脑来记录和保护这些古老的外墙。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Key Words（8 个）</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="round">🔊</button>
+        <div class="word">round<span class="pos">adj.</span></div>
+        <div class="zh">圆形的；环形的</div>
+        <div class="ex">There are big round houses.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="earth">🔊</button>
+        <div class="word">earth<span class="pos">n.</span></div>
+        <div class="zh">泥土；土（made of earth 用土做的）</div>
+        <div class="ex">The walls are made of earth.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="wall">🔊</button>
+        <div class="word">wall<span class="pos">n.</span></div>
+        <div class="zh">墙；墙壁（复数 walls）</div>
+        <div class="ex">The wall is two metres thick.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="thick">🔊</button>
+        <div class="word">thick<span class="pos">adj.</span></div>
+        <div class="zh">厚的（反义词 thin 薄的）</div>
+        <div class="ex">The walls are very thick.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="door">🔊</button>
+        <div class="word">door<span class="pos">n.</span></div>
+        <div class="zh">门；门口</div>
+        <div class="ex">There is only one big door.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="courtyard">🔊</button>
+        <div class="word">courtyard<span class="pos">n.</span></div>
+        <div class="zh">院子；天井（courtyard = court + yard）</div>
+        <div class="ex">There is an open courtyard.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="well">🔊</button>
+        <div class="word">well<span class="pos">n.</span></div>
+        <div class="zh">井；水井</div>
+        <div class="ex">There is a well for water.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="protect">🔊</button>
+        <div class="word">protect<span class="pos">v.</span></div>
+        <div class="zh">保护；防护</div>
+        <div class="ex">We protect the old walls.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns</h2>
+
+  <div class="pattern">
+    <div class="en">1. There are big round houses in the mountains.</div>
+    <div class="zh">山里有一些大圆房子。</div>
+    <div class="note">📌 表示「某处有某物」：There is + 单数／不可数，There are + 复数。<br>替换：There is a well in the courtyard.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">2. The walls are made of earth.</div>
+    <div class="zh">这些墙是用泥土筑成的。</div>
+    <div class="note">📌 be made of + 材料：由……制成（材料还看得出原样）。<br>替换：The door is made of wood.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">3. The walls are one or two metres thick.</div>
+    <div class="zh">这些墙有一到两米厚。</div>
+    <div class="note">📌 数字 + 单位 + 形容词：four storeys tall（四层楼高）、two metres thick（两米厚）、600 years old（六百岁）。单位超过 1 要加 s。<br>替换：The tulou is four storeys tall.</div>
+  </div>
+
+  <div class="pattern">
+    <div class="en">4. Families still live in some of them.</div>
+    <div class="zh">一些土楼里现在还住着人家。</div>
+    <div class="note">📌 still 表示「仍然」，放在实义动词前面：They still live here.<br>但如果句子里有 be 动词或情态动词，still 要放在它们后面：The walls are still strong.</div>
+  </div>
+</section>
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar</h2>
+
+  <div class="gram">
+    <h3>1. 被动语态入门：be + 过去分词</h3>
+    <ul>
+      <li>不知道是谁做的，或者「谁做的不重要」时，用被动语态：<span class="good">They are called tulou.</span>（它们被叫做土楼）</li>
+      <li>最常见的是 be made of：<span class="good">The walls are made of earth.</span>（墙是用泥土做的）</li>
+      <li>结构是 <span class="good">am / is / are + 过去分词</span>，be 动词要和主语一致：The wall <span class="good">is</span> made of earth. The walls <span class="good">are</span> made of earth.</li>
+      <li class="eg">再练一句：The doors are ___ of wood.（答案：made）</li>
+      <li>❌ 常见错误：<span class="bad">The walls are make of earth.</span>（be 后面要用过去分词 made）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. There is / There are：某处有某物</h3>
+    <ul>
+      <li>后面是单数或不可数名词 → <span class="good">There is</span>：There <span class="good">is</span> only one big door. There <span class="good">is</span> a well for water.</li>
+      <li>后面是复数名词 → <span class="good">There are</span>：There <span class="good">are</span> big round houses. There <span class="good">are</span> places for rice.</li>
+      <li>表示地点一般放在句子后面：There is an open courtyard <span class="good">in the middle</span>.</li>
+      <li class="eg">小练习：There ___ forty-six tulou on the list.（答案：are）</li>
+      <li>❌ 常见错误：<span class="bad">There are only one big door.</span>（后面是单数，要用 There is）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. 数量与度量：数字 + 单位 + 形容词</h3>
+    <ul>
+      <li>说高度：<span class="good">four storeys tall</span>（四层楼高）；说厚度：<span class="good">one or two metres thick</span>（一到两米厚）。</li>
+      <li>单位大于 1 时要加 s：<span class="good">two metres</span>、<span class="good">four storeys</span>；只有 1 时不加：one metre。</li>
+      <li>整百数字不用加 s：<span class="good">eight hundred people</span>，不能写成 eight hundreds。</li>
+      <li>几十几中间要加连字符：<span class="good">forty-six</span> buildings。</li>
+      <li>❌ 常见错误：<span class="bad">The wall is two metre thick.</span>（metre 要变复数 metres）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. 一般过去时 vs 一般现在时：什么时候用</h3>
+    <ul>
+      <li>讲<b>过去某一年发生的事</b>用过去时，常带 in 2008、long ago 这样的时间词：In 2008, forty-six of them <span class="good">became</span> a World Heritage site.（become → became）</li>
+      <li>讲<b>现在仍然是这样</b>的事用一般现在时：Today the tulou <span class="good">are</span> famous. Families <span class="good">live</span> in some of them.</li>
+      <li>把两种时态放在一段里，就能讲出「从前……现在……」的变化，这是写短文最好用的结构。</li>
+      <li class="eg">试试自己说：Long ago people could stay inside for months. Today visitors come to see the tulou.</li>
+      <li>❌ 常见错误：<span class="bad">In 2008 they become famous.</span>（过去的时间要用 became）</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz（5 题）</h2>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">1. Where can you find the tulou?</div>
+    <div class="qzh">在哪里可以找到土楼？</div>
+    <button class="opt">A) In the mountains of Fujian</button>
+    <button class="opt">B) In the middle of a desert</button>
+    <button class="opt">C) On a small island</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">2. What are the walls of a tulou made of?</div>
+    <div class="qzh">土楼的墙是用什么做的？</div>
+    <button class="opt">A) Ice and snow</button>
+    <button class="opt">B) Earth</button>
+    <button class="opt">C) Glass</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="2">
+    <div class="q">3. How many big doors does a tulou have on the outside?</div>
+    <div class="qzh">一座土楼的外墙上有几扇大门？</div>
+    <button class="opt">A) Ten</button>
+    <button class="opt">B) Two</button>
+    <button class="opt">C) One</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="1">
+    <div class="q">4. What is in the middle of a tulou?</div>
+    <div class="qzh">土楼的中间是什么？</div>
+    <button class="opt">A) A train station</button>
+    <button class="opt">B) An open courtyard</button>
+    <button class="opt">C) A swimming pool</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="quiz" data-ans="0">
+    <div class="q">5. When did forty-six tulou become a UNESCO World Heritage site?</div>
+    <div class="qzh">四十六座土楼是哪一年被列入《世界遗产名录》的？</div>
+    <button class="opt">A) In 2008</button>
+    <button class="opt">B) In 1990</button>
+    <button class="opt">C) Last year</button>
+    <div class="fb"></div>
+  </div>
+
+  <div class="score" id="score"></div>
+</section>
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · More to Know</h2>
+
+  <div class="know">
+    <h3>一、土楼到底是什么</h3>
+    <p>土楼主要分布在中国<b>福建省西南部</b>的山区（永定、南靖、华安等地），是客家先民和闽南先民建造的大型夯土民居。它不像普通的房子一家一户分开住，而是<b>整个家族几百人住在同一座楼里</b>：外墙厚实、只有一个大门，对内则完全敞开。</p>
+    <p>联合国教科文组织的官方介绍说：列入名录的福建土楼共有 <b>46 座</b>，建造于 15 到 20 世纪，分布在福建西南 120 多公里的范围内；每座楼可以住下<b>多达 800 人</b>，楼内房间大小相同、垂直分配给各个家庭。因为功能齐全、自成一格，人们把它们叫做<b>「家族的小王国」</b>或「热闹的小城市」。</p>
+  </div>
+
+  <div class="know">
+    <h3>二、为什么是圆的</h3>
+    <ul>
+      <li><b>方形在前，圆形在后。</b>最早的土楼多是方形的，但方楼四个角有视线盲区，通风采光也不好。后来人们改成圆形，四面都能照顾到，风也能穿堂而过。</li>
+      <li><b>向高空要空间。</b>福建山多平地少，一座土楼占地不大，却建到三四层高，把整个家族拢在一起，既省地又能互相照应。</li>
+      <li><b>墙里加了「料」。</b>闽南一带的夯土常用「三合土」——黄土、石灰、砂子拌在一起夯筑，有的还加入红糖水和糯米浆，让墙体更硬更结实。</li>
+      <li><b>会呼吸的房子。</b>厚土墙冬暖夏凉；楼塌废弃之后，土、木、石又回到自然里，不污染环境，因此土楼也被称为绿色生态建筑的典范。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>三、一座楼就是一个小社会</h3>
+    <p>土楼的内部安排得井井有条：<b>一层是厨房、饭厅和储藏室，二层放粮食，三层以上住人</b>；中间是露天的内院，院里常建有祖堂，既是祭祖的地方，也是孩子们读书的学堂。楼里有水井，能存粮，<b>关上大门可以坚守数月</b>。</p>
+    <p>最让人佩服的一点是：<b>楼里所有房间大小都一样，不分长幼尊卑，平均分配</b>。楹联上常写着耕读为本、忠孝仁义这样的家训。所以土楼不只是建筑，更是东方家族观念和聚族而居传统的历史见证。</p>
+  </div>
+
+  <div class="know">
+    <h3>四、从 2008 年到今天：老房子正在变成新课堂</h3>
+    <p>2008 年 7 月，在加拿大魁北克城举行的第 32 届世界遗产大会上，「福建土楼」以全票通过审议，被正式列入《世界遗产名录》。</p>
+    <p>申遗成功后，保护工作一直在推进。据人民网 2026 年 9 月的报道，南靖坚持「保护为先、最小干预」：一边用<b>数字化手段</b>为夯筑技艺和楼体存档，装上消防、防雷设施；一边把闲置的土楼改造成民宿、民俗体验空间，让游客从「看土楼」变成「住进土楼」。当地还在建设「520 福建土楼（南靖）文化旅游圈」，用 52 公里的风景道串起 20 处打卡点。</p>
+    <p>2026 年 7 月，华安县为「非世遗」土楼办理不动产确权登记，共颁发了 <b>256 本不动产权证书</b>——这些不在名录里的老楼终于有了「身份证」，后续的修缮和利用也有了法律基础。</p>
+  </div>
+
+  <div class="know">
+    <h3>🇨🇳 五、一方水土一方房：中国其他特色民居</h3>
+    <p>中国幅员辽阔，各地人民就地取材，造出了完全不同的房子，都讲究<b>「天人合一」</b>——顺应自然，而不是硬抗自然：</p>
+    <ul>
+      <li><b>陕北窑洞</b>：在黄土高原的崖壁上挖出洞穴，冬暖夏凉，被称为「地下四合院」。</li>
+      <li><b>云南「一颗印」</b>：方方正正像一枚印章的小院落，适应高原风大、日照强的气候。</li>
+      <li><b>徽派民居</b>：白墙黑瓦、马头墙高耸，防火又好看，多见于安徽、江西一带。</li>
+      <li><b>北京四合院</b>：四面房屋围出一个方正的院子，长幼有序、内外分明。</li>
+      <li><b>客家围屋</b>：分布在江西赣南、广东东部，和土楼是「亲戚」，同样聚族而居、重视防御。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>六、动手做：造一座你自己的小土楼</h3>
+    <ul>
+      <li><b>材料</b>：湿沙（或橡皮泥、超轻粘土）、一个圆纸筒、几根小木棍、硬纸板。</li>
+      <li><b>做法</b>：先用湿沙堆出一个圆环当外墙，厚一点；中间留空当天井；再在圆环上开一个门洞；最后用纸板剪一个比墙宽的大屋顶盖上去，屋檐要伸出来很多。</li>
+      <li><b>想一想</b>：为什么屋顶要伸得那么远？（提示：福建雨水多，大屋檐能把雨水甩离土墙。夯土墙最怕水长期浸泡。）</li>
+      <li><b>说一说</b>：做完后，用英语向家人介绍三句话：My tulou is round. It is made of sand. There is a courtyard in the middle.</li>
+    </ul>
+  </div>
+
+  <div class="tipbox">
+    <h3>⚠️ 参观土楼的三个提醒</h3>
+    <ul>
+      <li><b>土楼不是空的景点，是有人住的家。</b>很多土楼里至今住着居民，参观时请放轻脚步、不推门进屋、不擅自上楼，拍照前先打招呼。</li>
+      <li><b>不要触摸和刻划墙体。</b>夯土墙看着结实，其实怕水、怕刮。手上的汗和刻痕都会伤害它——这和课文中「用相机和电脑来保护老墙」是一个道理。</li>
+      <li><b>做模型要注意卫生。</b>用湿沙或粘土玩过之后一定要洗手；不要在田埂和水渠边挖土，那可能是村民种地用的。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--accent);font-size:17px;">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><span class="txt">读懂一篇约 141 词的英文短文，了解中国福建土楼这一世界文化遗产。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">掌握 8 个核心词汇：round, earth, wall, thick, door, courtyard, well, protect。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用 There is / There are 描述「某处有某物」，注意单复数。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会初步使用被动语态 are called / are made of，并说出 four storeys tall、two metres thick 这样的度量表达。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">能分清一般过去时与一般现在时，讲出「从前……现在……」的变化。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;color:var(--accent);font-size:17px;">📚 学习建议</h3>
+    <div class="know" style="border:none;padding:0;margin:0;">
+      <ul>
+        <li><b>先听后读</b>：点段落旁的播放键听一遍，再自己朗读；读到破折号和句号时稍作停顿。</li>
+        <li><b>找一找 There is / There are</b>：把课文里这两个句型圈出来，看看后面的名词是单数还是复数。</li>
+        <li><b>量一量</b>：用英语说出身边三样东西的尺寸，比如 My desk is one metre long. / My ruler is thirty centimetres long.</li>
+        <li><b>比一比时态</b>：从课文里各抄一句过去时和一般现在时的句子，说说为什么时态不同。</li>
+        <li><b>画一画</b>：画一张土楼的俯视图（一个大圆环），用英语标出 wall、door、courtyard、well 四个词。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 10px;color:var(--accent);font-size:17px;">🗣️ 今日口语小任务</h3>
+    <p style="font-size:14.5px;color:#374151;margin:0 0 8px;">用下面的句式，向同学介绍土楼（说满 3 句就算完成）：</p>
+    <div class="pattern" style="margin:0;">
+      <div class="en">In Fujian, there are big round houses. They are made of earth. There is one big door and a courtyard in the middle.</div>
+      <div class="zh">在福建有一些大圆房子。它们是用泥土筑成的。那里只有一个大门，中间有一个院子。</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:24px 0 8px;">
+    <button class="print-btn" onclick="window.print()">🖨️ 打印本页练习</button>
+  </div>
+</section>
+
+<footer>POLA NEWS · The Round House for a Whole Family · 2026-09-16</footer>
+</main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+"In the mountains of Fujian in south-east China, there are big round houses made of earth. They are called tulou. Some are four storeys tall and big enough for eight hundred people.",
+  "The walls are made of earth, and they are very thick — one or two metres. There is only one big door. Windows on the outside start above the first floor, so it is hard to climb in.",
+  "Inside, there is an open courtyard in the middle. Every family has rooms of the same size. There is a well for water, and there are places for rice. Long ago, people could stay inside for months.",
+  "Today the tulou are famous. In 2008, forty-six of them became a UNESCO World Heritage site. Families still live in some of them. Workers now use cameras and computers to protect the old walls."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'round': '圆形的；环形的 adj.',
+  'earth': '泥土；土 n.',
+  'wall': '墙；墙壁 n.',
+  'thick': '厚的 adj.',
+  'door': '门；门口 n.',
+  'courtyard': '院子；天井 n.',
+  'well': '水井 n.',
+  'protect': '保护；防护 v.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+function hideTip(){ tip.style.display = 'none'; }
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(kws[k]);
+}
+document.addEventListener('click', hideTip);
+window.addEventListener('scroll', hideTip);
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#','');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            sc.classList.add('show');
+            sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+              (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>

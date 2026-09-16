@@ -3482,6 +3482,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-16",
+    "title": "Why Does the Moon Change Shape",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-16-why-does-the-moon-change-shape",
+    "url": "lessons/a1/2026-09-16-why-does-the-moon-change-shape.html",
+    "vocab": [
+      {
+        "word": "moon",
+        "zh": "月亮",
+        "ex": "Look at the moon."
+      },
+      {
+        "word": "round",
+        "zh": "圆的",
+        "ex": "The moon is round."
+      },
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "The sun is big."
+      },
+      {
+        "word": "bright",
+        "zh": "亮的",
+        "ex": "The sun is bright."
+      },
+      {
+        "word": "earth",
+        "zh": "地球",
+        "ex": "We live on the earth."
+      },
+      {
+        "word": "month",
+        "zh": "月；一个月",
+        "ex": "Watch for one month."
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -5090,6 +5132,58 @@ const EPISODES = [
         "word": "born",
         "zh": "天生的；be born with 天生就有",
         "ex": "Children are born with it."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-16",
+    "title": "The Round House for a Whole Family",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-16-the-round-house-for-a-whole-family",
+    "url": "lessons/a2/2026-09-16-the-round-house-for-a-whole-family.html",
+    "vocab": [
+      {
+        "word": "round",
+        "zh": "在中国东南部的福建山区，有一些用泥土建成的大圆房子。它们叫做土楼。有的土楼有四层楼那么高，大得能住下八百人。",
+        "ex": "There are big round houses."
+      },
+      {
+        "word": "earth",
+        "zh": "泥土；土（made of earth 用土做的）",
+        "ex": "The walls are made of earth."
+      },
+      {
+        "word": "wall",
+        "zh": "墙；墙壁（复数 walls）",
+        "ex": "The wall is two metres thick."
+      },
+      {
+        "word": "thick",
+        "zh": "厚的（反义词 thin 薄的）",
+        "ex": "The walls are very thick."
+      },
+      {
+        "word": "door",
+        "zh": "门；门口",
+        "ex": "There is only one big door."
+      },
+      {
+        "word": "courtyard",
+        "zh": "院子；天井（courtyard = court + yard）",
+        "ex": "There is an open courtyard."
+      },
+      {
+        "word": "well",
+        "zh": "井；水井",
+        "ex": "There is a well for water."
+      },
+      {
+        "word": "protect",
+        "zh": "保护；防护",
+        "ex": "We protect the old walls."
       }
     ]
   },

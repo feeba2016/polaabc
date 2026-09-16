@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · Why Does the Moon Change Shape — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#4338ca;
+  --accent2:#7c3aed;
+  --bg:#eef2ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#3730a3;
+  --highlight:#fde68a;
+  --border:#c7d2fe;
+  --soft:#e0e7ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#a78bfa);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(67,56,202,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #a5b4fc;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#3730a3;background:#eef2ff;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(67,56,202,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(67,56,202,.6);}70%{box-shadow:0 0 0 14px rgba(67,56,202,0);}100%{box-shadow:0 0 0 0 rgba(67,56,202,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#ffd166;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(67,56,202,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">Why Does the Moon Change Shape 🌙🍌</h1>
+      <p class="subtitle">2026年9月16日 · 简单科普｜月亮为什么会变形状 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · A Moon in the Sky 天上的月亮</div>
+            <p>Look at the <span class="kw" data-def="月亮：晚上挂在天上、亮亮的那个大圆盘">moon</span> at night. 🌙 Some nights it is a big <span class="kw" data-def="圆的：像皮球、像盘子那样的形状">round</span> ball. Some nights it is a thin banana. 🍌</p>
+          </div>
+          <div class="zh">晚上看看月亮 🌙。有些夜晚它是一个又大又圆的球 🔵。有些夜晚它却变成了一根细细的香蕉 🍌。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · The Moon Does Not Change 月亮其实没变</div>
+            <p>The moon does not change. It is always <span class="kw" data-def="圆的：月亮一直是个圆球，只是我们看到的亮处不一样多">round</span>. 🔵 The <span class="kw" data-def="太阳：白天给我们光和热的那个大火球">sun</span> makes one side <span class="kw" data-def="亮的：被光照到、发亮的样子">bright</span>. ☀️</p>
+          </div>
+          <div class="zh">月亮并没有变形。它一直都是圆的 🔵。是太阳把它的其中一面照亮了 ☀️。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · A Trip Around the Earth 绕着地球转一圈</div>
+            <p>The moon goes around the <span class="kw" data-def="地球：我们住的这个蓝色星球，也是月亮绕着转的地方">earth</span>. 🌍 We see a lot of the bright side. We see a little. We see none. 👀</p>
+          </div>
+          <div class="zh">月亮绕着地球转 🌍。有时候我们看见一大片亮面，有时候只看见一点点，有时候一点都看不见 👀。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Watch for One Month 观察一个月</div>
+            <p>Watch the moon for one <span class="kw" data-def="月；一个月：大约三十天那么长的一段时间">month</span>. 📅 It grows big. It gets small again. Then it starts over. 🔄</p>
+          </div>
+          <div class="zh">连着看月亮一个月 📅。它会慢慢变胖，再慢慢变瘦，然后又重新开始 🔄。</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#e0e7ff;border:2px solid #a5b4fc;">
+        <h3 style="margin:0 0 8px;color:#4338ca;font-size:20px;">🌙 和 Pola 一起演一演！</h3>
+        <p style="margin:0;font-size:16px;">和爸爸妈妈一起用手比月亮：说 <b>“a big round ball”</b> 时两只手围成一个大圆圈 🔵；说 <b>“a thin banana”</b> 时把两只手弯成一条细细的月牙 🍌；说 <b>“It grows big.”</b> 时把圆圈慢慢撑大，说 <b>“It gets small again.”</b> 时再慢慢缩小 🔄。记得点黄色的词看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="moon">🔊</button><div class="emoji">🌙</div><div class="word">moon<span class="pos">n.</span></div><div class="zh">月亮</div><div class="ex">Look at the moon.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="round">🔊</button><div class="emoji">🔵</div><div class="word">round<span class="pos">adj.</span></div><div class="zh">圆的</div><div class="ex">The moon is round.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sun">🔊</button><div class="emoji">☀️</div><div class="word">sun<span class="pos">n.</span></div><div class="zh">太阳</div><div class="ex">The sun is big.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bright">🔊</button><div class="emoji">✨</div><div class="word">bright<span class="pos">adj.</span></div><div class="zh">亮的</div><div class="ex">The sun is bright.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="earth">🔊</button><div class="emoji">🌍</div><div class="word">earth<span class="pos">n.</span></div><div class="zh">地球</div><div class="ex">We live on the earth.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="month">🔊</button><div class="emoji">📅</div><div class="word">month<span class="pos">n.</span></div><div class="zh">月；一个月</div><div class="ex">Watch for one month.</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Look at the [thing].</h3>
+          <div class="zh">“看这个……”。想请别人<b>一起看一样东西</b>，就用 <b>Look at the ...</b>。the 后面放<b>要看的东西</b>。</div>
+          <div class="eg">Look at the moon. 🌙 / Look at the sun. ☀️ / Look at the star. ⭐</div>
+          <div class="practice">练习：看这只小鸟 → Look at <input placeholder="the bird">.</div>
+        </div>
+        <div class="item">
+          <h3>2. The moon is [adjective].</h3>
+          <div class="zh">“月亮是……的”。说一样东西<b>是什么样子</b>，用 <b>The ... is + 形容词</b>。形容词放在 <b>is</b> 的后面。</div>
+          <div class="eg">The moon is round. 🔵 / The moon is bright. ✨ / The moon is big. 🌕 / The moon is small. 🌘</div>
+          <div class="practice">练习：月亮是圆的 → The moon <input placeholder="is round">.</div>
+        </div>
+        <div class="item">
+          <h3>3. I see a [thing].</h3>
+          <div class="zh">“我看见一个……”。告诉别人<b>你看到了什么</b>，用 <b>I see a ...</b>。中文里“看见”和英文的 <b>see</b> 是一对好朋友 👀。</div>
+          <div class="eg">I see a moon. 🌙 / I see a star. ⭐ / I see a big round ball. 🔵</div>
+          <div class="practice">练习：我看见一颗星星 → I see <input placeholder="a star">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. a / an（一个）</h3>
+          <div class="zh">只有<b>一样</b>东西时，前面要加 a 或 an。单词以<b>辅音</b>开头用 <b>a</b>；以<b>元音</b>（a e i o u）开头用 <b>an</b>。要看的是<b>发音</b>，不是字母哦。</div>
+          <div class="eg">a moon 🌙 / a ball 🔵 / a banana 🍌 / a star ⭐ / an apple 🍎 / an orange 🍊　｜　地球只有一个，要说 <b>the earth</b> 🌍</div>
+        </div>
+        <div class="item">
+          <h3>2. is / am / are（是）</h3>
+          <div class="zh">英文里的“是”会变样子：<b>I</b> 后面用 <b>am</b>；<b>he / she / it</b> 和<b>单个东西</b>后面用 <b>is</b>；<b>you / we / they</b> 和<b>很多个东西</b>后面用 <b>are</b>。</div>
+          <div class="eg">It is round. 🔵 / The moon is bright. ✨ / I am happy. 😊 / The stars are bright. ⭐⭐</div>
+        </div>
+        <div class="item">
+          <h3>3. he / she / it 后面，动词要加 -s</h3>
+          <div class="zh">主语是 <b>he（他）</b>、<b>she（她）</b>、<b>it（它）</b> 时，动词要加 <b>-s</b>：make → <b>makes</b>，go → <b>goes</b>，grow → <b>grows</b>，get → <b>gets</b>。可是 <b>I</b>、<b>you</b>、<b>we</b>、<b>they</b> 后面<b>不加</b>。</div>
+          <div class="eg">The sun makes one side bright. ☀️ / The moon goes around the earth. 🌍 / It grows big. 🌕 / It gets small again. 🌘</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#e0e7ff;border:2px solid #a5b4fc;">
+        <div style="font-size:20px;font-weight:800;color:#4338ca;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#3730a3;margin-top:6px;">每做对一题得 1 分，全部做完就是小小天文家啦！🌙✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🌙 月亮真的会变形状吗？</h3>
+        <p>小朋友，你有没有在晚上抬头看过月亮？有时候它又大又圆，像一个大银盘 🌕；有时候它弯弯的，像一条小船，或者一根香蕉 🍌；还有的时候，你找遍了整个天空，都找不到它的影子 🌑。</p>
+        <p>难道月亮真的是被谁咬掉了一口吗？<b>不是的。</b>月亮一直都是一个<b>圆滚滚的大球</b>，它从来没有变过形状 🔵。真正变化的，是<b>我们能看到多少被太阳照亮的部分</b>。</p>
+
+        <h3>☀️ 月亮自己不会发光</h3>
+        <p>这里有一个很重要的小秘密：月亮自己<b>是不会发光的</b>。我们看到的月光，其实是<b>太阳的光照到月亮上，再反射到我们眼睛里</b>的 🌞➡️🌙➡️👀。</p>
+        <p>你可以这样想：太阳像一盏很大很大的灯，一直照着。太阳照到的那一半月亮是亮的，照不到的那一半是暗的。可是月亮在不停地绕着地球转，<b>亮的那半边有时候正对着我们，有时候侧一点点，有时候完全背着我们</b>。所以我们看到的形状就一天一天地变了。</p>
+
+        <h3>🌍 月亮绕着地球转</h3>
+        <p>月亮是地球<b>唯一的天然卫星</b>。它围着我们住的地球，一圈一圈地转 🌍。转完一整圈，大约需要<b>27 天多</b>。</p>
+        <p>有意思的是：月亮转一圈的时间，和它自己<b>转一次身</b>的时间刚好一样长。所以<b>我们在地球上永远只能看到月亮的同一面</b>，月亮的背面，人类一直到 1959 年才第一次拍到照片 📷。</p>
+        <p>当月亮转到地球和太阳中间时，亮的一面完全背着我们，我们就<b>看不见月亮</b>了，这叫<b>“新月”</b> 🌑。当月亮转到地球的另一边，亮的一面整个对着我们，我们就看到了<b>“满月”</b> 🌕。中间还有<b>月牙</b>（峨眉月）🌒、<b>半个月亮</b>（上弦月、下弦月）🌓🌗 和<b>凸月</b> 🌔。</p>
+
+        <h3>📅 一个月，一轮回</h3>
+        <p>从新月到满月，再回到新月，走完这一整套“变胖又变瘦”，大约需要 <b>29 天半</b> 🗓️。这个周期叫做<b>“朔望月”</b>。</p>
+        <p>很久很久以前，人们就是<b>靠看月亮来数日子的</b>。月亮变一轮，差不多就是一个月。所以在中国传统历法里，一个月就叫“一个月”，而<b>“月”这个字，最早画的就是天上那个弯弯的月亮</b> 🌙。</p>
+
+        <h3>🥮 中秋：中国人最重要的赏月节</h3>
+        <p>说到月亮，中国小朋友一定马上想到<b>中秋节</b> 🥮。中秋节在<b>每年农历八月十五</b>，对应到公历，一般在九月或者十月。</p>
+        <p>为什么是八月十五呢？因为农历的每个月，<b>十五这天正好是满月</b>。而八月十五前后，秋高气爽，天空又干净又清亮，是一年中最适合赏月的时候 🌕✨。所以古人选在这一天，全家坐在一起赏月、吃月饼、分柚子，<b>圆圆的月亮代表着“团圆”</b>，意思是一家人整整齐齐、和和美美 👨‍👩‍👧‍👦。</p>
+        <p>除了赏月，很多地方还有<b>提灯笼</b> 🏮、<b>猜灯谜</b>、<b>赏桂花</b> 🌼、<b>喝桂花酒</b>的习俗。在中国的南方，比如广东、香港、澳门一带，中秋夜孩子们提着彩色的灯笼走街串巷，热闹极了 🎉。</p>
+
+        <h3>📜 古诗里的月亮</h3>
+        <p>中国人为月亮写过太多太多的诗。最温柔的一首，大概是<b>李白</b>的《静夜思》：</p>
+        <p style="background:#e0e7ff;border-radius:12px;padding:12px 14px;font-size:19px;"><b>床前明月光，疑是地上霜。<br>举头望明月，低头思故乡。</b></p>
+        <p>明亮的月光洒在床前，好像地上结了霜。诗人抬起头看月亮，低下头就想起了自己的家乡 🏡。这首诗几乎每个中国小朋友都会背，因为它把“想家”这件事说得又简单又美。</p>
+        <p>还有<b>苏轼</b>的《水调歌头》里最有名的那几句：</p>
+        <p style="background:#e0e7ff;border-radius:12px;padding:12px 14px;font-size:19px;"><b>人有悲欢离合，月有阴晴圆缺，此事古难全。<br>但愿人长久，千里共婵娟。</b></p>
+        <p>苏轼说：人有相聚也有分离，月亮有圆也有缺，<b>从古以来就没有十全十美的事</b>。只希望亲人能平安长久，就算相隔千里，也能一起看着同一个月亮 🌕。“婵娟”就是月亮的美称。你看，我们今天学的“月有阴晴圆缺”，讲的就是月相变化呀。</p>
+
+        <h3>🐇 嫦娥奔月的故事</h3>
+        <p>中秋节还有一个美丽的传说——<b>嫦娥奔月</b> 🐇。传说很久以前，天上有十个太阳，大地被烤得裂开。英雄<b>后羿</b>拉开神弓，射下了九个太阳，为人们解了难。后来，他得到了一份能让人飞上天的仙药。他的妻子<b>嫦娥</b>为了不让坏人抢走仙药，情急之下自己喝了下去，身子就轻轻地飘了起来，一直飘到了月亮上 🌙。</p>
+        <p>从此嫦娥住在月宫里，身边有一只<b>白白的小玉兔</b> 🐰 日夜捣药。人们说，中秋夜抬头看月亮上的影子，那一团一团淡淡的阴影，就是月宫和玉兔呀。</p>
+        <p>这个故事当然只是传说，但它寄托了中国人<b>对月亮最温柔的想象</b>。也正因为这样，中国的探月工程被命名为<b>“嫦娥工程”</b>，月球车叫做<b>“玉兔号”</b> 🚀🐰——把古老的神话，变成了真的科学探索。</p>
+
+        <h3>🇨🇳 中国人真的去过月亮</h3>
+        <p>神话之外，现代中国也真的把探测器送上了月球 🚀：</p>
+        <ul>
+          <li><b>2007 年</b>，<b>嫦娥一号</b>成功绕月飞行，中国第一次拿到了全月球的地图 🗺️。</li>
+          <li><b>2013 年</b>，<b>嫦娥三号</b>带着<b>玉兔号</b>月球车在月球正面软着陆成功 🐰。</li>
+          <li><b>2019 年</b>，<b>嫦娥四号</b>成为人类<b>第一个</b>在月球背面软着陆的探测器 🌗。</li>
+          <li><b>2020 年</b>，<b>嫦娥五号</b>从月球带回土壤样本，中国成为世界上第三个做到这件事的国家 🪨。</li>
+          <li><b>2024 年</b>，<b>嫦娥六号</b>完成了人类<b>第一次</b>从<b>月球背面</b>采样返回，把背面的土壤带回了地球 🌙✨。</li>
+        </ul>
+        <p>从“举头望明月”到“上九天揽月”，中国人看月亮看了几千年，也终于一步一步走到了月亮上。也许正在读这篇课文的你，将来也能参与这项了不起的事业 👩‍🚀。</p>
+
+        <h3>🔬 关于月亮的小知识</h3>
+        <ul>
+          <li><b>月亮离我们很远</b> 📏：平均大约 38 万公里，坐飞机要飞十几天才到。</li>
+          <li><b>月亮上很安静</b> 🤫：那里几乎没有空气，所以<b>一点声音都传不过来</b>。</li>
+          <li><b>脚印能留很久</b> 👣：月球上没有风也没有雨，宇航员 1969 年留下的脚印，现在还清楚地印在那里。</li>
+          <li><b>月亮会“变颜色”</b> 🎨：月亮靠近地平线时常常看起来是<b>橙黄色的</b>，那是因为它的光穿过很厚的空气，蓝光被散开了。</li>
+          <li><b>月亮管着海水的涨落</b> 🌊：海边的潮水一天涨落两次，主要就是月亮“拉”出来的。</li>
+          <li><b>月亮在慢慢走远</b> 🚶：它每年大约离我们远 3.8 厘米，差不多是指甲长一点点的长度。</li>
+        </ul>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>做一个月亮日记</b> 📔：连续 30 天，每天晚上画下月亮的形状，看看它是不是真的在“变胖变瘦”。</li>
+          <li><b>奥利奥月相</b> 🍪：把奥利奥饼干的奶油刮出新月、半月、满月的样子，好吃又好记！</li>
+          <li><b>手电筒小实验</b> 🔦：关上灯，用手电筒当太阳，用一个球当月亮，让爸爸妈妈的头当地球。你拿着球绕着他们慢慢走一圈，就能看到月亮的各种形状啦。</li>
+          <li><b>动作跟读</b> 🌙：读故事时配上动作——round 画大圆、thin 画细线、grows big 撑大、gets small 缩小。</li>
+          <li><b>找一找今晚的月亮</b> 🔭：和爸爸妈妈一起看看今晚的月亮是圆的还是弯的，试着说一句英文：<b>“The moon is round.”</b> 或者 <b>“I see a thin moon.”</b></li>
+          <li><b>背一背古诗</b> 📜：中秋前后和家人一起念《静夜思》，再想想今天学的“月有阴晴圆缺”。</li>
+        </ul>
+
+        <p style="background:#fee2e2;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b><b>千万不要用眼睛直接看太阳</b>，也不要用望远镜、放大镜去看太阳 ☀️🚫，那样会严重伤害眼睛，甚至再也看不见东西。晚上看月亮一定要<b>有爸爸妈妈陪着</b>，不要自己一个人跑到阳台上、楼顶上或者黑暗的地方 🌙🚫；阳台的栏杆<b>不能爬</b>，椅子也不要垫在脚下。做<b>手电筒实验</b>时，手电筒的光不要照向别人的眼睛。玩完实验、摸过泥土或落叶后，记得<b>用肥皂把手洗干净</b> 🧼。如果对坚果过敏，做“奥利奥月相”前一定要先告诉爸爸妈妈 🍪😷。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读《月亮为什么会变形状》的小科普，知道月亮其实一直是圆的。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：moon, round, sun, bright, earth, month。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “Look at the ...”, “The moon is ...”, “I see a ...” 说句子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 a / an 的用法，is / am / are 的选择，以及 he / she / it 后动词加 -s。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>愿意每天抬头看看天空，喜欢观察自然，也为中国的探月成就感到骄傲。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读；读到 “a thin banana” 时把两只手弯成月牙 🍌。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，把 6 个词做成小卡片，和爸爸妈妈玩“你说我指”的游戏。</div></div>
+        <div class="goal"><span class="ic">🔦</span><div>关上灯做一次手电筒月相实验：手电筒当太阳，球当月亮，大人的头当地球 🌍。</div></div>
+        <div class="goal"><span class="ic">📔</span><div>从今晚开始画“月亮日记”，连画 30 天，看看月亮是不是真的在变胖变瘦 🌙。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把月亮图贴在床头，每天睡前说一句 “The moon is round.” 🌕</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · Why Does the Moon Change Shape · 2026-09-16 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Look at the moon at night. Some nights it is a big round ball. Some nights it is a thin banana.",
+  "The moon does not change. It is always round. The sun makes one side bright.",
+  "The moon goes around the earth. We see a lot of the bright side. We see a little. We see none.",
+  "Watch the moon for one month. It grows big. It gets small again. Then it starts over."
+];;;
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What makes the moon bright? 是什么让月亮亮起来？",em:["☀️","⭐","🔥"],opts:["The sun (太阳)","A star (星星)","A lamp (一盏灯)"],ans:0,
+   fb:"Yes! 是太阳照亮了月亮的一面，The sun makes one side bright ☀️。"},
+  {q:"Does the moon really change shape? 月亮真的会变形吗？",em:["🔵","🍌","⭐"],opts:["Yes, it changes. (会，它真的会变形)","No, it is always round. (不会，它一直都是圆的)","No, it is a star. (不会，它是一颗星星)"],ans:1,
+   fb:"Right! 月亮一直是圆的，It is always round 🔵。"},
+  {q:"What does the moon go around? 月亮绕着什么转？",em:["⭐","☀️","🌍"],opts:["A star (一颗星星)","The sun (太阳)","The earth (地球)"],ans:2,
+   fb:"Great! 月亮绕着地球转，The moon goes around the earth 🌍。"},
+  {q:"How long does one moon cycle take? 月亮变一整圈要多久？",em:["📅","⏰","🗓️"],opts:["One day (一天)","One month (一个月)","One year (一年)"],ans:1,
+   fb:"Correct! 大约一个月，Watch the moon for one month 📅。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
