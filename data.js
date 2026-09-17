@@ -3524,6 +3524,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-17",
+    "title": "I Get Dressed",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-17-i-get-dressed",
+    "url": "lessons/a1/2026-09-17-i-get-dressed.html",
+    "vocab": [
+      {
+        "word": "shirt",
+        "zh": "衬衫",
+        "ex": "I put on my shirt."
+      },
+      {
+        "word": "pants",
+        "zh": "裤子",
+        "ex": "I put on my pants."
+      },
+      {
+        "word": "socks",
+        "zh": "袜子",
+        "ex": "I put on my socks."
+      },
+      {
+        "word": "shoes",
+        "zh": "鞋子",
+        "ex": "I put on my shoes."
+      },
+      {
+        "word": "jacket",
+        "zh": "外套",
+        "ex": "I put on my jacket."
+      },
+      {
+        "word": "ready",
+        "zh": "准备好的",
+        "ex": "I am ready."
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -5184,6 +5226,58 @@ const EPISODES = [
         "word": "protect",
         "zh": "保护；防护",
         "ex": "We protect the old walls."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-17",
+    "title": "The Shop Boy Who Loved Numbers",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-17-the-shop-boy-who-loved-numbers",
+    "url": "lessons/a2/2026-09-17-the-shop-boy-who-loved-numbers.html",
+    "vocab": [
+      {
+        "word": "poor",
+        "zh": "华罗庚 1910 年出生在江苏金坛的一个小镇上。家里很穷，所以他初中毕业后就离开了学校。他在父亲的铺子里干活，用三本旧书自学数学。",
+        "ex": "His family was poor, so he left school."
+      },
+      {
+        "word": "taught",
+        "zh": "教（teach 的过去式）；teach oneself 自学",
+        "ex": "He taught himself maths from three old books."
+      },
+      {
+        "word": "paper",
+        "zh": "论文；文章（也可指“纸”）",
+        "ex": "In 1930, he wrote a paper."
+      },
+      {
+        "word": "professor",
+        "zh": "教授；大学里最高级别的老师",
+        "ex": "A famous professor read his paper."
+      },
+      {
+        "word": "invite",
+        "zh": "邀请",
+        "ex": "He invited Hua to Tsinghua University."
+      },
+      {
+        "word": "degree",
+        "zh": "学位；大学读完拿到的资格证明",
+        "ex": "He did not want a degree; he wanted knowledge."
+      },
+      {
+        "word": "province",
+        "zh": "省",
+        "ex": "He travelled to more than twenty provinces."
+      },
+      {
+        "word": "method",
+        "zh": "方法；办法",
+        "ex": "He taught workers easy maths methods."
       }
     ]
   },

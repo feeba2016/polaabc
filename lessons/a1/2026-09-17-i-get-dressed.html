@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · I Get Dressed — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#0d9488;
+  --accent2:#0891b2;
+  --bg:#f0fdfa;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#115e59;
+  --highlight:#fde68a;
+  --border:#99f6e4;
+  --soft:#ccfbf1;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#22d3ee);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(13,148,136,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #5eead4;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#115e59;background:#f0fdfa;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(13,148,136,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(13,148,136,.6);}70%{box-shadow:0 0 0 14px rgba(13,148,136,0);}100%{box-shadow:0 0 0 0 rgba(13,148,136,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#5eead4;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(13,148,136,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">I Get Dressed 👕🧦</h1>
+      <p class="subtitle">2026年9月17日 · 日常生活｜我自己穿衣服 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · Wake Up 起床啦</div>
+            <p>I get up at seven. ⏰ First I put on my <span class="kw" data-def="衬衫：穿在上半身、前面有扣子的衣服">shirt</span>. 👕 Then I put on my <span class="kw" data-def="裤子：穿在腿上、有两条裤腿的衣服">pants</span>. 👖</p>
+          </div>
+          <div class="zh">我七点起床 ⏰。我先穿上衬衫 👕，再穿上裤子 👖。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Socks and Shoes 袜子和鞋子</div>
+            <p>Now I put on my <span class="kw" data-def="袜子：穿在脚上、在鞋子里面，软软的">socks</span>. 🧦 One sock is red. One sock is blue. 🔴🔵 I put on my <span class="kw" data-def="鞋子：出门穿在脚上、有硬硬鞋底的">shoes</span>. 👟</p>
+          </div>
+          <div class="zh">现在该穿袜子啦 🧦。一只袜子是红色的，一只是蓝色的 🔴🔵。然后我穿上鞋子 👟。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · A Cool Day 有点凉的一天</div>
+            <p>It is cool today. 🍃 I put on my <span class="kw" data-def="外套：穿在最外面、挡风又保暖的衣服">jacket</span>. 🧥 I look in the mirror. 🪞 I look good! 😊</p>
+          </div>
+          <div class="zh">今天有点凉 🍃。我穿上外套 🧥。我照了照镜子 🪞，看起来很不错呢 😊！</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · I Am Ready 我准备好啦</div>
+            <p>I am <span class="kw" data-def="准备好的：衣服都穿好了，可以出门了">ready</span>. ✅ I say bye to Mom. 👋 I go to school. 🏫 I can get dressed! 🎉</p>
+          </div>
+          <div class="zh">我准备好啦 ✅！我和妈妈说再见 👋，然后去上学 🏫。我会自己穿衣服了 🎉！</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#ccfbf1;border:2px solid #5eead4;">
+        <h3 style="margin:0 0 8px;color:#0d9488;font-size:20px;">👕 和 Pola 一起演一演！</h3>
+        <p style="margin:0;font-size:16px;">和爸爸妈妈一起边说边做动作：说 <b>“I put on my shirt.”</b> 时双手从上往下套一下 👕；说 <b>“pants”</b> 时拍拍两条腿 👖；说 <b>“socks”</b> 时摸摸脚丫 🧦；说 <b>“shoes”</b> 时用力跺两下脚 👟；说 <b>“I am ready.”</b> 时双手叉腰、点点头 ✅。记得点黄色的词看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="shirt">🔊</button><div class="emoji">👕</div><div class="word">shirt<span class="pos">n.</span></div><div class="zh">衬衫</div><div class="ex">I put on my shirt.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pants">🔊</button><div class="emoji">👖</div><div class="word">pants<span class="pos">n.</span></div><div class="zh">裤子</div><div class="ex">I put on my pants.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="socks">🔊</button><div class="emoji">🧦</div><div class="word">socks<span class="pos">n.</span></div><div class="zh">袜子</div><div class="ex">I put on my socks.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="shoes">🔊</button><div class="emoji">👟</div><div class="word">shoes<span class="pos">n.</span></div><div class="zh">鞋子</div><div class="ex">I put on my shoes.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="jacket">🔊</button><div class="emoji">🧥</div><div class="word">jacket<span class="pos">n.</span></div><div class="zh">外套</div><div class="ex">I put on my jacket.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ready">🔊</button><div class="emoji">✅</div><div class="word">ready<span class="pos">adj.</span></div><div class="zh">准备好的</div><div class="ex">I am ready.</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. I put on my [clothes].</h3>
+          <div class="zh">“我穿上我的……”。说<b>穿衣服的动作</b>，用 <b>I put on my ...</b>。<b>put on</b> 是“穿上去”，后面接<b>衣服的名字</b>。</div>
+          <div class="eg">I put on my shirt. 👕 / I put on my pants. 👖 / I put on my socks. 🧦 / I put on my jacket. 🧥</div>
+          <div class="practice">练习：我穿上我的鞋子 → I put on <input placeholder="my shoes">.</div>
+        </div>
+        <div class="item">
+          <h3>2. I am [adjective].</h3>
+          <div class="zh">“我是……的”。说<b>自己的状态</b>，用 <b>I am + 形容词</b>。<b>I</b> 后面一定要用 <b>am</b>，不能说 “I is”。</div>
+          <div class="eg">I am ready. ✅ / I am happy. 😊 / I am big. 🧒 / I am cool. 😎</div>
+          <div class="practice">练习：我准备好了 → I <input placeholder="am ready">.</div>
+        </div>
+        <div class="item">
+          <h3>3. I can [verb].</h3>
+          <div class="zh">“我能／我会……”。说<b>自己会做的事</b>，用 <b>I can + 动作</b>。can 后面直接跟<b>动作的原形</b>，不用加 to。</div>
+          <div class="eg">I can get dressed. 🎉 / I can run. 🏃 / I can help. 🤝 / I can do it. 💪</div>
+          <div class="practice">练习：我会自己穿衣服 → I can <input placeholder="get dressed">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一般现在时：每天都要做的事</h3>
+          <div class="zh">讲<b>天天都做的习惯</b>，动词就用<b>原形</b>（get / put / go）。要说“在几点”，前面加 <b>at</b>：at seven 就是“在七点”。</div>
+          <div class="eg">I get up at seven. ⏰ / I put on my shirt. 👕 / I go to school. 🏫</div>
+        </div>
+        <div class="item">
+          <h3>2. am / is / are（是）</h3>
+          <div class="zh">英文的“是”会换样子：<b>I</b> 后面用 <b>am</b>；<b>he / she / it</b> 和<b>一个人、一样东西</b>后面用 <b>is</b>；<b>you / we / they</b> 和<b>很多人</b>后面用 <b>are</b>。</div>
+          <div class="eg">I am ready. ✅ / Mom is happy. 😊 / My socks are red. 🧦 / We are ready. 🙌</div>
+        </div>
+        <div class="item">
+          <h3>3. can 后面跟动词原形</h3>
+          <div class="zh"><b>can（能／会）</b>后面的动作<b>永远不加 -s，也不加 to</b>。不管主语是 I、he 还是 they，都写成 <b>can get</b>、<b>can put</b>、<b>can go</b>。</div>
+          <div class="eg">I can get dressed. 🎉 / He can get dressed. 👦 / They can get dressed. 👧👦</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#ccfbf1;border:2px solid #5eead4;">
+        <div style="font-size:20px;font-weight:800;color:#0d9488;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#115e59;margin-top:6px;">每做对一题得 1 分，全部做完就是穿衣小能手啦！👕✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>👕 今天，你自己穿衣服了吗？</h3>
+        <p>小朋友，每天早上起床以后，你要做的第一件大事是什么？没错，就是<b>穿衣服</b> 👕。以前这些事都是爸爸妈妈帮你做的，可是现在你慢慢长大了，可以<b>自己试着来</b>啦。</p>
+        <p>自己穿衣服，不只是“会做一件事”这么简单。你在练习<b>记住顺序</b>（先穿上衣、再穿裤子、最后穿鞋）、练习<b>分清楚前后和左右</b>（哪只是左脚的鞋？衣服的正面在哪儿？），也在练习<b>照顾好自己</b> 💪。这些本领，会让你越来越能干。</p>
+
+        <h3>🧩 穿衣顺序小口诀</h3>
+        <p>穿衣服是有<b>顺序</b>的。乱着穿，就会把袜子穿到鞋子外面去啦 😄。可以记住这个顺序：</p>
+        <p style="background:#ccfbf1;border-radius:12px;padding:12px 14px;font-size:19px;"><b>上衣 → 裤子 → 袜子 → 鞋子 → 外套</b><br>shirt 👕 → pants 👖 → socks 🧦 → shoes 👟 → jacket 🧥</p>
+        <p>脱衣服的时候，顺序<b>正好反过来</b>：先脱外套，再脱鞋子、袜子、裤子，最后脱上衣 🔄。出门回家后，记得把外套<b>挂起来</b>，把鞋子<b>摆整齐</b>，这样第二天就不用到处找啦。</p>
+
+        <h3>🧷 扣子、拉链和魔术贴</h3>
+        <p>衣服为什么能“合上”？靠的是这几样小发明：</p>
+        <ul>
+          <li><b>扣子</b> 🪡：最古老的办法。一边缝扣子，一边开个小洞，把扣子塞进洞里，衣服就合上了。</li>
+          <li><b>拉链</b> 🤐：我们现在常用的拉链，是瑞典裔工程师<b>吉迪恩·森德贝克</b>在 <b>1913 年</b>改进定型的，后来用在衣服、书包和鞋子上。</li>
+          <li><b>魔术贴</b> 🪝：<b>1941 年</b>，瑞士工程师<b>乔治·德·梅斯特拉尔</b>带着狗在野外散步，回家发现衣服和狗毛上粘满了<b>苍耳</b>（一种带小钩刺的草籽）。他在显微镜下看到那些小钩子，就受到启发，做出了“一面是钩、一面是毛”的魔术贴。</li>
+        </ul>
+        <p>你看，<b>发明常常就藏在日常生活里</b>。只要你肯观察，说不定下一个小发明就来自你 👀✨。</p>
+
+        <h3>🇨🇳 中国的衣裳：上衣下裳与盘扣</h3>
+        <p>中国古人穿衣服，讲究<b>“上衣下裳”</b>——上面穿的是“衣”，下面穿的是“裳”（读作 cháng，指的是裙子一样的下装）。今天英语里说一件上衣叫 <b>a shirt</b>，说裤子叫 <b>pants</b>，其实也正好分成“上”和“下”两部分，是不是很像？😊</p>
+        <p><b>汉服</b>是汉族的传统服装，最有特点的是<b>“交领右衽”</b>：衣领交叉，左边的衣襟压在右边上面，领口看起来像一个字母 <b>y</b>。这个穿法在中国延续了几千年。</p>
+        <p>再说<b>盘扣</b> 🪢：它是用一条布条盘成各种花样的小扣子，有的像花，有的像蝴蝶，常常缝在<b>旗袍</b>和<b>马褂</b>上。盘扣不只能系衣服，本身就是一件小小的<b>手工艺品</b>，是中国传统服饰里非常漂亮的一笔 🎨。</p>
+        <p>而中国还是世界上<b>最早养蚕、缫丝、织绸</b>的国家之一 🐛。四千多年前，中国就已经有了丝织品。后来这些又轻又亮的丝绸沿着<b>丝绸之路</b>运到远方，让世界各地的人都认识了中国的衣裳 🛤️。</p>
+
+        <h3>🌤️ 看天气穿衣服</h3>
+        <p>穿衣服还要看<b>天气</b>。今天学的那句 <b>“It is cool today.”</b>，就是在说“今天有点凉”。</p>
+        <ul>
+          <li>天气<b>热</b> ☀️：穿得薄一点、少一点，选浅色的衣服，别忘了戴帽子。</li>
+          <li>天气<b>凉</b> 🍃：在外面加一件 <b>jacket</b>（外套）🧥。</li>
+          <li>天气<b>冷</b> ❄️：要穿棉衣或羽绒服，还可以戴围巾、手套和帽子。</li>
+          <li>天气<b>下雨</b> 🌧️：穿雨衣或者打雨伞，鞋子最好选不怕水的。</li>
+        </ul>
+        <p>有个小窍门叫<b>“洋葱式穿衣”</b> 🧅：像洋葱一样一层一层穿，热了脱一层，冷了加一层，这样最不容易生病。</p>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>穿衣比赛</b> ⏱️：和爸爸妈妈比赛，看谁先把外套穿好、拉链拉上。注意不是比快，是要<b>穿得整齐</b>哦。</li>
+          <li><b>袜子配对</b> 🧦：把洗好的袜子倒出来，请你把一样的两只配成一对，顺便数一数有几双。</li>
+          <li><b>给娃娃穿衣服</b> 🧸：一边给玩偶穿，一边说英语：<b>“I put on your shirt.”</b>。</li>
+          <li><b>看图说话</b> 🗣️：早上穿衣服时，对着镜子说一句 <b>“I am ready.”</b> 再出门 ✅。</li>
+          <li><b>明天的衣服我来选</b> 👗：晚上和爸爸妈妈一起看第二天的天气，自己挑好要穿的衣服，摆在床边。</li>
+        </ul>
+
+        <p style="background:#fee2e2;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>穿好鞋子后，一定要把<b>鞋带系紧</b> 👟，鞋带散着走路很容易被自己踩到摔跤；如果还不会系鞋带，可以请爸爸妈妈帮忙，或者先穿魔术贴的鞋子。上下楼梯、跑跳的时候，<b>不要穿太长的裤子或裙子</b>，也不要穿有大带子、长绳子的衣服，容易被门缝或滑梯卡住 🚫。衣服上的小珠子、小亮片<b>不能放进嘴里</b>，掉下来了要马上交给大人 🫧。戴围巾的时候<b>不要玩滑梯和秋千</b>，围巾卷进去会很危险。拉拉链时要<b>慢慢拉</b>，别夹到下巴和手指 🤐。穿好衣服后照镜子时，镜子要放稳，<b>不要踩着凳子去够高处的镜子</b> 🪞。最后别忘了：出门前一定要<b>告诉爸爸妈妈</b>，不能自己一个人跑出去 🏠。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读《我自己穿衣服》的小故事，知道穿衣的顺序：先上衣，后裤子，再袜子和鞋。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：shirt, pants, socks, shoes, jacket, ready。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “I put on my ...”, “I am ...”, “I can ...” 说自己的日常。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得一般现在时的用法，am / is / are 的选择，以及 can 后面跟动词原形。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>愿意自己的事情自己做，也为中国传统的衣裳与丝绸文化感到骄傲。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读；说到 shirt / pants / socks 时配上动作 👕👖🧦。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，把 6 个词做成小卡片，玩“我说英文、你指衣服”的游戏。</div></div>
+        <div class="goal"><span class="ic">👟</span><div>明天早上真的自己穿一次衣服，边穿边说英语，穿完照镜子说一句 <b>“I am ready.”</b> ✅</div></div>
+        <div class="goal"><span class="ic">🧦</span><div>帮爸爸妈妈把洗好的袜子配成对，数一数：<b>One sock, two socks.</b></div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，把穿衣顺序图贴在衣柜门上，每天出门前看一眼 👕</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · I Get Dressed · 2026-09-17 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "I get up at seven. First I put on my shirt. Then I put on my pants.",
+  "Now I put on my socks. One sock is red. One sock is blue. I put on my shoes.",
+  "It is cool today. I put on my jacket. I look in the mirror. I look good!",
+  "I am ready. I say bye to Mom. I go to school. I can get dressed!"
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What do you put on first? 你先穿什么？",em:["👕","👖","🧦"],opts:["My shirt (衬衫)","My pants (裤子)","My socks (袜子)"],ans:0,
+   fb:"Yes! 先穿衬衫，First I put on my shirt 👕。"},
+  {q:"You put socks on your ... 袜子穿在哪里？",em:["🧦","🧤","🎒"],opts:["Hands (手上)","Feet (脚上)","Head (头上)"],ans:1,
+   fb:"Right! 袜子穿在脚上，I put on my socks 🧦。"},
+  {q:"It is cool today. What do you put on? 今天有点凉，加什么？",em:["🧥","🩳","🕶️"],opts:["Shorts (短裤)","A jacket (外套)","Sunglasses (太阳镜)"],ans:1,
+   fb:"Great! 凉了就加外套，I put on my jacket 🧥。"},
+  {q:"You are ready for school. What do you say? 准备好了说什么？",em:["✅","😴","😢"],opts:["I am ready. (我准备好了)","I am sleepy. (我困了)","I am sad. (我难过)"],ans:0,
+   fb:"Perfect! 准备好了就说 I am ready ✅ 然后出门吧！"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
