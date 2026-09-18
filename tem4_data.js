@@ -776,7 +776,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"B4", cat:"B", zh:"职业规划",   name:"Career Planning",   status:"soon", words:60,  desc:"简历、目标、白板"},
+  {
+    id:"B4", cat:"B", zh:"职业规划", name:"Career Planning", status:"live",
+    date:"2026-09-17", words:30, desc:"职业规划一天：认识自己、设定目标、技能与成长、导师的建议、迈向未来",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"B4-P1", slug:"tem4-B4-P1", title:"认识自己", shape:"拱门",
+        poster:"assets/tem4/posters/B4_P1.png",
+        sentence:"To map out her future, Xiaoye first assesses her capability and her instinct, finds that she is fond of drawing, and inclines to fancy a creative job in a small design studio.",
+        sentenceCn:"为了规划未来，小叶学姐先评估了自己的能力与天资，发现自己喜爱画画，于是倾向于设想一份设计工作室里的创意工作。",
+        scene:"清晨的粉彩书房里，小叶学姐伏在书桌前写自我评估笔记，身边散落着画册与彩色铅笔，墙上软木板贴着彩色便签，晨光透过窗户洒进来。",
+        words:[
+          {word:"assess",     ipa:"/əˈses/",          pos:"vt.",  zh:"评估（价值或数额），评定，核定",       forms:["assesses"]},
+          {word:"capability", ipa:"/ˌkeɪpəˈbɪləti/",  pos:"n.",   zh:"能力；素质，潜能",                     forms:["capability"]},
+          {word:"instinct",   ipa:"/ˈɪnstɪŋkt/",      pos:"n.",   zh:"本能，天性；直觉；天资，天赋",         forms:["instinct"]},
+          {word:"fond",       ipa:"/fɒnd/",           pos:"adj.", zh:"喜爱的，爱好的；溺爱的，深情的",       forms:["fond"]},
+          {word:"incline",    ipa:"/ɪnˈklaɪn/",       pos:"v.",   zh:"（使）倾向（于），意欲；赞同，爱好；倾斜", forms:["inclines"]},
+          {word:"fancy",      ipa:"/ˈfænsi/",         pos:"vt.",  zh:"想象，设想；喜爱，爱好 adj. 别致的，花哨的", forms:["fancy"]}
+        ]
+      },
+      {
+        id:"B4-P2", slug:"tem4-B4-P2", title:"设定目标", shape:"叶形",
+        poster:"assets/tem4/posters/B4_P2.png",
+        sentence:"Weighing every option carefully, she decides on a challenging but clear goal — to become a children's book illustrator; she determines to make a bid for her dream studio, and resolves that no difficulty will change her mind.",
+        sentenceCn:"仔细权衡各种选择后，她定下一个有挑战却清晰的目标——成为童书插画师；她下定决心争取梦想中的工作室，并打定主意：任何困难都不会让她改变心意。",
+        scene:"小叶学姐踩着小板凳站在软木板前，把彩色目标卡片一张张钉上去，脸上写满坚定，房间里绿植点缀，温馨明亮。",
+        words:[
+          {word:"weigh",       ipa:"/weɪ/",          pos:"v.",    zh:"称…的重量；斟酌，权衡，掂量",         forms:["Weighing"]},
+          {word:"decide",      ipa:"/dɪˈsaɪd/",      pos:"v.",    zh:"决定；解决，判决；使下决心",           forms:["decides"]},
+          {word:"challenging", ipa:"/ˈtʃælɪndʒɪŋ/",  pos:"adj.",  zh:"困难的；引起兴趣的，激发干劲的",       forms:["challenging"]},
+          {word:"determine",   ipa:"/dɪˈtɜːmɪn/",    pos:"v.",    zh:"下决心，决意，决定；确定，测定",       forms:["determines"]},
+          {word:"bid",         ipa:"/bɪd/",          pos:"n./v.", zh:"企图，努力；出价，投标 v. 命令，吩咐；出价", forms:["bid"]},
+          {word:"resolve",     ipa:"/rɪˈzɒlv/",      pos:"v.",    zh:"决定，下决心；解决 n. 决心，决定",     forms:["resolves"]}
+        ]
+      },
+      {
+        id:"B4-P3", slug:"tem4-B4-P3", title:"技能与成长", shape:"椭圆",
+        poster:"assets/tem4/posters/B4_P3.png",
+        sentence:"To possess stronger drawing skills, she takes an evening illustration course; the training expands her capacity, enables her to cope with harder tasks, and soon she makes steady progress and advances faster than her classmates.",
+        sentenceCn:"为了掌握更扎实的绘画技能，她报了晚间插画课；训练拓展了她的能力，使她能够应付更难的任务，很快她就取得稳步进步，速度超过了同学们。",
+        scene:"夜晚的小叶学姐戴着小耳机，在书桌前跟着笔记本电脑上的插画网课练习画板，桌上摆满习作，暖黄的台灯亮着，窗外有月亮和星星。",
+        words:[
+          {word:"possess",  ipa:"/pəˈzes/",    pos:"vt.",   zh:"拥有；掌握（技能）",                   forms:["possess"]},
+          {word:"capacity", ipa:"/kəˈpæsəti/", pos:"n.",    zh:"容量；能力；资格，地位",               forms:["capacity"]},
+          {word:"enable",   ipa:"/ɪˈneɪbl/",   pos:"vt.",   zh:"使能够，使成为可能，使实现",           forms:["enables"]},
+          {word:"cope",     ipa:"/kəʊp/",      pos:"v.",    zh:"（成功地）对付，应付",                 forms:["cope"]},
+          {word:"progress", ipa:"/ˈprəʊɡres/", pos:"n.",    zh:"进步，进展；前进，进行",               forms:["progress"]},
+          {word:"advance",  ipa:"/ədˈvɑːns/",  pos:"v./n.", zh:"前进，进步；提前 n. 前进，进步；预付款", forms:["advances"]}
+        ]
+      },
+      {
+        id:"B4-P4", slug:"tem4-B4-P4", title:"导师的建议", shape:"超圆角",
+        poster:"assets/tem4/posters/B4_P4.png",
+        sentence:"Her mentor advises her to stay flexible, supervises her practice every week, and often uses vivid stories to enlighten her; under such guidance, she gradually adapts to the pressure and orients herself toward a clear career path.",
+        sentenceCn:"导师建议她保持灵活变通，每周监督她的练习，还常用生动的故事启发她；在这样的指导下，她逐渐适应了压力，并为自己确定了清晰的职业方向。",
+        scene:"小叶学姐与戴圆眼镜的猫头鹰导师隔桌而坐，导师端着茶杯耐心讲述，小叶学姐认真记笔记，身后是高高的书架，午后阳光温暖。",
+        words:[
+          {word:"advise",    ipa:"/ədˈvaɪz/",      pos:"v.",   zh:"劝告，忠告，建议；通知",               forms:["advises"]},
+          {word:"flexible",  ipa:"/ˈfleksəbl/",    pos:"adj.", zh:"柔韧的，易弯曲的；可变通的，灵活的；易适应的", forms:["flexible"]},
+          {word:"supervise", ipa:"/ˈsjuːpəvaɪz/",  pos:"v.",   zh:"监督，管理，指导",                     forms:["supervises"]},
+          {word:"enlighten", ipa:"/ɪnˈlaɪtən/",    pos:"vt.",  zh:"启发；开导，使摆脱偏见；指导，教育",   forms:["enlighten"]},
+          {word:"adapt",     ipa:"/əˈdæpt/",       pos:"v.",   zh:"适应，适合；改编，改写",               forms:["adapts"]},
+          {word:"orient",    ipa:"/ˈɔːriˌent/",    pos:"vt.",  zh:"使适应；确定位置",                     forms:["orients"]}
+        ]
+      },
+      {
+        id:"B4-P5", slug:"tem4-B4-P5", title:"迈向未来", shape:"波浪",
+        poster:"assets/tem4/posters/B4_P5.png",
+        sentence:"With grit and steady effort, she struggles through every setback, learns to convert criticism into motivation, waits for the optimal moment to elevate her position, and finally thrives in the career she once only dreamed of.",
+        sentenceCn:"凭着坚毅与持续的努力，她闯过每一次挫折，学会把批评转化为动力，等待最佳时机提升自己的职位，最终在她曾经只能梦想的事业里蓬勃发展。",
+        scene:"日出时分，小叶学姐背着小背包站在山顶草地上，眺望粉彩色的城市天际线，一条小路蜿蜒而上，云朵与飞鸟相伴，充满希望。",
+        words:[
+          {word:"grit",     ipa:"/ɡrɪt/",     pos:"n.",    zh:"坚毅，勇气，决心；砂粒",               forms:["grit"]},
+          {word:"struggle", ipa:"/ˈstrʌɡl/",  pos:"v./n.", zh:"打斗，斗争；努力，奋斗",               forms:["struggles"]},
+          {word:"convert",  ipa:"/kənˈvɜːt/", pos:"v.",    zh:"改变，转变；改变…的信仰；兑换",       forms:["convert"]},
+          {word:"optimal",  ipa:"/ˈɒptɪməl/", pos:"adj.",  zh:"最适宜的，最理想的",                   forms:["optimal"]},
+          {word:"elevate",  ipa:"/ˈelɪveɪt/", pos:"vt.",   zh:"抬起，升高；提升（职位），振奋（情绪）", forms:["elevate"]},
+          {word:"thrive",   ipa:"/θraɪv/",    pos:"vi.",   zh:"兴盛，成功，繁荣",                     forms:["thrives"]}
+        ]
+      }
+    ]
+  },
   {id:"B5", cat:"B", zh:"办公工具",   name:"Workplace Tools",   status:"soon", words:60,  desc:"电脑、电话、打印机"},
   /* ===== C 日常生活 ===== */
   {id:"C1", cat:"C", zh:"家庭与家居", name:"Family & Home",     status:"soon", words:100, desc:"客厅、卧室、厨房"},
