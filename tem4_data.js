@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1/B2/F1/F2/F3/G1 已上线（12 主题 / 60 Part / 360 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/F1/F2/F3/G1 已上线（15 主题 / 75 Part / 450 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -858,7 +858,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"B5", cat:"B", zh:"办公工具",   name:"Workplace Tools",   status:"soon", words:60,  desc:"电脑、电话、打印机"},
+  {
+    id:"B5", cat:"B", zh:"办公工具", name:"Workplace Tools", status:"live",
+    date:"2026-09-22", words:30, desc:"办公工具一天：新电脑开箱、文件整理、打印机风波、电话与信号、保养日",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"B5-P1", slug:"tem4-B5-P1", title:"新电脑开箱", shape:"拱门",
+        poster:"assets/tem4/posters/B5_P1.png",
+        sentence:"Xiaoye assembles her new computer, installs the software, flips the switch, watches the screen load with the default settings, opens the terminal, and finally gains access to all her files.",
+        sentenceCn:"小叶学姐组装好新电脑，安装软件，按下开关，看着屏幕加载出厂预设设置，打开终端机，终于能存取她所有的文件。",
+        scene:"粉彩办公室里，小叶学姐拿着小螺丝刀组装一台淡绿色的新电脑，桌上摆着主机、显示器零件和彩色线缆，身后是置物架与小盆栽，星光点点。",
+        words:[
+          {word:"assemble", ipa:"/əˈsembl/",  pos:"v.",  zh:"聚集，集合；装配（机器等）",             forms:["assembles"]},
+          {word:"install",  ipa:"/ɪnˈstɔːl/", pos:"vt.", zh:"安装，设置；安顿，安置",                 forms:["installs"]},
+          {word:"switch",   ipa:"/swɪtʃ/",    pos:"n.",  zh:"开关；突然改变，转换 v. 接通或切断（电流）", forms:["switch"]},
+          {word:"default",  ipa:"/dɪˈfɔːlt/", pos:"n.",  zh:"（电脑的）预设，预置（值）；违约；拖欠",   forms:["default"]},
+          {word:"terminal", ipa:"/ˈtɜːmɪnəl/",pos:"n.",  zh:"（电脑的）终端机；终点站；末端",         forms:["terminal"]},
+          {word:"access",   ipa:"/ˈækses/",   pos:"n.",  zh:"通路；使用权 vt. 存取（计算机文件）",     forms:["access"]}
+        ]
+      },
+      {
+        id:"B5-P2", slug:"tem4-B5-P2", title:"文件整理", shape:"叶形",
+        poster:"assets/tem4/posters/B5_P2.png",
+        sentence:"She inputs the interview records, processes them one by one, classifies the answers into groups, sorts out the key quotes, labels each folder clearly, and pastes her favorite comments on the wall.",
+        sentenceCn:"她把访谈记录输入电脑，逐一处理，把回答分类归组，整理出关键引语，给每个文件夹贴上清楚的标签，再把最喜欢的评语粘贴在墙上。",
+        scene:"小叶学姐在淡紫色键盘上专注打字，显示器上是彩色抽象图形，桌边堆着粉黄绿三色便签和文件夹，淡蓝色办公室背景温馨明亮。",
+        words:[
+          {word:"input",    ipa:"/ˈɪnpʊt/",    pos:"n./v.", zh:"输入（信息、程序等），投入",           forms:["inputs"]},
+          {word:"process",  ipa:"/ˈprəʊses/",  pos:"n.",    zh:"步骤，过程；工序 vt. 加工，处理",       forms:["processes"]},
+          {word:"classify", ipa:"/ˈklæsɪfaɪ/", pos:"v.",    zh:"把…分类，把（货物等）分等级；把…归入某类", forms:["classifies"]},
+          {word:"sort",     ipa:"/sɔːt/",      pos:"vt.",   zh:"分类，整理 n. 种类，类别",             forms:["sorts"]},
+          {word:"label",    ipa:"/ˈleɪbl/",    pos:"vt.",   zh:"贴标签于；把…称为 n. 标签，标贴",       forms:["labels"]},
+          {word:"paste",    ipa:"/peɪst/",     pos:"vt.",   zh:"贴，粘贴 n. 糨糊",                     forms:["pastes"]}
+        ]
+      },
+      {
+        id:"B5-P3", slug:"tem4-B5-P3", title:"打印机风波", shape:"椭圆",
+        poster:"assets/tem4/posters/B5_P3.png",
+        sentence:"Suddenly the printer halts with a jam, the whole machine vibrates and gives everyone a small shock, so Xiaoye unplugs it first, then opens the cover to find the fault.",
+        sentenceCn:"突然打印机卡纸停了下来，整台机器振动起来，还让大家被轻轻电了一下，小叶学姐先拔掉电源插头，再打开盖子查找毛病。",
+        scene:"小叶学姐俯身查看一台卡纸的粉色打印机，出纸口卡着白纸，她一手扶着掀开的盖子、一手拿着电源插头，淡黄色办公室窗边有绿植。",
+        words:[
+          {word:"jam",     ipa:"/dʒæm/",      pos:"n.",  zh:"拥挤，堵塞；困境 v. 挤塞，夹住，卡住",   forms:["jam"]},
+          {word:"halt",    ipa:"/hɔːlt/",     pos:"v.",  zh:"停止前进；停止，停住 n. 中止，停止",     forms:["halts"]},
+          {word:"vibrate", ipa:"/vaɪˈbreɪt/", pos:"v.",  zh:"（使某物）颤动，振动；振动出声或发颤音", forms:["vibrates"]},
+          {word:"shock",   ipa:"/ʃɒk/",       pos:"n.",  zh:"冲击，震动；电震，电击；休克；震惊",     forms:["shock"]},
+          {word:"unplug",  ipa:"/ʌnˈplʌɡ/",   pos:"vt.", zh:"拔出（电器）的电源插头；除去障碍物",     forms:["unplugs"]},
+          {word:"fault",   ipa:"/fɔːlt/",     pos:"n.",  zh:"缺点，毛病；错误；责任，过失",           forms:["fault"]}
+        ]
+      },
+      {
+        id:"B5-P4", slug:"tem4-B5-P4", title:"电话与信号", shape:"超圆角",
+        poster:"assets/tem4/posters/B5_P4.png",
+        sentence:"During the phone meeting the device transmits her voice, yet the reception is poor; Xiaoye links a new wire that conducts the signal better, raises the frequency a little, and finally hears the alert clearly.",
+        sentenceCn:"电话会议中设备传送着她的声音，但信号接收很差；小叶学姐接上一根传导性能更好的新电线，把频率调高了一点，终于清晰地听到了提示音。",
+        scene:"小叶学姐拿着珊瑚红色电话听筒开心通话，另一只手小心地把新电线插进电话底座，空中飘着信号波纹，淡绿色办公室背景有置物架和挂钟。",
+        words:[
+          {word:"transmit",  ipa:"/trænzˈmɪt/",   pos:"v.", zh:"播送，传送；传染，传播；传导，传动", forms:["transmits"]},
+          {word:"reception", ipa:"/rɪˈsepʃən/",   pos:"n.", zh:"接待，欢迎；接受；（信号等）的接收",  forms:["reception"]},
+          {word:"link",      ipa:"/lɪŋk/",        pos:"v.", zh:"连接，结合 n. 联系，关联；链环",      forms:["links"]},
+          {word:"conduct",   ipa:"/ˈkɒndʌkt/",    pos:"v.", zh:"引导；实施；传导，传（热、电等）",    forms:["conducts"]},
+          {word:"frequency", ipa:"/ˈfriːkwənsi/", pos:"n.", zh:"次数，频率；频繁，屡次；周率",        forms:["frequency"]},
+          {word:"alert",     ipa:"/əˈlɜːt/",      pos:"n.", zh:"警报 v. 向…发出警报 adj. 警觉的",     forms:["alert"]}
+        ]
+      },
+      {
+        id:"B5-P5", slug:"tem4-B5-P5", title:"保养日", shape:"波浪",
+        poster:"assets/tem4/posters/B5_P5.png",
+        sentence:"Every Friday Xiaoye maintains each machine, checks that every mechanism operates smoothly, replaces the dirty filter, records any tiny defect, and keeps the account of all the tools in order.",
+        sentenceCn:"每周五，小叶学姐都会保养每台机器，检查每个机械装置是否运转顺畅，更换脏了的滤网，记下任何细小瑕疵，并把工具账目整理得井井有条。",
+        scene:"保养日的小叶学姐戴着小手套、提着打开的工具箱，用软刷清洁淡蓝色打印机和电脑主机，桌上摆着崭新的圆形滤网和放大镜，午后暖光洒进窗户。",
+        words:[
+          {word:"maintain",  ipa:"/menˈteɪn/",   pos:"vt.", zh:"维修，保养；赡养，供养；保持",         forms:["maintains"]},
+          {word:"mechanism", ipa:"/ˈmekənɪzəm/", pos:"n.",  zh:"机械装置；结构，机制，机构",           forms:["mechanism"]},
+          {word:"operate",   ipa:"/ˈɒpəreɪt/",   pos:"v.",  zh:"操作，（使）运转；经营；动手术",       forms:["operates"]},
+          {word:"filter",    ipa:"/ˈfɪltə/",     pos:"n.",  zh:"过滤器，过滤装置 v. 过滤，滤除",       forms:["filter"]},
+          {word:"defect",    ipa:"/ˈdiːfekt/",   pos:"n.",  zh:"缺点，瑕疵",                           forms:["defect"]},
+          {word:"account",   ipa:"/əˈkaʊnt/",    pos:"n.",  zh:"账，账目，账户；报道，记载；理由",     forms:["account"]}
+        ]
+      }
+    ]
+  },
   /* ===== C 日常生活 ===== */
   {id:"C1", cat:"C", zh:"家庭与家居", name:"Family & Home",     status:"soon", words:100, desc:"客厅、卧室、厨房"},
   {id:"C2", cat:"C", zh:"饮食与餐厅", name:"Food & Dining",     status:"soon", words:90,  desc:"餐桌、菜单、烹饪"},

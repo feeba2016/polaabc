@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The White That No One Painted — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#f97316;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#e2e8f0;
+  --soft:#f1f5f9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:8px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,78,216,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,78,216,.55);}70%{box-shadow:0 0 0 12px rgba(29,78,216,0);}100%{box-shadow:0 0 0 0 rgba(29,78,216,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#1e293b;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE WHITE THAT NO ONE PAINTED · 2026-09-22</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🧊 The White That No One Painted</h1>
+  <div class="subtitle">没有人涂过的白色 · CEFR A2 · 约 144 词 · 🔬 科学发现</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted);">👉 点黄色高亮词，可以看它的中文意思；点 ▶ 听这一段朗读。</p>
+
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">White with no paint · 没有颜料的白</div>
+        <p>Look at snow on a cold morning. It looks white, but there is no white <span class="kw" data-word="pigment">pigment</span> in it. Ice is clear, and water is clear too. Sea <span class="kw" data-word="foam">foam</span> is white. So are clouds.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">看一看寒冷清晨的雪。它看起来是白色的，可里面一点白色颜料都没有。冰是透明的，水也是透明的。海浪的泡沫是白的。云也是白的。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">The trick of tiny holes · 小孔的魔法</div>
+        <p>How does it work? Inside snow and foam there are millions of tiny air holes. When light goes in, it cannot go straight through. It <span class="kw" data-word="scatter">scatters</span> in every direction, and our eyes see white.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">这是怎么做到的？雪和泡沫里面有无数个小小的空气孔。光线射进去以后，没法笔直地穿过去，而是向四面八方散射，我们的眼睛就看到了白色。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">A new material · 一种新材料</div>
+        <p>In September 2026, a team led by Kyoto University in Japan made a new <span class="kw" data-word="material">material</span> this way. They used light and a mild liquid to make tiny holes inside a plastic. The holes scatter the light, so it turns bright white.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">2026 年 9 月，由日本京都大学领衔的一个团队用这个办法做出了一种新材料。他们用光和一种温和的液体，在塑料里面做出许多小孔。这些小孔把光散射开来，材料就变得雪白。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Dry like a lotus leaf · 像荷叶一样干爽</div>
+        <p>The rough <span class="kw" data-word="surface">surface</span> <span class="kw" data-word="repel">repels</span> water, like rain on a lotus leaf. The team also worked with Donghua University in China. The method works on <span class="kw" data-word="fabric">fabrics</span>, so one day your coat may stay dry without harmful <span class="kw" data-word="chemical">chemicals</span>.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">粗糙的表面会排斥水珠，就像雨水落在荷叶上一样。这个团队还和中国上海的东华大学合作。这种方法也能用在布料上，所以有一天，你的外套也许不需要有害化学品就能保持干爽。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Key Words（8 个）</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="pigment">🔊</button>
+        <div class="word">pigment<span class="pos">n.</span></div>
+        <div class="zh">颜料；让东西显出颜色的粉末</div>
+        <div class="ex">There is no white pigment in snow.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="foam">🔊</button>
+        <div class="word">foam<span class="pos">n.</span></div>
+        <div class="zh">泡沫（sea foam 海浪泡沫）</div>
+        <div class="ex">Sea foam looks white, but it is only water and air.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="scatter">🔊</button>
+        <div class="word">scatter<span class="pos">v.</span></div>
+        <div class="zh">散射；向四面八方散开</div>
+        <div class="ex">The tiny holes scatter light in every direction.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="material">🔊</button>
+        <div class="word">material<span class="pos">n.</span></div>
+        <div class="zh">材料（做东西用的物质）</div>
+        <div class="ex">The team made a new white material.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="repel">🔊</button>
+        <div class="word">repel<span class="pos">v.</span></div>
+        <div class="zh">排斥；把……挡在外面（防水）</div>
+        <div class="ex">This coat repels water, so you stay dry.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="surface">🔊</button>
+        <div class="word">surface<span class="pos">n.</span></div>
+        <div class="zh">表面；物体的最外面一层</div>
+        <div class="ex">The rough surface repels water.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="fabric">🔊</button>
+        <div class="word">fabric<span class="pos">n.</span></div>
+        <div class="zh">布料；织物（做衣服的材料）</div>
+        <div class="ex">The method also works on fabrics.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="chemical">🔊</button>
+        <div class="word">chemical<span class="pos">n.</span></div>
+        <div class="zh">化学品；化学物质</div>
+        <div class="ex">They made it without harmful chemicals.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns（4 个）</h2>
+  <div class="card">
+    <div class="pattern">
+      <div class="en">It looks white, but there is no white pigment in it.</div>
+      <div class="zh">它看起来是白的，可里面一点白色颜料都没有。</div>
+      <div class="note">讲科学现象最好用的一句：<b>It looks + 形容词, but ...</b>（看起来……，但是……）。先说眼睛看到的，再说真实的秘密。</div>
+    </div>
+    <div class="pattern">
+      <div class="en">There are millions of tiny air holes inside snow.</div>
+      <div class="zh">雪里面有数百万个小小的空气孔。</div>
+      <div class="note"><b>There are + 复数名词 + 地点</b>，表示“某处有某物”。单数或不可数名词要换成 <b>There is</b>：There is no white pigment in it.</div>
+    </div>
+    <div class="pattern">
+      <div class="en">When light goes in, it cannot go straight through.</div>
+      <div class="zh">当光线射进去的时候，它没法笔直地穿过去。</div>
+      <div class="note"><b>When + 句子, 主句</b>。when 放在句首时，中间那<b>个逗号不能漏</b>；把 when 从句放后面就不用逗号：It cannot go straight through when light goes in.</div>
+    </div>
+    <div class="pattern">
+      <div class="en">The method works on fabrics, so one day your coat may stay dry.</div>
+      <div class="zh">这种方法对布料也有效，所以有一天你的外套也许能保持干爽。</div>
+      <div class="note"><b>work on + 东西</b> 表示“对……起作用、适用”。后半句用 <b>may</b> 表示将来<b>有可能</b>，口气比 will 更谨慎，科学写作里很常见。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar（4 个）</h2>
+  <div class="card">
+    <div class="gram">
+      <h3>1. but 和 and：一个转弯，一个直行</h3>
+      <ul>
+        <li><b>and</b> 把同类的信息连起来；<b>but</b> 引出“和前面不一样、让人意外”的信息。</li>
+        <li><span class="good">✓ Ice is clear, but snow is white.</span>（冰透明，但雪是白的——有转折）</li>
+        <li><span class="bad">✗ Ice is clear, and snow is white.</span>（语法没错，但意思变成了简单并列，丢掉了“意外感”）</li>
+        <li class="eg">Sea foam is white. So are clouds.（so 开头的倒装句，表示“云也是这样”，后面动词要跟着 clouds 用复数 are。）</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>2. there is / there are：某处有某物</h3>
+      <ul>
+        <li>复数名词用 <b>there are</b>：<span class="good">There are millions of tiny air holes.</span></li>
+        <li>不可数名词或单数用 <b>there is</b>：<span class="good">There is no white pigment in it.</span></li>
+        <li>否定形式：<span class="good">There is no ... / There are no ...</span>，也可以写 There isn't any ...</li>
+        <li class="eg">There are 40 students in my class. · There is no snow in July.</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>3. 被动语态：is / are + 过去分词</h3>
+      <ul>
+        <li>当我们更关心“东西”而不是“谁做的”时，用被动语态：<b>The material is made with light.</b></li>
+        <li>本课还能说：<span class="good">It is called structural whiteness.</span>（它被称为“结构白”。）</li>
+        <li>过去的事用过去时被动：<span class="good">The material was made in 2026.</span></li>
+        <li class="eg">Paper is made from wood.（纸是用木头做的。）</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>4. 情态动词 can / cannot / may</h3>
+      <ul>
+        <li><b>can</b> 表示“能够”，<b>cannot</b>（或 can't）表示“不能”：<span class="good">Light cannot go straight through.</span></li>
+        <li><b>may</b> 表示“也许会”，用来谈未来可能性：<span class="good">One day your coat may stay dry.</span></li>
+        <li>它们后面都直接跟<b>动词原形</b>，不加 -s、不加 to：<span class="bad">✗ It may stays dry.</span> <span class="good">✓ It may stay dry.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz（5 题）</h2>
+  <div class="card">
+    <div class="quiz" data-ans="1">
+      <div class="q">1. Why does snow look white?</div>
+      <div class="qzh">为什么雪看起来是白色的？</div>
+      <button class="opt">A) Because it is made of white paint</button>
+      <button class="opt">B) Because tiny air holes scatter the light</button>
+      <button class="opt">C) Because the sun is white</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="2">
+      <div class="q">2. Which university led the team in 2026?</div>
+      <div class="qzh">2026 年，哪个大学领衔了这个团队？</div>
+      <button class="opt">A) Donghua University</button>
+      <button class="opt">B) Peking University</button>
+      <button class="opt">C) Kyoto University</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="2">
+      <div class="q">3. What does the rough surface do?</div>
+      <div class="qzh">粗糙的表面有什么作用？</div>
+      <button class="opt">A) It makes the material very heavy</button>
+      <button class="opt">B) It turns the material black</button>
+      <button class="opt">C) It repels water like a lotus leaf</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="1">
+      <div class="q">4. Which university in China worked with the team?</div>
+      <div class="qzh">中国的哪所大学参与了这个项目？</div>
+      <button class="opt">A) Tsinghua University</button>
+      <button class="opt">B) Donghua University</button>
+      <button class="opt">C) Fudan University</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="0">
+      <div class="q">5. Why is this new material good for the earth?</div>
+      <div class="qzh">为什么这种新材料对环境更友好？</div>
+      <button class="opt">A) It uses no titanium dioxide and no harmful chemicals</button>
+      <button class="opt">B) It needs a lot of white paint</button>
+      <button class="opt">C) It is very expensive</button>
+      <div class="fb"></div>
+    </div>
+    <div class="score" id="score"></div>
+  </div>
+</section>
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · More to Know</h2>
+
+  <div class="know">
+    <h3>🔬 这项研究是谁做的</h3>
+    <p>2026 年 9 月，日本京都大学物质—细胞统合系统研究所（iCeMS）的 Easan Sivaniah 教授团队公布了一种新方法，合作方包括<b>东京都立大学</b>和中国的<b>东华大学</b>。他们把这种做法叫“深层泡沫光刻”。步骤其实很朴素：先让光照在塑料（聚合物）上，把长链分子打断成小片段；再用一种温和的溶剂处理，材料像发面一样膨胀起来，里面就出现了一大片连通的微孔。这些微孔散射光线，材料白得发亮；表面同时变得粗糙，水珠站不住脚。</p>
+  </div>
+
+  <div class="know">
+    <h3>❄️ 雪为什么是白的：冰明明是透明的</h3>
+    <p>冰本身几乎无色透明。雪花由无数细小的冰晶组成，冰晶之间塞满了空气，光一进去就在这些界面上被来回弹射，各种颜色的光混在一起回到我们眼里，看起来就是白色。同样的道理让<b>云、海浪的白沫、肥皂泡、牛奶泡沫</b>都发白——它们大多只是“透明的液体 + 无数空气小孔”。科学家把这种不用颜料、靠结构造出来的颜色叫<b>结构色</b>；孔雀羽毛、蝴蝶翅膀上那种会变色的彩虹，也属于结构色。</p>
+  </div>
+
+  <div class="know">
+    <h3>🪷 荷叶效应：水珠自己滚走了</h3>
+    <p>荷叶表面布满微米级的小凸起，还覆着一层蜡，水珠只能在凸起的“尖顶”上站着，一滚动就把灰尘一起带走，所以荷叶总是干干净净。中国古人早就注意到这一点，“出淤泥而不染”说的就是它。工程师照着荷叶做出防水衣服、自清洁玻璃和防污外墙。这次的新材料也是借了荷叶的思路：<b>不靠化学涂层，靠表面结构防水</b>。</p>
+  </div>
+
+  <div class="know">
+    <h3>🇨🇳 中国团队做了什么</h3>
+    <p>这次合作方<b>东华大学</b>位于上海，是中国纺织科学与工程领域最有名的大学之一。研究团队与东华大学的纺织学者一起证明：这种方法不只用在塑料薄膜上，也能用在<b>布料</b>上。中国是纺织大国，如果布料不用化学涂层也能防水，工厂少用化学品，衣服也更好回收，对人和环境都更友好。</p>
+  </div>
+
+  <div class="know">
+    <h3>🎨 为什么要换掉钛白粉和永久化学品</h3>
+    <ul>
+      <li><b>钛白粉</b>（二氧化钛，TiO₂）是已知最白的白色颜料，油漆、塑料、纸张、防晒霜里都有。出于安全考虑，欧盟已经不再允许把它用作食品添加剂。</li>
+      <li><b>PFAS</b> 是一大类能防水防油的化学品，效果好但极难分解，会在土壤、水源甚至人体里长期积累，常被称为“永久化学品”。</li>
+      <li>新思路是：<b>用“结构”代替“化学品”</b>。颜色来自微孔对光的散射，防水来自粗糙表面，两者都不用额外添加物，也就少了一份污染。</li>
+      <li>它还有一个优点：不依赖昂贵的特种材料，用市面上常见的聚合物就能做出来，更容易推广。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🏺 中国人早就懂“白”的妙处</h3>
+    <p>福建德化的白瓷从明代起就远销海外，釉色温润如凝脂，欧洲人干脆叫它“中国白”。那份白不是靠白色颜料涂上去的，而是瓷土和釉料在高温下形成的结构对光的散射。中国传统的<b>宣纸</b>也是这样：青檀皮和稻草的纤维交织，纤维与空气之间把光反复散射，纸就又白又柔和。造纸术是中国古代的伟大发明，今天科学家做的，正是用现代的微孔结构，重新演了一遍“不用颜料也能白”的老道理。</p>
+  </div>
+
+  <div class="tipbox">
+    <h3>✋ 在家试一试：三分钟做出“结构白”</h3>
+    <ul>
+      <li><b>准备：</b>一块透明冰块（冻在冰箱里的那种）、一块深色布或深色纸、一把勺子。</li>
+      <li><b>第一步：</b>把冰块放在深色布上，对着灯光看——它几乎是无色透明的，能看穿。</li>
+      <li><b>第二步：</b>请大人帮忙，用勺子把冰敲碎或刮成冰屑，再看——同样的冰，一下子变成白色了！</li>
+      <li><b>为什么：</b>完整的冰是一整块，光直接穿过去；碎冰之间全是空气小孔，光被散射回来，就白了。</li>
+      <li><b>还能试：</b>一块方糖（半透明）和一小堆磨碎的糖粉（白色）；透明的洗手液（透明）和打出来的泡沫（白色）。</li>
+      <li><b>安全提示：</b>敲冰和拿冰一定要大人陪同，别长时间用手握冰以免冻伤；实验只用冰、糖和洗手液，<b>不要碰任何溶剂、酒精或清洁剂</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><span class="txt">读懂一篇 145 词左右的科普小文，弄清“雪为什么是白的”和“科学家怎么模仿它”。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">掌握 8 个核心词：pigment, foam, scatter, material, repel, surface, fabric, chemical。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用 but 说出反差、用 there is / there are 描述“有什么”、用 may 谈未来的可能。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">能用 3—4 句英文解释一个自然现象，并说出它和生活中什么东西有关。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">📚 学习建议</h3>
+    <div class="goal"><span class="tick">1</span><span class="txt">先不看中文听一遍全文，猜一猜：snow、foam 和 clouds 这三样东西有什么共同点？</span></div>
+    <div class="goal"><span class="tick">2</span><span class="txt">打开中文翻译逐段对照，把四个段落各用一句中文概括，再试着说成一句英文。</span></div>
+    <div class="goal"><span class="tick">3</span><span class="txt">用句型 <b>It looks ... but there is no ... in it.</b> 造三个句子，可以写云、糖霜、泡沫。</span></div>
+    <div class="goal"><span class="tick">4</span><span class="txt">做完测验后，把错题的正确句子抄一遍；再照着“动手试一试”做一次碎冰实验，用英语讲给家人听。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">🗣️ 亲子口语三问</h3>
+    <div class="goal"><span class="tick">Q1</span><span class="txt">Why does snow look white when ice is clear?</span></div>
+    <div class="goal"><span class="tick">Q2</span><span class="txt">What did the team use to make the tiny holes?</span></div>
+    <div class="goal"><span class="tick">Q3</span><span class="txt">Can you find something white with no white paint in our kitchen?</span></div>
+  </div>
+
+  <div style="text-align:center;margin:18px 0;">
+    <button class="print-btn" id="printBtn">🖨️ 打印本页</button>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>Pola News · A2 初级英语 · 2026-09-22 · 🔬 科学发现<br>资料参考：京都大学 iCeMS 发布、ScienceDaily（2026-09-10）等公开报道</footer>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+"Look at snow on a cold morning. It looks white, but there is no white pigment in it. Ice is clear, and water is clear too. Sea foam is white. So are clouds.",
+"How does it work? Inside snow and foam there are millions of tiny air holes. When light goes in, it cannot go straight through. It scatters in every direction, and our eyes see white.",
+"In September 2026, a team led by Kyoto University in Japan made a new material this way. They used light and a mild liquid to make tiny holes inside a plastic. The holes scatter the light, so it turns bright white.",
+"The rough surface repels water, like rain on a lotus leaf. The team also worked with Donghua University in China. The method works on fabrics, so one day your coat may stay dry without harmful chemicals."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'pigment': '颜料 n.',
+  'foam': '泡沫 n.',
+  'scatter': '散射；散开 v.',
+  'material': '材料 n.',
+  'repel': '排斥；防水 v.',
+  'surface': '表面 n.',
+  'fabric': '布料；织物 n.',
+  'chemical': '化学品 n.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', function(){ tip.style.display = 'none'; });
+  })(kws[k]);
+}
+document.addEventListener('click', function(){ tip.style.display = 'none'; });
+window.addEventListener('scroll', function(){ tip.style.display = 'none'; });
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#','');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 打印 ---------- */
+var printBtn = document.getElementById('printBtn');
+if(printBtn) printBtn.addEventListener('click', function(){ window.print(); });
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            if(sc){
+              sc.classList.add('show');
+              sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+                (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+            }
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

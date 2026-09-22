@@ -3566,6 +3566,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-22",
+    "title": "The Little Swallow Flies South",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-22-the-little-swallow-flies-south",
+    "url": "lessons/a1/2026-09-22-the-little-swallow-flies-south.html",
+    "vocab": [
+      {
+        "word": "swallow",
+        "zh": "燕子",
+        "ex": "A swallow is a small bird."
+      },
+      {
+        "word": "wire",
+        "zh": "电线",
+        "ex": "The bird sits on a wire."
+      },
+      {
+        "word": "fly",
+        "zh": "飞",
+        "ex": "Birds fly in the sky."
+      },
+      {
+        "word": "south",
+        "zh": "南方；向南",
+        "ex": "The swallow flies south."
+      },
+      {
+        "word": "rest",
+        "zh": "休息",
+        "ex": "I rest at night."
+      },
+      {
+        "word": "spring",
+        "zh": "春天",
+        "ex": "Spring is warm and green."
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -5278,6 +5320,58 @@ const EPISODES = [
         "word": "method",
         "zh": "方法；办法",
         "ex": "He taught workers easy maths methods."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-22",
+    "title": "The White That No One Painted",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-22-the-white-that-no-one-painted",
+    "url": "lessons/a2/2026-09-22-the-white-that-no-one-painted.html",
+    "vocab": [
+      {
+        "word": "pigment",
+        "zh": "看一看寒冷清晨的雪。它看起来是白色的，可里面一点白色颜料都没有。冰是透明的，水也是透明的。海浪的泡沫是白的。云也是白的。",
+        "ex": "There is no white pigment in snow."
+      },
+      {
+        "word": "foam",
+        "zh": "泡沫（sea foam 海浪泡沫）",
+        "ex": "Sea foam looks white, but it is only water and air."
+      },
+      {
+        "word": "scatter",
+        "zh": "散射；向四面八方散开",
+        "ex": "The tiny holes scatter light in every direction."
+      },
+      {
+        "word": "material",
+        "zh": "材料（做东西用的物质）",
+        "ex": "The team made a new white material."
+      },
+      {
+        "word": "repel",
+        "zh": "排斥；把……挡在外面（防水）",
+        "ex": "This coat repels water, so you stay dry."
+      },
+      {
+        "word": "surface",
+        "zh": "表面；物体的最外面一层",
+        "ex": "The rough surface repels water."
+      },
+      {
+        "word": "fabric",
+        "zh": "布料；织物（做衣服的材料）",
+        "ex": "The method also works on fabrics."
+      },
+      {
+        "word": "chemical",
+        "zh": "化学品；化学物质",
+        "ex": "They made it without harmful chemicals."
       }
     ]
   },
