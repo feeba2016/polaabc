@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/F1/F2/F3/G1 已上线（15 主题 / 75 Part / 450 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1/F1/F2/F3/G1 已上线（16 主题 / 80 Part / 480 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -941,7 +941,88 @@ const TEM4_THEMES = [
     ]
   },
   /* ===== C 日常生活 ===== */
-  {id:"C1", cat:"C", zh:"家庭与家居", name:"Family & Home",     status:"soon", words:100, desc:"客厅、卧室、厨房"},
+  {
+    id:"C1", cat:"C", zh:"家庭与家居", name:"Family & Home", status:"live",
+    date:"2026-09-23", words:30, desc:"安家一天：乔迁安家、晨光厨房、周末大扫除、傍晚修整、灯火晚安",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"C1-P1", slug:"tem4-C1-P1", title:"乔迁安家", shape:"拱门",
+        poster:"assets/tem4/posters/C1_P1.png",
+        sentence:"After signing the lease for a small property adjacent to the riverside park, the family decides to reside there at once, furnishes each room with warm wooden shelves, and decorates the walls with their own paintings.",
+        sentenceCn:"签下游河畔公园旁一处小房产的租约后，一家人决定立刻入住，用温暖的木架布置好每个房间，再把自己画的画挂上墙作装饰。",
+        scene:"粉彩暖调的新家客厅里，小叶学姐站在小梯凳上把画挂上墙，身旁堆着纸箱、木书架和钥匙串，窗外是河畔公园的绿树。",
+        words:[
+          {word:"lease",    ipa:"/liːs/",       pos:"n.",   zh:"租赁，租约 v. 出租，租得",  forms:["lease"]},
+          {word:"property", ipa:"/ˈprɒpəti/",   pos:"n.",   zh:"财产，所有物；不动产，房地产", forms:["property"]},
+          {word:"adjacent", ipa:"/əˈdʒeɪsənt/", pos:"adj.", zh:"邻近的",                    forms:["adjacent"]},
+          {word:"reside",   ipa:"/rɪˈzaɪd/",    pos:"vi.",  zh:"居住，定居",                forms:["reside"]},
+          {word:"furnish",  ipa:"/ˈfɜːnɪʃ/",    pos:"v.",   zh:"供应，提供；为…配备家具",   forms:["furnishes"]},
+          {word:"decorate", ipa:"/ˈdekəreɪt/",  pos:"v.",   zh:"装饰，装修，粉刷",          forms:["decorates"]}
+        ]
+      },
+      {
+        id:"C1-P2", slug:"tem4-C1-P2", title:"晨光厨房", shape:"叶形",
+        poster:"assets/tem4/posters/C1_P2.png",
+        sentence:"In the bright morning kitchen, she bakes the toast carefully so as not to overdo it, scrapes the crumbs from the table, rinses the mugs and lines them up beside the sink, and flushes cold water through the pipes to drive out the overnight chill.",
+        sentenceCn:"在明亮的晨间厨房里，她小心地烤着吐司以免烤过头，把面包屑从桌上刮落，洗净杯子一字排开放在水槽边，再放冷水冲一冲管道，赶走隔夜的寒气。",
+        scene:"洒满晨光的粉彩厨房，小叶学姐系着围裙站在烤面包机旁，金黄吐司正跳出来，洗净的杯子在水槽边排成一排。",
+        words:[
+          {word:"toast",  ipa:"/təʊst/",     pos:"n.", zh:"烤面包片，吐司；祝酒词 v. 烤，烘", forms:["toast"]},
+          {word:"overdo", ipa:"/ˌəʊvəˈduː/", pos:"v.", zh:"做（使用）…过度，把…煮太久",       forms:["overdo"]},
+          {word:"scrape", ipa:"/skreɪp/",    pos:"v.", zh:"削，刮落，擦去；刮坏，擦伤",       forms:["scrapes"]},
+          {word:"sink",   ipa:"/sɪŋk/",      pos:"n.", zh:"洗涤槽；污水池 v. 沉下，下陷",     forms:["sink"]},
+          {word:"flush",  ipa:"/flʌʃ/",      pos:"v.", zh:"冲洗，清除；脸红，发红",           forms:["flushes"]},
+          {word:"chill",  ipa:"/tʃɪl/",      pos:"n.", zh:"寒冷，寒气；寒战，寒意 v. 使变冷", forms:["chill"]}
+        ]
+      },
+      {
+        id:"C1-P3", slug:"tem4-C1-P3", title:"周末大扫除", shape:"椭圆",
+        poster:"assets/tem4/posters/C1_P3.png",
+        sentence:"On Saturday morning the whole family sweeps the floor, scrubs the sticky dining table, wipes every window until it shines, clears the clutter from the hallway, removes the old posters from the wall, and is glad to rid the house of a whole week's dust.",
+        sentenceCn:"星期六早晨，全家人一起扫地、用力擦净黏黏的餐桌、把每扇窗擦得发亮、清走走廊里的杂物、揭下墙上的旧海报，很开心让房子摆脱了一整周的灰尘。",
+        scene:"明亮的粉彩客厅里，小叶学姐挥着扫帚扫地，两位叶猴家人一起擦窗、擦桌，水桶里泡沫星星点点。",
+        words:[
+          {word:"sweep",  ipa:"/swiːp/",   pos:"v.",   zh:"打扫；掠过，拂过 n. 打扫",     forms:["sweeps"]},
+          {word:"scrub",  ipa:"/skrʌb/",   pos:"v.",   zh:"用力擦洗，擦净；取消，剔除",   forms:["scrubs"]},
+          {word:"wipe",   ipa:"/waɪp/",    pos:"v.",   zh:"抹，擦，去除",                 forms:["wipes"]},
+          {word:"clear",  ipa:"/klɪə/",    pos:"adj.", zh:"清晰的，清澈的 v. 清除，扫清", forms:["clears"]},
+          {word:"remove", ipa:"/rɪˈmuːv/", pos:"v.",   zh:"取去，移动；除去，消除",       forms:["removes"]},
+          {word:"rid",    ipa:"/rɪd/",     pos:"vt.",  zh:"使摆脱，使去掉，使获自由",     forms:["rid"]}
+        ]
+      },
+      {
+        id:"C1-P4", slug:"tem4-C1-P4", title:"傍晚修整", shape:"超圆角",
+        poster:"assets/tem4/posters/C1_P4.png",
+        sentence:"Before supper she knocks the loose nail back into the old chair, repairs the handle worn by ten years of use, tosses the toys into the box, hangs the coats on the rack by the door, coaxes the shy kitten out from under the sofa, and watches the garden gate swing shut.",
+        sentenceCn:"晚饭前，她把松动的钉子敲回旧椅子里，修好磨损了十年的把手，把玩具扔进箱子，把外套挂上门边的衣架，把害羞的小猫从沙发底下哄出来，看着院门在身后轻轻摆上关好。",
+        scene:"黄昏的粉彩门厅，小叶学姐举小锤敲紧旧椅子上的钉子，门边衣架挂着外套，小猫从沙发下探出头来。",
+        words:[
+          {word:"knock", ipa:"/nɒk/",   pos:"v.",   zh:"打，击，敲；相撞 n. 一击，敲门（声）", forms:["knocks"]},
+          {word:"wear",  ipa:"/weə/",   pos:"v.",   zh:"穿，戴，佩；耗损，磨损",               forms:["worn"]},
+          {word:"toss",  ipa:"/tɒs/",   pos:"v.",   zh:"投，扔，抛；掷（钱币）",               forms:["tosses"]},
+          {word:"rack",  ipa:"/ræk/",   pos:"n.",   zh:"（放置物件的）架子 vt. 使痛苦，折磨",  forms:["rack"]},
+          {word:"coax",  ipa:"/kəʊks/", pos:"v.",   zh:"哄，劝诱；耐心地摆弄",                 forms:["coaxes"]},
+          {word:"swing", ipa:"/swɪŋ/",  pos:"v.",   zh:"（使）来回摆动，摇荡；旋转 n. 秋千",   forms:["swing"]}
+        ]
+      },
+      {
+        id:"C1-P5", slug:"tem4-C1-P5", title:"灯火晚安", shape:"波浪",
+        poster:"assets/tem4/posters/C1_P5.png",
+        sentence:"When evening falls, the family lights the lanterns that illuminate the little garden, watches their soft glow sway in the breeze and fireflies flash above the flowerbeds, waves goodnight to a brood of sparrows under the eaves, and finally extinguishes the candles before bed.",
+        sentenceCn:"夜幕降临，全家人点亮照亮小花园的灯笼，看着柔光在晚风中轻摆、萤火虫在花坛上空闪烁，向屋檐下的一窝小麻雀道晚安，最后在睡前熄灭蜡烛。",
+        scene:"粉彩夜色的小花园里，小叶学姐提着暖黄的灯笼照亮花坛，萤火虫点点飞舞，屋檐下一窝小麻雀依偎而眠。",
+        words:[
+          {word:"light",      ipa:"/laɪt/",        pos:"n.",  zh:"光线；灯火 v. 点燃；照亮",          forms:["lights"]},
+          {word:"illuminate", ipa:"/ɪˈluːmɪneɪt/", pos:"v.",  zh:"照明，照射；用灯装饰；阐明，启发", forms:["illuminate"]},
+          {word:"sway",       ipa:"/sweɪ/",        pos:"v.",  zh:"（使）摇摆，（使）摆动；支配，影响", forms:["sway"]},
+          {word:"flash",      ipa:"/flæʃ/",        pos:"v.",  zh:"（使）闪光，（使）闪烁；飞驰，掠过", forms:["flash"]},
+          {word:"brood",      ipa:"/bruːd/",       pos:"n.",  zh:"（鸡等）窝，同窝幼鸟 v. 孵（蛋）；盘算", forms:["brood"]},
+          {word:"extinguish", ipa:"/ɪkˈstɪŋɡwɪʃ/", pos:"vt.", zh:"熄灭，扑灭；压制，压抑",            forms:["extinguishes"]}
+        ]
+      }
+    ]
+  },
   {id:"C2", cat:"C", zh:"饮食与餐厅", name:"Food & Dining",     status:"soon", words:90,  desc:"餐桌、菜单、烹饪"},
   {id:"C3", cat:"C", zh:"购物与消费", name:"Shopping",          status:"soon", words:80,  desc:"商场、付款、橱窗"},
   {id:"C4", cat:"C", zh:"日常作息",   name:"Daily Routine",     status:"soon", words:70,  desc:"起床、通勤、睡前"},
