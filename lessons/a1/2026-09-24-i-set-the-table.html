@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · I Set the Table — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#c2410c;
+  --accent2:#ea580c;
+  --bg:#fff7ed;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#7c2d12;
+  --highlight:#fde68a;
+  --border:#fed7aa;
+  --soft:#ffedd5;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#fb923c);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(194,65,12,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #fdba74;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#7c2d12;background:#fff7ed;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(194,65,12,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(194,65,12,.6);}70%{box-shadow:0 0 0 14px rgba(194,65,12,0);}100%{box-shadow:0 0 0 0 rgba(194,65,12,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#fdba74;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(194,65,12,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">I Set the Table 🍚🥢</h1>
+      <p class="subtitle">2026年9月24日 · 日常生活｜我来摆碗筷 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · Dinner Time 该吃饭啦</div>
+            <p>It is dinner time. 🕕 I help at home. 🏠 I put a <span class="kw" data-def="碗：圆圆的、可以装饭和汤的餐具">bowl</span> 🥣 on the <span class="kw" data-def="桌子：一家人围着吃饭、写字用的家具">table</span>. 🍚 One, two, three bowls. ✅</p>
+          </div>
+          <div class="zh">该吃晚饭啦 🕕。我在家里帮忙 🏠。我把一只碗 🥣 放到桌子上 🍚。一只、两只、三只碗 ✅。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Chopsticks and Spoons 筷子和勺子</div>
+            <p>I put <span class="kw" data-def="筷子：两根细细的小棒，用来夹菜、吃饭">chopsticks</span> 🥢 next to the bowl. 🍚 I put a <span class="kw" data-def="勺子：圆圆的小勺，用来喝汤、吃米饭">spoon</span> 🥄 too. 🥣 Everyone has a spoon. ⭐</p>
+          </div>
+          <div class="zh">我把筷子 🥢 放在碗的旁边 🍚。我还放了一把勺子 🥄 🥣。每个人都有一把勺子 ⭐。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Cups and Plates 杯子和盘子</div>
+            <p>I put a <span class="kw" data-def="杯子：用来喝水、喝牛奶的容器">cup</span> 🥤 for water. 💧 I put a <span class="kw" data-def="盘子：扁扁的、用来装菜的餐具">plate</span> 🍽️ for the fish. 🐟 The table looks nice. 😊</p>
+          </div>
+          <div class="zh">我放了一个杯子 🥤 用来喝水 💧。我放了一个盘子 🍽️ 用来装鱼 🐟。桌子看起来真漂亮 😊。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · A Good Helper 我是小帮手</div>
+            <p>My family sits down. 👨‍👩‍👧 We eat together. 🍚 I am happy. 😊 I am a good <span class="kw" data-def="帮手：帮忙做事的人，a good helper 就是好帮手">helper</span>. 💛</p>
+          </div>
+          <div class="zh">我的家人坐下来 👨‍👩‍👧。我们一起吃饭 🍚。我很开心 😊。我是一个好帮手 💛。</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#ffedd5;border:2px solid #fdba74;">
+        <h3 style="margin:0 0 8px;color:#c2410c;font-size:20px;">🍽️ 和 Pola 一起演一演！</h3>
+        <p style="margin:0;font-size:16px;">和爸爸妈妈一起边说边做动作：说 <b>“It is dinner time.”</b> 时搓搓小手、假装肚子饿 🤤；说 <b>“I put a bowl on the table.”</b> 时真的拿一只小碗轻轻放到桌上 🥣；说 <b>“I put chopsticks next to the bowl.”</b> 时把两根筷子并排放好 🥢；说 <b>“I am a good helper.”</b> 时竖起大拇指夸夸自己 👍。记得点黄色的词看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="table">🔊</button><div class="emoji">🍽️</div><div class="word">table<span class="pos">n.</span></div><div class="zh">桌子</div><div class="ex">The bowl is on the table.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bowl">🔊</button><div class="emoji">🥣</div><div class="word">bowl<span class="pos">n.</span></div><div class="zh">碗</div><div class="ex">I put rice in my bowl.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="chopsticks">🔊</button><div class="emoji">🥢</div><div class="word">chopsticks<span class="pos">n.</span></div><div class="zh">筷子</div><div class="ex">I use chopsticks to eat.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="spoon">🔊</button><div class="emoji">🥄</div><div class="word">spoon<span class="pos">n.</span></div><div class="zh">勺子</div><div class="ex">This is my spoon.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cup">🔊</button><div class="emoji">🥤</div><div class="word">cup<span class="pos">n.</span></div><div class="zh">杯子</div><div class="ex">I drink water from a cup.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="helper">🔊</button><div class="emoji">💛</div><div class="word">helper<span class="pos">n.</span></div><div class="zh">帮手</div><div class="ex">I am a good helper.</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. I put [thing] on the table.</h3>
+          <div class="zh">“我把……放在桌子上”。说<b>把一样东西放到某个地方</b>，用 <b>I put + 东西 + on the + 地方</b>。东西前面常常要加 <b>a</b>（一个）。</div>
+          <div class="eg">I put a bowl on the table. 🥣 / I put a cup on the table. 🥤 / I put a plate on the table. 🍽️ / I put chopsticks on the table. 🥢</div>
+          <div class="practice">练习：我把一只碗放在桌子上 → I put <input placeholder="a bowl on the table">.</div>
+        </div>
+        <div class="item">
+          <h3>2. This is my [thing].</h3>
+          <div class="zh">“这是我的……”。拿着一样东西介绍<b>它是我的</b>，用 <b>This is my + 东西</b>。<b>my</b> 是“我的”，如果是对别人说就用 <b>your</b>（你的）。</div>
+          <div class="eg">This is my bowl. 🥣 / This is my spoon. 🥄 / This is my cup. 🥤 / This is your plate. 🍽️</div>
+          <div class="practice">练习：这是我的勺子 → This is <input placeholder="my spoon">.</div>
+        </div>
+        <div class="item">
+          <h3>3. I am a good helper.</h3>
+          <div class="zh">“我是一个好帮手”。说自己<b>是什么样的人、现在感觉怎么样</b>，用 <b>I am + 一个词</b>。想说“我是一个……”就在中间加 <b>a</b>。</div>
+          <div class="eg">I am a good helper. 💛 / I am happy. 😊 / I am six. 6️⃣ / I am a big girl. 👧</div>
+          <div class="practice">练习：我很开心 → I <input placeholder="am happy">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. a = 一个：单数东西前面要加 a</h3>
+          <div class="zh">说<b>一个</b>东西的时候，前面要加 <b>a</b>：a bowl（一只碗）、a cup（一个杯子）、a spoon（一把勺子）。如果后面的词以 <b>a e i o u</b> 开头，就要写成 <b>an</b>：an apple 🍎、an egg 🥚。说“两个、三个”的时候<b>不要</b>加 a，直接说 two bowls、three bowls。</div>
+          <div class="eg">a bowl 🥣 → three bowls 🥣🥣🥣 / a cup 🥤 → two cups 🥤🥤 / an apple 🍎</div>
+        </div>
+        <div class="item">
+          <h3>2. 一般现在时：我做、我常常做</h3>
+          <div class="zh">讲<b>现在做的</b>或者<b>常常做的</b>事情，动词就用现在时。主语是 <b>I（我）</b>、<b>you（你）</b>、<b>we（我们）</b>、<b>they（他们）</b>的时候，动词用<b>原形</b>，<b>不加 -s</b>。<br>只有主语是 <b>he / she / it</b>（一个人、一只动物）时才加 -s。</div>
+          <div class="eg">I help at home. 🏠 / We eat together. 🍚 / I put a bowl on the table. 🥣 / My mum puts the fish on the plate. 🐟</div>
+        </div>
+        <div class="item">
+          <h3>3. on / next to / for：东西的位置和用途</h3>
+          <div class="zh">英文说“在哪里、用来做什么”，要靠不同的<b>介词</b>。<b>on</b> 是“在……上面、贴在上面”：on the table（在桌子上）；<b>next to</b> 是“在……旁边”：next to the bowl（在碗旁边）；<b>for</b> 是“给……用、用来装……”：a cup for water（用来喝水的杯子）。</div>
+          <div class="eg">The bowl is on the table. 🍽️ / The chopsticks are next to the bowl. 🥢 / This cup is for water. 💧</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#ffedd5;border:2px solid #fdba74;">
+        <div style="font-size:20px;font-weight:800;color:#c2410c;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#7c2d12;margin-top:6px;">每做对一题得 1 分，全部做完就是摆桌小能手啦！🍽️✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🍚 吃饭前为什么要“摆碗筷”？</h3>
+        <p>在中国，很多小朋友吃饭前都有一个小小的任务：<b>摆碗筷</b>。也就是给家里每个人放好一只碗、一双筷子、一把勺子，再摆上装菜的盘子和喝水的杯子 🍽️。</p>
+        <p>这件事看起来很小，其实很有用：碗筷摆放整齐了，饭菜端上来<b>马上就能吃</b>，不用大家干等着；而且这也是小朋友<b>帮家里做事</b>的第一课。今天故事里那句 <b>“I am a good helper.”</b>，说的就是这份小小的自豪感 💛。</p>
+
+        <h3>🥢 筷子的小秘密</h3>
+        <p>筷子是中国人用了<b>几千年</b>的餐具。它总是<b>成双成对</b>的——两根一起才能夹起东西，少一根就用不了。</p>
+        <ul>
+          <li>筷子一头<b>方</b>、一头<b>圆</b>。老辈人说，方的一头代表<b>地</b>，圆的一头代表<b>天</b>，叫做“天圆地方”。</li>
+          <li>中国人吃饭常常<b>用一只碗盛米饭</b>，用筷子夹菜，再用勺子喝汤 🥣。所以英文里说 bowl（碗）、chopsticks（筷子）、spoon（勺子），正好是餐桌上的三件宝。</li>
+          <li>很多国家的小朋友吃饭用<b>刀和叉</b>（knife and fork 🍴），我们用筷子。工具不一样，吃饭的开心是一样的 😊。</li>
+        </ul>
+
+        <h3>🍽️ 中国的圆桌：一家人围在一起</h3>
+        <p>你注意过吗？中国的餐桌很多是<b>圆圆的</b> ⭕。圆桌没有“上座”和“下座”的角，大家围坐一圈，<b>每个人离菜都一样近</b>，谁都能夹到自己想吃的那盘菜 🥗。</p>
+        <p>大一点的圆桌中间还有一个可以转动的<b>小转盘</b>。想吃什么，轻轻把转盘转过来就行，不用站起来够 🌀。逢年过节，比如<b>除夕的年夜饭</b>，全家人围坐圆桌吃一顿饭，是中国人心里最温暖的时刻 🏮。</p>
+
+        <h3>🙏 餐桌上的小礼貌</h3>
+        <ul>
+          <li>人要<b>到齐了再开饭</b>，长辈先动筷子，小朋友再吃 👨‍👩‍👧。</li>
+          <li>请别人帮忙递东西要说 <b>“请”</b>，别人帮你拿了要说 <b>“谢谢”</b>。英文就是 <b>please</b> 和 <b>thank you</b>。</li>
+          <li>不要<b>用筷子敲碗</b>，也不要把筷子<b>直直地插在饭碗中间</b>，这些都是不礼貌的做法。</li>
+          <li>夹菜时只夹<b>自己面前</b>的，不在盘子里挑来挑去 🥢。</li>
+        </ul>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>数一数</b> 🔢：晚饭前真的来摆一次桌。边摆边数：<b>One bowl, two bowls, three bowls.</b></li>
+          <li><b>我说你放</b> 🍽️：爸爸妈妈说英文 <b>“Put the spoon next to the bowl.”</b>，你来放对位置。</li>
+          <li><b>餐具配对</b> 🥢：把碗、筷子、勺子、杯子、盘子画成小卡片，一面画图，一面写英文，玩翻牌配对。</li>
+          <li><b>餐桌小记者</b> 🎤：指着桌上的东西问：<b>“What is this?”</b> 你来答：<b>“This is my bowl.”</b></li>
+          <li><b>小帮手打卡</b> 💛：每天帮家里摆一次碗筷，做完了对自己说一句：<b>“I am a good helper.”</b></li>
+        </ul>
+
+        <p style="background:#fee2e2;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>端<b>热汤、热菜</b>一定要请大人来，千万不要自己去端，烫到手非常疼 🍲；瓷碗、玻璃杯<b>掉在地上会摔碎</b>，碎片很锋利，<b>不要自己用手去捡</b>，要马上喊大人来处理 🚫；<b>筷子不能含在嘴里跑来跑去</b>，摔倒了很容易戳伤 👟；吃饭时要<b>坐好慢慢嚼</b>，一边吃一边笑、一边跑，容易呛到；搬椅子的时候看好后面，别撞到别人 🪑。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读《我来摆碗筷》的小故事，知道吃饭前要摆好碗、筷子、勺子、杯子和盘子。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：table, bowl, chopsticks, spoon, cup, helper。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “I put ... on the table.”、“This is my ...”、“I am a good helper.” 说简单的话。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 a / an 的用法、一般现在时里 I 后面动词不变形，以及 on / next to / for 的区别。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>愿意在家里做一点小事，感受“我是小帮手”的快乐。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读；说到 put a bowl 时真的去拿一只碗来放 🥣。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，把 6 个词做成小卡片，贴在餐桌旁边天天看。</div></div>
+        <div class="goal"><span class="ic">🔢</span><div>晚饭前和爸爸妈妈一起摆桌，边摆边用英文数：<b>One bowl, two bowls, three bowls.</b></div></div>
+        <div class="goal"><span class="ic">🎤</span><div>玩“我说你放”：<b>“Put the spoon next to the bowl.”</b> 看谁放得又快又对 🥄。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，贴在冰箱上，每天摆完碗筷打个卡 💛</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · I Set the Table · 2026-09-24 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["It is dinner time. I help at home. I put a bowl on the table. One, two, three bowls.", "I put chopsticks next to the bowl. I put a spoon too. Everyone has a spoon.", "I put a cup for water. I put a plate for the fish. The table looks nice.", "My family sits down. We eat together. I am happy. I am a good helper."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where do we put the rice? 米饭盛在哪里？",em:["🥣","🥤","🪑"],opts:["In a bowl (碗里)","In a cup (杯子里)","On the chair (椅子上)"],ans:0,
+   fb:"Yes! 米饭装在碗里，I put the rice in a bowl 🥣。"},
+  {q:"What do we use to eat in China? 在中国我们用什么吃饭？",em:["🍴","🥢","🥄"],opts:["A fork (叉子)","Chopsticks (筷子)","A cup (杯子)"],ans:1,
+   fb:"Right! 我们用筷子吃饭，I put chopsticks next to the bowl 🥢。"},
+  {q:"We drink water from a ... 我们用什么喝水？",em:["🥣","🍽️","🥤"],opts:["Bowl (碗)","Plate (盘子)","Cup (杯子)"],ans:2,
+   fb:"Great! 喝水用杯子，I put a cup for water 🥤。"},
+  {q:"Where is the bowl? 碗放在哪里？",em:["🍽️","🛏️","🚗"],opts:["On the table (在桌子上)","On the bed (在床上)","In a car (在车里)"],ans:0,
+   fb:"Perfect! 碗放在桌子上，The bowl is on the table 🍽️。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>

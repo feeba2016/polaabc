@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Girl Who Made History at Thirteen — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#075985;
+  --accent2:#f59e0b;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#bae6fd;
+  --border:#e2e8f0;
+  --soft:#f1f5f9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:8px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(7,89,133,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(7,89,133,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(7,89,133,.55);}70%{box-shadow:0 0 0 12px rgba(7,89,133,0);}100%{box-shadow:0 0 0 0 rgba(7,89,133,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#7dd3fc;}
+#tip{position:fixed;z-index:1200;background:#1e293b;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(7,89,133,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE GIRL WHO MADE HISTORY AT THIRTEEN · 2026-09-24</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🏊 The Girl Who Made History at Thirteen</h1>
+  <div class="subtitle">十三岁创造历史的女孩 · CEFR A2 · 约 157 词 · 📖 人物传记</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted);">👉 点蓝色高亮词，可以看它的中文意思；点 ▶ 听这一段朗读。</p>
+
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">The youngest swimmer · 最年轻的游泳选手</div>
+        <p>On 21 September, thirteen-year-old Yu Zidi stood beside a pool in Tokyo. She was the youngest <span class="kw" data-word="swimmer">swimmer</span> on the Chinese team at the Asian Games. In a few minutes, she would swim the <span class="kw" data-word="race">race</span> of her life.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">9 月 21 日，13 岁的于子迪站在东京的一个泳池边。她是中国亚运代表团里年龄最小的游泳选手。几分钟之后，她将要游出自己人生中最重要的一场比赛。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">Four strokes, two hundred metres · 四种泳姿，两百米</div>
+        <p>The race was two hundred metres of four different <span class="kw" data-word="stroke">strokes</span>. For one hundred and fifty metres, Yu was behind her <span class="kw" data-word="teammate">teammate</span> Yu Yiting. Then came the last fifty metres, and Yu swam faster than ever before. She touched the wall first.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">这场比赛全程两百米，要用四种不同的泳姿。前面一百五十米，于子迪一直落在队友余依婷后面。最后五十米到来时，她游得比以往任何时候都快，第一个触到了池壁。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">A new Asian record · 新的亚洲纪录</div>
+        <p>Her time was two minutes and six point one zero seconds — a new Asian <span class="kw" data-word="record">record</span>. It was also the second fastest time in history. Yu was surprised. <i>“I did not think about the record,”</i> she said. <i>“In the last fifty metres, I just swam.”</i></p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">她的成绩是 2 分 06 秒 10，创造了新的亚洲纪录，也是这个项目历史上第二快的成绩。于子迪自己也感到意外。她说：“我没有去想纪录的事，最后五十米，我只是一直往前游。”</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">She almost stopped · 她差点就停下来了</div>
+        <p>Two years ago, Yu almost stopped swimming because <span class="kw" data-word="training">training</span> was too hard. Her <span class="kw" data-word="coach">coach</span> and her family helped her keep going. <i>“The hardest moment may be the closest to your <span class="kw" data-word="goal">goal</span>,”</i> she says now.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">两年前，因为训练太苦，于子迪差点就不游了。她的教练和家人帮助她坚持了下来。她现在说：“最艰难的时刻，也许就是离目标最近的时刻。”</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Key Words（8 个）</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="swimmer">🔊</button>
+        <div class="word">swimmer<span class="pos">n.</span></div>
+        <div class="zh">游泳运动员；游泳的人</div>
+        <div class="ex">She was the youngest swimmer on the team.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="race">🔊</button>
+        <div class="word">race<span class="pos">n.</span></div>
+        <div class="zh">比赛；赛跑（比谁更快）</div>
+        <div class="ex">The race was two hundred metres long.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="stroke">🔊</button>
+        <div class="word">stroke<span class="pos">n.</span></div>
+        <div class="zh">泳姿；划水的动作</div>
+        <div class="ex">A medley race uses four different strokes.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="teammate">🔊</button>
+        <div class="word">teammate<span class="pos">n.</span></div>
+        <div class="zh">队友（同一个队里的人）</div>
+        <div class="ex">Her teammate Yu Yiting swam next to her.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="record">🔊</button>
+        <div class="word">record<span class="pos">n.</span></div>
+        <div class="zh">纪录；历史最好成绩</div>
+        <div class="ex">She broke the Asian record by 0.72 seconds.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="training">🔊</button>
+        <div class="word">training<span class="pos">n.</span></div>
+        <div class="zh">训练（为了变强而反复练习）</div>
+        <div class="ex">Training was hard, but she kept going.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="coach">🔊</button>
+        <div class="word">coach<span class="pos">n.</span></div>
+        <div class="zh">教练；指导训练的人</div>
+        <div class="ex">Her coach helped her when she wanted to stop.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="goal">🔊</button>
+        <div class="word">goal<span class="pos">n.</span></div>
+        <div class="zh">目标；想要到达的地方</div>
+        <div class="ex">My goal is to swim fifty metres without stopping.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns（4 个）</h2>
+  <div class="card">
+    <div class="pattern">
+      <div class="en">She was the youngest swimmer on the Chinese team.</div>
+      <div class="zh">她是中国队里最年轻的游泳选手。</div>
+      <div class="note">描述“在某个范围里最……的人或物”：<b>the + 最高级 + 名词 + on / in + 范围</b>。可以说 He is the tallest boy <b>in</b> my class.（他是我们班最高的男生。）</div>
+    </div>
+    <div class="pattern">
+      <div class="en">Yu swam faster than ever before.</div>
+      <div class="zh">于子迪游得比以往任何时候都快。</div>
+      <div class="note"><b>比较级 + than ever before</b>，意思是“比以前任何一次都更……”。口语里很常用：Today I feel better than ever before.（今天我感觉前所未有的好。）</div>
+    </div>
+    <div class="pattern">
+      <div class="en">She almost stopped swimming because training was too hard.</div>
+      <div class="zh">因为训练太苦，她差点就停止游泳了。</div>
+      <div class="note"><b>almost + 动词</b> 表示“差一点就……（但其实没有）”：I almost missed the bus.（我差点错过公交车。）后面用 <b>because</b> 说明原因。</div>
+    </div>
+    <div class="pattern">
+      <div class="en">The hardest moment may be the closest to your goal.</div>
+      <div class="zh">最艰难的时刻，也许就是离目标最近的时刻。</div>
+      <div class="note"><b>may be</b> 表示“也许是、有可能”，口气比 <b>is</b> 更谨慎。两个最高级并列，读起来像一句格言，很适合用来鼓励别人。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar（4 个）</h2>
+  <div class="card">
+    <div class="gram">
+      <h3>1. 一般过去时：讲故事用过去式</h3>
+      <ul>
+        <li>已经发生的事，动词要用过去式。本课出现了好几个<b>不规则动词</b>，要单独记住。</li>
+        <li><span class="good">stand → stood</span>：She stood beside the pool.</li>
+        <li><span class="good">swim → swam</span>：Yu swam faster than ever before.</li>
+        <li><span class="good">come → came</span>：Then came the last fifty metres.</li>
+        <li><span class="good">say → said</span>（读作 /sed/）：she said · <span class="good">think → thought</span>：I did not think about it.</li>
+        <li class="eg">规则动词直接加 -ed：help → helped，want → wanted，touch → touched。</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>2. 比较级和最高级：比一比，选出第一</h3>
+      <ul>
+        <li>两个人或物相比用<b>比较级 + than</b>：<span class="good">Yu swam faster than ever before.</span></li>
+        <li>三个以上相比用<b>the + 最高级</b>：<span class="good">the youngest swimmer</span> · <span class="good">the second fastest time in history</span></li>
+        <li>短词加 -er / -est：young → younger → youngest；fast → faster → fastest；hard → harder → hardest。</li>
+        <li>有两个词要特别记：<span class="good">good → better → best</span>，<span class="good">bad → worse → worst</span>。</li>
+        <li class="eg">This race is faster than that one. · She is the best swimmer in our school.</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>3. because：说明原因</h3>
+      <ul>
+        <li><b>because</b> 后面接一个完整的句子，说明“为什么”：<span class="good">She almost stopped swimming because training was too hard.</span></li>
+        <li>because 从句也可以放在句首：<span class="good">Because training was too hard, she almost stopped.</span> 这时中间<b>要加逗号</b>。</li>
+        <li><span class="bad">✗ Because training was too hard, so she almost stopped.</span></li>
+        <li class="eg">英语里 because 和 so 不能同时用，二选一：Training was too hard, <span class="good">so</span> she almost stopped.</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>4. stop + verb-ing：停止正在做的事</h3>
+      <ul>
+        <li><b>stop + 动词-ing</b> 表示“不再做这件事”：<span class="good">She almost stopped swimming.</span>（她差点不再游泳了。）</li>
+        <li>对比：<b>stop to + 动词原形</b> 是“停下来，去做另一件事”：<span class="good">She stopped to drink some water.</span>（她停下来去喝水。）</li>
+        <li>本课还有 <b>keep + 动词-ing</b>，意思正好相反，表示“继续做”：<span class="good">Her coach helped her keep going.</span></li>
+        <li class="eg">Please stop talking. · He kept swimming for one hour.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz（5 题）</h2>
+  <div class="card">
+    <div class="quiz" data-ans="1">
+      <div class="q">1. How old was Yu Zidi when she broke the Asian record?</div>
+      <div class="qzh">于子迪打破亚洲纪录时多大？</div>
+      <button class="opt">A) Eleven years old</button>
+      <button class="opt">B) Thirteen years old</button>
+      <button class="opt">C) Fifteen years old</button>
+      <button class="opt">D) Seventeen years old</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="2">
+      <div class="q">2. In which city did the swimming race take place?</div>
+      <div class="qzh">这场游泳比赛在哪座城市举行？</div>
+      <button class="opt">A) Beijing</button>
+      <button class="opt">B) Hangzhou</button>
+      <button class="opt">C) Tokyo</button>
+      <button class="opt">D) Shenzhen</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="0">
+      <div class="q">3. What did Yu do in the last fifty metres?</div>
+      <div class="qzh">在最后五十米，于子迪做了什么？</div>
+      <button class="opt">A) She swam faster and touched the wall first</button>
+      <button class="opt">B) She stopped for a short rest</button>
+      <button class="opt">C) She slowed down and waited</button>
+      <button class="opt">D) She left the pool</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="1">
+      <div class="q">4. Why did Yu almost stop swimming two years ago?</div>
+      <div class="qzh">两年前，于子迪为什么差点不再游泳？</div>
+      <button class="opt">A) Because she was ill</button>
+      <button class="opt">B) Because training was too hard</button>
+      <button class="opt">C) Because she moved to a new city</button>
+      <button class="opt">D) Because she did not like water</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="3">
+      <div class="q">5. What does the sentence “The hardest moment may be the closest to your goal” tell us?</div>
+      <div class="qzh">“最艰难的时刻也许就是离目标最近的时刻”这句话告诉我们什么？</div>
+      <button class="opt">A) Goals are not important</button>
+      <button class="opt">B) Give up when things are hard</button>
+      <button class="opt">C) Swimming is always easy</button>
+      <button class="opt">D) Do not give up — you may be very near success</button>
+      <div class="fb"></div>
+    </div>
+    <div class="score" id="score"></div>
+  </div>
+</section>
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · More to Know</h2>
+
+  <div class="know">
+    <h3>🏊 她是谁</h3>
+    <p>于子迪是一名游泳运动员，出生于 2013 年。在第 20 届亚洲运动会上，她是<b>中国游泳队里年龄最小的队员</b>。别看她年纪小，她已经是女子 200 米个人混合泳亚洲纪录的保持者。赛场上的她沉着冷静，可一走出泳池，立刻变回一个有点害羞的小姑娘。有记者说，她觉得“采访比比赛还难”，一进混采区就想悄悄溜走。</p>
+  </div>
+
+  <div class="know">
+    <h3>🏅 亚运会是什么</h3>
+    <ul>
+      <li><b>亚运会</b>全称“亚洲运动会”，是亚洲规模最大的综合性体育赛事，每四年举办一次。</li>
+      <li>第 20 届亚运会于 <b>2026 年 9 月 19 日</b>在日本爱知县名古屋市开幕，游泳项目在<b>东京水上运动中心</b>进行。</li>
+      <li>中国体育代表团共有 <b>815 名运动员</b>，平均年龄 24 岁，其中 <b>548 人</b>是第一次参加亚运会，2005 年以后出生的选手占了 27%。</li>
+      <li>这支队伍里既有孙颖莎、陈芋汐等 36 位奥运冠军压阵，也有于子迪、陈妤颉这样的少年新星。“年轻”是这届中国代表团最鲜明的标签。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🥇 两天，两枚金牌，两项纪录</h3>
+    <p><b>9 月 20 日</b>，于子迪在女子 200 米蝶泳决赛中夺冠，并刷新了亚运会纪录。<b>9 月 21 日</b>，她又站上女子 200 米个人混合泳的出发台。前 150 米，卫冕冠军、队友余依婷一直领先；150 米转身时，于子迪只落后 0.03 秒。最后的 50 米自由泳，她全力冲刺完成反超，以 <b>2 分 06 秒 10</b> 夺冠。这个成绩不仅打破了亚洲纪录，把原纪录提高了 0.72 秒，也是该项目<b>历史上第二好的成绩</b>，还是本届亚运会游泳项目产生的第一个亚洲纪录。</p>
+  </div>
+
+  <div class="know">
+    <h3>🔁 一年之内，纪录三次改写</h3>
+    <ul>
+      <li><b>2012 年</b>，叶诗文在伦敦奥运会上游出 2 分 07 秒 57，创下亚洲纪录，这个纪录保持了 13 年。</li>
+      <li><b>2025 年 11 月 11 日</b>，深圳，第十五届全国运动会，13 岁的于子迪游出 <b>2 分 07 秒 41</b>，第一次把亚洲纪录写在了自己名下。</li>
+      <li><b>2026 年 6 月 17 日</b>，杭州，全国游泳冠军赛，余依婷游出 <b>2 分 06 秒 82</b>，纪录再次易主；于子迪当天以 2 分 09 秒 33 获得亚军。</li>
+      <li><b>2026 年 9 月 21 日</b>，东京，于子迪以 <b>2 分 06 秒 10</b> 又把纪录往前推了 0.72 秒。</li>
+      <li>两个常常在相邻泳道并肩出发的中国女孩，一年里把这个项目的亚洲纪录一共提高了 <b>1 秒 47</b>。余依婷说：“只有不断突破亚洲纪录，才敢去想世界纪录。”</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🧒 什么是“个人混合泳”</h3>
+    <p>“混合泳”的英文是 medley，意思是一个人要把四种泳姿都游一遍。200 米个人混合泳的顺序是：<b>蝶泳 50 米 → 仰泳 50 米 → 蛙泳 50 米 → 自由泳 50 米</b>。它最能看出一名运动员是否全面：蝶泳要有爆发力，仰泳要会控制身体，蛙泳讲究节奏，自由泳拼速度。因为最后一项是自由泳，所以“最后 50 米逆转”在混合泳比赛里特别常见。英文里四种泳姿分别叫 butterfly、backstroke、breaststroke 和 freestyle。</p>
+  </div>
+
+  <div class="know">
+    <h3>💪 她曾经想放弃</h3>
+    <p>耀眼的成绩背后，也有过低谷。2024 年全国游泳冠军赛前，巨大的压力让当时只有 11 岁的于子迪<b>几乎放弃游泳</b>。是教练和家人的耐心鼓励，让她重新回到了泳池。她后来说：“最艰难的时刻，或许就是最接近目标的时候，必须坚持下去。”赛后谈到破纪录，她很平静：“很意外、很激动，这算是我们团队的训练成果。”她还把功劳记在教练身上——比赛前，她会在脑子里把教练说的技术细节“过一遍电影”。</p>
+  </div>
+
+  <div class="tipbox">
+    <h3>✋ 给小读者的两件小事</h3>
+    <ul>
+      <li><b>安全第一：</b>游泳一定要有大人陪同，并且只在有救生员的正规泳池里下水；下水前做热身，感觉累了就上岸休息，<b>绝对不要独自去野外水域</b>。</li>
+      <li><b>想放弃的时候，先说出来：</b>于子迪最难的时候，是教练和家人帮她挺过来的。你遇到做不下去的事（一道题、一首曲子、一项运动），可以试着跟爸爸妈妈、老师或教练说一说，请他们帮你把大目标切成几个小目标。</li>
+      <li><b>小目标怎么切：</b>比如“这个月学会一种泳姿”“这周多游 50 米”。完成一个，就在本子上画一颗星——纪录也是这样一秒一秒拼出来的。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><span class="txt">读懂一篇 150 词左右的体育人物小故事，能说出“谁、在哪、做了什么、成绩是多少”。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">掌握 8 个核心词：swimmer, race, stroke, teammate, record, training, coach, goal。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用最高级介绍“最……的人”、用 than ever before 说“前所未有的……”、用 because 讲原因。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">能用 3—4 句英文讲一个自己“坚持下来”的小故事。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">📚 学习建议</h3>
+    <div class="goal"><span class="tick">1</span><span class="txt">先不看中文听一遍全文，猜一猜：最后五十米发生了什么？把答案用中文写在纸上。</span></div>
+    <div class="goal"><span class="tick">2</span><span class="txt">打开中文翻译逐段对照，特别注意 stood、swam、came、said 这几个过去式，把它们圈出来。</span></div>
+    <div class="goal"><span class="tick">3</span><span class="txt">用 <b>the + 最高级 + in / on ...</b> 造三个句子，可以写你的班级、你的家、你的兴趣小组。</span></div>
+    <div class="goal"><span class="tick">4</span><span class="txt">做完测验后，把错题的正确句子抄一遍；再试着用英文说出一次你“差点放弃但坚持下来”的经历。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">🗣️ 亲子口语三问</h3>
+    <div class="goal"><span class="tick">Q1</span><span class="txt">How old was Yu Zidi when she broke the Asian record?</span></div>
+    <div class="goal"><span class="tick">Q2</span><span class="txt">What happened in the last fifty metres of the race?</span></div>
+    <div class="goal"><span class="tick">Q3</span><span class="txt">Was there a time when you almost gave up? What did you do?</span></div>
+  </div>
+
+  <div style="text-align:center;margin:18px 0;">
+    <button class="print-btn" id="printBtn">🖨️ 打印本页</button>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>Pola News · A2 初级英语 · 2026-09-24 · 📖 人物传记<br>资料参考：新华社、国家体育总局、光明网等公开报道（2026 年 9 月）</footer>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+"On 21 September, thirteen-year-old Yu Zidi stood beside a pool in Tokyo. She was the youngest swimmer on the Chinese team at the Asian Games. In a few minutes, she would swim the race of her life.",
+"The race was two hundred metres of four different strokes. For one hundred and fifty metres, Yu was behind her teammate Yu Yiting. Then came the last fifty metres, and Yu swam faster than ever before. She touched the wall first.",
+"Her time was two minutes and six point one zero seconds — a new Asian record. It was also the second fastest time in history. Yu was surprised. “I did not think about the record,” she said. “In the last fifty metres, I just swam.”",
+"Two years ago, Yu almost stopped swimming because training was too hard. Her coach and her family helped her keep going. “The hardest moment may be the closest to your goal,” she says now."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'swimmer': '游泳运动员 n.',
+  'race': '比赛；赛跑 n.',
+  'stroke': '泳姿；划水动作 n.',
+  'teammate': '队友 n.',
+  'record': '纪录 n.',
+  'training': '训练 n.',
+  'coach': '教练 n.',
+  'goal': '目标 n.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', function(){ tip.style.display = 'none'; });
+  })(kws[k]);
+}
+document.addEventListener('click', function(){ tip.style.display = 'none'; });
+window.addEventListener('scroll', function(){ tip.style.display = 'none'; });
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#','');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 打印 ---------- */
+var printBtn = document.getElementById('printBtn');
+if(printBtn) printBtn.addEventListener('click', function(){ window.print(); });
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            if(sc){
+              sc.classList.add('show');
+              sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+                (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+            }
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

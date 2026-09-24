@@ -3608,6 +3608,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-24",
+    "title": "I Set the Table",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-24-i-set-the-table",
+    "url": "lessons/a1/2026-09-24-i-set-the-table.html",
+    "vocab": [
+      {
+        "word": "table",
+        "zh": "桌子",
+        "ex": "The bowl is on the table."
+      },
+      {
+        "word": "bowl",
+        "zh": "碗",
+        "ex": "I put rice in my bowl."
+      },
+      {
+        "word": "chopsticks",
+        "zh": "筷子",
+        "ex": "I use chopsticks to eat."
+      },
+      {
+        "word": "spoon",
+        "zh": "勺子",
+        "ex": "This is my spoon."
+      },
+      {
+        "word": "cup",
+        "zh": "杯子",
+        "ex": "I drink water from a cup."
+      },
+      {
+        "word": "helper",
+        "zh": "帮手",
+        "ex": "I am a good helper."
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -5372,6 +5414,58 @@ const EPISODES = [
         "word": "chemical",
         "zh": "化学品；化学物质",
         "ex": "They made it without harmful chemicals."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-24",
+    "title": "The Girl Who Made History at Thirteen",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-24-the-girl-who-made-history-at-thirteen",
+    "url": "lessons/a2/2026-09-24-the-girl-who-made-history-at-thirteen.html",
+    "vocab": [
+      {
+        "word": "swimmer",
+        "zh": "9 月 21 日，13 岁的于子迪站在东京的一个泳池边。她是中国亚运代表团里年龄最小的游泳选手。几分钟之后，她将要游出自己人生中最重要的一场比赛。",
+        "ex": "She was the youngest swimmer on the team."
+      },
+      {
+        "word": "race",
+        "zh": "比赛；赛跑（比谁更快）",
+        "ex": "The race was two hundred metres long."
+      },
+      {
+        "word": "stroke",
+        "zh": "泳姿；划水的动作",
+        "ex": "A medley race uses four different strokes."
+      },
+      {
+        "word": "teammate",
+        "zh": "队友（同一个队里的人）",
+        "ex": "Her teammate Yu Yiting swam next to her."
+      },
+      {
+        "word": "record",
+        "zh": "纪录；历史最好成绩",
+        "ex": "She broke the Asian record by 0.72 seconds."
+      },
+      {
+        "word": "training",
+        "zh": "训练（为了变强而反复练习）",
+        "ex": "Training was hard, but she kept going."
+      },
+      {
+        "word": "coach",
+        "zh": "教练；指导训练的人",
+        "ex": "Her coach helped her when she wanted to stop."
+      },
+      {
+        "word": "goal",
+        "zh": "目标；想要到达的地方",
+        "ex": "My goal is to swim fifty metres without stopping."
       }
     ]
   },
