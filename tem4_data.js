@@ -1023,7 +1023,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"C2", cat:"C", zh:"饮食与餐厅", name:"Food & Dining",     status:"soon", words:90,  desc:"餐桌、菜单、烹饪"},
+  {
+    id:"C2", cat:"C", zh:"饮食与餐厅", name:"Food & Dining", status:"live",
+    date:"2026-09-24", words:30, desc:"餐桌的一天：节日盛宴、备餐掌勺、热锅厨房、各有所爱、心满意足",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"C2-P1", slug:"tem4-C2-P1", title:"节日盛宴", shape:"拱门",
+        poster:"assets/tem4/posters/C2_P1.png",
+        sentence:"On New Year's Eve a well-known chef is invited to cater the family feast in a small garden where plum trees bloom, and every delicacy he serves, from crisp spring rolls to honeyed cakes, soon satisfies the eager guests of three generations.",
+        sentenceCn:"除夕夜，一位名厨受邀在梅树开花的院子里为家宴掌勺备菜，他端上的每道佳肴，从脆脆的春卷到蜜汁糕点，很快就让满心期盼的三代宾客吃得心满意足。",
+        scene:"粉彩暖调的除夕夜庭院里，小叶学姐和动物宾客围坐在摆满春卷、蜜汁糕点和热汤的圆桌旁，头顶挂着灯笼和灯串，身旁梅树枝头开花。",
+        words:[
+          {word:"cater",    ipa:"/ˈkeɪtə/",    pos:"v.",   zh:"供应伙食，为（宴会等）供应酒菜；迎合", forms:["cater"]},
+          {word:"feast",    ipa:"/fiːst/",     pos:"n.",   zh:"盛宴，宴会 v. 盛宴款待；使（感官等）得到享受", forms:["feast"]},
+          {word:"delicacy", ipa:"/ˈdelɪkəsi/", pos:"n.",   zh:"精致，优美；美味，佳肴", forms:["delicacy"]},
+          {word:"eager",    ipa:"/ˈiːɡə/",     pos:"adj.", zh:"热切的，热衷的，渴望的", forms:["eager"]},
+          {word:"bloom",    ipa:"/bluːm/",     pos:"vi.",  zh:"开花；繁盛，茂盛 n. 花；香味", forms:["bloom"]},
+          {word:"crisp",    ipa:"/krɪsp/",     pos:"adj.", zh:"脆的，硬而易碎的；清新的，爽快的", forms:["crisp"]}
+        ]
+      },
+      {
+        id:"C2-P2", slug:"tem4-C2-P2", title:"备餐掌勺", shape:"叶形",
+        poster:"assets/tem4/posters/C2_P2.png",
+        sentence:"Early in the morning she stirs the mushroom soup with a wooden spoon, blends whole-wheat flour into the soft dough, whips the fresh cream, sprinkles sugar over the fruit tarts, squeezes ripe oranges into a glass of juice, and smears a little butter on the warm toast.",
+        sentenceCn:"清晨，她用木勺搅好蘑菇汤，把全麦粉揉进柔软的面团，搅打鲜奶油，在水果挞上撒糖，把熟橘子挤成一杯果汁，再在温热的吐司上抹一点黄油。",
+        scene:"洒满晨光的粉彩厨房，小叶学姐系着白围裙用木勺搅蘑菇汤，台面上有搅打好的鲜奶油、撒了糖的水果挞和刚挤出的橙汁。",
+        words:[
+          {word:"stir",     ipa:"/stɜː/",      pos:"v.",   zh:"搅和，搅拌；（使）轻移；激起 n. 搅拌", forms:["stirs"]},
+          {word:"blend",    ipa:"/blend/",     pos:"v.",   zh:"混合，混杂", forms:["blends"]},
+          {word:"whip",     ipa:"/wɪp/",       pos:"v.",   zh:"搅打（奶油、蛋等）；用鞭子抽 n. 鞭子", forms:["whips"]},
+          {word:"sprinkle", ipa:"/ˈsprɪŋkl/",  pos:"v.",   zh:"洒，喷，淋 n. 少量，少数", forms:["sprinkles"]},
+          {word:"squeeze",  ipa:"/skwiːz/",    pos:"v.",   zh:"挤压，压榨，紧握；榨取，挤出", forms:["squeezes"]},
+          {word:"smear",    ipa:"/smɪə/",      pos:"v.",   zh:"涂，抹（黏性或油性的物质）；弄脏 n. 污点", forms:["smears"]}
+        ]
+      },
+      {
+        id:"C2-P3", slug:"tem4-C2-P3", title:"热锅厨房", shape:"椭圆",
+        poster:"assets/tem4/posters/C2_P3.png",
+        sentence:"Meanwhile Grandpa greases the hot iron pan and pours in the batter, small drops of oil bubble around the edges, a slice of cheese melts slowly over the noodles, the boiled greens are drained dry, and one drop of vanilla essence makes the pudding smell wonderful.",
+        sentenceCn:"这时，爷爷给热铁锅涂上油、倒入面糊，小油滴在锅边噼啪起泡，一片奶酪在面上慢慢融化，煮好的青菜被沥干，一滴香草精让布丁香气四溢。",
+        scene:"粉彩厨房的灶台边，小叶学姐小心地把面糊倒进热铁锅，油滴噼啪起泡，奶酪在面条上慢慢融化，沥水篮里是煮好的青菜。",
+        words:[
+          {word:"grease",   ipa:"/ɡriːs/",     pos:"vt.",  zh:"涂油脂于，润滑 n. 动物脂；润滑脂", forms:["greases"]},
+          {word:"pour",     ipa:"/pɔː/",       pos:"v.",   zh:"倒，灌；蜂拥；倾诉", forms:["pours"]},
+          {word:"bubble",   ipa:"/ˈbʌbl/",     pos:"v.",   zh:"吹泡，起泡 n. 泡，水泡，气泡", forms:["bubble"]},
+          {word:"melt",     ipa:"/melt/",      pos:"v.",   zh:"（使）融化，（使）熔化；（使）消散；（态度等）软化", forms:["melts"]},
+          {word:"drain",    ipa:"/dreɪn/",     pos:"v.",   zh:"排出；把…弄干；喝干 n. 排水沟；消耗", forms:["drained"]},
+          {word:"essence",  ipa:"/ˈesəns/",    pos:"n.",   zh:"本质，实质；精髓，精华；香精，香料", forms:["essence"]}
+        ]
+      },
+      {
+        id:"C2-P4", slug:"tem4-C2-P4", title:"各有所爱", shape:"超圆角",
+        poster:"assets/tem4/posters/C2_P4.png",
+        sentence:"Grandpa spreads strawberry jam on a thick slice of loaf, finds the steak a little too rare and the soup rather bland, yet he loves the bitter herbal tea that saturates his tongue with a rich aftertaste.",
+        sentenceCn:"爷爷把草莓酱涂在厚厚的面包片上，觉得牛排稍生、汤味偏淡，却钟爱那杯苦涩的凉茶，浓郁的回甘浸满舌尖。",
+        scene:"粉彩长餐桌旁，小叶学姐往厚面包片上涂草莓酱，身旁的猴爷爷品着稍生的牛排和清淡的汤，手里端着一杯冒着热气的凉茶。",
+        words:[
+          {word:"spread",   ipa:"/spred/",     pos:"v.",   zh:"展开，摊开；涂敷；（使）传布 n. 涂抹食品", forms:["spreads"]},
+          {word:"loaf",     ipa:"/ləʊf/",      pos:"n.",   zh:"一条面包 v. 消磨时间，闲逛", forms:["loaf"]},
+          {word:"rare",     ipa:"/reə/",       pos:"adj.", zh:"罕见的，珍贵的；（指肉）半熟的；稀薄的", forms:["rare"]},
+          {word:"bland",    ipa:"/blænd/",     pos:"adj.", zh:"（指食物）无刺激性的，清淡的；文雅的", forms:["bland"]},
+          {word:"saturate", ipa:"/ˈsætʃəreɪt/",pos:"vt.",  zh:"浸透，浸湿；使饱和", forms:["saturates"]},
+          {word:"bitter",   ipa:"/ˈbɪtə/",     pos:"adj.", zh:"有苦味的；辛酸的；厉害的；严寒的", forms:["bitter"]}
+        ]
+      },
+      {
+        id:"C2-P5", slug:"tem4-C2-P5", title:"心满意足", shape:"波浪",
+        poster:"assets/tem4/posters/C2_P5.png",
+        sentence:"After the meal the children chew the last bites slowly and swallow the warm soup politely, Dad consumes the remaining pie with a smile, the kitten laps up its milk and licks the bowl clean, and Grandma says that balanced nutrition is the heart of family cooking.",
+        sentenceCn:"饭后，孩子们慢慢咀嚼最后几口、有礼貌地咽下温热的汤，爸爸笑着吃光剩下的派，小猫舔完牛奶还把碗舔得干干净净，奶奶说均衡的营养才是一家人饮食的核心。",
+        scene:"晚霞映照的粉彩餐厅里，孩子们慢慢咀嚼、咽下温热的汤，爸爸吃光最后一块派，小猫舔完牛奶把碗舔得干干净净。",
+        words:[
+          {word:"chew",      ipa:"/tʃuː/",       pos:"v.", zh:"咀嚼；深思，回味，体味", forms:["chew"]},
+          {word:"swallow",   ipa:"/ˈswɒləʊ/",    pos:"v.", zh:"吞，咽；吞没 n. 燕子；一次吞咽之量", forms:["swallow"]},
+          {word:"consume",   ipa:"/kənˈsjuːm/",  pos:"v.", zh:"消费，耗尽；吃光，饮尽；烧毁", forms:["consumes"]},
+          {word:"lap",       ipa:"/læp/",        pos:"v.", zh:"舔，舔食；（波浪）拍打 n. 膝部；一圈", forms:["laps"]},
+          {word:"lick",      ipa:"/lɪk/",        pos:"v.", zh:"舔 n. 舔；少量", forms:["licks"]},
+          {word:"nutrition", ipa:"/njuːˈtrɪʃən/", pos:"n.", zh:"营养，滋养；营养物，食物", forms:["nutrition"]}
+        ]
+      }
+    ]
+  },
   {id:"C3", cat:"C", zh:"购物与消费", name:"Shopping",          status:"soon", words:80,  desc:"商场、付款、橱窗"},
   {id:"C4", cat:"C", zh:"日常作息",   name:"Daily Routine",     status:"soon", words:70,  desc:"起床、通勤、睡前"},
   {id:"C5", cat:"C", zh:"服饰与时尚", name:"Clothing & Fashion", status:"soon", words:60,  desc:"试衣、衣柜、搭配"},
