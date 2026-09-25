@@ -1105,7 +1105,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"C3", cat:"C", zh:"购物与消费", name:"Shopping",          status:"soon", words:80,  desc:"商场、付款、橱窗"},
+  {
+    id:"C3", cat:"C", zh:"购物与消费", name:"Shopping", status:"live",
+    date:"2026-09-25", words:30, desc:"购物的一天：周末集市、货比三家、讨价还价、下单付款、售后维权",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"C3-P1", slug:"tem4-C3-P1", title:"周末集市", shape:"拱门",
+        poster:"assets/tem4/posters/C3_P1.png",
+        sentence:"On Saturday morning the riverside market is crowded: every stall along the lane supplies handmade snacks, vendors invite passers-by to sample dried fruit and cheese, and the fashion corner sells affordable scarves whose quality surprises even picky buyers.",
+        sentenceCn:"周六清晨的河畔集市人头攒动：巷子里的每个摊位都供应手工小吃，摊主们邀请路人品尝果干和奶酪，时尚角出售的围巾价格亲民，质量连挑剔的买家都感到惊喜。",
+        scene:"粉彩河畔周末集市，小叶学姐在小吃摊前请兔子和小熊顾客品尝果干与奶酪，旁边的木架上挂着彩色围巾，河畔帐篷和彩旗飘飘。",
+        words:[
+          {word:"stall",      ipa:"/stɔːl/",     pos:"n.",   zh:"摊位；畜舍，厩；戏院正厅的前排座位 v.（指引擎因动力不足而）停止转动；拖延，支吾", forms:["stall"]},
+          {word:"supply",     ipa:"/səˈplaɪ/",   pos:"vt.",  zh:"供给，供应；满足（需要）n. 供应，供给之物；现货，现货储存量", forms:["supplies"]},
+          {word:"sample",     ipa:"/ˈsɑːmpl/",   pos:"n.",   zh:"样品，货样 vt. 取…的样品，抽样检查；尝试", forms:["sample"]},
+          {word:"affordable", ipa:"/əˈfɔːdəbl/", pos:"adj.", zh:"买得起的；担负得起的；担得起…风险的", forms:["affordable"]},
+          {word:"fashion",    ipa:"/ˈfæʃən/",    pos:"n.",   zh:"流行式样；样子，方式；时尚，风尚", forms:["fashion"]},
+          {word:"quality",    ipa:"/ˈkwɒliti/",  pos:"n.",   zh:"质量，品级，品质；性质，特性", forms:["quality"]}
+        ]
+      },
+      {
+        id:"C3-P2", slug:"tem4-C3-P2", title:"货比三家", shape:"叶形",
+        poster:"assets/tem4/posters/C3_P2.png",
+        sentence:"Smart shoppers make a careful comparison before they buy: they compare the cost of a luxury watch with that of an economical one, decide whether the extra price is worth paying, and avoid extravagant spending on things they never use.",
+        sentenceCn:"聪明的买家购买前会仔细货比三家：他们比较豪华手表与经济实惠款的价格，衡量多付的钱是否值得，并避免为永远用不上的东西挥霍浪费。",
+        scene:"粉彩钟表店里，小叶学姐趴在玻璃柜台前认真比较两只手表，猫头鹰店主在柜台后微笑注视，货架上摆满怀表和时钟。",
+        words:[
+          {word:"comparison",  ipa:"/kəmˈpærɪsən/",   pos:"n.",    zh:"比较，对照；比喻", forms:["comparison"]},
+          {word:"cost",        ipa:"/kɒst/",          pos:"n.",    zh:"成本，价格，费用；代价 v. 使花费，值（多少钱）；付出代价，使丧失；估计…的成本", forms:["cost"]},
+          {word:"worth",       ipa:"/wɜːθ/",          pos:"prep.", zh:"值；值得 n. 价值", forms:["worth"]},
+          {word:"luxury",      ipa:"/ˈlʌkʃəri/",      pos:"n.",    zh:"奢侈；奢侈品；豪华", forms:["luxury"]},
+          {word:"economical",  ipa:"/ˌiːkəˈnɒmɪkəl/", pos:"adj.",  zh:"节俭的，经济的，精打细算的", forms:["economical"]},
+          {word:"extravagant", ipa:"/ɪkˈstrævəɡənt/", pos:"adj.",  zh:"浪费的，奢侈的；过度的，放肆的", forms:["extravagant"]}
+        ]
+      },
+      {
+        id:"C3-P3", slug:"tem4-C3-P3", title:"讨价还价", shape:"椭圆",
+        poster:"assets/tem4/posters/C3_P3.png",
+        sentence:"When the year-end discount season begins, frugal Aunt Lily rushes to the flea market, where she loves to bargain over teapots, haggles politely over the price of an old lamp, records every expense in her notebook, and still helps the shopkeeper celebrate a record monthly turnover.",
+        sentenceCn:"年末折扣季一开场，节俭的莉莉阿姨就赶去跳蚤市场：她喜欢为茶壶讨价还价，为一盏旧灯的价格礼貌地砍价，把每笔开销记在本子上，还帮店主庆祝了创纪录的月营业额。",
+        scene:"粉彩跳蚤市场的古董摊前，小叶学姐和熊摊主笑着讨价还价，桌上摆着旧灯、记账本和算盘，条纹遮阳棚下暖意融融。",
+        words:[
+          {word:"discount", ipa:"/ˈdɪskaʊnt/",  pos:"v.",  zh:"怀疑地看待；漠视，低估；（打）折扣", forms:["discount"]},
+          {word:"frugal",   ipa:"/ˈfruːɡəl/",   pos:"adj.",zh:"节俭的，节约的；廉价的", forms:["frugal"]},
+          {word:"bargain",  ipa:"/ˈbɑːɡɪn/",    pos:"v.",  zh:"议价，讨价还价 n. 廉价货；合同，协议；交易", forms:["bargain"]},
+          {word:"haggle",   ipa:"/ˈhæɡl/",      pos:"v.",  zh:"争论；讨价还价", forms:["haggles"]},
+          {word:"expense",  ipa:"/ɪkˈspens/",   pos:"n.",  zh:"费用，消费，支出；（精力、时间等的）消耗，耗费", forms:["expense"]},
+          {word:"turnover", ipa:"/ˈtɜːnˌəʊvə/", pos:"n.",  zh:"（一定时期的）营业额；（商店的）货物周转率；人事变动率", forms:["turnover"]}
+        ]
+      },
+      {
+        id:"C3-P4", slug:"tem4-C3-P4", title:"下单付款", shape:"超圆角",
+        poster:"assets/tem4/posters/C3_P4.png",
+        sentence:"At the checkout Tom settles every outstanding bill, finds the new installment payable next month, evaluates the shiny camera carefully, then resists the impulse to purchase it and keeps his travel fund intact for the trip home.",
+        sentenceCn:"在收银台，汤姆结清了所有未付的账单，得知新的分期款项下月支付，他仔细估量那台闪亮的相机，最终克制住购买的冲动，把旅行基金原封不动地留给回家的旅费。",
+        scene:"粉彩百货商店收银台，小叶学姐递出银行卡结账付款，脚边堆着购物袋，她摇摇头婉拒小狐狸展示的新相机。",
+        words:[
+          {word:"evaluate",   ipa:"/ɪˈvæljueɪt/",    pos:"vt.",  zh:"评价，估计", forms:["evaluates"]},
+          {word:"impulse",    ipa:"/ˈɪmpʌls/",       pos:"n.",   zh:"推动（力），驱使；冲动，心血来潮", forms:["impulse"]},
+          {word:"purchase",   ipa:"/ˈpɜːtʃəs/",      pos:"vt.",  zh:"购买 n. 购买；购得之物", forms:["purchase"]},
+          {word:"outstanding",ipa:"/ˌaʊtˈstændɪŋ/",  pos:"adj.", zh:"杰出的，优秀的；未付款的，（问题）未解决的", forms:["outstanding"]},
+          {word:"payable",    ipa:"/ˈpeɪəbl/",       pos:"adj.", zh:"应付的，可支付的", forms:["payable"]},
+          {word:"fund",       ipa:"/fʌnd/",          pos:"n.",   zh:"[pl.] 资金，公债；基金，专款，储备 v. 为…提供资金，资助，积累", forms:["fund"]}
+        ]
+      },
+      {
+        id:"C3-P5", slug:"tem4-C3-P5", title:"售后维权", shape:"波浪",
+        poster:"assets/tem4/posters/C3_P5.png",
+        sentence:"At the service desk, the clerk agrees to exchange the scratched watch and replace its strap, then uncovers a shop that forges receipts to swindle tourists and fleece visitors, so the police seize the counterfeit goods at once.",
+        sentenceCn:"在服务台，店员同意调换划伤的手表并更换表带，随后又协助警方揪出一家伪造收据、专骗游客敲竹杠的店铺，警察立即查扣了店里的假货。",
+        scene:"粉彩售后服务台，小叶学姐把划伤的手表递给戴眼镜的猫店员换新，一旁的獾警官正把假手镯和假包装箱查扣，柜台上摆着绿色茶壶。",
+        words:[
+          {word:"exchange", ipa:"/ɪksˈtʃeɪndʒ/", pos:"vt.", zh:"互换，兑换 n. 交换，互换；交流；交火，争吵；交换所，交易所", forms:["exchange"]},
+          {word:"replace",  ipa:"/rɪˈpleɪs/",    pos:"vt.", zh:"放回，置于原处；代替，取代；替换，更换", forms:["replace"]},
+          {word:"forge",    ipa:"/fɔːdʒ/",       pos:"vt.", zh:"伪造，假冒；锤造；打制", forms:["forges"]},
+          {word:"swindle",  ipa:"/ˈswɪndl/",     pos:"v.",  zh:"榨取，骗取 n. 诈骗行为，骗人的事物", forms:["swindle"]},
+          {word:"fleece",   ipa:"/fliːs/",       pos:"n.",  zh:"羊毛 v. 欺诈，敲竹杠，骗取", forms:["fleece"]},
+          {word:"seize",    ipa:"/siːz/",        pos:"v.",  zh:"攫取，抓住；强占，夺取；扣押，没收", forms:["seize"]}
+        ]
+      }
+    ]
+  },
   {id:"C4", cat:"C", zh:"日常作息",   name:"Daily Routine",     status:"soon", words:70,  desc:"起床、通勤、睡前"},
   {id:"C5", cat:"C", zh:"服饰与时尚", name:"Clothing & Fashion", status:"soon", words:60,  desc:"试衣、衣柜、搭配"},
   /* ===== D 社交与情感 ===== */
