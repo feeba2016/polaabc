@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Girl Who Flew Out of the Bowl — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#7e22ce;
+  --accent2:#f59e0b;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#e9d5ff;
+  --border:#e2e8f0;
+  --soft:#f1f5f9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:8px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(126,34,206,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(126,34,206,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(126,34,206,.55);}70%{box-shadow:0 0 0 12px rgba(126,34,206,0);}100%{box-shadow:0 0 0 0 rgba(126,34,206,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#d8b4fe;}
+#tip{position:fixed;z-index:1200;background:#1e293b;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(126,34,206,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE GIRL WHO FLEW OUT OF THE BOWL · 2026-09-25</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🛹 The Girl Who Flew Out of the Bowl</h1>
+  <div class="subtitle">从碗池里飞出来的女孩 · CEFR A2 · 约 158 词 · ⚽ 体育运动</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted);">👉 点紫色高亮词，可以看它的中文意思；点 ▶ 听这一段朗读。</p>
+
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">The youngest athlete · 最年轻的运动员</div>
+        <p>Cao Shiqi is twelve years old. She is the youngest <span class="kw" data-word="athlete">athlete</span> in China's team at the 2026 Asian Games in Japan. She rides a <span class="kw" data-word="skateboard">skateboard</span> in the women's park event. She started when she was four, and she still <span class="kw" data-word="practise">practises</span> every week.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">曹诗祺今年 12 岁。她是中国体育代表团参加 2026 年日本亚运会队伍里年龄最小的运动员。她参加的是女子碗池项目。她四岁就开始玩滑板，到现在每个星期都还在练习。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">A bad start, a good finish · 开局不顺，结局漂亮</div>
+        <p>On 24 September she skated in the opening round. Her first run went wrong, and she got only 48.02 points. She did not give up. In her third run she <span class="kw" data-word="score">scored</span> 73.49 points, so she reached the final.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">9 月 24 日，她参加了第一轮比赛。第一次滑行出了失误，只拿到 48.02 分。她没有放弃。第三轮她拿到了 73.49 分，成功进入决赛。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">Inside the bowl · 碗池里面</div>
+        <p>Her course looks like a big empty <span class="kw" data-word="bowl">bowl</span>. The curved walls are about four metres high. She rides up a wall, flies into the air, turns, and comes down again. Five <span class="kw" data-word="judge">judges</span> watch her. Each one gives points from 0 to 100.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">她的赛场像一个空空的大碗。弧形的池壁大约有四米高。她顺着池壁冲上去，飞到空中，转体，再落回池里。五名裁判看着她，每人打出 0 到 100 分。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Friends and a dream · 朋友和梦想</div>
+        <p>Skateboarding helps her make friends. At the Games she has swapped more than twenty badges with other skaters. She was <span class="kw" data-word="nervous">nervous</span>, so she talked and laughed with them. <i>“My <span class="kw" data-word="dream">dream</span> is the Olympic Games,”</i> she says.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">滑板帮她交到了朋友。在亚运会这几天，她已经和别的选手交换了二十多个徽章。她其实很紧张，就跟大家说说话、笑一笑。她说：“我的梦想是参加奥运会。”</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Key Words（8 个）</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="athlete">🔊</button>
+        <div class="word">athlete<span class="pos">n.</span></div>
+        <div class="zh">运动员；参加体育比赛的人</div>
+        <div class="ex">She is the youngest athlete in the team.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="skateboard">🔊</button>
+        <div class="word">skateboard<span class="pos">n.</span></div>
+        <div class="zh">滑板（也可以作动词：滑滑板）</div>
+        <div class="ex">He rides a skateboard in the park.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="practise">🔊</button>
+        <div class="word">practise<span class="pos">v.</span></div>
+        <div class="zh">练习（英式拼写，美式常写 practice）</div>
+        <div class="ex">She practises after school and at weekends.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="score">🔊</button>
+        <div class="word">score<span class="pos">v.</span></div>
+        <div class="zh">得分；得到分数</div>
+        <div class="ex">In her third run she scored 73.49 points.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="bowl">🔊</button>
+        <div class="word">bowl<span class="pos">n.</span></div>
+        <div class="zh">碗；这里指碗形的滑板场地（碗池）</div>
+        <div class="ex">The course looks like a big empty bowl.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="judge">🔊</button>
+        <div class="word">judge<span class="pos">n.</span></div>
+        <div class="zh">裁判；打分的评委</div>
+        <div class="ex">Five judges watch every run.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="nervous">🔊</button>
+        <div class="word">nervous<span class="pos">adj.</span></div>
+        <div class="zh">紧张的；心里发慌的</div>
+        <div class="ex">I am always nervous before a test.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="dream">🔊</button>
+        <div class="word">dream<span class="pos">n.</span></div>
+        <div class="zh">梦想；特别想做到的事</div>
+        <div class="ex">My dream is to skate in the Olympic Games.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns（4 个）</h2>
+  <div class="card">
+    <div class="pattern">
+      <div class="en">She is the youngest athlete in China's team.</div>
+      <div class="zh">她是中国队里年龄最小的运动员。</div>
+      <div class="note">表示“在某个范围里最……的人或物”：<b>the + 最高级 + 名词 + in / on + 范围</b>。也可以说 He is the tallest boy <b>in</b> our class.（他是我们班最高的男生。）</div>
+    </div>
+    <div class="pattern">
+      <div class="en">Her first run went wrong, and she got only 48.02 points.</div>
+      <div class="zh">她的第一次滑行出了失误，只拿到 48.02 分。</div>
+      <div class="note"><b>go wrong</b> 的意思是“出了问题、出了差错”，主语是事情本身：My plan went wrong.（我的计划出了岔子。）注意它的过去式是 <b>went</b>。</div>
+    </div>
+    <div class="pattern">
+      <div class="en">Each one gives points from 0 to 100.</div>
+      <div class="zh">每人打出 0 到 100 分。</div>
+      <div class="note">表示范围用 <b>from ... to ...</b>，从多少到多少。这本书给孩子看：This book is for children <b>from</b> seven <b>to</b> twelve.（这本书适合 7 到 12 岁的孩子。）</div>
+    </div>
+    <div class="pattern">
+      <div class="en">Skateboarding helps her make friends.</div>
+      <div class="zh">滑板帮助她交到朋友。</div>
+      <div class="note"><b>help + 某人 + 动词原形</b>：帮某人做某事。中间的动词<b>不加 to、也不加 s</b>：She helps me <b>learn</b> English.（她帮我学英语。）也可以写成 help me <b>to</b> learn。</div>
+    </div>
+  </div>
+</section>
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar（4 个）</h2>
+  <div class="card">
+    <div class="gram">
+      <h3>1. 一般过去时：讲故事用过去式</h3>
+      <ul>
+        <li>已经发生的事，动词要用过去式。本课有四个<b>不规则动词</b>，需要单独记住。</li>
+        <li><span class="good">stand → stood</span>：She first stood on a board when she was four.</li>
+        <li><span class="good">ride → rode</span>：She rode up the curved wall.</li>
+        <li><span class="good">come → came</span>：She came down again.</li>
+        <li><span class="good">give → gave</span>：Each judge gave points from 0 to 100.</li>
+        <li class="eg">规则动词直接加 -ed：skate → skated，score → scored，reach → reached，look → looked。</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>2. 比较级和最高级：比一比，选出第一</h3>
+      <ul>
+        <li>三个以上相比，用 <b>the + 最高级</b>：<span class="good">the youngest athlete in China's team</span></li>
+        <li>比某个数量更多，用 <b>more than + 数字</b>：<span class="good">more than twenty badges</span>（二十多个徽章）</li>
+        <li>短词加 -er / -est：young → younger → <b>youngest</b>；high → higher → highest。</li>
+        <li>有两个词要特别记：<span class="good">good → better → best</span>，<span class="good">bad → worse → worst</span>。</li>
+        <li class="eg">She is the youngest. · He has more than thirty badges.</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>3. and / but / so：把两个句子连起来</h3>
+      <ul>
+        <li><b>and</b> 顺接：Her first run went wrong, <span class="good">and</span> she got only 48.02 points.</li>
+        <li><b>but</b> 转折：She was nervous, <span class="good">but</span> she did not stop.（她很紧张，但她没有停下。）</li>
+        <li><b>so</b> 结果：She scored 73.49 points, <span class="good">so</span> she reached the final.</li>
+        <li>两个句子之间用逗号隔开，连词放在逗号后面。</li>
+        <li><span class="bad">✗ Because she was nervous, so she talked.</span></li>
+        <li class="eg">英语里 because 和 so 不能同时用，二选一：She was nervous, <span class="good">so</span> she talked with her friends.</li>
+      </ul>
+    </div>
+    <div class="gram">
+      <h3>4. help + 某人 + 动词原形</h3>
+      <ul>
+        <li><b>help + 宾语 + 动词原形</b>：帮助某人做某事。<span class="good">Skateboarding helps her make friends.</span></li>
+        <li>这个动词<b>一定要用原形</b>，不能加 s，也不能加 to（加了 to 也不算错）。</li>
+        <li><span class="bad">✗ It helps her makes friends.</span>　<span class="good">✓ It helps her make friends.</span></li>
+        <li>如果 help 后面不接人，可以直接接动词：This app helps <span class="good">learn</span> new words.</li>
+        <li class="eg">My sister helps me clean my room. · Music helps me sleep.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz（5 题）</h2>
+  <div class="card">
+    <div class="quiz" data-ans="1">
+      <div class="q">1. How old is Cao Shiqi?</div>
+      <div class="qzh">曹诗祺今年多大？</div>
+      <button class="opt">A) Ten years old</button>
+      <button class="opt">B) Twelve years old</button>
+      <button class="opt">C) Fourteen years old</button>
+      <button class="opt">D) Sixteen years old</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="0">
+      <div class="q">2. What happened in her first run on 24 September?</div>
+      <div class="qzh">9 月 24 日，她的第一次滑行发生了什么？</div>
+      <button class="opt">A) It went wrong, and she got only 48.02 points</button>
+      <button class="opt">B) She scored 73.49 points</button>
+      <button class="opt">C) She won a gold medal</button>
+      <button class="opt">D) She fell asleep</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="2">
+      <div class="q">3. How high are the curved walls of the bowl?</div>
+      <div class="qzh">碗池的弧形池壁大约有多高？</div>
+      <button class="opt">A) About one metre</button>
+      <button class="opt">B) About two metres</button>
+      <button class="opt">C) About four metres</button>
+      <button class="opt">D) About forty metres</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="1">
+      <div class="q">4. How many judges watch each run?</div>
+      <div class="qzh">每一轮滑行有几名裁判打分？</div>
+      <button class="opt">A) Two</button>
+      <button class="opt">B) Five</button>
+      <button class="opt">C) Ten</button>
+      <button class="opt">D) One hundred</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-ans="3">
+      <div class="q">5. What does Cao Shiqi say skateboarding helps her do?</div>
+      <div class="qzh">曹诗祺说滑板帮她做到了什么？</div>
+      <button class="opt">A) Run faster</button>
+      <button class="opt">B) Swim better</button>
+      <button class="opt">C) Sleep longer</button>
+      <button class="opt">D) Make friends</button>
+      <div class="fb"></div>
+    </div>
+    <div class="score" id="score"></div>
+  </div>
+</section>
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · More to Know</h2>
+
+  <div class="know">
+    <h3>🛹 她是谁</h3>
+    <p>曹诗祺今年 12 岁，是北京一所中学的初一学生。在第 20 届亚洲运动会上，她是<b>中国体育代表团年龄最小的运动员</b>——代表团一共有 815 名运动员，她是最小的那一个。她参加的项目叫女子碗池，也就是在一个碗形的场地上滑滑板。滑板陪着她长大：四五岁时，她在商场里第一次站上一块试用滑板，居然稳稳地保持了平衡；从那以后，她就再也没有离开过滑板。</p>
+  </div>
+
+  <div class="know">
+    <h3>🏫 从商场到亚运赛场</h3>
+    <ul>
+      <li><b>2021 年 12 月</b>，7 岁的曹诗祺被北京滑板队（现在的北京极限队）注意到。领队回忆说，第一次见她觉得这是个“小机灵鬼”，脚下技术、身体条件和训练时的那股猛劲都很突出。</li>
+      <li><b>2022 年 1 月</b>，她正式进入北京队，师从肖遥教练。从那以后，滑板不再只是“好玩”：动作不到位就一遍遍练，摔倒了就重新站起，比赛里没完成的动作要继续“死磕”。</li>
+      <li>她的训练几乎全在课余时间：每周<b>星期二、星期四</b>放学后从通州赶到大兴训练，<b>周末</b>全天训练，其余几天还要完成居家的体能作业。领队说，她小伤从不请假，是个很坚韧的小姑娘。</li>
+      <li>学习也没有落下。外出集训和比赛时，她会通过远程上课的方式跟上学校的进度。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>📈 2026 年的三级跳</h3>
+    <ul>
+      <li><b>4 月</b>：获得 2026 年亚洲滑板锦标赛女子碗池少年组冠军。</li>
+      <li><b>5 月</b>：在成都举行的亚运选拔赛上，75 名来自全国 15 个省市的选手同场竞技，她以 83.26 分排在第二名，拿到亚运会入场券。</li>
+      <li><b>7 月</b>：拿下全国滑板锦标赛女子碗池冠军，入选国家滑板队。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🎯 9 月 24 日那一轮</h3>
+    <p>在日本爱知县的赛场，曹诗祺迎来了自己的亚运会首秀。第一轮她出现失误，只得到 <b>48.02 分</b>；后两轮她一轮比一轮稳，第三轮滑出 <b>73.49 分</b>，最终以小组第三、总排名第五的成绩晋级决赛。等待出场的时候，她和身边的选手聊天；看到有人摔倒会马上起身张望，看到别人滑出漂亮的招式又会跑过去夸一句。赛后她笑着说：<b>“特别紧张，没想其他什么，就给自己加油，跟别人聊天缓解一下。”</b> 这几天，她已经和各国选手交换了二十多个徽章。</p>
+  </div>
+
+  <div class="know">
+    <h3>🌊 滑板是怎么来的</h3>
+    <ul>
+      <li><b>1950 年代</b>：美国南加州的冲浪者遇到没有浪的日子，就给木板装上轮子，在陆地上“冲浪”，这被叫做 sidewalk surfing（人行道冲浪）。滑板就这样诞生了。</li>
+      <li><b>1970 年代</b>：加州的 Z-Boys 一群人滑进了郊区干涸的游泳池，碗形场地（bowl）从此成了滑板的标志，后来慢慢建成了专门的滑板公园。</li>
+      <li><b>1995 年</b>：首届 X Games 举办，滑板通过电视转播被全世界看见。</li>
+      <li><b>2018 年</b>：雅加达亚运会，滑板第一次成为亚运会正式项目。</li>
+      <li><b>2021 年</b>：东京奥运会，滑板首次登上奥运舞台，分碗池（park）和街式（street）两类。2028 年洛杉矶奥运会仍将保留这个项目。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>📊 滑板怎么打分</h3>
+    <p>滑板<b>不比谁滑得快</b>，而是由裁判打分。五名裁判每人打出 0 到 100 分，去掉一个最高分和一个最低分，剩下三个分数取平均值。裁判主要看这些方面：动作<b>难度</b>、飞起来的<b>高度</b>、滑行的<b>速度</b>、招式是否有<b>原创性</b>、落地是否稳，以及整个路线是否流畅、有没有把场地用满。碗池比赛一般每人滑三轮，<b>只取最好的那一轮</b>作为最终成绩——所以第一轮失误了也不用慌，后面还有机会。</p>
+  </div>
+
+  <div class="know">
+    <h3>🇨🇳 中国的滑板少年</h3>
+    <p>滑板在中国起步不算早，但小选手成长得很快。2023 年杭州亚运会上，13 岁的崔宸曦夺得女子街式冠军，成为当时亚运会滑板项目最年轻的冠军；15 岁的陈烨拿下男子碗池冠军。到了 2026 年这届名古屋亚运会，中国队又有多名 16 岁以下的选手登场，曹诗祺是其中最小的一个。他们的目标都很一致——奥运会。</p>
+  </div>
+
+  <div class="tipbox">
+    <h3>⛑️ 想试试滑板？先记住这几条</h3>
+    <ul>
+      <li><b>护具要齐全：</b>头盔、护腕、护肘、护膝，一样都不能少。专业选手在碗池里也会戴头盔。</li>
+      <li><b>场地要正规：</b>只在专门的滑板公园或空旷平整的场地练习，<b>绝对不要在马路、车库出入口、楼梯扶手旁</b>模仿视频里的动作。</li>
+      <li><b>要有大人在场：</b>初学时请家长陪同，最好跟着教练学习。先学会<b>怎么安全摔倒</b>和<b>怎么停下来</b>，再学花样动作。</li>
+      <li><b>循序渐进：</b>碗池的池壁有三四米高，是练了很多年才敢上的场地。从平地开始，一步一个动作来。</li>
+      <li><b>紧张是正常的：</b>连亚运选手都说自己“特别紧张”。紧张的时候，可以像曹诗祺那样深呼吸，跟旁边的人说说话，把注意力放回动作本身。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><span class="txt">读懂一篇 150 词左右的体育小故事，能说出“谁、多大、参加什么项目、发生了什么”。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">掌握 8 个核心词：athlete, skateboard, practise, score, bowl, judge, nervous, dream。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用 the + 最高级 + in ... 介绍“最……的人”，用 from ... to ... 说范围，用 help + 某人 + 动词原形。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">能用 3—4 句英文介绍自己最喜欢的一项运动，并说出它为什么好玩。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">📚 学习建议</h3>
+    <div class="goal"><span class="tick">1</span><span class="txt">先不看中文听一遍全文，猜一猜：她第一轮得了多少分？把数字写在纸上。</span></div>
+    <div class="goal"><span class="tick">2</span><span class="txt">打开中文翻译逐段对照，把 stood、rode、came、gave 这几个不规则过去式圈出来。</span></div>
+    <div class="goal"><span class="tick">3</span><span class="txt">用 more than 造三个句子，可以写你的藏书、你的贴纸、你认识的同学。</span></div>
+    <div class="goal"><span class="tick">4</span><span class="txt">做完测验后，把错题的正确句子抄一遍；再试着用英文说出一次你“紧张但还是做到了”的经历。</span></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:var(--accent);">🗣️ 亲子口语三问</h3>
+    <div class="goal"><span class="tick">Q1</span><span class="txt">How old is Cao Shiqi, and what sport does she do?</span></div>
+    <div class="goal"><span class="tick">Q2</span><span class="txt">What does the park course look like? How do judges give points?</span></div>
+    <div class="goal"><span class="tick">Q3</span><span class="txt">What sport helps you make friends? Why do you like it?</span></div>
+  </div>
+
+  <div style="text-align:center;margin:18px 0;">
+    <button class="print-btn" id="printBtn">🖨️ 打印本页</button>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>Pola News · A2 初级英语 · 2026-09-25 · ⚽ 体育运动<br>资料参考：新华社、新华网、人民网、北京日报等公开报道（2026 年 9 月）</footer>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致） ---------- */
+var segmentTexts = [
+"Cao Shiqi is twelve years old. She is the youngest athlete in China's team at the 2026 Asian Games in Japan. She rides a skateboard in the women's park event. She started when she was four, and she still practises every week.",
+"On 24 September she skated in the opening round. Her first run went wrong, and she got only 48.02 points. She did not give up. In her third run she scored 73.49 points, so she reached the final.",
+"Her course looks like a big empty bowl. The curved walls are about four metres high. She rides up a wall, flies into the air, turns, and comes down again. Five judges watch her. Each one gives points from 0 to 100.",
+"Skateboarding helps her make friends. At the Games she has swapped more than twenty badges with other skaters. She was nervous, so she talked and laughed with them. “My dream is the Olympic Games,” she says."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'athlete': '运动员 n.',
+  'skateboard': '滑板 n.',
+  'practise': '练习 v.',
+  'score': '得分 v.',
+  'bowl': '碗；碗池 n.',
+  'judge': '裁判 n.',
+  'nervous': '紧张的 adj.',
+  'dream': '梦想 n.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', function(){ tip.style.display = 'none'; });
+  })(kws[k]);
+}
+document.addEventListener('click', function(){ tip.style.display = 'none'; });
+window.addEventListener('scroll', function(){ tip.style.display = 'none'; });
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#','');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 打印 ---------- */
+var printBtn = document.getElementById('printBtn');
+if(printBtn) printBtn.addEventListener('click', function(){ window.print(); });
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            if(sc){
+              sc.classList.add('show');
+              sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+                (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+            }
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

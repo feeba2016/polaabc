@@ -3650,6 +3650,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-25",
+    "title": "The Itsy Bitsy Spider",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-25-the-itsy-bitsy-spider",
+    "url": "lessons/a1/2026-09-25-the-itsy-bitsy-spider.html",
+    "vocab": [
+      {
+        "word": "spider",
+        "zh": "蜘蛛",
+        "ex": "Look at the little spider."
+      },
+      {
+        "word": "spout",
+        "zh": "水管、出水口",
+        "ex": "She climbs up the spout."
+      },
+      {
+        "word": "rain",
+        "zh": "雨",
+        "ex": "The rain comes down."
+      },
+      {
+        "word": "sun",
+        "zh": "太阳",
+        "ex": "The sun is warm."
+      },
+      {
+        "word": "climb",
+        "zh": "爬",
+        "ex": "I climb up the hill."
+      },
+      {
+        "word": "again",
+        "zh": "再一次",
+        "ex": "She climbs up again."
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -5466,6 +5508,58 @@ const EPISODES = [
         "word": "goal",
         "zh": "目标；想要到达的地方",
         "ex": "My goal is to swim fifty metres without stopping."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-25",
+    "title": "The Girl Who Flew Out of the Bowl",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-25-the-girl-who-flew-out-of-the-bowl",
+    "url": "lessons/a2/2026-09-25-the-girl-who-flew-out-of-the-bowl.html",
+    "vocab": [
+      {
+        "word": "athlete",
+        "zh": "曹诗祺今年 12 岁。她是中国体育代表团参加 2026 年日本亚运会队伍里年龄最小的运动员。她参加的是女子碗池项目。她四岁就开始玩滑板，到现在每个星期都还在练习。",
+        "ex": "She is the youngest athlete in the team."
+      },
+      {
+        "word": "skateboard",
+        "zh": "滑板（也可以作动词：滑滑板）",
+        "ex": "He rides a skateboard in the park."
+      },
+      {
+        "word": "practise",
+        "zh": "练习（英式拼写，美式常写 practice）",
+        "ex": "She practises after school and at weekends."
+      },
+      {
+        "word": "score",
+        "zh": "得分；得到分数",
+        "ex": "In her third run she scored 73.49 points."
+      },
+      {
+        "word": "bowl",
+        "zh": "碗；这里指碗形的滑板场地（碗池）",
+        "ex": "The course looks like a big empty bowl."
+      },
+      {
+        "word": "judge",
+        "zh": "裁判；打分的评委",
+        "ex": "Five judges watch every run."
+      },
+      {
+        "word": "nervous",
+        "zh": "紧张的；心里发慌的",
+        "ex": "I am always nervous before a test."
+      },
+      {
+        "word": "dream",
+        "zh": "梦想；特别想做到的事",
+        "ex": "My dream is to skate in the Olympic Games."
       }
     ]
   },

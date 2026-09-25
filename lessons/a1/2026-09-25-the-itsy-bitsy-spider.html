@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Itsy Bitsy Spider — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#4338ca;
+  --accent2:#6366f1;
+  --bg:#eef2ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#3730a3;
+  --highlight:#fde68a;
+  --border:#c7d2fe;
+  --soft:#e0e7ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#818cf8);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(67,56,202,.35);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #a5b4fc;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#3730a3;background:#eef2ff;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(67,56,202,.4);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(67,56,202,.6);}70%{box-shadow:0 0 0 14px rgba(67,56,202,0);}100%{box-shadow:0 0 0 0 rgba(67,56,202,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#a5b4fc;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(67,56,202,.35);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Itsy Bitsy Spider 🕷️🌧️</h1>
+      <p class="subtitle">2026年9月25日 · 儿歌童谣｜小小蜘蛛 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · A Little Spider 一只小蜘蛛</div>
+            <p>Look at the <span class="kw" data-def="蜘蛛：有八条腿、会吐丝结网的小动物">spider</span>. 🕷️ She is very small. She climbs up the <span class="kw" data-def="水管：房檐上把雨水引到地上的管子">spout</span>. ⬆️ Up, up, up she goes. 🕸️</p>
+          </div>
+          <div class="zh">快看那只小蜘蛛 🕷️。她很小很小。她顺着水管往上爬 ⬆️。爬呀爬，爬呀爬 🕸️。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Down Comes the Rain 下起雨来了</div>
+            <p>Then the <span class="kw" data-def="雨：从云里落下来的小水滴">rain</span> comes down. 🌧️ It washes the spider out. 😢 Down, down, down she goes. ⬇️ Poor little spider. 💧</p>
+          </div>
+          <div class="zh">这时候下起雨来了 🌧️。雨水把小蜘蛛冲了下来 😢。掉呀掉，掉呀掉 ⬇️。可怜的小蜘蛛 💧。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Out Comes the Sun 太阳出来啦</div>
+            <p>Then the <span class="kw" data-def="太阳：白天挂在天上、会发光发热的大火球">sun</span> comes out. ☀️ It dries up all the rain. 🌈 The spider is happy again. 😊</p>
+          </div>
+          <div class="zh">后来太阳出来了 ☀️。它把雨水全都晒干了 🌈。小蜘蛛又开心起来了 😊。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Try, Try Again 再试一次</div>
+            <p>She <span class="kw" data-def="爬：用手脚一点一点往上或往前挪动">climbs</span> up the spout <span class="kw" data-def="再一次：把同一件事又做一遍">again</span>. 🕷️ Up, up, up she goes. ⬆️ She does not stop. 💪 The sun is warm. ☀️</p>
+          </div>
+          <div class="zh">她又顺着水管往上爬 🕷️。爬呀爬，爬呀爬 ⬆️。她没有停下来 💪。太阳暖洋洋的 ☀️。</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#e0e7ff;border:2px solid #a5b4fc;">
+        <h3 style="margin:0 0 8px;color:#4338ca;font-size:20px;">🕷️ 和 Pola 一起演一演！</h3>
+        <p style="margin:0;font-size:16px;">这是一首可以<b>用手来演</b>的英文手指谣 🎵。唱到 <b>“Up, up, up she goes.”</b> 时，两只手的大拇指和食指轮流碰一碰、一点点往上举 ⬆️；唱到 <b>“Down came the rain.”</b> 时，双手举高、十根手指抖一抖、慢慢往下落，假装下雨 🌧️；唱到 <b>“Out came the sun.”</b> 时，两只手臂举过头围成一个大圆，做一个大太阳 ☀️；最后唱 <b>“again”</b> 时，再把爬的动作做一遍 🕷️。记得点黄色的词看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="spider">🔊</button><div class="emoji">🕷️</div><div class="word">spider<span class="pos">n.</span></div><div class="zh">蜘蛛</div><div class="ex">Look at the little spider.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="spout">🔊</button><div class="emoji">🚰</div><div class="word">spout<span class="pos">n.</span></div><div class="zh">水管、出水口</div><div class="ex">She climbs up the spout.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rain">🔊</button><div class="emoji">🌧️</div><div class="word">rain<span class="pos">n.</span></div><div class="zh">雨</div><div class="ex">The rain comes down.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sun">🔊</button><div class="emoji">☀️</div><div class="word">sun<span class="pos">n.</span></div><div class="zh">太阳</div><div class="ex">The sun is warm.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="climb">🔊</button><div class="emoji">🧗</div><div class="word">climb<span class="pos">v.</span></div><div class="zh">爬</div><div class="ex">I climb up the hill.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="again">🔊</button><div class="emoji">🔄</div><div class="word">again<span class="pos">adv.</span></div><div class="zh">再一次</div><div class="ex">She climbs up again.</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Look at the [thing].</h3>
+          <div class="zh">“快看这个……”。想让别人<b>也来看一样东西</b>，用 <b>Look at the + 东西</b>。<b>look</b> 是“看”，<b>at the</b> 后面接要看的东西。</div>
+          <div class="eg">Look at the spider. 🕷️ / Look at the rain. 🌧️ / Look at the sun. ☀️ / Look at the tree. 🌳</div>
+          <div class="practice">练习：快看那只小蜘蛛 → Look at <input placeholder="the spider">.</div>
+        </div>
+        <div class="item">
+          <h3>2. [Someone] goes up. / [Someone] goes down.</h3>
+          <div class="zh">“……往上走 / ……往下走”。说<b>往哪个方向动</b>，就在动词后面加 <b>up</b>（往上）或 <b>down</b>（往下）。它们是反义词。</div>
+          <div class="eg">Up, up, up she goes. ⬆️ / Down, down, down she goes. ⬇️ / I go up the hill. ⛰️ / We go down the slide. 🛝</div>
+          <div class="practice">练习：她往下掉了 → Down, down, down <input placeholder="she goes">.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Someone] climbs up the [place] again.</h3>
+          <div class="zh">“……又爬上了……”。<b>climb up</b> 是“往上爬”，<b>the</b> 后面接爬的地方，<b>again</b>（再一次）要放在<b>句子最后</b>。</div>
+          <div class="eg">She climbs up the spout again. 🕷️ / I climb up the tree again. 🌳 / The cat climbs up the chair again. 🐱</div>
+          <div class="practice">练习：她又顺着水管往上爬 → She climbs up <input placeholder="the spout again">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. he / she / it 后面，动词要加 -s</h3>
+          <div class="zh">当主语是<b>一只动物、一个人、一样东西</b>（he 他 / she 她 / it 它）时，句子里的动词要加一个小尾巴 <b>-s</b>。<br>但主语是 <b>I（我）</b>、<b>you（你）</b>、<b>we（我们）</b>、<b>they（他们）</b> 时，动词<b>保持原样，不加 -s</b>。</div>
+          <div class="eg">She climbs up the spout. 🕷️ / The rain comes down. 🌧️ / It dries up the rain. ☀️ / I climb up the hill. ⛰️ / They go up. ⬆️</div>
+        </div>
+        <div class="item">
+          <h3>2. up 和 down：一对反义词</h3>
+          <div class="zh"><b>up</b> 是“往上”，<b>down</b> 是“往下”，它们的意思正好相反。把它们放在动词后面，就能说出动作的方向。<br>小蜘蛛先 <b>up</b>、再 <b>down</b>、最后又 <b>up</b>，这首儿歌就是在讲“上去、下来、再上去”。</div>
+          <div class="eg">go up ⬆️ ←→ go down ⬇️ / climb up 🧗 ←→ climb down / stand up 🧍 ←→ sit down 🪑</div>
+        </div>
+        <div class="item">
+          <h3>3. again = 再一次，放在句子最后</h3>
+          <div class="zh">想说“<b>又做了一遍</b>同样的事”，就在句子<b>最后加上 again</b>。它是时间词，习惯上放在句尾，不放在动词前面。</div>
+          <div class="eg">She climbs up the spout again. 🕷️ / I read the book again. 📖 / Please say it again. 🗣️</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#e0e7ff;border:2px solid #a5b4fc;">
+        <div style="font-size:20px;font-weight:800;color:#4338ca;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#3730a3;margin-top:6px;">每做对一题得 1 分，全部做完就是勇敢小蜘蛛啦！🕷️✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🎵 这是一首“手指谣”</h3>
+        <p>今天这首儿歌的英文名字叫 <b>The Itsy Bitsy Spider</b>（小小蜘蛛）。<b>itsy bitsy</b> 是美国人随口说的“一点点大、非常小”，就像中文里说“小不点儿”。</p>
+        <p>它不只是一首歌，还是一首 <b>手指谣（fingerplay）</b>——一边唱，一边用两只手把故事演出来 🖐️。全世界的小朋友都在唱：在美国它叫 <b>Itsy Bitsy Spider</b>，在英国和澳大利亚常常唱成 <b>Incy Wincy Spider</b>，意思完全一样。</p>
+        <p>关于它出生在哪里，谁也说不准。目前能查到的<b>最早的印刷记录</b>，出现在 1910 年美国作家 Arthur Walbridge North 的一本旅行书《Camp and Camino in Lower California》里，那时候它的名字叫 <b>Spider Song</b>。现在我们唱的这个儿童版，是到 20 世纪中期才慢慢定型的，1948 年被收进了美国儿童民歌集。也就是说，这首歌已经被唱了一百多年 🎶。</p>
+
+        <h3>🕷️ 蜘蛛为什么喜欢雨后结网？</h3>
+        <p>儿歌里小蜘蛛爬的那个 <b>waterspout / spout</b>，就是房檐上<b>把雨水引到地上</b>的那根水管 🚰。下雨的时候，水从管子里哗哗流下来，站在里面的小蜘蛛自然就被冲下来了。</p>
+        <ul>
+          <li>大雨会把蜘蛛网<b>打破</b>。雨一停，空气变得潮湿，小飞虫特别多，蜘蛛就赶紧出来<b>补网、织新网</b>，好捉虫子吃 🌧️→☀️。</li>
+          <li>蜘蛛<b>不是昆虫</b>哦！昆虫有 <b>6 条腿</b>、还有翅膀和触角；蜘蛛有 <b>8 条腿</b>，没有翅膀 🐛 vs 🕷️。</li>
+          <li>蜘蛛的丝是从<b>肚子后面</b>的小管子（纺绩器）里拉出来的。丝非常细，却很有韧性，能牢牢粘住小飞虫 🕸️。</li>
+          <li>蜘蛛一天能吃掉<b>很多害虫</b>，是农田和花园里的小卫士，所以我们不要随便伤害它 🌾。</li>
+        </ul>
+
+        <h3>🧧 中国故事里的“喜蛛”</h3>
+        <p>在中国民间，小小的蜘蛛有个特别好听的名字——<b>喜蛛</b>，也叫<b>蟢子</b>。因为“蟢”字和“<b>喜</b>”字读音一样，古人就觉得见到它是<b>好事要来了</b> 🧧。</p>
+        <ul>
+          <li>传统吉祥画里有一幅叫<b>《喜从天降》</b>，画的就是一只小蜘蛛顺着蛛丝从上往下垂——意思是喜事从天上掉下来啦 😊。</li>
+          <li>农历<b>七月初七七夕</b>那天，古代的女孩子会在院子里摆上瓜果“乞巧”，祈求自己心灵手巧。如果夜里真有小蜘蛛爬到瓜果上结了网，大家就说是“<b>得巧</b>”了。这个习俗写在《荆楚岁时记》《东京梦华录》这些古书里 🏮。</li>
+          <li>中国自古以农为本，蜘蛛爱吃害虫，所以老乡们一直把它当<b>吉祥又实用</b>的小动物。</li>
+        </ul>
+        <p>你看，同样一只小蜘蛛，英文儿歌里它是<b>不怕失败的小勇士</b>，中国民俗里它是<b>报喜的小吉祥物</b>。想法不一样，喜欢的心情是一样的 💛。</p>
+
+        <h3>💪 小蜘蛛教会我们的事</h3>
+        <p>这首儿歌最短，却讲了一件很大的事：<b>被雨水冲下来，她没有赖在地上不起来</b>。太阳一出来，她就又爬了一次——<b>She climbs up the spout again.</b></p>
+        <p>学新东西也是这样呀：第一次系鞋带系不好、第一次骑车会摔倒、第一次唱英文歌会忘词……没关系，<b>Try again！再来一次</b>就好啦 🔄。</p>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>手指谣全家唱</b> 🎵：和爸爸妈妈一边做动作一边唱，谁的动作最像小蜘蛛谁就赢 🕷️。</li>
+          <li><b>我说你做</b> 🖐️：大人说英文 <b>“Up, up, up she goes.”</b> 或 <b>“Down, down, down she goes.”</b>，小朋友用手做对方向 ⬆️⬇️。</li>
+          <li><b>雨后找一找</b> 🔍：雨停后去小区花园找找蛛网，<b>只许用眼睛看</b>，数一数网有几圈、蜘蛛有几条腿。</li>
+          <li><b>四格画</b> 🎨：画四格画——小蜘蛛、下雨、出太阳、再爬一次，然后指着画把故事讲一遍。</li>
+          <li><b>换词唱</b> 🎤：把 spider 换成别的动物，唱成 <b>The itsy bitsy cat...</b>、<b>The itsy bitsy bear...</b>，看谁编得最有趣。</li>
+        </ul>
+
+        <p style="background:#fee2e2;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>路上、草丛里看到的蜘蛛<b>千万不要用手去摸、去抓</b>，有些蜘蛛会咬人，被咬了要马上告诉大人 🚫；看蜘蛛网要<b>站远一点</b>，不戳网、不把脸凑近 🕸️；<b>下雨天地面很滑</b>，不要踩水坑、不要在台阶上跑跳 🌧️；儿歌里的蜘蛛爬水管，<b>小朋友可不能去爬阳台、窗台和栏杆</b>，那样非常危险 🪟；在户外看完小动物，回家第一件事是<b>把手洗干净</b> 🧼。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读手指谣《The Itsy Bitsy Spider》，会用小手把“爬上去—被雨冲下来—太阳出来—再爬一次”演出来。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：spider, spout, rain, sun, climb, again。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “Look at the ...”、“... goes up / goes down”、“... climbs up ... again.” 说简单的话。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 he / she / it 后面动词加 -s、up 与 down 互为反义、again 放在句尾。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>遇到困难愿意再说一句 “Try again！”，做个不轻易放弃的小孩。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读；读的时候一定要加上手部动作 🖐️。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，把 6 个词做成小卡片，贴在洗手池旁边天天看。</div></div>
+        <div class="goal"><span class="ic">🎵</span><div>每天唱一遍这首手指谣，唱四天就能记住，比看四遍书还管用 🎶。</div></div>
+        <div class="goal"><span class="ic">🎤</span><div>玩“我说你做”：<b>“Up, up, up she goes.”</b> 看谁反应最快 ⬆️。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，贴在冰箱上，每天唱完打个卡 💛</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Itsy Bitsy Spider · 2026-09-25 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Look at the spider. She is very small. She climbs up the spout. Up, up, up she goes.", "Then the rain comes down. It washes the spider out. Down, down, down she goes. Poor little spider.", "Then the sun comes out. It dries up all the rain. The spider is happy again.", "She climbs up the spout again. Up, up, up she goes. She does not stop. The sun is warm."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Who climbs up the spout? 谁顺着水管往上爬？",em:["🕷️","🐶","🐱"],opts:["A spider (蜘蛛)","A dog (狗)","A cat (猫)"],ans:0,
+   fb:"Yes! 是小蜘蛛在爬水管，She climbs up the spout 🕷️。"},
+  {q:"What washes the spider out? 什么把蜘蛛冲了下来？",em:["🌧️","☀️","❄️"],opts:["The sun (太阳)","Snow (雪)","The rain (雨)"],ans:2,
+   fb:"Right! 是雨水把她冲下来的，The rain washes the spider out 🌧️。"},
+  {q:"What dries up all the rain? 什么把雨水晒干了？",em:["🌧️","☀️","🌙"],opts:["The rain (雨)","The sun (太阳)","The moon (月亮)"],ans:1,
+   fb:"Great! 太阳出来把雨水晒干，The sun dries up all the rain ☀️。"},
+  {q:"What does the spider do again? 小蜘蛛接着又做了什么？",em:["⬆️","⬇️","🛏️"],opts:["She sleeps (她去睡觉)","She climbs up again (她又往上爬)","She runs away (她跑掉了)"],ans:1,
+   fb:"Perfect! 她没有放弃，又爬了一次，She climbs up the spout again 🕷️。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
