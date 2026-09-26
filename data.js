@@ -3692,6 +3692,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-26",
+    "title": "The Busy Little Ants",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-26-the-busy-little-ants",
+    "url": "lessons/a1/2026-09-26-the-busy-little-ants.html",
+    "vocab": [
+      {
+        "word": "ant",
+        "zh": "蚂蚁",
+        "ex": "Look at the little ant."
+      },
+      {
+        "word": "food",
+        "zh": "食物",
+        "ex": "They carry food home."
+      },
+      {
+        "word": "carry",
+        "zh": "搬运、拿",
+        "ex": "I carry my bag."
+      },
+      {
+        "word": "strong",
+        "zh": "强壮的、力气大的",
+        "ex": "Ants are very strong."
+      },
+      {
+        "word": "nest",
+        "zh": "巢、窝",
+        "ex": "The nest is in the ground."
+      },
+      {
+        "word": "line",
+        "zh": "队伍、一条线",
+        "ex": "They walk in a long line."
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",
@@ -5560,6 +5602,58 @@ const EPISODES = [
         "word": "dream",
         "zh": "梦想；特别想做到的事",
         "ex": "My dream is to skate in the Olympic Games."
+      }
+    ]
+  },
+  {
+    "level": "A2",
+    "date": "2026-09-26",
+    "title": "The Bird That Came Back Home",
+    "category": "general",
+    "emoji": "📚",
+    "desc": "A2 小学英语学习",
+    "slug": "2026-09-26-the-bird-that-came-back-home",
+    "url": "lessons/a2/2026-09-26-the-bird-that-came-back-home.html",
+    "vocab": [
+      {
+        "word": "wild",
+        "zh": "1981 年，中国科学家只找到了 7 只野生朱鹮。这种鸟羽毛雪白，脸是红色的。人们叫它“东方宝石”。当时它们差一点就要从地球上消失了。",
+        "ex": "They found only seven wild crested ibises."
+      },
+      {
+        "word": "gem",
+        "zh": "宝石；非常珍贵的东西",
+        "ex": "People call the bird the 'Oriental gem'."
+      },
+      {
+        "word": "protect",
+        "zh": "保护；使……不受伤害",
+        "ex": "People protected the birds for forty-five years."
+      },
+      {
+        "word": "carefully",
+        "zh": "仔细地；小心地（形容词 careful + ly）",
+        "ex": "Workers fed the birds carefully every day."
+      },
+      {
+        "word": "population",
+        "zh": "种群数量；也可以指人口",
+        "ex": "Their population is more than ten thousand."
+      },
+      {
+        "word": "feed",
+        "zh": "喂养（过去式是 fed，不是 feeded）",
+        "ex": "Workers fed the birds six times a day."
+      },
+      {
+        "word": "above",
+        "zh": "在……上方；高于（above sea level 海拔）",
+        "ex": "The forest is 1,500 metres above sea level."
+      },
+      {
+        "word": "release",
+        "zh": "放归；放飞（把动物送回大自然）",
+        "ex": "This is the highest release place in China."
       }
     ]
   },

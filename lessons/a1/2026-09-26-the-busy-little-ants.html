@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Busy Little Ants — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#9a3412;
+  --accent2:#ea580c;
+  --bg:#fff7ed;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#7c2d12;
+  --highlight:#fde68a;
+  --border:#fed7aa;
+  --soft:#ffedd5;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#fb923c);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(154,52,18,.32);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #fdba74;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#7c2d12;background:#fff7ed;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(154,52,18,.38);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(154,52,18,.55);}70%{box-shadow:0 0 0 14px rgba(154,52,18,0);}100%{box-shadow:0 0 0 0 rgba(154,52,18,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#fdba74;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(154,52,18,.32);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Busy Little Ants 🐜🍂</h1>
+      <p class="subtitle">2026年9月26日 · 自然探索｜忙碌的小蚂蚁 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · Little Ants 小小的蚂蚁</div>
+            <p>Look at the <span class="kw" data-def="蚂蚁：很小很小、喜欢一起搬东西的昆虫">little ants</span>. 🐜 They are very small. They walk in a long <span class="kw" data-def="队伍：一个跟着一个排成的长队">line</span>. 🐜 They <span class="kw" data-def="搬运：把东西从一处拿到另一处">carry</span> <span class="kw" data-def="食物：可以吃的东西">food</span> home. 🍞</p>
+          </div>
+          <div class="zh">快看那些小蚂蚁 🐜。它们非常小。它们排成一条长长的队伍 🐜。它们把食物搬回家 🍞。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · A Big Crumb 一块大面包渣</div>
+            <p>An ant finds a <span class="kw" data-def="碎屑：面包、饼干掉下来的小渣子">crumb</span>. 🍞 The crumb is big. She <span class="kw" data-def="举起：把东西抬起来">lifts</span> it up. 💪 Ants are very <span class="kw" data-def="强壮的：力气很大的">strong</span>.</p>
+          </div>
+          <div class="zh">一只蚂蚁找到一块面包渣 🍞。这块面包渣很大。她把它举了起来 💪。蚂蚁的力气非常大。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · Home in the Ground 地下的家</div>
+            <p>The ants go up a hill. ⛰️ They carry the food to the <span class="kw" data-def="巢、窝：蚂蚁住的地方">nest</span>. 🏠 The nest is in the <span class="kw" data-def="地面、泥土：我们脚下踩的土地">ground</span>. 🟤</p>
+          </div>
+          <div class="zh">蚂蚁们往小土坡上爬 ⛰️。它们把食物搬回窝里 🏠。蚂蚁的窝在泥土下面 🟤。</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Rain Is Coming 要下雨了</div>
+            <p>Rain is coming. 🌧️ The ants <span class="kw" data-def="移动：换地方、走动">move</span> fast. They work all day. 🐜 Let us <span class="kw" data-def="帮助：帮别人一把">help</span> them. Do not step on the line. 💛</p>
+          </div>
+          <div class="zh">要下雨了 🌧️。蚂蚁们走得又快又急。它们忙了一整天 🐜。我们来帮帮它们吧。不要踩到那条队伍 💛。</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#ffedd5;border:2px solid #fdba74;">
+        <h3 style="margin:0 0 8px;color:#9a3412;font-size:20px;">🐜 和 Pola 一起找蚂蚁！</h3>
+        <p style="margin:0;font-size:16px;">秋天的午后，去小区的花园或大树下蹲下来，找一找地上的<b>蚂蚁小路</b> 🔍。你会看到它们<b>一个跟着一个</b>走，像一条会动的小黑线。轻轻放一小块饼干渣在路边（<b>只放一点点</b>），然后安静等一会儿，看会不会有蚂蚁来搬 🍪。记得点黄色的词看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ant">🔊</button><div class="emoji">🐜</div><div class="word">ant<span class="pos">n.</span></div><div class="zh">蚂蚁</div><div class="ex">Look at the little ant.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="food">🔊</button><div class="emoji">🍞</div><div class="word">food<span class="pos">n.</span></div><div class="zh">食物</div><div class="ex">They carry food home.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="carry">🔊</button><div class="emoji">🧺</div><div class="word">carry<span class="pos">v.</span></div><div class="zh">搬运、拿</div><div class="ex">I carry my bag.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="strong">🔊</button><div class="emoji">💪</div><div class="word">strong<span class="pos">adj.</span></div><div class="zh">强壮的、力气大的</div><div class="ex">Ants are very strong.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="nest">🔊</button><div class="emoji">🏠</div><div class="word">nest<span class="pos">n.</span></div><div class="zh">巢、窝</div><div class="ex">The nest is in the ground.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="line">🔊</button><div class="emoji">🧵</div><div class="word">line<span class="pos">n.</span></div><div class="zh">队伍、一条线</div><div class="ex">They walk in a long line.</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Look at the [thing].</h3>
+          <div class="zh">“快看这个……”。想让别人<b>也来看一样东西</b>，就用 <b>Look at the + 东西</b>。<b>look</b> 是“看”，<b>at the</b> 后面接要看的东西。</div>
+          <div class="eg">Look at the little ants. 🐜 / Look at the nest. 🏠 / Look at the food. 🍞 / Look at the hill. ⛰️</div>
+          <div class="practice">练习：快看那些小蚂蚁 → Look at <input placeholder="the little ants">.</div>
+        </div>
+        <div class="item">
+          <h3>2. [Someone] is very [adjective].</h3>
+          <div class="zh">“……非常……”。夸一样东西怎么样，用 <b>主语 + is / are + very + 形容词</b>。<b>very</b> 就是“非常”，形容词放在最后面。</div>
+          <div class="eg">They are very small. 🐜 / Ants are very strong. 💪 / I am very happy. 😊 / The crumb is very big. 🍞</div>
+          <div class="practice">练习：蚂蚁非常强壮 → Ants are <input placeholder="very strong">.</div>
+        </div>
+        <div class="item">
+          <h3>3. [They] carry [thing] to [place].</h3>
+          <div class="zh">“……把……搬到……”。<b>carry</b> 是“搬”，<b>to</b> 后面接<b>搬去的地方</b>。回家可以直接说 <b>home</b>，中间不加 to。</div>
+          <div class="eg">They carry the food home. 🍞 / They carry the food to the nest. 🏠 / I carry my bag to school. 🎒 / We carry the box to the room. 📦</div>
+          <div class="practice">练习：它们把食物搬回窝里 → They carry the food <input placeholder="to the nest">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一只用 a / an，很多只要加 -s</h3>
+          <div class="zh">说<b>一样东西</b>时，前面加 <b>a</b> 或 <b>an</b>（一个）：<b>an ant</b> 一只蚂蚁。<br>说<b>两个以上</b>时，词尾要加 <b>-s</b>：<b>ant → ants</b>。<br>因为蚂蚁以元音开头，所以用 <b>an ant</b>，不用 a ant。</div>
+          <div class="eg">an ant 🐜 ←→ two ants 🐜🐜 / a crumb 🍞 ←→ three crumbs / a hill ⛰️ ←→ many hills</div>
+        </div>
+        <div class="item">
+          <h3>2. is 和 are：单数用 is，复数用 are</h3>
+          <div class="zh"><b>一个人、一只动物</b>后面用 <b>is</b>；<b>两个以上</b>（we / you / they / ants）后面用 <b>are</b>。<br>记住搭配：<b>it is / she is</b>，<b>they are / we are</b>。</div>
+          <div class="eg">The ant is small. 🐜 / The crumb is big. 🍞 / They are very small. 🐜🐜 / Ants are very strong. 💪</div>
+        </div>
+        <div class="item">
+          <h3>3. Let us 和 Do not：叫别人做 / 不做一件事</h3>
+          <div class="zh">想说“<b>我们一起……吧</b>”，用 <b>Let us + 动词</b>（Let us 常写成 Let's）。<br>想说“<b>不要……</b>”，用 <b>Do not + 动词</b>（也常写成 Don't）。<br>这两种句子后面的动词都<b>用原形，不加 -s</b>。</div>
+          <div class="eg">Let us help them. 💛 / Let us go. 🚶 / Do not step on the line. 🚫 / Do not run. 🐢</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#ffedd5;border:2px solid #fdba74;">
+        <div style="font-size:20px;font-weight:800;color:#9a3412;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#7c2d12;margin-top:6px;">每做对一题得 1 分，全部做完就是最会观察的小小自然家啦！🐜✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🐜 “蚂蚁搬家”是什么意思？</h3>
+        <p>秋天一到，我们常在路边看到<b>一大群蚂蚁排着队匆匆忙忙地走</b>，这就是老话说的“<b>蚂蚁搬家</b>”。在中国民间，有一句流传很久的气象谚语：<b>“蚂蚁搬家蛇过道，大雨不久要来到。”</b> 意思是看到成群的蚂蚁往高处搬，很可能就要下雨了 🌧️。</p>
+        <p>为什么会这样呢？因为下雨前<b>空气变潮湿、气压下降</b>，住在泥土里的蚂蚁最先感觉到，就会往<b>地势高、不容易被水淹</b>的地方搬。不过科学家也说：蚂蚁搬家<b>不一定</b>都是因为要下雨，有时候是家里人太多、食物不够了，或者要分出一个新家。所以这句谚语是<b>大概率准，不是百分百准</b>，我们可以自己观察验证哦 🔍。</p>
+
+        <h3>💪 小小大力士</h3>
+        <ul>
+          <li>一只工蚁的体重只有大约 <b>25 到 60 毫克</b>，比一粒米还轻，却能举起<b>比自己重好几十倍</b>的东西。这就像小朋友能举起一辆小汽车 🚗。</li>
+          <li>一只搬不动时，几只蚂蚁会<b>一起上</b>：有的用牙咬住，有的在后面推，靠<b>团队合作</b>把大块食物运回家 🤝。</li>
+          <li>它们的“手”其实是<b>嘴上的两对大牙</b>（大颚），搬东西、挖土、保卫家都靠它。</li>
+        </ul>
+
+        <h3>🏠 一个蚂蚁窝就是一座小城市</h3>
+        <p>蚂蚁是<b>社会性昆虫</b>，一个窝里有明确的分工：蚁后负责生宝宝，工蚁负责挖洞、找食物、照顾小宝宝，兵蚁负责保卫大家。工蚁几乎都是<b>姐妹</b>，一生都在为这个家忙碌 🌾。</p>
+        <p>有意思的是，蚂蚁搬家时<b>并没有“指挥官”</b>。它们靠<b>触角互相碰一碰</b>、靠身体散发的<b>信息素</b>（一种闻得到的气味信号）传递消息：一只蚂蚁发现了食物或者感到危险，气味会一只传一只，很快整群蚂蚁就都知道该往哪儿走了 🔔。</p>
+
+        <h3>📜 中国故事里的蚂蚁</h3>
+        <ul>
+          <li>成语 <b>“千里之堤，溃于蚁穴”</b> 出自《韩非子》，意思是：很长很结实的堤坝，也可能因为一个小小的蚂蚁洞而垮掉，提醒我们<b>小问题要及时修补，不能大意</b> 🧱。</li>
+          <li>歇后语 <b>“蚂蚁搬家——要下雨”</b>、<b>“蚂蚁搬家——倾巢出动”</b>，说的就是今天我们看到的热闹场面。</li>
+          <li>还有 <b>“热锅上的蚂蚁”</b>，形容人急得团团转；<b>“蚍蜉撼树”</b> 比喻不自量力。小小的蚂蚁，在汉语里留下了很多生动的比喻 📖。</li>
+          <li>蚂蚁已经在地球上生活了<b>一亿多年</b>，比人类早太多太多，是和恐龙做过邻居的“老居民” 🦕。</li>
+        </ul>
+
+        <h3>🍂 秋天的蚂蚁在忙什么？</h3>
+        <p>现在正是<b>秋分过后</b>的九月下旬，天气一天天凉下来。蚂蚁们趁着还没冷透，<b>抓紧收集种子、昆虫和食物碎屑</b>存进窝里，准备过冬 🍁。所以这个时候，你在户外最容易看到它们排着长队赶路的样子。</p>
+        <p>你看，英文课文里说 <b>They carry food home.</b>，中国的老话里说“<b>蚂蚁搬家，有雨不差</b>”——说法不一样，讲的都是同一件事：<b>小小的身体，也能做成大大的事</b> 💛。</p>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>数一数</b> 🔢：找到一条蚂蚁路，数 10 秒钟里走过几只蚂蚁，明天再数一次，比一比。</li>
+          <li><b>面包渣实验</b> 🍪：放一小块饼干渣在蚂蚁路边，站在旁边安静观察，看它们怎么“叫来”同伴。</li>
+          <li><b>说说看</b> 🗣️：边看边说英文 <b>“Look at the little ants.”</b> “<b>They carry food home.</b>”，看谁说得最响亮。</li>
+          <li><b>画一画</b> 🎨：画一条弯弯的蚂蚁队伍，从饼干渣一直画到泥土里的小窝。</li>
+          <li><b>搬东西游戏</b> 💪：和爸爸妈妈比赛，用勺子端着小球从客厅走到厨房，体会“carry”有多不容易。</li>
+        </ul>
+
+        <p style="background:#fee2e2;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>户外的蚂蚁<b>千万不要用手去抓、去捏</b>，有些蚂蚁会咬人、还会喷出刺鼻的酸液，被咬了要马上告诉大人 🚫；<b>不要用脚踩蚂蚁队伍</b>，也不要用树枝去戳蚂蚁窝 🐜；观察时<b>蹲下慢慢看，不趴在地上</b>，看完了要<b>站起来拍拍手、回家把手洗干净</b> 🧼；如果看到<b>红色的小蚂蚁或鼓起来的土堆</b>，要离远一点，那是可能蜇人的蚂蚁 ⚠️。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读短文《The Busy Little Ants》，能说出蚂蚁“排队—搬食物—回窝—下雨前搬家”的故事。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：ant, food, carry, strong, nest, line。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “Look at the ...”、“... is very ...”、“They carry ... to ...” 说简单的话。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得单数加 a / an、复数加 -s，is / are 的选择，以及 Let us / Do not 的用法。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>愿意蹲下来观察小动物，并且记住：只许用眼睛看，不抓不踩 💛。</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读；读第四段时把“Do not”说得慢一点、清楚一点。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，把 6 个词做成小卡片，贴在书包上天天看。</div></div>
+        <div class="goal"><span class="ic">🐜</span><div>周末去公园找一条蚂蚁路，边看边说 <b>“They walk in a long line.”</b>（只许看，不许摸）。</div></div>
+        <div class="goal"><span class="ic">🎤</span><div>玩“我说你做”：大人说 <b>“Let us help them.”</b> 或 <b>“Do not step on the line.”</b>，小朋友做出对的表情和动作。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，贴在冰箱上，每天读一段打个卡 💛</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Busy Little Ants · 2026-09-26 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Look at the little ants. They are very small. They walk in a long line. They carry food home.", "An ant finds a crumb. The crumb is big. She lifts it up. Ants are very strong.", "The ants go up a hill. They carry the food to the nest. The nest is in the ground.", "Rain is coming. The ants move fast. They work all day. Let us help them. Do not step on the line."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What do the ants carry? 蚂蚁们在搬什么？",em:["🎈","🍞","🚗"],opts:["Balloons (气球)","Food (食物)","Cars (汽车)"],ans:1,
+   fb:"Yes! 它们搬的是食物，They carry food home 🍞。"},
+  {q:"Are ants strong? 蚂蚁的力气大吗？",em:["💪","😴","🎂"],opts:["Yes, they are very strong (是的，非常大)","No, they sleep all day (不，它们整天睡觉)","No, they are very big (不，它们非常大只)"],ans:0,
+   fb:"Right! 蚂蚁是小小大力士，Ants are very strong 💪。"},
+  {q:"Where is the nest? 蚂蚁的窝在哪里？",em:["☁️","🟤","🌙"],opts:["In the cloud (在云里)","In the ground (在地里)","On the moon (在月亮上)"],ans:1,
+   fb:"Great! 蚂蚁的窝在泥土下面，The nest is in the ground 🟤。"},
+  {q:"What should we do? 我们应该怎么做？",em:["👟","🥤","💛"],opts:["Step on the line (去踩队伍)","Catch the ants (去抓蚂蚁)","Help them and do not step (帮助它们，不去踩)"],ans:2,
+   fb:"Perfect! 我们当小卫士，Let us help them 💛。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>

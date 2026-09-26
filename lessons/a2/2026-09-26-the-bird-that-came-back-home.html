@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Bird That Came Back Home — Interactive Lesson (A2)</title>
+<style>
+:root{
+  --accent:#be123c;
+  --accent2:#0d9488;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --highlight:#fecdd3;
+  --border:#e2e8f0;
+  --soft:#f1f5f9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:230px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:8px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(190,18,60,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:220px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+.seg p{margin:4px 0 0;font-size:16px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(190,18,60,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(190,18,60,.55);}70%{box-shadow:0 0 0 12px rgba(190,18,60,0);}100%{box-shadow:0 0 0 0 rgba(190,18,60,0);}}
+.seg .zh{flex-basis:100%;margin-left:52px;color:var(--muted);font-size:14px;padding-left:10px;border-left:3px solid var(--border);}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fda4af;}
+#tip{position:fixed;z-index:1200;background:#1e293b;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:260px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.trans-toggle{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak{position:absolute;top:12px;right:12px;background:var(--soft);border:1px solid var(--border);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.speak:hover{background:var(--highlight);}
+.pattern{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--accent2);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pattern .en{font-weight:700;font-size:16.5px;color:var(--text);}
+.pattern .zh{color:#374151;font-size:14px;margin:4px 0 8px;}
+.pattern .note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:8px 10px;}
+.gram{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.gram h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.gram ul{margin:0;padding-left:20px;}
+.gram li{margin-bottom:6px;font-size:14.5px;}
+.gram .eg{color:#4b5563;font-style:italic;font-size:13.5px;}
+.bad{color:#b91c1c;}
+.good{color:#15803d;font-weight:600;}
+.quiz{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.quiz .q{font-weight:700;font-size:16px;margin-bottom:6px;}
+.quiz .qzh{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.opt{display:block;width:100%;text-align:left;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:14.5px;transition:.15s;color:var(--text);}
+.opt:hover{background:var(--highlight);}
+.opt.correct{background:#dcfce7;border-color:#86efac;color:#15803d;font-weight:700;}
+.opt.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c;}
+.fb{margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px;}
+.fb.show{display:block;}
+.fb.ok{background:#dcfce7;color:#15803d;}
+.fb.no{background:#fee2e2;color:#b91c1c;}
+.score{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:16px;padding:18px;text-align:center;font-size:18px;font-weight:800;margin-top:8px;display:none;}
+.score.show{display:block;}
+.know{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.know h3{margin:0 0 10px;font-size:17px;color:var(--accent);}
+.know p{font-size:14.5px;color:#374151;margin:0 0 10px;}
+.know ul{padding-left:20px;font-size:14.5px;color:#374151;}
+.know li{margin-bottom:7px;}
+.tipbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:16px;padding:18px;margin-bottom:14px;}
+.tipbox h3{margin:0 0 10px;font-size:17px;color:#b45309;}
+.tipbox ul{margin:0;padding-left:20px;font-size:14.5px;color:#78350f;}
+.tipbox li{margin-bottom:6px;}
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--soft);margin-bottom:10px;}
+.goal .tick{color:var(--accent);font-weight:800;font-size:18px;}
+.goal .txt{font-size:14.5px;color:#374151;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(190,18,60,.3);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:26px 16px 40px;}
+@media(max-width:820px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:-260px;top:60px;z-index:950;transition:left .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.12);}
+  nav.sidebar.open{left:0;}
+  main{padding:20px 16px;}
+  .seg .zh{margin-left:0;flex-basis:100%;}
+}
+@media print{
+  nav.sidebar,.play-btn,.speak,.menu-btn,.trans-toggle,#progress,.print-btn{display:none!important;}
+  section{display:block!important;page-break-inside:avoid;}
+  body{background:#fff;}
+  .card{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">Pola News A2
+    <small>THE BIRD THAT CAME BACK HOME · 2026-09-26</small>
+  </div>
+</header>
+<div class="wrap">
+<nav class="sidebar" id="sidebar">
+  <a href="#read" class="active"><span class="ic">📖</span>全文阅读</a>
+  <a href="#vocab"><span class="ic">🔤</span>词汇表</a>
+  <a href="#pattern"><span class="ic">💬</span>句型练习</a>
+  <a href="#grammar"><span class="ic">📐</span>语法点</a>
+  <a href="#quiz"><span class="ic">✏️</span>练习测验</a>
+  <a href="#know"><span class="ic">🌏</span>中文知识扩展</a>
+  <a href="#about"><span class="ic">💡</span>关于本课</a>
+</nav>
+
+<main>
+<!-- ============ 1. 全文阅读 ============ -->
+<section id="read" class="active">
+  <h1 class="title">🕊️ The Bird That Came Back Home</h1>
+  <div class="subtitle">归来的东方宝石 · CEFR A2 · 约 155 词 · 🌱 环境保护</div>
+
+  <button class="trans-toggle" id="transToggle">🇨🇳 隐藏中文翻译</button>
+
+  <div class="card">
+    <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted);">👉 点粉色高亮词，可以看它的中文意思；点 ▶ 听这一段朗读。</p>
+
+    <div class="seg">
+      <div class="num">1</div>
+      <div class="body">
+        <div class="role">Only seven birds · 只剩七只</div>
+        <p>In 1981, scientists in China found only seven <span class="kw" data-word="wild">wild</span> crested ibises. These birds have white feathers and red faces. People call them the 'Oriental <span class="kw" data-word="gem">gem</span>'. They were almost gone from the world.</p>
+      </div>
+      <button class="play-btn" data-idx="0">▶</button>
+      <div class="zh">1981 年，中国科学家只找到了 7 只野生朱鹮。这种鸟羽毛雪白，脸是红色的。人们叫它“东方宝石”。当时它们差一点就要从地球上消失了。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">2</div>
+      <div class="body">
+        <div class="role">Forty-five years of care · 四十五年的守护</div>
+        <p>For forty-five years, people <span class="kw" data-word="protect">protected</span> them <span class="kw" data-word="carefully">carefully</span>. Today their <span class="kw" data-word="population">population</span> is more than ten thousand. In 2023, twenty birds travelled to Xiaolongshan in Gansu. Workers built a base there and <span class="kw" data-word="feed">fed</span> the birds every day.</p>
+      </div>
+      <button class="play-btn" data-idx="1">▶</button>
+      <div class="zh">四十五年来，人们一直细心地保护它们。如今朱鹮的种群数量已经超过一万只。2023 年，20 只朱鹮来到了甘肃小陇山。工作人员在那里建了基地，每天喂养这些鸟。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">3</div>
+      <div class="body">
+        <div class="role">The gate opens · 笼门打开</div>
+        <p>On 20 September 2026, workers opened the gate of a big cage. Twenty birds flew into the forest. No one pushed them, because the birds could choose their own time. This place is more than 1,500 metres <span class="kw" data-word="above">above</span> sea level. It is the highest <span class="kw" data-word="release">release</span> place in China.</p>
+      </div>
+      <button class="play-btn" data-idx="2">▶</button>
+      <div class="zh">2026 年 9 月 20 日，工作人员打开了一个大笼子的门。20 只朱鹮飞进了森林。没有人赶它们，因为它们可以自己选择飞出去的时间。这个地方海拔超过 1500 米，是中国放归朱鹮海拔最高的一次。</div>
+    </div>
+
+    <div class="seg">
+      <div class="num">4</div>
+      <div class="body">
+        <div class="role">Watching and waiting · 守望</div>
+        <p>Now the birds must find their own food. Workers still help them. They left six feeding places outside. Rangers use satellites, leg rings and cameras to watch the birds. Slowly, the 'Oriental gem' is coming back to its old home.</p>
+      </div>
+      <button class="play-btn" data-idx="3">▶</button>
+      <div class="zh">现在这些鸟必须自己找食物了。工作人员仍然在帮助它们，在笼子外面设了 6 个投食点。巡护员用卫星、脚环和相机观察它们。慢慢地，“东方宝石”正在回到它从前的家。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. 词汇表 ============ -->
+<section id="vocab">
+  <h2 class="sec">🔤 词汇表 · Key Words（8 个）</h2>
+  <div class="card">
+    <div class="vocab-grid">
+      <div class="vocab">
+        <button class="speak" data-word="wild">🔊</button>
+        <div class="word">wild<span class="pos">adj.</span></div>
+        <div class="zh">野生的；在自然环境里生活的</div>
+        <div class="ex">They found only seven wild crested ibises.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="gem">🔊</button>
+        <div class="word">gem<span class="pos">n.</span></div>
+        <div class="zh">宝石；非常珍贵的东西</div>
+        <div class="ex">People call the bird the 'Oriental gem'.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="protect">🔊</button>
+        <div class="word">protect<span class="pos">v.</span></div>
+        <div class="zh">保护；使……不受伤害</div>
+        <div class="ex">People protected the birds for forty-five years.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="carefully">🔊</button>
+        <div class="word">carefully<span class="pos">adv.</span></div>
+        <div class="zh">仔细地；小心地（形容词 careful + ly）</div>
+        <div class="ex">Workers fed the birds carefully every day.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="population">🔊</button>
+        <div class="word">population<span class="pos">n.</span></div>
+        <div class="zh">种群数量；也可以指人口</div>
+        <div class="ex">Their population is more than ten thousand.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="feed">🔊</button>
+        <div class="word">feed<span class="pos">v.</span></div>
+        <div class="zh">喂养（过去式是 fed，不是 feeded）</div>
+        <div class="ex">Workers fed the birds six times a day.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="above">🔊</button>
+        <div class="word">above<span class="pos">prep.</span></div>
+        <div class="zh">在……上方；高于（above sea level 海拔）</div>
+        <div class="ex">The forest is 1,500 metres above sea level.</div>
+      </div>
+      <div class="vocab">
+        <button class="speak" data-word="release">🔊</button>
+        <div class="word">release<span class="pos">n. / v.</span></div>
+        <div class="zh">放归；放飞（把动物送回大自然）</div>
+        <div class="ex">This is the highest release place in China.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 句型练习 ============ -->
+<section id="pattern">
+  <h2 class="sec">💬 句型练习 · Useful Patterns（4 个）</h2>
+  <div class="card">
+
+    <div class="pattern">
+      <div class="en">In 1981, scientists found only seven wild crested ibises.</div>
+      <div class="zh">1981 年，科学家只找到了 7 只野生朱鹮。</div>
+      <div class="note">📌 时间 + 主语 + 动词过去式 + 宾语。讲故事时，把时间放在句首最清楚。</div>
+    </div>
+
+    <div class="pattern">
+      <div class="en">There were only seven wild crested ibises in the world.</div>
+      <div class="zh">全世界只剩下 7 只野生朱鹮。</div>
+      <div class="note">📌 There was / There were 表示“某地有某物”。后面是单数用 was，复数用 were。</div>
+    </div>
+
+    <div class="pattern">
+      <div class="en">This place is more than 1,500 metres above sea level.</div>
+      <div class="zh">这个地方海拔超过 1500 米。</div>
+      <div class="note">📌 主语 + be + more than + 数字 + 单位。more than 就是“多于、超过”。</div>
+    </div>
+
+    <div class="pattern">
+      <div class="en">The birds must find their own food.</div>
+      <div class="zh">这些鸟必须自己找食物。</div>
+      <div class="note">📌 must / can / could 后面永远跟动词原形，不能加 to，也不能加 s。</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 4. 语法点 ============ -->
+<section id="grammar">
+  <h2 class="sec">📐 语法点 · Grammar（4 个）</h2>
+
+  <div class="gram">
+    <h3>1. 一般过去时：规则动词和不规则动词</h3>
+    <ul>
+      <li>规则动词直接加 -ed：<span class="eg">protect → protected，open → opened，travel → travelled</span></li>
+      <li>不规则动词要单独背：<span class="eg">find → found，build → built，fly → flew，leave → left，feed → fed</span></li>
+      <li><span class="good">✔ In 2023, twenty birds travelled to Gansu.</span></li>
+      <li><span class="bad">✘ In 2023, twenty birds travel to Gansu.</span>（时间已过去，动词要变过去式）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>2. There was / There were：说“有多少”</h3>
+    <ul>
+      <li>单数或不可数用 <b>There was</b>：<span class="eg">There was only one bird.</span></li>
+      <li>复数用 <b>There were</b>：<span class="eg">There were seven wild crested ibises.</span></li>
+      <li>否定句：<span class="eg">There were not many birds in 1981.</span></li>
+      <li><span class="bad">✘ There were only seven bird.</span>（seven 后面名词要用复数）</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>3. more than + 数字；形容词最高级 the highest</h3>
+    <ul>
+      <li>more than = 超过：<span class="eg">more than ten thousand，more than 1,500 metres</span></li>
+      <li>三者以上比较用最高级：<span class="eg">high → higher → the highest</span></li>
+      <li><span class="good">✔ It is the highest release place in China.</span></li>
+      <li>最高级前面一般要加 <b>the</b>。</li>
+    </ul>
+  </div>
+
+  <div class="gram">
+    <h3>4. 情态动词 must / can / could</h3>
+    <ul>
+      <li><b>must</b> 必须：<span class="eg">The birds must find their own food.</span></li>
+      <li><b>can</b> 能够（现在）：<span class="eg">Rangers can watch them with cameras.</span></li>
+      <li><b>could</b> 能够（过去）：<span class="eg">The birds could choose their own time.</span></li>
+      <li><span class="bad">✘ The birds must to find food.</span>（情态动词后不加 to）</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ============ 5. 练习测验 ============ -->
+<section id="quiz">
+  <h2 class="sec">✏️ 练习测验 · Quiz（5 题）</h2>
+  <div class="card">
+    <p style="margin:0 0 16px;font-size:13.5px;color:var(--muted);">👉 每道题只能选一次，选完就会显示对错。全部答完可以看到总分。</p>
+
+    <div class="quiz" data-ans="2">
+      <div class="q">1. How many wild crested ibises did scientists find in 1981?</div>
+      <div class="qzh">1981 年科学家找到了几只野生朱鹮？</div>
+      <button class="opt">A) Seventeen</button>
+      <button class="opt">B) Seventy</button>
+      <button class="opt">C) Seven</button>
+      <button class="opt">D) Seven hundred</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" data-ans="0">
+      <div class="q">2. What do people call the crested ibis?</div>
+      <div class="qzh">人们把朱鹮叫作什么？</div>
+      <button class="opt">A) The Oriental gem</button>
+      <button class="opt">B) The forest king</button>
+      <button class="opt">C) The red fish</button>
+      <button class="opt">D) The sky diamond</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" data-ans="1">
+      <div class="q">3. When did twenty birds fly into the forest in Gansu?</div>
+      <div class="qzh">二十只朱鹮是什么时候飞进甘肃的森林的？</div>
+      <button class="opt">A) On 20 September 2025</button>
+      <button class="opt">B) On 20 September 2026</button>
+      <button class="opt">C) On 2 September 2026</button>
+      <button class="opt">D) In the winter of 2023</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" data-ans="1">
+      <div class="q">4. How high is the release place in Xiaolongshan?</div>
+      <div class="qzh">小陇山的放归地点海拔有多高？</div>
+      <button class="opt">A) More than 150 metres above sea level</button>
+      <button class="opt">B) More than 1,500 metres above sea level</button>
+      <button class="opt">C) More than 15,000 metres above sea level</button>
+      <button class="opt">D) More than 5,000 metres above sea level</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" data-ans="3">
+      <div class="q">5. Why did no one push the birds out of the cage?</div>
+      <div class="qzh">为什么没有人把鸟赶出笼子？</div>
+      <button class="opt">A) Because the cage was too small</button>
+      <button class="opt">B) Because the birds were asleep</button>
+      <button class="opt">C) Because the workers were not there</button>
+      <button class="opt">D) Because the birds could choose their own time</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="score" id="score"></div>
+  </div>
+</section>
+
+<!-- ============ 6. 中文知识扩展 ============ -->
+<section id="know">
+  <h2 class="sec">🌏 中文知识扩展 · 你知道吗？</h2>
+
+  <div class="know">
+    <h3>🕊️ 朱鹮是谁？</h3>
+    <p>朱鹮是一种大中型涉禽，羽毛白中透粉，脸和腿是红色的，飞起来时翅膀下面会露出淡淡的粉红色，非常漂亮，所以被称为“东方宝石”。它是中国国家一级保护野生动物，也是生态环境的“指示物种”——哪里环境好，朱鹮才愿意在哪里安家。</p>
+  </div>
+
+  <div class="know">
+    <h3>📉 从 7 只到一万多只</h3>
+    <ul>
+      <li><b>1981 年</b>：中国科学家在陕西省汉中市洋县，发现了当时全世界仅存的 <b>7 只</b>野生朱鹮。</li>
+      <li><b>45 年后</b>：经过一代代人的抢救性保护，全球朱鹮种群总量已经<b>超过一万只</b>（据央广网报道，截至 2025 年底已超 1.2 万只）。</li>
+      <li>目前中国已在 <b>15 个省份</b>建立了朱鹮人工种群和野外种群，还设立了朱鹮国家保护研究中心。</li>
+      <li>《全国朱鹮保护行动方案（2022—2035 年）》提出，要在不同地理区重建自然种群，让朱鹮回到从前生活过的地方。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🏔️ 甘肃这次为什么特别？</h3>
+    <p>2026 年 9 月 20 日，20 只经过野化训练的朱鹮在甘肃省天水市小陇山放归自然。这是中国朱鹮野化放归<b>海拔最高</b>的一次（超过 1500 米），也是地理位置最靠西的一次尝试。</p>
+    <p>小陇山是朱鹮的历史分布地，它们曾经在这里生活，后来一度消失。2023 年甘肃启动朱鹮再引入项目，从陕西引入 10 对共 20 只朱鹮，在小陇山龙门林场建设繁育基地，已成功繁育出 30 只“甘肃籍”幼鸟，基地种群规模达到 50 只。</p>
+  </div>
+
+  <div class="know">
+    <h3>🚪 放归不是“一开了之”</h3>
+    <ul>
+      <li>放归前，朱鹮在离繁育基地约 7 公里的适应笼里生活了 <b>20 多天</b>，慢慢熟悉风和雨、人和车的声音。</li>
+      <li>工作人员只是<b>把笼门打开</b>，不抓、不赶、不催促。因为如果一下子把它们轰出去，鸟会受惊四散，反而不容易形成稳定的种群。</li>
+      <li>笼内食物逐步减少，笼外设置了 <b>6 处固定投食点</b>和 <b>10 多个临时投食点</b>，引导它们学会自己找吃的。</li>
+      <li>这 20 只按照成体、亚成体、幼体“3 : 3 : 4”的比例挑选，年龄“老中青”都有——大鸟可以带着小鸟找食物。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🛰️ 放归之后怎么盯着？</h3>
+    <p>林草部门会用<b>卫星追踪、环志识别、红外相机和地面巡护</b>四种办法，持续记录朱鹮的活动范围、觅食和繁殖情况，为它们建立完整的种群档案，及时发现疫病和人为干扰等风险。</p>
+    <p>选择 9 月放归也是有讲究的：这时气温比较温和，食物充足，极端天气少，朱鹮更容易适应野外生活。</p>
+  </div>
+
+  <div class="know">
+    <h3>🤝 朱鹮也是“友谊使者”</h3>
+    <ul>
+      <li>朱鹮曾经广泛生活在中国、日本、朝鲜半岛和俄罗斯远东地区，后来在日韩两国先后野外灭绝。</li>
+      <li><b>1999 年</b>，中国把朱鹮“友友”和“洋洋”赠送给日本新潟县佐渡市（“友友”寓意中日友好，“洋洋”来自陕西洋县），如今日本朱鹮已恢复到数百只。</li>
+      <li><b>2008 年</b>，中国又向韩国赠送朱鹮，韩国朱鹮也已从最初的一对繁育到数百只，并成功实现野外繁殖。</li>
+      <li>中国陕西省汉中市、日本佐渡市、韩国昌宁郡三地，从 2012 年起定期召开朱鹮保护国际会议，一起分享经验。</li>
+    </ul>
+  </div>
+
+  <div class="know">
+    <h3>🐼 还有谁在回来？</h3>
+    <p>朱鹮不是唯一“回来”的动物。近年来，中国的大熊猫、藏羚羊、普氏原羚（2026 年 9 月青海人工救护繁育种群首次突破 100 只）、长江江豚（2026 年 1 月普查 1426 头）等物种的数量都在回升。这些数字背后，是很多人几十年如一日的守护。</p>
+  </div>
+
+  <div class="tipbox">
+    <h3>🌱 你能做什么？</h3>
+    <ul>
+      <li><b>远远地看</b>：在野外看到朱鹮或其他野生鸟类，不要靠近、不要大声喊、不要扔东西。用望远镜或手机长焦看就好。</li>
+      <li><b>不要随便喂</b>：人类的零食对鸟可能是毒药。投食点只有专业人员才能设置。</li>
+      <li><b>爱护湿地和稻田</b>：朱鹮喜欢在浅水湿地和稻田里找泥鳅、小鱼。少用农药的地方，鸟才愿意来。</li>
+      <li><b>做记录</b>：跟爸爸妈妈一起，把见到的鸟的名字、时间、地点记在本子上，你也能当一名小小公民科学家。</li>
+      <li><b>注意安全</b>：观察野生动物一定要有大人陪同，不要为了看得更近而靠近水边、悬崖或深沟。</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ============ 7. 关于本课 ============ -->
+<section id="about">
+  <h2 class="sec">💡 关于本课 · About This Lesson</h2>
+
+  <div class="know">
+    <h3>🎯 学习目标</h3>
+    <div class="goal"><span class="tick">✓</span><span class="txt">读懂一篇约 155 词的英文短文，了解朱鹮从 7 只到一万多只的真实故事。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">掌握 8 个核心词汇：wild, gem, protect, carefully, population, feed, above, release。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">会用 There was / There were、more than + 数字、must / can / could 造句。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">能分辨规则动词与不规则动词的过去式。</span></div>
+    <div class="goal"><span class="tick">✓</span><span class="txt">懂得保护野生动物不是一件遥远的事，每个人都能出一份力。</span></div>
+  </div>
+
+  <div class="know">
+    <h3>📖 学习建议</h3>
+    <ul>
+      <li><b>第一步</b>：先不看中文，听一遍四段朗读，看看能抓住几个词。</li>
+      <li><b>第二步</b>：打开中文翻译，一句一句对照，把生词圈出来。</li>
+      <li><b>第三步</b>：关掉中文，再听一遍，这次试着跟读（shadowing）。</li>
+      <li><b>第四步</b>：挑两个句型，换成你自己的内容造句，比如写你家乡的一种鸟。</li>
+      <li><b>第五步</b>：做测验，错的题回到原文里找出正确答案在哪一句。</li>
+    </ul>
+  </div>
+
+  <div class="tipbox">
+    <h3>🗣️ 一句话复述挑战</h3>
+    <ul>
+      <li>试着用三句英文把故事讲给爸爸妈妈听：</li>
+      <li>① In 1981, there were only seven wild crested ibises.</li>
+      <li>② On 20 September 2026, twenty birds flew into a forest in Gansu.</li>
+      <li>③ Now rangers watch them with satellites and cameras.</li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align:center;">
+    <button class="print-btn" id="printBtn">🖨️ 打印 / 保存为 PDF</button>
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>Pola News · A2 初级英语 · 2026-09-26 · 🌱 环境保护<br>资料参考：新华社、国家林业和草原局、中央广播电视总台、CGTN 等公开报道（2026 年 9 月）</footer>
+
+<div id="tip"></div>
+<script>
+/* ---------- 段落文本（与正文完全一致，由脚本自动生成） ---------- */
+var segmentTexts = [
+"In 1981, scientists in China found only seven wild crested ibises. These birds have white feathers and red faces. People call them the 'Oriental gem'. They were almost gone from the world.",
+"For forty-five years, people protected them carefully. Today their population is more than ten thousand. In 2023, twenty birds travelled to Xiaolongshan in Gansu. Workers built a base there and fed the birds every day.",
+"On 20 September 2026, workers opened the gate of a big cage. Twenty birds flew into the forest. No one pushed them, because the birds could choose their own time. This place is more than 1,500 metres above sea level. It is the highest release place in China.",
+"Now the birds must find their own food. Workers still help them. They left six feeding places outside. Rangers use satellites, leg rings and cameras to watch the birds. Slowly, the 'Oriental gem' is coming back to its old home."
+];
+
+/* ---------- 语音 ---------- */
+var currentBtn = null;
+
+function stopSpeech(){
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  resetBtn();
+}
+
+function resetBtn(){
+  if(currentBtn){
+    currentBtn.classList.remove('playing');
+    currentBtn.textContent = '\u25B6';
+    currentBtn = null;
+  }
+}
+
+function speakText(text, btn){
+  if(currentBtn === btn){ stopSpeech(); return; }
+  resetBtn();
+  stopSpeech();
+  if(!('speechSynthesis' in window)) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  u.pitch = 1.05;
+  if(btn){
+    btn.classList.add('playing');
+    btn.textContent = '\u23F8';
+    currentBtn = btn;
+  }
+  u.onend = function(){ resetBtn(); };
+  u.onerror = function(){ resetBtn(); };
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- 段落朗读按钮 ---------- */
+var playBtns = document.querySelectorAll('.play-btn');
+for(var i = 0; i < playBtns.length; i++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      speakText(segmentTexts[idx], btn);
+    });
+  })(playBtns[i]);
+}
+
+/* ---------- 词汇发音 ---------- */
+var speakBtns = document.querySelectorAll('.speak');
+for(var s = 0; s < speakBtns.length; s++){
+  (function(btn){
+    btn.addEventListener('click', function(){
+      var w = btn.getAttribute('data-word');
+      stopSpeech();
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance(w);
+      u.lang = 'en-US';
+      u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    });
+  })(speakBtns[s]);
+}
+
+/* ---------- 生词点击释义 ---------- */
+var KW = {
+  'wild': '野生的 adj.',
+  'gem': '宝石 n.',
+  'protect': '保护 v.',
+  'carefully': '仔细地；小心地 adv.',
+  'population': '种群数量 n.',
+  'feed': '喂养 v.（过去式 fed）',
+  'above': '在……上方 prep.',
+  'release': '放归；释放 n./v.'
+};
+var tip = document.getElementById('tip');
+function showTip(el, html){
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var r = el.getBoundingClientRect();
+  var top = r.bottom + 8;
+  var left = Math.min(r.left, window.innerWidth - 280);
+  if(left < 8) left = 8;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+}
+
+var kws = document.querySelectorAll('.kw');
+for(var k = 0; k < kws.length; k++){
+  (function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = el.getAttribute('data-word');
+      showTip(el, '<b>' + w + '</b><br>' + (KW[w] || '点击查词'));
+    });
+    el.addEventListener('mouseleave', function(){ tip.style.display = 'none'; });
+  })(kws[k]);
+}
+document.addEventListener('click', function(){ tip.style.display = 'none'; });
+window.addEventListener('scroll', function(){ tip.style.display = 'none'; });
+
+/* ---------- 中文翻译开关 ---------- */
+var transOn = true;
+var transBtn = document.getElementById('transToggle');
+transBtn.addEventListener('click', function(){
+  transOn = !transOn;
+  var zs = document.querySelectorAll('.seg .zh');
+  for(var z = 0; z < zs.length; z++){
+    zs[z].style.display = transOn ? 'block' : 'none';
+  }
+  transBtn.textContent = transOn ? '\uD83C\uDDE8\uD83C\uDDF3 隐藏中文翻译' : '\uD83C\uDDE8\uD83C\uDDF3 显示中文翻译';
+});
+
+/* ---------- 侧边导航 ---------- */
+var links = document.querySelectorAll('nav.sidebar a');
+var secs = document.querySelectorAll('main section');
+function goTo(hash){
+  var id = (hash || '').replace('#','');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.remove('active');
+  var target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  for(var j = 0; j < links.length; j++) links[j].classList.remove('active');
+  var link = document.querySelector('nav.sidebar a[href="' + hash + '"]');
+  if(link) link.classList.add('active');
+  stopSpeech();
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
+}
+for(var l = 0; l < links.length; l++){
+  (function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var hash = link.getAttribute('href');
+      goTo(hash);
+      if(history.replaceState) history.replaceState(null, '', hash);
+    });
+  })(links[l]);
+}
+window.addEventListener('hashchange', function(){
+  if(location.hash) goTo(location.hash);
+});
+if(location.hash) goTo(location.hash);
+
+/* ---------- 移动端菜单 ---------- */
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ---------- 阅读进度条 ---------- */
+window.addEventListener('scroll', function(){
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('progress').style.width = (pct || 0) + '%';
+});
+
+/* ---------- 打印 ---------- */
+var printBtn = document.getElementById('printBtn');
+if(printBtn) printBtn.addEventListener('click', function(){ window.print(); });
+
+/* ---------- 测验 ---------- */
+var answered = 0, correct = 0;
+var quizzes = document.querySelectorAll('.quiz');
+for(var q = 0; q < quizzes.length; q++){
+  (function(box){
+    var ans = parseInt(box.getAttribute('data-ans'), 10);
+    var opts = box.querySelectorAll('.opt');
+    var fb = box.querySelector('.fb');
+    for(var o = 0; o < opts.length; o++){
+      (function(btn, idx){
+        btn.addEventListener('click', function(){
+          if(box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          answered++;
+          if(idx === ans){
+            btn.classList.add('correct');
+            correct++;
+            fb.className = 'fb show ok';
+            fb.textContent = '\u2705 答对啦！Correct!';
+          } else {
+            btn.classList.add('wrong');
+            opts[ans].classList.add('correct');
+            fb.className = 'fb show no';
+            fb.textContent = '\u274C 再看看正确答案，记住它哦！';
+          }
+          if(answered === quizzes.length){
+            var sc = document.getElementById('score');
+            if(sc){
+              sc.classList.add('show');
+              sc.textContent = '\uD83C\uDF89 你的得分：' + correct + ' / ' + quizzes.length +
+                (correct === quizzes.length ? '　满分！太棒了！' : '　继续加油！');
+            }
+          }
+        });
+      })(opts[o], o);
+    }
+  })(quizzes[q]);
+}
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
