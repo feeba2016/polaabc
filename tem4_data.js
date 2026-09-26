@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1/F1/F2/F3/G1 已上线（16 主题 / 80 Part / 480 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C4/F1/F2/F3/G1 已上线（19 主题 / 95 Part / 570 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1187,7 +1187,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"C4", cat:"C", zh:"日常作息",   name:"Daily Routine",     status:"soon", words:70,  desc:"起床、通勤、睡前"},
+  {
+    id:"C4", cat:"C", zh:"日常作息", name:"Daily Routine", status:"live",
+    date:"2026-09-26", words:30, desc:"作息的一天：黎明即起、洗漱梳妆、挤车通勤、午间小憩、灯火晚安",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"C4-P1", slug:"tem4-C4-P1", title:"黎明即起", shape:"拱门",
+        poster:"assets/tem4/posters/C4_P1.png",
+        sentence:"At dawn the little alarm clock awakens the whole dormitory: Xiaoye yawns and stretches her arms, still half dreaming, her roommate arises without delay, and a busy but exciting school day awaits them all.",
+        sentenceCn:"黎明时分，小闹钟唤醒了整间宿舍：小叶学姐打着哈欠伸了个懒腰，还半在梦中；室友毫不迟疑地起身，忙碌又精彩的校园一天正等着她们。",
+        scene:"粉彩清晨宿舍，晨光透过窗帘，小叶学姐坐在床上打哈欠伸懒腰，小闹钟在床头柜上响铃，兔子室友正在拉开窗帘。",
+        words:[
+          {word:"dawn",    ipa:"/dɔːn/",     pos:"n.",  zh:"黎明，拂晓；开端 v. 破晓；开始；展现", forms:["dawn"]},
+          {word:"awaken",  ipa:"/əˈweɪkən/", pos:"v.",  zh:"叫醒，闹醒；醒来，觉醒", forms:["awakens"]},
+          {word:"yawn",    ipa:"/jɔːn/",     pos:"v.",  zh:"打哈欠，欠身；裂开，豁开 n. 呵欠；裂口，豁口", forms:["yawns"]},
+          {word:"stretch", ipa:"/stretʃ/",   pos:"v.",  zh:"伸展，张开，拉紧；伸展（四肢），直躺；滥用，曲解 n. 伸展，张开，拉紧；（陆地或水域的）一大片；连续的一段时间", forms:["stretches"]},
+          {word:"arise",   ipa:"/əˈraɪz/",   pos:"vi.", zh:"兴起，发生，出现；站起来，起立，起身", forms:["arises"]},
+          {word:"await",   ipa:"/əˈweɪt/",   pos:"v.",  zh:"等待", forms:["awaits"]}
+        ]
+      },
+      {
+        id:"C4-P2", slug:"tem4-C4-P2", title:"洗漱梳妆", shape:"叶形",
+        poster:"assets/tem4/posters/C4_P2.png",
+        sentence:"Like every morning, Xiaoye goes through her habitual wash-up: accustomed to humming while she brushes her teeth, she splashes cold water on her face, grimaces at her tangled hair in the mirror, gives it a brisk comb, and grumbles only a little when her favourite ribbon cannot be found.",
+        sentenceCn:"和每个早晨一样，小叶学姐按惯例洗漱：她习惯边刷牙边哼歌，掬起冷水泼在脸上，对着镜子里乱糟糟的头发扮了个鬼脸，飞快地梳了几下，只在找不到心爱的发带时小声抱怨了一句。",
+        scene:"粉彩洗漱间，小叶学姐对着圆镜扮鬼脸、飞快梳头，双手掬起水花洗脸，台面上摆着牙刷杯和泡泡，小熊伙伴在身后叠被子。",
+        words:[
+          {word:"habitual", ipa:"/həˈbɪtjuəl/", pos:"adj.", zh:"通常的，惯常的；习惯性的，已养成习惯的", forms:["habitual"]},
+          {word:"accustom", ipa:"/əˈkʌstəm/",   pos:"vt.",  zh:"使习惯", forms:["accustomed"]},
+          {word:"splash",   ipa:"/splæʃ/",      pos:"v.",   zh:"溅，泼；（指液体）飞溅 n. 飞溅（声）；溅污的斑点；有颜色的斑点", forms:["splashes"]},
+          {word:"grimace",  ipa:"/ɡrɪˈmeɪs/",   pos:"vi.",  zh:"扭曲脸部（以表示痛苦等）；扮鬼脸", forms:["grimaces"]},
+          {word:"brisk",    ipa:"/brɪsk/",      pos:"adj.", zh:"活跃的，轻快的；（空气等）清新的，令人爽快的；兴旺的，生气勃勃的 v. 使活泼，兴旺；活泼起来，兴旺起来", forms:["brisk"]},
+          {word:"grumble",  ipa:"/ˈɡrʌmbl/",    pos:"v.",   zh:"发牢骚 n. 不平，怨言", forms:["grumbles"]}
+        ]
+      },
+      {
+        id:"C4-P3", slug:"tem4-C4-P3", title:"挤车通勤", shape:"椭圆",
+        poster:"assets/tem4/posters/C4_P3.png",
+        sentence:"The morning rush never waits: crowds swarm into the bus station, passengers scramble for the few empty seats, the monotonous rattle of the wheels fills the whole trip, stops come only at long intervals, and even a tiny hitch on the road makes everyone anxious about being late.",
+        sentenceCn:"早高峰从不等人：人群涌进公交站，乘客们争抢仅剩的几个空座，车轮单调的哐当声响了一路，停靠站间隔很久才来一趟，路上哪怕一点小意外都会让所有人担心迟到。",
+        scene:"粉彩清晨公交站，动物乘客们涌向双层巴士，小叶学姐挤在人群中抓紧扶手背着书包，远处红灯前车队排成长龙。",
+        words:[
+          {word:"rush",       ipa:"/rʌʃ/",        pos:"n.",   zh:"冲，突进；匆忙，急忙；急需；高峰期，热潮 v. 冲，奔，使急行；仓促处理，匆忙地做；突发，突现", forms:["rush"]},
+          {word:"swarm",      ipa:"/swɔːm/",      pos:"n.",   zh:"（昆虫等的）群，人群 v. 拥挤，蜂拥而行", forms:["swarm"]},
+          {word:"scramble",   ipa:"/ˈskræmbl/",   pos:"v.",   zh:"爬行，攀爬；杂乱蔓延；抢夺 n. 攀缘，爬行；抢夺", forms:["scramble"]},
+          {word:"hitch",      ipa:"/hɪtʃ/",       pos:"n.",   zh:"意外障碍，暂时的困难；结，绳套；急拉（推）v. 钩住，系住；搭便车", forms:["hitch"]},
+          {word:"monotonous", ipa:"/məˈnɒtənəs/", pos:"adj.", zh:"单调的，无变化的，令人厌倦的", forms:["monotonous"]},
+          {word:"interval",   ipa:"/ˈɪntəvəl/",   pos:"n.",   zh:"间隔，空隙，间歇；幕间休息", forms:["intervals"]}
+        ]
+      },
+      {
+        id:"C4-P4", slug:"tem4-C4-P4", title:"午间小憩", shape:"超圆角",
+        poster:"assets/tem4/posters/C4_P4.png",
+        sentence:"When the lunchtime recess arrives, the quiet reading lounge fills with sleepy students: they grow drowsy after morning classes, so a short nap helps to relieve the accumulated fatigue and revives everyone for the afternoon lessons.",
+        sentenceCn:"午间休息一到，安静的阅览室里挤满困倦的学生：上午的课让大家昏昏欲睡，一小段午睡既能缓解积累的疲劳，又让每个人下午上课时重新精神起来。",
+        scene:"粉彩午间阅览室，小叶学姐趴在桌上枕着小圆枕小睡，旁边同学懒洋洋地窝在豆袋沙发里，桌上一杯柠檬茶，阳光透过百叶窗。",
+        words:[
+          {word:"recess",  ipa:"/rɪˈses/",  pos:"n.",  zh:"工间休息，休会期，休业期；壁凹，壁龛；隐秘处 v. 使凹进", forms:["recess"]},
+          {word:"lounge",  ipa:"/laʊndʒ/",  pos:"n.",  zh:"休息室 v. 懒洋洋地靠坐着；闲逛，混时间", forms:["lounge"]},
+          {word:"drowsy",  ipa:"/ˈdraʊzi/", pos:"adj.", zh:"半醒半睡的，（使人）昏昏欲睡的", forms:["drowsy"]},
+          {word:"relieve", ipa:"/rɪˈliːv/", pos:"vt.", zh:"减轻，解除（痛苦或困难）；救助，救济；换班，接替", forms:["relieve"]},
+          {word:"fatigue", ipa:"/fəˈtiːɡ/", pos:"n.",  zh:"疲劳，劳累", forms:["fatigue"]},
+          {word:"revive",  ipa:"/rɪˈvaɪv/", pos:"v.",  zh:"（使）苏醒，（使）恢复知觉；（使）复用，（使）复兴", forms:["revives"]}
+        ]
+      },
+      {
+        id:"C4-P5", slug:"tem4-C4-P5", title:"灯火晚安", shape:"波浪",
+        poster:"assets/tem4/posters/C4_P5.png",
+        sentence:"As the last evening light dims, another ordinary day quietly elapses: Mum tucks the quilt in and comforts Xiaoye, who closes her eyes to reflect on the whole day, grateful for every small joy it brought.",
+        sentenceCn:"当傍晚最后一缕光线暗下来，平凡的一天悄然流逝：妈妈为小叶学姐掖好被角、轻声安抚，她闭上眼睛回想这一天的种种，为它带来的每一份小确幸心怀感激。",
+        scene:"粉彩夜晚卧室，熊妈妈为小叶学姐掖好粉色被角、轻声安抚，床头小夜灯发着暖光，窗外星空与弯月，小叶闭眼微笑。",
+        words:[
+          {word:"elapse",  ipa:"/ɪˈlæps/",    pos:"vi.", zh:"（时间）过去，消逝", forms:["elapses"]},
+          {word:"tuck",    ipa:"/tʌk/",       pos:"v.",  zh:"塞进，插进；卷起，折起；打褶裥", forms:["tucks"]},
+          {word:"dim",     ipa:"/dɪm/",       pos:"adj.", zh:"暗淡的，昏暗的；朦胧的；迟钝的，愚蠢的 v.（使）变暗淡；（使）变模糊，（使）失去光泽", forms:["dims"]},
+          {word:"comfort", ipa:"/ˈkʌmfət/",   pos:"n.",  zh:"安慰；舒适，安逸 vt. 安慰；使…舒适", forms:["comforts"]},
+          {word:"grateful",ipa:"/ˈɡreɪtfəl/", pos:"adj.", zh:"感激的，感谢的；令人愉快的，可喜的", forms:["grateful"]},
+          {word:"reflect", ipa:"/rɪˈflekt/",  pos:"v.",  zh:"反射，反映；表达，表现；考虑，思考", forms:["reflect"]}
+        ]
+      }
+    ]
+  },
   {id:"C5", cat:"C", zh:"服饰与时尚", name:"Clothing & Fashion", status:"soon", words:60,  desc:"试衣、衣柜、搭配"},
   /* ===== D 社交与情感 ===== */
   {id:"D1", cat:"D", zh:"友情与爱情", name:"Friendship & Love", status:"soon", words:100, desc:"咖啡馆、牵手、对话"},
