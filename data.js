@@ -8317,5 +8317,67 @@ const EPISODES = [
         "ex": "\"cite the journalism while ignoring the stylometry — a selective piety\""
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-09-28",
+    "title": "The Formula That Sang",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-09-28-the-formula-that-sang",
+    "url": "lessons/c1/2026-09-28-the-formula-that-sang.html",
+    "vocab": [
+      {
+        "word": "epithet",
+        "zh": "修饰性称号、固定修饰语（a descriptive phrase regularly attached to a name；本课指荷马史诗中反复出现的固定修饰语，如 swift-footed Achilles；形容词 epithetic）",
+        "ex": "\"readers treated Homer's epithets as decoration\""
+      },
+      {
+        "word": "formula",
+        "zh": "程式（口头程式理论术语：a group of words regularly employed, under the same metrical conditions, to express a given essential idea；复数 formulas / formulae；形容词 formulaic）",
+        "ex": "\"He defined the formula as a group of words regularly employed\""
+      },
+      {
+        "word": "metrical",
+        "zh": "格律的、音步的（relating to the rhythmic structure of verse；metrical conditions 格律条件；metrical slot 格律槽位；名词 metre 英式 / meter 美式）",
+        "ex": "\"under the same metrical conditions, to express a given essential idea\""
+      },
+      {
+        "word": "extemporaneously",
+        "zh": "即兴地、无准备地（without preparation；形容词 extemporaneous，an extemporaneous performance 即兴表演；动词 extemporise；近义 improvise，但 extemporise 更正式、更偏学术语域）",
+        "ex": "\"letting a singer compose extemporaneously, without counting syllables\""
+      },
+      {
+        "word": "embellishment",
+        "zh": "装饰、润色、添枝加叶（a decorative detail added to something；动词 embellish；本课喻指被误认为只是修辞花边、实则为结构性成分的东西）",
+        "ex": "\"What looked like embellishment was, in truth, machinery.\""
+      },
+      {
+        "word": "corroborate",
+        "zh": "证实、佐证（to confirm a claim by supplying supporting evidence；corroborate a theory / finding；名词 corroboration；形容词 corroborative / corroborating）",
+        "ex": "\"he went in search of one that might corroborate it\""
+      },
+      {
+        "word": "repertoire",
+        "zh": "全部曲目／可调用的语汇库（the stock of pieces, skills or expressions a performer can draw on；a repertoire of formulas 一套可供调用的程式；have something in one's repertoire）",
+        "ex": "\"a repertoire of formulas and of type-scenes for arming or feasting\""
+      },
+      {
+        "word": "bard",
+        "zh": "吟游诗人、史诗歌手（a poet-singer skilled in composing and reciting verses about heroes；本课指荷马史诗中的职业歌手，如费阿刻斯宫廷的 Demodocus；也常用作 Shakespeare 的尊称 the Bard）",
+        "ex": "\"the bard at the Phaeacian court\""
+      },
+      {
+        "word": "transmission",
+        "zh": "传承、传递、传播（the passing of something from one person, place or generation to another；oral transmission 口头传承；cultural transmission 文化传播；动词 transmit）",
+        "ex": "\"acknowledge the poem's transmission as oral poetry\""
+      },
+      {
+        "word": "frivolous",
+        "zh": "轻率的、不严肃的、无关紧要的（not serious or sensible；a frivolous comparison / objection 轻率的类比或反对；名词 frivolity；常用于学术写作中预先排除一种可能的质疑）",
+        "ex": "\"The comparison is not frivolous.\""
+      }
+    ]
   }
 ];

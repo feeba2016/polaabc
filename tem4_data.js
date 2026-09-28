@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C4/F1/F2/F3/G1 已上线（19 主题 / 95 Part / 570 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1/F1/F2/F3/G1 已上线（21 主题 / 105 Part / 630 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1269,9 +1269,169 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"C5", cat:"C", zh:"服饰与时尚", name:"Clothing & Fashion", status:"soon", words:60,  desc:"试衣、衣柜、搭配"},
+  {
+    id:"C5", cat:"C", zh:"服饰与时尚", name:"Clothing & Fashion", status:"live",
+    date:"2026-09-28", words:30, desc:"穿搭的一天：衣柜晨选、织造工坊、洗衣晾晒、盛装细节、化装舞会",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"C5-P1", slug:"tem4-C5-P1", title:"衣柜晨选", shape:"拱门",
+        poster:"assets/tem4/posters/C5_P1.png",
+        sentence:"Facing an array of clothes, from bright summer dresses to decent grey cardigans, Xiaoye finally picks a cardinal-red coat that matches her gorgeous new boots.",
+        sentenceCn:"面对一整排衣服——从鲜艳的夏裙到体面的灰色开衫——小叶学姐最终挑中一件深红大衣，正好配她那双漂亮的新靴子。",
+        scene:"粉彩晨光卧室，小叶学姐站在敞开的衣柜前，面对一排彩色衣裙手拿深红大衣比较，脚边放着一双漂亮的小靴子。",
+        words:[
+          {word:"array",    ipa:"/əˈreɪ/",     pos:"n.",  zh:"展示，陈列；排列整齐的一队人，一长列（物品）", forms:["array"]},
+          {word:"bright",   ipa:"/braɪt/",     pos:"adj.", zh:"明亮的；晴朗的；鲜艳的；开朗的，愉快的；聪明的", forms:["bright"]},
+          {word:"decent",   ipa:"/ˈdiːsənt/",  pos:"adj.", zh:"体面的，正当的；严肃的；高雅的；和气的，过得去的，宽容的", forms:["decent"]},
+          {word:"match",    ipa:"/mætʃ/",      pos:"v.",  zh:"与…相配；与…相匹敌 n. 比赛，竞赛；火柴；对手；匹配物", forms:["matches"]},
+          {word:"cardinal", ipa:"/ˈkɑːdɪnəl/", pos:"adj.", zh:"主要的，基本的；深红的 n. 深红色；基数；红衣主教", forms:["cardinal"]},
+          {word:"gorgeous", ipa:"/ˈɡɔːdʒəs/",  pos:"adj.", zh:"异常漂亮的，壮丽的；令人愉快的", forms:["gorgeous"]}
+        ]
+      },
+      {
+        id:"C5-P2", slug:"tem4-C5-P2", title:"织造工坊", shape:"叶形",
+        poster:"assets/tem4/posters/C5_P2.png",
+        sentence:"In the cozy workshop, Grandma weaves soft wool on an old loom while Xiaoye knits a delicate scarf, and baskets of coarse yarn and colorful elastic bands sit beside them.",
+        sentenceCn:"在温馨的工坊里，猴奶奶在老织布机上织着软软的羊毛，小叶学姐织一条精致的围巾，旁边篮子里放着粗毛线和五颜六色的松紧带。",
+        scene:"粉彩织造工坊，猴奶奶在老式木织布机前织羊毛，小叶学姐坐在旁边用棒针织一条精致围巾，篮子里装着粗毛线团和彩色松紧带。",
+        words:[
+          {word:"weave",    ipa:"/wiːv/",      pos:"v.",  zh:"编织，织；编造；迂回行进 n. 编织法，编织式样", forms:["weaves"]},
+          {word:"loom",     ipa:"/luːm/",      pos:"n.",  zh:"织布机；隐隐呈现的形象 vt. 隐隐呈现；阴森地逼近", forms:["loom"]},
+          {word:"knit",     ipa:"/nɪt/",       pos:"v.",  zh:"编织，针织；使密接，结合", forms:["knits"]},
+          {word:"delicate", ipa:"/ˈdelɪkɪt/",  pos:"adj.", zh:"易碎的，娇弱的；精密的，精致的；微妙的；清香的，清淡的", forms:["delicate"]},
+          {word:"coarse",   ipa:"/kɔːs/",      pos:"adj.", zh:"粗糙的，粗劣的；（举动等）粗鲁的，粗暴的，粗俗的", forms:["coarse"]},
+          {word:"elastic",  ipa:"/ɪˈlæstɪk/",  pos:"adj.", zh:"弹性的，有弹力的；灵活的，可伸缩的 n. 橡皮带，松紧带", forms:["elastic"]}
+        ]
+      },
+      {
+        id:"C5-P3", slug:"tem4-C5-P3", title:"洗衣晾晒", shape:"椭圆",
+        poster:"assets/tem4/posters/C5_P3.png",
+        sentence:"Xiaoye soaks the durable jeans in cool water so the color will not fade, then hangs the clean shirts out to flutter in the breeze, fluffs the towels, and presses away every crinkle.",
+        sentenceCn:"小叶学姐把耐穿的牛仔裤泡进凉水以免褪色，再把洗干净的衬衫挂出去让微风吹得飘动，抖松毛巾，熨平每一道褶皱。",
+        scene:"粉彩阳光后院，晾衣绳上衬衫床单随风飘动，小叶学姐在木盆边抖松毛巾，盆里泡着牛仔裤，泡泡飘在空中。",
+        words:[
+          {word:"soak",     ipa:"/səʊk/",      pos:"v.",  zh:"浸，泡，（使）浸透 n. 浸，泡，渍", forms:["soaks"]},
+          {word:"durable",  ipa:"/ˈdjʊərəbl/", pos:"adj.", zh:"持久的，耐用的，耐穿的 n. [pl.] 耐用品", forms:["durable"]},
+          {word:"fade",     ipa:"/feɪd/",      pos:"v.",  zh:"（使）褪色，（使）枯萎，变衰；逐渐消失", forms:["fade"]},
+          {word:"flutter",  ipa:"/ˈflʌtə/",    pos:"n. / v.", zh:"振翅，拍翼；飘动，摆动；激动，紧张，兴奋", forms:["flutter"]},
+          {word:"fluff",    ipa:"/flʌf/",      pos:"n.",  zh:"松软的绒毛团；软毛，柔毛 v. 抖松，拍松；把…弄糟，弄错", forms:["fluffs"]},
+          {word:"crinkle",  ipa:"/ˈkrɪŋkl/",   pos:"n.",  zh:"皱纹 v.（使）起皱", forms:["crinkle"]}
+        ]
+      },
+      {
+        id:"C5-P4", slug:"tem4-C5-P4", title:"盛装细节", shape:"超圆角",
+        poster:"assets/tem4/posters/C5_P4.png",
+        sentence:"Before the show, Xiaoye buckles her shiny belt, finds one sleeve loose, pierces the satin ribbon with a silver pin that pricks her finger, then steps out looking magnificent, her little ear studs sparkling under the lights.",
+        sentenceCn:"走秀前，小叶学姐扣好闪亮的腰带，发现一只袖子松了，用银别针刺穿缎带别好——别针刺痛了她的手指——然后闪亮登场，气质华美，小耳钉在灯光下闪闪发光。",
+        scene:"粉彩梳妆台前，小叶学姐对着椭圆镜扣金色腰带、用银别针别住缎带，首饰盒里项链耳钉闪闪发光，台面上摆着化妆刷和香水瓶。",
+        words:[
+          {word:"buckle",      ipa:"/ˈbʌkl/",        pos:"n.",  zh:"皮带扣环；装饰用扣环 v. 用扣环扣住；（使）弯曲，扭曲；让步，屈服", forms:["buckles"]},
+          {word:"loose",       ipa:"/luːs/",         pos:"adj.", zh:"松动的，宽松的；不受束缚的；不精确的 v. 释放", forms:["loose"]},
+          {word:"pierce",      ipa:"/pɪəs/",         pos:"v.",  zh:"刺穿，刺破；突破", forms:["pierces"]},
+          {word:"prick",       ipa:"/prɪk/",         pos:"v.",  zh:"戳穿，刺；（使）感到刺痛 n. 刺痛；刺痕，刺孔", forms:["pricks"]},
+          {word:"magnificent", ipa:"/mæɡˈnɪfɪsənt/", pos:"adj.", zh:"富丽堂皇的，宏伟的，极好的", forms:["magnificent"]},
+          {word:"sparkle",     ipa:"/ˈspɑːkl/",      pos:"v.",  zh:"闪闪发光，闪烁，闪耀 n. 光亮；活力；闪光", forms:["sparkling"]}
+        ]
+      },
+      {
+        id:"C5-P5", slug:"tem4-C5-P5", title:"化装舞会", shape:"波浪",
+        poster:"assets/tem4/posters/C5_P5.png",
+        sentence:"At the costume ball, Xiaoye wraps a silk shawl around her shoulders and wears a cat mask as a playful disguise; when the host unveils the \"Best Dressed\" prize, her golden sash, neatly attached with a pin, clings softly and everyone cheers.",
+        sentenceCn:"化装舞会上，小叶学姐肩披丝巾、戴着猫咪面具扮可爱；当主持人揭开“最佳着装”奖时，她用别针别好的金色腰带轻轻服帖着，大家欢呼起来。",
+        scene:"粉彩化装舞会，小叶学姐额头推着猫咪面具、肩披丝巾、腰系金色缎带，兔子主持人揭开金奖杯，彩旗气球彩带飘扬，动物宾客鼓掌。",
+        words:[
+          {word:"wrap",     ipa:"/ræp/",       pos:"v.",  zh:"把…包起来，缠，捆 n. 披肩，围巾", forms:["wraps"]},
+          {word:"mask",     ipa:"/mɑːsk/",     pos:"n.",  zh:"面罩，假面具 v. 掩饰，伪装", forms:["mask"]},
+          {word:"disguise", ipa:"/dɪsˈɡaɪz/",  pos:"n. / vt.", zh:"假扮，伪装，掩盖", forms:["disguise"]},
+          {word:"unveil",   ipa:"/ʌnˈveɪl/",   pos:"vt.", zh:"除去…的面纱（盖布）等，揭开；为…揭幕", forms:["unveils"]},
+          {word:"attach",   ipa:"/əˈtætʃ/",    pos:"v.",  zh:"缚，系，贴；参加（党派）；把（重点等）放在", forms:["attached"]},
+          {word:"cling",    ipa:"/klɪŋ/",      pos:"vi.", zh:"粘住，缠住；依附，依靠；紧紧握住，紧紧抱住", forms:["clings"]}
+        ]
+      }
+    ]
+  },
   /* ===== D 社交与情感 ===== */
-  {id:"D1", cat:"D", zh:"友情与爱情", name:"Friendship & Love", status:"soon", words:100, desc:"咖啡馆、牵手、对话"},
+  {id:"D1", cat:"D", zh:"友情与爱情", name:"Friendship & Love", status:"live",
+    date:"2026-09-28", words:30, desc:"友情与爱情的一天：咖啡馆初遇、榕树下陪伴、一场误会、道歉与拥抱、夕阳下告白",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"D1-P1", slug:"tem4-D1-P1", title:"咖啡馆初遇", shape:"拱门",
+        poster:"assets/tem4/posters/D1_P1.png",
+        sentence:"At the campus café, the gregarious waiter greets every guest with warm hospitality, while a lovable girl with keen eyes waits in line, and her soft murmur of thanks makes a shy freshman's cheeks glow.",
+        sentenceCn:"在校园咖啡馆里，热情健谈的服务生殷勤地招待每位客人；一个眼神灵动、讨人喜欢的女孩在排队，她轻声道谢的低语让一位害羞的新生脸颊泛起了红晕。",
+        scene:"粉彩校园咖啡馆，小叶学姐双手捧着拿铁站在木柜台前，穿围裙的服务生热情招呼客人，空气中飘着心形与蒸汽。",
+        words:[
+          {word:"gregarious",  ipa:"/ɡrɪˈɡeəriəs/",  pos:"adj.",     zh:"爱交际的；群居的", forms:["gregarious"]},
+          {word:"hospitality", ipa:"/ˌhɒspɪˈtælɪti/", pos:"n.",       zh:"好客，殷勤的款待", forms:["hospitality"]},
+          {word:"lovable",     ipa:"/ˈlʌvəbl/",       pos:"adj.",     zh:"可爱的，讨人喜欢的", forms:["lovable"]},
+          {word:"keen",        ipa:"/kiːn/",          pos:"adj.",     zh:"热心的；敏锐的；渴望的", forms:["keen"]},
+          {word:"murmur",      ipa:"/ˈmɜːmə/",        pos:"n. / v.",  zh:"低语声，咕哝 v. 低声说；发低沉连续的声音", forms:["murmur"]},
+          {word:"glow",        ipa:"/ɡləʊ/",          pos:"vi.",      zh:"发白热光；容光焕发 n. 光辉；热烈", forms:["glow"]}
+        ]
+      },
+      {
+        id:"D1-P2", slug:"tem4-D1-P2", title:"榕树下陪伴", shape:"叶形",
+        poster:"assets/tem4/posters/D1_P2.png",
+        sentence:"In the weeks that followed, Leo would accompany her to the library and escort her home after evening classes, and she came to trust and rely on this quiet friend, whose steady support and firm faith in her never wavered.",
+        sentenceCn:"在接下来的几周里，利奥总会陪她去图书馆，晚课后又送她回家；她渐渐学会信赖、依靠这位安静的朋友——他坚定的支持和对她的信任从未动摇。",
+        scene:"大榕树下，小叶学姐与戴蓝围巾的猴朋友并肩抱着书走在粉彩小路上，树影斑驳，远处是校园建筑。",
+        words:[
+          {word:"accompany", ipa:"/əˈkʌmpəni/", pos:"vt.",      zh:"伴随，陪同；为…伴奏", forms:["accompany"]},
+          {word:"escort",    ipa:"/ˈeskɔːt/",   pos:"n.",       zh:"护卫队，护送者；陪伴", forms:["escort"]},
+          {word:"trust",     ipa:"/trʌst/",     pos:"n. / v.",  zh:"信任，信赖 v. 委托，托付；倚靠", forms:["trust"]},
+          {word:"rely",      ipa:"/rɪˈlaɪ/",    pos:"vi.",      zh:"信任，信赖；依赖，依靠", forms:["rely"]},
+          {word:"support",   ipa:"/səˈpɔːt/",   pos:"vt.",      zh:"支撑；支持，鼓励；拥护，供养 n. 支撑物；拥护", forms:["support"]},
+          {word:"faith",     ipa:"/feɪθ/",      pos:"n.",       zh:"信任，信念；信仰，信条；诚意，忠诚", forms:["faith"]}
+        ]
+      },
+      {
+        id:"D1-P3", slug:"tem4-D1-P3", title:"一场误会", shape:"椭圆",
+        poster:"assets/tem4/posters/D1_P3.png",
+        sentence:"One careless piece of gossip spread through the class, and light discord soon grew worse: a hot word made her temper flare, his upset silence aroused her suspicion, and they began to argue over nothing.",
+        sentenceCn:"一句无心的流言在班里传开，小小的不和很快升级：一句气话让她脾气爆发，他难过心烦的沉默又引来她的猜疑，两人开始为琐事争吵起来。",
+        scene:"粉彩长椅上小叶学姐抱着书低头难过，头顶飘着一小朵雨云，几步外戴蓝围巾的猴朋友别过脸去，两人之间飘着一颗裂开的小心。",
+        words:[
+          {word:"gossip",    ipa:"/ˈɡɒsɪp/",    pos:"n. / vi.", zh:"闲谈，聊天；流言蜚语 vi. 说闲话", forms:["gossip"]},
+          {word:"discord",   ipa:"/ˈdɪskɔːd/",  pos:"n.",       zh:"（意见）不合，不和，争论；（音乐）不和谐", forms:["discord"]},
+          {word:"temper",    ipa:"/ˈtempə/",    pos:"n. / v.",  zh:"心情，脾气，性情 v. 回火；使软化；缓和", forms:["temper"]},
+          {word:"upset",     ipa:"/ʌpˈset/",    pos:"v.",       zh:"使人心烦意乱；弄翻，打翻 adj. 难过的，不安的", forms:["upset"]},
+          {word:"suspicion", ipa:"/səˈspɪʃən/", pos:"n.",       zh:"怀疑，猜疑，嫌疑，疑心", forms:["suspicion"]},
+          {word:"argue",     ipa:"/ˈɑːɡjuː/",   pos:"v.",       zh:"辩论，争论；主张，认为", forms:["argue"]}
+        ]
+      },
+      {
+        id:"D1-P4", slug:"tem4-D1-P4", title:"道歉与拥抱", shape:"超圆角",
+        poster:"assets/tem4/posters/D1_P4.png",
+        sentence:"Early the next morning, Leo came with a small bouquet to apologize and ask her pardon; she showed mercy at once, admitting she could sympathize with his shyness, and they agreed to reconcile with a warm embrace.",
+        sentenceCn:"第二天一早，利奥捧着一小束花来道歉，请求她的原谅；她立刻心软宽恕，坦言自己很能体谅他的害羞，两人和好，给了彼此一个温暖的拥抱。",
+        scene:"樱花树下，戴蓝围巾的猴朋友捧着一小束粉花向小叶学姐道歉，两人温暖拥抱，头顶飘着一颗贴了创可贴的爱心。",
+        words:[
+          {word:"apologize",  ipa:"/əˈpɒlədʒaɪz/", pos:"vi.",      zh:"道歉", forms:["apologize"]},
+          {word:"pardon",     ipa:"/ˈpɑːdən/",     pos:"n. / vt.", zh:"原谅，宽恕", forms:["pardon"]},
+          {word:"mercy",      ipa:"/ˈmɜːsi/",      pos:"n.",       zh:"宽大，仁慈，怜悯", forms:["mercy"]},
+          {word:"sympathize", ipa:"/ˈsɪmpəθaɪz/",  pos:"vi.",      zh:"同情，赞同，支持；体谅", forms:["sympathize"]},
+          {word:"reconcile",  ipa:"/ˈrekənsaɪl/",  pos:"vt.",      zh:"使和解，使和好；调和，使一致", forms:["reconcile"]},
+          {word:"embrace",    ipa:"/ɪmˈbreɪs/",    pos:"v. / n.",  zh:"抱，环绕；包含；接受 n. 拥抱，怀抱", forms:["embrace"]}
+        ]
+      },
+      {
+        id:"D1-P5", slug:"tem4-D1-P5", title:"夕阳下告白", shape:"波浪",
+        poster:"assets/tem4/posters/D1_P5.png",
+        sentence:"Under the sunset, Leo finally confessed the deep affection he had fostered for months, promising that he would yearn for his beloved friend forever and that fidelity and honesty would sustain their love through every season.",
+        sentenceCn:"夕阳下，利奥终于表白了他默默培育数月的深深爱慕，承诺会永远思慕这位心爱的人，并以忠诚与坦诚维系这份爱，走过每一个季节。",
+        scene:"粉彩山丘上，戴蓝围巾的猴朋友单膝跪地捧出发光的粉色爱心花送给小叶学姐，两人脸颊绯红，橙粉色晚霞中飘着小爱心。",
+        words:[
+          {word:"affection", ipa:"/əˈfekʃən/",  pos:"n.",       zh:"爱，钟爱；爱慕；慈爱，友爱", forms:["affection"]},
+          {word:"beloved",   ipa:"/bɪˈlʌvɪd/",  pos:"adj. / n.", zh:"为…所爱的，被热爱的 n. 心爱的人", forms:["beloved"]},
+          {word:"yearn",     ipa:"/jɜːn/",      pos:"vi.",      zh:"想念，思慕，渴望", forms:["yearn"]},
+          {word:"foster",    ipa:"/ˈfɒstə/",    pos:"vt.",      zh:"促进，培养；收养；心怀（希望等）", forms:["fostered"]},
+          {word:"sustain",   ipa:"/səˈsteɪn/",  pos:"vt.",      zh:"支撑，承受；维持，支持；蒙受", forms:["sustain"]},
+          {word:"fidelity",  ipa:"/fɪˈdelɪti/", pos:"n.",       zh:"忠诚，忠实；逼真；精确", forms:["fidelity"]}
+        ]
+      }
+    ]},
   {id:"D2", cat:"D", zh:"情绪表达",   name:"Emotions",          status:"soon", words:80,  desc:"开心、悲伤、惊讶"},
   {id:"D3", cat:"D", zh:"沟通与对话", name:"Communication",     status:"soon", words:70,  desc:"电话、视频、写作"},
   {id:"D4", cat:"D", zh:"社交礼仪",   name:"Social Etiquette",  status:"soon", words:60,  desc:"拜访、致谢、道歉"},

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Formula That Sang — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#b45309;
+  --bg:#f4f7fd;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#d9e3fb;
+  --soft:#eef4ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,78,216,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,78,216,.55);}70%{box-shadow:0 0 0 12px rgba(29,78,216,0);}100%{box-shadow:0 0 0 0 rgba(29,78,216,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#111c3a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 文学评论 Literary Criticism</span>
+      <h1 class="title">The Formula That Sang</h1>
+      <p class="subtitle">How a compositional technology misread as decoration became the key to Homer · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Machinery</div>
+            <p>For centuries readers treated Homer's <span class="kw" data-def="修饰性称号、固定修饰语（a descriptive phrase regularly attached to a name；本课指荷马史诗中反复出现的固定修饰语，如 swift-footed Achilles；形容词 epithetic）">epithets</span> as decoration: the wine-dark sea, swift-footed Achilles. Milman Parry proposed the reverse. These recurring phrases were not ornate, he argued, but instrumental. He defined the <span class="kw" data-def="程式（oral-formulaic theory 术语：a group of words regularly employed, under the same metrical conditions, to express a given essential idea；复数 formulas 或 formulae；形容词 formulaic）">formula</span> as a group of words regularly employed, under the same <span class="kw" data-def="格律的、音步的（relating to the rhythmic structure of verse；metrical conditions 格律条件；metre 格律、韵律）">metrical</span> conditions, to express a given essential idea. Each filled a fixed slot in the dactylic hexameter, letting a singer compose <span class="kw" data-def="即兴地、无准备地（done or performed without preparation；形容词 extemporaneous；an extemporaneous performance 即兴表演；动词 extemporise）">extemporaneously</span>, without counting syllables. What looked like <span class="kw" data-def="装饰、润色（a decorative detail added to something；本课喻指『被误认为只是修辞花边、实则为结构性成分的东西』；动词 embellish）">embellishment</span> was, in truth, machinery.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Fieldwork</div>
+            <p>Parry's claim rested on analogy, and in 1933 he went in search of one that might <span class="kw" data-def="证实、佐证（to confirm or give support to a claim by providing evidence；corroborate a theory / finding；名词 corroboration；形容词 corroborative）">corroborate</span> it. In the Balkans he and his student Albert Lord recorded guslari, singers of epics thousands of lines long, most of them unable to read. No two performances were identical, yet each was recognisably the same song: the singer carried no fixed text, only a <span class="kw" data-def="全部曲目／语汇库（a stock of pieces, skills or expressions that a performer can draw on；a repertoire of formulas 一套可供调用的程式；have something in one's repertoire）">repertoire</span> of formulas and of type-scenes. Lord set this out in The Singer of Tales, published in 1960.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Objection</div>
+            <p>The analogy drew fire. Geoffrey Kirk, in The Songs of Homer, argued that Homeric hexameter is far stricter than the Serbo-Croatian material; the Greek singer, he insisted, was not merely reproductive but inventive. Others objected that formulaic density had become a litmus test it could not bear: a literate poet can imitate an oral style, as Virgil did. Foley's reply was to restore meaning to the formula, a word carrying the weight of its previous uses.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Return</div>
+            <p>In 2026 the debate acquired an unlikely illustration. Christopher Nolan cast a rapper as Demodocus, the <span class="kw" data-def="吟游诗人、史诗歌手（a poet-singer who composes and recites verses about heroes；本课指荷马史诗中的职业歌手，如费阿刻斯宫廷的 Demodocus）">bard</span> at the Phaeacian court, explaining that he wished to honour the poem's <span class="kw" data-def="传承、传递（the passing on of something from one person or generation to another；oral transmission 口头传承；动词 transmit）">transmission</span> as oral poetry, analogous to rap. The comparison is not <span class="kw" data-def="轻率的、不严肃的（not serious or sensible；a frivolous comparison / objection 轻率的类比或反对；名词 frivolity）">frivolous</span>: freestyle depends on the same trick — pre-compiled rhythmic units retrieved under pressure, releasing attention for the next line. The formula, then, was never a deficiency of imagination; it was the condition under which improvisation on such a scale became possible at all.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="epithet">🔊</button><div class="word">epithet<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">修饰性称号、固定修饰语（a descriptive phrase regularly attached to a name；本课指荷马史诗中反复出现的固定修饰语，如 swift-footed Achilles；形容词 epithetic）</div><div class="ex">"readers treated Homer's epithets as decoration"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="formula">🔊</button><div class="word">formula<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">程式（口头程式理论术语：a group of words regularly employed, under the same metrical conditions, to express a given essential idea；复数 formulas / formulae；形容词 formulaic）</div><div class="ex">"He defined the formula as a group of words regularly employed"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="metrical">🔊</button><div class="word">metrical<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">格律的、音步的（relating to the rhythmic structure of verse；metrical conditions 格律条件；metrical slot 格律槽位；名词 metre 英式 / meter 美式）</div><div class="ex">"under the same metrical conditions, to express a given essential idea"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="extemporaneously">🔊</button><div class="word">extemporaneously<span class="pos">adv.</span></div><span class="lvl">C2</span><div class="zh">即兴地、无准备地（without preparation；形容词 extemporaneous，an extemporaneous performance 即兴表演；动词 extemporise；近义 improvise，但 extemporise 更正式、更偏学术语域）</div><div class="ex">"letting a singer compose extemporaneously, without counting syllables"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="embellishment">🔊</button><div class="word">embellishment<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">装饰、润色、添枝加叶（a decorative detail added to something；动词 embellish；本课喻指被误认为只是修辞花边、实则为结构性成分的东西）</div><div class="ex">"What looked like embellishment was, in truth, machinery."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="corroborate">🔊</button><div class="word">corroborate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">证实、佐证（to confirm a claim by supplying supporting evidence；corroborate a theory / finding；名词 corroboration；形容词 corroborative / corroborating）</div><div class="ex">"he went in search of one that might corroborate it"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="repertoire">🔊</button><div class="word">repertoire<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">全部曲目／可调用的语汇库（the stock of pieces, skills or expressions a performer can draw on；a repertoire of formulas 一套可供调用的程式；have something in one's repertoire）</div><div class="ex">"a repertoire of formulas and of type-scenes for arming or feasting"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bard">🔊</button><div class="word">bard<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">吟游诗人、史诗歌手（a poet-singer skilled in composing and reciting verses about heroes；本课指荷马史诗中的职业歌手，如费阿刻斯宫廷的 Demodocus；也常用作 Shakespeare 的尊称 the Bard）</div><div class="ex">"the bard at the Phaeacian court"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="transmission">🔊</button><div class="word">transmission<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">传承、传递、传播（the passing of something from one person, place or generation to another；oral transmission 口头传承；cultural transmission 文化传播；动词 transmit）</div><div class="ex">"acknowledge the poem's transmission as oral poetry"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="frivolous">🔊</button><div class="word">frivolous<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">轻率的、不严肃的、无关紧要的（not serious or sensible；a frivolous comparison / objection 轻率的类比或反对；名词 frivolity；常用于学术写作中预先排除一种可能的质疑）</div><div class="ex">"The comparison is not frivolous."</div></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. What looked like X was, in truth, Y（现象—本质的校正结构）</h3>
+          <div class="zh">用 <i>what</i> 引导的名词性关系从句把「人们曾经怎么看」打包成主语，再用表语给出「实际是什么」。中间插入评注性状语 <i>in truth</i>，把转折压缩在一个句子里完成，比另起一句 <i>However, ...</i> 更紧凑、更有格言感。论文结论段常用。</div>
+          <div class="eg">What looked like embellishment was, in truth, machinery.</div>
+          <div class="practice">✍️ 仿写：看似退步的东西，实则是必要的调整。<input type="text" placeholder="What looked like... was, in truth,..."></div>
+        </div>
+        <div class="item">
+          <h3>2. No two X were identical, yet each was recognisably Y（全称否定 + 让步对举）</h3>
+          <div class="zh"><i>No two...</i> 是比 <i>all...were different</i> 更有力的全称否定；<i>yet</i> 引出的对举分句保留 <i>recognisably</i> 这一降级副词，形成「变中有常」的张力。这个句式特别适合描述口头传统、方言变体、即兴表演这类「同一性与差异性并存」的对象。</div>
+          <div class="eg">No two performances were identical, yet each was recognisably the same song.</div>
+          <div class="practice">✍️ 仿写：没有两份手稿完全相同，却每一份都能辨认出属于同一系统。<input type="text" placeholder="No two... were identical, yet each was recognisably..."></div>
+        </div>
+        <div class="item">
+          <h3>3. define X as Y + 过去分词后置定语（下定义句）</h3>
+          <div class="zh">学术写作中「下定义」的标准句式：<i>define X as + 名词短语</i>，其中心词再挂一串后置修饰——过去分词短语 <i>regularly employed</i>、插入的介词短语 <i>under the same metrical conditions</i>、目的不定式 <i>to express...</i>。三层修饰各有分工，读起来却是一口气。</div>
+          <div class="eg">He defined the formula as a group of words regularly employed, under the same metrical conditions, to express a given essential idea.</div>
+          <div class="practice">✍️ 仿写：他把体裁定义为在特定场合反复使用、以达成既定社会目的的一套话语惯例。<input type="text" placeholder="He defines genre as a set of... regularly employed, ..., to..."></div>
+        </div>
+        <div class="item">
+          <h3>4. 零关系代词定语从句：a Y (that) it could not bear</h3>
+          <div class="zh">当关系代词在从句中作<b>宾语</b>时，可整体省略，形成 <i>a test it could not bear</i> 这样的紧缩结构。它比 <i>a test that it could not bear</i> 更简练，也更贴近英语母语学术写作的实际节奏。<b>注意</b>：若关系词在从句中作主语（<i>a test that failed</i>），则不可省。</div>
+          <div class="eg">Others objected that formulaic density had become a litmus test it could not bear.</div>
+          <div class="practice">✍️ 仿写：这个方法被要求承担它无法承担的解释负担。<input type="text" placeholder="The method was asked to carry a burden..."></div>
+        </div>
+        <div class="item">
+          <h3>5. X was never a deficiency of Y; it was the condition under which Z became possible at all（否定—重定义—关系从句收束）</h3>
+          <div class="zh">先彻底否定一个常识判断（<i>never</i>），再用分号引出重新定义（<i>it was the condition...</i>），最后用 <i>under which</i> 把抽象名词展开为具体条件。句末的 <i>at all</i> 是加强语气的小品词，用于否定句与条件句，意为「根本、全然」。这是高级议论文最有力的收束句式之一。</div>
+          <div class="eg">The formula was never a deficiency of imagination; it was the condition under which improvisation on such a scale became possible at all.</div>
+          <div class="practice">✍️ 仿写：限制从来不是创造力的敌人；它恰恰是创造得以发生的条件。<input type="text" placeholder="Constraint was never...; it was the condition under which..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 名词性关系从句（Nominal relative clauses with what）</h3>
+          <div class="zh"><i>what</i> = the thing(s) that，兼作先行词与关系词，在句中可充当主语、宾语或表语。课文原句 <i>What looked like embellishment was, in truth, machinery</i> 中，整个从句作主语，因此谓语用单数 <i>was</i>。同类结构还有 <i>What makes this possible is a paradox</i>。</div>
+          <div class="eg">What looked like embellishment was, in truth, machinery. / What we need are reliable samples.</div>
+          <div class="practice">⚠️ 主谓一致看<b>表语</b>：表语为单数用 is，为复数用 are（第二句 samples 为复数，故用 are）。</div>
+        </div>
+        <div class="item">
+          <h3>2. 过去分词短语作后置定语（Reduced relative clauses）</h3>
+          <div class="zh">定语从句若含「be + 过去分词」，可整体简化为过去分词短语：<i>words (which were) regularly employed under the same metrical conditions</i>。它紧贴在中心词之后，是学术英语压缩信息的首要手段。课文的 <i>pre-compiled rhythmic units retrieved under pressure</i> 同样是这一结构。</div>
+          <div class="eg">a group of words regularly employed, under the same metrical conditions, to express a given essential idea</div>
+          <div class="practice">⚠️ 过去分词表被动／完成，现在分词表主动／进行：<i>the singer performing</i>（主动）≠ <i>the song performed</i>（被动）。</div>
+        </div>
+        <div class="item">
+          <h3>3. 独立主格（Nominative absolute）</h3>
+          <div class="zh">结构为「名词／代词 + 分词／形容词／介词短语」，自带逻辑主语，在句中作状语表伴随或补充。课文原句 <i>...singers of epics thousands of lines long, most of them unable to read</i>，其逻辑主语 <i>most of them</i> 与主句主语 <i>guslari</i> 并不等同——这正是判定独立主格的标准。</div>
+          <div class="eg">He recorded guslari, most of them unable to read. / The debate settled, the discipline moved on.</div>
+          <div class="practice">⚠️ 若分词短语的逻辑主语就是主句主语，写成独立主格反而是错的；若<b>不是</b>，则必须带上自己的主语，否则构成悬垂分词。</div>
+        </div>
+        <div class="item">
+          <h3>4. 介词 + which 引导的关系从句（Preposition + relative pronoun）</h3>
+          <div class="zh">当关系词在从句中作介词的宾语时，正式文体把介词提到关系词之前：先行词 <i>condition</i> 习惯搭配 <i>under</i>，故为 <i>the condition under which...</i>。口语中可说 <i>the condition that...under</i>（介词留在句末），但学术写作宜用前者。</div>
+          <div class="eg">it was the condition under which improvisation on such a scale became possible at all</div>
+          <div class="practice">⚠️ 介词 + which 结构中<b>不能</b>用 that，也不能用 who；指人时用 <i>preposition + whom</i>。介词的选择取决于先行词的固定搭配（under the condition / in the circumstances / for the reason）。</div>
+        </div>
+        <div class="item">
+          <h3>5. 对照性副词与分号的论证功能（yet / then / in truth）</h3>
+          <div class="zh">连接副词不是装饰：<i>yet</i> 引出的分句推翻前一句的<b>预期</b>，<i>then</i> 在句首表示「综上所述、如此说来」，<i>in truth</i> 标记「校正读者既有印象」。三者共同构成一篇议论文的推进骨架——分别对应让步、推论与纠偏。</div>
+          <div class="eg">No two performances were identical, yet each was recognisably the same song. / The formula, then, was never a deficiency of imagination.</div>
+          <div class="practice">⚠️ <i>yet</i> 是并列连词，可直接连接两个完整分句；若误当作副词写成 <i>..., and yet each...</i> 在正式文体中显得累赘。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、本课在说什么（一句话概括）</h3>
+        <p>荷马史诗里那些反复出现的固定修饰语——「wine-dark sea」「rosy-fingered dawn」「swift-footed Achilles」——长久以来被当作修辞上的花边，甚至被当成想象力不足的证据。二十世纪的米尔曼·帕里（Milman Parry）与阿尔伯特·洛德（Albert Lord）提出相反的解读：这些<b>程式</b>（formula）不是装饰，而是一套<b>在表演中实时生成诗行的技术</b>。本课考察这一理论的建立、它所受到的批评，以及它在 2026 年获得的一个出人意料的例证。</p>
+
+        <h3>二、荷马问题：三派之争</h3>
+        <table>
+          <tr><th style="width:15%">流派</th><th style="width:30%">代表与著述</th><th>核心主张</th></tr>
+          <tr><td><b>分析派</b><br>Analysts</td><td>F. A. Wolf，《荷马导论》（<i>Prolegomena ad Homerum</i>, 1795）</td><td>两部史诗并非一人之作，而是由许多短歌历经数代拼合、后人再加以整理而成；文中的矛盾与接缝就是证据</td></tr>
+          <tr><td><b>统一派</b><br>Unitarians</td><td>F. G. Welcker、W. E. Gladstone 等</td><td>史诗在结构与主题上高度统一，这种统一性无法由多人合作解释，只能归于一位天才诗人</td></tr>
+          <tr><td><b>口述派</b><br>Oralists</td><td>Milman Parry、Albert Lord，《故事的歌手》（1960）</td><td>不直接回答「是一个人还是许多人」，而是改变问题本身：这些诗是在<b>表演中</b>被即兴创编的，程式是创编的工具</td></tr>
+        </table>
+        <p><b>为什么口述派是一次范式转移？</b>前两派共享一个前提：诗是被「写」出来的，所以问题必然是「谁写的、写了几次」。帕里—洛德先把这个前提悬置起来，转而去问「在没有文字的条件下，一个人如何可能连续唱出上万行合乎格律的诗」。答案一旦找到，作者问题就不再是一个二选一。</p>
+
+        <h3>三、田野工作：从文本到活态传统</h3>
+        <table>
+          <tr><th style="width:14%">时间</th><th style="width:36%">事件</th><th>意义</th></tr>
+          <tr><td><b>1928</b></td><td>帕里完成博士论文，论证荷马的用语是一种世代传承的<b>传统性语言</b>（traditional diction）</td><td>起点是「传统」，不是「口头」——这一区分后来至关重要</td></tr>
+          <tr><td><b>1930–32</b></td><td>帕里发表两篇「Studies in the Epic Technique」论文，正式给出程式的定义</td><td>程式被界定为：在相同格律条件下、为表达某一既定基本意念而<b>反复使用</b>的一组词</td></tr>
+          <tr><td><b>1933–35</b></td><td>帕里与洛德两度赴南斯拉夫，录制古斯勒歌手（guslari）的演唱；到 1935 年帕里意外去世时，已采集约 12,500 份文本（含蜡筒录音与听写记录）</td><td>这批材料即哈佛大学「米尔曼·帕里口头文学收藏」，是口头程式理论的实证基础</td></tr>
+          <tr><td><b>1960</b></td><td>洛德出版《故事的歌手》（<i>The Singer of Tales</i>）——书名承自帕里未完成的遗稿</td><td>把田野发现系统化为理论，并应用于荷马、《贝奥武甫》、《罗兰之歌》等文本</td></tr>
+        </table>
+        <p><b>田野里最关键的观察：</b>同一个歌手两次唱「同一首」歌，词句并不相同，长度也可能相差很大，但听众仍能认出那是同一首歌。歌手记住的不是一份<b>文本</b>，而是一套<b>语法</b>——程式的库存、典型场景（type-scene，如「披挂上阵」「设宴待客」）的模板，以及故事的骨架。</p>
+
+        <h3>四、程式到底是什么：格律槽位</h3>
+        <ul>
+          <li><b>格律约束。</b>荷马史诗用六音步长短短格（dactylic hexameter）。每一行有固定的长短音节排列，诗人必须在演唱的当下填满它。</li>
+          <li><b>槽位填充。</b>「swift-footed Achilles」与「godlike Achilles」占据不同的格律位置；歌手按当前音节需要选取，如同从货架上取零件。</li>
+          <li><b>经济性。</b>帕里还发现荷马用语极其「节俭」：对同一个概念，在同一格律位置上，几乎不会有两个功能完全相同的表达式并存。这恰恰说明这套系统是长期打磨出来的工具，而非随意的修饰。</li>
+          <li><b>认知机制。</b>用认知科学的术语说，这是<b>组块化</b>（chunking）：把逐字的低层决策，替换为对预制单元的整体调用。国际象棋大师记棋形、乐手读和弦，用的是同一套机制。</li>
+        </ul>
+
+        <h3>五、争议与修正：理论并没有停在 1960 年</h3>
+        <ul>
+          <li><b>Geoffrey Kirk，《荷马之歌》（1962）：</b>最直接的反驳。他认为荷马的格律远比塞尔维亚—克罗地亚材料<b>严格</b>，而荷马的用语又远比后者<b>经济且灵活</b>；希腊歌手不是「复制型」的，而是在一个自由度极高的系统内部创造。类比不能无条件外推。</li>
+          <li><b>Adam Parry，〈我们拥有荷马的伊利亚特吗？〉（1966）：</b>承认口头性，但主张应把荷马设想为这一传统所能达到的<b>最成熟的个体</b>——他能在传统框架内塑造出复杂的人物。</li>
+          <li><b>Eric Havelock，《柏拉图序论》（1963）：</b>把口头程式与「希腊人如何在无文字时代保存文化知识」联系起来，把问题从文学扩展到媒介史。</li>
+          <li><b>John Miles Foley，《演述中的故事歌手》（1995）：</b>最重要的内部修正。他指出「程式密度」被当成了判别口头性的石蕊试纸，但这个测试<b>承担不起</b>——有文化的诗人完全可以模仿口头风格（维吉尔、斯米尔纳的昆图斯都做过）。他的解法是把<b>意义</b>还给程式：程式的指称不只停留在字面，而携带了它在传统中所有前次使用积累下来的分量（他称之为 traditional referentiality）。</li>
+          <li><b>Larry Benson 的「书面程式」（written-formulaic）：</b>有些文本确实是写下来的，却仍有大量程式与典型场景——说明「口头」与「书面」不是非此即彼，而是一条光谱。</li>
+        </ul>
+
+        <h3>六、2026：一个出人意料的例证</h3>
+        <p>克里斯托弗·诺兰 2026 年 7 月上映的《奥德赛》中，费阿刻斯宫廷的歌手 <i>Demodocus</i> 由一位说唱歌手出演。诺兰在 2026 年 5 月接受《时代》杂志采访时解释了这一选择：<b>「I cast him because I wanted to nod towards the idea that this story has been handed down as oral poetry, which is analogous to rap.」</b>（我选他，是因为我想向这样一个事实致意——这个故事是作为口头诗歌流传下来的，而这与说唱相类似。）</p>
+        <p>这个说法并非随口一提。史诗中的 <i>Demodocus</i> 在奥德修斯面前唱了三支歌，其中一支唱的正是特洛伊木马——也就是说，荷马让一位歌手在史诗内部演唱史诗，这是口头传统对自己的一次自我指涉。而即兴说唱（freestyle）依赖的机制，与荷马歌手的机制在结构上是平行的：预先储备的节奏单元，在压力下被整块调用，从而把注意力释放给下一句。</p>
+        <div class="box">🧭 <b>事实与立场：</b>本课只取诺兰这一选角所提出的<b>诗学类比</b>加以考察，不构成对该影片或任何演员的评价。电影改编必然包含导演的取舍，与原诗存在出入，这一点属改编的常规，不在本课讨论范围内。上文所引访谈与角色信息出自 2026 年 5 月《时代》杂志访谈及 2026 年 6—7 月的多家媒体公开报道；学术部分（帕里的定义、12,500 份采集文本、Kirk 与 Foley 的论点）出自相应原著与学术文献。</div>
+
+        <h3>七、中国的口头传统研究</h3>
+        <p>口头程式理论并非只属于古典学。中国社会科学院民族文学研究所研究员朝戈金曾在《中国文学批评》（2025 年第 5 期）撰文纪念《故事的歌手》出版 65 周年，指出该理论的意义在于：它把精微的语文学解析与人类学的田野作业结合起来，是跨学科研究的早期范例；其影响也从口头诗歌研究扩展到《圣经》研究、言说民族志与媒介环境学等领域。</p>
+        <p>中国拥有丰富的活态史诗传统——藏族的《格萨尔》、蒙古族的《江格尔》、柯尔克孜族的《玛纳斯》——它们至今仍有民间艺人以口头方式演述。这类材料为检验「程式—典型场景—表演中的创编」这一框架提供了希腊之外的独立样本，也提醒我们：文字并不是文学的唯一形态，把「文本」当作文学的默认前提，本身是一个需要被历史化的观念。</p>
+
+        <h3>八、可用于雅思 / 托福的思考题</h3>
+        <ul>
+          <li>Does knowing how a work was composed change our judgement of its artistic value? Discuss both views and give your own opinion.</li>
+          <li>把一种文化的口头传统（如南斯拉夫史诗）用作另一种文化（如古希腊史诗）的解释模型，这种方法论的边界在哪里？</li>
+          <li>Constraint is the condition of creativity, not its enemy. 你是否同意？请结合一个具体领域（文学、音乐、科学）说明。</li>
+        </ul>
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课</h2>
+      <div class="card">
+        <h3>🎯 学习目标</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇：</b>掌握 10 个 C1–C2 学术词汇（epithet, formula, metrical, extemporaneously, embellishment, corroborate, repertoire, bard, transmission, frivolous），能替换掉 decorative phrase / without preparation / not serious 这类基础表达。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句法：</b>能仿写 5 个高级学术句型，尤其是 <i>What looked like X was, in truth, Y</i> 的校正结构与 <i>the condition under which...</i> 的收束式重定义。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法：</b>掌握名词性关系从句、过去分词后置定语、独立主格、介词 + which 关系从句，以及连接副词在论证推进中的功能。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>批判思维：</b>能说明一个理论如何被田野证据支持、又如何被内部修正；理解「类比」在人文研究中的效力与其边界。</div></div>
+      </div>
+      <div class="card">
+        <h3>📝 考试技巧</h3>
+        <ul>
+          <li><b>雅思阅读判断题：</b>本课第 3 段是典型出题区——「Kirk 完全否定了口头理论」是 FALSE（他反对的是类比的无条件外推，不是口头性本身）；「程式密度可以单独证明一个文本是口头创作的」是 FALSE（Foley 与 Benson 都指出识字诗人可以模仿口头风格）。分清<b>否定理论的某一推论</b>与<b>否定整个理论</b>。</li>
+          <li><b>托福推断题：</b>遇到 <i>it can be inferred that...</i>，答案必须是原文的<b>必然推论</b>。练习时先定位原句，再自问：这个选项有没有可能被原文直接推翻？</li>
+          <li><b>修辞目的题（Rhetorical Purpose）：</b>第 4 段提到 2026 年的电影，其作用是<b>举例说明</b>一个抽象机制，而不是评价电影本身。凡是文中出现当代例证，先问它服务于哪个论点，不要被题材吸引走。</li>
+          <li><b>写作 Task 2：</b><i>What looked like X was, in truth, Y</i> 与 <i>X was never a deficiency of Y; it was the condition under which Z became possible</i> 可直接用于「反驳一个流行看法」的段落，比 however 更能体现论证层次。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🐾 关于 Pola News</h3>
+        <p>Pola News 每天为 C1–C2 学习者提供一篇有学术深度、有辩论价值的英文短文，覆盖文学评论、经济分析、前沿科技、国际政治、学术论文、法律伦理与跨文化比较七大主题。全文不提供逐段中文翻译，中文仅出现在关键词释义与背景扩展中——这是刻意设计：在 C1 以上阶段，依赖翻译会阻碍你建立英语思维。</p>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Formula That Sang · 2026-09-28 · Advanced English for IELTS / TOEFL 🐾</footer>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["For centuries readers treated Homer's epithets as decoration: the wine-dark sea, swift-footed Achilles. Milman Parry proposed the reverse. These recurring phrases were not ornate, he argued, but instrumental. He defined the formula as a group of words regularly employed, under the same metrical conditions, to express a given essential idea. Each filled a fixed slot in the dactylic hexameter, letting a singer compose extemporaneously, without counting syllables. What looked like embellishment was, in truth, machinery.", "Parry's claim rested on analogy, and in 1933 he went in search of one that might corroborate it. In the Balkans he and his student Albert Lord recorded guslari, singers of epics thousands of lines long, most of them unable to read. No two performances were identical, yet each was recognisably the same song: the singer carried no fixed text, only a repertoire of formulas and of type-scenes. Lord set this out in The Singer of Tales, published in 1960.", "The analogy drew fire. Geoffrey Kirk, in The Songs of Homer, argued that Homeric hexameter is far stricter than the Serbo-Croatian material; the Greek singer, he insisted, was not merely reproductive but inventive. Others objected that formulaic density had become a litmus test it could not bear: a literate poet can imitate an oral style, as Virgil did. Foley's reply was to restore meaning to the formula, a word carrying the weight of its previous uses.", "In 2026 the debate acquired an unlikely illustration. Christopher Nolan cast a rapper as Demodocus, the bard at the Phaeacian court, explaining that he wished to honour the poem's transmission as oral poetry, analogous to rap. The comparison is not frivolous: freestyle depends on the same trick — pre-compiled rhythmic units retrieved under pressure, releasing attention for the next line. The formula, then, was never a deficiency of imagination; it was the condition under which improvisation on such a scale became possible at all."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["A history of the Balkan epic tradition and the singers who sustained it","The reclassification of Homer's repeated phrases from ornament to compositional technology, and the scholarly debate that followed","An argument that no historical person named Homer ever existed","A defence of cinematic adaptation against the charge of infidelity to its source"],ans:1,
+   fb:"Correct. 全文四段呈递进结构：第一段提出重新解读（修饰语不是装饰而是机械装置），第二段给出田野证据，第三段呈现批评与内部修正，第四段用当代例证收束并点明意义。B 同时涵盖『重新解读』与『随之而来的争论』两层，概括最完整。A 只是第二段的材料；C 是荷马问题的一个侧面，文中并未主张；D 与原文无关。"},
+  {q:"2. According to paragraph 2, what did the recorded guslari demonstrate? 根据第二段，被录制的古斯勒歌手说明了什么？",opts:["That epic singers commit a fixed, word-for-word text to memory","That every performance of a given song is essentially identical to the last","That a singer may vary the wording freely while the song stays recognisably the same, because what he carries is a grammar rather than a text","That the Balkan epic tradition descends directly from the Homeric poems"],ans:2,
+   fb:"Yes. 原文的结构是一个让步对举：No two performances were identical, yet each was recognisably the same song —— 变的与不变的分别是什么？后半句给出答案：the singer carried no fixed text, only a grammar。C 完整复述了这一组对照。A、B 与原文 identical / no fixed text 正好相反；D 属于过度推断——帕里用的是类比（analogy），不是谱系传承，这正是第三段 Kirk 所质疑之处。"},
+  {q:"3. The word 'extemporaneously' in paragraph 1 is closest in meaning to: 第一段中的 extemporaneously 最接近下列哪个词？",opts:["With elaborate ornament and careful revision","Without preparation, at the moment of performance","In strict accordance with a written exemplar","In collaboration with a second singer"],ans:1,
+   fb:"Correct. 解题要回到紧接着的语境：letting a singer compose extemporaneously, without counting syllables —— without counting syllables 是对该词的<b>同义复述</b>（不必预先计算音节＝无需事先准备）。下一句 What looked like embellishment 也提示这里讨论的是创作方式而非修辞风格，故 A 错；B 是唯一既合词义又合语境的选项。"},
+  {q:"4. What objection does Geoffrey Kirk raise in paragraph 3? 第三段中 Geoffrey Kirk 提出的反对意见是什么？",opts:["That Homeric verse is metrically stricter and its diction more economical than the Balkan material, so the analogy cannot be transferred without qualification","That Parry never actually travelled to the Balkans","That the guslari were in fact fully literate","That Homer wrote the epics down himself with the aid of a scribe"],ans:0,
+   fb:"Yes. 原文：Homeric hexameter is far stricter and Homeric diction far more economical than the Serbo-Croatian material ... not merely reproductive but inventive。注意 Kirk 否定的是类比的<b>无条件外推</b>，而不是口头性本身——这正是雅思判断题最爱设的陷阱。B、C、D 在原文中均无依据，属于凭常识臆造的选项。"},
+  {q:"5. What is the rhetorical function of the reference to the 2026 film in paragraph 4? 第四段提及 2026 年那部电影，其修辞作用是什么？",opts:["To criticise the film for departing from the poem","To prove that rap is a direct descendant of Homeric song","To show that the cognitive mechanism the theory describes — pre-compiled units retrieved under pressure — is still observable in a modern improvised form","To argue that cinema has replaced oral poetry as the chief vehicle of cultural memory"],ans:2,
+   fb:"Correct. 修辞目的题的解法是先问『它服务于哪个论点』。末段的论点在最后两句：Freestyle depends on the same trick ... pre-compiled rhythmic units retrieved under pressure。电影只是引子（an unlikely illustration），机制才是落点。B 若成立需要历史传承的证据，原文只说 analogous，且 not frivolous 是在限定类比的分量，不是升级为谱系；A、D 均非本文关切。"},
+  {q:"6. Which of the following best describes the author's attitude towards the formula? 作者对『程式』的态度最接近下列哪一项？",opts:["Dismissive — the formula is evidence of a limited imagination","Nostalgic — the formula belongs to a lost age that modern readers cannot recover","Ambivalent — the formula enables and constrains in exactly equal measure","Revisionary — long dismissed as ornament, the formula is in fact the enabling condition of oral composition on such a scale"],ans:3,
+   fb:"Correct. 态度题先圈评价性信号：第一段 What looked like embellishment was, in truth, machinery；末段 The formula was never a deficiency of imagination; it was the condition under which improvisation ... became possible at all。两处都在做同一件事——<b>推翻既有判断并给出新定义</b>，故称 revisionary。A 是被推翻的旧看法；B 无文本依据；C 看似公允，但原文并未主张『利弊相等』，而是明确赋予条件性地位。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
