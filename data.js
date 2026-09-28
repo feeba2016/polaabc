@@ -3734,6 +3734,48 @@ const EPISODES = [
     ]
   },
   {
+    "level": "A1",
+    "date": "2026-09-28",
+    "title": "The Gingerbread Man",
+    "category": "general",
+    "emoji": "🧒",
+    "desc": "A1 幼儿英语启蒙",
+    "slug": "2026-09-28-the-gingerbread-man",
+    "url": "lessons/a1/2026-09-28-the-gingerbread-man.html",
+    "vocab": [
+      {
+        "word": "bake",
+        "zh": "烘焙、烤",
+        "ex": "Mom can bake a cake."
+      },
+      {
+        "word": "oven",
+        "zh": "烤箱",
+        "ex": "The oven is hot."
+      },
+      {
+        "word": "run",
+        "zh": "跑、奔跑",
+        "ex": "I can run fast."
+      },
+      {
+        "word": "river",
+        "zh": "河、河流",
+        "ex": "The river is big."
+      },
+      {
+        "word": "fox",
+        "zh": "狐狸",
+        "ex": "The fox is clever."
+      },
+      {
+        "word": "smile",
+        "zh": "微笑",
+        "ex": "I smile at my mom."
+      }
+    ]
+  },
+  {
     "level": "A2",
     "date": "2026-08-12",
     "title": "Japan Lantern Festival",

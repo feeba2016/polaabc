@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Gingerbread Man — Interactive Lesson (A1)</title>
+<style>
+:root{
+  --accent:#92400e;
+  --accent2:#b45309;
+  --bg:#fffbeb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#78350f;
+  --highlight:#fde68a;
+  --border:#fcd34d;
+  --soft:#fef3c7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Comic Sans MS","Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:19px;}
+#progress{position:fixed;top:0;left:0;height:6px;width:0%;background:linear-gradient(90deg,var(--accent),#f59e0b);z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:22px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:8px 14px;font-size:20px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 62px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:2px solid var(--border);padding:18px 12px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:13px 14px;margin:5px 0;border-radius:14px;color:var(--text);text-decoration:none;font-weight:700;font-size:15.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:20px;width:26px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(146,64,14,.32);}
+main{flex:1;padding:28px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:34px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:20px;font-size:16px;}
+h2.sec{font-size:27px;margin:0 0 16px;color:var(--text);border-left:6px solid var(--accent2);padding-left:12px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:22px;padding:24px;margin-bottom:18px;box-shadow:0 6px 20px rgba(31,41,55,.06);}
+.seg{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--soft);margin-bottom:16px;border:2px solid #fcd34d;flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+.seg .body{flex:1;font-size:20px;}
+.seg .role{font-size:13px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg .zh{flex-basis:100%;margin-left:58px;font-size:16px;color:#78350f;background:#fffbeb;border-radius:10px;padding:8px 12px;margin-top:10px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(146,64,14,.38);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(146,64,14,.55);}70%{box-shadow:0 0 0 14px rgba(146,64,14,0);}100%{box-shadow:0 0 0 0 rgba(146,64,14,0);}}
+.kw{background:var(--highlight);padding:2px 6px;border-radius:8px;cursor:pointer;font-weight:700;border-bottom:3px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:15px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.6;}
+#tip b{color:#fcd34d;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.vocab{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.12);}
+.vocab .emoji{font-size:38px;}
+.vocab .word{font-weight:800;font-size:20px;color:var(--accent);margin-top:4px;}
+.vocab .pos{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:16px;margin:6px 0;}
+.vocab .ex{font-size:15px;color:#4b5563;font-style:italic;border-left:4px solid var(--accent2);padding-left:10px;}
+.speak-btn{position:absolute;top:16px;right:16px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:18px;padding-bottom:18px;border-bottom:2px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 8px;color:var(--accent);font-size:20px;}
+.item .zh{color:var(--muted);font-size:16px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:17px;}
+.practice{margin-top:10px;font-size:16px;color:#374151;}
+.practice input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:10px;margin-top:6px;font-family:inherit;font-size:16px;}
+.q{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:18px 20px;margin-bottom:16px;}
+.q .qt{font-weight:800;margin-bottom:12px;font-size:18px;}
+.q .opts{display:flex;flex-direction:column;gap:10px;}
+.q label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:.15s;font-size:17px;}
+.q label:hover{background:var(--soft);}
+.q label .em{font-size:26px;}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:12px;font-size:16px;font-weight:700;min-height:22px;}
+.q .check{margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;font-size:16px;}
+.ext p{margin:12px 0;font-size:17px;}
+.ext h3{color:var(--accent);font-size:21px;margin-top:20px;}
+.ext ul{padding-left:24px;}
+.ext li{margin:8px 0;}
+.goal{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+.goal .ic{font-size:24px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:14px 24px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(146,64,14,.32);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:26px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:62px;height:calc(100vh - 62px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+  .seg .zh{margin-left:0;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:2px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Little Explorers · A1</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Gingerbread Man 🍪🏃</h1>
+      <p class="subtitle">2026年9月28日 · 童话故事｜会跑的姜饼人 —— 全文阅读（点黄色词看意思）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Part 1 · Out of the Oven 从烤箱里跳出来</div>
+            <p>A little old woman <span class="kw" data-def="烘焙：用烤箱把面团做成饼干、蛋糕">bakes</span> a gingerbread man. 🍪 He jumps out of the <span class="kw" data-def="烤箱：把面团烤熟的加热箱子">oven</span>. 🔥 He is brown. 🤎</p>
+          </div>
+          <div class="zh">一位老奶奶烤了一个姜饼人 🍪。他从烤箱里跳了出来 🔥。他是棕色的 🤎。</div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Part 2 · Run, Run, Run 跑呀跑呀跑</div>
+            <p>“Run, run, run as fast as you can! You can't catch me, I'm the Gingerbread Man!” 🏃 He <span class="kw" data-def="跑：用脚很快地往前移动">runs</span> past a cat and a dog. 🐱🐶</p>
+          </div>
+          <div class="zh">“跑呀，跑呀，你能跑多快就跑多快！你抓不到我，我是姜饼人！” 🏃 他跑过一只猫和一只狗 🐱🐶。</div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Part 3 · A Big River 一条大河</div>
+            <p>He comes to a big <span class="kw" data-def="河：长长的、一直流的水">river</span>. 🌊 He cannot swim. A <span class="kw" data-def="狐狸：尖耳朵、大尾巴的野生动物">fox</span> says, 🦊 “Jump on my back.” He says, “Thank you!” 🙏</p>
+          </div>
+          <div class="zh">他来到一条大河边 🌊。他不会游泳。一只狐狸说 🦊：“跳到我背上来吧。” 他说：“谢谢你！” 🙏</div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Part 4 · Home Again 回家啦</div>
+            <p>The fox helps him cross. 🦊 He runs home. 🏠 The old woman <span class="kw" data-def="微笑：嘴角往上翘，表示很开心">smiles</span>. 😊 They bake more little friends. 🍪</p>
+          </div>
+          <div class="zh">狐狸帮他过了河 🦊。他跑回了家 🏠。老奶奶笑了 😊。他们又烤了好多小姜饼伙伴 🍪。</div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:#fef3c7;border:2px solid #fcd34d;">
+        <h3 style="margin:0 0 8px;color:#92400e;font-size:20px;">🍪 和 Pola 一起念咒语！</h3>
+        <p style="margin:0;font-size:16px;">姜饼人有一句全世界小朋友都会念的话：<b>“Run, run, run as fast as you can! You can't catch me, I'm the Gingerbread Man!”</b> 🏃 和爸爸妈妈一起拍手念三遍，念到 <b>Gingerbread Man</b> 的时候要大声喊出来！记得点黄色的词看中文意思 💛</p>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bake">🔊</button><div class="emoji">🍪</div><div class="word">bake<span class="pos">v.</span></div><div class="zh">烘焙、烤</div><div class="ex">Mom can bake a cake.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="oven">🔊</button><div class="emoji">🔥</div><div class="word">oven<span class="pos">n.</span></div><div class="zh">烤箱</div><div class="ex">The oven is hot.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="run">🔊</button><div class="emoji">🏃</div><div class="word">run<span class="pos">v.</span></div><div class="zh">跑、奔跑</div><div class="ex">I can run fast.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="river">🔊</button><div class="emoji">🌊</div><div class="word">river<span class="pos">n.</span></div><div class="zh">河、河流</div><div class="ex">The river is big.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fox">🔊</button><div class="emoji">🦊</div><div class="word">fox<span class="pos">n.</span></div><div class="zh">狐狸</div><div class="ex">The fox is clever.</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="smile">🔊</button><div class="emoji">😊</div><div class="word">smile<span class="pos">v.</span></div><div class="zh">微笑</div><div class="ex">I smile at my mom.</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. [Someone] can [verb].</h3>
+          <div class="zh">“……会 / 能……”。想说自己或别人<b>会做什么</b>，就用 <b>can + 动词</b>。记住：<b>can 后面的动词永远用原形，不加 -s</b>。</div>
+          <div class="eg">I can run. 🏃 / He can jump. 🐸 / We can bake. 🍪 / The fox can swim. 🦊</div>
+          <div class="practice">练习：我会跑 → I can <input placeholder="run">.</div>
+        </div>
+        <div class="item">
+          <h3>2. [Someone] runs past a [thing].</h3>
+          <div class="zh">“……跑过……”。<b>run past</b> 就是“从旁边跑过去”，后面接<b>跑过的东西</b>（一只猫、一棵树、一栋房子）。</div>
+          <div class="eg">He runs past a cat. 🐱 / He runs past a dog. 🐶 / I run past a big tree. 🌳 / We run past the school. 🏫</div>
+          <div class="practice">练习：他跑过一只猫 → He runs past <input placeholder="a cat">.</div>
+        </div>
+        <div class="item">
+          <h3>3. [Verb]! 一句话的口令</h3>
+          <div class="zh">想让别人立刻做一件事，就把<b>动词放在最前面</b>，句子可以很短：<b>Run!</b>（跑！）<b>Stop!</b>（停！）。想客气一点，就在前面或后面加 <b>please</b>。</div>
+          <div class="eg">Run! 🏃 / Jump on my back. 🦊 / Come here, please. 👋 / Stop, please! ✋</div>
+          <div class="practice">练习：跳到我背上 → <input placeholder="Jump on my back">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 一个东西前面加 a 或 an</h3>
+          <div class="zh">说“<b>一个</b>”时，单词前面要加 <b>a</b> 或 <b>an</b>。<br>单词<b>以元音字母 a / e / i / o / u 开头</b>，用 <b>an</b>：<b>an oven</b>、<b>an apple</b> 🍎、<b>an egg</b> 🥚。<br>其他情况用 <b>a</b>：<b>a fox</b> 🦊、<b>a river</b> 🌊、<b>a cat</b> 🐱。</div>
+          <div class="eg">an oven 🔥 ←→ a fox 🦊 / an apple 🍎 ←→ a dog 🐶</div>
+        </div>
+        <div class="item">
+          <h3>2. 他 / 她 / 它 后面，动词要加 -s</h3>
+          <div class="zh">当做事的是 <b>he（他）、she（她）、it（它）</b>，或者<b>只有一个人 / 一只动物</b>时，动词后面要加 <b>-s</b>：<br><b>run → runs</b>、<b>say → says</b>、<b>smile → smiles</b>、<b>bake → bakes</b>。<br>但 <b>I / you / we / they</b> 后面<b>不加</b>：I run、they run。</div>
+          <div class="eg">He runs fast. 🏃 / She bakes a cake. 🍪 / The fox smiles. 🦊 ←→ I run. 🏃 / They run. 🏃🏃</div>
+        </div>
+        <div class="item">
+          <h3>3. can 和 cannot：能 / 不能</h3>
+          <div class="zh"><b>can</b> 是“能、会”，<b>cannot</b>（常写成 <b>can't</b>）是“不能、不会”。<br>两个词后面都跟<b>动词原形</b>，<b>千万不要加 -s</b>：要说 <b>He can run.</b> 不能说 He can runs。<br>回答别人的问题时，可以说 <b>Yes, I can.</b> 或 <b>No, I cannot.</b></div>
+          <div class="eg">I can run. 🏃 / He cannot swim. 🌊 / The fox can help. 🦊 ←→ I can runs. ❌</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card" style="background:#fef3c7;border:2px solid #fcd34d;">
+        <div style="font-size:20px;font-weight:800;color:#92400e;">🏅 我的得分：<span id="score">0</span> / 4</div>
+        <div style="font-size:15px;color:#78350f;margin-top:6px;">每做对一题得 1 分，全部做完就是最会讲故事的小小童话家啦！🍪✨</div>
+      </div>
+    </section>
+
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>🍪 姜饼人是从哪里来的？</h3>
+        <p>《姜饼人》（<b>The Gingerbread Man</b>，也叫 The Gingerbread Boy）是一个<b>美国的童话故事</b>。它最早印在 <b>1875 年 5 月</b>的儿童杂志《<b>圣尼古拉斯杂志</b>》（St. Nicholas Magazine）上 📖。讲故事的人说，这个故事是一个缅因州的女孩讲给孩子们听的，孩子们太喜欢了，她就把故事记了下来。</p>
+        <p>这个故事属于<b>“逃跑的食物”</b>家族：很多国家都有<b>从锅里跳出来跑掉的食物</b>的故事。比如俄罗斯的《<b>小圆面包</b>》（Kolobok，中文常译作“科洛博克”，1864 年记录）、挪威的《<b>煎饼</b>》（Pannekaken，1842—1844 年出版）、德国的《<b>又胖又大的煎饼</b>》、法国的《滚动的薄饼》。它们都比美国的姜饼人<b>更早</b>，可以说是姜饼人的“老亲戚” 🌍。</p>
+        <p><b>要说明一下：</b>1875 年的原版结局里，狐狸把姜饼人吃掉了（他会喊 “I'm quarter gone... I'm all gone!”）。今天我们学的这一课用的是<b>给小朋友改写的温和版本</b>——狐狸帮助姜饼人过河，他平安回到了家 🏠。读故事的时候，可以和爸爸妈妈聊聊：你更喜欢哪一个结局呢？</p>
+
+        <h3>🫚 姜饼里为什么要放姜？</h3>
+        <ul>
+          <li>姜饼（<b>gingerbread</b>）是用<b>面粉、蜂蜜或糖蜜、姜粉</b>做成的点心。姜有一种<b>暖暖的、微微辣</b>的味道，加在甜甜的饼干里特别香 ✨。</li>
+          <li>欧洲人很早就会做姜饼了。传说中世纪时人们把姜饼做成<b>小人、小动物</b>的形状，赶集的时候卖给小朋友。后来就有了“姜饼人” 🍪。</li>
+          <li>在中国，<b>姜</b>也是一种很老的食材。《论语》里就记着孔子 <b>“不撤姜食”</b>，意思是他吃饭时<b>总少不了姜</b> 📜。中医也说姜能<b>驱寒暖身</b>，冬天喝一碗<b>姜汤</b>，身子马上暖起来 ♨️。</li>
+          <li>因为姜饼又甜又耐放，欧洲人还喜欢用它<b>盖房子</b>——就是童话里的<b>姜饼屋</b>，屋顶上刷一层白糖霜，像下过雪一样 🏠❄️。</li>
+        </ul>
+
+        <h3>🎨 中国也有“可以吃的小人”：面塑与糖人</h3>
+        <p>看到姜饼人，中国的小朋友一定会想到另一种老手艺——<b>捏面人</b>。<b>面塑</b>（也叫面人）是用<b>糯米面、面粉</b>加上颜色，用手和一小根竹刀，几下就捏出<b>小人、小动物、故事里的人物</b>，比如孙悟空、猪八戒 🐒。</p>
+        <ul>
+          <li>面塑在中国已经有<b>一千多年</b>的历史，<b>2008 年</b>被列入<b>国家级非物质文化遗产</b>名录 🏅。山东菏泽面人、北京“面人汤”、上海面塑都很有名。</li>
+          <li>和面塑很像的还有 <b>吹糖人</b>：把麦芽糖加热变软，一边吹一边捏，转眼就变出一只<b>亮晶晶的小老鼠或小龙</b> 🐉。以前庙会、集市上最常见，师傅的手快得像变魔术。</li>
+          <li>姜饼人是<b>烤</b>出来的，面人是<b>捏</b>出来的，糖人是<b>吹</b>出来的——做法不一样，但都是把<b>好吃的面团变成一个会讲故事的小人</b> 🍪🎨。</li>
+        </ul>
+
+        <h3>🦊 故事里的小道理</h3>
+        <p>姜饼人跑得很快，可是一条大河就把他难住了。这告诉我们：<b>每个人都有做不到的事</b>，做不到的时候<b>请别人帮忙</b>一点也不丢脸，记得说一声 <b>“Thank you!”</b> 🙏。反过来说，别人帮了你，你也要像老奶奶一样<b>笑着谢谢他</b> 😊。</p>
+        <p>老版本里姜饼人因为<b>太骄傲、太相信陌生人</b>才吃了亏。所以现实生活里，遇到不认识的人搭话，小朋友要<b>先找爸爸妈妈</b>，不跟陌生人走，不吃陌生人给的东西 🚫。</p>
+
+        <h3>🎮 可以这样玩</h3>
+        <ul>
+          <li><b>念咒语比赛</b> 🏃：全家一起念 <b>“Run, run, run as fast as you can! You can't catch me, I'm the Gingerbread Man!”</b>，看谁念得又快又清楚。</li>
+          <li><b>捏一个姜饼人</b> 🍪：用橡皮泥、面团（或者和爸爸妈妈一起烤真的饼干）做一个小人，给他点上眼睛和纽扣，边做边说 <b>bake</b>、<b>oven</b>、<b>run</b>。</li>
+          <li><b>我说你做</b> 🗣️：大人说 <b>“Run!”</b> “<b>Jump on my back.</b>” “<b>Stop, please!</b>”，小朋友立刻做动作，练习英文口令。</li>
+          <li><b>画一条河</b> 🌊：画姜饼人跑过的路线——烤箱、猫、狗、大河、狐狸、家，边画边讲一遍故事。</li>
+          <li><b>找一找</b> 🔍：在故事里找出所有带 <b>-s</b> 的动词：<b>runs</b>、<b>says</b>、<b>smiles</b>，说说它们为什么加 s。</li>
+        </ul>
+
+        <p style="background:#fee2e2;border-radius:12px;padding:12px 14px;"><b>⚠️ 安全提醒：</b>烤箱<b>非常烫</b>，小朋友<b>不能自己开关烤箱、不能伸手进去拿烤盘</b>，一定要请大人帮忙，并且戴上隔热手套 🧤；烤好的饼干要<b>放凉了再吃</b>，刚出炉会烫到嘴巴 🔥；吃饼干前要<b>把手洗干净</b> 🧼；如果家里有对<b>小麦、鸡蛋、坚果</b>过敏的人，吃之前一定要先问清楚 ⚠️。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;font-size:21px;">🎯 学习目标</h3>
+        <div class="goal"><span class="ic">🌟</span><div>听懂并跟读短文《The Gingerbread Man》，能讲出“烤出来—逃跑—过河—回家”的故事。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>学会 6 个 A1 核心词：bake, oven, run, river, fox, smile。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>会用 “I can ...”、“... runs past a ...” 和英文口令 “Run!” “Jump on my back.” 说简单的话。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>懂得 a / an 的选择、he / she / it 后面动词加 -s，以及 can 后面用动词原形。</div></div>
+        <div class="goal"><span class="ic">🌟</span><div>知道遇到困难可以请人帮忙，并且记得说 “Thank you!” 🙏</div></div>
+
+        <h3 style="color:var(--accent);font-size:21px;">📝 学习建议</h3>
+        <div class="goal"><span class="ic">🔊</span><div>点每段右侧的 ▶ 按钮，跟着 Pola 一句一句读；第二段那句咒语要读得又快又有节奏。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div>点词汇卡片上的 🔊 听发音，把 6 个词做成小卡片，贴在冰箱上天天看。</div></div>
+        <div class="goal"><span class="ic">🍪</span><div>和爸爸妈妈一起做（或捏）一个姜饼人，边做边说 <b>“We can bake.”</b> 🍪</div></div>
+        <div class="goal"><span class="ic">🎤</span><div>玩“口令游戏”：大人说 <b>“Run!”</b> 或 <b>“Stop, please!”</b>，小朋友马上做动作，再换过来玩。</div></div>
+        <div class="goal"><span class="ic">🖨️</span><div>点下方按钮打印本课，贴在冰箱上，每天读一段打个卡 💛</div></div>
+
+        <div style="margin-top:18px;">
+          <button class="print-btn" onclick="window.print()">🖨️ 打印本课（Print Friendly）</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Gingerbread Man · 2026-09-28 · Made for little explorers 🐾</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman|girl)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.85; u.pitch=1.15;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["A little old woman bakes a gingerbread man. He jumps out of the oven. He is brown.", "Run, run, run as fast as you can! You can't catch me, I'm the Gingerbread Man! He runs past a cat and a dog.", "He comes to a big river. He cannot swim. A fox says, Jump on my back. He says, Thank you!", "The fox helps him cross. He runs home. The old woman smiles. They bake more little friends."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What does the old woman bake? 老奶奶烤了什么？",em:["🍪","🚗","📕"],opts:["A gingerbread man (姜饼人)","A car (小汽车)","A book (书)"],ans:0,
+   fb:"Yes! 她烤的是一个姜饼人 🍪。"},
+  {q:"Can the gingerbread man run? 姜饼人会跑吗？",em:["😴","🏃","🪑"],opts:["No, he sleeps all day (不，他整天睡觉)","Yes, he can run fast (会，他跑得很快)","No, he is a chair (不，他是一把椅子)"],ans:1,
+   fb:"Right! 他跑得飞快，还从猫和狗身边跑过去了 🏃。"},
+  {q:"Who helps him cross the river? 谁帮他过河？",em:["🐱","🐟","🦊"],opts:["A cat (猫)","A fish (鱼)","A fox (狐狸)"],ans:2,
+   fb:"Great! 是狐狸背他过河的 🦊。"},
+  {q:"What does he say to the fox? 他对狐狸说了什么？",em:["😠","🙏","🌙"],opts:["Go away (走开)","Thank you (谢谢你)","Good night (晚安)"],ans:1,
+   fb:"Perfect! 有礼貌的孩子会说 Thank you 🙏。"}
+];
+const qb=document.getElementById('quizBox');
+const scoreEl=document.getElementById('score');
+let score=0;
+let answered=new Array(quizData.length).fill(false);
+function updateScore(){if(scoreEl)scoreEl.textContent=String(score);}
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><span class="em">${item.em[j]}</span> <input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#a16207';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+      if(!answered[i]){answered[i]=true;score++;updateScore();}
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+      answered[i]=true;
+    }
+  });
+});
+updateScore();
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
