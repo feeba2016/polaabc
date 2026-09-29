@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Mood That Refuses the Data — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#b45309;
+  --bg:#f4f7fd;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#d9e3fb;
+  --soft:#eef4ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,78,216,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,78,216,.55);}70%{box-shadow:0 0 0 12px rgba(29,78,216,0);}100%{box-shadow:0 0 0 0 rgba(29,78,216,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#111c3a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 经济学人 Economist-style Analysis</span>
+      <h1 class="title">The Mood That Refuses the Data</h1>
+      <p class="subtitle">Why measures of economic conditions and measures of economic sentiment have stopped agreeing · 全文阅读（点蓝色词看释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Fraying</div>
+            <p>Since 1946 the University of Michigan's Surveys of Consumers has served as a serviceable <span class="kw" data-def="晴雨表、衡量指标（原指气压计：an instrument that registers atmospheric pressure；引申为 a barometer of household mood 家庭情绪的晴雨表；形容词 barometric；动词形式为 measure / track）">barometer</span> of household mood: unemployment up, the index down; unemployment down, the index up. That regularity has frayed. At a September 2026 reading of 47.8, the index stood far below its postwar average, even as output expanded and joblessness stayed low. The instrument, it seems, has stopped agreeing with the weather.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Rival Readings</div>
+            <p>Two accounts compete, neither patient. On the first, the official statistics are the liars: a cost-of-living squeeze invisible to a deflator that imputes rent homeowners never pay. On the second, the households are — primed by partisan media into a recession that exists only in the telling. Both treat the <span class="kw" data-def="背离、分歧、偏离（the process of moving apart；a divergence between sentiment and spending 情绪与支出之间的背离；形容词 divergent，divergent views 分歧的观点；动词 diverge + from）">divergence</span> as a fault to assign. The third is less satisfying and more probable: the two series never measured the same object, and we <span class="kw" data-def="混淆、把两件事混为一谈（to combine two separate things into one, mistakenly；conflate correlation with causation 把相关性与因果性混为一谈；名词 conflation）">conflate</span> them at our peril.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Evidence</div>
+            <p>Experimental work points that way. Cavallo, Cruces and Perez-Truglia, in the American Economic Journal: Macroeconomics (2017), found that even when respondents were handed official inflation figures, they continued to weight their own memories of supermarket prices, systematically recalling past prices as lower than they had been, and so overstating inflation. <span class="kw" data-def="先验、先验信念（贝叶斯术语：a belief held before new evidence is considered；weak priors 弱先验；形容词义为「在先的」，prior to the survey 调查之前）">Priors</span> were weakest where inflation had been lowest, as rational <span class="kw" data-def="忽视、不注意（rational inattention 理性忽视：获取信息有成本，故理性地选择不完全知情；形容词 inattentive；反义 attention）">inattention</span> predicts, and expectations proved strikingly <span class="kw" data-def="异质的、成分不一的（diverse in character or content；a heterogeneous sample 异质样本；名词 heterogeneity；反义 homogeneous 同质的）">heterogeneous</span>; what governed recall was not frequency but <span class="kw" data-def="显著性、凸显度（the quality of being noticeable or prominent；the salience of petrol prices 汽油价格的凸显性；形容词 salient，a salient feature 显著特征）">salience</span>.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Reading</div>
+            <p>Richard Curtin, a former director, documented near-perfect selective perception of economic news; his successor Joanne Hsu has shown that partisan gaps in sentiment now exceed those by income, age or education, though the groups still co-move and independents track the headline. The index is thus less a thermometer than a <span class="kw" data-def="代理变量、替代指标（a variable used to stand in for one that cannot be measured directly；a proxy for affiliation 归属感的代理指标；by proxy 通过代理）">proxy</span> for affiliation. Were policymakers to read it as a forecast, they would be reacting partly to an <span class="kw" data-def="人为产物、假象（something observed that is produced by the method rather than by the phenomenon itself；a statistical artifact 统计假象；也拼作 artefact）">artifact</span> of the questions the survey <span class="kw" data-def="引出、采集（回答、反应、信息）（to draw out a response or piece of information；elicit answers from respondents 从受访者处采集回答；名词 elicitation）">elicits</span>: a mood, not a measurement.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="barometer">🔊</button><div class="word">barometer<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">晴雨表、衡量指标（原指气压计 an instrument that registers atmospheric pressure；引申为反映某事物状态的指标；a barometer of household mood 家庭情绪的晴雨表；形容词 barometric）</div><div class="ex">"has served as a serviceable barometer of household mood"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="divergence">🔊</button><div class="word">divergence<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">背离、分歧、偏离（the process or state of moving apart；a divergence between A and B 两者之间的背离；形容词 divergent，divergent views 分歧的观点；动词 diverge，diverge from the trend）</div><div class="ex">"Both treat the divergence as a fault to assign."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="conflate">🔊</button><div class="word">conflate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">混淆、把两件事混为一谈（to combine two separate things into one, mistakenly；conflate correlation with causation 把相关性与因果性混为一谈；名词 conflation；近义 confuse，但 conflate 强调「把两个本应分开的实体并成一个」）</div><div class="ex">"the two series never measured the same object, and we conflate them at our peril"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="priors">🔊</button><div class="word">priors<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">先验、先验信念（贝叶斯术语：beliefs held before new evidence is considered；weak priors 弱先验；单数 a prior；形容词义为「在先的」，prior to the survey 在调查之前）</div><div class="ex">"Priors were weakest where inflation had been lowest."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="inattention">🔊</button><div class="word">inattention<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">忽视、不注意（rational inattention 理性忽视：信息获取有成本，故理性主体选择不完全知情；形容词 inattentive；名词 attention 的反义）</div><div class="ex">"as rational inattention predicts"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="salience">🔊</button><div class="word">salience<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">显著性、凸显度（the quality of being noticeable, prominent or important；the salience of petrol prices 汽油价格的凸显性；形容词 salient，a salient feature 显著特征；也用于语言学 salience 显著度）</div><div class="ex">"what governed recall was not frequency but salience"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="heterogeneous">🔊</button><div class="word">heterogeneous<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">异质的、成分不一的（diverse in character or content；a heterogeneous sample 异质样本；名词 heterogeneity；反义 homogeneous 同质的；注意发音 /ˌhetərəˈdʒiːniəs/）</div><div class="ex">"expectations proved strikingly heterogeneous"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="proxy">🔊</button><div class="word">proxy<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">代理变量、替代指标（a variable or person used to stand in for another；a proxy for affiliation 归属感的代理指标；by proxy 通过代理；也指「代理服务器」「委托书」）</div><div class="ex">"less a thermometer than a proxy for affiliation"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="artifact">🔊</button><div class="word">artifact<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">人为产物、假象（something observed that is produced by the method rather than by the phenomenon itself；a statistical artifact 统计假象；也拼作 artefact；另一个常见义项是「人工制品、文物」）</div><div class="ex">"partly an artifact of the questions the survey elicits"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="elicit">🔊</button><div class="word">elicit<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">引出、采集（回答、反应、信息）（to draw out a response, answer or fact；elicit answers from respondents 从受访者处采集回答；elicit a reaction 引发反应；名词 elicitation；注意与 illicit「非法的」区分）</div><div class="ex">"an artifact of the questions the survey elicits"</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. X has served as a serviceable Y of Z（现在完成时 + 隐喻性评价名词）</h3>
+          <div class="zh"><i>serve as</i> 表示「充当、起到…的作用」；<i>serviceable</i> 是一个刻意低调的形容词，意为「够用的、称职的」，比 excellent 更克制，比 useful 更书面。<i>since + 时间点</i> 与现在完成时搭配，把「从某年延续至今」这一时间框架一次性交代清楚。经济学人常用这种句型为一个指标或制度定位。</div>
+          <div class="eg">Since 1946 the University of Michigan's Surveys of Consumers has served as a serviceable barometer of household mood.</div>
+          <div class="practice">✍️ 仿写：自 1990 年以来，这一比值一直充当着投资者风险偏好的实用指标。<input type="text" placeholder="Since 1990 the ratio has served as..."></div>
+        </div>
+        <div class="item">
+          <h3>2. On the first, ...; on the second, ...（两派观点对举的省略结构）</h3>
+          <div class="zh">先在前文点明有两种说法（<i>Two accounts compete</i>），再用 <i>on the first / on the second</i> 分别展开。后一个分句可以只保留主语与助动词（<i>the households are</i>），把表语留给读者从前文回补——这种「留白式省略」节奏极快，是英语议论文排在段首的常见手法。注意两个分句的结构必须平行。</div>
+          <div class="eg">On the first, the official statistics are the liars. On the second, the households are — primed by partisan media into a recession that exists only in the telling.</div>
+          <div class="practice">✍️ 仿写：第一种解释认为模型错了；第二种则认为数据错了。<input type="text" placeholder="On the first, ... On the second, ..."></div>
+        </div>
+        <div class="item">
+          <h3>3. even when + 过去分词短语，主句（让步分句的省略）</h3>
+          <div class="zh">当让步从句的主语与主句一致、且谓语含 <i>be</i> 时，可整体省略为 <i>even when + 过去分词</i>：<i>even when handed official inflation figures, they continued...</i>。它比完整的 <i>even when they were handed...</i> 更紧凑，也把重心推给了主句。<b>注意</b>：分词必须依附主句主语，否则构成悬垂分词。</div>
+          <div class="eg">...found that even when respondents were handed official inflation figures, they continued to weight their own memories of supermarket prices.</div>
+          <div class="practice">✍️ 仿写：即使在被告知正确答案之后，参与者仍坚持自己最初的判断。<input type="text" placeholder="even when told the correct answer, ..."></div>
+        </div>
+        <div class="item">
+          <h3>4. Were + 主语 + to-infinitive, 主语 + would + 原形（虚拟条件句的倒装省略）</h3>
+          <div class="zh">省略 <i>if</i> 并把 <i>were</i> 提到句首，是正式文体中表示「与现在／将来事实相反或可能性很低」的标准虚拟式：<i>Were policymakers to read it as a forecast, they would be reacting...</i> 相当于 <i>If policymakers were to read...</i>。语气比普通条件句更疏离、更书面，适合用于提出警告。</div>
+          <div class="eg">Were policymakers to read it as a forecast, they would be reacting partly to an artifact of the questions the survey elicits.</div>
+          <div class="practice">✍️ 仿写：倘若研究者把相关性当作因果性，他们就会得出完全相反的结论。<input type="text" placeholder="Were researchers to ... they would ..."></div>
+        </div>
+        <div class="item">
+          <h3>5. less a X than a Y / not X but Y（对照性重定义）</h3>
+          <div class="zh">两者都用于「先排除一个说法，再给出更准确的说法」。<i>less a thermometer than a proxy</i> 表示「与其说是温度计，不如说是…」；<i>not frequency but salience</i> 表示「不是频率，而是凸显度」。区别在于：<i>less...than...</i> 是程度上的重新配比，语气较缓和；<i>not...but...</i> 是非此即彼的替换，语气更硬。结论段宜用前者，论证中段宜用后者。</div>
+          <div class="eg">The index is thus less a thermometer than a proxy for affiliation. / What governed recall was not frequency but salience.</div>
+          <div class="practice">✍️ 仿写：这项调查与其说是测量经济状况，不如说是记录人们对新闻的反应。<input type="text" placeholder="The survey has become less ... than ..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟条件句的倒装省略（Inverted conditional clauses）</h3>
+          <div class="zh">当条件从句含 <i>were / had / should</i> 时，可省略 <i>if</i> 并把它提到句首：<i>Were they to read... = If they were to read...</i>；<i>Had the survey asked... = If the survey had asked...</i>；<i>Should inflation rise... = If inflation should rise...</i>。三种形式分别对应将来／过去／可能三种虚拟。这是雅思写作与学术英语中最能体现句式控制力的结构之一。</div>
+          <div class="eg">Were policymakers to read it as a forecast, they would be reacting partly to an artifact of the questions the survey elicits.</div>
+          <div class="practice">⚠️ 倒装后<b>不能</b>再写 if；否定形式把 not 放在主语之后：<i>Were they not to read...</i>（较少见，通常改用 <i>If they did not read...</i>）。</div>
+        </div>
+        <div class="item">
+          <h3>2. 现在完成时 + since（未终止的时间框架）</h3>
+          <div class="zh"><i>since + 时间点</i> 要求主句用现在完成时，表示动作或状态从该点持续到现在：<i>Since 1946 the Surveys of Consumers has served...</i>。它与一般过去时的区别在于：<i>has served</i> 暗示「至今仍然如此或刚刚被推翻」，<i>served</i> 则把事实封存在过去。本课正是利用这一区别——前半句建立延续性，后半句 <i>That regularity has frayed</i> 宣告它终止。</div>
+          <div class="eg">Since 1946 the University of Michigan's Surveys of Consumers has served as a serviceable barometer of household mood.</div>
+          <div class="practice">⚠️ 主语为机构名称时用单数（<i>the Surveys of Consumers has</i>），因为它是专有名词（一个调查项目的名称），尽管 Surveys 是复数形式。</div>
+        </div>
+        <div class="item">
+          <h3>3. 让步分句的省略：even when + 过去分词短语</h3>
+          <div class="zh">规则：从句主语与主句主语一致，且从句谓语为 <i>be + 过去分词</i> 时，可删去主语与 be，只留过去分词。<i>even when (respondents were) handed official figures, they continued...</i>。可引导这类省略的连词还有 <i>although, though, if, unless, once, while</i>。</div>
+          <div class="eg">even when respondents were handed official inflation figures, they continued to weight their own memories</div>
+          <div class="practice">⚠️ 省略的前提是<b>主语一致</b>。若写成 <i>Even when handed the data, the conclusion remains unclear</i>（data 与 conclusion 不一致），即为悬垂结构，正式写作中应避免。</div>
+        </div>
+        <div class="item">
+          <h3>4. 比较结构中的替代：those / that of</h3>
+          <div class="zh">比较两个同类事物时，用 <i>those</i> 替代上文出现过的复数名词，用 <i>that of</i> 替代「单数名词 + of」。课文原句 <i>partisan gaps in sentiment now exceed those by income, age or education</i> 中，<i>those</i> 替代的是 <i>gaps</i>，即「党派造成的差距超过了收入、年龄或教育造成的<b>差距</b>」。省略替代词会让句子难以卒读。</div>
+          <div class="eg">partisan gaps in sentiment now exceed those by income, age or education</div>
+          <div class="practice">⚠️ 复数用 those，单数用 that：<i>The gap among Democrats exceeds that among independents.</i> 若被替代的是可数名词单数，也可用 the one。</div>
+        </div>
+        <div class="item">
+          <h3>5. 无动词后置修饰：形容词短语修饰名词</h3>
+          <div class="zh">形容词短语（而非单个形容词）作定语时必须后置：<i>a squeeze invisible to a deflator</i>；<i>partly an artifact of the questions</i>。第二例中 <i>partly an artifact</i> 是名词短语作后置修饰，同样不带动词。这类结构能在不铺开定语从句的前提下塞进一层限定，是英语学术文体高密度的主要来源。</div>
+          <div class="eg">a cost-of-living squeeze invisible to a deflator that imputes rent homeowners never pay</div>
+          <div class="practice">⚠️ 单个形容词前置（<i>an invisible squeeze</i>），短语则后置（<i>a squeeze invisible to statisticians</i>）。分词短语同理：<i>the questions the survey elicits</i> 是省略关系词的定语从句，不是无动词结构。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、本课在说什么（一句话概括）</h3>
+        <p>一个用了近八十年的经济指标——密歇根大学消费者信心指数——与它本该反映的客观经济状况之间出现了持续而显著的背离。本课不急着判定「谁错了」，而是追问一个更根本的问题：<b>这两条曲线测量的，真的是同一个东西吗？</b></p>
+
+        <h3>二、密歇根消费者调查是什么</h3>
+        <table>
+          <tr><th style="width:18%">项目</th><th>内容</th></tr>
+          <tr><td><b>起始与执行</b></td><td>1946 年起由密歇根大学社会研究所（Institute for Social Research）下属的<b>调查研究中心</b>（Survey Research Center）按月执行，是美国历史最长的消费者调查之一</td></tr>
+          <tr><td><b>指数构成</b></td><td>由固定的若干道核心问题合成，分为两个分指数：<b>当前经济状况指数</b>（Index of Current Economic Conditions，评价当下）与<b>消费者预期指数</b>（Index of Consumer Expectations，展望未来）</td></tr>
+          <tr><td><b>基期</b></td><td>以 1966 年为 100。因此「47.8」这类读数的含义是：相当于 1966 年水平的不足一半</td></tr>
+          <tr><td><b>抽样</b></td><td>美国本土的等概率住户样本，主要通过电话访问；调查方同时公布「最小显著变动」阈值，提醒读者不要把几个点以内的月度波动当真</td></tr>
+          <tr><td><b>历史区间</b></td><td>三个政治群体（两党成员与无党派人士）的情绪在 2022 年 6 月同时触底——这是该调查记录到的最低点</td></tr>
+        </table>
+        <p><b>为什么它重要？</b>因为它被写进了无央行的沟通材料、被投行写进周报、被媒体当作「普通人怎么想」的代名词。一个指标一旦被反复引用，它就不再只是描述现实，而会参与塑造现实。</p>
+
+        <h3>三、背离的三种解释</h3>
+        <table>
+          <tr><th style="width:16%">解释路径</th><th style="width:32%">主张</th><th>问题</th></tr>
+          <tr><td><b>① 统计失真</b></td><td>官方通胀指标低估了真实生活成本：它按固定篮子加权、对自有住房采用<b>推算租金</b>（imputed rent），而这些恰恰不是家庭每月实际掏钱时感受到的东西</td><td>方向对，但解释力有限——即使把能源与食品剔除，核心通胀与情绪的背离依然存在</td></tr>
+          <tr><td><b>② 心理机制</b></td><td>人对价格的记忆是有偏差的，且受<b>凸显性</b>支配：汽油、鸡蛋、房租这类高频且显眼的价格被过度加权</td><td>解释了「为什么感受与统计不同」，但解释不了差距为何在近十余年突然扩大</td></tr>
+          <tr><td><b>③ 政治与媒介</b></td><td>情绪调查在相当程度上记录了受访者<b>如何解释</b>新闻，而解释是被立场过滤的</td><td>这是调查自身的研究者给出的结论，不是外部批评者的指控</td></tr>
+        </table>
+        <p>本课的立场是：这三条并不互斥，但它们经常被当作<b>互斥的</b>来使用——各方都急于把背离指派为对方的过错，而这恰恰阻断了真正有用的讨论。</p>
+
+        <h3>四、关键实验：人们究竟相信哪一个</h3>
+        <p>阿尔贝托·卡瓦洛（Alberto Cavallo，MIT）、吉列尔莫·克鲁塞斯（Guillermo Cruces）与里卡多·佩雷斯—特鲁利亚（Ricardo Perez-Truglia）在 2017 年发表于《美国经济杂志：宏观经济学》（<i>American Economic Journal: Macroeconomics</i>，9 卷 3 期，1–35 页；NBER 工作论文 w20576）的研究，用一组调查实验直接检验了这个问题。</p>
+        <ul>
+          <li><b>做法。</b>随机向受访者提供两类信息：一是官方通胀统计数据，二是若干超市商品的历史价格表；然后测量他们的通胀预期如何变化，并用贝叶斯学习模型估计他们给每类信息分配的权重。</li>
+          <li><b>发现一。</b>在<b>低通胀</b>环境中，受访者对通胀水平的先验信念明显更弱——这与「理性忽视」（获取信息的成本高于收益，故理性地选择不知情）的预测一致。</li>
+          <li><b>发现二。</b>即使官方统计被明明白白地递到手上，受访者<b>仍然</b>赋予自己记忆中的超市价格以显著的权重。</li>
+          <li><b>发现三。</b>人们对<b>过去</b>价格的系统性回忆偏低，于是<b>高估</b>了通胀——不是因为记错了今天的价格，而是因为记低了去年的价格。</li>
+        </ul>
+        <div class="box">🔍 <b>为什么这个结论重要？</b>如果信息摩擦只来自「不知道统计数据」，那么药方很简单：多公布数据、多解释数据。但如果摩擦来自认知机制本身，那么<b>再多的信息披露也未必奏效</b>——央行面对的就不是一个「沟通不足」的问题，而是一个「沟通对象如何处理信息」的问题。</div>
+
+        <h3>五、党派差距：调查者自己的发现</h3>
+        <p>这一点必须强调清楚：情绪的党派分化<b>不是</b>外部批评者的发明，而是调查团队自己反复报告的结果。</p>
+        <ul>
+          <li><b>理查德·柯廷（Richard Curtin，前主任）</b>在 2019 年的一篇方法论论文中给出了「近乎完美的选择性知觉」：受访者被问及最近听到过什么经济新闻时，共和党受访者中 89% 报告<b>有利</b>消息、仅 28% 报告不利消息；民主党受访者则相反，33% 有利、83% 不利；无党派人士居中（55% / 57%）。同一组事实，三种记忆。</li>
+          <li><b>许乔安（Joanne Hsu，现任主任）</b>与团队在 2024 年的专题报告中指出：情绪的<b>党派差距</b>已经超过了收入、年龄与教育造成的差距；但差距虽大，三个群体的走势仍高度同步（两党情绪的相关系数约 0.85–0.86），无党派人士始终贴近总体指数，拐点出现的时间也基本一致。</li>
+          <li><b>样本代表性</b>：该调查的党派构成与其他全国性调查基本吻合（2023 年 12 月为共和党 28%、民主党 29%，与盖洛普一致），因此差距不太可能只是「哪一党的人更愿意接电话」造成的抽样假象。</li>
+        </ul>
+        <p>把这些放在一起，得到的不是「情绪无用」的结论，而是一个更精确的用法：<b>指数的水平值可能被立场污染，但其时间序列的拐点仍然携带真实信息。</b>这正是一条可以直接用在写作里的分析。</p>
+
+        <h3>六、政策含义：当指标成为自变量</h3>
+        <ul>
+          <li><b>预期是内生的。</b>家庭对通胀的预期会影响他们的议价与消费行为，从而影响实际通胀。当指标本身被立场与凸显性扭曲时，它就不是外生的「温度」，而是回路中的一环。</li>
+          <li><b>误读的代价。</b>若决策者把情绪指数当作预测变量，就会对一个部分由提问方式制造出来的数字作出反应——该收紧时过松，该放松时过紧。</li>
+          <li><b>可操作的建议。</b>学界反复提出的方向包括：把「水平值」与「变化量」分开使用；优先看无党派子样本；把开放式问题（你最近听到了什么？）与封闭式评分结合；以及明确区分「评价当下」与「预测未来」两个分指数。</li>
+        </ul>
+
+        <h3>七、中国语境下的对应指标</h3>
+        <p>中国国家统计局中国经济景气监测中心同样定期编制并发布<b>消费者信心指数</b>，通常包含对当前经济状况的<b>满意指数</b>与对未来走向的<b>预期指数</b>两部分，结构上与密歇根指数的两分法可相参照。需要说明的是：两者在问卷题目、抽样方式、基期与发布频率上并不相同，<b>跨国直接比较数值高低没有意义</b>，可比的是同一序列自身的变化趋势。对学习者而言，更有价值的练习是：去看一份本国指标的原始问卷，问一问「这几道题实际问的是什么」——这正是本课反复训练的那一步。</p>
+
+        <div class="box">🧭 <b>事实与立场：</b>本课只讨论<b>调查方法论与已发表的学术文献</b>，不构成对任何国家、政党、政府或政策主体的评价。文中引用的具体指数读数为媒体转述的<b>月度初步值</b>，密歇根调查的月度数据通常会在当月晚些时候修订，正式引用前请以调查方公布为准。党派差异自里根政府时期起即有记录，属该调查的长期发现，并非针对特定时期或特定一方的判断。所引学术论文信息（Cavallo、Cruces、Perez-Truglia，2017，《美国经济杂志：宏观经济学》9(3): 1–35；Curtin，2019；Hsu 等，2024）均出自公开发表的原文或调查方发布的报告。</div>
+
+        <h3>八、可用于雅思 / 托福的思考题</h3>
+        <ul>
+          <li>Some people argue that official economic statistics should be trusted over personal experience. Others believe that how people feel about the economy is itself a fact. Discuss both views and give your own opinion.</li>
+          <li>如果一项调查会改变被调查者的行为，它还可能是中立的工具吗？请结合一个具体例子说明。</li>
+          <li>Should central banks take public sentiment into account when setting interest rates, or should they rely solely on hard data? 请给出你的立场并说明理由。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课</h2>
+      <div class="card">
+        <h3>🎯 学习目标</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇：</b>掌握 10 个 C1–C2 学术词汇（barometer, divergence, conflate, priors, inattention, salience, heterogeneous, proxy, artifact, elicit），能替换掉 measure / difference / mix up / noticeable 这类基础表达。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句法：</b>能仿写 5 个高级学术句型，尤其是 <i>Were policymakers to...</i> 的虚拟倒装，以及 <i>less a X than a Y</i> 的对照性重定义。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法：</b>掌握虚拟条件句倒装、现在完成时 + since 的时间框架、让步分句的省略、比较结构中的 those 替代，以及形容词短语的名词后置修饰。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>批判思维：</b>能区分「统计有误」「认知有偏」「立场介入」三种对同一现象的解释，并说明它们为何不互斥；能判断一个指标的水平值与变化量哪一个更可信。</div></div>
+      </div>
+      <div class="card">
+        <h3>📝 考试技巧</h3>
+        <ul>
+          <li><b>雅思阅读判断题：</b>本课第 2 段是典型出题区——「作者认为官方统计是错的」是 FALSE（作者把这一立场列为两种竞争性解释之一，并在第三段指出三种解释并不互斥）；「作者认为情绪指数已经毫无用处」也是 FALSE（第四段说的是水平值被污染，但序列的拐点仍携带信息）。分清<b>作者转述的立场</b>与<b>作者自己的立场</b>。</li>
+          <li><b>托福推断题：</b>遇到 <i>it can be inferred that...</i>，答案必须是原文的<b>必然推论</b>，不能引入原文没有的因果。本课练习第 4 题的干扰项「样本不具代表性」之所以错，是因为原文明确说样本构成与其他全国性调查一致。</li>
+          <li><b>词汇题：</b>不要只看词根。以 <i>salience</i> 为例，回到并列结构 not frequency but salience —— 与「频率」相对的正是「引人注目的程度」，语境已经把答案给了你一半。</li>
+          <li><b>写作 Task 2：</b><i>Were policymakers to...</i> 可用于结尾段提出条件性警告；<i>X has served as a serviceable barometer of Y</i> 是引入一个指标或制度时最经济的开场白。二者都比 <i>If...</i> / <i>X is a good indicator of Y</i> 更能体现句式与用词的层次。</li>
+          <li><b>口语 Part 3：</b>被问到「数据能不能反映真实生活」时，可直接调用本课的三种解释：measurement error（统计失真）、cognitive bias（认知偏差）、interpretive frame（解释框架）。三层结构比单层回答更容易拿到 7 分以上。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🐾 关于 Pola News</h3>
+        <p>Pola News 每天为 C1–C2 学习者提供一篇有学术深度、有辩论价值的英文短文，覆盖文学评论、经济分析、前沿科技、国际政治、学术论文、法律伦理与跨文化比较七大主题。全文不提供逐段中文翻译，中文仅出现在关键词释义与背景扩展中——这是刻意设计：在 C1 以上阶段，依赖翻译会阻碍你建立英语思维。</p>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Mood That Refuses the Data · 2026-09-29 · Advanced English for IELTS / TOEFL 🐾</footer>
+
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Since 1946 the University of Michigan's Surveys of Consumers has served as a serviceable barometer of household mood: unemployment up, the index down; unemployment down, the index up. That regularity has frayed. At a September 2026 reading of 47.8, the index stood far below its postwar average, even as output expanded and joblessness stayed low. The instrument, it seems, has stopped agreeing with the weather.", "Two accounts compete, neither patient. On the first, the official statistics are the liars: a cost-of-living squeeze invisible to a deflator that imputes rent homeowners never pay. On the second, the households are — primed by partisan media into a recession that exists only in the telling. Both treat the divergence as a fault to assign. The third is less satisfying and more probable: the two series never measured the same object, and we conflate them at our peril.", "Experimental work points that way. Cavallo, Cruces and Perez-Truglia, in the American Economic Journal: Macroeconomics (2017), found that even when respondents were handed official inflation figures, they continued to weight their own memories of supermarket prices, systematically recalling past prices as lower than they had been, and so overstating inflation. Priors were weakest where inflation had been lowest, as rational inattention predicts, and expectations proved strikingly heterogeneous; what governed recall was not frequency but salience.", "Richard Curtin, a former director, documented near-perfect selective perception of economic news; his successor Joanne Hsu has shown that partisan gaps in sentiment now exceed those by income, age or education, though the groups still co-move and independents track the headline. The index is thus less a thermometer than a proxy for affiliation. Were policymakers to read it as a forecast, they would be reacting partly to an artifact of the questions the survey elicits: a mood, not a measurement."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["A history of the University of Michigan's Surveys of Consumers since its founding in 1946","Why a long-standing measure of household sentiment no longer tracks objective economic conditions, and what that implies for policy","An argument that official inflation statistics are deliberately falsified","A proposal to abandon survey-based indices in favour of administrative data"],ans:1,
+   fb:"Correct. 全文四段呈递进结构：第一段提出『指标与天气对不上』这一现象，第二段列出两种相互竞争的解释并给出第三种，第三段用实验证据说明认知机制，第四段落到政策含义。B 同时覆盖『为什么对不上』与『那又如何』两层，概括最完整。A 只是第一段的背景；C 是第二段中作者转述的一种立场，并非作者主张；D 属于过度推断——作者从未主张废除该调查。"},
+  {q:"2. According to paragraph 3, what did Cavallo, Cruces and Perez-Truglia find? 根据第三段，三位研究者的发现是什么？",opts:["That respondents distrust official statistics and ignore them altogether","That memories of supermarket prices are more accurate than official inflation figures","That even when official figures were supplied, respondents still weighted their recollections of prices, recalling past prices as lower than they had been","That households in high-inflation countries held the weakest priors"],ans:2,
+   fb:"Yes. 原文的关键是一个让步：even when respondents were handed official inflation figures, they continued to weight their own memories —— 信息与习惯两者都在起作用，所以 A 的 ignore them altogether 过强。C 完整复述了『继续加权自己的记忆』与『系统性低估过去价格』两步。B 把方向说反了（记忆更不准确，正因为如此才高估通胀）；D 也反了：原文是低通胀环境下先验最弱（Priors were weakest where inflation had been lowest）。"},
+  {q:"3. The word 'salience' in paragraph 3 is closest in meaning to: 第三段中的 salience 最接近下列哪一项？",opts:["Statistical frequency","Accuracy of recall","Duration of exposure","The quality of standing out and drawing attention"],ans:3,
+   fb:"Correct. 词汇题先回到并列结构：what governed recall was not frequency but salience —— but 提示前后为对照关系，与『频率』相对的正是『引人注目的程度』，语境已经把答案给了你一半。A 恰是原文明确否定的那一项；B、C 都像是合理的干扰，但在原文中找不到支撑。"},
+  {q:"4. Which of the following can be inferred from the passage? 下列哪一项可以从原文推出？",opts:["The index has never had any predictive value for household spending","The index cannot simply be assumed to track objective conditions, because it partly records how respondents interpret events","The index should immediately be replaced by administrative data","Its partisan component is an artifact of unrepresentative sampling"],ans:1,
+   fb:"Yes. 第二段的第三种可能（两列数据从未测量同一个对象）与第四段末（水平值部分由提问方式制造）共同支持 B。A 的 never 过强——原文只说水平值被污染，并未否定预测价值；C 的立即替换属于原文没有的处方；D 与原文直接冲突：调查的党派构成与其他全国性调查基本一致，因此不太可能只是抽样假象——这正是本题设下的主要陷阱。"},
+  {q:"5. Why does the author refer to Richard Curtin and Joanne Hsu? 作者提及柯廷与许乔安的目的是什么？",opts:["To suggest that the survey has been badly mismanaged","To argue that the two directors contradict each other","To show that the partisan component of sentiment was documented by the survey's own directors rather than invented by outside critics","To establish that independents are the only reliable respondents"],ans:2,
+   fb:"Correct. 注意作者特意点明两人的身份——a former director 与 his successor：情绪的党派分化不是外部批评者的发明，而是调查团队自己反复报告的结果。抓住 a former director / successor 这一身份线索，就能确定 C。A、B 在原文中毫无依据；D 把『无党派人士贴近总体指数』这一观察夸大成了『唯一可靠的受访者』。"},
+  {q:"6. The final sentence ('Were policymakers to read it as a forecast...') primarily serves to: 末句的主要作用是？",opts:["Issue a caution against treating the index as a predictor","Summarise the findings of Cavallo and his co-authors","Propose revised wording for the survey questionnaire","Dismiss the index as worthless"],ans:0,
+   fb:"Correct. 末句用虚拟倒装（Were policymakers to...）提出一个与现实相反的条件，其功能是<b>警告</b>而非总结或建议。A 正确。B 是第三段的内容；C 原文并未给出具体的新问法；D 过强——作者说的是水平值部分由提问方式制造，同时承认序列的拐点仍携带信息（though the groups still co-move and independents track the headline），并未否定整个指标。"}
+];;
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

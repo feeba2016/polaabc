@@ -8379,5 +8379,67 @@ const EPISODES = [
         "ex": "\"The comparison is not frivolous.\""
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-09-29",
+    "title": "The Mood That Refuses the Data",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-09-29-the-mood-that-refuses-the-data",
+    "url": "lessons/c1/2026-09-29-the-mood-that-refuses-the-data.html",
+    "vocab": [
+      {
+        "word": "barometer",
+        "zh": "晴雨表、衡量指标（原指气压计 an instrument that registers atmospheric pressure；引申为反映某事物状态的指标；a barometer of household mood 家庭情绪的晴雨表；形容词 barometric）",
+        "ex": "\"has served as a serviceable barometer of household mood\""
+      },
+      {
+        "word": "divergence",
+        "zh": "背离、分歧、偏离（the process or state of moving apart；a divergence between A and B 两者之间的背离；形容词 divergent，divergent views 分歧的观点；动词 diverge，diverge from the trend）",
+        "ex": "\"Both treat the divergence as a fault to assign.\""
+      },
+      {
+        "word": "conflate",
+        "zh": "混淆、把两件事混为一谈（to combine two separate things into one, mistakenly；conflate correlation with causation 把相关性与因果性混为一谈；名词 conflation；近义 confuse，但 conflate 强调「把两个本应分开的实体并成一个」）",
+        "ex": "\"the two series never measured the same object, and we conflate them at our peril\""
+      },
+      {
+        "word": "priors",
+        "zh": "先验、先验信念（贝叶斯术语：beliefs held before new evidence is considered；weak priors 弱先验；单数 a prior；形容词义为「在先的」，prior to the survey 在调查之前）",
+        "ex": "\"Priors were weakest where inflation had been lowest.\""
+      },
+      {
+        "word": "inattention",
+        "zh": "忽视、不注意（rational inattention 理性忽视：信息获取有成本，故理性主体选择不完全知情；形容词 inattentive；名词 attention 的反义）",
+        "ex": "\"as rational inattention predicts\""
+      },
+      {
+        "word": "salience",
+        "zh": "显著性、凸显度（the quality of being noticeable, prominent or important；the salience of petrol prices 汽油价格的凸显性；形容词 salient，a salient feature 显著特征；也用于语言学 salience 显著度）",
+        "ex": "\"what governed recall was not frequency but salience\""
+      },
+      {
+        "word": "heterogeneous",
+        "zh": "异质的、成分不一的（diverse in character or content；a heterogeneous sample 异质样本；名词 heterogeneity；反义 homogeneous 同质的；注意发音 /ˌhetərəˈdʒiːniəs/）",
+        "ex": "\"expectations proved strikingly heterogeneous\""
+      },
+      {
+        "word": "proxy",
+        "zh": "代理变量、替代指标（a variable or person used to stand in for another；a proxy for affiliation 归属感的代理指标；by proxy 通过代理；也指「代理服务器」「委托书」）",
+        "ex": "\"less a thermometer than a proxy for affiliation\""
+      },
+      {
+        "word": "artifact",
+        "zh": "人为产物、假象（something observed that is produced by the method rather than by the phenomenon itself；a statistical artifact 统计假象；也拼作 artefact；另一个常见义项是「人工制品、文物」）",
+        "ex": "\"partly an artifact of the questions the survey elicits\""
+      },
+      {
+        "word": "elicit",
+        "zh": "引出、采集（回答、反应、信息）（to draw out a response, answer or fact；elicit answers from respondents 从受访者处采集回答；elicit a reaction 引发反应；名词 elicitation；注意与 illicit「非法的」区分）",
+        "ex": "\"an artifact of the questions the survey elicits\""
+      }
+    ]
   }
 ];
