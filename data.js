@@ -8508,5 +8508,67 @@ const EPISODES = [
         "ex": "\"an artifact of the questions the survey elicits\""
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-03",
+    "title": "The Gate That Would Not Close",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-03-the-gate-that-would-not-close",
+    "url": "lessons/c1/2026-10-03-the-gate-that-would-not-close.html",
+    "vocab": [
+      {
+        "word": "gatekeeping",
+        "zh": "守门、门槛审查（证据法术语：the judicial function of screening expert evidence before it reaches the jury；即法官在专家证言进入陪审团之前先行审查的职责；动词 gatekeep；a gatekeeping mandate 守门职责；该词亦用于期刊同行评议、平台内容审核等语境）",
+        "ex": "\"The gatekeeping mandate was to be a filter, not a formality.\""
+      },
+      {
+        "word": "empirically",
+        "zh": "以经验为依据地、通过实证（in a way based on observation or experiment rather than theory；empirically validated 经实证验证的；形容词 empirical，empirical evidence 实证证据；名词 empiricism 经验主义；反义 theoretically）",
+        "ex": "\"few forensic techniques had been empirically validated\""
+      },
+      {
+        "word": "infallibility",
+        "zh": "绝对无误、不可能出错（the quality of being incapable of error；claims of infallibility 关于绝对无误的宣称；形容词 infallible；反义名词 fallibility 易错性，学术写作中更常见：human fallibility 人之易错）",
+        "ex": "\"far above the infallibility claimed in court\""
+      },
+      {
+        "word": "admissibility",
+        "zh": "可采性（证据法核心术语：whether a piece of evidence may lawfully be presented to the jury；the admissibility of expert testimony 专家证言的可采性；形容词 admissible 可采纳的；反义 inadmissible；须与 weight 证明力区分：可采并不等于有分量）",
+        "ex": "\"Challenges to the admissibility of such evidence seldom succeed.\""
+      },
+      {
+        "word": "heuristic",
+        "zh": "启发法、认知捷径（a mental shortcut that reduces a complex judgement to a simpler one；认知科学中指快速但未必准确的判断策略；名词与形容词同形，heuristic reasoning 启发式推理；复数 heuristics；词源为希腊语 heuriskein，意为「发现」）",
+        "ex": "\"precedent itself works as a heuristic\""
+      },
+      {
+        "word": "deference",
+        "zh": "遵从、尊重（submission to the judgement, opinion or authority of another；deference to precedent 对先例的遵从；动词 defer to；形容词 deferential 恭敬的；注意与 difference 拼写区分）",
+        "ex": "\"What presents itself as deference to authority may be a cognitive shortcut.\""
+      },
+      {
+        "word": "exoneration",
+        "zh": "免罪、洗冤、宣告无罪（the act of clearing a person of blame, especially by official decision；cases ending in exoneration 最终获宣告无罪的案件；动词 exonerate；与 acquittal 的差别：acquittal 指当庭判无罪，exoneration 常指事后以新证据推翻原判）",
+        "ex": "\"732 cases of exoneration found false or misleading forensic evidence in 635\""
+      },
+      {
+        "word": "unmask",
+        "zh": "解盲、去遮蔽；揭穿（法庭科学术语中指按固定顺序逐步向鉴定人披露信息，使与任务无关的案情不污染判断；sequential unmasking 序列解盲；原义为「摘下面具、暴露真相」，unmask a fraud 揭穿骗局）",
+        "ex": "\"sequential unmasking of task-irrelevant detail\""
+      },
+      {
+        "word": "epistemic",
+        "zh": "认识论的、关乎知识根据的（relating to knowledge, its scope and its grounds；epistemic standards 认识论标准；epistemic humility 认知谦逊；名词 epistemology 认识论；与 doxastic「信念的」相对）",
+        "ex": "\"instruction in the epistemic standards the rule presumes\""
+      },
+      {
+        "word": "probative",
+        "zh": "有证明力的、具证据价值的（tending to prove or disprove something；probative value / probative weight 证明力；法律英语高频词，常与 prejudicial 成对出现；反义 non-probative 无证明力的）",
+        "ex": "\"A ruling on probative weight is a judgment about evidence.\""
+      }
+    ]
   }
 ];

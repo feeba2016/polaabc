@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Gate That Would Not Close — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#0f766e;
+  --accent2:#c2410c;
+  --bg:#f2faf8;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#ccfbf1;
+  --border:#c7ece7;
+  --soft:#edfbf8;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(15,118,110,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(15,118,110,.55);}70%{box-shadow:0 0 0 12px rgba(15,118,110,0);}100%{box-shadow:0 0 0 0 rgba(15,118,110,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#99f6e4;}
+#tip{position:fixed;z-index:1200;background:#0b2027;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#5eead4;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ccfbf1;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习<span class="en">Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展<span class="en">Background</span></a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 法律伦理 Law &amp; Ethics</span>
+      <h1 class="title">The Gate That Would Not Close</h1>
+      <p class="subtitle">Why courts keep admitting forensic science they have stopped trusting · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Mandate</div>
+            <p>For three decades the trial judge has been told to keep the gate. Under Daubert v. Merrell Dow Pharmaceuticals (1993) and Rule 702, as amended in 2023, the proponent of expert testimony must show that a method is not merely respected but reliable: testable, peer-reviewed, and accompanied by a known error rate. The <span class="kw" data-def="守门、门槛审查（证据法术语：the judicial function of screening expert evidence before it reaches the jury；法官在专家证言进入陪审团之前先行审查的职责；动词 gatekeep；a gatekeeping mandate 守门职责；也用于期刊编辑、平台审核等语境）">gatekeeping</span> mandate was to be a filter, not a formality.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Verdict of Science</div>
+            <p>The science that followed was unwelcome. In 2009 the National Research Council concluded that, nuclear DNA apart, few forensic techniques had been <span class="kw" data-def="以经验为依据地、通过实证（in a way based on observation or experiment rather than theory；empirically validated 经实证验证的；形容词 empirical，empirical evidence 实证证据；名词 empiricism 经验主义；反义 theoretically）">empirically</span> validated. In 2016 the President's Council of Advisors on Science and Technology was blunter: of the feature-comparison methods it reviewed, only single-source DNA rested on solid ground. Fingerprint analysis survived, burdened by a false-positive rate far above the <span class="kw" data-def="绝对无误、不可能出错（the quality of being incapable of error；claims of infallibility 关于绝对无误的宣称；形容词 infallible；反义名词 fallibility 易错性，学术写作中更常见：human fallibility 人之易错）">infallibility</span> claimed in court; bitemark analysis did not survive at all.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Puzzle</div>
+            <p>A wave of exclusion might have been expected. It has not arrived. Challenges to the <span class="kw" data-def="可采性（证据法核心术语：whether a piece of evidence may lawfully be presented to the jury；the admissibility of expert testimony 专家证言的可采性；形容词 admissible 可采纳的；反义 inadmissible；注意与 weight 证明力区分：可采 ≠ 有分量）">admissibility</span> of such evidence seldom succeed, and Sara Gordon offers an unsettling reason: precedent itself works as a <span class="kw" data-def="启发法、认知捷径（a mental shortcut that reduces a complex judgement to a simpler one；在认知科学中指能快速但不必然准确的判断策略；形容词与名词同形，heuristic reasoning 启发式推理；复数 heuristics；词源为希腊语 heuriskein，意为「发现」）">heuristic</span>. Once a technique has been received for fifty years, the fact of its reception becomes the argument for receiving it. What presents itself as <span class="kw" data-def="遵从、尊重（submission to the judgement, opinion or authority of another；deference to precedent 对先例的遵从；动词 defer to，defer to the court 遵从法院；形容词 deferential 恭敬的；注意与 difference 拼写区分）">deference</span> to authority may be a cognitive shortcut, fortified by the bias blind spot — the tendency to detect bias in others and deny it in oneself.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Reckoning</div>
+            <p>The cost is not abstract. A federal review of hair comparison found erroneous statements in at least ninety per cent of the transcripts examined; a National Institute of Justice study of 732 cases of <span class="kw" data-def="免罪、洗冤、宣告无罪（the act of clearing a person of blame, especially by official decision；cases ending in exoneration 最终获宣告无罪的案件；动词 exonerate；与 acquittal 的差别：acquittal 是当庭判无罪，exoneration 常指事后以新证据推翻原判）">exoneration</span> found false or misleading forensic evidence in 635. The remedies are procedural, not heroic: blind proficiency testing, sequential <span class="kw" data-def="解盲、去遮蔽（此处为法庭科学术语：按固定顺序逐步向鉴定人披露信息，使与任务无关的案情不污染判断；sequential unmasking 序列解盲；动词 unmask，原义为「摘下面具、揭穿」）">unmasking</span> of task-irrelevant detail, and instruction in the <span class="kw" data-def="认识论的、关乎知识根据的（relating to knowledge, its scope and its grounds；epistemic standards 认识论标准；名词 epistemology 认识论；epistemic humility 认知谦逊；与 doxastic「信念的」相对）">epistemic</span> standards the rule presumes. Whether a rule drafted for laboratories can discipline a courtroom habit remains to be seen. A ruling on <span class="kw" data-def="有证明力的、具证据价值的（tending to prove or disprove something；probative value / probative weight 证明力；法律英语高频词，常与 prejudicial 成对出现；动词 prove；反义 non-probative 无证明力的）">probative</span> weight is a judgment about evidence; a ruling on admissibility, about ourselves.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (C1–C2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="gatekeeping">🔊</button><div class="word">gatekeeping<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">守门、门槛审查（证据法术语：the judicial function of screening expert evidence before it reaches the jury；即法官在专家证言进入陪审团之前先行审查的职责；动词 gatekeep；a gatekeeping mandate 守门职责；该词亦用于期刊同行评议、平台内容审核等语境）</div><div class="ex">"The gatekeeping mandate was to be a filter, not a formality."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="empirically">🔊</button><div class="word">empirically<span class="pos">adv.</span></div><span class="lvl">C1</span><div class="zh">以经验为依据地、通过实证（in a way based on observation or experiment rather than theory；empirically validated 经实证验证的；形容词 empirical，empirical evidence 实证证据；名词 empiricism 经验主义；反义 theoretically）</div><div class="ex">"few forensic techniques had been empirically validated"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="infallibility">🔊</button><div class="word">infallibility<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">绝对无误、不可能出错（the quality of being incapable of error；claims of infallibility 关于绝对无误的宣称；形容词 infallible；反义名词 fallibility 易错性，学术写作中更常见：human fallibility 人之易错）</div><div class="ex">"far above the infallibility claimed in court"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="admissibility">🔊</button><div class="word">admissibility<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">可采性（证据法核心术语：whether a piece of evidence may lawfully be presented to the jury；the admissibility of expert testimony 专家证言的可采性；形容词 admissible 可采纳的；反义 inadmissible；须与 weight 证明力区分：可采并不等于有分量）</div><div class="ex">"Challenges to the admissibility of such evidence seldom succeed."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="heuristic">🔊</button><div class="word">heuristic<span class="pos">n. / adj.</span></div><span class="lvl">C2</span><div class="zh">启发法、认知捷径（a mental shortcut that reduces a complex judgement to a simpler one；认知科学中指快速但未必准确的判断策略；名词与形容词同形，heuristic reasoning 启发式推理；复数 heuristics；词源为希腊语 heuriskein，意为「发现」）</div><div class="ex">"precedent itself works as a heuristic"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="deference">🔊</button><div class="word">deference<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">遵从、尊重（submission to the judgement, opinion or authority of another；deference to precedent 对先例的遵从；动词 defer to；形容词 deferential 恭敬的；注意与 difference 拼写区分）</div><div class="ex">"What presents itself as deference to authority may be a cognitive shortcut."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="exoneration">🔊</button><div class="word">exoneration<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">免罪、洗冤、宣告无罪（the act of clearing a person of blame, especially by official decision；cases ending in exoneration 最终获宣告无罪的案件；动词 exonerate；与 acquittal 的差别：acquittal 指当庭判无罪，exoneration 常指事后以新证据推翻原判）</div><div class="ex">"732 cases of exoneration found false or misleading forensic evidence in 635"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="unmask">🔊</button><div class="word">unmask<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">解盲、去遮蔽；揭穿（法庭科学术语中指按固定顺序逐步向鉴定人披露信息，使与任务无关的案情不污染判断；sequential unmasking 序列解盲；原义为「摘下面具、暴露真相」，unmask a fraud 揭穿骗局）</div><div class="ex">"sequential unmasking of task-irrelevant detail"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="epistemic">🔊</button><div class="word">epistemic<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">认识论的、关乎知识根据的（relating to knowledge, its scope and its grounds；epistemic standards 认识论标准；epistemic humility 认知谦逊；名词 epistemology 认识论；与 doxastic「信念的」相对）</div><div class="ex">"instruction in the epistemic standards the rule presumes"</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="probative">🔊</button><div class="word">probative<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">有证明力的、具证据价值的（tending to prove or disprove something；probative value / probative weight 证明力；法律英语高频词，常与 prejudicial 成对出现；反义 non-probative 无证明力的）</div><div class="ex">"A ruling on probative weight is a judgment about evidence."</div></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. X was to be a Y, not a Z（be + to do 表「本应／预定」，后接对照性名词）</h3>
+          <div class="zh"><i>be + to do</i> 在回顾性叙述中表示「按原本的设计应当如何」，自带一层「事实上并未如此」的暗示。<i>was to be a filter</i> 因而既是描述，也是判词。后半句用 <i>not a Z</i> 形成最小差异的对照——两个名词越接近，讽刺越强（filter / formality 都是「一道程序」，差别只在是否真的起筛选作用）。这是英文论说文里极经济的收尾。</div>
+          <div class="eg">The gatekeeping mandate was to be a filter, not a formality.</div>
+          <div class="practice">✍️ 仿写：这项披露义务本应是保障，而不是走过场。<input type="text" placeholder="The disclosure duty was to be a safeguard, not..."></div>
+        </div>
+        <div class="item">
+          <h3>2. The N that followed was ADJ（关系分句作后置定语 + 评价性表语）</h3>
+          <div class="zh"><i>The science that followed</i> 用关系分句把「紧随其后」这个时间关系塞进主语内部，省掉一整句 <i>When the rule was adopted, science arrived afterwards</i>。表语位置放一个简短的<b>评价性形容词</b>（unwelcome / inconvenient / unflattering），是英文评论文章典型的「一句定调」：先陈事实，再落判断，两句压成一句。注意此处不用副词（不能说 the science followed unwelcomely）。</div>
+          <div class="eg">The science that followed was unwelcome.</div>
+          <div class="practice">✍️ 仿写：随后出台的那份评估报告对双方都很不利。<input type="text" placeholder="The assessment that followed was..."></div>
+        </div>
+        <div class="item">
+          <h3>3. Once X has been V-ed, the fact of its V-ing becomes the argument for V-ing it（词形复现 polyptoton）</h3>
+          <div class="zh">这是全文修辞密度最高的一句。同一个词根在两小句中三次变形出现：<i>received → reception → receiving</i>。这种<b>异形重复</b>（polyptoton）在拉丁修辞传统里就叫这个词，效果是让读者亲眼看见一个论证在原地打转：过去被接受，于是「被接受」本身就成了继续接受的理由。雅思大作文与托福独立写作中，用它来指出<b>循环论证</b>非常有力。注意介词搭配：the argument <i>for</i> doing something。</div>
+          <div class="eg">Once a technique has been received for fifty years, the fact of its reception becomes the argument for receiving it.</div>
+          <div class="practice">✍️ 仿写：一项做法一旦被沿用几十年，「一直这么用」就成了继续这么用的理由。<input type="text" placeholder="Once a practice has been followed for decades, the fact of its..."></div>
+        </div>
+        <div class="item">
+          <h3>4. What presents itself as X may be Y, fortified by Z（what- 主语从句 + 降级式重定义）</h3>
+          <div class="zh"><i>What presents itself as X</i> 意为「表面上表现为 X 的东西」，<i>present oneself as</i> 已经预设了「表象可能不等于实质」。谓语用 <i>may be</i> 而非 <i>is</i>，把断言降为谨慎的推测——学术写作中这一步很关键：它让作者显得在推断而非指控。末尾的 <i>fortified by</i> 用过去分词短语追加一个加深因素，比另起一句更紧凑。整句的功能是<b>重定义</b>：把一个体面的说法（尊重先例）重新描述为一个不那么体面的机制（认知捷径）。</div>
+          <div class="eg">What presents itself as deference to authority may be a cognitive shortcut, fortified by the bias blind spot.</div>
+          <div class="practice">✍️ 仿写：表面上的程序公正，可能只是路径依赖，又因为缺乏反馈而越发牢固。<input type="text" placeholder="What presents itself as procedural fairness may be..."></div>
+        </div>
+        <div class="item">
+          <h3>5. Whether X can Y remains to be seen（whether 主语从句 + 开放式收尾）</h3>
+          <div class="zh">用一个 <i>whether</i> 引导的名词性从句作主语，谓语落在 <i>remains to be seen</i>（尚待观察），是论文与评论文章中<b>最安全的收尾</b>之一：它既提出了核心疑问，又不必在证据不足时给出答案。两个分句之间刻意形成尺度反差——<i>a rule drafted for laboratories</i>（实验室的规范）对 <i>a courtroom habit</i>（法庭的习惯），规则与惯习、精确与模糊并置，疑问因此有了张力。写作时可用它替代平庸的 <i>It is unclear whether...</i>。</div>
+          <div class="eg">Whether a rule drafted for laboratories can discipline a courtroom habit remains to be seen.</div>
+          <div class="practice">✍️ 仿写：为工业时代设计的标准能否约束算法时代的实践，还有待观察。<input type="text" placeholder="Whether a standard drafted for the industrial age can..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. be + to do：预定、义务与「未实现的应当」</h3>
+          <div class="zh">第 1 段末 <i>The gatekeeping mandate <b>was to be</b> a filter</i>。此处 <i>be + 不定式</i> 不是将来时，而是表达「按安排／按规定应当如何」。在过去时语境中它往往携带一层反事实意味：<b>本该如此，实际并不如此</b>。对比：<i>The meeting is to be held on Monday</i>（安排）／<i>You are to report to the principal</i>（命令）／<i>He was never to return</i>（命运性的「最终没有」）。写作价值在于：一句话同时交代规范与落差。</div>
+          <div class="eg">The gatekeeping mandate was to be a filter, not a formality.</div>
+        </div>
+        <div class="item">
+          <h3>2. 名词 + 副词的绝对结构：nuclear DNA apart</h3>
+          <div class="zh">第 2 段 <i>nuclear DNA apart, few forensic techniques had been empirically validated</i>。这里的 <i>apart</i> 相当于 <i>apart from</i>，但被后置到名词之后，形成一个精练的<b>例外性状语</b>——与独立主格（absolute construction）同源，只是省略了分词。同类结构还有 <i>that aside</i>、<i>exceptions notwithstanding</i>、<i>weather permitting</i>。它的修辞效果是：先把唯一的例外让出来，再让主句的断言显得更不留余地。位置灵活，可句首可句中，但前后必须用逗号隔开。</div>
+          <div class="eg">nuclear DNA apart, few forensic techniques had been empirically validated</div>
+        </div>
+        <div class="item">
+          <h3>3. 情态动词 + 完成体：might have been expected</h3>
+          <div class="zh">第 3 段首 <i>A wave of exclusion <b>might have been expected</b></i>。<i>情态 + have + 过去分词</i> 指向过去：<i>might have</i> 在此不是「也许已经发生」，而是「按常理本可以／本会（但事实上没有）」。它与紧随其后的 <i>It has not arrived</i> 构成完整推理链：<b>预期 — 落空</b>。注意与 <i>must have been</i>（几乎确定的推断）、<i>should have been</i>（带责备的「本应」）区分——本句要的是中性推测，用 <i>might</i> 的分寸感最合适。</div>
+          <div class="eg">A wave of exclusion might have been expected. It has not arrived.</div>
+        </div>
+        <div class="item">
+          <h3>4. what- 名词性关系从句作主语</h3>
+          <div class="zh">第 3 段 <i><b>What</b> presents itself as deference to authority <b>may be</b> a cognitive shortcut</i>。这里的 <i>what</i> 等于 <i>the thing that</i>，一个词同时充当关系词与其先行词，整个从句作主句的主语，因此谓语用单数。这种结构在学术英语中极高频，因为它可以把一个<b>现象与其解释</b>压进一个主语里：<i>What counts as evidence in one era may be excluded in the next</i>。注意它不同于 <i>Whatever</i>（无论什么）与 <i>Which</i>（有先行词的定语从句）。</div>
+          <div class="eg">What presents itself as deference to authority may be a cognitive shortcut.</div>
+        </div>
+        <div class="item">
+          <h3>5. 省略（gapping）与对照（antithesis）</h3>
+          <div class="zh">末句 <i>A ruling on probative weight is a judgment about evidence; a ruling on admissibility, about ourselves.</i> 后半句省略了重复的 <i>is a judgment</i>，只保留对照焦点 <i>about ourselves</i>——这是 <b>gapping</b>（隔位省略），靠分号与平行结构支撑。两个分句结构几乎相同、只换一个词，构成 <b>antithesis</b>（对照）。两者叠加，是英文格言式结尾的标准配方：<i>Ask not what your country can do for you; ask what you can do for your country</i> 用的是同一套机制。写作中慎用——一句足矣，多则浮夸。</div>
+          <div class="eg">A ruling on probative weight is a judgment about evidence; a ruling on admissibility, about ourselves.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (IELTS / TOEFL Style)</h2>
+      <div class="card" id="quizBox"></div>
+    </section>
+    <!-- 6. EXT -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展</h2>
+      <div class="card ext">
+        <h3>一、本课在说什么（一句话概括）</h3>
+        <p>三十年来，美国联邦法院被要求由法官充当「守门人」，把不靠谱的专家证言挡在陪审团门外；但两轮权威科学评估先后指出，多种法庭科学技术从未经过严格验证，而排除它们的动议却极少成功。本课要追问的不是「科学对不对」，而是一个更别扭的问题：<b>为什么一道依法设立的门，实际上一直开着？</b></p>
+
+        <h3>二、守门人这一职分是怎么来的</h3>
+        <table>
+          <tr><th style="width:22%">阶段</th><th style="width:36%">规则</th><th>要点</th></tr>
+          <tr><td><b>Frye 标准</b>（1923）</td><td><i>Frye v. United States</i></td><td>科学证据须在该专业领域内获得「普遍接受」（general acceptance）。门槛稳定，但把判断权交给了该领域自身——一个方法越是被同行沿用，就越难被认定为不可靠</td></tr>
+          <tr><td><b>Daubert 标准</b>（1993）</td><td><i>Daubert v. Merrell Dow Pharmaceuticals</i>，联邦证据规则第 702 条</td><td>把「普遍接受」降为<b>若干考量因素之一</b>，另加：可否被检验（testability）、是否经同行评议与发表、已知或潜在错误率、是否存在操作标准。法官由此成为主动的审查者，而不再是接受度的统计员</td></tr>
+          <tr><td><b>2023 年修订</b></td><td>联邦证据规则第 702 条（2023 年 12 月 1 日生效）</td><td>明确要求<b>提出证言的一方</b>以「优势证据」（more likely than not）证明：专家知识会有助于事实认定、证言基于充分事实、产生于可靠原理与方法，且专家<b>可靠地把方法适用于本案事实</b>。最后一项是新重点——方法本身可靠，不等于这一次用得可靠</td></tr>
+        </table>
+        <p><b>为什么这一步重要？</b>因为它把审查的重心从「这个人够不够格」移到了「这个方法靠不靠谱」。但规则只改变了<b>应当问什么</b>，没有保证这些问题被真正问出来——这正是第三、四段要处理的问题。</p>
+
+        <h3>三、两份权威报告给出的评估</h3>
+        <table>
+          <tr><th style="width:26%">方法</th><th style="width:26%">评估结果</th><th>说明</th></tr>
+          <tr><td><b>单源与简单混合 DNA</b></td><td>基础效度成立</td><td>实验室流程界定清晰，人工判断介入很少；误差主要来自样本混淆、污染与报告错误，可通过能力验证（proficiency testing）压低</td></tr>
+          <tr><td><b>复杂混合 DNA</b></td><td>主观解释路径未获基础效度</td><td>依赖鉴定人主观判断与简化计算的早期方法不可靠；引入客观算法后明显改善，但仍需在更广泛的情境下继续验证</td></tr>
+          <tr><td><b>潜在指纹比对</b></td><td>基础效度成立，但假阳性率可观</td><td>报告援引的研究中，假阳性率高达约 1/306（一项联邦研究）与 1/18（另一实验室研究），远高于法庭上长期宣称的「零错误率」</td></tr>
+          <tr><td><b>咬痕比对</b></td><td>远未达到基础效度</td><td>研究中的假阳性率通常高于 10%；鉴定人甚至无法稳定地就「这是不是人咬痕」达成一致。已有因咬痕证据定罪的案件在专家本人撤回证言后被推翻</td></tr>
+          <tr><td><b>枪弹、鞋印</b></td><td>缺乏设计得当的黑箱研究</td><td>并非「已被证伪」，而是<b>尚无可据以评估准确性的合格研究</b>——这一点与「已证可靠」是完全不同的两回事</td></tr>
+        </table>
+        <div class="box">🔍 <b>两个报告的分工：</b>2009 年美国国家研究理事会（National Research Council）的报告是全景式批评，指出除核 DNA 分析外，几乎没有一种法庭科学方法被严格证明能够一致且高确信地建立「证据—特定来源」之间的联系；2016 年总统科学与技术顾问委员会（PCAST）的报告则聚焦「特征比对」这一类方法，逐项给出基础效度（foundational validity）与「适用效度」（validity as applied）的判断。前者提出问题，后者给出清单。</div>
+
+        <h3>四、为什么排除动议很少成功</h3>
+        <p>这是本课的核心，也是最新文献的着力点。萨拉·戈登（Sara Gordon，不列颠哥伦比亚大学 Allard 法学院）在《多伦多大学法律杂志》（<i>University of Toronto Law Journal</i>，2026 年第 76 卷第 2 期）提出：问题出在<b>先例本身被当成了认知捷径</b>。</p>
+        <ul>
+          <li><b>先例即启发式。</b>法官面对一份技术复杂的科学评估报告，最省力的处理方式是问「以前准许过吗」。准许过，于是继续准许。表面上是尊重先例，实质上是把一个需要重新计算的问题，替换成了一个可以查表的问题。</li>
+          <li><b>偏见盲点。</b>指人容易看见他人的偏见、却难以看见自己的偏见。这一效应使法官倾向于认为：受认知偏差影响的是专家与陪审团，而不是自己的裁量。</li>
+          <li><b>调查数据的佐证。</b>有关研究的另一项发现是：只有约三分之一的法官认为 Daubert 判决的用意在于<b>提高</b>可采性门槛。若守门人对「这道门要拦什么」理解不一，筛选结果必然参差。</li>
+          <li><b>上诉审查的结构性障碍。</b>初审法院常不就可采性出具书面理由，上诉卷宗因而不完整；许多问题又因为庭审时未及时提出异议而根本无法进入上诉审查。</li>
+        </ul>
+        <p>把这些放在一起，得到的结论不是「法官不胜任」，而是：<b>一个要求通才法官去执行同行评议的制度，缺少让它稳定运作的支撑条件。</b></p>
+
+        <h3>五、代价有多大（两个可核查的数字）</h3>
+        <ul>
+          <li><b>毛发显微比对审查。</b>联邦方面对二十余年案件的复核发现，在受审查的审判笔录中，<b>至少 90%</b> 含有鉴定人的错误陈述；在以该证言不利于被告的 268 起案件中，257 起存在错误；受审查的 28 名鉴定人中有 26 人出具过错误证言或报告。其中 35 名被告被判处死刑，33 起中发现错误，9 人在复核前已被执行。</li>
+          <li><b>虚假或误导性法庭科学证据。</b>美国国家司法研究所（NIJ）基于免罪案件登记库对 732 起错案所作的分析发现，其中 <b>635 起</b>存在虚假或误导性的法庭科学证据。</li>
+        </ul>
+        <p>需要提醒的是：这类统计的口径取决于「什么算错误」以及登记库收录了哪些案件，<b>比例会随登记库更新而变化</b>；但它们共同指向一个方向——多数失败并非发生在实验台上，而发生在<b>解释、表述与报告</b>环节。这一点直接决定了下面的改革清单为什么长成这个样子。</p>
+
+        <h3>六、改革工具箱（为什么都是程序性的）</h3>
+        <table>
+          <tr><th style="width:28%">工具</th><th>针对什么</th></tr>
+          <tr><td><b>盲态能力验证</b>（blind proficiency testing）</td><td>让鉴定人在不知道「这是测试」的前提下处理样本，测出的准确率才接近真实水平</td></tr>
+          <tr><td><b>线性序列解盲</b>（linear sequential unmasking）</td><td>按固定顺序逐步披露信息：先接触检材、后接触比对样本、最后才接触案情。无关案情（嫌疑人的前科、侦查方向）因此难以进入判断</td></tr>
+          <tr><td><b>情境管理与实验室独立</b></td><td>减少鉴定机构在组织上对侦查机关的依附，避免角色期待变成实质压力</td></tr>
+          <tr><td><b>量化表述与误差披露</b></td><td>禁用「零错误率」「百分之百确定」「排除一切其他人」这类表述；有实证研究就报告错误率，没有就说没有</td></tr>
+          <tr><td><b>法庭指定专家</b>与<b>司法教育</b></td><td>缓解「双方各雇一个专家」造成的对抗性偏移；同时补上守门人自身的科学素养短板</td></tr>
+        </table>
+        <p>注意这些措施的共同点：它们<b>不试图让法官变成科学家</b>，而是改造信息流入判断的顺序与形式。这是近十年文献的一个明显转向——从「提高审查标准」转向「降低污染可能」。</p>
+
+        <h3>七、中国语境下的对应制度</h3>
+        <p>中国的刑事诉讼框架下，<b>鉴定意见</b>是法定证据种类之一，实行鉴定机构与鉴定人的登记名册管理，并推行实验室认证认可等质量保障措施。2012 年刑事诉讼法修改后，引入了「有专门知识的人」出庭就鉴定意见提出意见的制度（通常称为<b>专家辅助人</b>），为控辩双方质证专业意见提供了程序通道；此后相关司法解释与鉴定程序规范亦持续细化。</p>
+        <p>需要说明的是：不同法域在<b>审查模式</b>上差异很大——有的在采纳前作可靠性筛查（前置式守门），有的则先行采纳、把可靠性交由质证与法官心证处理（后置式评价）。两种模式各有其制度前提与配套，<b>不宜脱离各自的程序环境作简单比较</b>。对学习者而言，更有价值的练习是：找一份本国鉴定意见的规范文本，问一问「它要求鉴定人披露什么、不要求披露什么」——这正是本课反复训练的那一步。</p>
+
+        <div class="box">🧭 <b>事实与立场：</b>本课只讨论<b>证据法规则、已公开发表的科学评估报告与学术文献</b>，不构成对任何国家、司法辖区、法院、执法机构、实验室或具体案件的评价；也不对任何法域的制度作优劣判断。文中援引的报告与统计（国家研究理事会 2009 年报告、总统科学与技术顾问委员会 2016 年报告、联邦毛发比对复核、美国国家司法研究所基于 732 起错案的分析、戈登 2026 年论文）均出自公开来源，统计口径可能随登记库更新而变动，正式引用前请以原始报告为准。文中提到的具体数值在学术讨论中仍存在方法论争议，本课采纳的是报告自身的表述。</div>
+
+        <h3>八、可用于雅思 / 托福的思考题</h3>
+        <ul>
+          <li>Some people argue that judges should exclude scientific evidence whose reliability has not been empirically established. Others believe that juries, not judges, should decide how much weight to give it. Discuss both views and give your own opinion.</li>
+          <li>如果一项技术已经被法庭接受了几十年，这本身能否成为继续接受它的理由？请结合一个具体领域说明。</li>
+          <li>Should experts who give misleading testimony be held professionally accountable, or is error an unavoidable part of scientific work? 请给出你的立场并说明理由。</li>
+          <li>「规则能约束实验室，却未必能约束习惯。」请谈谈你对这句话的理解，并举例。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课</h2>
+      <div class="card">
+        <h3>🎯 学习目标</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇：</b>掌握 10 个 C1–C2 学术与法律词汇（gatekeeping, empirically, infallibility, admissibility, heuristic, deference, exoneration, unmask, epistemic, probative），能替换掉 check / by experiment / never wrong / allowed / shortcut / respect / set free / reveal / about knowledge / useful 这类基础表达。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句法：</b>能仿写 5 个高级学术句型，尤其是 <i>What presents itself as X may be Y</i> 的重定义式表述，以及 <i>Whether X can Y remains to be seen</i> 的开放式收尾。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法：</b>掌握 be + to do 的「未实现的应当」、名词 + 副词的绝对结构、情态动词 + 完成体的反事实推测、what- 名词性关系从句作主语，以及分号句中的隔位省略与对照。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>批判思维：</b>能区分「未经证实」与「已被证伪」；能说明为什么把可靠性问题交给程序而非交给个人能力；能判断一个数字是「错误率」还是「错误案件占比」。</div></div>
+      </div>
+      <div class="card">
+        <h3>📝 考试技巧</h3>
+        <ul>
+          <li><b>雅思阅读判断题：</b>本课第 2 段是典型出题区——「指纹比对已被证明完全可靠」是 FALSE（原文说它基础效度成立，但假阳性率远高于法庭宣称的零错误）；「咬痕比对已经获得科学界普遍接受」也是 FALSE（原文说它远未达到基础效度）。注意 <b>FALSE 与 NOT GIVEN 的分界</b>：原文明确否定的才是 FALSE，只是没提到的才是 NOT GIVEN。</li>
+          <li><b>托福推断题：</b>遇到 <i>it can be inferred that...</i>，答案必须是原文的<b>必然推论</b>。本课练习第 4 题的干扰项「法官被要求忽略先例」之所以错，是因为原文说的是法官<b>事实上</b>把先例当捷径，而非规则要求他们如此——事实描述与规范要求不能混为一谈。</li>
+          <li><b>词汇题：</b>不要只认词形。<i>heuristic</i> 与 <i>deference</i> 在同一句里构成解释关系：把「尊重权威」重新描述为「认知捷径」，两个词的所指其实是同一件事的两种说法。抓住这种<b>重定义结构</b>，两个词一起就都懂了。</li>
+          <li><b>写作 Task 2：</b><i>Whether ... remains to be seen</i> 适合结尾段——既点了题，又不至于在证据不足时下断言；<i>Once X has been V-ed, the fact of its V-ing becomes the argument for V-ing it</i> 用于指出「存在即合理」式的循环论证，比 <i>people do it because it has always been done</i> 高出不止一个档位。</li>
+          <li><b>口语 Part 3：</b>被问到「专家是否值得信任」时，可直接调用本课三层结构：foundational validity（方法有没有被验证）、validity as applied（这一次用得对不对）、contextual bias（信息环境是不是干净）。三层递进比单层回答更容易拿到 7 分以上。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🐾 关于 Pola News</h3>
+        <p>Pola News 每天为 C1–C2 学习者提供一篇有学术深度、有辩论价值的英文短文，覆盖文学评论、经济分析、前沿科技、国际政治、学术论文、法律伦理与跨文化比较七大主题。全文不提供逐段中文翻译，中文仅出现在关键词释义与背景扩展中——这是刻意设计：在 C1 以上阶段，依赖翻译会阻碍你建立英语思维。</p>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · The Gate That Would Not Close · 2026-10-03 · Advanced English for IELTS / TOEFL 🐾</footer>
+
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["For three decades the trial judge has been told to keep the gate. Under Daubert v. Merrell Dow Pharmaceuticals (1993) and Rule 702, as amended in 2023, the proponent of expert testimony must show that a method is not merely respected but reliable: testable, peer-reviewed, and accompanied by a known error rate. The gatekeeping mandate was to be a filter, not a formality.", "The science that followed was unwelcome. In 2009 the National Research Council concluded that, nuclear DNA apart, few forensic techniques had been empirically validated. In 2016 the President's Council of Advisors on Science and Technology was blunter: of the feature-comparison methods it reviewed, only single-source DNA rested on solid ground. Fingerprint analysis survived, burdened by a false-positive rate far above the infallibility claimed in court; bitemark analysis did not survive at all.", "A wave of exclusion might have been expected. It has not arrived. Challenges to the admissibility of such evidence seldom succeed, and Sara Gordon offers an unsettling reason: precedent itself works as a heuristic. Once a technique has been received for fifty years, the fact of its reception becomes the argument for receiving it. What presents itself as deference to authority may be a cognitive shortcut, fortified by the bias blind spot — the tendency to detect bias in others and deny it in oneself.", "The cost is not abstract. A federal review of hair comparison found erroneous statements in at least ninety per cent of the transcripts examined; a National Institute of Justice study of 732 cases of exoneration found false or misleading forensic evidence in 635. The remedies are procedural, not heroic: blind proficiency testing, sequential unmasking of task-irrelevant detail, and instruction in the epistemic standards the rule presumes. Whether a rule drafted for laboratories can discipline a courtroom habit remains to be seen. A ruling on probative weight is a judgment about evidence; a ruling on admissibility, about ourselves."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["A history of fingerprint analysis from its nineteenth-century origins to the present day","Why forensic evidence that scientists have questioned continues to be admitted, and what reformers now propose","An argument that all forensic evidence should be excluded from criminal trials","A comparison between the rules of expert evidence in the United States and in Canada"],ans:1,
+   fb:"Correct. 全文四段呈递进结构：第一段交代守门规则的设立，第二段给出两轮科学评估的结论，第三段追问为什么排除没有发生，第四段落到代价与补救。B 同时覆盖『为什么门没关』与『现在能做什么』两层，概括最完整。A 只是第二段中的一项技术；C 过强——作者从未主张全部排除；D 在原文中不存在，本文不比较法域。"},
+  {q:"2. According to paragraph 2, what did the 2016 report of the President's Council of Advisors on Science and Technology conclude? 根据第二段，2016 年那份报告的结论是什么？",opts:["That every feature-comparison method then in use had been empirically validated","That latent fingerprint analysis had no measurable false-positive rate","That of the methods it reviewed, only single-source DNA rested on solid ground","That the gatekeeping role of trial judges should be abolished"],ans:2,
+   fb:"Yes. 原文的表述是 of the feature-comparison methods it reviewed, only single-source DNA rested on solid ground。C 与之逐字对应。A 与原文相反（第二段开头即说 few forensic techniques had been empirically validated）；B 也相反——指纹分析之所以『带着负担存续』，正因为其假阳性率高于法庭长期宣称的零错误；D 属无中生有，报告并未触及法官职分。"},
+  {q:"3. The word 'heuristic' in paragraph 3 is closest in meaning to: 第三段中的 heuristic 最接近下列哪一项？",opts:["A formal rule laid down by an appellate court","A statistical measure of the rate of error","A laboratory procedure for improving accuracy","A mental shortcut that simplifies a difficult judgement"],ans:3,
+   fb:"Correct. 词汇题先回看同义改写：作者把『尊重权威』重述为『认知捷径』，两句指的是同一件事，因此 heuristic 与 shortcut 同向。再看搭配——precedent itself works as a heuristic，先例被当作一种「用来省去重新计算的东西」，D 的 mental shortcut 正合此意。A 混淆了 heuristic（心里的快捷方式）与 precedent（外在的先例）；B、C 都把学科弄错了：错误率与实验室流程分别是第二段与第四段的话题。"},
+  {q:"4. Which of the following can be inferred from paragraph 3? 下列哪一项可以从第三段推出？",opts:["Challenges to forensic evidence usually succeed once the science has been discredited","Courts often continue to admit a technique because it has long been admitted, rather than because its validity has been re-examined","Judges are required to disregard precedent when ruling on admissibility","The 2023 amendment removed the burden of proof from the party offering the evidence"],ans:1,
+   fb:"Yes. 第三段的关键表述是 the fact of its reception becomes the argument for receiving it —— 接受的既成事实本身成了继续接受的理由，这正是 B 的意思。A 与原文直接冲突（原文说挑战 seldom succeed）；C 恰恰说反了，规则从未要求法官无视先例，作者指出的是他们事实上把先例当了捷径；D 也反了——2023 年修订是<b>明确</b>把举证责任放在提出证言的一方（第一段已交代）。"},
+  {q:"5. Why does the author cite the hair-comparison review and the National Institute of Justice study? 作者援引毛发比对复核与国家司法研究所研究的目的是什么？",opts:["To argue that forensic laboratories should be closed","To show that the problem is confined to a single discipline","To give the argument about admissibility a measurable human cost","To suggest that exonerations are easy to obtain"],ans:2,
+   fb:"Correct. 注意第四段首句这一路标：The cost is not abstract。前面三段讲的是规则与认识论，这一段要把它落到人身上，两组数字承担的就是这个转换功能，C 正确。A 过强且原文没有；B 与原文相反——毛发、指纹、咬痕、枪弹、鞋印多领域并提，恰恰说明问题并不限于一门；D 与原文冲突：这些案件从定罪到洗冤往往历时数十年。"},
+  {q:"6. The final sentence ('A ruling on probative weight...') primarily serves to: 末句的主要作用是？",opts:["To distinguish the technical question of evidentiary weight from the reflexive question of what courts are willing to receive","To summarise the findings of the President's Council of Advisors on Science and Technology","To propose revised wording for Rule 702","To express the author's certainty that reform will fail"],ans:0,
+   fb:"Correct. 末句是标准的隔位省略加对照：证明力之判断是关于<b>证据</b>的，可采性之判断是关于<b>我们自己</b>的。作者由此把全文从技术层面拉回制度自省，A 正确。B 是第二段的内容；C 原文并未给出新的规则措辞；D 过强——同一段说的是 remains to be seen（尚待观察），是开放而非断定。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

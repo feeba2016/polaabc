@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1/F1/F2/F3/G1 已上线（21 主题 / 105 Part / 630 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D2/F1/F2/F3/G1 已上线（22 主题 / 110 Part / 660 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1432,7 +1432,86 @@ const TEM4_THEMES = [
         ]
       }
     ]},
-  {id:"D2", cat:"D", zh:"情绪表达",   name:"Emotions",          status:"soon", words:80,  desc:"开心、悲伤、惊讶"},
+  {id:"D2", cat:"D", zh:"情绪表达", name:"Emotions", status:"live",
+    date:"2026-10-03", words:30, desc:"情绪的起起落落：喜讯降临、欢笑时刻、惊讶一瞬、低落与悲伤、怒气平息",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"D2-P1", slug:"tem4-D2-P1", title:"喜讯降临", shape:"拱门",
+        poster:"assets/tem4/posters/D2_P1.png",
+        sentence:"When the long-awaited letter arrived, Xiao Ye felt truly blessed: the thrilling news of her scholarship excited the whole dorm, her roommates were exhilarated by the wonderful result, their warm congratulations flattered her greatly, and their intense curiosity stimulated one question after another.",
+        sentenceCn:"当期盼已久的信件终于寄到时，小叶学姐感到无比幸福：她获得奖学金的好消息让整个宿舍兴奋不已，室友们为这一美妙的成果激动万分，她们热情的祝贺让她倍感欣喜，大家强烈的好奇心更是引出了一个又一个的问题。",
+        scene:"粉彩宿舍里，小叶学姐站在椅子上双手高举发光的信件，三位猴室友欢呼庆祝，彩纸与星星飞舞。",
+        words:[
+          {word:"excite",     ipa:"/ɪkˈsaɪt/",     pos:"vt.",  zh:"刺激，使兴奋，使激动；激发，唤起", forms:["excited"]},
+          {word:"exhilarate", ipa:"/ɪɡˈzɪləreɪt/", pos:"vt.",  zh:"使高兴，使兴奋", forms:["exhilarated"]},
+          {word:"flatter",    ipa:"/ˈflætə/",      pos:"vt.",  zh:"奉承，恭维；使高兴，使满意", forms:["flattered"]},
+          {word:"stimulate",  ipa:"/ˈstɪmjuleɪt/", pos:"v.",   zh:"激励，促进；刺激，使兴奋", forms:["stimulated"]},
+          {word:"intense",    ipa:"/ɪnˈtens/",     pos:"adj.", zh:"强烈的；热切的，热情的；认真的，紧张的", forms:["intense"]},
+          {word:"blessed",    ipa:"/ˈblesɪd/",     pos:"adj.", zh:"神圣的，受上帝恩宠的；带来愉快的", forms:["blessed"]}
+        ]
+      },
+      {
+        id:"D2-P2", slug:"tem4-D2-P2", title:"欢笑时刻", shape:"叶形",
+        poster:"assets/tem4/posters/D2_P2.png",
+        sentence:"That afternoon a fluffy kitten wandered into the dorm and amused everyone: it tickled Xiao Ye's ankle with its tail and teased the ball of yarn until it rolled away, one roommate giggled non-stop, another chuckled quietly behind her book, and even the serious monitor could not help but grin.",
+        sentenceCn:"那天下午，一只毛茸茸的小猫溜进宿舍，把大家都逗乐了：它用尾巴挠小叶学姐的脚踝，又逗弄着毛线团直到毛线团滚走；一位室友咯咯笑个不停，另一位在书后轻声偷笑，连严肃的班长也忍不住咧嘴笑了。",
+        scene:"宿舍地毯上，小奶猫用尾巴挠小叶学姐的脚踝逗得她咯咯笑，毛线团滚到一旁，室友们有的大笑有的捧书偷笑。",
+        words:[
+          {word:"amuse",   ipa:"/əˈmjuːz/", pos:"vt.",     zh:"逗…乐，逗…笑；给…娱乐（消遣）", forms:["amused"]},
+          {word:"tickle",  ipa:"/ˈtɪkl/",   pos:"vt.",     zh:"胳肢，发痒；使愉悦，满足", forms:["tickled"]},
+          {word:"tease",   ipa:"/tiːz/",    pos:"v.",      zh:"取笑，揶揄，嘲弄", forms:["teased"]},
+          {word:"giggle",  ipa:"/ˈɡɪɡl/",   pos:"n. / v.", zh:"吃吃地笑，咯咯地笑；傻笑", forms:["giggled"]},
+          {word:"chuckle", ipa:"/ˈtʃʌkl/",  pos:"v.",      zh:"轻声地笑，窃笑", forms:["chuckled"]},
+          {word:"grin",    ipa:"/ɡrɪn/",    pos:"n. / v.", zh:"露齿笑，咧着嘴笑", forms:["grin"]}
+        ]
+      },
+      {
+        id:"D2-P3", slug:"tem4-D2-P3", title:"惊讶一瞬", shape:"椭圆",
+        poster:"assets/tem4/posters/D2_P3.png",
+        sentence:"Suddenly a loud crash in the corridor startled everyone: Xiao Ye rushed out and was stunned by the sight of a toppled shelf, the amazing number of scattered books astonished her so much that she could only exclaim in surprise, while a freshman nearby began to panic, not knowing what to do.",
+        sentenceCn:"走廊里突然传来一声巨响，吓了大家一跳：小叶学姐冲出门去，看到倒下的书架顿时惊呆了；散落一地的书多得令人惊叹，她惊讶得只能连连惊呼，而旁边的一名新生则慌乱起来，完全不知如何是好。",
+        scene:"粉彩走廊里书架倒下、书本散落一地，小叶学姐双手捂嘴睁大眼睛，旁边的小新生一脸慌张。",
+        words:[
+          {word:"amaze",    ipa:"/əˈmeɪz/",    pos:"vt.", zh:"令（人）惊愕，使（人）惊叹", forms:["amazing"]},
+          {word:"astonish", ipa:"/əˈstɒnɪʃ/",  pos:"vt.", zh:"使吃惊，使惊愕", forms:["astonished"]},
+          {word:"startle",  ipa:"/ˈstɑːtl/",   pos:"v.",  zh:"（使）惊愕，（使）吃惊", forms:["startled"]},
+          {word:"stun",     ipa:"/stʌn/",      pos:"vt.", zh:"将（人或动物）打昏；使目瞪口呆，使吃惊；令人喜悦", forms:["stunned"]},
+          {word:"exclaim",  ipa:"/ɪkˈskleɪm/", pos:"v.",  zh:"（由于惊讶、痛苦、愤怒、高兴等）呼喊，惊叫，大声说", forms:["exclaim"]},
+          {word:"panic",    ipa:"/ˈpænɪk/",    pos:"n.",  zh:"恐慌，惊惶 v.（使）恐慌，（使）惊惶 adj. 恐慌的，惊慌的", forms:["panic"]}
+        ]
+      },
+      {
+        id:"D2-P4", slug:"tem4-D2-P4", title:"低落与悲伤", shape:"超圆角",
+        poster:"assets/tem4/posters/D2_P4.png",
+        sentence:"It turned out that her friend Lily had failed the exam, and the result disappointed her deeply: she wept quietly by the window and sank into gloom for days, and the gray skies only seemed to depress her further; but Xiao Ye stayed beside her, refusing to let her despair, and gently reminded her that it is all right to grieve before starting again.",
+        sentenceCn:"原来她的朋友莉莉考试失利，结果让她深感失望：她在窗边悄悄流泪，一连几天闷闷不乐，灰蒙蒙的天空似乎更使她消沉；但小叶学姐一直陪着她，不肯让她陷入绝望，还温柔地提醒她——悲伤一阵子没关系，之后重新出发就好。",
+        scene:"雨天窗边，小猴姑娘抱着膝盖低头流泪，小叶学姐跪坐在旁轻拍她的肩膀，递上一杯热茶。",
+        words:[
+          {word:"disappoint", ipa:"/ˌdɪsəˈpɔɪnt/", pos:"vt.",      zh:"使失望，使扫兴，使（希望等）破灭", forms:["disappointed"]},
+          {word:"despair",    ipa:"/dɪˈspeə/",     pos:"n. / vi.", zh:"绝望，失望", forms:["despair"]},
+          {word:"grieve",     ipa:"/ɡriːv/",       pos:"v.",       zh:"使悲痛；使苦恼 vi. 悲伤；哀悼", forms:["grieve"]},
+          {word:"gloom",      ipa:"/ɡluːm/",       pos:"n.",       zh:"黑暗，幽暗；忧郁，阴沉", forms:["gloom"]},
+          {word:"depress",    ipa:"/dɪˈpres/",     pos:"vt.",      zh:"使消沉，使抑郁，使萧条；压下，按下", forms:["depress"]},
+          {word:"weep",       ipa:"/wiːp/",        pos:"v.",       zh:"流泪，哭泣", forms:["wept"]}
+        ]
+      },
+      {
+        id:"D2-P5", slug:"tem4-D2-P5", title:"怒气平息", shape:"波浪",
+        poster:"assets/tem4/posters/D2_P5.png",
+        sentence:"That evening, however, the noise of the celebration provoked a small quarrel: a tired roommate, annoyed by the loud music and irritated by the endless jokes, soon grew furious, and her rage flared until Xiao Ye handed her a cup of warm milk tea, and all the anger melted into laughter.",
+        sentenceCn:"不过到了晚上，庆祝的喧闹引来了一场小风波：一位疲惫的室友被吵闹的音乐弄得很恼火，又被没完没了的玩笑惹得心烦，很快气得大发雷霆，怒火一触即发——直到小叶学姐递给她一杯温热的奶茶，所有的怒气才化作了笑声。",
+        scene:"晚霞映照的宿舍里，气鼓鼓的猴室友抱臂而坐，小叶学姐微笑着递上温热的奶茶，怒气符号化作小爱心。",
+        words:[
+          {word:"annoy",    ipa:"/əˈnɔɪ/",     pos:"v.",   zh:"使烦恼，使生气；打搅", forms:["annoyed"]},
+          {word:"irritate", ipa:"/ˈɪrɪteɪt/",  pos:"v.",   zh:"激怒，使烦躁；使不舒服，刺激", forms:["irritated"]},
+          {word:"provoke",  ipa:"/prəˈvəʊk/",  pos:"vt.",  zh:"激怒，煽动，挑起", forms:["provoked"]},
+          {word:"furious",  ipa:"/ˈfjʊəriəs/", pos:"adj.", zh:"狂怒的，暴怒的；狂暴的，猛烈的，强烈的", forms:["furious"]},
+          {word:"rage",     ipa:"/reɪdʒ/",     pos:"n.",   zh:"盛怒，狂怒 vi. 发怒，动怒；（风、浪、战斗等）猛烈进行", forms:["rage"]},
+          {word:"flare",    ipa:"/fleə/",      pos:"v.",   zh:"（火焰）摇曳，闪耀；突然发怒（激动） n. 闪烁，闪现", forms:["flared"]}
+        ]
+      }
+    ]},
   {id:"D3", cat:"D", zh:"沟通与对话", name:"Communication",     status:"soon", words:70,  desc:"电话、视频、写作"},
   {id:"D4", cat:"D", zh:"社交礼仪",   name:"Social Etiquette",  status:"soon", words:60,  desc:"拜访、致谢、道歉"},
   /* ===== E 科学与探索 ===== */
