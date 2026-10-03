@@ -6955,6 +6955,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-03",
+    "title": "The Map That Found a Killer",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-03-the-map-that-found-a-killer",
+    "url": "lessons/b2/2026-10-03-the-map-that-found-a-killer.html",
+    "vocab": [
+      {
+        "word": "outbreak",
+        "zh": "（战争、疾病的）爆发；突然发生",
+        "ex": "\"An outbreak of cholera struck the Soho district of London in September 1854.\""
+      },
+      {
+        "word": "attribute",
+        "zh": "把…归因于（attribute A to B）",
+        "ex": "\"Most physicians attributed the disease to the air itself.\""
+      },
+      {
+        "word": "contaminate",
+        "zh": "污染；弄脏（水源、食物等）",
+        "ex": "\"Snow suspected that the water from the pump was contaminated.\""
+      },
+      {
+        "word": "cluster",
+        "zh": "聚集；成群分布",
+        "ex": "\"The black bars clustered around one pump with uncomfortable precision.\""
+      },
+      {
+        "word": "adjacent",
+        "zh": "毗连的；紧邻的（adjacent to）",
+        "ex": "\"Two adjacent institutions escaped the outbreak: a workhouse and a brewery.\""
+      },
+      {
+        "word": "incidence",
+        "zh": "（疾病、事件的）发生率、发病率",
+        "ex": "\"The incidence of new cases had already begun to fall before the handle came off.\""
+      },
+      {
+        "word": "compelling",
+        "zh": "极具说服力的；引人入胜的",
+        "ex": "\"Snow's evidence was compelling, yet it was not proof.\""
+      },
+      {
+        "word": "intervene",
+        "zh": "介入；干预；出面调停",
+        "ex": "\"He persuaded the Board of Guardians to intervene and remove the handle.\""
+      },
+      {
+        "word": "notwithstanding",
+        "zh": "尽管；虽然（介词，后接名词短语）",
+        "ex": "\"Notwithstanding his map, Snow could not name the organism responsible.\""
+      },
+      {
+        "word": "scepticism",
+        "zh": "怀疑态度；质疑（美式拼写 skepticism）",
+        "ex": "\"Scepticism about Snow's theory long outlived him.\""
+      },
+      {
+        "word": "plot",
+        "zh": "在图上标出；绘制（数据点、曲线）",
+        "ex": "\"Plotted carefully, the distribution of deaths can point to a cause.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

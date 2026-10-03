@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Map That Found a Killer</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#c2410c;
+  --bg:#f7f9ff;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#dbeafe;
+  --border:#d8e4fb;
+  --soft:#eff5ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,78,216,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,78,216,.55);}70%{box-shadow:0 0 0 12px rgba(29,78,216,0);}100%{box-shadow:0 0 0 0 rgba(29,78,216,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#93c5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · History</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Map That Found a Killer</h1>
+      <p class="subtitle">1854 年伦敦苏豪区：一张手绘地图如何指认出一口水泵｜全文阅读（点高亮词看中文释义，点 ▶ 听朗读）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Ten Days in Soho 苏豪区的十天</div>
+            <p>In September 1854, an <span class="kw" data-def="（疾病的）爆发；突然发生">outbreak</span> of cholera struck the Soho district of London with terrifying speed. Within two hundred and fifty yards of the corner where Cambridge Street meets Broad Street, more than five hundred people died in ten days. Most physicians <span class="kw" data-def="把…归因于（attribute A to B 认为 A 由 B 引起）">attributed</span> the disease to the air itself: it travelled, they argued, on a noxious vapour rising from decay. John Snow, a doctor who lived a few streets away, doubted it. Cholera, he had come to believe, was swallowed rather than breathed — the suspect was <span class="kw" data-def="被污染的；弄脏的（contaminated water 受污染的水）">contaminated</span> water, not the wind.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · A Map of Black Bars 一张画满黑杠的地图</div>
+            <p>Snow did not argue in the abstract. He went from house to house, recorded every address, and marked each death as a black bar on a street map. The bars <span class="kw" data-def="聚集；成簇分布">clustered</span> around one pump on Broad Street with uncomfortable precision. Two <span class="kw" data-def="毗连的；紧邻的">adjacent</span> institutions escaped: a workhouse that had its own well, and a brewery whose workers drank beer instead of water. Of the eighty-nine people who died in the first week, seventy-nine lived near the pump or used it daily; of the remaining ten, Snow established that eight had drunk from it shortly before falling ill.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Handle Comes Off 拆掉水泵柄</div>
+            <p>Snow's evidence was <span class="kw" data-def="令人信服的；极有说服力的">compelling</span>, yet it was not proof, and the authorities were unmoved. On 7 September he persuaded the St James's parish Board of Guardians to <span class="kw" data-def="介入；干预">intervene</span>; the handle of the pump was removed the following day, and the outbreak, already in decline, collapsed. That decline is precisely the detail the legend tends to omit: three quarters of the neighbourhood's residents had fled, and the <span class="kw" data-def="（疾病的）发生率、发病率">incidence</span> of new cases had already begun to fall before the handle came off. <span class="kw" data-def="尽管；虽然（介词，后接名词或名词短语）">Notwithstanding</span> his map, Snow could not name the organism that killed his patients.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What the Map Really Proved 地图究竟证明了什么</div>
+            <p>Only in 1883 did Robert Koch isolate the comma-shaped bacillus responsible, and <span class="kw" data-def="怀疑态度；质疑">scepticism</span> about Snow's theory long outlived him. His method, however, proved more durable than his conclusion. What Snow had really shown was that a disease has a geography: <span class="kw" data-def="绘制；在图上标出（数据点）">plotted</span> carefully, the distribution of deaths can point to a cause even while the mechanism remains unknown. Modern epidemiology, contact tracing and the pandemic dashboards of our own century all descend from that map. The pump handle, now preserved in a London school, is a monument to looking at the data before arguing about it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="outbreak">🔊</button><div class="word">outbreak<span class="pos">n.</span></div><div class="zh">（战争、疾病的）爆发；突然发生</div><div class="ex">"An outbreak of cholera struck the Soho district of London in September 1854."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="attribute">🔊</button><div class="word">attribute<span class="pos">v.</span></div><div class="zh">把…归因于（attribute A to B）</div><div class="ex">"Most physicians attributed the disease to the air itself."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="contaminate">🔊</button><div class="word">contaminate<span class="pos">v.</span></div><div class="zh">污染；弄脏（水源、食物等）</div><div class="ex">"Snow suspected that the water from the pump was contaminated."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cluster">🔊</button><div class="word">cluster<span class="pos">v.</span></div><div class="zh">聚集；成群分布</div><div class="ex">"The black bars clustered around one pump with uncomfortable precision."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="adjacent">🔊</button><div class="word">adjacent<span class="pos">adj.</span></div><div class="zh">毗连的；紧邻的（adjacent to）</div><div class="ex">"Two adjacent institutions escaped the outbreak: a workhouse and a brewery."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="incidence">🔊</button><div class="word">incidence<span class="pos">n.</span></div><div class="zh">（疾病、事件的）发生率、发病率</div><div class="ex">"The incidence of new cases had already begun to fall before the handle came off."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="compelling">🔊</button><div class="word">compelling<span class="pos">adj.</span></div><div class="zh">极具说服力的；引人入胜的</div><div class="ex">"Snow's evidence was compelling, yet it was not proof."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="intervene">🔊</button><div class="word">intervene<span class="pos">v.</span></div><div class="zh">介入；干预；出面调停</div><div class="ex">"He persuaded the Board of Guardians to intervene and remove the handle."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="notwithstanding">🔊</button><div class="word">notwithstanding<span class="pos">prep.</span></div><div class="zh">尽管；虽然（介词，后接名词短语）</div><div class="ex">"Notwithstanding his map, Snow could not name the organism responsible."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scepticism">🔊</button><div class="word">scepticism<span class="pos">n.</span></div><div class="zh">怀疑态度；质疑（美式拼写 skepticism）</div><div class="ex">"Scepticism about Snow's theory long outlived him."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="plot">🔊</button><div class="word">plot<span class="pos">v.</span></div><div class="zh">在图上标出；绘制（数据点、曲线）</div><div class="ex">"Plotted carefully, the distribution of deaths can point to a cause."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. What + 谓语, + 系动词 + that 从句（What 主语从句 + 表语从句）.</h3>
+          <div class="zh">what 引导的从句整体作主语，等于 “the thing that …”，谓语用单数。它最适合用来纠正读者的预期：先抛出“某人真正证明的是什么”，再在主句里给出与常识相反的答案。注意后半句是 that 引导的<b>表语从句</b>，that 一般不省。</div>
+          <div class="eg">What Snow had really shown was that a disease has a geography.</div>
+          <div class="practice">练习：用 “the map really prove” → <input placeholder="What the map really proved"> was that clean water saves more lives than any medicine of the century.</div>
+        </div>
+        <div class="item">
+          <h3>2. Only + 状语 / 状语从句 + 助动词 + 主语 + 动词原形（部分倒装）.</h3>
+          <div class="zh">Only 修饰时间、方式、条件等状语并置于句首时，主句必须部分倒装：把 did / was / can 等助动词提到主语之前。它把“迟到的事实”压成一句紧凑的强调句，是历史叙述里写“直到某年才……”最有力的句式。注意倒装只发生在主句。</div>
+          <div class="eg">Only in 1883 did Robert Koch isolate the comma-shaped bacillus responsible.</div>
+          <div class="practice">练习：用 “after 1884 / the authorities / accept” → <input placeholder="Only after 1884 did the authorities accept"> that cholera travelled in water.</div>
+        </div>
+        <div class="item">
+          <h3>3. 过去分词短语 (+ 状语), 主语 + 谓语.</h3>
+          <div class="zh">过去分词作状语，表示被动且已完成的动作，逻辑主语必须是主句主语。它能在句首一次性交代“处理方式”，然后主句立刻给出结果，节奏干净；常用于学术与科技写作。悬垂分词（逻辑主语对不上）是最常见的错误。</div>
+          <div class="eg">Plotted carefully, the distribution of deaths can point to a cause even while the mechanism remains unknown.</div>
+          <div class="practice">练习：用 “map / by address” → <input placeholder="Mapped by address">, the eighty-nine deaths fell into a single unmistakable pattern.</div>
+        </div>
+        <div class="item">
+          <h3>4. Notwithstanding + 名词短语, 主语 + 谓语.</h3>
+          <div class="zh">notwithstanding 作<b>介词</b>时后接名词（也可置于名词之后：his map notwithstanding），表示“尽管”。它比 despite 更正式、更书面，常见于法律和学术文本；作连词时才可接句子（Notwithstanding that...）。不要把它和 though 混用——though 后面必须跟主谓结构。</div>
+          <div class="eg">Notwithstanding his map, Snow could not name the organism that killed his patients.</div>
+          <div class="practice">练习：用 “all the evidence” → <input placeholder="Notwithstanding all the evidence">, the board removed the handle only because the neighbourhood had already emptied.</div>
+        </div>
+        <div class="item">
+          <h3>5. A rather than B / A, not B（对照式并列结构）.</h3>
+          <div class="zh">把“被否定的说法”和“被肯定的说法”并置，形成一句内的转折。rather than 后接的动词形式要与前面保持一致（swallowed rather than breathed 都是过去分词）；not 则常跟在名词短语后做同位否定（the water, not the wind）。这是议论文里最短、最锋利的反驳方式。</div>
+          <div class="eg">Cholera was swallowed rather than breathed — the suspect was contaminated water, not the wind.</div>
+          <div class="practice">练习：用 “the pump / the air” → The inquiry concluded that the culprit was <input placeholder="the pump, not the air">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Only 引起的部分倒装 (Partial Inversion after Only)</h3>
+          <div class="zh">规则：Only + <b>副词 / 介词短语 / 状语从句</b>置于句首时，主句部分倒装（助动词提前）。<br>
+          · 一般现在 / 过去：<b>Only then did he</b> understand. <br>
+          · 含 be 动词：<b>Only in Soho was</b> the pattern visible. <br>
+          · 情态动词：<b>Only by mapping can</b> we see the cluster.<br>
+          常见错误：Only 修饰<b>主语</b>时不倒装（Only Snow noticed it. ✓，不说 Only did Snow...）。本句 Only in 1883 修饰时间状语，因此主句用 did Koch isolate。</div>
+          <div class="eg">Only in 1883 did Robert Koch isolate the comma-shaped bacillus responsible. / Only after the handle came off did the deaths stop entirely.</div>
+        </div>
+        <div class="item">
+          <h3>2. What 主语从句 + that 表语从句</h3>
+          <div class="zh">what 引导的名词性从句作主语，谓语通常用单数（What we need <b>is</b> time）；若表语为复数名词，也可用复数。紧随其后的 be + that 从句是<b>表语从句</b>，that 在正式文体中不省略。辨析：which 引导定语从句要有先行词，what = the thing that，自带先行词，因此不能写成 “the thing what”。</div>
+          <div class="eg">What Snow had really shown was that a disease has a geography. / What the board feared was that the poor would riot.</div>
+        </div>
+        <div class="item">
+          <h3>3. 过去分词短语作状语 (Past Participial Adverbials)</h3>
+          <div class="zh">过去分词表示被动、完成，其逻辑主语必须是主句主语。可表条件（Plotted carefully, ... can point to...）、时间（Asked about the pump, ...）、原因（Convinced by the map, ...）。<br>
+          <b>悬垂分词</b>是最典型错误：Plotted carefully, <b>Snow</b> found the source. ✗ —— 被绘制的是地图/数据，不是 Snow，应改为 Plotting the deaths carefully, Snow found the source. 或 Plotted carefully, the deaths revealed the source. ✓</div>
+          <div class="eg">Plotted carefully, the distribution of deaths can point to a cause. / Written in 1855, his book failed to convince the medical establishment.</div>
+        </div>
+        <div class="item">
+          <h3>4. 让步表达：Notwithstanding / Despite / In spite of vs. Though</h3>
+          <div class="zh">四者都表示“尽管”，但后续成分不同：<br>
+          · <b>Notwithstanding</b> + 名词短语（最正式，书面、法律语体），也可后置：Doubts notwithstanding, ...<br>
+          · <b>Despite / In spite of</b> + 名词短语（of 不可省）<br>
+          · <b>Though / Although</b> + 完整主谓句子<br>
+          易错：Despite of ✗；Though his map, ... ✗（though 后必须接句子）。</div>
+          <div class="eg">Notwithstanding his map, Snow could not name the organism. / Though his map was elegant, the authorities remained unconvinced.</div>
+        </div>
+        <div class="item">
+          <h3>5. 定语从句：where 与省略的关系代词</h3>
+          <div class="zh">where 引导定语从句时，先行词是表示地点的名词（the corner <b>where</b> Cambridge Street meets Broad Street）。若从句缺少的是主语或宾语，则用 which / that；当关系代词在从句中作<b>宾语</b>时可以省略：the detail <b>(that)</b> the legend tends to omit。判断方法：把先行词放回从句，若需要加介词用 where，若直接作主语或宾语用 that / which。</div>
+          <div class="eg">Within two hundred and fifty yards of the corner where Cambridge Street meets Broad Street, more than five hundred people died. / That decline is precisely the detail the legend tends to omit.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+        <h3>一、一座由气味定义的城市</h3>
+        <p>要理解 1854 年的争论，得先想象那座城市的气味。19 世纪中叶的伦敦人口超过两百万，抽水马桶刚刚开始普及，而新建的下水道恰好把粪便直接排进泰晤士河。涨潮时海水上推，整条河成了一条露天的臭水沟。1848 至 1849 年的那场霍乱，仅在英格兰和威尔士就登记了约 5.3 万例死亡。</p>
+        <p>在细菌学说诞生之前，最主流的解释是<b>瘴气论（miasma theory）</b>：疾病由腐败有机物散发的“坏空气”传播。它并非纯粹的愚昧——它有一个无法反驳的表面证据：穷人住的地方更臭，穷人得的病也更多。于是医学解释悄然滑向了道德解释：穷人生病，是因为他们不洁、不节制。这个推论在经验上“看起来成立”，却把因果彻底弄反了。</p>
+
+        <h3>二、约翰·斯诺是谁</h3>
+        <p>斯诺（1813—1858）生于约克一个劳工家庭，是九个孩子中的长子。14 岁起做外科医生的学徒，在煤矿村亲历过一次霍乱爆发。他生活极严：素食、不饮酒、终身未婚。1844 年在伦敦大学获得医学学位后，他成了当时最出色的麻醉医师之一——1853 年和 1857 年，他为维多利亚女王分娩时实施氯仿麻醉，这一举动极大推动了产科麻醉在英国被接受。</p>
+        <p>一个耐人寻味的对照：一位整天与麻醉气体打交道的医生，恰恰比任何人都更清楚“通过空气传播的东西”应该是什么样子。他研究过吸入剂的剂量与毒性，因此当别人把霍乱交给“空气”时，他要求证据。</p>
+
+        <h3>三、那张地图是怎么画出来的</h3>
+        <p>1854 年 8 月底，苏豪区（Soho）爆发霍乱。斯诺就住在附近，他几乎是逐户敲门走访，把死亡登记簿上的每一个地址对应到街道图上，每例死亡画一道横杠——同一住址多例死亡，横杠就往上堆叠，像街边堆起的尸体。</p>
+        <table class="facts">
+          <tr><th>要素</th><th>做法</th><th>作用</th></tr>
+          <tr><td>死亡数据</td><td>逐户走访 + 死亡登记，共标出 578 例死亡地址</td><td>把“感觉上很多”变成可数的分布</td></tr>
+          <tr><td>水源数据</td><td>标出该区 13 口公共水井的位置</td><td>提供了可以比对的“候选原因”</td></tr>
+          <tr><td>服务区划分</td><td>先按直线距离画泰森多边形，再用铅笔和细绳沿街道重画“最短步行路径”</td><td>判断一户人家最可能去哪口井取水——这已经是现代 GIS 的雏形</td></tr>
+          <tr><td>反例检验</td><td>专门去找“应该生病却没生病”的人</td><td>排除巧合，是全文最关键的推理动作</td></tr>
+        </table>
+        <p>结果清晰得令人不安：绝大多数死亡落在宽街（Broad Street，今 Broadwick Street）水泵的步行服务区之内。而这口井的水，恰恰因为<b>口感清冽</b>而被许多人专门绕路来打。</p>
+
+        <h3>四、两个“没生病”的地方</h3>
+        <p>真正让论证立住的，是两个反例。紧邻水泵的一所济贫院（workhouse）有五百多名住客，却几乎没有病例——因为它有自己的水井。水泵东侧一个街区的啤酒厂，七十多名工人一个都没病——他们喝的是自己酿的啤酒。当时无人知道发酵能杀菌，但事实摆在那里：不喝那口井水的人，就不生病。</p>
+        <p>反过来看也一样：住在别的街区、但专门到宽街打水的人，照样病死。斯诺后来追查第一周死亡的 89 人，其中 79 人住在附近或日常取用该井，剩下 10 人中有 8 人在发病前不久喝过那里的水。</p>
+
+        <h3>五、拆掉手柄那天，究竟发生了什么</h3>
+        <p>1854 年 9 月 7 日，斯诺带着地图走进圣詹姆斯教区监护人委员会。委员们并不信他，但愿意试试——毕竟拆个手柄几乎不花钱。9 月 8 日，手柄被卸下。</p>
+        <p>故事通常讲到这里就结束了：英雄拆柄，疫情终止。但事实更微妙。疫情在手柄被拆<b>之前</b>就已经开始衰退，该区约四分之三的居民在恐慌中逃离。所以严格地说，那口手柄并没有独自“拯救”苏豪区。</p>
+        <p>那么斯诺的荣誉在哪里？在于他判断正确。后来的调查发现，宽街水泵旁的渗坑（cesspit）有粪便渗入井中；1854 年 8 月底，附近一名婴儿患霍乱，其尿布的清洗水被倒入那个渗坑。手柄拆下时，真正的污染源其实已经在自行熄灭。<b>先做对的事，再等结果证明它</b>——这就是公共卫生与英雄传说之间的差别。</p>
+
+        <h3>六、真相为什么迟到了三十年</h3>
+        <p>斯诺能指出“是什么在传病”，却说不出“到底是什么东西在传病”。他的理论缺少最后一环：病原体。</p>
+        <ul>
+          <li><b>1854 年</b>：意大利解剖学家菲利波·帕奇尼（Filippo Pacini）在佛罗伦萨用显微镜观察霍乱死者肠道，看到了大量逗号状微生物并作了记录，但在瘴气论主导的年代无人理会。</li>
+          <li><b>1883 年</b>：德国医生罗伯特·科赫（Robert Koch）在埃及和印度分离出霍乱弧菌，次年公布结果，水传播理论才获得决定性的证据支持。</li>
+          <li><b>1884 年</b>：伦敦再次流行霍乱时，官方报告仍未完全接受水传播说。此时斯诺已去世二十六年。</li>
+        </ul>
+        <blockquote>先有正确的地图，后有人相信它；再后才有能解释它的显微镜。<em>—— 科学的顺序常常是反的：方法先于证据，证据先于共识。</em></blockquote>
+
+        <h3>七、留给今天的遗产</h3>
+        <p>斯诺那张图被反复称为“数据可视化”的奠基之作，但它真正的继承者遍布当代生活：流行病学这门学科、疫情期间的接触者追踪、约翰斯·霍普金斯大学的疫情仪表盘、用基因组测序追查传染链、城市里按街道级别绘制的疾病热力图——逻辑都是同一条：<b>先看清分布，再追问原因。</b></p>
+        <p>它还提供了另一个更朴素的教训。在致病机制尚未查明、专家仍在争论的那十年里，最有效的动作可能只是“拆掉手柄”——切断传播途径。今天我们把这叫<b>预防原则</b>：不必等到完全理解一个问题，才去做那些明显更安全的事。</p>
+
+        <h3>八、在中国</h3>
+        <p>霍乱在 19 世纪随全球贸易航路扩散，中国沿海口岸也多次受到波及，1932 年曾发生全国性大流行。20 世纪后半叶以来，通过饮用水安全工程、粪便无害化处理、改厕运动与法定传染病报告制度，中国的霍乱发病长期维持在极低水平（属《传染病防治法》管理的甲类传染病之一）。</p>
+        <p>中国公共卫生史上还有一次与斯诺高度相似的行动：1910—1911 年东北鼠疫期间，伍连德博士通过流行病学调查与病理解剖，确认了肺鼠疫可经呼吸道在人与人之间传播，随后推行隔离、交通管制与口罩（他改进的“伍氏口罩”），在数月内扑灭疫情。这与斯诺的思路一脉相承：<b>先查清传播链，再动手切断它</b>。</p>
+
+        <h3>九、留给你的两个问题</h3>
+        <ul>
+          <li>斯诺的地图正确，却无法说服同时代的多数人，因为他拿不出病原体。你认为说服公众究竟需要什么：数据、机制，还是权威？今天的我们是否也常常因为“没有完整的解释”而拒绝一个正确的建议？</li>
+          <li>课文中说，那口手柄“并没有独自拯救苏豪区”。当我们讲述科学史时，把复杂的过程简化成一个英雄瞬间，这种简化是有益的常识普及，还是有害的误解？</li>
+        </ul>
+        <p class="source">资料来源：美国加州大学洛杉矶分校（UCLA）流行病学系 John Snow 专题网站（Ralph R. Frerichs 编）、英国开放大学 OpenLearn 公共卫生教材、Sandra Hempel《The Medical Detective: John Snow and the Mystery of Cholera》、PMC 综述《John Snow, Cholera, the Broad Street Pump》、伦敦卫生与热带医学院院史资料。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3>🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>阅读</b>：读懂一篇约 380 词的历史评论短文，把握“灾难—调查—行动—反思”的四段论证结构。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>词汇</b>：掌握 11 个 CEFR B2 核心词（outbreak, attribute, contaminate, cluster, adjacent, incidence, compelling, intervene, notwithstanding, scepticism, plot），能在新闻、医学与学术语境中主动使用。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>句型</b>：熟练运用 5 个高级句式，重点突破 Only 部分倒装、What 主语从句与过去分词短语作状语。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>语法</b>：系统复习 Only 引起的部分倒装、What 主语从句与 that 表语从句、过去分词作状语与悬垂分词、notwithstanding 等让步结构、where 定语从句与省略关系代词。</div></div>
+        <div class="goal"><span class="ic">✅</span><div><b>测验</b>：完成 6 道选择题，检验历史细节、推理判断与语法识别能力。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>拓展</b>：理解流行病学诞生的历史背景、瘴气论为何长期占据主流，以及“先切断传播、后查明机制”的公共卫生思路。</div></div>
+        <h3 style="margin-top:20px;">🗣️ 口语输出建议</h3>
+        <p>用本课句型，口头描述一次“靠数据而不是靠感觉解决问题”的经历（可以是一次校园调查、一张成绩分布图、一次疫情打卡统计）。要求至少用上 1 个倒装句和 1 个 what 主语从句。例如：</p>
+        <div class="item"><div class="eg">Only after we arranged the results by class did the pattern appear. What we had taken for laziness was in fact a timetable problem.</div></div>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English Learning · History<br>Generated on 3 October 2026</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-GB';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "In September 1854, an outbreak of cholera struck the Soho district of London with terrifying speed. Within two hundred and fifty yards of the corner where Cambridge Street meets Broad Street, more than five hundred people died in ten days. Most physicians attributed the disease to the air itself: it travelled, they argued, on a noxious vapour rising from decay. John Snow, a doctor who lived a few streets away, doubted it. Cholera, he had come to believe, was swallowed rather than breathed — the suspect was contaminated water, not the wind.",
+  "Snow did not argue in the abstract. He went from house to house, recorded every address, and marked each death as a black bar on a street map. The bars clustered around one pump on Broad Street with uncomfortable precision. Two adjacent institutions escaped: a workhouse that had its own well, and a brewery whose workers drank beer instead of water. Of the eighty-nine people who died in the first week, seventy-nine lived near the pump or used it daily; of the remaining ten, Snow established that eight had drunk from it shortly before falling ill.",
+  "Snow's evidence was compelling, yet it was not proof, and the authorities were unmoved. On 7 September he persuaded the St James's parish Board of Guardians to intervene; the handle of the pump was removed the following day, and the outbreak, already in decline, collapsed. That decline is precisely the detail the legend tends to omit: three quarters of the neighbourhood's residents had fled, and the incidence of new cases had already begun to fall before the handle came off. Notwithstanding his map, Snow could not name the organism that killed his patients.",
+  "Only in 1883 did Robert Koch isolate the comma-shaped bacillus responsible, and scepticism about Snow's theory long outlived him. His method, however, proved more durable than his conclusion. What Snow had really shown was that a disease has a geography: plotted carefully, the distribution of deaths can point to a cause even while the mechanism remains unknown. Modern epidemiology, contact tracing and the pandemic dashboards of our own century all descend from that map. The pump handle, now preserved in a London school, is a monument to looking at the data before arguing about it."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Within two hundred and fifty yards of the corner of Cambridge Street and Broad Street, how many people died in ten days? 在剑桥街与宽街交口的 250 码范围内，十天内死了多少人？",opts:["About eighty-nine 约八十九人","Fewer than fifty 不足五十人","More than five hundred 超过五百人","Exactly thirteen 正好十三人"],ans:2,
+   fb:"正确！500 人是十天内的死亡总数；89 人是第一周的死亡数——斯诺正是拿这 89 人做的逐例追查，别把两个数字弄混。"},
+  {q:"What did most physicians in 1854 believe caused cholera? 1854 年大多数医生认为霍乱由什么引起？",opts:["Contaminated water 受污染的水","Bad air, a noxious vapour rising from decay 污浊的空气，即腐败物散发的瘴气","Direct contact with the sick 与病人的直接接触","Spoiled beer 变质的啤酒"],ans:1,
+   fb:"正确！这就是瘴气论（miasma theory）：疾病由腐败有机物散发的坏空气传播。它的表面证据是“越穷的地方越臭、病也越多”——可惜因果被弄反了。"},
+  {q:"Which two places near the pump escaped the outbreak? 水泵附近有哪两处躲过了疫情？",opts:["A church and a school 一座教堂和一所学校","A workhouse with its own well and a local brewery 有自备水井的济贫院与一家本地啤酒厂","Two hospitals 两家医院","The police station and the market 警察局和市场"],ans:1,
+   fb:"正确！济贫院有自己的水井，啤酒厂工人喝啤酒而不喝水（发酵能杀死弧菌，只是当时无人知道）。这两个“反例”才是斯诺论证里最有力的一环。"},
+  {q:"When was the pump handle actually removed? 水泵柄究竟是什么时候被拆掉的？",opts:["In 1883, after Koch isolated the bacillus 1883 年科赫分离出病菌之后","On 7 September 1854, the same day Snow spoke to the board 1854 年 9 月 7 日，斯诺向委员会陈述当天","The day after Snow spoke to the Board of Guardians 斯诺向教区监护人委员会陈述之后的次日","It was never removed 从未被拆除"],ans:2,
+   fb:"正确！斯诺 9 月 7 日说服委员会，手柄是 9 月 8 日卸下的。注意这个“次日”的细节——课文里 the following day 就是它。1883 年科赫才找到病原体，比拆手柄晚了近三十年。"},
+  {q:"Why does the writer say the popular legend 'tends to omit' something? 作者为什么说流行版本的传说“往往遗漏”了某些东西？",opts:["Because Snow never actually visited Soho 因为斯诺根本没去过苏豪区","Because the map was destroyed in a fire 因为地图被火烧毁了","Because the pump turned out to be innocent 因为那口水泵其实是无辜的","Because deaths were already falling and three quarters of the residents had fled before the handle came off 因为在手柄被拆之前死亡数已在下降，且四分之三居民已经逃离"],ans:3,
+   fb:"正确！这是本课最关键的一处“去神话”：手柄并不是独自终结疫情的。但斯诺的判断依然正确——后来的调查证实水泵旁的渗坑确有粪便渗入。做对的事，有时要等很久才有结果来证明。"},
+  {q:"'Only in 1883 did Robert Koch isolate the comma-shaped bacillus responsible.' 这句话使用了什么语法结构？",opts:["Cleft sentence 强调句","Partial inversion after Only + adverbial “Only + 状语”置于句首引起的部分倒装","Past participle phrase 过去分词短语作状语","Concessive inversion 让步倒装"],ans:1,
+   fb:"正确！Only 修饰时间状语 in 1883 并置于句首，主句必须部分倒装：助动词 did 提到主语 Robert Koch 之前。注意：如果 Only 修饰的是主语（Only Snow noticed it），则不需要倒装。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#1d4ed8';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
