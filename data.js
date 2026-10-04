@@ -7022,6 +7022,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-04",
+    "title": "The Choice You Make in the Dark",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-04-the-choice-you-make-in-the-dark",
+    "url": "lessons/b2/2026-10-04-the-choice-you-make-in-the-dark.html",
+    "vocab": [
+      {
+        "word": "veil",
+        "zh": "面纱；遮蔽物（the veil of ignorance 无知之幕，罗尔斯术语）",
+        "ex": "\"Rawls called this condition the veil of ignorance.\""
+      },
+      {
+        "word": "ignorance",
+        "zh": "无知；不知情（形容词 ignorant，动词 ignore「故意忽略」）",
+        "ex": "\"His subjects were not truly ignorant.\""
+      },
+      {
+        "word": "impartiality",
+        "zh": "不偏不倚；公正（形容词 impartial，反义 bias / partiality）",
+        "ex": "\"Strip away self-knowledge, and what remains is a radical impartiality.\""
+      },
+      {
+        "word": "rational",
+        "zh": "理性的；合乎理性的（a rational agent 理性行为者；名词 rationality）",
+        "ex": "\"A rational person behind the veil would not gamble.\""
+      },
+      {
+        "word": "inequality",
+        "zh": "不平等；不均（前缀 in- 表否定，反义 equality）",
+        "ex": "\"Inequality is permitted only where it improves the position of the least advantaged.\""
+      },
+      {
+        "word": "arbitrary",
+        "zh": "任意的；武断的（morally arbitrary 在道德上任意的）",
+        "ex": "\"Winning the lottery of birth is arbitrary: no one deserves it.\""
+      },
+      {
+        "word": "distribution",
+        "zh": "分配；分布（动词 distribute，形容词 distributive）",
+        "ex": "\"Having studied four principles of distribution, the students discussed them.\""
+      },
+      {
+        "word": "consensus",
+        "zh": "共识；一致意见（reach consensus on sth 就某事达成共识）",
+        "ex": "\"They had to reach consensus on one before learning their own position.\""
+      },
+      {
+        "word": "constraint",
+        "zh": "约束；限制条件（动词 constrain；a floor constraint 底线约束）",
+        "ex": "\"Maximise the average income, subject to a floor constraint.\""
+      },
+      {
+        "word": "refute",
+        "zh": "驳斥；反驳（refute an argument 驳倒一个论证；名词 refutation）",
+        "ex": "\"Does this refute Rawls? Not necessarily.\""
+      },
+      {
+        "word": "empirical",
+        "zh": "实证的；经验性的（empirical evidence 实证证据，与 theoretical 相对）",
+        "ex": "\"Later empirical work has been kinder to the intuition if not to the prediction.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

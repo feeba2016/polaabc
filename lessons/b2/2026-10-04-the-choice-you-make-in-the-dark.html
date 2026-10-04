@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Choice You Make in the Dark</title>
+<style>
+:root{
+  --accent:#7c3aed;
+  --accent2:#b45309;
+  --bg:#faf8ff;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#e9d5ff;
+  --border:#e3daf7;
+  --soft:#f5f1ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(124,58,237,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(124,58,237,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,58,237,.55);}70%{box-shadow:0 0 0 12px rgba(124,58,237,0);}100%{box-shadow:0 0 0 0 rgba(124,58,237,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#d8b4fe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#c4b5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(124,58,237,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e9d5ff;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Philosophy</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Choice You Make in the Dark</h1>
+      <p class="subtitle">罗尔斯的「无知之幕」：如果你不知道自己会是谁，你会设计怎样的社会？｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Wager 一场赌局</div>
+            <p>Imagine that you <span class="kw" data-def="（虚拟语气）被要求；假如你被要求（were asked 是 be 型虚拟式，不随人称变化）">were asked</span> to design a society. You may set its schools, its hospitals, its rules for hiring. There is one condition: you must decide before you learn who you will be inside it — whether you will be born rich or poor, healthy or ill, gifted or struggling. The American philosopher John Rawls called this the <span class="kw" data-def="面纱；遮蔽物（the veil of ignorance 无知之幕，罗尔斯术语）">veil</span> of <span class="kw" data-def="无知；不知情（名词，形容词 ignorant）">ignorance</span>, and made it the centrepiece of A Theory of Justice (1971). His wager was bold: strip away self-knowledge, and what remains is a radical <span class="kw" data-def="不偏不倚；公正（名词，形容词 impartial）">impartiality</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Why You Would Not Gamble 为什么不该去赌</div>
+            <p>Rawls argued that a <span class="kw" data-def="理性的；合乎理性的（a rational agent 理性行为者）">rational</span> person behind the veil would not gamble. If you did not know where you would land, you could not calculate the odds, and so you would apply what decision theorists call the maximin rule: choose the arrangement whose worst outcome is better than the worst outcome of any alternative. Two principles follow. Everyone should enjoy the widest basic liberties compatible with the same liberties for all. And <span class="kw" data-def="不平等；不均（名词，反义 equality）">inequality</span> is permitted only where it improves the position of the least advantaged — the difference principle. For Rawls, talent and birth are a lottery, and winning one is <span class="kw" data-def="任意的；武断的（morally arbitrary 在道德上任意的）">arbitrary</span>: no one deserves it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Experiment 实验室里的原初状态</div>
+            <p>An elegant argument — but does it describe how people really choose? In 1987 Norman Frohlich, Joe Oppenheimer and Cheryl Eavey brought the original position into the laboratory. Having studied four principles of <span class="kw" data-def="分配；分布（名词，动词 distribute，形容词 distributive）">distribution</span>, students in groups of five discussed them and had to reach <span class="kw" data-def="共识；一致意见（reach consensus on sth 就某事达成共识）">consensus</span> on one. The rule chosen, each was assigned at random to an income class and paid accordingly. Rawls predicted they would pick the difference principle. Not once did it win a majority: only one group out of eighty-one chose it. The favourite was a rule Rawls himself had considered and rejected — maximise the average income, subject to a floor <span class="kw" data-def="约束；限制条件（a floor constraint 底线约束）">constraint</span> below which no one may fall.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Does It Refute Him? 这能否驳倒他</div>
+            <p>Does this <span class="kw" data-def="驳斥；反驳（refute an argument 驳倒一个论证）">refute</span> Rawls? Not necessarily. His subjects were not truly <span class="kw" data-def="（此处）不知情的；ignorance 的形容词形式 ignorant">ignorant</span>; they walked in carrying memories, expectations and a lifetime of opinions about fairness. Later <span class="kw" data-def="实证的；经验性的（empirical evidence 实证证据）">empirical</span> work has been kinder to the intuition if not to the prediction. Herne and Suojanen found that people chose the Rawlsian outcome far more often when they knew their own position than when they did not — sixty per cent against fourteen. Perhaps the veil does not produce one right answer; perhaps it merely exposes a tension we all carry: we want a society that rewards effort, and we want one in which nobody is left with nothing.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="veil">🔊</button><div class="word">veil<span class="pos">n.</span></div><div class="zh">面纱；遮蔽物（the veil of ignorance 无知之幕，罗尔斯术语）</div><div class="ex">"Rawls called this condition the veil of ignorance."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ignorance">🔊</button><div class="word">ignorance<span class="pos">n.</span></div><div class="zh">无知；不知情（形容词 ignorant，动词 ignore「故意忽略」）</div><div class="ex">"His subjects were not truly ignorant."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="impartiality">🔊</button><div class="word">impartiality<span class="pos">n.</span></div><div class="zh">不偏不倚；公正（形容词 impartial，反义 bias / partiality）</div><div class="ex">"Strip away self-knowledge, and what remains is a radical impartiality."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rational">🔊</button><div class="word">rational<span class="pos">adj.</span></div><div class="zh">理性的；合乎理性的（a rational agent 理性行为者；名词 rationality）</div><div class="ex">"A rational person behind the veil would not gamble."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="inequality">🔊</button><div class="word">inequality<span class="pos">n.</span></div><div class="zh">不平等；不均（前缀 in- 表否定，反义 equality）</div><div class="ex">"Inequality is permitted only where it improves the position of the least advantaged."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="arbitrary">🔊</button><div class="word">arbitrary<span class="pos">adj.</span></div><div class="zh">任意的；武断的（morally arbitrary 在道德上任意的）</div><div class="ex">"Winning the lottery of birth is arbitrary: no one deserves it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="distribution">🔊</button><div class="word">distribution<span class="pos">n.</span></div><div class="zh">分配；分布（动词 distribute，形容词 distributive）</div><div class="ex">"Having studied four principles of distribution, the students discussed them."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="consensus">🔊</button><div class="word">consensus<span class="pos">n.</span></div><div class="zh">共识；一致意见（reach consensus on sth 就某事达成共识）</div><div class="ex">"They had to reach consensus on one before learning their own position."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="constraint">🔊</button><div class="word">constraint<span class="pos">n.</span></div><div class="zh">约束；限制条件（动词 constrain；a floor constraint 底线约束）</div><div class="ex">"Maximise the average income, subject to a floor constraint."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="refute">🔊</button><div class="word">refute<span class="pos">v.</span></div><div class="zh">驳斥；反驳（refute an argument 驳倒一个论证；名词 refutation）</div><div class="ex">"Does this refute Rawls? Not necessarily."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="empirical">🔊</button><div class="word">empirical<span class="pos">adj.</span></div><div class="zh">实证的；经验性的（empirical evidence 实证证据，与 theoretical 相对）</div><div class="ex">"Later empirical work has been kinder to the intuition if not to the prediction."</div></div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Imagine that + 主语 + were / did..., 主句 would / could + 动词原形.（虚拟语气）</h3>
+          <div class="zh">用祈使句 Imagine / Suppose 引出一个与事实相反或纯属假设的场景，从句里用 <b>were</b>（不分人称）或<b>过去式</b>，主句用 <b>would / could + 原形</b>。注意这里的过去式不是「过去时间」，而是「距离现实一步」——语法上叫<b> remoteness（疏远性）</b>。常见错误：写成 Imagine that you <s>are</s> asked 或主句用 will。</div>
+          <div class="eg">Imagine that you were asked to design a society before you knew your place in it. / If you did not know where you would land, you could not calculate the odds.</div>
+          <div class="practice">练习：用 “you / have to choose / without knowing your talents” → <input placeholder="Imagine that you had to choose without knowing your talents">, what rule would you pick?</div>
+        </div>
+        <div class="item">
+          <h3>2. Not once / Never / Rarely + 助动词 + 主语 + 动词原形...（否定状语前置的部分倒装）</h3>
+          <div class="zh">否定或半否定词语移到句首时，助动词（did / do / have / can 等）必须提到主语之前。若原句没有助动词，要<b>借 do / did</b>。它强调的不是一个事实，而是这个事实的<b>罕见程度</b>，语气比普通陈述锋利得多，特别适合用来推翻某个预期。</div>
+          <div class="eg">Not once did it win a majority: only one group out of eighty-one chose it.</div>
+          <div class="practice">练习：用 “never / they / question the premise” → <input placeholder="Never did they question the premise">, even when the stakes were made clear.</div>
+        </div>
+        <div class="item">
+          <h3>3. 名词 + 过去分词 / 现在分词, 主句.（独立主格）</h3>
+          <div class="zh">独立主格<b>自带逻辑主语</b>，与主句主语不一致也完全合法，因此不受「悬垂分词」限制。形式为「名词 / 代词 + 分词 / 形容词 / 介词短语」，用逗号与主句隔开，功能相当于一个省略了连词的状语从句。本课用的是<b>过去分词</b>，表示被动且已完成：规则一旦选定，随机分配就发生了。</div>
+          <div class="eg">The rule chosen, each was then assigned at random to an income class and paid accordingly.</div>
+          <div class="practice">练习：用 “the principle / agree on” → <input placeholder="The principle agreed on">, the participants were told which class they belonged to.</div>
+        </div>
+        <div class="item">
+          <h3>4. Having + 过去分词 + 宾语, 主语 + 谓语.（完成分词作状语）</h3>
+          <div class="zh">用 <b>Having done</b> 明确表示动作<b>先于</b>主句发生，比单纯的现在分词更精确，是学术写作里梳理步骤顺序的利器。规则仍然只有一条：它的逻辑主语必须等于主句主语。若不满足，就必须改写成从句或独立主格。</div>
+          <div class="eg">Having studied four principles of distribution, students in groups of five discussed them and had to reach consensus on one.</div>
+          <div class="practice">练习：用 “read / the four options” → <input placeholder="Having read the four options">, the groups began their discussion.</div>
+        </div>
+        <div class="item">
+          <h3>5. 名词 + 介词 + which 引导的定语从句（介词前置）</h3>
+          <div class="zh">当关系代词作介词的宾语时，正式文体把介词移到 which（人用 whom）之前，形成 <b>preposition + which</b>。介词的选择取决于它与先行词或从句动词的<b>固定搭配</b>：本课是 below + a floor（在底线之下），所以只能用 below which，不能用 which ... below（口语中可以）或 that。这是 B2 到 C1 的分水岭之一。</div>
+          <div class="eg">Maximise the average income, subject to a floor constraint below which no one may fall.</div>
+          <div class="practice">练习：用 “a threshold / below” → The group set a threshold <input placeholder="below which nobody was allowed to fall">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 虚拟语气与非真实条件句 (Subjunctive Mood &amp; Unreal Conditionals)</h3>
+          <div class="zh">英语用<b>时态后退</b>来表达「不是真的」：现在 / 将来假设用过去式（从句）+ would / could + 原形（主句）；过去假设用 had done + would / could have done。两个容易忽略的细节：<br>
+          · <b>be 动词一律用 were</b>（If I <b>were</b> you / Imagine that you <b>were</b> asked），不随人称变化；口语中 was 常见，正式写作仍以 were 为规范。<br>
+          · <b>混合用法</b>：Imagine that... 后面可以直接跟一个真实祈使或陈述（Imagine that you were asked. You must decide now.），此时虚拟与陈述并存，用来把读者<b>推进</b>假设场景，而不是留在假设里。</div>
+          <div class="eg">Imagine that you were asked to design a society. / If you did not know where you would land, you could not calculate the odds.</div>
+        </div>
+        <div class="item">
+          <h3>2. 部分倒装 (Partial Inversion after Negative Adverbials)</h3>
+          <div class="zh">触发词包括 never, not once, rarely, seldom, hardly, scarcely, no sooner, under no circumstances, on no account 等。结构为：<b>否定语 + 助动词 / 情态动词 + 主语 + 主要动词</b>。三点务必注意：<br>
+          · 只有<b>助动词</b>提前，主要动词留在原位且<b>恢复原形</b>（did it win，不是 did it won）。<br>
+          · 原句无助动词时要借 do / does / did。<br>
+          · 句首状语<b>不是否定</b>时不能倒装（Often he... 不倒装；Only then did he... 才倒装，因为 only 具否定限定意味）。</div>
+          <div class="eg">Not once did it win a majority. / Never did they question the premise. / Only later did the pattern become clear.</div>
+        </div>
+        <div class="item">
+          <h3>3. 独立主格 (The Nominative Absolute)</h3>
+          <div class="zh">结构为「名词 / 代词 + 现在分词 / 过去分词 / 形容词 / 副词 / 介词短语」，整体上相当于一个省略了连词的状语从句，常表示时间、原因或条件。判断标准很简单：<b>看这个短语有没有自己的主语</b>。有的话，它与主句主语不同也没关系；没有的话，逻辑主语就默认是主句主语，一旦不合逻辑就成了悬垂分词。<br>
+          比较：<b>The rule chosen</b>, each was assigned to a class.（正确，rule 自带主语）／<s>Chosen at random</s>, each was assigned to a class.（错误，悬垂：each 不可能被 chosen 修饰成「规则被选」的意思）。</div>
+          <div class="eg">The rule chosen, each was then assigned at random to an income class. / The discussion over, the groups voted one by one.</div>
+        </div>
+        <div class="item">
+          <h3>4. 完成分词作状语 (Perfect Participle Clauses)</h3>
+          <div class="zh"><b>Having + 过去分词</b> 表示动作发生在主句之前，常用来交代「先做了 A，才做 B」。若两个动作几乎同时，用普通现在分词（Studying the options, they argued.）即可；若要强调「A 完成之后」或「因为已经 A 了」，就必须用完成式。否定形式是在前面加 not：<b>Not having</b> read the rules, he abstained。</div>
+          <div class="eg">Having studied four principles of distribution, students discussed them. / Having reached consensus, the group learned which class each member belonged to.</div>
+        </div>
+        <div class="item">
+          <h3>5. 介词 + which / whom 引导的定语从句 (Preposition + Relative Pronoun)</h3>
+          <div class="zh">正式文体把从句末尾的介词提到关系代词之前：the floor <b>below which</b> no one may fall。四条规则：<br>
+          · 先行词是<b>物</b>用 which，是<b>人</b>用 whom，<b>都不能用 that</b>，也不能省略。<br>
+          · 介词由<b>搭配</b>决定：below a floor / at a level / in which case / for which reason。<br>
+          · 若动词短语不可拆分（look after, put up with），介词<b>不能</b>前置。<br>
+          · 口语中允许把介词留在句末（a floor which no one may fall below），但学术写作优先前置。</div>
+          <div class="eg">A floor constraint below which no one may fall. / The original position in which the parties choose. / The level at which the floor should be set.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+        <h3>一、先做一个实验：现在就决定</h3>
+        <p>在读下去之前，请真的花十秒钟回答：你要为下面这个社会定规矩——收入怎么分、教育怎么分配、医疗谁先得到。条件只有一个：<b>你还不知道自己会是谁</b>。不知道性别、家庭、天赋、健康、所处地区，也不知道你属于多数还是少数。</p>
+        <p>罗尔斯的赌注是：在这种情况下，大多数人会变得谨慎。因为你完全有可能是那个最倒霉的人。</p>
+
+        <h3>二、《正义论》与它要回答的问题</h3>
+        <p>约翰·罗尔斯（John Rawls，1921—2002）是美国哲学家，长期任教于哈佛大学。<b>《正义论》（A Theory of Justice）</b>出版于 1971 年，被公认为二十世纪最有影响的政治哲学著作之一。</p>
+        <p>它要处理的对手是<b>功利主义</b>。功利主义关心的是总量：只要幸福的总和增加了，牺牲一部分人是可以接受的。罗尔斯认为这有个致命问题——它把「多少人受益」和「谁受益」混为一谈，因而允许为了多数人的利益去牺牲少数人的权利。他要找的是一种把<b>公平</b>放在第一位的理论。</p>
+
+        <h3>三、原初状态：屏蔽什么，保留什么</h3>
+        <p>罗尔斯借用了霍布斯、洛克、卢梭以来的<b>社会契约</b>传统，但做了一个关键改动：签约者不是在谈判桌前讨价还价，而是在一个叫「<b>原初状态</b>（original position）」的假想情境里做选择。原初状态的核心装置就是<b>无知之幕</b>。</p>
+        <table class="facts">
+          <tr><th>维度</th><th>被无知之幕屏蔽的</th><th>仍然保留的</th></tr>
+          <tr><td>个人身份</td><td>阶级、家庭背景、性别、族群</td><td rowspan="4">关于社会运作的<b>一般知识</b>：经济学、心理学、社会学的基本规律；「人们一般希望过得更好」这类事实</td></tr>
+          <tr><td>天赋能力</td><td>智力、体力、外貌、特殊才能</td></tr>
+          <tr><td>价值观念</td><td>自己的人生目标、宗教信仰、善的观念</td></tr>
+          <tr><td>时间位置</td><td>自己属于哪一代人、社会处于哪个发展阶段</td></tr>
+        </table>
+        <p>这个设计有个精巧之处：它<b>不是让人变无私，而是让自私无处下手</b>。你依然可以为自己打算，只是你不知道「自己」是谁，于是任何偏袒某个群体的条款都无法通过。</p>
+
+        <h3>四、maximin：为什么不赌一把</h3>
+        <p>在不知道自己位置的情况下，你无法计算「我落在底层」的概率——不是概率小，而是<b>根本没有概率可算</b>。这时罗尔斯认为理性人会用<b>maximin 规则</b>（最大化最小值）：比较各种方案里<b>最坏</b>的那种结果，选其中最坏结果最好的那一个。</p>
+        <p>由此推出两条原则，且<b>有严格的优先顺序</b>：</p>
+        <ul>
+          <li><b>第一原则（自由原则）</b>：每个人都平等地享有最广泛的基本自由，且这套自由必须与所有人享有的同样自由相容。这条<b>绝对优先</b>，任何经济利益都不能拿来交换它。</li>
+          <li><b>第二原则（差别原则）</b>：社会与经济的不平等只有在两种条件下才被允许——(a) 相关的职位在<b>公平的机会平等</b>下向所有人开放；(b) 这种不平等<b>最有利于境况最差的人</b>。</li>
+        </ul>
+        <p>差别原则常被误读成「劫富济贫」。它其实是另一回事：不平等<b>可以</b>存在，但必须能证明它让最底层也变好了——比如更高的报酬激励出更高的生产率，而产出的一部分流向最底层。</p>
+        <blockquote>The natural distribution is neither just nor unjust; nor is it unjust that persons are born into society at some particular position. These are simply natural facts.<br>天赋的自然分布谈不上正义或不正义；人出生在社会的某个特定位置，也不存在正义与否的问题。这些只是自然事实。<em>—— John Rawls, A Theory of Justice (1971)</em></blockquote>
+        <p>这句话是整本书的支点：<b>天赋与出身是抽签</b>。抽中了不该被奖励，抽不中也不该被惩罚。所以「这是我应得的」这句话，用在一个人的起点上时，是没有根据的。</p>
+
+        <h3>五、为什么罗尔斯拒绝了「平均值 + 底线」</h3>
+        <p>有意思的是，罗尔斯在书里认真讨论过后面实验里胜出的那个方案——<b>最大化平均收入，同时设一条最低收入底线</b>——并明确拒绝了它。</p>
+        <p>理由很哲学：这是个<b>混合原则</b>，理论内部没有给出「底线应该设在哪里」的标准。maximin 给出一个明确的答案（把最底层尽量抬高），而这个混合原则把最关键的数值交给了直觉。罗尔斯要的是一条<b>能自己推导出结论</b>的原则。</p>
+
+        <h3>六、把无知之幕搬进实验室</h3>
+        <p>1987 年，政治学家诺曼·弗罗利希（Norman Frohlich）、乔·奥本海默（Joe Oppenheimer）与谢丽尔·伊维（Cheryl Eavey）在《英国政治学杂志》上发表了实验结果。他们把原初状态尽可能忠实地复现出来：</p>
+        <ul>
+          <li>参与者五人一组，先学习四种分配原则：最大化最差者所得（即差别原则）、最大化平均收入、最大化平均收入＋底线约束、最大化平均收入＋极差约束。</li>
+          <li>小组必须<b>达成一致</b>选出其中一条，然后每个人才会被<b>随机</b>分到一个收入等级，并按所选规则拿到真实报酬。</li>
+          <li>实验在美国、加拿大、日本、澳大利亚等多地重复过；后续还有去掉「正义」「公平」等字眼的版本，结果大致相同。</li>
+        </ul>
+        <p>结果对罗尔斯相当不利：<b>81 个小组中只有 1 组选择了差别原则</b>。压倒性的赢家正是他否掉的那条——<b>最大化平均收入，但设一条底线</b>，约四分之三的小组选了它。</p>
+        <p>换句话说：真实的人既想要效率与激励，也想要一张安全网，而且他们愿意在两者之间<b>折中</b>，不愿意把全部筹码压在最底层身上。</p>
+
+        <h3>七、一个反直觉的后续发现</h3>
+        <p>如果实验到此为止，结论就是「罗尔斯预测错了」。但后来的研究让事情变复杂了。</p>
+        <p>Herne 与 Suojanen（2004）比较了两种状态：一种是罗尔斯式的<b>无知之幕</b>，另一种是 Scanlon 式的<b>知情谈判</b>（谈判者知道自己的全部特征，但拥有平等的议价能力，且希望达成无人能合理拒绝的协议）。结果出人意料：<b>没有无知之幕时，选择罗尔斯结果的比例反而更高</b>（约 60%），有幕时却只有约 14%。</p>
+        <p>一种解释是：当人们知道自己的处境时，处境不利的人会明确主张保护最底层；而在幕布后面，每个人都开始计算平均收益，反而没那么在意最差的结果。也就是说，无知之幕未必像罗尔斯设想的那样会自动导向差别原则。</p>
+
+        <h3>八、五十年来的主要批评</h3>
+        <table class="facts">
+          <tr><th>批评者</th><th>核心质疑</th></tr>
+          <tr><td>John Harsanyi<br>（约翰·海萨尼）</td><td>从福利经济学出发：不确定自己位置时，理性选择应是最大化<b>平均</b>效用，而非最大化最小值。maximin 过于保守，为了极小概率的最坏情况放弃了巨大收益。</td></tr>
+          <tr><td>Robert Nozick<br>（罗伯特·诺齐克）</td><td>无知之幕预设了一种可疑的人的观念——把人与他的天赋、财产剥离开来。而且它只看<b>分配结果</b>，完全无视人们是怎么获得这些东西的历史过程。</td></tr>
+          <tr><td>Michael Sandel<br>（迈克尔·桑德尔）</td><td>幕布后面那个选择者「太瘦了」：被剥去家庭、信仰、社群与历史之后，这个「<b>无拘束的自我</b>」在现实中并不存在，也就无法做出有实质内容的选择。</td></tr>
+          <tr><td>Jürgen Habermas<br>（尤尔根·哈贝马斯）</td><td><b>假想的同意</b>不能替代真实的民主商议。正义不能由哲学家在思想实验里推演出来，而必须由真实的人在真实程序中谈出来。</td></tr>
+          <tr><td>Martha Nussbaum<br>（玛莎·努斯鲍姆）</td><td>仅靠「基本善」的分配不够，还需要一份关于<b>人类能力</b>的实质清单：一个人究竟能够<b>做什么、成为什么</b>，才是评价正义的尺度。</td></tr>
+        </table>
+
+        <h3>九、中文语境里的回响</h3>
+        <p>把无知之幕讲给中国学生听，最容易被接住的一句话是《论语·卫灵公》里的：</p>
+        <blockquote>己所不欲，勿施于人。<em>——《论语·卫灵公》</em></blockquote>
+        <p>两者确实有一层相通：都是要求你<b>先把自己的特殊位置拿掉，再评价规则</b>。但差别也很明显。「己所不欲」诉诸的是<b>推己及人的情感能力</b>——你得先能想象别人的处境；而罗尔斯把这件事<b>制度化</b>了：他不指望人心变好，而是设计一套让私心无法生效的程序。一个是修身的要求，一个是制度的设计。</p>
+        <p>另一句常被拿来对照的是《论语·季氏》的「不患寡而患不均」。但要注意：这里的「均」在历代注疏里多指<b>各得其分、合乎名分</b>，并不等于罗尔斯意义上的「最有利于最差者」。把两句直接画等号，会同时误解两边。</p>
+
+        <h3>十、留给你的三个问题</h3>
+        <ul>
+          <li>如果再让你选一次：<b>最大化最差者的所得</b>与<b>最大化平均值＋一条底线</b>，你选哪个？先说出你的选择，再追问一句——你现在选的，和你实际所处的社会位置有关吗？</li>
+          <li>罗尔斯认为「天赋是抽签，因此不应得」。如果接受这一点，那么一个人靠天赋获得的收入，在多大程度上属于他自己？如果拒绝这一点，你反对的理由是什么？</li>
+          <li>实验里的人无法真正忘记自己是谁。你觉得有没有可能设计出一个「更彻底」的无知之幕？如果做不到，这是否说明这个思想实验的价值只在于<b>检验我们的诚实</b>，而不在于给出答案？</li>
+        </ul>
+        <p class="source">资料来源：John Rawls, A Theory of Justice (Cambridge, MA: Harvard University Press, 1971)；Norman Frohlich, Joe A. Oppenheimer &amp; Cheryl L. Eavey, "Laboratory Results on Rawls's Distributive Justice", British Journal of Political Science 17(1), 1987；Frohlich &amp; Oppenheimer, Choosing Justice (1992)；Kaisa Herne &amp; Mika Suojanen 关于原初状态的比较实验（2004）；John Harsanyi (1975)、Robert Nozick, Anarchy, State and Utopia (1974)、Michael Sandel, Liberalism and the Limits of Justice (1982) 的相关批评。中文引文出自《论语》卫灵公篇与季氏篇。</p>
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3>🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>阅读</b>：读懂一篇约 400 词的哲学评论，把握「设题—论证—实验—反驳—反思」的五段推进结构。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>词汇</b>：掌握 11 个 CEFR B2 核心词（veil, ignorance, impartiality, rational, inequality, arbitrary, distribution, consensus, constraint, refute, empirical），能在哲学、经济与社会议题讨论中主动使用。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>句型</b>：熟练运用 5 个高级句式，重点突破虚拟语气、否定状语前置倒装、独立主格与介词 + which 定语从句。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>语法</b>：系统复习非真实条件句、部分倒装的三个注意点、独立主格与悬垂分词的区别、完成分词作状语，以及介词 + which / whom 的四条规则。</div></div>
+        <div class="goal"><span class="ic">✅</span><div><b>测验</b>：完成 6 道选择题，检验细节理解、概念辨析与语法识别能力。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>拓展</b>：理解无知之幕的设计逻辑、maximin 与差别原则、1987 年实验为何否定了罗尔斯的预测，以及五十年来的五种主要批评。</div></div>
+        <h3 style="margin-top:20px;">🗣️ 口语输出建议</h3>
+        <p>用本课句型，口头回答一个问题：<b>如果让你在无知之幕后面选一条分配原则，你会选哪一条？为什么？</b>要求至少用上 1 个虚拟语气、1 个否定状语前置倒装和 1 个独立主格。例如：</p>
+        <div class="item"><div class="eg">If I were choosing behind the veil, I would not gamble on talent. Not once have I met anyone who would. The floor fixed, I would then let the average rise — for a society that rewards effort still has to decide what it owes the unlucky.</div></div>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English Learning · Philosophy<br>Generated on 4 October 2026</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "Imagine that you were asked to design a society. You may set its schools, its hospitals, its rules for hiring. There is one condition: you must decide before you learn who you will be inside it — whether you will be born rich or poor, healthy or ill, gifted or struggling. The American philosopher John Rawls called this the veil of ignorance, and made it the centrepiece of A Theory of Justice (1971). His wager was bold: strip away self-knowledge, and what remains is a radical impartiality.",
+  "Rawls argued that a rational person behind the veil would not gamble. If you did not know where you would land, you could not calculate the odds, and so you would apply what decision theorists call the maximin rule: choose the arrangement whose worst outcome is better than the worst outcome of any alternative. Two principles follow. Everyone should enjoy the widest basic liberties compatible with the same liberties for all. And inequality is permitted only where it improves the position of the least advantaged — the difference principle. For Rawls, talent and birth are a lottery, and winning one is arbitrary: no one deserves it.",
+  "An elegant argument — but does it describe how people really choose? In 1987 Norman Frohlich, Joe Oppenheimer and Cheryl Eavey brought the original position into the laboratory. Having studied four principles of distribution, students in groups of five discussed them and had to reach consensus on one. The rule chosen, each was assigned at random to an income class and paid accordingly. Rawls predicted they would pick the difference principle. Not once did it win a majority: only one group out of eighty-one chose it. The favourite was a rule Rawls himself had considered and rejected — maximise the average income, subject to a floor constraint below which no one may fall.",
+  "Does this refute Rawls? Not necessarily. His subjects were not truly ignorant; they walked in carrying memories, expectations and a lifetime of opinions about fairness. Later empirical work has been kinder to the intuition if not to the prediction. Herne and Suojanen found that people chose the Rawlsian outcome far more often when they knew their own position than when they did not — sixty per cent against fourteen. Perhaps the veil does not produce one right answer; perhaps it merely exposes a tension we all carry: we want a society that rewards effort, and we want one in which nobody is left with nothing."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What is the veil of ignorance? 什么是「无知之幕」？",
+   opts:["A rule requiring everyone to earn exactly the same income 要求所有人收入完全相同的规则","A method for calculating the average income of a group 计算群体平均收入的方法","A condition in which you do not know your own place in society 一种你不知道自己在社会中处于何种位置的状态","A law forbidding people from discussing fairness 禁止人们讨论公平的法律"],
+   ans:2,
+   fb:"正确！它是罗尔斯「原初状态」的核心装置：屏蔽掉你的阶级、天赋、性别、世代与人生目标，让偏袒无从下手。注意它并不要求人变无私，而是让私心无法生效。"},
+  {q:"What does the maximin rule ask you to do? maximin 规则要求你做什么？",
+   opts:["Maximise the average income of the whole society 最大化全社会的平均收入","Choose the arrangement whose worst outcome is better than the worst outcome of any alternative 选择那种「最坏结果也优于其他方案最坏结果」的安排","Maximise the income of the most talented members 最大化最有天赋者的收入","Divide all income equally, whatever the consequences 无论后果如何都把收入均分"],
+   ans:1,
+   fb:"正确！因为幕布后面「我落在底层」这件事<b>没有概率可算</b>，所以不能赌期望值，只能比较各种方案里最坏的那一种结果，再选其中最坏结果最好的。"},
+  {q:"In the 1987 experiment by Frohlich, Oppenheimer and Eavey, which rule did most groups choose? 1987 年的实验中，大多数小组选了哪条规则？",
+   opts:["Maximise the average income, subject to a floor constraint below which no one may fall 最大化平均收入，但设一条无人可以跌破的底线","The difference principle 差别原则","A strict equal split for everyone 所有人严格均分","Maximise the income of the least advantaged at all costs 不计代价最大化最差者的收入"],
+   ans:0,
+   fb:"正确！81 个小组中约四分之三选了这条「带底线的平均最大化」——而它恰恰是罗尔斯本人在《正义论》里讨论过并明确拒绝的方案，理由是它是个混合原则，没有给出「底线应该设在哪里」的标准。"},
+  {q:"How many of the eighty-one groups chose the difference principle? 81 个小组中有多少组选择了差别原则？",
+   opts:["About half of them 约一半","Forty 四十组","None at all 一组也没有","Only one 只有一组"],
+   ans:3,
+   fb:"正确！只有 1 组。这是该实验最著名的结果：人们对罗尔斯的直觉（保护最底层）有共鸣，却不愿意把它推到极致，而是想在激励与安全网之间折中。"},
+  {q:"'Not once did it win a majority.' 这句话使用的语法结构是？",
+   opts:["Nominative absolute 独立主格","Partial inversion after a negative adverbial 否定状语前置的部分倒装","Cleft sentence 强调句","Perfect participle clause 完成分词从句"],
+   ans:1,
+   fb:"正确！否定词语 not once 移到句首，助动词 did 提到主语 it 之前，主要动词保持原形 win（不是 won）。这个结构强调的不是事实本身，而是事实的<b>罕见程度</b>。"},
+  {q:"'The rule chosen, each was then assigned at random to an income class.' 这句话使用的语法结构是？",
+   opts:["Dangling participle 悬垂分词","Preposition + which relative clause 介词 + which 定语从句","Nominative absolute 独立主格（自带逻辑主语 the rule）","Inverted unreal conditional 虚拟语气倒装"],
+   ans:2,
+   fb:"正确！the rule 是 chosen 自己的逻辑主语，与主句主语 each 不同也完全合法。若写成 Chosen at random, each was assigned...，就成了悬垂分词——因为 each（人）无法承担「规则被选定」这个意思。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#7c3aed';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
