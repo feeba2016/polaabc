@@ -8637,5 +8637,67 @@ const EPISODES = [
         "ex": "\"A ruling on probative weight is a judgment about evidence.\""
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-04",
+    "title": "The Gap That Felt Like a Gulf",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-04-the-gap-that-felt-like-a-gulf",
+    "url": "lessons/c1/2026-10-04-the-gap-that-felt-like-a-gulf.html",
+    "vocab": [
+      {
+        "word": "ethnographic",
+        "zh": "人种志的、民族志的（relating to the descriptive study of a people and its practices；ethnographic lore 人种志文献中流传的说法；ethnographic report 人种志报告；名词 ethnography 民族志；研究者称 ethnographer；须与 ethnic「族裔的」区分）",
+        "ex": "“Ethnographic lore has it that a question put in rural Scandinavia may be answered at dusk.”"
+      },
+      {
+        "word": "interlocutor",
+        "zh": "对话者、谈话的对方（a person who takes part in a conversation；正式程度高于 speaker / listener，尤用于语言学、哲学与外交文本；one's interlocutor 谈话的另一方；勿与 interlocutory「中间裁决的」混淆）",
+        "ex": "“an interlocutor who waits for the full stop never gets the floor”"
+      },
+      {
+        "word": "volubility",
+        "zh": "健谈、滔滔不绝（the quality of talking a great deal and with fluency；形容词 voluble 健谈的；副词 volubly；近义 loquacity、talkativeness；反义 taciturnity、reticence；该词常带一丝「说得多」的贬义，用时需看语境）",
+        "ex": "“as though whole peoples had chosen opposite settings on some dial of volubility”"
+      },
+      {
+        "word": "latency",
+        "zh": "（反应的）延迟、潜伏期（the interval between a stimulus and the response to it；response latency 反应潜伏期；形容词 latent 潜伏的；会话分析中特指上一话轮结束到下一话轮开始之间的时间量；语体上比 lag 更偏技术与测量）",
+        "ex": "“a cross-linguistic mean response latency of roughly 208 milliseconds”"
+      },
+      {
+        "word": "calibration",
+        "zh": "校准、标定（the adjustment of an instrument or system so that it matches a standard；此处引申为「尺度上的调校」；动词 calibrate；calibrate one's expectations 校准预期；也可用于抽象义：moral calibration 道德判断的尺度）",
+        "ex": "“variation in calibration, not in kind”"
+      },
+      {
+        "word": "dispreferred",
+        "zh": "非偏好的、次选的（会话分析术语：the less favoured of two possible responses；a dispreferred response 非偏好回应；对立面为 preferred；英语中接受、同意属偏好回应，往往即刻给出；拒绝、异议属非偏好回应，常以迟疑、缓和语或沉默先行标记）",
+        "ex": "“silence after an invitation is heard as a dispreferred response”"
+      },
+      {
+        "word": "project",
+        "zh": "投射、预测（会话分析术语：to anticipate where and when a speaker's turn will end，据语法、韵律与语境预判话轮终结；project the end of a turn 预判话轮终点；名词 projection；另有「投射、投影、规划」等常见义，须按上下文判定）",
+        "ex": "“a hearer who has already projected the turn's end launches an answer…”"
+      },
+      {
+        "word": "inferential",
+        "zh": "推理的、推论的（relating to the drawing of conclusions from evidence；inferential demands 推理负担；名词 inference 推论；动词 infer 推断；与 illocutionary「言外之意的」同为语用学高频搭配；勿与 inferable「可推知的」混淆）",
+        "ex": "“it places high inferential demands on the addressee”"
+      },
+      {
+        "word": "tacit",
+        "zh": "心照不宣的、默示的（understood or implied without being stated；a tacit agreement 默契、默示协议；tacit knowledge 隐性知识；tacit assumption 未言明的假设；副词 tacitly；近义 implicit，反义 explicit、articulated）",
+        "ex": "“the tacit convention that assigns it a meaning”"
+      },
+      {
+        "word": "equivocal",
+        "zh": "模棱两可的、含混的（open to more than one interpretation；an equivocal answer 含糊其辞的回答；equivocal silence 可作多种解读的沉默；副词 equivocally；名词 equivocation 含糊其辞；反义 unequivocal 明确无误的）",
+        "ex": "“Cross-cultural failure begins when equivocal silence is read as a verdict.”"
+      }
+    ]
   }
 ];

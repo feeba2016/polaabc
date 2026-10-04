@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D2/F1/F2/F3/G1 已上线（22 主题 / 110 Part / 660 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D3/F1/F2/F3/G1 已上线（23 主题 / 115 Part / 690 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1512,7 +1512,87 @@ const TEM4_THEMES = [
         ]
       }
     ]},
-  {id:"D3", cat:"D", zh:"沟通与对话", name:"Communication",     status:"soon", words:70,  desc:"电话、视频、写作"},
+  {
+    id:"D3", cat:"D", zh:"沟通与对话", name:"Communication", status:"live",
+    date:"2026-10-04", words:30, desc:"隔着山海的问候：深夜来电、视频絮语、奋笔疾书、妙笔回信、隔空论战",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"D3-P1", slug:"tem4-D3-P1", title:"深夜来电", shape:"拱门",
+        poster:"assets/tem4/posters/D3_P1.png",
+        sentence:"Late one evening, Xiao Ye received a surprise collect call from Leo, who lived in a distant mountain village: at first she hesitated, not daring to guess who was calling, and her voice faltered when the familiar greeting came through; Leo rang to enquire after his old friend, and before she could utter a word of complaint about his long silence, both of them were already laughing.",
+        sentenceCn:"一天深夜，小叶学姐接到一个意想不到的由对方付费的长途电话，打来的是住在遥远山村的老朋友利奥：起初她犹豫着不敢猜是谁来电，听到熟悉问候声的那一刻，她的声音都有些发颤；利奥打电话来问候老朋友，还没等她抱怨一句“怎么这么久才联系”，两人已经笑作一团。",
+        scene:"深夜粉彩宿舍里，小叶学姐坐在床上抱着粉色老式电话听筒，台灯温暖，窗外月亮与星星闪烁。",
+        words:[
+          {word:"receive",  ipa:"/rɪˈsiːv/",   pos:"v.",         zh:"收到，领到，受到；收听，收看", forms:["received"]},
+          {word:"collect",  ipa:"/kəˈlekt/",   pos:"v. / adj.",  zh:"收集，采集；收（账等）；由对方付费的", forms:["collect"]},
+          {word:"hesitate", ipa:"/ˈhezɪteɪt/", pos:"v.",         zh:"踌躇，犹豫；不愿意；言语支吾", forms:["hesitated"]},
+          {word:"falter",   ipa:"/ˈfɔːltə/",   pos:"v.",         zh:"蹒跚，踉跄；犹豫；结巴地说，支吾而语", forms:["faltered"]},
+          {word:"enquire",  ipa:"/ɪnˈkwaɪə/",  pos:"v.",         zh:"调查；询问，打听；问候", forms:["enquire"]},
+          {word:"utter",    ipa:"/ˈʌtə/",      pos:"vt. / adj.", zh:"发出（声音等），说；完全的，彻底的", forms:["utter"]}
+        ]
+      },
+      {
+        id:"D3-P2", slug:"tem4-D3-P2", title:"视频絮语", shape:"叶形",
+        poster:"assets/tem4/posters/D3_P2.png",
+        sentence:"At the weekend they met again on a video call: Leo related one funny story after another about village life, the two of them conversed happily for hours, Xiao Ye had to whisper whenever her roommates fell asleep, gestured to show him her new sketchbook, winked at the camera when he teased her, and finally breathed a happy sigh when the call ended.",
+        sentenceCn:"周末，两人又在视频通话中重逢：利奥讲了一件又一件山村趣事，他们开心地聊了好几个小时；每当室友睡下，小叶学姐就压低声音说话，还用手势向他展示自己的新速写本；当他打趣她时，她对着镜头眨了眨眼；通话结束时，她满足地舒了一口气。",
+        scene:"粉彩书桌前，小叶学姐戴着耳机对笔记本电脑挥手，屏幕里蓝围巾的利奥在山村背景里挥手回应，爱心与对话框漂浮。",
+        words:[
+          {word:"converse", ipa:"/kənˈvɜːs/",   pos:"v.",        zh:"交谈 adj. 相反的，逆的 n. 相反事物", forms:["conversed"]},
+          {word:"whisper",  ipa:"/ˈwɪspə/",     pos:"v.",        zh:"低声说，耳语；暗中传说；发沙沙声", forms:["whisper"]},
+          {word:"gesture",  ipa:"/ˈdʒestʃə/",   pos:"n. / v.",   zh:"姿势，手势；用手势表示，用动作示意", forms:["gestured"]},
+          {word:"wink",     ipa:"/wɪŋk/",       pos:"v.",        zh:"眨眼，使眼色；（星或光）闪烁", forms:["winked"]},
+          {word:"relate",   ipa:"/rɪˈleɪt/",    pos:"v.",        zh:"叙述，讲；使…有关联；与…有关", forms:["related"]},
+          {word:"breathe",  ipa:"/briːð/",      pos:"v.",        zh:"呼吸；吐出；低语", forms:["breathed"]}
+        ]
+      },
+      {
+        id:"D3-P3", slug:"tem4-D3-P3", title:"奋笔疾书", shape:"椭圆",
+        poster:"assets/tem4/posters/D3_P3.png",
+        sentence:"After the call, Xiao Ye spread out her letter paper: she described her busy campus life in vivid detail, dictated the dorm address to her roommate for the envelope, specified a date for Leo's winter visit, disclosed a small surprise she was planning but refused to generalize her feelings into plain words, and finally verified the postcode twice before sealing the envelope.",
+        sentenceCn:"通话结束后，小叶学姐铺开了信纸：她用生动的细节描写自己忙碌的校园生活，向室友口述宿舍地址以便写在信封上，具体约定了利奥寒假来访的日期，透露了自己正在筹备的一个小惊喜，却拒绝把心事简单概括成几句话；最后她把邮编核对了两遍才封上信封。",
+        scene:"暖黄台灯下的书桌，小叶学姐执钢笔在信纸上写信，旁边是书堆、可可杯与贴着爱心邮票的信封。",
+        words:[
+          {word:"describe",   ipa:"/dɪˈskraɪb/",    pos:"vt.", zh:"叙述，描写，形容；描绘，画", forms:["described"]},
+          {word:"dictate",    ipa:"/dɪkˈteɪt/",     pos:"v.",  zh:"口述，（使）听写；命令，强行规定", forms:["dictated"]},
+          {word:"specify",    ipa:"/ˈspesɪfaɪ/",    pos:"vt.", zh:"具体指定；详述", forms:["specified"]},
+          {word:"disclose",   ipa:"/dɪsˈkləʊz/",    pos:"v.",  zh:"（使）显露，揭露，泄露；公开，说出", forms:["disclosed"]},
+          {word:"generalize", ipa:"/ˈdʒenərəlaɪz/", pos:"v.",  zh:"概括，归纳；泛论", forms:["generalize"]},
+          {word:"verify",     ipa:"/ˈverɪfaɪ/",     pos:"vt.", zh:"核实，查证", forms:["verified"]}
+        ]
+      },
+      {
+        id:"D3-P4", slug:"tem4-D3-P4", title:"妙笔回信", shape:"超圆角",
+        poster:"assets/tem4/posters/D3_P4.png",
+        sentence:"Days later a reply arrived: Leo's letter was eloquent and full of colloquial jokes, and its playful wit made her laugh out loud in the library; he affirmed that he would surely come at the start of the winter holiday, alleged with a straight face that the stars above his village were far brighter than any city light, and every line between the jokes implied a warm invitation.",
+        sentenceCn:"几天后回信到了：利奥的信写得文采斐然，满是口语化的俏皮话，字里行间的机智让小叶学姐在图书馆里笑出了声；他斩钉截铁地表示寒假一开始一定前来，还一本正经地声称他们村口上空的星星比任何城市的灯光都要亮，而那些玩笑之外的每一行字，都在暗示着一份热情的邀请。",
+        scene:"粉彩宿舍里，小叶学姐窝在懒人沙发上捧着几页信念出了声，旁边散落着带心形邮票的信封与星星装饰。",
+        words:[
+          {word:"eloquent",   ipa:"/ˈeləkwənt/",    pos:"adj.", zh:"雄辩的，有说服力的，口才好的；意味深长的", forms:["eloquent"]},
+          {word:"colloquial", ipa:"/kəˈləʊkwɪəl/",  pos:"adj.", zh:"口语的，会话的；口语体的", forms:["colloquial"]},
+          {word:"wit",        ipa:"/wɪt/",          pos:"n.",   zh:"才智，机智；机智的人，才子", forms:["wit"]},
+          {word:"affirm",     ipa:"/əˈfɜːm/",       pos:"v.",   zh:"坚称，断言，肯定地说", forms:["affirmed"]},
+          {word:"allege",     ipa:"/əˈledʒ/",       pos:"v.",   zh:"（在提不出证明的情况下）断言，声称", forms:["alleged"]},
+          {word:"imply",      ipa:"/ɪmˈplaɪ/",      pos:"vt.",  zh:"暗指，暗示；意味要，必然包含", forms:["implied"]}
+        ]
+      },
+      {
+        id:"D3-P5", slug:"tem4-D3-P5", title:"隔空论战", shape:"波浪",
+        poster:"assets/tem4/posters/D3_P5.png",
+        sentence:"Xiao Ye could not let his claim pass unanswered: in her reply she asserted that city sunsets were just as splendid, retorted to his teasing with a photograph of the glowing skyline, refused to be contradicted on the point, and tried her best to persuade him that the best view was wherever good friends watched it together; the sunset colors in her picture seemed to testify that she was right, and she was sure no one could ever claim otherwise.",
+        sentenceCn:"小叶学姐可不肯就这样认输：在回信中她主张城市的晚霞同样绚烂，用一张灯火璀璨的天际线照片回敬他的打趣，在这件事上绝不容许别人反驳，还竭力说服他——最好的风景，是和好朋友一起看到的那一处；照片中绚烂的霞色仿佛在证明她是对的，她也确信没有人能对此提出异议。",
+        scene:"晚霞映照的窗边，小叶学姐把城市天际线照片郑重装进信封，窗外粉橙色晚霞与初现的星星交相辉映。",
+        words:[
+          {word:"claim",      ipa:"/kleɪm/",        pos:"v. / n.", zh:"声称，主张；要求，认领 n. 要求；权利", forms:["claim"]},
+          {word:"assert",     ipa:"/əˈsɜːt/",       pos:"vt.",     zh:"宣称，断言；维护，坚持（权利等）", forms:["asserted"]},
+          {word:"retort",     ipa:"/rɪˈtɔːt/",      pos:"n. / v.", zh:"反驳，反唇相讥", forms:["retorted"]},
+          {word:"contradict", ipa:"/ˌkɒntrəˈdɪkt/", pos:"v.",      zh:"否定；反驳；与…矛盾", forms:["contradicted"]},
+          {word:"persuade",   ipa:"/pəˈsweɪd/",     pos:"v.",      zh:"说服，劝服，使…相信", forms:["persuade"]},
+          {word:"testify",    ipa:"/ˈtestɪfaɪ/",    pos:"v.",      zh:"作证，证实；表明，证明", forms:["testify"]}
+        ]
+      }
+    ]},
   {id:"D4", cat:"D", zh:"社交礼仪",   name:"Social Etiquette",  status:"soon", words:60,  desc:"拜访、致谢、道歉"},
   /* ===== E 科学与探索 ===== */
   {id:"E1", cat:"E", zh:"太空探索",   name:"Space Exploration", status:"soon", words:80,  desc:"火箭、星球、宇航员"},
