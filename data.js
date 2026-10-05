@@ -7089,6 +7089,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-05",
+    "title": "The Dashes They Took Away",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-05-the-dashes-they-took-away",
+    "url": "lessons/b2/2026-10-05-the-dashes-they-took-away.html",
+    "vocab": [
+      {
+        "word": "posthumous",
+        "zh": "死后的；身后的（posthumous fame 身后之名，副词 posthumously）",
+        "ex": "\"Their posthumous publication was swift and unexpectedly popular.\""
+      },
+      {
+        "word": "deliberate",
+        "zh": "有意的；深思熟虑的（名词 deliberation，副词 deliberately；动词读 /dɪˈlɪbəreɪt/，意为仔细考虑）",
+        "ex": "\"Scholars regard these habits as deliberate rather than accidental.\""
+      },
+      {
+        "word": "intervention",
+        "zh": "干预；介入（editorial intervention 编辑干预，动词 intervene）",
+        "ex": "\"Such an intervention would obscure her technique.\""
+      },
+      {
+        "word": "obscure",
+        "zh": "遮蔽、使难以理解（动词）；晦涩的、无名的（形容词；名词 obscurity）",
+        "ex": "\"It obscured the very technique that makes her work idiosyncratic.\""
+      },
+      {
+        "word": "idiosyncratic",
+        "zh": "独特的；异于常规的（名词 idiosyncrasy，指个人特有的习惯或癖性）",
+        "ex": "\"Readers now admire exactly the features that once looked idiosyncratic.\""
+      },
+      {
+        "word": "fidelity",
+        "zh": "忠实；精确还原（fidelity to the manuscript 忠于手稿；形容词 faithful）",
+        "ex": "\"Franklin placed fidelity to the handwritten page above everything else.\""
+      },
+      {
+        "word": "variant",
+        "zh": "变体；异文（同一首诗的不同手写版本；形容词指「不同的」）",
+        "ex": "\"He treated each variant as evidence rather than error.\""
+      },
+      {
+        "word": "preclude",
+        "zh": "排除；使不可能（preclude disagreement 并不排除分歧，名词 preclusion）",
+        "ex": "\"None of this precludes disagreement.\""
+      },
+      {
+        "word": "meticulous",
+        "zh": "一丝不苟的；极为细致的（meticulous transcription，副词 meticulously）",
+        "ex": "\"No printed page can reproduce handwriting, however meticulous the transcription.\""
+      },
+      {
+        "word": "scrutiny",
+        "zh": "仔细审查；细看（subject sth to scrutiny 把某物拿来仔细审读；动词 scrutinise）",
+        "ex": "\"Anyone can subject the originals to their own scrutiny.\""
+      },
+      {
+        "word": "authoritative",
+        "zh": "权威的；可靠可依据的（an authoritative edition 权威版本，名词 authority）",
+        "ex": "\"An authoritative edition is not one that ends the argument.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
