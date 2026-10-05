@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Plot That Grew in Public — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#6d28d9;
+  --accent2:#be123c;
+  --bg:#f7f5fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#ede9fe;
+  --border:#e2dcf7;
+  --soft:#f4f1fd;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(109,40,217,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(109,40,217,.55);}70%{box-shadow:0 0 0 12px rgba(109,40,217,0);}100%{box-shadow:0 0 0 0 rgba(109,40,217,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#ddd6fe;}
+#tip{position:fixed;z-index:1200;background:#1b1235;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#c4b5fd;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(109,40,217,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ede9fe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 文学评论 Literary Criticism</span>
+      <h1 class="title">The Plot That Grew in Public</h1>
+      <p class="subtitle">How serial publication made the Victorian novel a collaboration · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Stopgap</div>
+            <p>In March 1836 the first monthly number of <i>The Posthumous Papers of the Pickwick Club</i> appeared in London. It was a publisher's <span class="kw" data-def="权宜之计、临时替代品（a temporary substitute for something missing or inadequate；a stopgap measure 权宜措施；动词短语 stop the gap 填补空缺；语体上比 makeshift 更强调「先顶上、随时可换」，常带一丝贬义，暗示方案本不该长久）">stopgap</span>: <span class="kw" data-def="凸版印刷；亦指印刷品中的文字部分（printing from a raised inked surface；在出版史中常用来与 plates「图版」对举，指一册中的文字页；letterpress printing 凸版印刷术；现代排版语境里也指「正文文字」相对于插图的部分）">letterpress</span> wrapped around four sporting engravings, with a twenty-four-year-old journalist engaged to supply the words. Within a year the hierarchy had inverted — the plates <span class="kw" data-def="使居于次要地位、使从属于（to treat or rank as less important；动词，重音在第二音节；形容词 subordinate 次要的、下级的，读作 /səˈbɔːdɪnət/；名词 subordination 从属关系；常搭配 subordinate A to B「把 A 置于 B 之下」，也可用于语法：a subordinate clause 从句）">subordinated</span> to the prose, and a Cockney boot-cleaner named Sam Weller carrying a shilling pamphlet from a few hundred copies at the outset to something like forty thousand at the close.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Grammar</div>
+            <p>What Dickens had stumbled into was not a channel but a form. In <i>The Victorian Serial</i> (1991), Linda Hughes and Michael Lund argued that <span class="kw" data-def="周期性、定期性（the quality of occurring at regular intervals；此处特指连载小说按周或按月定期出刊这一属性；形容词 periodic 定期的；名词 periodical 期刊；该词把「多久出一期」从出版安排提升为影响文本结构的变量）">periodicity</span> is <span class="kw" data-def="构成性的、本质性的（having the power to establish or constitute something；在学术写作中常与 incidental「附带的」对举；a constitutive feature 构成性特征；be constitutive of X 是 X 的构成要素；动词 constitute 构成；同族词 constitution 宪法／体质，注意不要混译）">constitutive</span> rather than <span class="kw" data-def="附带的、次要的、偶发的（occurring as a minor accompaniment to something else；incidental to 相对于……而言是次要的；an incidental detail 无关紧要的细节；名词 incidence 发生率，与 incidents「事件」不同；此处与 constitutive 构成一组关键对照）">incidental</span>: a novel issued in twenty monthly parts is not a unified book damaged by its delivery but a different <span class="kw" data-def="人工制品、产物（something made or given shape by human work；在文学批评中指「作品本身是一件被制作出来的物件」，强调其物质性与形制；美式拼写 artifact；常与 aesthetics of the artefact 一类的措辞共现；也可泛指考古出土物）">artefact</span>, with a grammar of its own.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Intervention</div>
+            <p>Its most unsettling consequence is that the author was no longer alone with the manuscript. In 1861 Dickens showed the closing chapters of <i>Great Expectations</i> to Edward Bulwer-Lytton, who thought them too sad, and rewrote the ending. <span class="kw" data-def="后世、后人（all future generations of people；正式且带文学色彩；for posterity 为了后世；preserve sth for posterity 为后人保存某物；常见搭配 go down to posterity 流传后世；与 descendants「某人的后代」不同，posterity 指全人类的未来世代）">Posterity</span> has argued ever since: Forster found the discarded version more consistent; Gissing thought the novel would have been perfect had it been left alone; Shaw called the substituted close an outrage on a serious book. J. Hillis Miller, conversely, welcomed it.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Return</div>
+            <p>The form did not die with the magazine; it migrated. In 2026, a hundred and ninety years after that first number, a scholar at Cornell began releasing <i>Pickwick</i> one <span class="kw" data-def="（分期连载的）一期、分册（one of several parts of something published or paid for at intervals；英式拼写 instalment，美式 installment；publish in monthly instalments 按月分期出版；金融义为分期付款的一期）">instalment</span> a month, on the anniversary of each original appearance, inviting readers to <span class="kw" data-def="放弃、弃绝（to go without something desirable；及物动词，过去式 forwent，过去分词 forgone；forgo the pleasure of 放弃……的乐趣；正式程度高于 give up，多用于书面语与法律文本；注意与 forego「先行、在前」拼写相近而义不同）">forgo</span> the complete text and wait. The wager is an old one: that a story told in public is not a story told in private and afterwards published, but another story altogether.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="sec" style="border:none;padding:0;margin:0 0 10px;">🧭 篇章结构 Structure at a Glance</h2>
+        <div class="ext">
+        <table>
+          <tr><th>段</th><th>功能</th><th>关键句</th></tr>
+          <tr><td>1</td><td>给出具体史实：连载本是权宜之计，却造出了一部现象级作品</td><td>Within a year the hierarchy had inverted…</td></tr>
+          <tr><td>2</td><td>把史实上升为论点：周期性是构成性的，不是附加的</td><td>…constitutive rather than incidental.</td></tr>
+          <tr><td>3</td><td>推出后果：作者不再与手稿独处，结局成为可谈判之物</td><td>…the author was no longer alone with the manuscript.</td></tr>
+          <tr><td>4</td><td>落到当代：连载的前提以新的载体回返</td><td>…a story told in public is not a story told in private…</td></tr>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (10 · C1–C2)</h2>
+      <div class="card">
+        <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="stopgap">🔊</button><div class="word">stopgap<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">权宜之计、临时替代品（a temporary substitute for something missing or inadequate；a stopgap measure 权宜措施；源自动词短语 stop the gap 填补空缺；语体上比 makeshift 更强调「先顶上、随时可换」，常带一丝贬义，暗示方案本不该长久）</div><div class="ex">“It was a publisher's stopgap: letterpress wrapped around four sporting engravings.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="letterpress">🔊</button><div class="word">letterpress<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">凸版印刷；亦指印刷品中的文字部分（printing from a raised inked surface；在出版史中常与 plates「图版」对举，指一册中的文字页；letterpress printing 凸版印刷术；现代排版语境里也指正文文字相对于插图的部分）</div><div class="ex">“letterpress wrapped around four sporting engravings, with a twenty-four-year-old journalist engaged to supply the words”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="subordinated">🔊</button><div class="word">subordinated<span class="pos">adj. / v.</span></div><span class="lvl">C1</span><div class="zh">使居于次要地位、使从属于（to treat or rank as less important；动词，重音在第二音节；形容词 subordinate 次要的、下级的；名词 subordination 从属关系；常搭配 subordinate A to B；也可用于语法：a subordinate clause 从句）</div><div class="ex">“Within a year the hierarchy had inverted — the plates subordinated to the prose.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="periodicity">🔊</button><div class="word">periodicity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">周期性、定期性（the quality of occurring at regular intervals；此处特指连载小说按周或按月定期出刊这一属性；形容词 periodic 定期的；名词 periodical 期刊；该词把「多久出一期」从出版安排提升为影响文本结构的变量）</div><div class="ex">“Linda Hughes and Michael Lund argued that periodicity is constitutive rather than incidental.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="constitutive">🔊</button><div class="word">constitutive<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">构成性的、本质性的（having the power to establish or constitute something；学术写作中常与 incidental「附带的」对举；a constitutive feature 构成性特征；be constitutive of X 是 X 的构成要素；动词 constitute 构成）</div><div class="ex">“periodicity is constitutive rather than incidental”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="incidental">🔊</button><div class="word">incidental<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">附带的、次要的、偶发的（occurring as a minor accompaniment to something else；incidental to 相对于……而言是次要的；an incidental detail 无关紧要的细节；名词 incidence 发生率，与 incidents「事件」不同；此处与 constitutive 构成关键对照）</div><div class="ex">“periodicity is constitutive rather than incidental”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="artefact">🔊</button><div class="word">artefact<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">人工制品、产物（something made or given shape by human work；文学批评中指作品本身是一件被制作出来的物件，强调物质性与形制；美式拼写 artifact；也可泛指考古出土物）</div><div class="ex">“a different artefact, with a grammar of its own”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="instalment">🔊</button><div class="word">instalment<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">（分期连载的）一期、分册（one of several parts of something published or paid for at intervals；英式拼写 instalment，美式 installment；publish in monthly instalments 按月分期出版；金融义为分期付款的一期）</div><div class="ex">“releasing Pickwick one instalment a month”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="posterity">🔊</button><div class="word">posterity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">后世、后人（all future generations of people；正式且带文学色彩；for posterity 为了后世；preserve sth for posterity 为后人保存某物；go down to posterity 流传后世；与 descendants「某人的后代」不同）</div><div class="ex">“Posterity has argued ever since: Forster found the discarded version more consistent.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="forgo">🔊</button><div class="word">forgo<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">放弃、弃绝（to go without something desirable；及物动词，过去式 forwent，过去分词 forgone；forgo the pleasure of 放弃……的乐趣；正式程度高于 give up；注意与 forego「先行、在前」拼写相近而义不同）</div><div class="ex">“inviting readers to forgo the complete text and wait”</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. What X had stumbled into was not A but B（误打误撞撞上的其实是别的东西）</h3>
+          <div class="zh">学术评论里最好用的一句转折。<i>what</i> 引导的主语从句先把「他碰上的那个东西」整体打包，再用 <i>not A but B</i> 把它重新归类：不是发行渠道（channel），而是文体形式（form）。三个要点：一、<i>stumble into</i> 自带「非计划、偶然」的意味，正好服务论点；二、A 与 B 都是单数可数名词且不带冠词，形成干净的对举；三、整句充当段落主旨句，后面三句都是它的展开。练笔时把 <i>stumbled into</i> 换成 <i>inherited / inherited from his predecessors</i> 之类，可以改写各种「始料未及」的论点。</div>
+          <div class="eg">What Dickens had stumbled into was not a channel but a form.</div>
+          <div class="practice">✍️ 仿写：她接手的其实不是一份档案，而是一场尚未结束的争论。<input type="text" placeholder="What she had inherited was not..."></div>
+        </div>
+        <div class="item">
+          <h3>2. In &lt;书名&gt; (年份), X argued that N is ADJ rather than ADJ（引述学派立场）</h3>
+          <div class="zh">文献综述的标准动作：先给出处（书名斜体 + 年份），再给出某位学者的<b>具体主张</b>，主张用一对反义形容词压缩成一行。<i>constitutive rather than incidental</i> 是这套写法的高阶版——不是「重要／不重要」这种空泛对比，而是「构成性的／附带性的」这种有学科含量的对比。注意时态：<i>argued</i> 是过去时（学者当年如此主张），而 <i>is</i> 是现在时（该主张的内容至今有效），这种「过去时 + 现在时」的组合正是学术英语的惯例。</div>
+          <div class="eg">In <i>The Victorian Serial</i> (1991), Linda Hughes and Michael Lund argued that periodicity is constitutive rather than incidental.</div>
+          <div class="practice">✍️ 仿写：在其 2016 年的论文中，作者主张算法偏见是结构性的而非偶发的。<input type="text" placeholder="In her 2016 paper, the author argued that bias is..."></div>
+        </div>
+        <div class="item">
+          <h3>3. X is not A + 过去分词短语 but B + 介词短语（带后置修饰的平行对照）</h3>
+          <div class="zh">比上一句更重的对照。两侧都不是光秃秃的名词：<i>a unified book damaged by its delivery</i>（被交付方式损害的统一之书）与 <i>a different artefact, with a grammar of its own</i>（自有其语法的另一件制品）。左用过去分词短语表被动，右用 with 短语表属性，一破一立，读起来像天平两端各放了一件实物。写作启示：平行结构不怕长，怕的是两侧形式不对称——左侧有修饰、右侧没有，气势立刻散掉。</div>
+          <div class="eg">…a novel issued in twenty monthly parts is not a unified book damaged by its delivery but a different artefact, with a grammar of its own.</div>
+          <div class="practice">✍️ 仿写：这份手稿并非被删改过的定本，而是另一部作品，有其自身的逻辑。<input type="text" placeholder="The manuscript is not a finished text..."></div>
+        </div>
+        <div class="item">
+          <h3>4. 批评接受史的三段式列举（A found…; B thought…; C called…）</h3>
+          <div class="zh">写「后世如何评价」时的高效模板：三个分句，三个不同的谓语动词（<i>found / thought / called</i>），避免重复；分号连接，最后一句用句号收束。再补一句 <i>X, conversely, welcomed it</i> 做反转，四句话就撑起一整段学术争鸣的立体感。要点在于<b>动词要挑选能体现各家立场的词</b>：<i>find</i> 是判断，<i>think</i> 是意见，<i>call</i> 是定性并常带尖锐色彩（call sth an outrage）。</div>
+          <div class="eg">Forster found the discarded version more consistent; Gissing thought the novel would have been perfect had it been left alone; Shaw called the substituted close an outrage on a serious book.</div>
+          <div class="practice">✍️ 仿写：三位评论者对该结局各有评价，最后一位则持欢迎态度。<input type="text" placeholder="One reviewer found...; another thought...; a third called..."></div>
+        </div>
+        <div class="item">
+          <h3>5. The wager is an old one: that…, and that…（冒号引出同位从句，收束全篇）</h3>
+          <div class="zh">全文的落点句型。<i>The wager is an old one</i> 先把论点定性为「一个古老的赌注」，冒号之后用两个并列的 <i>that</i> 从句把赌注的内容说出来，第二个从句内部再用 <i>not…but…</i> 收尾。三层嵌套（主句 → 同位从句 → 内部对照）却不显拥挤，靠的是冒号这个「呼吸口」。雅思大作文结尾段若用一次这个结构，结论会显得既有立场又有余味。</div>
+          <div class="eg">The wager is an old one: that a story told in public is not a story told in private and afterwards published, but another story altogether.</div>
+          <div class="practice">✍️ 仿写：这个设想由来已久：教育并非把知识灌进容器，而是点燃一团火。<input type="text" placeholder="The premise is an old one: that education is not..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 破折号引出的绝对结构（absolute construction）</h3>
+          <div class="zh">第 1 段：<i>Within a year the hierarchy had inverted — <b>the plates subordinated to the prose, and a Cockney boot-cleaner … carrying a shilling pamphlet</b>…</i> 破折号之后是两个「名词 + 分词」的绝对结构：前一个用过去分词 <i>subordinated</i>（被动义：图版被置于次要地位），后一个用现在分词 <i>carrying</i>（主动义：一个人物承载着销量）。它们各自带自己的逻辑主语，与主句主语 <i>the hierarchy</i> 不一致，因此叫绝对结构。功能是把一组画面直接铺在主句之后，不必另起一句，信息密度极高。</div>
+          <div class="eg">…the plates subordinated to the prose, and a Cockney boot-cleaner named Sam Weller carrying a shilling pamphlet…</div>
+        </div>
+        <div class="item">
+          <h3>2. rather than 的平行要求</h3>
+          <div class="zh">第 2 段：<i>periodicity is <b>constitutive rather than incidental</b></i>。<i>rather than</i> 连接的两个成分必须词性相同、功能对称：此处同为形容词作表语。若写成 <i>constitutive rather than an accident</i> 就破坏了对仗。本课第 3 型中的 <i>not a channel but a form</i> 亦为名词短语对举，遵循同一规则。考点提示：雅思写作中 <i>rather than</i> 是替换 <i>instead of</i> 的稳妥升级，但两侧一定要对齐。</div>
+          <div class="eg">…argued that periodicity is constitutive rather than incidental.</div>
+        </div>
+        <div class="item">
+          <h3>3. not A but B 的严格平行</h3>
+          <div class="zh">第 2 段：<i>is not <b>a unified book damaged by its delivery</b> but <b>a different artefact, with a grammar of its own</b></i>。<i>not…but…</i> 要求两侧同为名词短语，且各自的后置修饰形式可以不同（过去分词短语 / with 介词短语），只要<b>结构层级</b>相当。第 4 段还有一处：<i>not a story told in private and afterwards published, but another story altogether</i>——左为过去分词修饰，右为副词 altogether 收尾，靠 <i>story</i> 的重复维持平衡。</div>
+          <div class="eg">…is not a unified book damaged by its delivery but a different artefact, with a grammar of its own.</div>
+        </div>
+        <div class="item">
+          <h3>4. 虚拟条件句的倒装：had it been left alone</h3>
+          <div class="zh">第 3 段：<i>Gissing thought the novel would have been perfect <b>had it been left alone</b></i>。完整形式是 <i>if it had been left alone</i>；当条件从句含 <i>had / were / should</i> 时，可省略 <i>if</i> 并把这些词提到主语之前。整句是典型的<b>与过去事实相反</b>的虚拟：主句 <i>would have been</i> + 从句 <i>had been</i>——事实是结局已被改写，所以「完美」只能存在于反事实中。这是 C1 以上写作的分水岭句式，用对一次，语法项的分数立刻不同。</div>
+          <div class="eg">…the novel would have been perfect had it been left alone.</div>
+        </div>
+        <div class="item">
+          <h3>5. 冒号引出同位 that-从句，及分号列举中的并列省略</h3>
+          <div class="zh">第 4 段：<i>The wager is an old one: <b>that</b> a story told in public is not…</i>，冒号后的 <i>that</i> 从句与 <i>one</i>（= a wager）同位，说明赌注的具体内容；冒号在此起「等于号」作用。第 3 段另有 <i>Forster found the discarded version more consistent; Gissing thought…; Shaw called…</i>，三个分句结构平行，后句不再重复已出现的主语模式，这种省略叫 gapping，是书面英语节奏感的来源。第 4 段开头的 <i>The form did not die with the magazine; it migrated</i> 则用分号连接两个独立分句，表示后句是对前句的补充而非从属。</div>
+          <div class="eg">The wager is an old one: that a story told in public is not a story told in private and afterwards published, but another story altogether.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (6 · IELTS / TOEFL style)</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card"><div id="score" style="font-weight:700;color:var(--accent);font-size:16px;">作答后可在下方查看每题解析；全部做完可对照本页上方的篇章结构表复盘。</div></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 · 深度解析</h2>
+      <div class="card ext">
+        <h3>引子：一本不被看好的小册子，改写了小说的形制</h3>
+        <p>《匹克威克外传》（<i>The Posthumous Papers of the Pickwick Club</i>）在 1836 年 3 月以每月一册的形式开张时，出版方 Chapman and Hall 心里的算盘是<b>卖画</b>：请画家 Robert Seymour 画一组英国乡绅的狩猎滑稽图，再找个写手配点文字。24 岁的狄更斯就是那个写手，用笔名 Boz 接活。结果不到一年，<b>图与文的主从关系倒转</b>——Seymour 在第二期后去世，20 岁的 Hablot Knight Browne（笔名 Phiz）接手；版式也从「24 页文字配 4 幅图」改成「32 页文字配 2 幅图」，文字成了主体。销量上，首期只印了约一千册、实售数百本，到最后一期已接近四万册。文学史上把这次陡升称为 <b>Sam Weller Bump</b>：第四期引入的仆人山姆·维勒一出场，读者就再也放不下了。</p>
+
+        <h3>一、连载不是「发行方式」，而是一种文体</h3>
+        <p>长久以来，文学史把分期连载当作小说之外的一层包装：先有完整的书，再切成若干期卖。1990 年代的连载研究推翻了这个默认前提。Linda K. Hughes 与 Michael Lund 在 <i>The Victorian Serial</i>（1991）中提出，<b>周期性（periodicity）是构成性的而非附带性的</b>：一部按月出版二十期的小说，与一部写完再整本出版的小说，是两种不同的物件，不能互相折算。Michael Lund 在 <i>America's Continuing Story</i>（1993）中对美国期刊小说做了同类论证。</p>
+        <table>
+          <tr><th>维度</th><th>把连载当作包装</th><th>把连载当作形式（Hughes &amp; Lund）</th></tr>
+          <tr><td>文本单位</td><td>章节；分册只是切法</td><td><b>分册本身就是设计单位</b></td></tr>
+          <tr><td>间隔的作用</td><td>空白，是阅读的中断</td><td><b>间隔是结构元素</b>，悬念要靠它维持</td></tr>
+          <tr><td>作者与读者</td><td>作者写完，读者接收</td><td>写作过程向读者的反应开放</td></tr>
+          <tr><td>评价尺度</td><td>用「完整长篇」的标准衡量，故连载小说常被认为松散</td><td>用连载自身的标准衡量：悬念分布、每期收束、人物复现</td></tr>
+        </table>
+        <div class="box"><b>为什么这件事重要：</b>一旦承认连载是一种形式，「维多利亚小说结构松散」这个老判断就失去了依据。所谓「松散 baggy monster」，很可能是用错了尺子——拿衡量封闭长篇的标准，去量一件本就开放的制品。</div>
+
+        <h3>二、狄更斯的写作笔记：以「期」为单位</h3>
+        <p>最能支持上述论点的实物证据，是狄更斯留下的写作备忘录，通称 <b>Number Plans</b>（分册计划，也称 Mems）。这些手稿按<b>分册</b>而非章节编排，逐期记录人物走向、待用的悬念、下一期可能的落点。也就是说，狄更斯构思时的最小单位不是「章」，而是「这一期给读者什么、在哪里断」。这批材料多藏于伦敦维多利亚与阿尔伯特博物馆的 Forster Collection，是研究维多利亚连载最常被引用的原始文献之一。</p>
+        <p>由此可以理解连载的几条技术要求：<b>每期都要有自己的骨架</b>（不能只是被切开的连续体）；<b>结尾必须留钩</b>（悬念的剩余量要足够撑过数周）；<b>人物要可复现</b>（读者隔月再见，需要一望即识的特征）。这些都不是美学偏好，而是形式施加的约束。</p>
+
+        <h3>三、读者的反馈回路</h3>
+        <p>连载把写作过程暴露在即时的公众反应之中。狄更斯读信、读评论、观察销量，并据此调整。最广为人知的两个例子：</p>
+        <ul>
+          <li><b>Sam Weller Bump（1836）</b>：一个配角的登场让销量从数百跳到数万。此后狄更斯在连载中反复使用「新角色救场」这一手。</li>
+          <li><b>小内尔之死（1841）</b>：《老古玩店》在 <i>Master Humphrey's Clock</i> 上周连载时，读者纷纷致信请求不要让她死去。一则流传极广的说法称，1841 年载着最后一期的轮船抵达纽约时，码头上的读者朝船上高喊小内尔是否还活着——<b>这则轶事出自后人转述，其细节可靠性在学界有保留</b>，但「读者大规模干预情节」这件事本身有大量书信证据支持。</li>
+        </ul>
+        <div class="box"><b>方法论提醒：</b>引用这类轶事时要区分两层——「读者反应影响了连载写作」是可证的；「某句台词在码头上被喊出」则属于传说。写作与阅读中都要留意这个落差，它恰是雅思阅读 NOT GIVEN 题型最爱下手的地方。</div>
+
+        <h3>四、《远大前程》的结局之争：一次被记录下来的干预</h3>
+        <p>本课正文第三段讲的是文学史上少有的一次<b>有据可查的外部干预</b>。《远大前程》自 1860 年 12 月起在狄更斯自己主编的 <i>All the Year Round</i> 上周连载，共三十六期，至 1861 年 8 月结束。成书前，狄更斯把最后几章交给小说家 Edward Bulwer-Lytton 看；后者认为结局太悲伤，力劝改写。狄更斯在给传记作者 John Forster 的信里说明，Bulwer 提出的理由极有说服力，他打算改。</p>
+        <table>
+          <tr><th>版本</th><th>情节</th><th>代表评价</th></tr>
+          <tr><td><b>原结局</b>（未采用）</td><td>皮普终身未婚，在伦敦街头与艾丝黛拉偶遇；艾丝黛拉在德鲁莫死后改嫁他人</td><td>Forster：更一致、更自然；Gissing：若不改，这部小说本可完美</td></tr>
+          <tr><td><b>改写结局</b>（出版）</td><td>皮普在萨蒂斯庄园废墟重见艾丝黛拉，二人一同走出废墟</td><td>Shaw：对一部严肃作品而言，这个俗套的美满结尾是一种冒犯；J. Hillis Miller：认为改写可取，迷雾已散</td></tr>
+        </table>
+        <p>另有一处常被引用的细节：末句在后续版本中又被微调——从「我看不见任何离别的阴影」改为「我看不见另一次离别的阴影」，一字之差使结局重新变得<b>暧昧</b>：两人究竟是否成婚，读者至今争论不休。这说明「改写」本身就不是一个事件，而是一个持续的过程。</p>
+
+        <h3>五、当代回响：把一个月还给它</h3>
+        <p>连载并未随杂志消亡，它换了载体。2026 年——首期《匹克威克外传》问世整一百九十年后——康奈尔大学的 David Mimno 启动了一个复刻阅读节奏的项目：自 3 月起，<b>每月放出当年的一期</b>，与 1836–1837 年的出版日期对应，直到 2027 年 11 月放完最后一期。参与者被要求主动放弃「一次读完全本」的便利，重新体验等待。</p>
+        <p>这个项目的有趣之处不在怀旧，而在它把一个可检验的命题摆到了台面上：<b>间隔是否真的改变阅读？</b>如果 Hughes 与 Lund 是对的，那么按月读与一口气读完，得到的就是两部不同的《匹克威克外传》——悬念的密度不同，记忆的衰减曲线不同，对人物的情感积累方式也不同。当代流媒体平台上「每周更新」与「全集放出」之争，其实是同一个问题的新版本。</p>
+
+        <h3>六、对中文读者的三点启发</h3>
+        <ul>
+          <li><b>先分清「形式」与「载体」，再下判断。</b>遇到结构看似松散的作品，先问它的出版形制是什么。用错尺子作出的评价，比不评价更糟。</li>
+          <li><b>把「干预」当作分析对象，而不是八卦。</b>《远大前程》的改写常被讲成名流轶事；但真正有价值的问题是：当写作过程向读者开放，文本的<b>作者身份</b>如何被重新分配？这才是文学批评的入口。</li>
+          <li><b>写作迁移：四段推进法。</b>本文骨架是「具体史实 → 上升为论点 → 推出后果 → 落到当代」。历史类、文化类、技术类话题都能套用，比罗列事实更有推进感。</li>
+        </ul>
+
+        <div class="box"><b>事实与立场声明</b>：本页只综述已出版的学术研究、公开可查的出版史料与作者书信，不构成对任何在世人物的评价。文中销量数字为首期约数百册、末期约四万册一类<b>史料转述的约数</b>，不同版本的出版史著作略有出入，不宜当作精确统计。「码头高喊小内尔」一节已明确标注为<b>后人转述的轶事</b>，其细节在学界有争议。本页不涉及任何政治议题。</div>
+
+        <h3>参考来源 References</h3>
+        <ul>
+          <li>Hughes, L. K., &amp; Lund, M. (1991). <i>The Victorian Serial</i>. University of Virginia Press.</li>
+          <li>Lund, M. (1993). <i>America's Continuing Story: An Introduction to Serial Fiction, 1850–1900</i>. Wayne State University Press.</li>
+          <li>Dickens, C. (1836–1837). <i>The Posthumous Papers of the Pickwick Club</i>（19 期分册连载，Chapman and Hall）.</li>
+          <li>Dickens, C. (1860–1861). <i>Great Expectations</i>（<i>All the Year Round</i>，36 期周连载）.</li>
+          <li>Forster, J. (1872–1874). <i>The Life of Charles Dickens</i>（狄更斯致 Forster 书信，改写结局一节）.</li>
+          <li>Gissing, G. (1898). <i>Charles Dickens: A Critical Study</i>；Shaw, G. B.，及 J. Hillis Miller 关于《远大前程》结局的相关论述。</li>
+          <li>Mimno, D. (2026). <i>The Pickwick Papers 190th Anniversary</i>（康奈尔大学，按月复刻连载项目）.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇</b>：掌握 10 个 C1–C2 学术词（stopgap, letterpress, subordinated, periodicity, constitutive, incidental, artefact, instalment, posterity, forgo），能在写作中替换掉 <i>temporary fix</i>、<i>unimportant</i>、<i>give up</i> 这类通用表达。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句法</b>：会用 What X had stumbled into was not A but B 立论、用 argued that N is ADJ rather than ADJ 引述学派立场、用 The wager is an old one: that… 收束全篇。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法</b>：会拆会仿绝对结构、rather than / not…but… 的平行，以及 had it been left alone 这类省略 if 的虚拟倒装。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>思维</b>：区分「形式」与「载体」；遇到看似松散的作品，先追问它的出版形制，再下判断。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 Exam Skills</h3>
+        <div class="ext">
+        <ul>
+          <li><b>雅思阅读 · 段落信息匹配</b>：按<b>功能</b>而非话题配对。本文段 1 是「具体史实」，段 2 是「理论主张」，段 3 是「后果与争鸣」，段 4 是「当代回响」。先给每段贴功能标签，再去找对应题干，比逐词定位快得多。</li>
+          <li><b>雅思阅读 · TRUE / FALSE / NOT GIVEN</b>：本文是范本。题干「狄更斯始终拒绝外部建议」与段 3 相反（FALSE）；题干「评论界已就改写达成一致」原文给出四家相反意见（FALSE）；题干「首期印了五万册」原文只说数百到四万（FALSE）；而「码头高喊小内尔」若未在文中出现即为 NOT GIVEN——<b>分不清 FALSE 与 NOT GIVEN 是失分重灾区</b>。</li>
+          <li><b>托福阅读 · 修辞目的题（Why does the author mention X?）</b>：文末康奈尔项目不是轶闻，而是用来支撑上一句主张（连载形式并未消亡，只是换了载体）的当代例证。答这类题要找它服务的<b>前一主张</b>，而不是它的字面内容。</li>
+          <li><b>托福阅读 · 词汇题</b>：<i>forgo</i> ≈ do without / give up；<i>incidental</i> ≈ secondary / accompanying；<i>constitutive</i> ≈ formative / essential to the make-up of；<i>posterity</i> ≈ future generations。注意 <i>constitutive</i> 与 <i>constitution</i> 只差后缀，词义极易误判。</li>
+          <li><b>写作迁移</b>：Task 2 讨论「形式是否影响内容」类话题时，可用 <i>X is not A damaged by B but C, with a logic of its own</i> 把对立立场收进一个更准确的框架，比让步段各打五十大板更有力。</li>
+          <li><b>口语 Part 3</b>：被问到阅读习惯时，用本课骨架作答——先说一个具体事实，再上升为判断，最后指出当代的对应现象（如每周更新与全集放出之争）。</li>
+        </ul>
+        </div>
+
+        <h3 style="color:var(--accent);">🗓️ 课程信息</h3>
+        <div class="ext">
+        <table>
+          <tr><th>级别</th><td>C1–C2（CEFR 精通级）</td></tr>
+          <tr><th>档期</th><td>周一 · 文学评论 Literary Criticism</td></tr>
+          <tr><th>日期</th><td>2026-10-05</td></tr>
+          <tr><th>正文词数</th><td>约 285 词 · 4 段（无逐段中文翻译，中文仅在生词释义与扩展板块）</td></tr>
+          <tr><th>学科领域</th><td>维多利亚小说研究 Victorian Studies · 连载形式研究 Seriality · 出版史 History of the Book</td></tr>
+        </table>
+        </div>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+      <footer>Pola News · Advanced English · 每日一课，日积月累 🦘</footer>
+    </section>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["In March 1836 the first monthly number of The Posthumous Papers of the Pickwick Club appeared in London. It was a publisher's stopgap: letterpress wrapped around four sporting engravings, with a twenty-four-year-old journalist engaged to supply the words. Within a year the hierarchy had inverted — the plates subordinated to the prose, and a Cockney boot-cleaner named Sam Weller carrying a shilling pamphlet from a few hundred copies at the outset to something like forty thousand at the close.", "What Dickens had stumbled into was not a channel but a form. In The Victorian Serial (1991), Linda Hughes and Michael Lund argued that periodicity is constitutive rather than incidental: a novel issued in twenty monthly parts is not a unified book damaged by its delivery but a different artefact, with a grammar of its own.", "Its most unsettling consequence is that the author was no longer alone with the manuscript. In 1861 Dickens showed the closing chapters of Great Expectations to Edward Bulwer-Lytton, who thought them too sad, and rewrote the ending. Posterity has argued ever since: Forster found the discarded version more consistent; Gissing thought the novel would have been perfect had it been left alone; Shaw called the substituted close an outrage on a serious book. J. Hillis Miller, conversely, welcomed it.", "The form did not die with the magazine; it migrated. In 2026, a hundred and ninety years after that first number, a scholar at Cornell began releasing Pickwick one instalment a month, on the anniversary of each original appearance, inviting readers to forgo the complete text and wait. The wager is an old one: that a story told in public is not a story told in private and afterwards published, but another story altogether."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["A defence of the marketing methods used by Victorian publishers","The claim that serial publication is a literary form in its own right, one that exposed the writing process to outside influence","An argument that Great Expectations is Dickens's weakest novel","A biographical account of the illustrators who worked with Dickens"],ans:1,
+   fb:"正确。全文四段递进：段 1 用《匹克威克外传》的史实说明连载本是权宜之计；段 2 把它上升为论点——周期性是构成性的；段 3 推出后果——作者不再与手稿独处；段 4 落到当代。B 同时覆盖「形式」与「开放于外界影响」两层，概括最完整。A 恰恰是作者要修正的说法（不是营销，是形式）；C 无据，作者从未比较作品高下；D 只是段 1 的细节。"},
+  {q:"2. According to paragraph 1, which of the following is true of The Pickwick Papers? 关于《匹克威克外传》，下列哪一项符合第一段？",opts:["It was planned as a complete novel and sold steadily from the first number","It was abandoned after its illustrator died","Its illustrations were subordinated to the prose, and its sales rose sharply over the run","It appeared weekly and ran for thirty-six episodes"],ans:2,
+   fb:"正确。段 1 明说 hierarchy had inverted（主从倒转）与 the plates subordinated to the prose，并给出销量从数百到约四万的变化，与 C 吻合。A 与史实相反——它本是为配图而写的文字；B 错在「放弃」，画家去世后由 Phiz 接手并在一年后才结束；D 张冠李戴——三十六期周连载是《远大前程》的形制，《匹克威克外传》是每月一期、共十九期。"},
+  {q:"3. According to paragraph 2, Hughes and Lund argued that periodicity is: 依第二段，Hughes 与 Lund 主张周期性是？",opts:["constitutive rather than incidental","a commercial necessity imposed by publishers","irrelevant to the structure of the finished book","a defect that later editors tried to remove"],ans:0,
+   fb:"正确。原文 argued that periodicity is constitutive rather than incidental，A 为原词复现。B 把「形式属性」降格为「商业安排」，与论点相反；C 与 D 都是把周期性说成负面或无关，恰恰是本段要否定的看法。词汇提示：constitutive 构成性的、incidental 附带的，二者是本课最核心的一组对立。"},
+  {q:"4. Which of the following can be inferred from paragraph 3 about the ending of Great Expectations? 关于《远大前程》的结局，下列哪一项可从第三段推出？",opts:["Dickens refused all outside advice on his manuscripts","The original ending was never shown to anyone before publication","Critics soon reached a consensus that the revision had improved the novel","The substituted ending has remained a matter of dispute ever since"],ans:3,
+   fb:"正确。段 3 给出四家相反意见：Forster 认为原版更一致，Gissing 认为不改才完美，Shaw 称改写后的结尾是对严肃作品的冒犯，Hillis Miller 则欢迎改写——既然各家分歧持续，D 成立。A 与原文相反（他恰恰采纳了建议）；B 错，原稿给 Bulwer-Lytton 看过；C 与「各家分歧」直接冲突。注意这题用的是 inference（推断）而非 detail（细节），不能靠原句复现作答。"},
+  {q:"5. The word 'forgo' in paragraph 4 is closest in meaning to: 第四段中的 forgo 最接近下列哪一项？",opts:["reproduce","do without","annotate","summarise"],ans:1,
+   fb:"正确。forgo 意为放弃、弃绝（to go without something desirable），原文指读者被邀请放弃「一次读完全本」的便利而选择等待，故 B 的 do without 最接近。A 复制、C 批注、D 概述均与语境不符。补充：forgo 的过去式是 forwent、过去分词是 forgone，且与 forego（先行、在前）拼写相近而义不同，是词汇题常见干扰项。"},
+  {q:"6. Why does the author mention the Cornell project in the final paragraph? 作者为何在末段提到康奈尔的那个项目？",opts:["To suggest that Victorian novels have become unreadable for modern audiences","To criticise contemporary readers for their short attention spans","To show that the premise of serial form is still being put to the test today","To argue that universities rather than publishers should control literary culture"],ans:2,
+   fb:"正确。这是典型的修辞目的题：先找它支撑的上一句主张——The form did not die with the magazine; it migrated. 康奈尔的项目是该主张的当代例证，说明「间隔是否改变阅读」这个老命题仍被检验。C 正确。A、B 都含有原文没有的贬评；D 无中生有，原文并未讨论出版权归属。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

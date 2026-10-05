@@ -8766,5 +8766,67 @@ const EPISODES = [
         "ex": "“Cross-cultural failure begins when equivocal silence is read as a verdict.”"
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-05",
+    "title": "The Plot That Grew in Public",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-05-the-plot-that-grew-in-public",
+    "url": "lessons/c1/2026-10-05-the-plot-that-grew-in-public.html",
+    "vocab": [
+      {
+        "word": "stopgap",
+        "zh": "权宜之计、临时替代品（a temporary substitute for something missing or inadequate；a stopgap measure 权宜措施；源自动词短语 stop the gap 填补空缺；语体上比 makeshift 更强调「先顶上、随时可换」，常带一丝贬义，暗示方案本不该长久）",
+        "ex": "“It was a publisher's stopgap: letterpress wrapped around four sporting engravings.”"
+      },
+      {
+        "word": "letterpress",
+        "zh": "凸版印刷；亦指印刷品中的文字部分（printing from a raised inked surface；在出版史中常与 plates「图版」对举，指一册中的文字页；letterpress printing 凸版印刷术；现代排版语境里也指正文文字相对于插图的部分）",
+        "ex": "“letterpress wrapped around four sporting engravings, with a twenty-four-year-old journalist engaged to supply the words”"
+      },
+      {
+        "word": "subordinated",
+        "zh": "使居于次要地位、使从属于（to treat or rank as less important；动词，重音在第二音节；形容词 subordinate 次要的、下级的；名词 subordination 从属关系；常搭配 subordinate A to B；也可用于语法：a subordinate clause 从句）",
+        "ex": "“Within a year the hierarchy had inverted — the plates subordinated to the prose.”"
+      },
+      {
+        "word": "periodicity",
+        "zh": "周期性、定期性（the quality of occurring at regular intervals；此处特指连载小说按周或按月定期出刊这一属性；形容词 periodic 定期的；名词 periodical 期刊；该词把「多久出一期」从出版安排提升为影响文本结构的变量）",
+        "ex": "“Linda Hughes and Michael Lund argued that periodicity is constitutive rather than incidental.”"
+      },
+      {
+        "word": "constitutive",
+        "zh": "构成性的、本质性的（having the power to establish or constitute something；学术写作中常与 incidental「附带的」对举；a constitutive feature 构成性特征；be constitutive of X 是 X 的构成要素；动词 constitute 构成）",
+        "ex": "“periodicity is constitutive rather than incidental”"
+      },
+      {
+        "word": "incidental",
+        "zh": "附带的、次要的、偶发的（occurring as a minor accompaniment to something else；incidental to 相对于……而言是次要的；an incidental detail 无关紧要的细节；名词 incidence 发生率，与 incidents「事件」不同；此处与 constitutive 构成关键对照）",
+        "ex": "“periodicity is constitutive rather than incidental”"
+      },
+      {
+        "word": "artefact",
+        "zh": "人工制品、产物（something made or given shape by human work；文学批评中指作品本身是一件被制作出来的物件，强调物质性与形制；美式拼写 artifact；也可泛指考古出土物）",
+        "ex": "“a different artefact, with a grammar of its own”"
+      },
+      {
+        "word": "instalment",
+        "zh": "（分期连载的）一期、分册（one of several parts of something published or paid for at intervals；英式拼写 instalment，美式 installment；publish in monthly instalments 按月分期出版；金融义为分期付款的一期）",
+        "ex": "“releasing Pickwick one instalment a month”"
+      },
+      {
+        "word": "posterity",
+        "zh": "后世、后人（all future generations of people；正式且带文学色彩；for posterity 为了后世；preserve sth for posterity 为后人保存某物；go down to posterity 流传后世；与 descendants「某人的后代」不同）",
+        "ex": "“Posterity has argued ever since: Forster found the discarded version more consistent.”"
+      },
+      {
+        "word": "forgo",
+        "zh": "放弃、弃绝（to go without something desirable；及物动词，过去式 forwent，过去分词 forgone；forgo the pleasure of 放弃……的乐趣；正式程度高于 give up；注意与 forego「先行、在前」拼写相近而义不同）",
+        "ex": "“inviting readers to forgo the complete text and wait”"
+      }
+    ]
   }
 ];
