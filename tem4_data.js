@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D3/F1/F2/F3/G1 已上线（23 主题 / 115 Part / 690 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/F1/F2/F3/G1 已上线（24 主题 / 120 Part / 720 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1593,7 +1593,87 @@ const TEM4_THEMES = [
         ]
       }
     ]},
-  {id:"D4", cat:"D", zh:"社交礼仪",   name:"Social Etiquette",  status:"soon", words:60,  desc:"拜访、致谢、道歉"},
+  {
+    id:"D4", cat:"D", zh:"社交礼仪", name:"Social Etiquette", status:"live",
+    date:"2026-10-05", words:30, desc:"利奥的山村回访：迎客到访、待客之道、晚宴餐桌、赠礼致谢、依依送别",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"D4-P1", slug:"tem4-D4-P1", title:"迎客到访", shape:"拱门",
+        poster:"assets/tem4/posters/D4_P1.png",
+        sentence:"Everyone had anticipated Leo's winter visit for weeks: Xiao Ye hurried to the station to hail him the moment his train arrived and admitted him into the warm dormitory with a pot of hot tea; when the roommates praised his gentle manners and the hand-woven scarf from his grandmother, the modest village boy blushed and gave each of them a shy smile.",
+        sentenceCn:"利奥的寒假来访让全宿舍盼了好几个星期：火车一到站，小叶学姐就赶去月台招呼他，捧着一壶热茶把他迎进温暖的宿舍；当室友们夸他彬彬有礼、还夸奶奶织的围巾好看时，这位谦虚的山村男孩红着脸，朝每个人腼腆地笑了笑。",
+        scene:"冬日清晨的宿舍门前雪花轻飘，小叶学姐捧着热茶壶迎接背旅行袋、系蓝围巾的利奥，爱心与星星漂浮。",
+        words:[
+          {word:"anticipate", ipa:"/ˈæntɪsɪpeɪt/",         pos:"vt.",     zh:"预料；先发制人；先于…做", forms:["anticipated"]},
+          {word:"hail",       ipa:"/heɪl/",                pos:"v.",      zh:"向…欢呼；热情赞扬；高呼，招呼；下冰雹 n. 欢呼；打招呼；（冰）雹", forms:["hail"]},
+          {word:"gentle",     ipa:"/ˈdʒentl/",             pos:"adj.",    zh:"温柔的，柔和的；有礼貌的，文雅的；出身高贵的", forms:["gentle"]},
+          {word:"admit",      ipa:"/ədˈmɪt/",              pos:"v.",      zh:"允许…进入；承认；（指在一范围内）可容纳（某人或某事）", forms:["admitted"]},
+          {word:"modest",     ipa:"/ˈmɒdɪst/",             pos:"adj.",    zh:"谦虚的；适度的，不过分的；端庄的；朴素的", forms:["modest"]},
+          {word:"blush",      ipa:"/blʌʃ/",                pos:"n. / v.", zh:"脸红；感到羞愧", forms:["blushed"]}
+        ]
+      },
+      {
+        id:"D4-P2", slug:"tem4-D4-P2", title:"待客之道", shape:"叶形",
+        poster:"assets/tem4/posters/D4_P2.png",
+        sentence:"During his stay, the roommates treated Leo like family: they exerted themselves to keep the guest comfortable, considerate Xiao Ye eased his shyness with warm small talk and gave him privacy whenever he wanted to video-call his grandmother, and in return the happy visitor diverted everyone with funny card games and tales of village life.",
+        sentenceCn:"做客的日子里，室友们把利奥当家人一样款待：他们竭尽全力让客人住得舒服，体贴的小叶学姐用温暖的闲聊化解他的拘谨，每当他想和奶奶视频通话时，还会贴心地给他留出独处的空间；作为回报，开心的客人用有趣的卡牌游戏和山村故事给所有人解闷。",
+        scene:"温暖的粉彩宿舍客厅里，小叶学姐为窝在沙发上的利奥倒茶，桌上摆着桌游与饼干，串灯温馨。",
+        words:[
+          {word:"treat",       ipa:"/triːt/",               pos:"v. / n.", zh:"对待；处理；治疗；谈判，磋商；款待，招待 n. 难得的乐事；款待", forms:["treated"]},
+          {word:"considerate", ipa:"/kənˈsɪdərɪt/",         pos:"adj.",    zh:"关切的，体贴的；替人设想的，考虑周到的", forms:["considerate"]},
+          {word:"ease",        ipa:"/iːz/",                 pos:"n. / v.", zh:"舒适，悠闲，自在；容易，不费力 v. 减轻，缓和，使舒适；放松", forms:["eased"]},
+          {word:"exert",       ipa:"/ɪɡˈzɜːt/",             pos:"vt.",     zh:"运用，行使，发挥（影响等）；用力，尽力", forms:["exerted"]},
+          {word:"privacy",     ipa:"/ˈprɪvəsi; ˈpraɪvəsi/", pos:"n.",      zh:"独处，隐私；秘密，私下", forms:["privacy"]},
+          {word:"divert",      ipa:"/daɪˈvɜːt/",            pos:"v.",      zh:"（使）转向；转移…的注意力；使得到消遣", forms:["diverted"]}
+        ]
+      },
+      {
+        id:"D4-P3", slug:"tem4-D4-P3", title:"晚宴餐桌", shape:"椭圆",
+        poster:"assets/tem4/posters/D4_P3.png",
+        sentence:"On the last evening Xiao Ye cooked a grand farewell dinner: compliments on her generous dishes came from every side, Leo interjected between courses with funny stories about village cooking and joked that his own table manners were rather crude, and when he spilt a little tea while asking everyone not to stare at his flying chopsticks, the whole table burst into laughter.",
+        sentenceCn:"离校前的最后一晚，小叶学姐做了一大桌丰盛的送别晚餐：大家纷纷称赞她的大方手艺，利奥在席间插科打诨，讲着村里做饭的趣事，还打趣说自己村里的餐桌规矩实在粗野；讲到兴头上他洒了几滴茶水，又忙着让大家别盯着他上下翻飞的筷子看，逗得全桌哈哈大笑。",
+        scene:"暖灯下的圆餐桌摆满热气腾腾的菜肴，小叶学姐端菜上桌，利奥笑得前仰后合，打翻的茶杯旁室友掩嘴而笑。",
+        words:[
+          {word:"compliment", ipa:"/ˈkɒmplɪmənt/",         pos:"n.",      zh:"恭维，称赞", forms:["compliments"]},
+          {word:"generous",   ipa:"/ˈdʒenərəs/",           pos:"adj.",    zh:"宽宏大量的，慷慨的；丰富的，丰盛的", forms:["generous"]},
+          {word:"interject",  ipa:"/ˌɪntəˈdʒekt/",         pos:"vt.",     zh:"突然插入，插话，打断（别人的话）", forms:["interjected"]},
+          {word:"crude",      ipa:"/kruːd/",               pos:"adj. / n.", zh:"天然的，未加工的；粗野的，没有教养的；赤裸裸的 n. 原油", forms:["crude"]},
+          {word:"spill",      ipa:"/spɪl/",                pos:"v.",      zh:"（使）溢出，（使）溅出", forms:["spilt"]},
+          {word:"stare",      ipa:"/steə/",                pos:"v. / n.", zh:"盯，凝视，目不转睛地看 n. 盯，凝视", forms:["stare"]}
+        ]
+      },
+      {
+        id:"D4-P4", slug:"tem4-D4-P4", title:"赠礼致谢", shape:"超圆角",
+        poster:"assets/tem4/posters/D4_P4.png",
+        sentence:"That night Leo bestowed a gift on each roommate: dried mushrooms from his grandmother's garden, and for Xiao Ye a hand-carved wooden hairpin, a pledge of friendship he hoped would last forever; she stammered her thanks and said she felt much obliged, praised the fine workmanship while the roommates admired every little detail, and promised to wear it when he came again.",
+        sentenceCn:"那天晚上，利奥给每位室友都送上一份来自山村的礼物：奶奶菜园里晒干的蘑菇，给小叶学姐的则是一支手工雕刻的木发簪——那是他希望永久保存的友谊信物；她结结巴巴地道谢，直说自己感激不尽，一边夸赞做工精巧，室友们也对每个小细节赞叹不已，她还答应等他再来时一定戴上它。",
+        scene:"夜晚的宿舍里暖灯融融，利奥双手递上干蘑菇与木发簪礼盒，小叶学姐红着脸双手接过，室友在身后拍手。",
+        words:[
+          {word:"bestow",  ipa:"/bɪˈstəʊ/",                pos:"vt.",     zh:"把…赠与，把…给予", forms:["bestowed"]},
+          {word:"pledge",  ipa:"/pledʒ/",                  pos:"n. / vt.", zh:"誓言，誓约；保证物，信物 vt. 保证；抵押", forms:["pledge"]},
+          {word:"stammer", ipa:"/ˈstæmə/",                 pos:"v. / n.", zh:"结巴，口吃 n. 口吃", forms:["stammered"]},
+          {word:"oblige",  ipa:"/əˈblaɪdʒ/",               pos:"v.",      zh:"迫使；对…感激；施恩惠于", forms:["obliged"]},
+          {word:"praise",  ipa:"/preɪz/",                  pos:"n. / vt.", zh:"表扬，赞美", forms:["praised"]},
+          {word:"admire",  ipa:"/ədˈmaɪə/",                pos:"v.",      zh:"赞赏，钦佩，羡慕", forms:["admired"]}
+        ]
+      },
+      {
+        id:"D4-P5", slug:"tem4-D4-P5", title:"依依送别", shape:"波浪",
+        poster:"assets/tem4/posters/D4_P5.png",
+        sentence:"When Sunday morning came and it was time to say goodbye, Leo lingered at the dormitory gate, unwilling to leave; Xiao Ye blamed herself for the jokes that had gone too far at dinner, full of shame and afraid she might have offended him; she sighed, repented of her sharp tongue and promised to visit his mountain village next summer, while Leo only laughed and said a friend's teasing was the warmest gift of all.",
+        sentenceCn:"星期天清早到了说再见的时候，利奥在宿舍门口久久徘徊、不肯离去；小叶学姐却一直在心里责怪自己晚宴上的玩笑开过了头，满心羞愧，生怕冒犯了这位远道而来的朋友；她轻轻叹了口气，为自己的嘴快悔悟不已，还承诺明年夏天一定去他的山村看看——而利奥只是大笑，说朋友的打趣才是最温暖的礼物。",
+        scene:"冬日清晨的宿舍门口洒满金色阳光，利奥背着旅行袋挥手告别，小叶学姐含泪微笑挥手，手中小信封攥得紧紧的。",
+        words:[
+          {word:"linger",  ipa:"/ˈlɪŋɡə/",                 pos:"v.",      zh:"逗留，徘徊", forms:["lingered"]},
+          {word:"blame",   ipa:"/bleɪm/",                  pos:"vt. / n.", zh:"责备，找…的差错；把…归咎，推诿 n. 责备，责怪；责任", forms:["blamed"]},
+          {word:"shame",   ipa:"/ʃeɪm/",                   pos:"n. / vt.", zh:"惭愧，耻辱；可耻之事物（人）；遗憾，惋惜之事 vt. 使蒙羞；使感羞愧", forms:["shame"]},
+          {word:"sigh",    ipa:"/saɪ/",                    pos:"v. / n.", zh:"叹息，叹气 n. 叹息，叹气声", forms:["sighed"]},
+          {word:"offend",  ipa:"/əˈfend/",                 pos:"v.",      zh:"冒犯，触怒，给人不愉快的感觉；犯过错，犯罪", forms:["offended"]},
+          {word:"repent",  ipa:"/rɪˈpent/",                pos:"v.",      zh:"悔悟，悔改，悔恨", forms:["repented"]}
+        ]
+      }
+    ]},
   /* ===== E 科学与探索 ===== */
   {id:"E1", cat:"E", zh:"太空探索",   name:"Space Exploration", status:"soon", words:80,  desc:"火箭、星球、宇航员"},
   {id:"E2", cat:"E", zh:"自然探索",   name:"Nature Discovery",  status:"soon", words:90,  desc:"森林、动物、植物"},
