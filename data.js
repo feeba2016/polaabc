@@ -8895,5 +8895,67 @@ const EPISODES = [
         "ex": "“inviting readers to forgo the complete text and wait”"
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-07",
+    "title": "The Crystal That Would Not Choose",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-07-the-crystal-that-would-not-choose",
+    "url": "lessons/c1/2026-10-07-the-crystal-that-would-not-choose.html",
+    "vocab": [
+      {
+        "word": "bargain",
+        "zh": "交易、划算的买卖；（文中引申）一笔不得不接受的取舍、交换条件（an agreement between parties, or terms one did not dictate；drive a hard bargain 极力讨价还价；into the bargain 此外、附带地；bargain hunting 淘便宜货；动词 bargain with sb over sth 就某事与人讨价还价）",
+        "ex": "“Piezoelectric design has long been governed by a bargain.”"
+      },
+      {
+        "word": "clamps",
+        "zh": "用夹具夹紧；（引申）压制、限制住（to hold tightly in place, or hold back；clamp down on 严厉打击、取缔；名词 clamp 夹具、夹钳；文中 the substrate clamps the lattice 指衬底把薄膜晶格箍住，使其无法自由形变）",
+        "ex": "“…in thin films, where the substrate clamps the lattice, most deliver strains below one percent.”"
+      },
+      {
+        "word": "vacancies",
+        "zh": "空缺、空额；（晶体学）空位（an unoccupied position；job vacancy 职位空缺；solid physics 中 oxygen vacancy 指 missing oxygen ion 所形成的点缺陷，是调控性能最常用的手段之一；形容词 vacant）",
+        "ex": "“…oxygen vacancies migrating across several unit cells reach a thousand picometres per volt at ten hertz…”"
+      },
+      {
+        "word": "doped",
+        "zh": "掺杂（to introduce a small, deliberate amount of an impurity so as to change properties；be doped with 掺入……；名词 dopant 掺杂剂、doping 掺杂工艺；与日常义「给……下药」不同，材料科学中没有贬义）",
+        "ex": "“In silver niobate doped with eight mole percent potassium, they built what they call polaron-defect complexes.”"
+      },
+      {
+        "word": "localised",
+        "zh": "使局限于局部、使局域化（to restrict to a particular place；物理上指电子被束缚在某原子附近而非自由移动；美式拼写 localize；反义 delocalise 使离域；名词 localisation，注意与 location「位置」不同）",
+        "ex": "“…an electron localised on a niobium site, dragging a lattice distortion behind it…”"
+      },
+      {
+        "word": "hops",
+        "zh": "单脚跳、短距跳跃；（物理）粒子在相邻格点之间的跃迁（to move in short jumps；hopping conduction 跳跃式导电；hop on the bandwagon 跟风、赶时髦；文中指电子以跳跃方式跨过几个晶胞，其动力学远快于离子迁移）",
+        "ex": "“…it hops across several unit cells at once, reconfiguring the complex…”"
+      },
+      {
+        "word": "reconfiguring",
+        "zh": "重新配置、重构、改变结构与布局（to arrange the parts of something into a new configuration；reconfigure a system 重构系统；名词 reconfiguration；形容词 reconfigurable 可重构的；前缀 re- 表「重新」，词根 configure 配置）",
+        "ex": "“…reconfiguring the complex and carrying a defect polarization no single dipole could supply.”"
+      },
+      {
+        "word": "unprecedented",
+        "zh": "前所未有的、无先例的（never previously done, known, or experienced；un- + precedent 先例 + -ed；unprecedented levels / scale / degree 前所未有的水平／规模／程度；比 record-breaking 正式，但只描述「此前没有过」，不可泛化为「极好」的褒义词）",
+        "ex": "“…alongside six percent strain — figures unprecedented in a film.”"
+      },
+      {
+        "word": "corroborated",
+        "zh": "用独立证据证实、佐证（to confirm a statement, theory or finding with further evidence；corroborating evidence 佐证；名词 corroboration；学术写作里用它在 claim 与 proof 之间留出余地：一次实验 corroborate 一个理论，而不 prove 它）",
+        "ex": "“Those numbers are corroborated rather than merely announced.”"
+      },
+      {
+        "word": "generic",
+        "zh": "通用的、一类共有的；非某例特有的（characteristic of a whole class rather than particular to one case；generic term 统称、generic drug 仿制药；与 specific、peculiar 相对；名词 generality 一般性，注意与 generosity「慷慨」拼写相近）",
+        "ex": "“…a sign that the mechanism is generic rather than peculiar to one chemistry.”"
+      }
+    ]
   }
 ];
