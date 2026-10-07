@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Medicine Made for One Child</title>
+<style>
+:root{
+  --accent:#047857;
+  --accent2:#9a3412;
+  --bg:#f2faf6;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#a7f3d0;
+  --border:#cdeee0;
+  --soft:#eafaf3;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(4,120,87,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(4,120,87,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(4,120,87,.55);}70%{box-shadow:0 0 0 12px rgba(4,120,87,0);}100%{box-shadow:0 0 0 0 rgba(4,120,87,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#6ee7b7;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#6ee7b7;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(4,120,87,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#a7f3d0;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Technology</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Medicine Made for One Child</h1>
+      <p class="subtitle">为一个孩子定制的碱基编辑疗法，与一次审批规则的改写｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Number Nobody Wanted 一个没人想看到的数字</div>
+            <p>When KJ Muldoon was two days old, a blood test returned a number nobody wanted: his ammonia level was above 1,000, <span class="kw" data-def="在此引导定语从句，相当于「而、在……的情况下」；对比两个数值所在的尺度">where</span> a healthy infant's is measured in the tens. KJ had inherited two damaged copies of CPS1, a gene that helps the liver clear the ammonia produced when protein is broken down. Without it, the toxin <span class="kw" data-def="积累；积聚（动词；名词 accumulation）">accumulates</span> in the blood and injures the brain. Severe CPS1 deficiency is a <span class="kw" data-def="新陈代谢的（metabolic disorder 代谢性疾病，名词 metabolism 新陈代谢）">metabolic</span> disorder, and it is often <span class="kw" data-def="致命的（a lethal dose 致死剂量，动词形 kill；名词 lethality 致死性）">lethal</span> — about half of the infants born with it die early. Dialysis and a strict diet held the danger back; a transplant might one day cure him, but <span class="kw" data-def="只有当……（= only when，强调条件的唯一性；句首时主句要部分倒装）">only once</span> he was big enough for one.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · A Pencil, Not Scissors 铅笔，不是剪刀</div>
+            <p>The team in Philadelphia chose another route. Conventional CRISPR is often called molecular scissors, since it cuts both strands of the helix. Base editing works more like a pencil: it <span class="kw" data-def="转变；转化（convert A into B 把 A 变成 B，名词 conversion）">converts</span> one DNA letter into another without making a double-strand break, lowering the risk of unwanted insertions and deletions. <span class="kw" data-def="此处为倒装虚拟条件句，= If the team had cut…，表示与过去事实相反">Had</span> the team cut both strands instead, such errors would have been far more likely. A guide RNA was designed to find KJ's exact mutation; messenger RNA instructed his liver cells to build it. Both were wrapped in lipid nanoparticles — fatty spheres that gather in the liver once <span class="kw" data-def="输注；注入（动词；名词 infusion 输液、输注）">infused</span>. The aim was modest: repair enough cells to widen his diet and protect his brain.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Six Months Instead of Eighteen 六个月，而不是十八个月</div>
+            <p>Speed was the hard part. An editor had to be designed, tested in cells and animals carrying KJ's mutations, checked for sites it might alter by accident, <span class="kw" data-def="生产；制造（动词；名词 manufacture / manufacturing，manufacturer 生产商）">manufactured</span> to clinical standard, and cleared by regulators. One manufacturing partner estimated eighteen months; the work took about six. On 25 February 2025, at roughly seven months of age, KJ received the first of three infusions. No serious <span class="kw" data-def="不良的；有害的（adverse events 不良事件；adverse effects 不良反应）">adverse</span> events were reported. Within weeks he <span class="kw" data-def="耐受；承受（动词；名词 tolerance 耐受性；tolerable 可忍受的）">tolerated</span> more protein and needed less medication; he went home in June, and by the end of the year he was taking his first steps.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Rewriting the Rulebook 改写规则手册</div>
+            <p>The wider consequence is <span class="kw" data-def="监管的；管理的（regulatory approval 监管审批；regulator 监管机构；动词 regulate）">regulatory</span>: conventional drugs are tested on hundreds of patients, but a therapy built for one person cannot be. In February 2026, the FDA published draft guidance proposing a 'plausible mechanism framework': if a developer can identify the exact molecular fault, correct it, document the untreated course of the disease, and demonstrate improvement, one trial of the underlying platform may <span class="kw" data-def="足够；足以（动词；形容词 sufficient，名词 sufficiency）">suffice</span>. Customising it for the next patient would then follow a shorter path. The caveats remain substantial: cost, <span class="kw" data-def="公平的；公正合理的（equitable access 公平可及；名词 equity）">equitable</span> access, off-target edits, and how long a correction lasts. Whether medicine designed for one child can become medicine for many is now an engineering question, not a biological one.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="metabolic">🔊</button><div class="word">metabolic<span class="pos">adj.</span></div><div class="zh">新陈代谢的（metabolic disorder 代谢性疾病；名词 metabolism 新陈代谢）</div><div class="ex">"Severe CPS1 deficiency is a metabolic disorder, and it is often lethal."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="lethal">🔊</button><div class="word">lethal<span class="pos">adj.</span></div><div class="zh">致命的；致死的（a lethal dose 致死剂量；名词 lethality 致死率）</div><div class="ex">"It is often lethal — about half of the infants born with it die early."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="accumulate">🔊</button><div class="word">accumulate<span class="pos">v.</span></div><div class="zh">积累；积聚（名词 accumulation；形容词 accumulative）</div><div class="ex">"Without it, the toxin accumulates in the blood and injures the brain."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="convert">🔊</button><div class="word">convert<span class="pos">v.</span></div><div class="zh">转变；转化（convert A into B 把 A 变为 B；名词 conversion）</div><div class="ex">"It converts one DNA letter into another without making a double-strand break."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="infuse">🔊</button><div class="word">infuse<span class="pos">v.</span></div><div class="zh">输注；注入（医学语境指静脉输注；名词 infusion）</div><div class="ex">"Fatty spheres that gather in the liver once infused."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="manufacture">🔊</button><div class="word">manufacture<span class="pos">v. / n.</span></div><div class="zh">生产；制造（manufactured to clinical standard 按临床级标准生产；manufacturer 生产商）</div><div class="ex">"Tested, checked, manufactured to clinical standard, and cleared by regulators."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="adverse">🔊</button><div class="word">adverse<span class="pos">adj.</span></div><div class="zh">不良的；有害的（adverse events 不良事件；adverse effects 不良反应）</div><div class="ex">"No serious adverse events were reported."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="tolerate">🔊</button><div class="word">tolerate<span class="pos">v.</span></div><div class="zh">耐受；承受（名词 tolerance 耐受性；形容词 tolerable 可忍受的）</div><div class="ex">"Within weeks he tolerated more protein and needed less medication."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="regulatory">🔊</button><div class="word">regulatory<span class="pos">adj.</span></div><div class="zh">监管的；管理的（regulatory approval 监管审批；regulator 监管机构；动词 regulate）</div><div class="ex">"The wider consequence is regulatory."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="suffice">🔊</button><div class="word">suffice<span class="pos">v.</span></div><div class="zh">足够；足以（形容词 sufficient；名词 sufficiency；suffice it to say 只需说）</div><div class="ex">"One trial of the underlying platform may suffice."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="equitable">🔊</button><div class="word">equitable<span class="pos">adj.</span></div><div class="zh">公平的；公正合理的（equitable access 公平可及；名词 equity 公平）</div><div class="ex">"The caveats remain substantial: cost, equitable access, off-target edits."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. where 引导定语从句：地点、抽象地点与「对比」三种用法</h3>
+          <div class="zh">课文里这一句最容易被读错：<b>…above 1,000, where a healthy infant's is measured in the tens.</b> 这里 where 前面是数词 1,000，看似不是地点，但 where 在<b>抽象意义上</b>指「在（健康婴儿的血液）这个尺度上」，起到<b>对比</b>作用，约等于 whereas（而）。<br>
+          判断口诀：<b>where 前是名词</b> → 定语从句（This is the hospital <b>where</b> he was born.）；<b>where 前是动词或整句</b> → 地点状语从句（<b>Where</b> he was born, ammonia testing is routine.）；<b>前后两项在比大小、比数值</b> → 对比用法，可替换为 whereas。<br>
+          注意定语从句里的语序：<b>a healthy infant's is measured</b> 中所有格 <b>'s</b> 已代指 level，后面<b>不再重复名词</b>。</div>
+          <div class="eg">…his ammonia level was above 1,000, where a healthy infant's is measured in the tens. / This is the ward where the first infusion was given.</div>
+          <div class="practice">练习：用 “the new therapy costs about 2 million dollars / the standard drug costs 20,000” → The new therapy costs about two million dollars, <input placeholder="where the standard drug costs twenty thousand">.</div>
+        </div>
+        <div class="item">
+          <h3>2. Had + 主语 + 过去分词, 主语 + would have + 过去分词 — 倒装虚拟语气</h3>
+          <div class="zh">这是<b>与过去事实相反</b>的虚拟条件句，把 if 去掉、把 had 提到句首形成的<b>部分倒装</b>：<b>Had the team cut both strands instead</b> = <b>If the team had cut</b> both strands instead。<br>
+          三种「提前倒装」形式要成套记：<b>Had</b> I known…（过去）· <b>Were</b> it not for the diet…（现在）· <b>Should</b> you need help…（将来，语气客气）。<br>
+          用途：学术与论证性写作里，这种句式能在<b>不占主句位置</b>的前提下先摆出反事实假设，让主句的结论更有力。<br>
+          易错点：去掉倒装后<b>不能</b>再加 if（✘ Had if the team cut…）；主句谓语固定为 <b>would / could / might have + 过去分词</b>。</div>
+          <div class="eg">Had the team cut both strands instead, such errors would have been far more likely. / Had the ammonia not been removed in time, the damage would have been permanent.</div>
+          <div class="practice">练习：用 “the editor / miss its target” → <input placeholder="Had the editor missed its target">, the therapy would have failed.</div>
+        </div>
+        <div class="item">
+          <h3>3. without + V-ing, 主句 — 介词 + 动名词作方式状语</h3>
+          <div class="zh">without 是介词，后面只能接<b>名词或动名词</b>，不能接动词原形。课文用它交代「怎么做到的」：<b>converts one DNA letter into another without making a double-strand break</b>。<br>
+          三个高频同族结构：<b>by + V-ing</b>（通过……，表手段）· <b>instead of + V-ing</b>（而不是……，表取舍）· <b>without + V-ing</b>（没有……，表伴随之否定）。<br>
+          逗号之后的 <b>lowering the risk…</b> 是<b>现在分词作结果状语</b>，说明「顺带带来的结果」；它必须紧贴在<b>造成了这个结果的那个动作</b>之后。<br>
+          陷阱：介词后的<b>逻辑主语</b>默认是主句主语。若不一致要补出：…without <b>the patient's</b> having to fast.（加名词所有格。）</div>
+          <div class="eg">It converts one DNA letter into another without making a double-strand break, lowering the risk of unwanted insertions and deletions.</div>
+          <div class="practice">练习：用 “damage / surrounding cells” → The editor reached the liver <input placeholder="without damaging the surrounding cells">.</div>
+        </div>
+        <div class="item">
+          <h3>4. 被动语态的并列动作链 — 一个谓语统领一串过去分词</h3>
+          <div class="zh">课文第三段用一句写完了整个研发流程：<b>An editor had to be designed, tested…, checked…, manufactured…, and cleared…</b> <br>
+          结构是：<b>情态动词 + be + 过去分词₁, 过去分词₂, 过去分词₃, and 过去分词₄</b>。第一个 <b>be</b> 出现一次即可，后面全部<b>只留过去分词</b>，靠 <b>and</b> 收尾并列（写作时建议保留牛津逗号以外的最后一个 and，起到「到此为止」的信号作用）。<br>
+          好处：把五六个技术步骤压成一句，读起来像一条<b>流水线</b>，主语始终是被加工的那个东西。<br>
+          陷阱：并列成分必须<b>同形</b>。✘ to be designed, testing, and manufactured（testing 破坏了平行）。另外不要漏掉 <b>to</b>：had to be manufactured（不是 had be manufactured）。</div>
+          <div class="eg">An editor had to be designed, tested in cells and animals carrying KJ's mutations, checked for sites it might alter by accident, manufactured to clinical standard, and cleared by regulators.</div>
+          <div class="practice">练习：用 “every batch / test, check, release” → Every batch must be <input placeholder="tested, checked, and released"> before it reaches a patient.</div>
+        </div>
+        <div class="item">
+          <h3>5. Whether 引导的主语从句 + X, not Y — 把问题本身变成句子的主语</h3>
+          <div class="zh">课文最后一句：<b>Whether medicine designed for one child can become medicine for many is now an engineering question, not a biological one.</b> <br>
+          前半：<b>Whether + 完整陈述句</b>整体充当<b>主语</b>，谓语用<b>单数</b>（is）。中间那个 designed for one child 是过去分词短语作后置定语，等于 which is designed…。<br>
+          后半：<b>X, not Y</b> 是强调式取舍，比 X rather than Y 语气更硬，常放在句末作结论。<br>
+          Whether 从句还可作宾语（I doubt <b>whether</b> the cost will fall.）与同位语（the question <b>whether</b> it works）。注意：<b>主语位置只能用 whether，不能用 if</b>（✘ If it works is unclear. → ✔ Whether it works is unclear.）。</div>
+          <div class="eg">Whether medicine designed for one child can become medicine for many is now an engineering question, not a biological one.</div>
+          <div class="practice">练习：用 “the cost / fall enough / an economic question, not a technical one” → <input placeholder="Whether the cost will fall enough is an economic question">, not a technical one.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. where 引导定语从句 vs. 地点状语从句 vs. 对比用法</h3>
+          <div class="zh">同一个词，三种身份，靠<b>位置</b>区分：<br>
+          · <b>定语从句</b>：前面紧挨<b>名词</b>，修饰它。This is the hospital <b>where</b> the trial began.（修饰 hospital）<br>
+          · <b>地点状语从句</b>：位于<b>句首或句末</b>，修饰整个主句的动词。<b>Where</b> the trial began, standards were strict.（修饰 were）<br>
+          · <b>对比用法</b>：前后是<b>两个可比的数值或情况</b>，where ≈ whereas（而）。The level was 1,000, <b>where</b> a healthy infant's is 40.<br>
+          另外两条常被忽略的规则：<br>
+          ① 定语从句中若 where 所指的地点是<b>动作的对象</b>，要换成 which/that：the hospital <b>which</b> they built（built 缺宾语，不能用 where）。<br>
+          ② 抽象名词后也常用 where：a case <b>where</b> the drug failed、a stage <b>where</b> symptoms appear。</div>
+          <div class="eg">His ammonia level was above 1,000, where a healthy infant's is measured in the tens. / This is the ward where the first infusion was given.</div>
+        </div>
+        <div class="item">
+          <h3>2. 虚拟条件句的倒装 (Inversion in Unreal Conditionals)</h3>
+          <div class="zh">把 <b>if</b> 省掉、把助动词提到主语之前，就叫<b>部分倒装</b>。三种时态对应三种形式：<br>
+          · <b>与过去相反</b>：Had + 主语 + 过去分词 → 主句 would/could/might <b>have + 过去分词</b>。<br>
+          · <b>与现在相反</b>：Were + 主语（人人称通用）→ 主句 would/could/might <b>+ 动词原形</b>。Were the cost lower, more families could afford it.<br>
+          · <b>与将来相反</b>：Should + 主语 + 动词原形 → 主句 would/could/might <b>+ 动词原形</b>。Should side effects appear, the dose would be reduced.<br>
+          三点提醒：<br>
+          ① 倒装后<b>绝不能</b>再写 if；② <b>Were I…</b> 不能写成 Was I…；③ <b>Had it not been for X</b>（= 如果没有 X）是固定说法，写作里极好用：Had it not been for the nurse's quick test, the diagnosis would have come too late.</div>
+          <div class="eg">Had the team cut both strands instead, such errors would have been far more likely. / Had it not been for the strict diet, the danger would have returned.</div>
+        </div>
+        <div class="item">
+          <h3>3. 介词 + 动名词，与现在分词作结果状语</h3>
+          <div class="zh">两组结构看起来都是 -ing，性质完全不同：<br>
+          <b>A. 介词 + 动名词</b>（作状语，表方式/条件/取舍）：without <b>making</b>、by <b>testing</b>、instead of <b>cutting</b>、before <b>infusing</b>。介词后<b>只能</b>接动名词，不能接原形或不定式。<br>
+          <b>B. 现在分词短语</b>（作结果/伴随状语）：…, <b>lowering</b> the risk…、…, <b>allowing</b> him to eat more protein。它等于 and this lowered / and this allowed，位置固定在句末。<br>
+          判别法：看前面<b>有没有介词</b>。有介词 → A；有逗号且可还原成 and + 谓语 → B。<br>
+          陷阱：B 的隐含主语必须等于主句主语，否则出现<b>悬垂分词</b>。✘ Lowering the risk, the team chose base editing.（主语 team 不能发出 lowering，修改：…, which lowered the risk of…）</div>
+          <div class="eg">It converts one letter into another without making a double-strand break, lowering the risk of unwanted insertions and deletions.</div>
+        </div>
+        <div class="item">
+          <h3>4. 被动语态的并列与情态被动 (Passive Chains)</h3>
+          <div class="zh">本课出现两类被动：<br>
+          <b>A. 动作链</b>：had to <b>be designed, tested, checked, manufactured, and cleared</b>。结构是「be + 过去分词₁，过去分词₂，…，and 过去分词ₙ」，be 只出现一次；所有并列项必须同为过去分词。<br>
+          <b>B. 情态被动</b>：<b>must / may / can / should + be + 过去分词</b>。注意不定式的被动是 <b>to be done</b>，进行体被动是 <b>being done</b>：The editor avoided <b>being destroyed</b> by the cell.（avoid 后接动名词。)<br>
+          常见错误三则：<br>
+          ① ✘ had to manufactured → ✔ had to <b>be</b> manufactured（情态后必须有 be）；<br>
+          ② ✘ designed, testing, and manufactured → 并列项不同形；<br>
+          ③ 不要在不必要时用被动。主动更清楚时就别绕：Researchers tested it.（比 It was tested by researchers. 更简洁。）</div>
+          <div class="eg">An editor had to be designed, tested, checked, manufactured to clinical standard, and cleared by regulators. / Conventional drugs are tested on hundreds of patients.</div>
+        </div>
+        <div class="item">
+          <h3>5. Whether 名词性从句与 not X but Y 的平行</h3>
+          <div class="zh"><b>A. Whether 从句三位置</b>：<br>
+          · 主语（句首）：<b>Whether</b> the correction lasts is still unknown.（谓语用单数）<br>
+          · 宾语：Doctors asked <b>whether</b> the diet could be widened.<br>
+          · 同位语：the question <b>whether</b> it is affordable<br>
+          硬规则：<b>主语位置和介词后只能用 whether，不能用 if</b>；口语中宾语位置可换 if，但正式写作建议一律用 whether。<br>
+          <b>B. not X but Y</b>：强调式取舍，前后成分必须<b>同词性</b>：not a biological <b>question</b> but an engineering <b>question</b>；not <b>to cure</b> but <b>to stabilise</b>。<br>
+          辨析：rather than 是把后者「排除掉」，语气平；not X but Y 是「<b>先否定再纠正</b>」，语气强，适合放在结论句。</div>
+          <div class="eg">Whether medicine designed for one child can become medicine for many is now an engineering question, not a biological one. / The aim was not to repair every cell but to repair enough of them.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+        <h3>一、先把两个数字放在一起</h3>
+        <p>健康婴儿血液里的氨含量，通常<b>几十</b>（微摩尔每升量级）；出生两天的 KJ 测出来是 <b>1000 以上</b>。氨是蛋白质代谢的自然产物，对成人尚且有毒，对新生儿的大脑更是如此。</p>
+        <p>这个故事之所以重要，不是因为它「用了基因编辑」——到 2025 年，基因编辑本身已经不算新闻——而是因为它把一个此前被认为不可能的时间表压缩到了七个月，并顺带逼着监管规则改了一次口径。</p>
+
+        <h3>二、CPS1 缺乏症：尿素循环断在了第一步</h3>
+        <p>我们吃下的蛋白质会被拆解成氨基酸，氨基酸进一步分解时会产生<b>氨</b>。肝脏里有一套叫<b>尿素循环</b>的流水线，负责把有毒的氨转化成尿素，再由肾脏排出。这条流水线有六个步骤，每一步都需要一种酶。</p>
+        <p><b>CPS1（氨甲酰磷酸合成酶 1）</b>负责的是<b>第一步</b>，也是限速的一步。它一旦失灵，整条线就堵在起点：氨排不出去，在血液里越积越高，进入大脑后会引发脑水肿与不可逆的神经损伤。</p>
+        <table class="facts">
+          <tr><th>可用的办法</th><th>能做什么</th><th>代价与限制</th></tr>
+          <tr><td>严格限制蛋白质摄入</td><td>从源头减少氨的产生</td><td>婴儿正处在快速生长期，长期低蛋白会影响发育</td></tr>
+          <tr><td>降氨药物（氮清除剂）</td><td>提供另一条排氮通路</td><td>只能降低水平，不能解决酶的缺陷</td></tr>
+          <tr><td>透析</td><td>危急时直接把血里的氨滤掉</td><td>是抢救手段，不是长期方案</td></tr>
+          <tr><td>肝移植</td><td>换一个有正常 CPS1 的肝脏</td><td>要求患儿体重和身体状况达到一定门槛，且需终身抗排异</td></tr>
+        </table>
+        <p>据已发表的临床综述，重度 CPS1 缺乏症患儿中<b>约有一半在婴儿期死亡</b>。这就是为什么「等他长大一点再做移植」这句话，对一个出生两天的家庭来说几乎不是选项。</p>
+
+        <h3>三、从「剪刀」到「铅笔」：两代编辑器</h3>
+        <p>很多人熟悉的 CRISPR-Cas9 被比喻成<b>分子剪刀</b>：它按引导 RNA 的指示找到目标序列，然后把 DNA 双链<b>剪断</b>。细胞随后会启动修复，而修复过程并不完全可控，可能插入或删掉几个碱基（学界称 indels）。</p>
+        <p><b>碱基编辑</b>（base editing）换了个思路：不去剪断双链，而是用化学方法<b>把一个碱基直接改成另一个</b>——比如把 A·T 变成 G·C。这一步不需要双链断裂，也就绕开了最容易出错的那段修复过程。</p>
+        <table class="facts">
+          <tr><th></th><th>CRISPR-Cas9（第一代）</th><th>碱基编辑（第二代）</th></tr>
+          <tr><td>动作</td><td>切断 DNA 双链</td><td>直接化学转换单个碱基</td></tr>
+          <tr><td>主要风险</td><td>修复时产生意外的插入或缺失</td><td>可能误改目标附近的同类碱基</td></tr>
+          <tr><td>适合处理</td><td>需要删除或替换整段序列</td><td>由<b>单个碱基错误</b>引起的突变</td></tr>
+          <tr><td>形象说法</td><td>剪刀</td><td>铅笔（配橡皮）</td></tr>
+        </table>
+        <p>要注意的是，「第二代」不等于「全面更好」。碱基编辑只能处理四类转换中的一部分位点，遇到需要删除长片段的突变就无能为力。工具是<b>互补</b>的，不是替代关系。</p>
+
+        <h3>四、为什么脂质纳米颗粒会跑到肝脏去</h3>
+        <p>设计出编辑器只是第一步，更难的是<b>怎么把它送进正确的细胞</b>。这次用的是<b>脂质纳米颗粒</b>（lipid nanoparticle，缩写 LNP）——一层脂肪质的外壳，把编辑器蛋白的「制作说明书」（mRNA）和导航用的引导 RNA 包在里面。</p>
+        <p>静脉输注之后，这些颗粒在血液里会吸附上特定的血浆蛋白；肝细胞表面的受体认得这些蛋白，于是把颗粒吞进去。换句话说，<b>不是颗粒自己找路，而是肝脏本来就在过滤血液</b>。这是好事——目标基因 CPS1 恰好在肝脏表达；也是限制——想用同样的方法去治大脑或肌肉的病，就没这么顺。</p>
+
+        <h3>五、七个月是怎么挤出来的</h3>
+        <p>常规药物从立项到临床试验，往往需要数年。这次的流程大致如下：</p>
+        <table class="facts">
+          <tr><th>环节</th><th>通常耗时</th><th>本案实际情况</th></tr>
+          <tr><td>基因测序与确诊</td><td>数周</td><td>出生数日内完成</td></tr>
+          <tr><td>设计并筛选引导 RNA 与编辑器</td><td>数月</td><td>与建模同步推进</td></tr>
+          <tr><td>构建携带该突变的细胞与动物模型</td><td>数月</td><td>在已有平台上做改造</td></tr>
+          <tr><td>脱靶评估、毒理与分布研究</td><td>半年以上</td><td>压缩并行</td></tr>
+          <tr><td>临床级生产</td><td>合作方最初估计约 18 个月</td><td>实际约 6 个月完成整套流程</td></tr>
+          <tr><td>监管 cleared</td><td>数月至一年</td><td>研究团队称紧急情况下约一周获批</td></tr>
+        </table>
+        <p>能这么快，主要有三个前提：<b>平台已经存在</b>（递送颗粒、编辑器骨架、生产工艺都是现成的，改的只是「地址」）、<b>目标明确</b>（只有一个已知突变），以及<b>多人并行、边做边审</b>，而不是按部就班的串行走法。研究团队也公开表示，他们刻意回避患儿的个人信息，以保证判断不被情感裹挟。</p>
+
+        <h3>六、疗效该怎么说，不该该怎么说</h3>
+        <p>已发表的临床报告记录了这样一个过程：2025 年 2 月 25 日首次输注，随后在 3 月、4 月各接受一次更高剂量；<b>未报告严重不良事件</b>。首次输注后数周内，他能摄入更多蛋白质，降氨药物的用量下降；当年 6 月出院回家，年底学会了独立迈步。</p>
+        <p>但有三句话现在还说不得：<b>不能说「治愈」</b>——他仍需长期服药与随访监测；<b>不能说「效果持久」</b>——编辑后的细胞能维持多久仍在观察中；<b>不能说「已经可以推广」</b>——单个病例无法给出统计意义上的疗效结论。医学报道里这种「好消息」与「确定性」之间的落差，本身就是一个值得练习判断的地方。</p>
+
+        <h3>七、真正被改写的也许是规则，而不是基因</h3>
+        <p>常规药物的证据标准是<b>大样本随机对照试验</b>：几百上千名患者，随机分组，双盲对照。可如果全世界符合某种突变的患者只有个位数，这套标准在<b>数学上和伦理上都跑不通</b>。</p>
+        <p>2026 年 2 月，美国食品药品监督管理局（FDA）发布<b>指导草案</b>，提出所谓「合理机制路径」（plausible mechanism framework）。它没有放弃证据，而是把证据换了一种组合方式：</p>
+        <table class="facts">
+          <tr><th>要素</th><th>要求开发者证明什么</th></tr>
+          <tr><td>① 找出确切的分子异常</td><td>是哪个基因、哪个位点出了问题</td></tr>
+          <tr><td>② 产品针对该异常</td><td>疗法的机制与这个异常是对应的</td></tr>
+          <tr><td>③ 明确自然史</td><td>不治疗的话，这种病通常会怎么走</td></tr>
+          <tr><td>④ 确认靶点被真正编辑</td><td>用可测量的指标证明编辑确实发生了</td></tr>
+          <tr><td>⑤ 临床结局改善</td><td>患者的功能指标确实变好了</td></tr>
+        </table>
+        <p>如果这五条都成立，那么对<b>底层平台</b>（递送系统、编辑器、生产工艺）做一次临床试验可能就<b>足够</b>；下一次给另一个突变做定制时，走的是一条更短的路，而不是从头再来一遍。</p>
+        <p>需要谨慎的两点：其一，这是<b>草案</b>，还不是正式法规，后续是否落地、如何执行都未确定；其二，学界对此有不同声音——支持者认为这是让监管与现代生物学对齐，批评者担心单个成功案例会被过度外推。这属于正常的科学争论，读者不必急着站队，但要清楚争论的是什么。</p>
+
+        <h3>八、一定要分清的两件事：体细胞编辑与生殖系编辑</h3>
+        <p>KJ 接受的是<b>体细胞编辑</b>：改动发生在他身体的普通细胞（主要是肝细胞）里，<b>不会传给后代</b>，也不会影响卵子或精子。这与生殖系编辑（修改胚胎、卵子或精子，改动会遗传给下一代）是性质完全不同的两件事。后者目前在绝大多数国家<b>不允许用于临床</b>，也是国际科学界划出的明确红线。</p>
+        <p>把这两件事混为一谈，是基因编辑相关讨论里最常见的误解之一。看到「编辑人类基因」这类标题时，先问一句：<b>编辑的是谁、会不会遗传</b>，答案往往完全不同。</p>
+
+        <h3>九、中文语境里的一段回声</h3>
+        <p>「为一个人定制一种疗法」听起来很新，但「因人而异地治病」这件事在中国医学传统里并不陌生。中医讲<b>辨证论治</b>、<b>同病异治、异病同治</b>：同样是感冒，风寒与风热用药不同；不同的病，若证候相同，治法又可相通。《黄帝内经》里就有这一类强调随人而变的表述。</p>
+        <p>但把两者直接等同，是另一种需要避免的误解。它们的<b>依据</b>不同：一个建立在可观察的证候归纳上，一个建立在分子层面的因果机制上；<b>验证方式</b>也不同：一个依赖长期积累的临床经验与个案总结，一个要求可测量、可重复的对照证据。用中医去「证明」基因编辑，或者用基因编辑去「证明」中医，两边都不成立。</p>
+        <p>较稳妥的说法是：<b>个体化医疗的理念由来已久，而让它变得可以被验证、可以被复制，是近几十年的事。</b> 这也正是「合理机制路径」想解决的矛盾——医学已经精细到可以为一个人制药，证据规则还停留在需要几百人的时代。</p>
+        <p>还有一个可以对照的地方：中国古代文献校勘讲究<b>标明底本、出校记</b>，改动要写在明处；现代医学的个案报告同样要求<b>把不确定性写进论文</b>。两者相隔千年，方法不同，精神却有些相通——<b>让人知道结论是怎么来的</b>。</p>
+
+        <h3>十、四个还没解决的问题，和三个留给你思考的问题</h3>
+        <ul>
+          <li><b>成本。</b>已获批的通用型基因编辑疗法单疗程价格极高（例如镰状细胞病疗法在英国的定价以百万英镑计）。公开报道中提到过 KJ 疗法「约百万美元」级别的估算，但研究团队并未公布可核实的生产账单，这类数字应当谨慎对待，不宜当作定价依据。</li>
+          <li><b>肝脏之外的递送。</b>脂质纳米颗粒天然趋向肝脏，其他器官怎么办，目前仍是开放的工程难题。</li>
+          <li><b>脱靶与长期安全性。</b>编辑器会不会改到目标以外的位点、改了之后会不会有远期后果，都需要多年随访。</li>
+          <li><b>效果的持久性。</b>肝细胞会更新换代，被编辑的那部分细胞能维持多久，尚无定论。</li>
+        </ul>
+        <p>三个思考题：</p>
+        <ul>
+          <li>如果一个疗法只为一个人设计，审批该放松到什么程度才算合理？请同时为「放松」和「不放」各说一条理由。</li>
+          <li>媒体报道常用「治愈」「奇迹」这类词，而论文通常只写「耐受更多蛋白质」「未见严重不良事件」。这种落差是怎么产生的？作为读者该如何处理？</li>
+          <li>把本课第 5 个句型用到你的专业或生活里写一句话：<b>Whether ______ is now a question of ______, not ______.</b></li>
+        </ul>
+        <p class="source">资料来源：K. Musunuru 等关于 CPS1 缺乏症个体化碱基编辑疗法的临床报告，<i>The New England Journal of Medicine</i>（2025）；<i>Nature</i> 关于首例个体化 CRISPR 疗法的报道（2025）；<i>Harvard Gazette</i> 关于基因治疗的访谈（2026）；FDA 关于个体化基因编辑疗法指导草案的公开报道（2026）；尿素循环障碍与 CPS1 缺乏症的临床综述。中文部分的中医内容取自通行的基础表述，仅作理念对照，不构成医学建议。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3>🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>阅读</b>：读懂一篇约 435 词的科技报道，把握「诊断—方案—速度—规则」的四段推进结构，并区分「已确认的事实」与「仍在观察中的结论」。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>词汇</b>：掌握 11 个 CEFR B2 核心词（metabolic, lethal, accumulate, convert, infuse, manufacture, adverse, tolerate, regulatory, suffice, equitable），能在医学科普、科研新闻与公共政策话题中主动使用。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>句型</b>：熟练运用 5 个高级句式，重点突破 where 对比性定语从句、Had 倒装虚拟语气、without + V-ing 非谓语结构、被动语态的并列动作链，以及 Whether 主语从句配 not X but Y。正文另有 3 处高亮标出结构词（where / Had / only once），点击可看提示。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>语法</b>：系统复习 where 定语从句与状语从句的辨析、三种虚拟条件句倒装形式、介词+动名词与结果分词的区分、情态被动与并列平行，以及 whether 与 if 的位置限制。</div></div>
+        <div class="goal"><span class="ic">✅</span><div><b>测验</b>：完成 6 道选择题，检验细节理解、概念辨析与语法识别能力。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>拓展</b>：理解尿素循环与碱基编辑的基本原理，认识「为一个人制药」给审批带来的难题，并能分清体细胞编辑与生殖系编辑。</div></div>
+        <h3 style="margin-top:20px;">🗣️ 口语输出建议</h3>
+        <p>用本课句型，口头回答一个问题：<b>你会支持为单个患者快速审批一种定制疗法吗？为什么？</b>要求至少用上 1 个 Had 倒装虚拟句、1 个 without + V-ing 结构和 1 个 not X but Y。例如：</p>
+        <div class="item"><div class="eg">I would support it, but with conditions. Had this therapy been rushed without checking for off-target edits, the harm would have been irreversible. The regulators were right to ask for evidence obtained without delaying a child who was running out of time. What changed in 2026 is not the science but the paperwork — not a lower standard, a different one.</div></div>
+        <p style="font-size:13.5px;color:#6b7280;">示范句里用到的三个本课句型：<b>Had this therapy been rushed…</b>（倒装虚拟语气）· <b>without checking / without delaying</b>（介词 + 动名词）· <b>not a lower standard, a different one</b>（not X but Y 取舍）。</p>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English Learning · Technology<br>Generated on 7 October 2026</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["When KJ Muldoon was two days old, a blood test returned a number nobody wanted: his ammonia level was above 1,000, where a healthy infant's is measured in the tens. KJ had inherited two damaged copies of CPS1, a gene that helps the liver clear the ammonia produced when protein is broken down. Without it, the toxin accumulates in the blood and injures the brain. Severe CPS1 deficiency is a metabolic disorder, and it is often lethal — about half of the infants born with it die early. Dialysis and a strict diet held the danger back; a transplant might one day cure him, but only once he was big enough for one.",
+  "The team in Philadelphia chose another route. Conventional CRISPR is often called molecular scissors, since it cuts both strands of the helix. Base editing works more like a pencil: it converts one DNA letter into another without making a double-strand break, lowering the risk of unwanted insertions and deletions. Had the team cut both strands instead, such errors would have been far more likely. A guide RNA was designed to find KJ's exact mutation; messenger RNA instructed his liver cells to build it. Both were wrapped in lipid nanoparticles — fatty spheres that gather in the liver once infused. The aim was modest: repair enough cells to widen his diet and protect his brain.",
+  "Speed was the hard part. An editor had to be designed, tested in cells and animals carrying KJ's mutations, checked for sites it might alter by accident, manufactured to clinical standard, and cleared by regulators. One manufacturing partner estimated eighteen months; the work took about six. On 25 February 2025, at roughly seven months of age, KJ received the first of three infusions. No serious adverse events were reported. Within weeks he tolerated more protein and needed less medication; he went home in June, and by the end of the year he was taking his first steps.",
+  "The wider consequence is regulatory: conventional drugs are tested on hundreds of patients, but a therapy built for one person cannot be. In February 2026, the FDA published draft guidance proposing a 'plausible mechanism framework': if a developer can identify the exact molecular fault, correct it, document the untreated course of the disease, and demonstrate improvement, one trial of the underlying platform may suffice. Customising it for the next patient would then follow a shorter path. The caveats remain substantial: cost, equitable access, off-target edits, and how long a correction lasts. Whether medicine designed for one child can become medicine for many is now an engineering question, not a biological one."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What made KJ Muldoon's blood test result alarming? KJ 的血检结果为什么令人担忧？",
+   opts:["It showed no ammonia at all 结果显示完全测不到氨","It showed too much protein in his blood 结果显示血液中蛋白质过多","His ammonia level was above 1,000, far above the tens seen in healthy infants 他的血氨值超过 1000，远高于健康婴儿的几十","His liver was too small for his age 他的肝脏比同龄人小"],
+   ans:2,
+   fb:"正确！健康婴儿的血氨通常以<b>几十</b>计，而 KJ 超过了 1000。氨会在血液中积聚并损伤大脑，这正是 CPS1 缺乏症危险的原因。"},
+  {q:"Why could KJ not simply receive a liver transplant straight away? 为什么 KJ 不能马上做肝移植？",
+   opts:["Because he was too young and not yet stable enough to survive one 因为他太小、身体状况还不足以承受这样的大手术","Because liver transplants are illegal for infants 因为婴儿做肝移植是违法的","Because no donor liver can ever be found 因为永远找不到供体肝脏","Because his parents refused the operation 因为他的父母拒绝了手术"],
+   ans:0,
+   fb:"正确！肝移植是常规的希望所在，但要求患儿<b>足够大、足够稳定</b>才能承受手术。在等待期间，每一次血氨升高都可能造成不可逆的神经损伤——这才是真正的两难。"},
+  {q:"How does base editing differ from conventional CRISPR-Cas9? 碱基编辑与常规 CRISPR-Cas9 有何不同？",
+   opts:["It edits RNA instead of DNA 它编辑的是 RNA 而不是 DNA","It works only outside the body 它只能在体外起作用","It is cheaper but less accurate 它更便宜但不够精确","It converts one DNA letter into another without cutting both strands 它把单个碱基转换成另一个，而不切断双链"],
+   ans:3,
+   fb:"正确！常规 CRISPR 被比作<b>剪刀</b>（切断双链，修复时可能产生插入或缺失）；碱基编辑更像<b>铅笔</b>，不切断双链而直接化学转换单个碱基。课文用了 <b>without making a double-strand break</b> 这个非谓语结构。"},
+  {q:"How long did it take from starting the work to the first infusion? 从立项到首次输注用了多久？",
+   opts:["About eighteen months 约十八个月","About six months 约六个月","Only two weeks 只有两周","More than two years 两年以上"],
+   ans:1,
+   fb:"正确！合作生产企业最初估计需要 <b>18 个月</b>，实际整套流程约 <b>6 个月</b>完成。能做到这一点，关键在于递送颗粒、编辑器骨架和生产工艺都是现成的平台，改的只是「地址」。"},
+  {q:"In the sentence 'Had the team cut both strands instead, such errors would have been far more likely', what structure is used? 该句使用了什么结构？",
+   opts:["A real conditional about the future 关于将来的真实条件句","A passive voice chain 被动语态并列结构","An inverted unreal conditional about the past 与过去事实相反的倒装虚拟条件句","A relative clause 定语从句"],
+   ans:2,
+   fb:"正确！<b>Had + 主语 + 过去分词</b> 是去掉 if 后的部分倒装，等于 If the team had cut…，主句为 would have been。请成套记住三种形式：Had（过去）、Were（现在）、Should（将来）。"},
+  {q:"What does the FDA's proposed 'plausible mechanism framework' allow? FDA 提出的「合理机制路径」允许什么？",
+   opts:["One trial of the underlying platform, instead of a separate trial for every mutation 对底层平台做一次试验，而不必为每个突变各做一次","Skipping all clinical trials for gene therapies 基因疗法可以完全跳过临床试验","Treating patients without any safety testing 不做任何安全性测试即可治疗患者","Making any personalised drug free of charge 让所有个体化药物免费"],
+   ans:0,
+   fb:"正确！它降低的是<b>重复审批</b>的成本，不是证据标准：仍需证明确切的分子异常、产品针对该异常、疾病的自然史、靶点确实被编辑，以及临床结局改善。另外要注意，这只是<b>指导草案</b>，尚未成为正式法规。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#047857';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/F1/F2/F3/G1 已上线（24 主题 / 120 Part / 720 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1/F1/F2/F3/G1 已上线（25 主题 / 125 Part / 750 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1675,7 +1675,87 @@ const TEM4_THEMES = [
       }
     ]},
   /* ===== E 科学与探索 ===== */
-  {id:"E1", cat:"E", zh:"太空探索",   name:"Space Exploration", status:"soon", words:80,  desc:"火箭、星球、宇航员"},
+  {
+    id:"E1", cat:"E", zh:"太空探索", name:"Space Exploration", status:"live",
+    date:"2026-10-07", words:30, desc:"从仰望星空到叩问深空：星空初见、火箭发射、太空站生活、月球漫步、星际畅想",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"E1-P1", slug:"tem4-E1-P1", title:"星空初见", shape:"拱门",
+        poster:"assets/tem4/posters/E1_P1.png",
+        sentence:"On the astronomy night we gazed up in awe: thousands of stars glimmered in the velvet sky, a few bright ones gleamed like silver coins, and every time a star seemed to blink, the whole class marveled at the wonder above.",
+        sentenceCn:"天文之夜，我们满怀敬畏地抬头凝望：成千上万的星星在天鹅绒般的夜空中闪烁着微光，几颗亮星像银币般闪闪发亮，每当一颗星星仿佛眨了眨眼，全班同学都为头顶的奇观惊叹不已。",
+        scene:"星空下的天文台露台，小叶学姐俯身白色望远镜仰望星空，小熊和小兔指着划过的流星。",
+        words:[
+          {word:"gaze",       ipa:"/ɡeɪz/",        pos:"vi. / n.", zh:"凝视，注视，盯 n. 凝视，注视", forms:["gazed"]},
+          {word:"awe",        ipa:"/ɔː/",          pos:"n. / vt.", zh:"畏惧；敬畏；使敬畏，威吓", forms:["awe"]},
+          {word:"glimmer",    ipa:"/ˈɡlɪmə/",      pos:"vi. / n.", zh:"发出闪烁的微光；微光，微弱的闪光", forms:["glimmered"]},
+          {word:"gleam",      ipa:"/ɡliːm/",       pos:"n. / v.",  zh:"微光，闪光，一线光明；闪现；闪烁，隐约闪光", forms:["gleamed"]},
+          {word:"blink",      ipa:"/blɪŋk/",       pos:"v.",       zh:"（星星）闪烁；（眼睛）眨眼", forms:["blink"]},
+          {word:"marvel",     ipa:"/ˈmɑːvəl/",     pos:"n. / v.",  zh:"令人惊奇的事物；惊奇，惊异", forms:["marveled"]}
+        ]
+      },
+      {
+        id:"E1-P2", slug:"tem4-E1-P2", title:"火箭发射", shape:"叶形",
+        poster:"assets/tem4/posters/E1_P2.png",
+        sentence:"At dawn the rocket was ready to launch: it lifted off with a tremendous blast, giant flames roared from its tail, the scream of its engines shook the ground, its mighty thrust pushed it higher and higher, and it kept accelerating until it vanished into the clouds.",
+        sentenceCn:"黎明时分，火箭蓄势待发：随着一声巨响它轰然升空，巨大的火焰从尾部喷涌而出，引擎的呼啸震颤着大地，强劲的推进力把它越推越高，它不断加速，直到消失在云层之中。",
+        scene:"粉彩晨光的发射场，小叶学姐和伙伴们在观景台上仰望升空的火箭，橘色火焰与粉色烟云翻涌。",
+        words:[
+          {word:"launch",     ipa:"/lɔːntʃ/",        pos:"n. / v.", zh:"发射；（船）下水；发起，展开，开办", forms:["launch"]},
+          {word:"blast",      ipa:"/blɑːst; blæst/", pos:"n. / v.", zh:"一阵（风）；喇叭声，号角声；爆炸；摧毁", forms:["blast"]},
+          {word:"flame",      ipa:"/fleɪm/",         pos:"n. / v.", zh:"火焰，火舌；闪光；焚烧；发光；闪耀", forms:["flames"]},
+          {word:"scream",     ipa:"/skriːm/",        pos:"v. / n.", zh:"尖声叫喊；（指风、机器等）呼啸，发尖锐声 n. 尖叫声", forms:["scream"]},
+          {word:"thrust",     ipa:"/θrʌst/",         pos:"v. / n.", zh:"刺，戳；刺进；用力推，冲 n. 推，刺，戳；推进力", forms:["thrust"]},
+          {word:"accelerate", ipa:"/əkˈseləreɪt/",   pos:"v.",      zh:"（使）加速", forms:["accelerating"]}
+        ]
+      },
+      {
+        id:"E1-P3", slug:"tem4-E1-P3", title:"太空站生活", shape:"椭圆",
+        poster:"assets/tem4/posters/E1_P3.png",
+        sentence:"Life on the space station is magical: pens hover in mid-air and water drops glisten like pearls, the station slowly spins around the Earth, instruments emit soft beeps, the astronauts interact with the control centre through video calls, and every visual detail outside the window looks brand new.",
+        sentenceCn:"太空站上的生活真奇妙：钢笔悬停在半空，水珠像珍珠般闪闪发光，空间站缓缓绕着地球旋转，仪器发出轻柔的哔哔声，宇航员通过视频通话与地面控制中心互动，窗外每一个看得见的细节都那么新奇。",
+        scene:"太空站舱内，穿白色宇航服的小叶学姐漂浮在舷窗前，钢笔与水珠悬浮，窗外是蔚蓝地球。",
+        words:[
+          {word:"hover",      ipa:"/ˈhɒvə/",      pos:"vi.",      zh:"飞翔，盘旋，徘徊", forms:["hover"]},
+          {word:"glisten",    ipa:"/ˈɡlɪsən/",    pos:"n. / vi.", zh:"闪耀", forms:["glisten"]},
+          {word:"spin",       ipa:"/spɪn/",       pos:"v. / n.",  zh:"纺纱；（使）快速旋转；杜撰，撰述 n. 旋转", forms:["spins"]},
+          {word:"emit",       ipa:"/ɪˈmɪt/",      pos:"vt.",      zh:"发出，射出", forms:["emit"]},
+          {word:"interact",   ipa:"/ˌɪntərˈækt/", pos:"vi.",      zh:"相互作用，相互影响", forms:["interact"]},
+          {word:"visual",     ipa:"/ˈvɪʒuəl/",    pos:"adj.",     zh:"视觉的，视力的；看得见的", forms:["visual"]}
+        ]
+      },
+      {
+        id:"E1-P4", slug:"tem4-E1-P4", title:"月球漫步", shape:"超圆角",
+        poster:"assets/tem4/posters/E1_P4.png",
+        sentence:"Walking on the Moon feels alien yet exciting: the astronauts heave their equipment across the grey dust, watch tiny meteoroids collide with the surface and disperse clouds of silver dust, learn how a magnetic shield can deflect the dangerous solar wind, and train hard so that even the smallest mistake will never grow into a catastrophe.",
+        sentenceCn:"在月球上行走感觉陌生又刺激：宇航员们拖着设备走过灰色的尘土，看着小小的流星体撞上月面、扬起片片银色尘埃，学习磁场护盾如何让危险的太阳风偏转，并刻苦训练，让哪怕最微小的差错也永远不会酿成大祸。",
+        scene:"灰色月面上，穿宇航服的小叶学姐蹦跳着留下脚印，银色尘埃飞扬，着陆器与月球车伴其左右，地球悬在星空。",
+        words:[
+          {word:"alien",      ipa:"/ˈeɪliən/",     pos:"n. / adj.", zh:"外侨，外国人；外星人；外国的，异邦的；敌对的", forms:["alien"]},
+          {word:"heave",      ipa:"/hiːv/",        pos:"v.",        zh:"举起，拉，拖；投掷；（有节奏地）起伏", forms:["heave"]},
+          {word:"collide",    ipa:"/kəˈlaɪd/",     pos:"v.",        zh:"（车、船等）猛撞；冲突", forms:["collide"]},
+          {word:"disperse",   ipa:"/dɪsˈpɜːs/",    pos:"v.",        zh:"（使）分散；驱散，疏散", forms:["disperse"]},
+          {word:"deflect",    ipa:"/dɪˈflekt/",    pos:"v.",        zh:"（使）偏斜，转向", forms:["deflect"]},
+          {word:"catastrophe",ipa:"/kəˈtæstrəfi/", pos:"n.",        zh:"（突然的）大灾祸，大灾害", forms:["catastrophe"]}
+        ]
+      },
+      {
+        id:"E1-P5", slug:"tem4-E1-P5", title:"星际畅想", shape:"波浪",
+        poster:"assets/tem4/posters/E1_P5.png",
+        sentence:"Back at school, Xiao Ye undertook a project on deep space: she explained how a space probe can encircle a distant planet, how two orbits may intersect, and how the sun radiates light and heat across the infinite universe, and her classmates were amazed that human curiosity could reach so far.",
+        sentenceCn:"回到学校后，小叶学姐着手做了一份关于深空的课题：她讲解了空间探测器如何环绕遥远的行星运行、两条轨道如何相交、太阳如何把光和热辐射到无限的宇宙中，同学们惊叹人类的好奇心竟能抵达如此远方。",
+        scene:"明亮的教室里，小叶学姐指着星空海报讲解深空探测器模型，同学们听得目不转睛。",
+        words:[
+          {word:"undertake",  ipa:"/ˌʌndəˈteɪk/", pos:"vt.",     zh:"试图，企图；着手做，从事；承担", forms:["undertook"]},
+          {word:"probe",      ipa:"/prəʊb/",      pos:"n. / v.", zh:"探针；探测飞船；探查，彻底调查；探查，查究", forms:["probe"]},
+          {word:"encircle",   ipa:"/ɪnˈsɜːkl/",   pos:"vt.",     zh:"环绕，包围；绕行", forms:["encircle"]},
+          {word:"intersect",  ipa:"/ˌɪntəˈsekt/", pos:"v.",      zh:"横断，横切，贯穿；相交，交叉", forms:["intersect"]},
+          {word:"radiate",    ipa:"/ˈreɪdieɪt/",  pos:"v.",      zh:"发光，放热；辐射，散发", forms:["radiates"]},
+          {word:"infinite",   ipa:"/ˈɪnfɪnɪt/",   pos:"adj.",    zh:"无限的，无穷的，无际的；巨大的，无数的", forms:["infinite"]}
+        ]
+      }
+    ]},
   {id:"E2", cat:"E", zh:"自然探索",   name:"Nature Discovery",  status:"soon", words:90,  desc:"森林、动物、植物"},
   {id:"E3", cat:"E", zh:"实验室与科学", name:"Lab & Science",   status:"soon", words:70,  desc:"试管、显微镜、实验"},
   {id:"E4", cat:"E", zh:"科技与人工智能", name:"Tech & AI",     status:"soon", words:90,  desc:"电脑、手机、机器人"},

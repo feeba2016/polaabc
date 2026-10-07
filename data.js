@@ -7156,6 +7156,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-07",
+    "title": "The Medicine Made for One Child",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-07-the-medicine-made-for-one-child",
+    "url": "lessons/b2/2026-10-07-the-medicine-made-for-one-child.html",
+    "vocab": [
+      {
+        "word": "metabolic",
+        "zh": "新陈代谢的（metabolic disorder 代谢性疾病；名词 metabolism 新陈代谢）",
+        "ex": "\"Severe CPS1 deficiency is a metabolic disorder, and it is often lethal.\""
+      },
+      {
+        "word": "lethal",
+        "zh": "致命的；致死的（a lethal dose 致死剂量；名词 lethality 致死率）",
+        "ex": "\"It is often lethal — about half of the infants born with it die early.\""
+      },
+      {
+        "word": "accumulate",
+        "zh": "积累；积聚（名词 accumulation；形容词 accumulative）",
+        "ex": "\"Without it, the toxin accumulates in the blood and injures the brain.\""
+      },
+      {
+        "word": "convert",
+        "zh": "转变；转化（convert A into B 把 A 变为 B；名词 conversion）",
+        "ex": "\"It converts one DNA letter into another without making a double-strand break.\""
+      },
+      {
+        "word": "infuse",
+        "zh": "输注；注入（医学语境指静脉输注；名词 infusion）",
+        "ex": "\"Fatty spheres that gather in the liver once infused.\""
+      },
+      {
+        "word": "manufacture",
+        "zh": "生产；制造（manufactured to clinical standard 按临床级标准生产；manufacturer 生产商）",
+        "ex": "\"Tested, checked, manufactured to clinical standard, and cleared by regulators.\""
+      },
+      {
+        "word": "adverse",
+        "zh": "不良的；有害的（adverse events 不良事件；adverse effects 不良反应）",
+        "ex": "\"No serious adverse events were reported.\""
+      },
+      {
+        "word": "tolerate",
+        "zh": "耐受；承受（名词 tolerance 耐受性；形容词 tolerable 可忍受的）",
+        "ex": "\"Within weeks he tolerated more protein and needed less medication.\""
+      },
+      {
+        "word": "regulatory",
+        "zh": "监管的；管理的（regulatory approval 监管审批；regulator 监管机构；动词 regulate）",
+        "ex": "\"The wider consequence is regulatory.\""
+      },
+      {
+        "word": "suffice",
+        "zh": "足够；足以（形容词 sufficient；名词 sufficiency；suffice it to say 只需说）",
+        "ex": "\"One trial of the underlying platform may suffice.\""
+      },
+      {
+        "word": "equitable",
+        "zh": "公平的；公正合理的（equitable access 公平可及；名词 equity 公平）",
+        "ex": "\"The caveats remain substantial: cost, equitable access, off-target edits.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
