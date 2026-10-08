@@ -7223,6 +7223,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-08",
+    "title": "The Gap No Crowd Can Close",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-08-the-gap-no-crowd-can-close",
+    "url": "lessons/b2/2026-10-08-the-gap-no-crowd-can-close.html",
+    "vocab": [
+      {
+        "word": "prevalence",
+        "zh": "普遍程度；（流行病学中的）患病率、流行率（形容词 prevalent 普遍的、盛行的）",
+        "ex": "\"Among those aged thirteen to twenty-nine, the prevalence was higher than in any other band measured.\""
+      },
+      {
+        "word": "discrepancy",
+        "zh": "差距；不一致（a discrepancy between A and B；形容词 discrepant 有出入的）",
+        "ex": "\"Loneliness is the painful discrepancy between the connection a person wants and the connection they have.\""
+      },
+      {
+        "word": "maladaptive",
+        "zh": "适应不良的（前缀 mal- 表「坏、不良」；反义 adaptive 适应性的）",
+        "ex": "\"Correcting what psychologists call maladaptive social cognition.\""
+      },
+      {
+        "word": "cognition",
+        "zh": "认知（形容词 cognitive；social cognition 社会认知）",
+        "ex": "\"Maladaptive social cognition — the habit of reading a neutral face as a rejection.\""
+      },
+      {
+        "word": "intuitive",
+        "zh": "直觉的；凭直觉想到的（名词 intuition 直觉；副词 intuitively）",
+        "ex": "\"The team found that the intuitive remedy performed worst.\""
+      },
+      {
+        "word": "ambiguity",
+        "zh": "含糊；不确定（形容词 ambiguous 模棱两可的；动词 ambiguate 极少用）",
+        "ex": "\"Training people to reinterpret social ambiguity did best.\""
+      },
+      {
+        "word": "sustain",
+        "zh": "维持；支撑（sustain a conversation 维持对话；形容词 sustained 持续的）",
+        "ex": "\"Loneliness is sustained less by empty rooms than by a mind on guard.\""
+      },
+      {
+        "word": "attribute",
+        "zh": "把……归因于（attribute A to B；形容词 attributable 可归因于的；名词 attribution）",
+        "ex": "\"The 871,000 deaths a year attributed to loneliness and isolation.\""
+      },
+      {
+        "word": "prolong",
+        "zh": "延长（prolong a life 延长寿命；名词 prolongation；形容词 prolonged 长期的）",
+        "ex": "\"No large trial has yet shown that lowering a loneliness score prolongs a life.\""
+      },
+      {
+        "word": "scrutiny",
+        "zh": "仔细审查；详细核查（under scrutiny 在接受审查；动词 scrutinise / scrutinize）",
+        "ex": "\"What survives scrutiny is quieter than a slogan.\""
+      },
+      {
+        "word": "solitude",
+        "zh": "独处（指主动选择的、有价值的独处；与 loneliness「痛苦的孤独感」相对）",
+        "ex": "\"Chosen solitude, as the theologian Paul Tillich observed, has a glory of its own.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

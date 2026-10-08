@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Gap No Crowd Can Close</title>
+<style>
+:root{
+  --accent:#b45309;
+  --accent2:#78350f;
+  --bg:#fdf8f0;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#f3e2c2;
+  --soft:#fff8ea;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(180,83,9,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(180,83,9,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(180,83,9,.55);}70%{box-shadow:0 0 0 12px rgba(180,83,9,0);}100%{box-shadow:0 0 0 0 rgba(180,83,9,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(180,83,9,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Social Issues</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Gap No Crowd Can Close</h1>
+      <p class="subtitle">最孤独的不是老人，而是年轻人；而「多安排些人陪他」恰恰是试验里最没用的一招｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Face We Picture 我们心里那张脸</div>
+            <p>Ask a room of people to picture a lonely person and most will describe someone old: a widow at a window, a grandfather whose telephone has stopped ringing. That picture is not invented, but it is out of date. In June 2025 the World Health Organization's Commission on Social Connection published its first global report, and the age group that alarmed it most was not old age. Roughly one in six people worldwide is affected by loneliness; among those aged thirteen to twenty-nine, the <span class="kw" data-def="普遍程度；（流行病学中的）患病率、流行率（名词；形容词 prevalent 普遍的、盛行的）">prevalence</span> was higher than in any other band measured, with between seventeen and twenty-one per cent reporting it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Not a Headcount 不是数人头</div>
+            <p>What makes the finding hard to act on is that loneliness is not a headcount. The Commission defines it as the painful <span class="kw" data-def="差距；不一致（a discrepancy between A and B 指 A 与 B 之间的落差；形容词 discrepant）">discrepancy</span> between the connection a person wants and the connection they have; social isolation, <span class="kw" data-def="相比之下（插入语，用于把两件相对的事并列；同义 in contrast，但 by contrast 后面常接完整句子）">by contrast</span>, is the objective shortage of contacts. The two overlap without being the same thing. A student can feel cut off in a lecture hall of two hundred; a novelist can spend a month alone and feel nourished by it. <span class="kw" data-def="此处为倒装虚拟条件句，等于 If loneliness were…，表示与现在事实相反，主句用 would + 动词原形">Were</span> loneliness simply a matter of bodies per room, the remedy would be easy. It is not, and the trials discussed below suggest why.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Remedy That Scores Worst 得分最低的那一招</div>
+            <p>The most instructive evidence comes from a 2011 meta-analysis by Christopher Masi and colleagues, which sorted fifty loneliness interventions into four strategies: improving social skills, providing support, widening opportunities for contact, and correcting what psychologists call <span class="kw" data-def="适应不良的（前缀 mal- 表示「坏、不良」；反义 adaptive 适应性的）">maladaptive</span> social <span class="kw" data-def="认知（名词；形容词 cognitive；social cognition 社会认知，指人如何理解他人与社会情境）">cognition</span> — the habit of reading a neutral face as a rejection. Restricting the analysis to randomised controlled trials, the team found that the <span class="kw" data-def="直觉的；凭直觉想到的（名词 intuition 直觉；副词 intuitively）">intuitive</span> remedy performed worst: adding company barely moved the dial, while training people to reinterpret social <span class="kw" data-def="含糊；不确定（名词；形容词 ambiguous 模棱两可的、含糊不清的）">ambiguity</span> did best, and even that effect was modest. Loneliness, it seems, is <span class="kw" data-def="维持；支撑（动词；sustain a conversation 维持对话；形容词 sustained 持续的）">sustained</span> less by empty rooms than by a mind on guard.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What the Numbers Do Not Prove 数字证明不了的那部分</div>
+            <p><span class="kw" data-def="None of this 作主语统指上文全部内容，谓语用单数；license 在此为动词，意为「使……正当化、为……提供依据」">None of this</span> licenses the bleakest headlines. The 871,000 deaths a year <span class="kw" data-def="把……归因于（attribute A to B；名词 attribution；形容词 attributable 可归因于……的）">attributed</span> to loneliness and isolation come from observational studies, in which illness may cause withdrawal as easily as withdrawal causes illness; no large trial has yet shown that lowering a loneliness score <span class="kw" data-def="延长（动词；prolong a life 延长寿命；名词 prolongation）">prolongs</span> a life. Measurement is slippery too: different scales give different answers, and when the OECD compared twenty-two European countries between 2018 and 2022, the share reporting loneliness most or all of the time barely moved. What survives <span class="kw" data-def="仔细审查；详细核查（under scrutiny 在审查之中；动词 scrutinise / scrutinize）">scrutiny</span> is quieter than a slogan — that company is not the same as connection, and that chosen <span class="kw" data-def="独处（名词，指主动选择的、有价值的独处；与 loneliness「痛苦的孤独感」相对）">solitude</span>, as the theologian Paul Tillich observed, has a glory of its own.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCAB -->
+    <section id="vocab">
+      <h2 class="sec">📘 词汇表 Vocabulary (CEFR B2)</h2>
+      <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="prevalence">🔊</button><div class="word">prevalence<span class="pos">n.</span></div><div class="zh">普遍程度；（流行病学中的）患病率、流行率（形容词 prevalent 普遍的、盛行的）</div><div class="ex">"Among those aged thirteen to twenty-nine, the prevalence was higher than in any other band measured."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="discrepancy">🔊</button><div class="word">discrepancy<span class="pos">n.</span></div><div class="zh">差距；不一致（a discrepancy between A and B；形容词 discrepant 有出入的）</div><div class="ex">"Loneliness is the painful discrepancy between the connection a person wants and the connection they have."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="maladaptive">🔊</button><div class="word">maladaptive<span class="pos">adj.</span></div><div class="zh">适应不良的（前缀 mal- 表「坏、不良」；反义 adaptive 适应性的）</div><div class="ex">"Correcting what psychologists call maladaptive social cognition."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cognition">🔊</button><div class="word">cognition<span class="pos">n.</span></div><div class="zh">认知（形容词 cognitive；social cognition 社会认知）</div><div class="ex">"Maladaptive social cognition — the habit of reading a neutral face as a rejection."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="intuitive">🔊</button><div class="word">intuitive<span class="pos">adj.</span></div><div class="zh">直觉的；凭直觉想到的（名词 intuition 直觉；副词 intuitively）</div><div class="ex">"The team found that the intuitive remedy performed worst."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ambiguity">🔊</button><div class="word">ambiguity<span class="pos">n.</span></div><div class="zh">含糊；不确定（形容词 ambiguous 模棱两可的；动词 ambiguate 极少用）</div><div class="ex">"Training people to reinterpret social ambiguity did best."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sustain">🔊</button><div class="word">sustain<span class="pos">v.</span></div><div class="zh">维持；支撑（sustain a conversation 维持对话；形容词 sustained 持续的）</div><div class="ex">"Loneliness is sustained less by empty rooms than by a mind on guard."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="attribute">🔊</button><div class="word">attribute<span class="pos">v.</span></div><div class="zh">把……归因于（attribute A to B；形容词 attributable 可归因于的；名词 attribution）</div><div class="ex">"The 871,000 deaths a year attributed to loneliness and isolation."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="prolong">🔊</button><div class="word">prolong<span class="pos">v.</span></div><div class="zh">延长（prolong a life 延长寿命；名词 prolongation；形容词 prolonged 长期的）</div><div class="ex">"No large trial has yet shown that lowering a loneliness score prolongs a life."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scrutiny">🔊</button><div class="word">scrutiny<span class="pos">n.</span></div><div class="zh">仔细审查；详细核查（under scrutiny 在接受审查；动词 scrutinise / scrutinize）</div><div class="ex">"What survives scrutiny is quieter than a slogan."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="solitude">🔊</button><div class="word">solitude<span class="pos">n.</span></div><div class="zh">独处（指主动选择的、有价值的独处；与 loneliness「痛苦的孤独感」相对）</div><div class="ex">"Chosen solitude, as the theologian Paul Tillich observed, has a glory of its own."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Sentence Patterns (B2 Advanced)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. Were 倒装虚拟条件句：把「如果」藏进句子里</h3>
+          <div class="zh">课文原句：<b>Were loneliness simply a matter of bodies per room, the remedy would be easy.</b> 这是省略 if 后的部分倒装，等于 <b>If loneliness were simply a matter of bodies per room…</b>，表示<b>与现在事实相反</b>。<br>
+          三个要点：① 虚拟语气中「是」一律用 <b>were</b>，不用 was（即使主语是单数）；② 去掉 if 后，<b>were / had / should 提到句首</b>；③ 主句固定用 <b>would / could / might + 动词原形</b>。<br>
+          <span style="color:#b45309;">常见错句：</span>Were loneliness <s>is</s> simply a matter…（were 本身就是谓语，不能再加 is）</div>
+          <div class="eg">Were loneliness simply a matter of bodies per room, the remedy would be easy.<br>— If loneliness <b>were</b> simply a matter of bodies per room, the remedy <b>would be</b> easy.</div>
+          <div class="practice">练一练：用倒装改写下面的句子。<br>
+          If I had known how common loneliness is among students, I would have joined the reading group.<br>
+          <input type="text" placeholder="Had I known…" data-key="had i known">
+          <input type="text" placeholder="how common loneliness is among students…" data-key=" students">
+          <input type="text" placeholder="I would have joined the reading group." data-key="joined">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. less A than B：「与其说是 A，不如说是 B」</h3>
+          <div class="zh">课文原句：<b>Loneliness is sustained less by empty rooms than by a mind on guard.</b> 这个结构不是简单的「比……少」，而是<b>重新分配权重</b>：承认两者都有份，但指出后者才是主因。<br>
+          句式：<b>less + 形容词/副词 + than</b>（She was less angry than disappointed. 与其说她生气，不如说她失望。）／<b>less by A than by B</b>（因果版本，本课用法）。<br>
+          可以换成 <b>not so much A as B</b>，语气更书面：Loneliness is sustained <b>not so much</b> by empty rooms <b>as</b> by a mind on guard.</div>
+          <div class="eg">The failure was due <b>less to</b> a lack of funding <b>than to</b> a lack of coordination.<br>这次失败与其说是缺钱，不如说是缺乏协调。</div>
+          <div class="practice">练一练：模仿写一句关于考试的感悟。<br>
+          My grade suffered less from <input type="text" placeholder="lack of ability 能力不足" data-key="lack"> than from <input type="text" placeholder="poor time management 时间管理差" data-key="time">.</div>
+        </div>
+
+        <div class="item">
+          <h3>3. as + 副词 + as：同等比较里的「同样可能」</h3>
+          <div class="zh">课文原句：<b>…illness may cause withdrawal as easily as withdrawal causes illness.</b> 这里用两个 as 把<b>两种方向相反的因果</b>等量并列，是学术写作里质疑因果方向的常用句式。<br>
+          结构：<b>A does X as + 副词 + as + B does Y</b>。注意第二个 as 后面接<b>完整分句</b>（要有主语和谓语），不能只写一个名词。<br>
+          <span style="color:#b45309;">常见错句：</span>…as easily as <s>the reverse</s>。（reverse 是名词，缺谓语，应写成 as easily as the reverse happens 或 as the reverse does）</div>
+          <div class="eg">Poverty may predict poor health <b>as reliably as</b> poor health predicts poverty.<br>贫困预示健康不佳，其可靠程度不亚于健康不佳预示贫困。</div>
+          <div class="practice">练一练：写一个你自己专业里的「互为因果」句。<br>
+          <input type="text" placeholder="A may cause B as easily as B causes A." data-key=" as "></div>
+        </div>
+
+        <div class="item">
+          <h3>4. V-ing 分词短语作状语：先限定条件，再说结论</h3>
+          <div class="zh">课文原句：<b>Restricting the analysis to randomised controlled trials, the team found that the intuitive remedy performed worst.</b> 句首的 Restricting… 是<b>现在分词短语作状语</b>，交代主句结论成立的条件（＝ When they restricted…）。<br>
+          铁律：<b>分词短语的逻辑主语必须就是主句的主语</b>。这里「把分析限定在 RCT 上」的是 the team，主句主语也是 the team，所以合法。<br>
+          <span style="color:#b45309;">典型病句（悬垂分词）：</span><s>Restricting the sample, the results improved.</s> —— 分析并不「限制样本」，主句应改成 the researchers found that the results improved。</div>
+          <div class="eg"><b>Restricting the analysis to randomised controlled trials</b>, the team found that adding company barely moved the dial.</div>
+          <div class="practice">练一练：把下面的句子改成分词开头。<br>
+          When you compare two different scales, you get two different answers.<br>
+          <input type="text" placeholder="Comparing two different scales…" data-key="comparing">
+          <input type="text" placeholder="you get two different answers." data-key="answers"></div>
+        </div>
+
+        <div class="item">
+          <h3>5. What 引导主语从句：把「经得起检验的东西」整个提出来当主语</h3>
+          <div class="zh">课文收尾句：<b>What survives scrutiny is quieter than a slogan — that company is not the same as connection…</b><br>
+          <b>What survives scrutiny</b> 是主语从句，what 同时充当从句的主语（＝ the thing that）。破折号后的 that 从句是<b>表语的同位说明</b>，把抽象结论具体展开。<br>
+          对比：<b>What</b> 从句＝「……的东西」（内含先行词）；<b>That</b> 从句＝「……这件事」（不缺成分）。That loneliness harms health is now widely accepted. ✓ ／ What loneliness harms health… ✗</div>
+          <div class="eg"><b>What</b> surprises researchers most is not the size of the number but its stability.<br>最让研究者吃惊的不是数字有多大，而是它稳得不动。</div>
+          <div class="practice">练一练：用 What 从句写一句学习感悟。<br>
+          What <input type="text" placeholder="survives the exam 经得住考试检验的" data-key=" what"> is <input type="text" placeholder="not memorised formulas but habits 不是背下来的公式，而是习惯" data-key="habits">.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <div class="card">
+        <div class="item">
+          <h3>① 虚拟条件句的三种倒装：Were / Had / Should</h3>
+          <div class="zh">去掉 if 后要把<b>第一个助动词提到句首</b>，其余不变。三种时态对应三种形式：</div>
+          <div class="eg">
+            与<b>现在</b>相反：If loneliness were X → <b>Were</b> loneliness X, the remedy would be easy.<br>
+            与<b>过去</b>相反：If the team had cut X → <b>Had</b> the team cut X, errors would have been likelier.<br>
+            与<b>将来</b>相反：If it should fail → <b>Should</b> it fail, the programme would be revised.
+          </div>
+          <div class="zh">注意：<b>Had</b> 后面直接跟过去分词（had cut 是一个整体，只剩 Had 提前）；<b>Were</b> 后面跟主语再加表语或 being done。否定形式是 <b>Were it not for…</b>（要不是……）。</div>
+        </div>
+
+        <div class="item">
+          <h3>② 比较结构的平行与省略</h3>
+          <div class="zh">比较级前后两项必须<b>语法成分对称</b>：介词短语对介词短语，不定式对不定式。</div>
+          <div class="eg">
+            ✓ sustained <b>less by</b> empty rooms <b>than by</b> a mind on guard（介词短语 ∶ 介词短语）<br>
+            ✗ sustained less <b>by</b> empty rooms <b>than</b> a mind on guard（缺第二个 by）<br>
+            ✓ It is easier <b>to add</b> company <b>than to change</b> what people expect of it.
+          </div>
+          <div class="zh">省略规则：<b>than / as</b> 后面若谓语与主句完全重复，可用助动词代替或直接省略 — than <b>withdrawal causes illness does</b>；但如果尾部还有<b>自己的状语</b>，往往要保留完整。</div>
+        </div>
+
+        <div class="item">
+          <h3>③ -ing 分词作状语与「悬垂分词」陷阱</h3>
+          <div class="zh">分词短语的逻辑主语＝主句主语。主句若是<b>被动语态</b>，更容易出错。</div>
+          <div class="eg">
+            ✓ Restricting the analysis to randomised trials, <b>the team</b> found…（team 做 restricting 的动作）<br>
+            ✗ Restricting the analysis to randomised trials, <b>the effect</b> almost disappeared.（effect 不会 restricting）
+          </div>
+          <div class="zh">修正两法：① 改主句主语（…the researchers found the effect almost disappeared）；② 把分词短语还原为从句（When the analysis was restricted to…）。</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 被动语态 + 现在完成时 + yet：证据不足怎么写</h3>
+          <div class="zh">课文中大量使用被动，因为<b>动作的承担者不重要，结论才重要</b>：</div>
+          <div class="eg">
+            一般现在时被动：deaths <b>are attributed to</b>（被动 + 介词 to，不用 by）<br>
+            一般现在时被动：loneliness <b>is sustained by</b>（被动 + 介词 by，表施动）<br>
+            现在完成时被动：<b>no large trial has yet shown</b> that…（yet 置于过去分词前，表「迄今尚未」）
+          </div>
+          <div class="zh">搭配要记牢：<b>attribute A to B</b>／<b>sustain A by B</b>／<b>compare A with B</b>／<b>restrict A to B</b>。中文常说「被归因于」「由……支撑」，但英语里介词固定，不能互换。</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ What 从句（内含先行词） vs. That 从句（不含）</h3>
+          <div class="zh">判断方法：看从句里<b>缺不缺成分</b>。</div>
+          <div class="eg">
+            <b>What</b> survives scrutiny is quieter than a slogan.（survives 缺主语 → 用 what＝the thing that）<br>
+            <b>That</b> loneliness harms health is widely accepted.（从句成分齐全 → 用 that，只起连接作用）<br>
+            The idea <b>that</b> company equals connection is mistaken.（同位语从句，说明 idea 的内容）
+          </div>
+          <div class="zh">同位语从句的先行词通常是抽象名词：<b>idea / fact / evidence / suggestion / finding</b>；定语从句的 that 则在从句里做成分（The scale <b>that</b> they used… 中 that 是 used 的宾语）。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+        <h3>一、先把三个常被混为一谈的词分开</h3>
+        <p>中文日常会说「我很孤独」，但在这件事的专业讨论里，至少有三个彼此不同、经常被相互替换的概念：</p>
+        <table class="facts">
+          <tr><th>概念</th><th>定义</th><th>一句话辨析</th></tr>
+          <tr><td>社会孤立<br>social isolation</td><td>客观上缺少足够的社会联系</td><td><b>可以数出来</b>：独居与否、一周见几个人、有没有可以借钱的人</td></tr>
+          <tr><td>孤独<br>loneliness</td><td>期望的联系与实际拥有的联系之间存在落差而产生的<b>主观痛苦</b></td><td><b>数不出来</b>：同一个宿舍里，有人很充实，有人痛不欲生</td></tr>
+          <tr><td>独处<br>solitude</td><td>主动选择的、不带痛苦的独在状态</td><td><b>不是问题</b>：不少创造性工作恰恰需要它</td></tr>
+        </table>
+        <p>课文第 2 段的核心就是这个三分法。<b>把这三个词分清，本课一半的内容就理解了</b>——因为后面所有「为什么好心没用」的讨论，都建立在「孤独不是缺人数」这一点上。</p>
+
+        <h3>二、为什么最孤独的可能是年轻人，而不是老人</h3>
+        <p>2025 年 6 月，世界卫生组织下设的<b>社会联系委员会</b>（Commission on Social Connection）发布了第一份全球报告，题为《从孤独走向社会联系》。几个关键数字：</p>
+        <table class="facts">
+          <tr><th>数字</th><th>含义</th></tr>
+          <tr><td>约 1/6</td><td>全球受孤独影响的人口比例</td></tr>
+          <tr><td>17%—21%</td><td>13—29 岁人群中自述感到孤独的比例，为各年龄段最高</td></tr>
+          <tr><td>约 24% vs 约 11%</td><td>低收入国家与高收入国家的自述孤独比例</td></tr>
+          <tr><td>约 87.1 万</td><td>每年与孤独和社会孤立相关的死亡估计数（约合每小时 100 人）</td></tr>
+        </table>
+        <p>这个结果之所以反直觉，是因为公共讨论里「孤独的老人」这个形象太牢固了。研究者给出的解释大致有三类：年轻人的社交网络正在<b>重建期</b>（升学、换城市、初入职场，旧关系断了新的还没长出来）；社交媒介把大量互动<b>搬到了线上</b>，而线上互动的替代效果并不对称；以及孤独在这一年龄段更<b>少被当成求助理由</b>，说出来容易被当作矫情。</p>
+        <p><b>但这里必须补一句学界自己的分歧。</b>「年轻人最孤独」主要来自<b>横断面调查</b>（同一时间点问不同年龄的人）。而 2024 年一项整合了九项<b>纵向</b>研究、覆盖十二万余人的分析发现，孤独随年龄呈 <b>U 形</b>：青年期较高，中年最低，老年期再度升高。两种结论并不必然矛盾——横断面看到的是「当下谁最痛」，纵向看到的是「同一个人的一生怎么变」。读这类新闻时，先问一句<b>数据是怎么来的</b>，比记住数字更重要。</p>
+
+        <h3>三、为什么「多安排些人陪他」是试验里最没用的一招</h3>
+        <p>2011 年，Masi 等人在《人格与社会心理学评论》上发表 meta 分析，把已有的五十项孤独干预研究归为四类：</p>
+        <table class="facts">
+          <tr><th>干预类型</th><th>做法</th><th>随机对照试验中的效应量</th></tr>
+          <tr><td>社交技能训练</td><td>教人怎么开口、怎么维持对话</td><td>0.02（几乎无效）</td></tr>
+          <tr><td>提供社会支持</td><td>陪伴、互助小组、定期探访</td><td>-0.16（微弱）</td></tr>
+          <tr><td>增加接触机会</td><td>组织活动、扩大社交场合</td><td>-0.06（微弱）</td></tr>
+          <tr><td>矫正不良社会认知</td><td>认知行为式训练，教人重新解读模糊的社交信号</td><td>-0.60（四类中最有效，但仍属中等偏小）</td></tr>
+        </table>
+        <p>要点有三层。第一，<b>非随机的研究普遍夸大了效果</b>——一旦只用随机对照试验，效应量整体缩小。第二，<b>最符合直觉的方案排在最后</b>：单纯增加接触几乎没动指针。第三，连最有效的方案也只是「中等」。</p>
+        <p>为什么会这样？主流解释是：长期孤独会让人进入一种<b>对社会性威胁高度警觉</b>的状态。一张没有表情的脸，在孤独者眼里更可能读作「他不想理我」；于是这个人提前收敛、少开口、少赴约，别人自然会慢慢退开，而「退开」又坐实了他原本的判断。这是一个<b>自我实现的循环</b>。在这个循环里，往房间里多塞人，等于往一个正在报警的烟雾探测器旁边继续点火——人是在的，警报也在响。</p>
+
+        <h3>四、87.1 万这个数字是怎么来的，又缺了哪一环</h3>
+        <p>看到「每年 87.1 万人死于孤独」，第一反应往往是震惊，第二反应应该是<b>追问这条因果链是怎么搭起来的</b>。</p>
+        <ul>
+          <li><b>它来自观察性研究。</b>研究者跟踪一批人若干年，记录谁孤独、谁去世，再统计相关性。这类设计<b>无法排除第三种因素</b>：低收入、慢性病、抑郁，既让人孤独，也让人短寿。</li>
+          <li><b>因果方向可能反过来。</b>课文里那句 illness may cause withdrawal as easily as withdrawal causes illness 说的就是这件事：生病的人会退出社交圈，于是「孤独」和「死亡」同时出现，但孤独未必是原因。</li>
+          <li><b>最关键的一环还没有做过。</b>迄今没有大型随机对照试验证明「把孤独评分降下去，人的寿命就会变长」。干预研究测的是<b>孤独感</b>，流行病学研究测的是<b>死亡</b>，中间那一格是空的。</li>
+        </ul>
+        <p>所以本课第 4 段用了 licenses 这个词：<b>这些证据不足以支撑</b>最耸动的标题。这不是说社会联系不重要——它在数百项研究中稳定出现，机制上也很可信——而是说「重要」和「已被证明为因果」是两个不同的等级。医学新闻里最常见的毛病，就是把前者包装成后者。</p>
+
+        <h3>五、「流行病」这个说法，学界自己也在争</h3>
+        <p>「孤独流行病」这个提法在公共传播里很有效，但它的证据基础至少有三处松动：</p>
+        <table class="facts">
+          <tr><th>争议点</th><th>质疑的一方说</th><th>坚持的一方说</th></tr>
+          <tr><td>测量工具不统一</td><td>UCLA 孤独量表、De Jong Gierveld 量表、单题提问，三种方法给出的患病率差别很大，跨国横向比较未必可靠</td><td>工具不同不等于结论无效，多个国家都观察到年轻人比例偏高，趋势是一致的</td></tr>
+          <tr><td>「在增加」缺乏证据</td><td>经济合作与发展组织比较欧洲 22 国 2018 与 2022 年数据，自述「大部分时间或一直」孤独的比例几乎没动</td><td>慢性孤独稳定，不代表<b>情境性</b>孤独没有上升；指标太粗，可能测不出变化</td></tr>
+          <tr><td>把正常情绪病理化</td><td>有社会学者批评这是在把人生常态医学化：孤独本可以促使人反思处境</td><td>把痛苦说成「思考机会」，可能让真正需要帮助的人得不到帮助</td></tr>
+        </table>
+        <p>读到这里不需要急着站队。更有收获的做法是看清<b>争论的焦点在哪里</b>：双方其实都同意「社会联系对人有好处」，分歧在于「严重程度」和「该怎么办」。</p>
+
+        <h3>六、各国做了什么：一张中立的清单</h3>
+        <p>把政策单列出来时要注意，<b>这不是一份排行榜</b>，不同国家的制度背景不同，直接比高低没有意义。下表只陈述公开可查的做法：</p>
+        <table class="facts">
+          <tr><th>做法</th><th>内容</th><th>公开的争议或局限</th></tr>
+          <tr><td>设立专门职位</td><td>英国 2018 年设立「孤独事务大臣」，2018 年发布孤独应对战略</td><td>提高了议题能见度，但多年后<b>可衡量的患病率变化有限</b>，且任职人员更替频繁</td></tr>
+          <tr><td>立法</td><td>日本通过应对孤独与孤立的推进法，为地方政府设定行动义务</td><td>有法律框架，但面对庞大的长期不外出人群，执行力量仍显不足</td></tr>
+          <tr><td>社会处方<br>social prescribing</td><td>英国国民保健体系把基层医疗与非临床社区服务连接起来，由「链接员」引导患者参与本地活动、社团；2017—2023 年间约九十万成年人获得相关转介编码</td><td>患者和医生的反馈普遍正面，但<b>系统综述认为证据质量偏低</b>：缺严格对照、脱落率高、各地项目差异大</td></tr>
+          <tr><td>国际层面</td><td>世卫组织 2025 年提出五项行动领域：政策、研究、干预、测量、公众参与</td><td>框架完整，但无强制执行力，落地取决于各国意愿与资源</td></tr>
+        </table>
+        <p>值得注意的是最后一项里的「测量」。世卫组织的路线图把<b>改进测量</b>与「政策」「干预」并列，本身就是承认：<b>在连「有多少人孤独」都还数不确切的时候，先急推出干预方案是不负责任的。</b></p>
+
+        <h3>七、中文语境里的一段回声</h3>
+        <p>有意思的是，古汉语里「孤」和「独」原本都指<b>客观处境</b>，反倒更接近今天说的 social isolation。《孟子·梁惠王下》有一段常被引用：</p>
+        <blockquote>老而无妻曰鳏，老而无夫曰寡，老而无子曰独，幼而无父曰孤。此四者，天下之穷民而无告者也。<em>——《孟子·梁惠王下》</em></blockquote>
+        <p>鳏、寡、孤、独，四种说的都是<b>身边少了谁</b>，是可以清点的事实，而且孟子紧接着说的是「无告」——没有可以诉说的人。这与现代定义里的 social isolation 几乎严丝合缝。至于主观上那份难受，古人另有词：寂寞、落寞。换句话说，<b>中文用两套词区分了「客观无伴」与「主观痛苦」，和当代心理学的三分法不谋而合。</b></p>
+        <p>还有一处可以对照，是《礼记·中庸》里的<b>慎独</b>：</p>
+        <blockquote>莫见乎隐，莫显乎微，故君子慎其独也。<em>——《礼记·中庸》</em></blockquote>
+        <p>它的主张是：一个人独处时的状态最能说明问题，因此要在无人看见处也同样谨慎。这与本课结尾引用的蒂利希论 solitude「独处的荣光」有呼应，但<b>不能划等号</b>：</p>
+        <ul>
+          <li><b>指向不同</b>：慎独指向<b>道德自律</b>（独处时是否依然守规矩）；蒂利希的 solitude 指向<b>存在体验</b>（独处本身就是人确立自我的必要条件）。</li>
+          <li><b>评价对象不同</b>：慎独评价的是行为是否端正；solitude 评价的是内在是否自由。一个人可以在书房里既不够「慎」，也谈不上「荣光」，那只是普通的独处。</li>
+        </ul>
+        <p>把它们放在一起看，最稳妥的收获是：<b>英语用 loneliness 与 solitude 两个词把「痛苦的独」和「有价值的独」分开，而这层区分在中文里早就存在</b>，只是藏在「寂寞」与「慎独」这两套相隔千年的词汇里。语言早就注意到了区别，麻烦的是我们常常忘了用。</p>
+        <p>还有一个更贴近生活的对照：城镇化带来的人口流动、「空巢家庭」与「独居青年」这类词进入日常讨论，本质上都是同一件事的不同侧面——<b>居住形态变了，关系的成本也变了</b>。在这些讨论里，本课最有用的一句话也许是：<b>把人聚到一起不等于让人连接起来。</b></p>
+
+        <h3>八、三个留给你思考的问题</h3>
+        <ul>
+          <li>如果让你给一所中学设计一个「减少孤独」的方案，你会先从四类干预中的哪一类入手？请说明你为什么<b>不</b>选「增加接触机会」这一项（或者，如果你要选它，请给出理由）。</li>
+          <li>媒体报道常用「每小时 100 人死于孤独」这类表述。假设你要向同学解释这个数字的局限，只能说三句话，你会说哪三句？</li>
+          <li>用本课第 5 个句型写一句话：<b>What survives ______ is not ______ but ______.</b>（提示：可以写友谊、学习方法、社团活动。）</li>
+        </ul>
+        <p class="source">资料来源：世界卫生组织社会联系委员会《从孤独走向社会联系：通往更健康社会之路》（2025 年 6 月）及其新闻稿；联合国新闻关于该报告的报道（2025 年 6 月）；Masi C. M. 等《 loneliness 干预的 meta 分析》，《Personality and Social Psychology Review》（2011）；Graham E. K. 等关于成年期孤独轨迹的九项纵向研究协调分析，《Psychological Science》（2024）；英国政府《应对孤独的循证综述》；经济合作与发展组织关于欧洲国家孤独与人际接触形态的报告（2025）；Cacioppo 与 Hawkley 关于孤独与社会认知机制的研究。中文部分：《孟子·梁惠王下》《礼记·中庸》，蒂利希（Paul Tillich）论孤独与独处的表述取自其通行译介；相关解读仅为学习对照，不构成心理健康建议。如本人长期受孤独困扰，寻求专业帮助比阅读本文更重要。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3>🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>阅读</b>：读懂一篇约 425 词的社会议题短论，把握「常识被推翻 → 概念辨析 → 证据不支持常识 → 数字本身的局限」四段推进，并区分「证据支持的结论」与「尚未被证明的推论」。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>词汇</b>：掌握 11 个 CEFR B2 核心词（prevalence, discrepancy, maladaptive, cognition, intuitive, ambiguity, sustain, attribute, prolong, scrutiny, solitude），能在心理健康、社会调查与公共政策话题中主动使用。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>句型</b>：熟练运用 5 个高级句式，重点突破 Were 倒装虚拟语气、less A than B 的权重重分配、as + 副词 + as 的双向因果并列、V-ing 分词作状语，以及 What 引导的主语从句。正文另有 3 处高亮标出结构词（Were / by contrast / None of this），点击可看提示。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>语法</b>：系统复习三种虚拟倒装（Were / Had / Should）、比较结构的平行与省略、悬垂分词的识别与修正、被动语态搭配与「现在完成时 + yet」，以及 What 从句与 That 从句的区分。</div></div>
+        <div class="goal"><span class="ic">✅</span><div><b>测验</b>：完成 6 道选择题，检验细节理解、概念辨析与语法识别能力。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>拓展</b>：分清社会孤立、孤独与独处三个概念；理解为什么「增加接触」在随机试验中得分最低；知道 87.1 万这个数字的因果链缺在哪一环；并了解中文里「鳏寡孤独」与「慎独」的思想资源。</div></div>
+        <h3 style="margin-top:20px;">🗣️ 口语输出建议</h3>
+        <p>用本课句型，口头回答一个问题：<b>你的学校或社区想减少孤独感，你会建议先做什么？</b>要求至少用上 1 个 Were 倒装虚拟句、1 个 less … than … 和 1 个 V-ing 分词作状语。例如：</p>
+        <div class="item"><div class="eg">I would start with how people read each other, not with how many people are in the room. Restricting the budget to events alone, we would almost certainly waste it: loneliness is sustained less by empty calendars than by the habit of reading a neutral face as a rejection. Were we to put that money into training instead — helping people reinterpret social ambiguity — we would probably get further, even though the result would be quieter than any campaign poster.</div></div>
+        <p style="font-size:13.5px;color:#6b7280;">示范句里用到的三个本课句型：<b>Restricting the budget to events alone, we would…</b>（V-ing 分词作状语）· <b>sustained less by empty calendars than by…</b>（less A than B）· <b>Were we to put that money into training…</b>（Were 倒装虚拟语气）。</p>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>POLA NEWS · B2 English Learning · Social Issues<br>Generated on 8 October 2026</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Ask a room of people to picture a lonely person and most will describe someone old: a widow at a window, a grandfather whose telephone has stopped ringing. That picture is not invented, but it is out of date. In June 2025 the World Health Organization's Commission on Social Connection published its first global report, and the age group that alarmed it most was not old age. Roughly one in six people worldwide is affected by loneliness; among those aged thirteen to twenty-nine, the prevalence was higher than in any other band measured, with between seventeen and twenty-one per cent reporting it.",
+  "What makes the finding hard to act on is that loneliness is not a headcount. The Commission defines it as the painful discrepancy between the connection a person wants and the connection they have; social isolation, by contrast, is the objective shortage of contacts. The two overlap without being the same thing. A student can feel cut off in a lecture hall of two hundred; a novelist can spend a month alone and feel nourished by it. Were loneliness simply a matter of bodies per room, the remedy would be easy. It is not, and the trials discussed below suggest why.",
+  "The most instructive evidence comes from a 2011 meta-analysis by Christopher Masi and colleagues, which sorted fifty loneliness interventions into four strategies: improving social skills, providing support, widening opportunities for contact, and correcting what psychologists call maladaptive social cognition — the habit of reading a neutral face as a rejection. Restricting the analysis to randomised controlled trials, the team found that the intuitive remedy performed worst: adding company barely moved the dial, while training people to reinterpret social ambiguity did best, and even that effect was modest. Loneliness, it seems, is sustained less by empty rooms than by a mind on guard.",
+  "None of this licenses the bleakest headlines. The 871,000 deaths a year attributed to loneliness and isolation come from observational studies, in which illness may cause withdrawal as easily as withdrawal causes illness; no large trial has yet shown that lowering a loneliness score prolongs a life. Measurement is slippery too: different scales give different answers, and when the OECD compared twenty-two European countries between 2018 and 2022, the share reporting loneliness most or all of the time barely moved. What survives scrutiny is quieter than a slogan — that company is not the same as connection, and that chosen solitude, as the theologian Paul Tillich observed, has a glory of its own."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"According to the WHO report published in June 2025, which age group had the highest prevalence of loneliness? 世卫组织 2025 年 6 月的报告显示，哪个年龄段的孤独比例最高？",
+   opts:["People aged seventy and over 70 岁及以上人群","Middle-aged adults between forty and fifty-five 40 至 55 岁的中年人","Those aged thirteen to twenty-nine 13 至 29 岁人群","Children under ten 十岁以下儿童"],
+   ans:2,
+   fb:"正确！报告指出 13—29 岁人群中 17%—21% 自述感到孤独，高于任何其他被测年龄段——这与「孤独是老年病」的印象正好相反。不过本文扩展部分也提醒：这一结论主要来自横断面调查，纵向研究呈现的是 U 形曲线。"},
+  {q:"How does the Commission distinguish loneliness from social isolation? 该委员会如何区分 loneliness 与 social isolation？",
+   opts:["Loneliness is a diagnosed illness; isolation is a daily habit 孤独是一种已确诊疾病，孤立是一种日常习惯","Loneliness is the painful gap between the connection a person wants and the connection they have; isolation is the objective shortage of contacts 孤独是「想要的联系」与「实际拥有的联系」之间的痛苦落差；社会孤立是联系人客观上的短缺","The two terms mean exactly the same thing 两个术语意思完全一样","Loneliness affects older people; isolation affects younger people 孤独影响老人，孤立影响年轻人"],
+   ans:1,
+   fb:"正确！这是本课最关键的一组概念：<b>孤独是主观的落差，无法清点；社会孤立是客观状态，可以清点。</b>一个人可以在两百人的教室里感到被隔绝，也可以独居一个月而充实自在。"},
+  {q:"In Masi and colleagues' 2011 meta-analysis, which strategy performed best in randomised controlled trials? 在 Masi 等人 2011 年的 meta 分析中，哪一类干预在随机对照试验里表现最好？",
+   opts:["Widening opportunities for social contact 增加社交接触机会","Providing social support 提供社会支持","Improving social skills 训练社交技能","Correcting maladaptive social cognition 矫正不良社会认知"],
+   ans:3,
+   fb:"正确！效应量为 <b>-0.60</b>，而增加接触机会只有 -0.06、提供社会支持 -0.16、社交技能训练 0.02。也就是说：<b>最符合直觉的「多聚一聚」在试验里几乎没动指针</b>，训练人重新解读模糊的社交信号才最有效——但即便如此，效果也只是中等偏小。"},
+  {q:"Why should the figure of 871,000 deaths a year be treated with caution? 为什么「每年 87.1 万人死亡」这个数字要谨慎对待？",
+   opts:["It counts only people over eighty 它只统计八十岁以上的人","No randomised trial has yet shown that lowering a loneliness score prolongs a life; the figure rests on observational data 迄今没有随机试验证明降低孤独评分能延长寿命；该数字建立在观察性数据上","The WHO withdrew the figure in 2026 世卫组织在 2026 年撤回了这一数字","It has been confirmed by large randomised trials 它已被大型随机试验证实"],
+   ans:1,
+   fb:"正确！这个数字来自<b>观察性研究</b>：既难以排除收入、慢性病等第三因素，也可能存在<b>反向因果</b>（是疾病让人退出社交，而非孤独让人患病）。最关键的一环——降低孤独是否能延长寿命——目前尚无大型随机试验证据。课文用的是 license 这个词：<b>这些证据不足以支撑最耸动的说法。</b>"},
+  {q:"In 'Were loneliness simply a matter of bodies per room, the remedy would be easy', what structure is used? 该句使用了什么结构？",
+   opts:["An inverted unreal conditional about the present 与现在事实相反的倒装虚拟条件句","A real conditional about the future 关于将来的真实条件句","A relative clause introduced by were 由 were 引导的定语从句","A passive voice chain 被动语态并列结构"],
+   ans:0,
+   fb:"正确！<b>Were + 主语 + 表语</b> 是去掉 if 后的部分倒装，等于 <b>If loneliness were…</b>，主句用 would + 动词原形。请成套记住：<b>Had</b>（过去）· <b>Were</b>（现在）· <b>Should</b>（将来）；虚拟语气中「是」一律用 were，不用 was。"},
+  {q:"What does the reference to Paul Tillich support in the closing paragraph? 结尾段引用蒂利希（Paul Tillich）支持什么观点？",
+   opts:["That being alone is always harmful 独处总是有害的","That being alone and feeling lonely are different things, and chosen solitude can be valuable 身边没人 ≠ 感到孤独，主动选择的独处可以是有价值的","That loneliness is a medical disease requiring medication 孤独是一种需要药物治疗的疾病","That only elderly people benefit from company 只有老年人能从陪伴中获益"],
+   ans:1,
+   fb:"正确！蒂利希注意到英语造了两个词：<b>loneliness</b> 表达独处的<b>痛苦</b>，<b>solitude</b> 表达独处的<b>荣光</b>。本课扩展部分用《孟子·梁惠王下》的「鳏寡孤独」与《礼记·中庸》的「慎独」做了对照——但要记得主动辨析：慎独指向道德自律，与 solitude 的存在体验并不完全相同。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
