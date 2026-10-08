@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1/F1/F2/F3/G1 已上线（25 主题 / 125 Part / 750 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E2/F1/F2/F3/G1 已上线（26 主题 / 130 Part / 780 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1756,7 +1756,87 @@ const TEM4_THEMES = [
         ]
       }
     ]},
-  {id:"E2", cat:"E", zh:"自然探索",   name:"Nature Discovery",  status:"soon", words:90,  desc:"森林、动物、植物"},
+  {
+    id:"E2", cat:"E", zh:"自然探索", name:"Nature Discovery", status:"live",
+    date:"2026-10-08", words:30, desc:"从清晨进山到守护归途：走进林间、松鼠与啄木鸟、溪谷水畔、植物王国的奥秘、守护与归途",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"E2-P1", slug:"tem4-E2-P1", title:"走进林间", shape:"拱门",
+        poster:"assets/tem4/posters/E2_P1.png",
+        sentence:"Early in the morning we followed the winding trail into the valley: birds chattered in the canopy, Xiao Ye picked up a sturdy stick as her walking staff and warned us not to slip on the mossy stones, she pointed at a lizard creeping across the path, and we all held our breath to watch a shy deer sneak deeper into the ferns.",
+        sentenceCn:"清晨，我们沿着蜿蜒的小径走进山谷：鸟儿在树冠间啁啾鸣叫，小叶学姐捡起一根结实的树枝当手杖，提醒大家别在长满青苔的石头上滑倒；她指着一只蜥蜴悄悄爬过小径，我们全都屏住呼吸，看一只羞怯的小鹿悄悄溜进蕨丛深处。",
+        scene:"清晨粉彩森林，小叶学姐背着小背包沿蜿蜒苔藓小径走进山谷，手持树枝手杖，小鹿在蕨丛边探头，鸟儿在树冠间鸣叫。",
+        words:[
+          {word:"trail",   ipa:"/treɪl/",  pos:"n. / v.", zh:"足迹，踪迹；小径，小路 v. 拖，拖拽；跟踪，尾随", forms:["trail"]},
+          {word:"chatter", ipa:"/ˈtʃætə/", pos:"v. / n.", zh:"喋喋不休；（鸟）啁啾，（松鼠等）吱吱叫；（溪流）潺潺作声", forms:["chattered"]},
+          {word:"stick",   ipa:"/stɪk/",   pos:"n. / v.", zh:"小树枝；棍，棒；棒状物 v. 插入，刺，戳；黏着，粘贴", forms:["stick"]},
+          {word:"slip",    ipa:"/slɪp/",   pos:"n. / v.", zh:"滑，溜，失足；小过失 v. 滑倒，溜走，潜行；滑落；犯错误", forms:["slip"]},
+          {word:"creep",   ipa:"/kriːp/",  pos:"v.",      zh:"爬行；蹑手蹑脚地走，悄悄地走", forms:["creeping"]},
+          {word:"sneak",   ipa:"/sniːk/",  pos:"v. / n.", zh:"潜行，溜走 n. 怯懦鬼祟的人", forms:["sneak"]}
+        ]
+      },
+      {
+        id:"E2-P2", slug:"tem4-E2-P2", title:"松鼠与啄木鸟", shape:"叶形",
+        poster:"assets/tem4/posters/E2_P2.png",
+        sentence:"On a fallen trunk a red squirrel perched and gnawed at a pine cone, a woodpecker flapped from hole to hole hunting for a worm, and the whole group clutched their cameras, waiting for the squirrel to leap back to its nest.",
+        sentenceCn:"一根倒木上，红松鼠栖息着啃咬松果，一只啄木鸟振翅从一个树洞飞到另一个树洞捉虫子，全组同学紧握相机，等待松鼠跳回树巢的那一刻。",
+        scene:"粉彩森林的倒木旁，红松鼠栖息着啃松果，啄木鸟振翅停在树洞边，小叶学姐和伙伴们蹲在草丛中举着相机观察。",
+        words:[
+          {word:"perch",  ipa:"/pɜːtʃ/", pos:"n. / v.", zh:"（鸟的）栖木；高的位置 v.（鸟）栖息；位于高处", forms:["perched"]},
+          {word:"flap",   ipa:"/flæp/",  pos:"v. / n.", zh:"拍打，摆动；（鸟）振（翅）n. 拍打；（袋）盖，（信封）盖口", forms:["flapped"]},
+          {word:"gnaw",   ipa:"/nɔː/",   pos:"v.",      zh:"咬，啮，啃；消耗，侵蚀；折磨，（使）烦恼", forms:["gnawed"]},
+          {word:"leap",   ipa:"/liːp/",  pos:"n. / v.", zh:"跳，跳跃；（数字等）激增", forms:["leap"]},
+          {word:"worm",   ipa:"/wɜːm/",  pos:"n. / v.", zh:"虫；可怜虫，寄生虫 v. 蠕动；爬行，慢慢进入", forms:["worm"]},
+          {word:"clutch", ipa:"/klʌtʃ/", pos:"v. / n.", zh:"紧抓，紧握 n. 把握，紧抓；[pl.] 爪子，手；控制", forms:["clutched"]}
+        ]
+      },
+      {
+        id:"E2-P3", slug:"tem4-E2-P3", title:"溪谷水畔", shape:"椭圆",
+        poster:"assets/tem4/posters/E2_P3.png",
+        sentence:"By the stream, dragonflies glided over the water, the little waterfall threw up cool spray, fish flashed their silver scales as they swam, a green frog squatted motionless on a lotus leaf, and we watched an otter slide down the muddy bank to chase its prey.",
+        sentenceCn:"溪边，蜻蜓掠过水面滑翔，小小的瀑布溅起清凉的水花，游动的鱼儿闪着银色的鳞光，一只绿蛙一动不动地蹲在荷叶上，我们看着一只水獭顺着泥岸滑下去追赶猎物。",
+        scene:"粉彩溪谷，蜻蜓掠水滑翔，小鱼闪着银鳞，绿蛙蹲在荷叶上，水獭滑下泥岸，小叶学姐蹲在水边惊喜观看。",
+        words:[
+          {word:"glide", ipa:"/ɡlaɪd/", pos:"n. / v.",  zh:"滑动，滑行；滑翔", forms:["glided"]},
+          {word:"spray", ipa:"/spreɪ/", pos:"n. / v.",  zh:"水雾，水花，浪花；喷雾器 v. 喷，喷洒", forms:["spray"]},
+          {word:"scale", ipa:"/skeɪl/", pos:"n. / v.",  zh:"尺度，刻度；规模；音阶；[pl.] 天平 v. 爬，攀 n. 鳞，鳞片", forms:["scales"]},
+          {word:"squat", ipa:"/skwɒt/", pos:"v.",       zh:"蹲踞，跪坐；（指动物）蜷伏", forms:["squatted"]},
+          {word:"prey",  ipa:"/preɪ/",  pos:"n. / vi.", zh:"猎物，牺牲品 vi. 捕食；（疾病等）折磨，困扰", forms:["prey"]},
+          {word:"slide", ipa:"/slaɪd/", pos:"v. / n.",  zh:"滑动，滑行；溜进，潜行 n. 滑（行）；滑道，滑梯；幻灯片", forms:["slide"]}
+        ]
+      },
+      {
+        id:"E2-P4", slug:"tem4-E2-P4", title:"植物王国的奥秘", shape:"超圆角",
+        poster:"assets/tem4/posters/E2_P4.png",
+        sentence:"In the botanical corner the old guide showed us round: bright berries grew in clusters along every stem, dwarf pines clung to the rocky cliff, an aboriginal orchid that grows nowhere else bloomed quietly in the shade, he taught us how to transplant seedlings without hurting their roots, and reminded us that wild flowers will soon wither if we pick them.",
+        sentenceCn:"在植物园一角，老向导带我们四处参观：鲜亮的浆果沿着每根茎成串簇生，矮小的松树紧贴岩壁生长，一株别处绝无仅有的原生兰花在荫处静静开放；他教我们如何在不伤根的前提下移植幼苗，并提醒我们野花一旦被采摘很快就会枯萎。",
+        scene:"森林植物园一角，浆果串沿茎簇生，矮松紧贴岩壁，原生兰花在荫处开放，小叶学姐戴小手套移植幼苗，熊教授在旁讲解。",
+        words:[
+          {word:"cluster",    ipa:"/ˈklʌstə/",       pos:"n. / v.", zh:"（果实、花等）串，簇；群，组 v. 使成群；群集，丛生", forms:["clusters"]},
+          {word:"stem",       ipa:"/stem/",          pos:"n. / v.", zh:"（植物的）茎，干 v. 遏止，阻止（液体流动等）；源自", forms:["stem"]},
+          {word:"dwarf",      ipa:"/dwɔːf/",         pos:"n. / v.", zh:"矮子，矮小的人（动物、植物）v. 使矮小，显得渺小", forms:["dwarf"]},
+          {word:"aboriginal", ipa:"/ˌæbəˈrɪdʒənəl/", pos:"adj.",    zh:"（指人、动植物）土生的，原产地的；土著的", forms:["aboriginal"]},
+          {word:"transplant", ipa:"/trænsˈplɑːnt/",  pos:"v.",      zh:"移植（植物）；移植（器官、皮肤、头发等）", forms:["transplant"]},
+          {word:"wither",     ipa:"/ˈwɪðə/",         pos:"v.",      zh:"（使）枯萎，（使）凋谢", forms:["wither"]}
+        ]
+      },
+      {
+        id:"E2-P5", slug:"tem4-E2-P5", title:"守护与归途", shape:"波浪",
+        poster:"assets/tem4/posters/E2_P5.png",
+        sentence:"When a sudden shower caught us on the way down, we took shelter under a tall pine and watched a brown bear fishing quietly on the far bank of the lake; we talked about how the reserve protects even the most savage animals, why domestic rabbits could hardly survive in the wild, and promised to capture every memory in our notebooks and to carry every bit of our waste back down the mountain.",
+        sentenceCn:"下山途中骤雨突至，我们躲进一棵高大的松树下避雨，看一头棕熊在湖对岸安静地捕鱼；我们聊起保护区如何守护连最凶猛的动物、家兔为什么几乎难以在野外生存，并约定把每一段记忆都记进笔记本，把自己产生的每一点垃圾都带下山。",
+        scene:"骤雨后的松树下，小叶学姐在笔记本上画自然笔记，湖对岸棕熊母子安静捕鱼，天边挂着一道柔和的彩虹。",
+        words:[
+          {word:"shelter",  ipa:"/ˈʃeltə/",     pos:"n. / v.",   zh:"庇护，保护，遮蔽；避难所 v. 躲避，避难", forms:["shelter"]},
+          {word:"bear",     ipa:"/beə/",        pos:"v. / n.",   zh:"承担，负荷；承受，忍受；结（果实）n. 熊；粗鲁的人", forms:["bear"]},
+          {word:"savage",   ipa:"/ˈsævɪdʒ/",    pos:"adj. / n.", zh:"野蛮的，未开化的；凶猛的，残酷的 n. 野人", forms:["savage"]},
+          {word:"domestic", ipa:"/dəʊˈmestɪk/", pos:"adj.",      zh:"家庭的，家用的；（动物）非野生的，驯养的；国内的", forms:["domestic"]},
+          {word:"capture",  ipa:"/ˈkæptʃə/",    pos:"vt. / n.",  zh:"捕获；夺得，占领；赢得；引起（注意）n. 捕获", forms:["capture"]},
+          {word:"waste",    ipa:"/weɪst/",      pos:"n. / v.",   zh:"损耗，浪费；废物，废料 v. 浪费，滥用；使荒芜", forms:["waste"]}
+        ]
+      }
+    ]},
   {id:"E3", cat:"E", zh:"实验室与科学", name:"Lab & Science",   status:"soon", words:70,  desc:"试管、显微镜、实验"},
   {id:"E4", cat:"E", zh:"科技与人工智能", name:"Tech & AI",     status:"soon", words:90,  desc:"电脑、手机、机器人"},
   /* ===== F 旅行与地理 ===== */
