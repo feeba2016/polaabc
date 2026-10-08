@@ -9024,5 +9024,72 @@ const EPISODES = [
         "ex": "“…a sign that the mechanism is generic rather than peculiar to one chemistry.”"
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-08",
+    "title": "The Plan No One Made",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-08-the-plan-no-one-made",
+    "url": "lessons/c1/2026-10-08-the-plan-no-one-made.html",
+    "vocab": [
+      {
+        "word": "consequential",
+        "zh": "有重大后果的、重要的（resulting in important consequences；a consequential decision 影响深远的决定；正式语体，比 important 强，强调「会带来后果」；另一义项「随之而来的」，偶与 consequent 混用，学术写作中多取「重大」义）",
+        "ex": "“When something consequential happens abroad, the first question is rarely how it came about but who arranged it.”"
+      },
+      {
+        "word": "premise",
+        "zh": "前提、假定（a proposition upon which an argument is based；on the premise that 在……前提下；动词 be premised on 以……为前提；注意 premises 作「房屋及场地」讲时与本文无关）",
+        "ex": "“The premise goes unstated because it feels obvious.”"
+      },
+      {
+        "word": "misconception",
+        "zh": "错误观念、误解（a view that is incorrect because based on faulty thinking；common misconception 常见误解；与 misunderstanding 相比，强调「观念层面的系统性错误」而不是「一时没听懂」）",
+        "ex": "“The common misconception, he writes, is to see the behavior of others as more centralized…than it is.”"
+      },
+      {
+        "word": "centralize",
+        "zh": "使集中、把权力收归中枢（to concentrate under a single authority；形容词 centralized、名词 centralization；反义 decentralize / distributed；国际关系中指「决策集中于一个可辨识的中枢，因此表现得像单一行为体」）",
+        "ex": "“…to see the behavior of others as more centralized, planned, and coordinated than it is.”"
+      },
+      {
+        "word": "coherent",
+        "zh": "连贯的、有条理的、内部自洽的（logically consistent and intelligible；a coherent argument / narrative / policy；名词 coherence 连贯性；兼含「说话有条理」与「事物内部自洽」两层）",
+        "ex": "“…the urge to squeeze complex and unrelated events into a coherent pattern.”"
+      },
+      {
+        "word": "asymmetry",
+        "zh": "不对称、不对等（lack of equivalence between two things；information asymmetry 信息不对称、asymmetry of power 权力不对称；a- 否定 + sym-「共同、相同」；形容词 asymmetric；常用来点出「同一机制在两边表现不同」）",
+        "ex": "“What makes the bias worth studying is its asymmetry.”"
+      },
+      {
+        "word": "monolithic",
+        "zh": "铁板一块的、单一而僵硬的整体（formed of a single large block; figuratively uniform and inflexible；a monolithic bloc 铁板一块的集团；mono-「单一」+ lith-「石头」；政治学中形容「看似一个整体、实则内部充满博弈」的那种想象）",
+        "ex": "“Decision-makers know that their own government is not monolithic.”"
+      },
+      {
+        "word": "ad hoc",
+        "zh": "临时的、为特定目的特设的（made or done for a particular purpose only；源自拉丁语「for this」；an ad hoc committee 特别委员会、ad hoc solution 权宜之计；比 temporary 精确——强调「为这一件事临时凑出」而非「短期」）",
+        "ex": "“…the product of shifting internal bargaining, ad hoc decisions, and uncoordinated actions.”"
+      },
+      {
+        "word": "assimilate",
+        "zh": "吸收、同化；把新信息纳入既有框架（to take in and incorporate；assimilate information 消化信息、assimilate into 融入；名词 assimilation；文中指矛盾信息被「改造后塞进」旧框架，而不是推翻旧框架）",
+        "ex": "“…cognitive consistency does the rest, assimilating discrepant information into the established picture.”"
+      },
+      {
+        "word": "discrepant",
+        "zh": "不一致的、相左的（not in agreement; differing；discrepant data 相互矛盾的数据；源自拉丁语 discrepant-「发出不同声音」；比 inconsistent 冷僻、更书面；名词 discrepancy 差异、出入）",
+        "ex": "“…assimilating discrepant information into the established picture.”"
+      },
+      {
+        "word": "counterpoint",
+        "zh": "对照物、形成对比的另一方（a thing that contrasts with or complements another；音乐上指对位法、对位声部，引申为与主流论述相对的那一支声音；a counterpoint to X 与 X 相对照的观点）",
+        "ex": "“…remains the standard counterpoint to structural accounts of world politics.”"
+      }
+    ]
   }
 ];

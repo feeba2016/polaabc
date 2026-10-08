@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Plan No One Made — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#0b4f6c;
+  --accent2:#c2410c;
+  --bg:#f5f8fa;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#d3eaf3;
+  --border:#c3dbe5;
+  --soft:#e9f3f8;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(11,79,108,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(11,79,108,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(11,79,108,.55);}70%{box-shadow:0 0 0 12px rgba(11,79,108,0);}100%{box-shadow:0 0 0 0 rgba(11,79,108,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#a9d8ea;}
+#tip{position:fixed;z-index:1200;background:#062b3a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#f0b429;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(11,79,108,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#d3eaf3;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 国际政治 International Politics</span>
+      <h1 class="title">The Plan No One Made</h1>
+      <p class="subtitle">Robert Jervis and the illusion of the coordinated adversary · 2026-10-08 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The unstated premise</div>
+            <p>When something <span class="kw" data-def="有重大后果的、重要的（resulting in important consequences；正式语体，比 important 强，强调「会带来后果」而非「本身很大」；a consequential decision 一项影响深远的决定；注意另一义项「随之而来的、作为结果的」，偶与 consequent 混用，但在学术写作中多取「重大」义）">consequential</span> happens abroad, the first question is rarely how it came about but who arranged it. The <span class="kw" data-def="前提、假定（a proposition upon which an argument is based；on the premise that… 在……的前提之下；动词 premise 可构成 be premised on「以……为前提」；注意与 premises「房屋及场地」拼写相同、词义无关）">premise</span> goes unstated because it feels obvious: if an outcome has shape, something must have shaped it. Robert Jervis spent a career arguing that this intuition is not occasionally wrong but reliably wrong — wrong, moreover, in a direction one can predict. In <i>Perception and Misperception in International Politics</i>, published in 1976, he gave the error a chapter and a name: the perception of centralization.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The asymmetry</div>
+            <p>His formulation is blunt. The common <span class="kw" data-def="错误观念、误解（a view that is incorrect because it is based on faulty thinking；common misconception 常见误解；动词 mis conceive 少见，名词 mis conception 本身即「conception 的错误版本」；与 misunderstanding 相比，misconception 强调「观念层面的系统性错误」而非「一时没听懂」）">misconception</span>, he writes, is to see the behavior of others as more <span class="kw" data-def="集中化的、权力集中于中枢的（concentrated under a single authority；centralized state 中央集权国家；动词 centralize、名词 centralization；反义 decentralize / distributed；国际关系语境中指「决策权集中于一个可辨识的中枢，因而 behaves like a single actor」）">centralized</span>, planned, and coordinated than it is — a reflex driven by the urge to squeeze complex and unrelated events into a <span class="kw" data-def="连贯的、有条理的、各部分逻辑一致的（logically consistent and intelligible；a coherent argument / narrative / policy；名词 coherence 连贯性；形容词兼含「说话有条理」与「事物内部自洽」两层，学术写作高频）">coherent</span> pattern. What makes the bias worth studying is its <span class="kw" data-def="不对称、不对等（lack of equality or equivalence between two things；information asymmetry 信息不对称、asymmetry of power 权力不对称；词根 sym-「共同、相同」加 a- 否定前缀，形容词 asymmetric；学术写作常用来点出「同一机制在两边表现不同」）">asymmetry</span>. Decision-makers know that their own government is not <span class="kw" data-def="铁板一块的、单一而僵硬的整体的（formed of a single large block; figuratively, uniform and inflexible；a monolithic bloc 铁板一块的集团；词根 mono-「单一」+ lith-「石头」；在政治学中形容「看似一个整体、实则内部充满博弈」的那种想象）">monolithic</span>: policy emerges from bargaining, agents disobey, luck intrudes. Confronted with another state, they behave as though the mess stopped at the border. Accidents, Jervis observes, are rarely given their due.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The compounding</div>
+            <p>The consequences compound. Infer a plan from a pattern and one will project it forward; Jervis warns that this misleads whenever the behavior was the product of shifting internal bargaining, <span class="kw" data-def="临时的、为特定目的特设的（made or done for a particular purpose only；源自拉丁语，意为「for this」；an ad hoc committee 特别委员会、ad hoc solution 权宜之计；正式语体，写作中比 temporary 精确——它强调「为这一件事临时凑出」而非「短期」）">ad hoc</span> decisions, and uncoordinated actions. A second error rides on the first, for actors exaggerate their centrality to others' calculations, so that whatever the other side does reads as a response to them. Once an image has formed, cognitive consistency does the rest, <span class="kw" data-def="吸收、同化；把新信息纳入既有框架（to take in and incorporate；assimilate information 消化信息；assimilate into 融入；名词 assimilation；文中指与既有印象相矛盾的信息被「改造后塞进」旧框架，而不是推翻旧框架）">assimilating</span> <span class="kw" data-def="不一致的、相左的（not in agreement; differing；discrepant data 相互矛盾的数据；源自拉丁语 discrepant-「发出不同声音」；比 inconsistent 更冷僻、更书面，多见于学术文本；名词 discrepancy 差异、出入）">discrepant</span> information into the established picture.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The standing and the limits</div>
+            <p>Half a century on, the book's standing is secure. It won the American Political Science Association's Woodrow Wilson Foundation Award in 1977, was reissued in 2017 with a long preface surveying four decades of psychological research, and remains the standard <span class="kw" data-def="对照物、形成对比的另一方（a thing that contrasts with or complements another；音乐上指「对位法、对位声部」，引申为「与主流论述相对的那一支声音」；a counterpoint to X 与 X 相对照的观点；文中指心理学路径与结构主义路径的对照）">counterpoint</span> to structural accounts of world politics. Critics reply that individual-level bias can crowd out structural constraint, that laboratory findings may not travel to cabinet rooms, and that emotion in real diplomacy resists measurement. Jervis's own remedies were institutional rather than heroic: make assumptions explicit, fund a devil's advocate, and keep identities unstaked on a single image of the adversary.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="sec" style="border:none;padding:0;margin:0 0 10px;">🧭 篇章结构 Structure at a Glance</h2>
+        <div class="ext">
+        <table>
+          <tr><th>段</th><th>功能</th><th>关键句</th></tr>
+          <tr><td>1</td><td>提出命题：外交中最不受欢迎的解释是「意外」；给这个偏差命名</td><td>…wrong, moreover, in a direction one can predict.</td></tr>
+          <tr><td>2</td><td>给出机制：集中性错觉，并指出它是不对称的</td><td>What makes the bias worth studying is its asymmetry.</td></tr>
+          <tr><td>3</td><td>推出后果：推断出计划→外推未来；并叠加「自我中心性高估」</td><td>The consequences compound.</td></tr>
+          <tr><td>4</td><td>给出定位与边界：学术地位稳固，但有批评；补救措施是制度性的</td><td>…institutional rather than heroic.</td></tr>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (11 · C1–C2)</h2>
+      <div class="card">
+        <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="consequential">🔊</button><div class="word">consequential<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">有重大后果的、重要的（resulting in important consequences；a consequential decision 影响深远的决定；正式语体，比 important 强，强调「会带来后果」；另一义项「随之而来的」，偶与 consequent 混用，学术写作中多取「重大」义）</div><div class="ex">“When something consequential happens abroad, the first question is rarely how it came about but who arranged it.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="premise">🔊</button><div class="word">premise<span class="pos">n. / v.</span></div><span class="lvl">C1</span><div class="zh">前提、假定（a proposition upon which an argument is based；on the premise that 在……前提下；动词 be premised on 以……为前提；注意 premises 作「房屋及场地」讲时与本文无关）</div><div class="ex">“The premise goes unstated because it feels obvious.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="misconception">🔊</button><div class="word">misconception<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">错误观念、误解（a view that is incorrect because based on faulty thinking；common misconception 常见误解；与 misunderstanding 相比，强调「观念层面的系统性错误」而不是「一时没听懂」）</div><div class="ex">“The common misconception, he writes, is to see the behavior of others as more centralized…than it is.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="centralize">🔊</button><div class="word">centralize<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">使集中、把权力收归中枢（to concentrate under a single authority；形容词 centralized、名词 centralization；反义 decentralize / distributed；国际关系中指「决策集中于一个可辨识的中枢，因此表现得像单一行为体」）</div><div class="ex">“…to see the behavior of others as more centralized, planned, and coordinated than it is.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="coherent">🔊</button><div class="word">coherent<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">连贯的、有条理的、内部自洽的（logically consistent and intelligible；a coherent argument / narrative / policy；名词 coherence 连贯性；兼含「说话有条理」与「事物内部自洽」两层）</div><div class="ex">“…the urge to squeeze complex and unrelated events into a coherent pattern.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="asymmetry">🔊</button><div class="word">asymmetry<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">不对称、不对等（lack of equivalence between two things；information asymmetry 信息不对称、asymmetry of power 权力不对称；a- 否定 + sym-「共同、相同」；形容词 asymmetric；常用来点出「同一机制在两边表现不同」）</div><div class="ex">“What makes the bias worth studying is its asymmetry.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="monolithic">🔊</button><div class="word">monolithic<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">铁板一块的、单一而僵硬的整体（formed of a single large block; figuratively uniform and inflexible；a monolithic bloc 铁板一块的集团；mono-「单一」+ lith-「石头」；政治学中形容「看似一个整体、实则内部充满博弈」的那种想象）</div><div class="ex">“Decision-makers know that their own government is not monolithic.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ad hoc">🔊</button><div class="word">ad hoc<span class="pos">adj. / adv.</span></div><span class="lvl">C2</span><div class="zh">临时的、为特定目的特设的（made or done for a particular purpose only；源自拉丁语「for this」；an ad hoc committee 特别委员会、ad hoc solution 权宜之计；比 temporary 精确——强调「为这一件事临时凑出」而非「短期」）</div><div class="ex">“…the product of shifting internal bargaining, ad hoc decisions, and uncoordinated actions.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="assimilate">🔊</button><div class="word">assimilate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">吸收、同化；把新信息纳入既有框架（to take in and incorporate；assimilate information 消化信息、assimilate into 融入；名词 assimilation；文中指矛盾信息被「改造后塞进」旧框架，而不是推翻旧框架）</div><div class="ex">“…cognitive consistency does the rest, assimilating discrepant information into the established picture.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="discrepant">🔊</button><div class="word">discrepant<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">不一致的、相左的（not in agreement; differing；discrepant data 相互矛盾的数据；源自拉丁语 discrepant-「发出不同声音」；比 inconsistent 冷僻、更书面；名词 discrepancy 差异、出入）</div><div class="ex">“…assimilating discrepant information into the established picture.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="counterpoint">🔊</button><div class="word">counterpoint<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">对照物、形成对比的另一方（a thing that contrasts with or complements another；音乐上指对位法、对位声部，引申为与主流论述相对的那一支声音；a counterpoint to X 与 X 相对照的观点）</div><div class="ex">“…remains the standard counterpoint to structural accounts of world politics.”</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. The first question is rarely X but Y.（先立靶子再纠正的对举开场）</h3>
+          <div class="zh">议论性写作最好用的一句开场。<i>rarely X but Y</i> 两句并置，把读者心里默认的那件事摆出来（X），再把它扭向作者真正要说的那件（Y）。妙处在于它不否定读者的常识，只是指出常识问错了问题——比直接说 People are wrong 温和，却更有力量。变体：<i>The problem is not X but Y</i>、<i>What matters is not X but Y</i>。雅思 Task 2 引言段用一次，立场立刻清晰。</div>
+          <div class="eg">When something consequential happens abroad, the first question is rarely how it came about but who arranged it.</div>
+          <div class="practice">✍️ 仿写：面对一次失败，第一个问题很少是「谁出的错」，而是「流程哪一环失灵了」。<input type="text" placeholder="Faced with a failure, the first question is rarely..."></div>
+        </div>
+        <div class="item">
+          <h3>2. What makes N worth V-ing is its N.（what-从句作主语 + 尾重原则）</h3>
+          <div class="zh">学术写作中「说明研究价值」的标准句式。<i>What makes … is …</i> 把「原因」整块前移，把真正的答案（此处是 <i>its asymmetry</i>）留在句末这个信息焦点上。<i>worth doing</i> 后接动名词，是固定搭配；换成 <i>worth studying / worth noting / worth questioning</i> 都很自然。这一句在文献综述里也极好用：<i>What makes this literature worth revisiting is…</i></div>
+          <div class="eg">What makes the bias worth studying is its asymmetry.</div>
+          <div class="practice">✍️ 仿写：让这一案例值得重新审视的，是它证据的完整性。<input type="text" placeholder="What makes this case worth revisiting is..."></div>
+        </div>
+        <div class="item">
+          <h3>3. Imperative + and + one will …（祈使句当条件句用）</h3>
+          <div class="zh">把 <i>If you infer a plan from a pattern, you will project it forward</i> 压缩成 <i>Infer a plan from a pattern and one will project it forward</i>。两个变化值得学：一是祈使句直接承担条件从句的功能，节奏更紧；二是主语用<b>泛指的 one</b> 而非 you，语气从「对你说」变成「对任何人成立」，学术味立刻上来。注意 <i>one</i> 后续代词要保持 <i>one</i>/<i>one's</i>（英式更严格，美式常换回 he/his）。</div>
+          <div class="eg">Infer a plan from a pattern and one will project it forward.</div>
+          <div class="practice">✍️ 仿写：只要把结论写死，你就会失去修正它的空间。<input type="text" placeholder="Fix the conclusion in advance and one will..."></div>
+        </div>
+        <div class="item">
+          <h3>4. A second N rides on the first, for …（递进式因果链）</h3>
+          <div class="zh">写「第二个错误叠加在第一个之上」时，最简洁有力的骨架。<i>rides on</i> 字面是「骑在……上」，此处引申为「依附、叠加」，比 builds on 更多一层「负担」的意味——第二个错误不是从第一个里长出来的，是压在它上面的。<i>for</i> 在这里是<b>并列连词</b>，相当于 <i>because</i>，但更书面、更克制，正式论说文中用 for 引出一个补充说明性的理由，是很地道的做法。</div>
+          <div class="eg">A second error rides on the first, for actors exaggerate their centrality to others' calculations.</div>
+          <div class="practice">✍️ 仿写：第二重代价压在第一重之上，因为延误会侵蚀信任。<input type="text" placeholder="A second cost rides on the first, for..."></div>
+        </div>
+        <div class="item">
+          <h3>5. Critics reply that A, that B, and that C.（三重 that 并列的反驳陈列）</h3>
+          <div class="zh">文献综述与讨论段里「摆出反方意见」的高级写法。三个 <i>that</i> 从句并列，节奏整齐、层次清楚；关键是连词 <i>reply</i> 而非 <i>say</i> 或 <i>argue</i>——<i>reply</i> 暗示这些批评是<b>针对某个既有主张的回应</b>，学术对话感立刻建立。三个 that 一个都不能省（省略第一个会让读者以为后面是并列名词）。写完反方后通常紧跟一句作者自己的判断，形成「让步—回应」结构，本篇末句正是如此。</div>
+          <div class="eg">Critics reply that individual-level bias can crowd out structural constraint, that laboratory findings may not travel to cabinet rooms, and that emotion in real diplomacy resists measurement.</div>
+          <div class="practice">✍️ 仿写：批评者回应说样本偏小，说指标不敏感，也说因果方向无法确证。<input type="text" placeholder="Critics reply that the sample is small, that..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. not A but B 对举 + moreover 插入语 + 零关系代词定语从句</h3>
+          <div class="zh">第 1 段：<i>…this intuition is <b>not occasionally wrong but reliably wrong</b> — wrong, moreover, <b>in a direction one can predict</b>.</i> 三层结构叠在一起：<b>①</b> not A but B 要求两侧词性相同（均为副词+形容词）；<b>②</b> moreover 作插入语，前后用逗号隔开，把递进关系嵌进句子内部而不必另起一句；<b>③</b> <i>a direction one can predict</i> 省略了关系代词 <i>that/which</i>——当代词在从句中作<b>宾语</b>时可以省略（one can predict [that]）。同类常见：the book I mentioned、the approach they adopted。</div>
+          <div class="eg">…this intuition is not occasionally wrong but reliably wrong — wrong, moreover, in a direction one can predict.</div>
+        </div>
+        <div class="item">
+          <h3>2. as though + 过去式：非真实比较的虚拟语气</h3>
+          <div class="zh">第 2 段：<i>…they behave <b>as though the mess stopped at the border</b>.</i> <i>as though / as if</i> 引导的从句描述与事实相反的情形时，动词要<b>后退一个时态</b>：主句现在时 → 从句用过去式（此处 stop → stopped），be 动词则一律用 were。注意 stopped 并非「过去真的停了」，而是「说话时并不如此」的虚拟标记。若要表达「也许是、也许不是」，则保留陈述语气：<i>as though the mess stops…</i>——两者意思差别很大。</div>
+          <div class="eg">Confronted with another state, they behave as though the mess stopped at the border.</div>
+        </div>
+        <div class="item">
+          <h3>3. 祈使句 + and + will：条件句的紧缩形式</h3>
+          <div class="zh">第 3 段：<i><b>Infer a plan from a pattern and one will project it forward</b>.</i> 结构上等于 <i>If one infers…, one will…</i>，但用祈使句承担条件，语气更果断、更像箴言，适合放在段落开头统领后面半句。要点：<b>①</b> and 不能换成 then（<i>Do X then you will…</i> 不合规，需加逗号或改 and）；<b>②</b> 若想表达否定条件，用 <i>or</i>：<i>Act now or you will lose the chance.</i>；<b>③</b> 后句主语用 one 表泛指，见句型练习第 3 条。</div>
+          <div class="eg">Infer a plan from a pattern and one will project it forward.</div>
+        </div>
+        <div class="item">
+          <h3>4. 现在分词短语作后置定语：a preface surveying four decades of research</h3>
+          <div class="zh">第 4 段：<i>…was reissued in 2017 with a long preface <b>surveying four decades of psychological research</b>.</i> 分词短语相当于省略了 <i>that surveys</i>，用来压缩定语从句。判断用现在分词还是过去分词，看名词与动词的<b>主被动关系</b>：preface 主动 surveying，用 -ing；若是 <i>a preface written by the author</i>，则被写，用 -ed。这一招在学术摘要里几乎句句可见（<i>a method combining A with B</i>、<i>data collected from…</i>），是提升信息密度最省力的手段。</div>
+          <div class="eg">…was reissued in 2017 with a long preface surveying four decades of psychological research.</div>
+        </div>
+        <div class="item">
+          <h3>5. 名词化 + 三重并列：the product of shifting internal bargaining, ad hoc decisions, and uncoordinated actions</h3>
+          <div class="zh">第 3 段这一串是典型学术名词化写法：把「各方不断博弈」「临时拍板」「行动互不协调」三件事全部<b>名词化</b>为三个并列项，再用 <i>the product of</i> 统起来。要点有三：<b>①</b> 第一项用现在分词 <i>shifting</i> 作定语（博弈在进行中），第二、三项用形容词 ad hoc / uncoordinated；<b>②</b> 三项内部结构不完全相同是可以的，只要<b>词性层级一致</b>（都是名词短语）；<b>③</b> 并列最后一项前加 and（牛津逗号在美式学术写作中通常保留）。</div>
+          <div class="eg">…whenever the behavior was the product of shifting internal bargaining, ad hoc decisions, and uncoordinated actions.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (6 · IELTS / TOEFL style)</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card"><div id="score" style="font-weight:700;color:var(--accent);font-size:16px;">作答后可在下方查看每题解析；全部做完可对照本页上方的篇章结构表复盘。</div></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 Deep Dive</h2>
+      <div class="card ext">
+        <h3>一、为什么「集中性」值得单开一章</h3>
+        <p>在国际关系的日常语言里，几乎所有句子都以国家作主语：某国「决定」了什么、「释放」了什么信号、「做出」了让步。这种语法本身就在暗示：存在一个能决定、能释放、能让步的主体。罗伯特·杰维斯（Robert Jervis，1940—2021）的整本书都在追问这个默认假设。</p>
+        <p>他的答案不是「国家不是行为体」，而是更微妙的一层：<b>行为体的内部一致性是被高估的</b>，而且这种高估是系统性的、方向可预测的。正因为可预测，它才值得研究——一个随机的错误没有理论价值，一个有方向的偏差才有。</p>
+        <p>杰维斯是哥伦比亚大学阿德莱·史蒂文森国际政治讲席教授，2000 至 2001 年任美国政治学会主席。《国际政治中的知觉与错误知觉》1976 年由普林斯顿大学出版社初版，1977 年获美国政治学会伍德罗·威尔逊基金会奖；2017 年 5 月推出新版，附作者撰写的长篇新序，回顾此后四十年认知心理学与行为经济学的进展。全书十二章、五百余页。</p>
+
+        <h3>二、全书结构（四部分 · 十二章）</h3>
+        <table>
+          <tr><th>部分</th><th>章节</th><th>处理的问题</th></tr>
+          <tr><td>一 问题的设定</td><td>1–3</td><td>层次分析问题；外部刺激与内部加工；威慑模型与螺旋模型</td></tr>
+          <tr><td>二 知觉的过程</td><td>4–7</td><td>认知一致性；唤起的集合；决策者如何向历史学习；态度改变</td></tr>
+          <tr><td>三 常见的错误知觉</td><td>8–11</td><td><b>集中性错觉</b>；高估自己作为影响者或目标的分量；愿望与恐惧；认知失调</td></tr>
+          <tr><td>四 代结论</td><td>12</td><td>如何减少误判</td></tr>
+        </table>
+        <p>可见「集中性」被放在错误知觉清单的第一位，篇幅约二十四页（第八章）。杰维斯早在 1968 年发表于《世界政治》（<i>World Politics</i>）的论文《关于错误知觉的若干假设》中，就把它列为十四条假设的第九条；1976 年的书是这一思路的系统展开。</p>
+
+        <h3>三、三层机制拆解</h3>
+        <table>
+          <tr><th>层次</th><th>内容</th><th>一句话例示</th></tr>
+          <tr><td>① 现象</td><td>把对方的行为读成有预谋、有指挥、有统筹的</td><td>看结果有形状，就推定有人给了它形状</td></tr>
+          <tr><td>② 不对称</td><td>对自己内部的混乱心知肚明，对对方的混乱视而不见</td><td>己方是讨价还价，对方是统一意志</td></tr>
+          <tr><td>③ 叠加</td><td>推断出计划后外推未来；并高估自己在对方盘算中的分量</td><td>对方做什么都被读成「针对我」的反应</td></tr>
+        </table>
+        <p>第三层最容易与另一个偏差混淆：杰维斯在第九章专门处理「高估自己作为影响者或目标的分量」。二者区别在于——集中性错觉说的是<b>对方有多像一个整体</b>，自我中心性说的是<b>对方有多在意我</b>。它们常常同时出现，叠加后效果更强。</p>
+
+        <h3>四、它和相邻概念的关系</h3>
+        <ul>
+          <li><b>安全困境（security dilemma）</b>：杰维斯 1978 年发表于《世界政治》的《安全困境下的合作》是其另一代表作，讨论一国为增进自身安全所采取的措施如何被他国读成威胁。它与集中性错觉互为补充：前者解释<b>意图被误读</b>，后者解释<b>能力被夸大的指挥力</b>。</li>
+          <li><b>螺旋模型 vs 威慑模型</b>：书的第一部分把两套对立解释并置——前者认为戒备会自我实现地制造敌意，后者认为软弱才会招致进攻。杰维斯的立场是：两种模型都可能成立，关键在于判断对方究竟属于哪一种，而这一步恰恰最容易出错。</li>
+          <li><b>信号与指数（signals and indices）</b>：出自其 1970 年著作《国际关系中的意象逻辑》。「信号」是可以随意发出、因而需要付出成本才可信的陈述；「指数」是因其代价高昂而难以伪造的事实。二者区分是理解「承诺如何变得可信」的基础。</li>
+          <li><b>与行为经济学的呼应</b>：书评常把本书与卡尼曼《思考，快与慢》（2011）并置。二者共同点是：偏差不是偶发故障，而是可预测、可命名、可列出清单的规律性现象。</li>
+        </ul>
+
+        <h3>五、批评与边界</h3>
+        <p>行为路径并非没有对手。常见批评有三条：其一，把解释重心放在个体决策者身上，可能挤掉了结构层面的约束——实力分布、联盟格局、地缘条件这些不由意志转移的因素；其二，心理学的实验室发现能否外推到真实的地缘政治环境，外部效度始终存疑；其三，真实外交中的情绪与认知过程极难测量，缺少可靠数据。</p>
+        <p>值得注意的是，这些批评推动的是方法上的精细化，而不是对该路径的否定。近年出现的「行为国际关系」（behavioral IR）研究，普遍采用预注册、大样本与跨情境复制来回应上述质疑。</p>
+        <p>杰维斯本人给出的补救措施也相当克制，全部落在制度层面而非个人修养：把假设与预测写下来以便检验；设置唱反调者（devil's advocate）；不要让机构身份与某一种对对手的想象绑死。他没有许诺能消除误判——只说能把误判从「看不见」变成「可检查」。</p>
+
+        <div class="box">
+          <b>📌 事实与立场</b><br>
+          ① 本文只讨论已发表的学术理论与可核对的出版事实（作者、书名、出版年、奖项、章节、期刊论文），不评价任何国家、政府、政党、政体或现行政策；也不涉及任何具体历史事件与当代争端的评判。<br>
+          ② 文中「1977 年获奖」「2017 年新版」等出版信息取自出版社与图书馆的公开著录；若需引用，请以普林斯顿大学出版社的版权页与原论文页面为准。<br>
+          ③ 认知偏差研究属于经验科学，其结论具有统计性与条件性，描述的是<b>群体层面的倾向</b>，不构成对任何具体决策者或具体决策的判断。<br>
+          ④ 「行为国际关系」的批评意见在本页第五部分已并列呈现，未作取舍；读者如需形成自己的判断，请回到原始文献而非二手转述。
+        </div>
+
+        <h3>六、术语对照表</h3>
+        <table>
+          <tr><th>英文</th><th>中文</th><th>一句话解释</th></tr>
+          <tr><td>perception of centralization</td><td>集中性错觉</td><td>高估对方内部的统一性与计划性</td></tr>
+          <tr><td>cognitive consistency</td><td>认知一致性</td><td>把新信息塞进既有印象，而非修正印象</td></tr>
+          <tr><td>evoked set</td><td>唤起的集合</td><td>人在某一刻实际想到的那部分信息，而非全部已知信息</td></tr>
+          <tr><td>security dilemma</td><td>安全困境</td><td>增进自身安全的举措反被他国视为威胁</td></tr>
+          <tr><td>spiral model / deterrence model</td><td>螺旋模型／威慑模型</td><td>解释敌意来源的两种对立模型</td></tr>
+          <tr><td>signals and indices</td><td>信号与指数</td><td>可伪装的陈述 vs 难以伪造的事实</td></tr>
+          <tr><td>devil's advocate</td><td>唱反调者</td><td>制度性地安排一个人提出反对意见</td></tr>
+        </table>
+
+        <h3>七、延伸阅读</h3>
+        <ul>
+          <li>Robert Jervis, <i>Perception and Misperception in International Politics</i> (Princeton University Press, 1976; new edition 2017)——第八章、第九章为本文核心。</li>
+          <li>Robert Jervis, “Hypotheses on Misperception,” <i>World Politics</i> 20(3), 1968——十四条假设的雏形。</li>
+          <li>Robert Jervis, “Cooperation Under the Security Dilemma,” <i>World Politics</i> 30(2), 1978。</li>
+          <li>Robert Jervis, <i>The Logic of Images in International Relations</i> (Princeton University Press, 1970)。</li>
+          <li>Daniel Kahneman, <i>Thinking, Fast and Slow</i> (Farrar, Straus and Giroux, 2011)——可与之对读的偏差清单。</li>
+        </ul>
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <p><b>主题：</b>国际政治 International Politics · 罗伯特·杰维斯《国际政治中的知觉与错误知觉》（1976／2017）中的「集中性错觉」，以及它为什么是<b>有方向</b>的偏差。</p>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🎯 学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div>读懂政治学论说文的标准推进结构：<b>命题 → 机制 → 后果 → 定位与边界</b>，并能独立画出篇章结构表。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div>掌握 11 个 C1–C2 学术词汇，其中 <i>asymmetry</i>、<i>monolithic</i>、<i>counterpoint</i>、<i>ad hoc</i> 可直接迁移到雅思写作与托福独立写作。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div>掌握 5 个高级学术句型，特别是用于<b>摆出反方意见</b>的三重 that 并列（Critics reply that…）。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div>能识别并复现 5 个高级语法结构：not A but B 对举、as though 虚拟、祈使句条件句、分词后置定语、名词化三重并列。</div></div>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🧪 考试技巧 Exam Skills</h3>
+        <ul>
+          <li><b>主旨题（Gist）：</b>别被第一段的修辞带走。本文的「主旨」是一个<b>认知机制</b>——内部一致性被高估——而不是某本书或某位学者。</li>
+          <li><b>细节题（Detail）：</b>年份、奖项、章节这类信息极易被选项<b>张冠李戴</b>（例如把获奖年份说成出版年份）。定位后逐词比对，别凭印象选。</li>
+          <li><b>推断题（Inference）：</b>答案不会逐字出现，但一定由原文的因果链推出。如第 3 题，原文说「偏差是不对称的」，答案要落到「对自己和用两套标准」这一层。</li>
+          <li><b>修辞目的题（Rhetorical purpose）：</b>先找它支撑的那一句主张，再回头看这个例子证明了什么。末段的奖项与再版不是炫耀，而是为了说明「学术地位稳固」。</li>
+          <li><b>态度题（Attitude）：</b>学术写作的态度常是「肯定价值 + 明确设限」。选项中出现 unqualified、dismissive 这类极端词，基本可以先排除。</li>
+        </ul>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">📌 使用建议 How to Use</h3>
+        <ul>
+          <li>第一遍：不看文本，连听四段音频，抓住每段的功能（命题 / 机制 / 后果 / 边界）。</li>
+          <li>第二遍：逐段精读，把高亮词的中文释义先遮住，靠上下文猜，再点开核对。</li>
+          <li>第三遍：到「句型练习」做仿写，写完后与本课的原文句子逐词比对结构。</li>
+          <li>最后：完成 6 道测验，把错题对应的段落回读一遍。</li>
+        </ul>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+      <footer>Pola News · Advanced English · 每日一课，日积月累 🦘</footer>
+    </section>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["When something consequential happens abroad, the first question is rarely how it came about but who arranged it. The premise goes unstated because it feels obvious: if an outcome has shape, something must have shaped it. Robert Jervis spent a career arguing that this intuition is not occasionally wrong but reliably wrong — wrong, moreover, in a direction one can predict. In Perception and Misperception in International Politics, published in 1976, he gave the error a chapter and a name: the perception of centralization.", "His formulation is blunt. The common misconception, he writes, is to see the behavior of others as more centralized, planned, and coordinated than it is — a reflex driven by the urge to squeeze complex and unrelated events into a coherent pattern. What makes the bias worth studying is its asymmetry. Decision-makers know that their own government is not monolithic: policy emerges from bargaining, agents disobey, luck intrudes. Confronted with another state, they behave as though the mess stopped at the border. Accidents, Jervis observes, are rarely given their due.", "The consequences compound. Infer a plan from a pattern and one will project it forward; Jervis warns that this misleads whenever the behavior was the product of shifting internal bargaining, ad hoc decisions, and uncoordinated actions. A second error rides on the first, for actors exaggerate their centrality to others' calculations, so that whatever the other side does reads as a response to them. Once an image has formed, cognitive consistency does the rest, assimilating discrepant information into the established picture.", "Half a century on, the book's standing is secure. It won the American Political Science Association's Woodrow Wilson Foundation Award in 1977, was reissued in 2017 with a long preface surveying four decades of psychological research, and remains the standard counterpoint to structural accounts of world politics. Critics reply that individual-level bias can crowd out structural constraint, that laboratory findings may not travel to cabinet rooms, and that emotion in real diplomacy resists measurement. Jervis's own remedies were institutional rather than heroic: make assumptions explicit, fund a devil's advocate, and keep identities unstaked on a single image of the adversary."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["A biography of Robert Jervis and his career at Columbia University","A systematic tendency to overestimate how unified and planned another state's behaviour is","A defence of structural realism against psychological explanations of war","A chronology of the awards given to books on international relations"],ans:1,
+   fb:"正确。四段分明：段 1 立命题并命名（集中性错觉）；段 2 讲机制与它「不对称」的性质；段 3 讲后果如何叠加；段 4 讲该书的学术定位、批评与补救。B 同时覆盖「机制」与「系统性」两层。A 只是穿插的事实，不是议题；C 与末段的 counterpoint 一词相左——本文并未替任何一方辩护；D 无据，奖项只在段 4 出现一次。"},
+  {q:"2. According to paragraph 2, what do decision-makers know about their own government? 依第二段，决策者对自己政府的了解是？",opts:["That it is in fact monolithic and tightly controlled","That its agents never disobey instructions","That it is not monolithic: policy emerges from bargaining, agents disobey, and luck intrudes","That its behaviour abroad is always the product of a single plan"],ans:2,
+   fb:"正确。原文：Decision-makers know that their own government is not monolithic: policy emerges from bargaining, agents disobey, luck intrudes. C 几乎是原文的同义转述。A 与原文直接相反；B 与 agents disobey 冲突；D 把「他国」的错觉安到了自己身上，正是第二段要指出的不对称之处。"},
+  {q:"3. It can be inferred from paragraph 2 that the word asymmetry refers to: 由第二段可推断，asymmetry 一词指的是？",opts:["Decision-makers apply one standard to their own side and a different one to the other side","Rich and poor states are affected by the bias to unequal degrees","The bias has grown stronger over the fifty years since the book appeared","Psychologists and political scientists disagree about how to define the bias"],ans:0,
+   fb:"正确。这是推断题。原文先说决策者深知己方内部是讨价还价、下属抗命、运气插手，紧接着说 Confronted with another state, they behave as though the mess stopped at the border —— 同一件事，两套标准，正是 A。B 的贫富、C 的时间变化、D 的学科分歧，原文均未提及，属于把别处的概念搬来凑选项。"},
+  {q:"4. The word consequential in paragraph 1 is closest in meaning to: 第一段中的 consequential 最接近下列哪一项？",opts:["Subsequent or following as a result","Significant in its consequences","Controversial and widely disputed","Gradually developing over time"],ans:1,
+   fb:"正确。consequential 在此取自「有重大后果的」这一义项，与 B 同义。A 是它另一个较少用的义项（随之而来的），属于典型的同词异义干扰；C 把「重大」偷换成「有争议」；D 无据。词汇题的诀窍：把选项逐一代回原句，看哪个既合词义又合句意——此处 something consequential happens abroad 讲的是「出了大事」。"},
+  {q:"5. Why does the author mention the 1977 award and the 2017 reissue in paragraph 4? 作者为何在第四段提到 1977 年的奖项与 2017 年的再版？",opts:["To suggest that the book is now outdated","To establish that the book's scholarly standing is secure","To criticise the American Political Science Association","To explain why Jervis changed his theory after 1976"],ans:1,
+   fb:"正确。这是修辞目的题：先定位它所支撑的首句主张——the book's standing is secure；奖项与再版都是这句主张的证据。B 正确。A 与 secure 相反；C 含原文没有的贬评；D 无据，原文只说新版附了一篇回顾四十年研究的新序，并未说理论被修改。"},
+  {q:"6. Which of the following is NOT mentioned in paragraph 4 as a criticism of the behavioural approach? 下列哪一项<b>不是</b>第四段提到的对行为路径的批评？",opts:["Individual-level bias may crowd out structural constraint","Laboratory findings may not travel to cabinet rooms","Emotion in real diplomacy resists measurement","Jervis failed to read the psychological literature of his own time"],ans:3,
+   fb:"正确。段 4 的批评共三条，对应 A、B、C：Critics reply that individual-level bias can crowd out structural constraint, that laboratory findings may not travel to cabinet rooms, and that emotion in real diplomacy resists measurement。D 不在其中，且与原文相反——该书正是建立在他对当时心理学文献的系统阅读之上。NOT / EXCEPT 题的做法：把三个选项逐一回原文定位，剩下那个即为答案。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
