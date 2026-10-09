@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Sails That Hide a Sphere</title>
+<style>
+:root{
+  --accent:#0369a1;
+  --accent2:#0c4a6e;
+  --bg:#f2f8fd;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#bae6fd;
+  --border:#d3e7f6;
+  --soft:#eef8ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(3,105,161,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(3,105,161,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(3,105,161,.55);}70%{box-shadow:0 0 0 12px rgba(3,105,161,0);}100%{box-shadow:0 0 0 0 rgba(3,105,161,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#7dd3fc;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#7dd3fc;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(3,105,161,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#bae6fd;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Arts</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Sails That Hide a Sphere</h1>
+      <p class="subtitle">悉尼歌剧院那几片「帆」背后，藏着一个迟到三年的几何答案；而解出它的人，从来没有站在建成的屋顶下｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Shape Everyone Recognises 谁都认得的那个形状</div>
+            <p>For most visitors the Sydney Opera House needs no explanation. Completed in 1973 and set on a <span class="kw" data-def="岬；伸入海中的高地（head + land；与 cape 近义，但 headland 常指较陡的海岬）">headland</span> in Sydney Harbour, its white roofs are read at once as sails, shells, or the segments of a peeled orange. <span class="kw" data-def="此处 What 引导主语从句，等于 The thing that…，表示「这座建筑没有说出口的（东西）」；注意它和 Which 不同，What 本身内含先行词">What</span> the building does not advertise is how close it came to never being built. When the Danish architect Jørn Utzon won an international competition in 1957, his <span class="kw" data-def="大胆的；敢为常人所不敢的（形容词；名词 audacity 胆识、鲁莽兼而有之；副词 audaciously）">audacious</span> entry drew immediate <span class="kw" data-def="赞誉；喝彩（不可数名词；动词 acclaim 称赞；形容词 acclaimed 广受好评的；win acclaim 获得赞誉）">acclaim</span> — and rested on almost no engineering at all. To look at the finished roof today is to look at a problem that was solved late, at enormous expense, and for nearly four years not at all.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · When Every Piece Is Unique 当每一块都独一无二</div>
+            <p>Successive <span class="kw" data-def="（设计、方案的）迭代版本；一次次的重做（名词；动词 iterate 反复、迭代；区别于「版本 version」——iteration 强调的是过程里的第几轮）">iterations</span> of the design, submitted to the government in March 1958, gave every shell a different curve. For the engineers at Ove Arup &amp; Partners the consequence was brutal: each would need its own <span class="kw" data-def="模板；（浇筑混凝土用的）模具壳板（不可数名词；某一种形式 formwork 一旦浇筑完就被拆掉，无法复用）">formwork</span>, built from scratch and discarded after one use. Since no contractor could price such work and no schedule could absorb it, Utzon spent three years testing parabolas, then ellipsoids, hunting for a single geometry from which all the shapes might be <span class="kw" data-def="派生；源自（动词；derive A from B 从 B 中得出 A；be derived from 由……衍生而来；名词 derivation）">derived</span>. By late 1961, <span class="kw" data-def="with + 宾语 + 现在分词，构成「with 复合结构」作状语，表示背景状况；此处意为「在基座已经在其下方升起的（时候）」">with the podium already rising</span> beneath him, the project was barely <span class="kw" data-def="可行的；能维持下去的（形容词；名词 viability 可行性；a viable alternative 一个可行的替代方案）">viable</span>, and the client had begun asking whether other engineers should be brought in.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · An Answer Found by Tidying Up 收拾桌子时捡到的答案</div>
+            <p>The answer arrived by accident. Alone one evening in his Danish studio, Utzon was stacking the shells of a large wooden model to clear his desk when he noticed how alike they looked. <span class="kw" data-def="过去分词短语作状语＝When it was spread out（摊开来看）；逻辑主语是后文的主句主语 each，被动含义">Spread out</span>, each had seemed distinct; <span class="kw" data-def="同理＝When they were piled together（摞在一起时）；与前一个分词短语形成对照并列，注意两处逗号都不能省">piled together</span>, each could be cut from the surface of one ideal sphere. That was the trick. Because every segment now came from the same parent form, ribs and tiles could be mass-produced in <span class="kw" data-def="统一的；一致的（形容词；名词 uniformity 一致性、整齐划一；uniform batches 统一规格的批量）">uniform</span> batches, and only half of each profile needed drawing, the rest being a mirror image. <span class="kw" data-def="Drafted 是过去分词作状语＝When it was drafted（被绘制／起草成）；注意 drawer（抽屉）与 draft 词形相近但无关">Drafted</span> in January 1962 as thirty-eight pages of drawings, the so-called spherical solution rescued the project. Popular retellings credit a piece of fruit; Utzon's own account credits a tidy desk.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Who Gets to Finish It 谁有资格把它做完</div>
+            <p>Utzon did not see it through. Disputes over cost and schedule led him to <span class="kw" data-def="辞职（动词；resign from a post 辞去职务；resign oneself to 只好接受、听任；名词 resignation 辞职、辞呈）">resign</span> in 1966; the interiors passed to architects working locally, and although he was <span class="kw" data-def="被重新聘任（动词 re-engage 的被动；前缀 re- 表「重新」，连字符不能省）">re-engaged</span> in 1999 to write the principles that would govern all future changes, he never returned to Australia. Awarded the Pritzker Prize in 2003, he died five years later without having stood beneath his own roof. The building therefore holds two lessons, and only one of them concerns geometry. A shape that looks <span class="kw" data-def="任意的；随机的；武断的（形容词；名词 arbitrariness；英语里 arbitrary 强调「没有依据」而非单纯的随便）">arbitrary</span> may <span class="kw" data-def="隐藏；掩盖（动词，正式；conceal A from B 对 B 隐瞒 A；名词 concealment；近义 hide，但 conceal 更书面）">conceal</span> an exact rule; the harder lesson concerns <span class="kw" data-def="创作者身份；作品的归属（名词；author + 后缀 -ship；本课含义：解出难题的人，未必就是被允许把作品做完的人）">authorship</span> — that solving a problem earns no one the right to finish it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="audacious">🔊</button><div class="word">audacious<span class="pos">adj.</span></div><div class="zh">大胆的；敢为常人所不敢的（名词 audacity 既可褒指『胆识』，也可贬指『放肆』；副词 audaciously）</div><div class="ex">"His audacious entry drew immediate acclaim."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="acclaim">🔊</button><div class="word">acclaim<span class="pos">n.</span></div><div class="zh">赞誉；喝彩（不可数名词；动词 acclaim 称赞；形容词 acclaimed 广受好评的；win / draw acclaim 获得赞誉）</div><div class="ex">"His audacious entry drew immediate acclaim."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="iteration">🔊</button><div class="word">iteration<span class="pos">n.</span></div><div class="zh">迭代版本；反复重做的第几轮（动词 iterate；与 version 的区别在于它强调过程：successive iterations 一轮接一轮的修改稿）</div><div class="ex">"Successive iterations of the design gave every shell a different curve."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="derive">🔊</button><div class="word">derive<span class="pos">v.</span></div><div class="zh">派生；源自（derive A from B 从 B 中取得 A；be derived from 由……衍生而来；名词 derivation）</div><div class="ex">"Hunting for a geometry from which all the shapes might be derived."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="viable">🔊</button><div class="word">viable<span class="pos">adj.</span></div><div class="zh">可行的；能存续下去的（名词 viability 可行性；a viable plan / alternative 可行的方案／替代选项；barely viable 勉强撑得住）</div><div class="ex">"By late 1961 the project was barely viable."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="uniform">🔊</button><div class="word">uniform<span class="pos">adj.</span></div><div class="zh">统一的；一致的（名词 uniformity 整齐划一；一词多性：uniform 作名词是『制服』）</div><div class="ex">"Ribs and tiles could be mass-produced in uniform batches."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="draft">🔊</button><div class="word">draft<span class="pos">v.</span></div><div class="zh">起草；绘制（design draft 设计草案；名词 draft 草稿；英式拼写 draught 另有『穿堂风』之义，勿混）</div><div class="ex">"Drafted in January 1962 as thirty-eight pages of drawings."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="resign">🔊</button><div class="word">resign<span class="pos">v.</span></div><div class="zh">辞职（resign from a post 辞去职务）；引申：resign oneself to 只好接受、听任（名词 resignation 辞职／辞呈）</div><div class="ex">"Disputes over cost and schedule led him to resign in 1966."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="arbitrary">🔊</button><div class="word">arbitrary<span class="pos">adj.</span></div><div class="zh">任意的；缺乏依据的；武断的（名词 arbitrariness；英语强调『没有依据』，比中文的『随便』语气更重）</div><div class="ex">"A shape that looks arbitrary may conceal an exact rule."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="conceal">🔊</button><div class="word">conceal<span class="pos">v.</span></div><div class="zh">隐藏；掩盖（conceal A from B 对 B 隐瞒 A；名词 concealment；近义 hide，但 conceal 更书面、常用于抽象物）</div><div class="ex">"A shape that looks arbitrary may conceal an exact rule."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="authorship">🔊</button><div class="word">authorship<span class="pos">n.</span></div><div class="zh">创作者身份；作品的归属（author + 后缀 -ship，表示『身份／地位』；本课引申为『谁算作成者』这一问题）</div><div class="ex">"The harder lesson concerns authorship."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Themes within the text</h3>
+        <p class="ext"><b>① 几何词链：</b>curve 曲线 → parabola 抛物线 → ellipsoid 椭球体 → sphere 球体 → profile 剖面 → segment 分节 → mirror image 镜像。<br>
+        <b>② 工程词链：</b>formwork 模板 → rib 肋拱 → tile 面砖 → podium 基座平台 → contractor 承包商 → mass-produced 批量生产的。<br>
+        <b>③ 抽象名词后缀：</b>-ship 表身份或关系（authorship, leadership, scholarship）；-ity 表性质（viability, uniformity, audacity）。</p>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. What 引导的主语从句 · Nominal clause as subject</h3>
+          <div class="zh">用一个从句直接充当主语，是学术英语里最常见的高级开场。<b>What</b> 在这里等于 the thing that，<b>本身自带先行词</b>，所以后面不能再加 that。</div>
+          <div class="eg">课文原句：<b>What the building does not advertise is how close it came to never being built.</b> 这座建筑没有说出口的是，它离「根本建不起来」曾经有多近。<br>
+          注意后半句：<b>how close it came to never being built</b> 是表语从句，其中 <b>came to</b> 的 to 是介词，后面只能接动名词，且否定要用 <b>never being built</b>。</div>
+          <div class="practice">仿写：把「这本书没有讲的是……」译成英语试试。<input placeholder="What the book does not ... is ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. To do ... is to do ... · 不定式主表对称结构</h3>
+          <div class="zh">主语和表语都用不定式，形成对称。这种写法比 It is ... to do ... 更有力，常用于下定义或强调判断。</div>
+          <div class="eg">课文原句：<b>To look at the finished roof today is to look at a problem that was solved late.</b> 今天看这座建成的屋顶，＝在看一个被很晚才解决的问题。<br>
+          同类句：<b>To promise money before doing anything at all is to promise nothing.</b> 什么都没做先许钱，等于什么都没许。<br>
+          写作用法：主语不定式给出条件，表语不定式给出等同判断，常被用来给抽象概念下定义。</div>
+          <div class="practice">仿写：「理解这个问题等于理解了一半的答案」。<input placeholder="To understand the problem is ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. with + 宾语 + 分词 · with 复合结构作状语</h3>
+          <div class="zh"><b>with + 名词 + 现在分词／过去分词／介词短语</b>，交代主句动作发生的背景状况，比另起一句 with 从句更利落。</div>
+          <div class="eg">课文原句：<b>By late 1961, with the podium already rising beneath him, the project was barely viable.</b> 到 1961 年底，基座已经在他脚下升起，项目却已濒临做不下去。<br>
+          判断分词形式的口诀：<b>名词能主动发出这个动作用 -ing，不能就用 -ed</b>——podium rises 是主动，故用 rising。</div>
+          <div class="practice">仿写：「文件还摆在他面前，他却已经放弃了」。<input placeholder="With the documents still ... before him, he ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. 过去分词短语作状语 · Past participial adverbial</h3>
+          <div class="zh">句首的 -ed 短语＝一个被省掉的状语从句，自带<b>被动＋完成</b>两层意思，逻辑主语必须和主句主语一致。</div>
+          <div class="eg">课文原句：<b>Drafted in January 1962 as thirty-eight pages of drawings, the so-called spherical solution rescued the project.</b> ＝ When it was drafted in January 1962...<br>
+          还原法：<b>When / Because it was drafted ...</b>，把主语和谓语补回去，是写出合格分词状语最稳的办法。</div>
+          <div class="practice">仿写：「这本小说于 1990 年出版，后来被译成了二十种语言」。<input placeholder="Published in 1990, the novel ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. 对照式分词并列 · Parallel participial contrast</h3>
+          <div class="zh">两个手法相同、意思相反的分词短语并列，用分号连接，能在半句话里塞进一个对照实验。</div>
+          <div class="eg">课文原句：<b>Spread out, each had seemed distinct; piled together, each could be cut from the surface of one ideal sphere.</b> 摊开来看，每一片都各不相同；摞在一起，每一片都能从同一个理想球体的表面切出来。<br>
+          结构：<b>过去分词，主句；过去分词，主句</b>。两处逗号都不能省，分号后面通常不再加连词。</div>
+          <div class="practice">仿写：「放在一起看，它们彼此矛盾；拆开来看，它们说的是同一件事」。<input placeholder="Read together, ...; taken apart, ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Points</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>① 名词性从句作主语：What / How / Whether 三兄弟</h3>
+          <div class="zh"><b>What</b> ＝ the thing that（缺主语或宾语时用）；<b>How</b> ＝ the way in which（缺方式状语时用）；<b>Whether</b> ＝ 是否（表选择，不能用 if 替换主语从句）。</div>
+          <div class="eg">What the building does not advertise <b>is</b> how close it came to never being built.<br>
+          → 主语从句 + be 动词 + 表语从句。<br>
+          易错：主语从句整体视为<b>单数</b>，谓语用 is / was，不用 are。<br>
+          仿写：<b>What he lacks is how to finish what he starts.</b>（他缺的是把开了头的事做完的办法。）</div>
+        </div>
+
+        <div class="item">
+          <h3>② To do is to do：不定式作主语与表语</h3>
+          <div class="zh">不定式作主语时，谓语一律用<b>单数</b>；主语和表语都用不定式时，前后<b>结构必须对称</b>。</div>
+          <div class="eg">To look at the finished roof today <b>is</b> to look at a problem.<br>
+          误：<b>To look at the finished roof today is looking at a problem.</b>（前后不对称，学术写作中应避免）<br>
+          同义改写：<b>Looking at the finished roof today is looking at a problem.</b>（动名词主表也要对称）</div>
+        </div>
+
+        <div class="item">
+          <h3>③ with 复合结构的四种形态</h3>
+          <div class="zh">with + 名词 + <b>现在分词</b>（主动、正在进行）／<b>过去分词</b>（被动、已完成）／<b>形容词或介词短语</b>（状态）／<b>不定式</b>（待办）。</div>
+          <div class="eg">with the podium <b>rising</b>（主动进行）<br>
+          with the drawings <b>drafted</b>（被动完成）<br>
+          with the tools <b>on the table</b>（介词短语表位置）<br>
+          注意：with 复合结构常常被前置，用逗号与主句隔开；后置时也可以不用逗号。</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 过去分词短语的逻辑主语（一致性原则）</h3>
+          <div class="zh">分词短语的逻辑主语必须＝主句主语；否则就是<b>垂悬分词</b>（dangling participle），正式写作里算错误。</div>
+          <div class="eg">正确：<b>Drafted</b> in January 1962, the <b>solution</b> rescued the project.（solution 是被 drafted 的）<br>
+          错误：<b>Drafted</b> in January 1962, the engineers thought it would work.（人被 drafted，并非 engineers）<br>
+          修正二选一：① 改主句主语；② 还原为从句 <b>When it was drafted in January 1962, ...</b></div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 破折号引出的同位语从句</h3>
+          <div class="zh">抽象名词（lesson, idea, fact, evidence, notion）后面可以用<b>破折号</b>带一个完整的 that 从句，说明这个名词的具体内容——比逗号更醒目，比冒号更口语。</div>
+          <div class="eg">The harder lesson concerns <b>authorship</b> — <b>that</b> solving a problem earns no one the right to finish it.<br>
+          拆解：<b>authorship</b> 是先行名词，<b>that 从句</b>是它的同位语，两者内容完全等同。<br>
+          换用冒号亦可：<b>authorship: that ...</b>；若改用定语从句就变成限定，语义会窄很多，别乱替换。</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、本课到底讲了什么：一个关于「重复」的工程故事</h3>
+        <p>悉尼歌剧院常被当成「造型取胜」的例子，但课本里的版本其实是一个<b>成本核算的故事</b>。1958 年提交的一稿之所以做不成，不是因为形状怪，而是因为<b>每一片都不一样</b>：浇筑混凝土要用到模板（formwork），倘若十片壳体各不相同，就得做十套只用过一次便丢弃的模板。工程师算不出来价，工期也排不进去。</p>
+        <p>1962 年 1 月的「球面解」把这件事彻底改写了：<b>所有壳体都取自同一个想象中的球体表面</b>。既然同出一母，肋拱可以分规格批量预制，面砖可以采用统一的排布图案，连剖面也只需画一半——另一半是镜像。省下来的不是形状之美，而是重复本身带来的钱与时间。</p>
+
+        <h3>二、中外对照：这个思路，中国古代木构建筑早就系统化了</h3>
+        <p>把「千变万化的零件」归结为「同一套可重复的规格」，在中国营造传统里有个专门的名字，叫<b>模数制</b>。</p>
+        <table class="facts">
+          <tr><th>文献</th><th>成书年代</th><th>模数单位</th><th>要点</th></tr>
+          <tr><td>《营造法式》</td><td>北宋崇宁二年，1103 年刊行，李诫编修</td><td>材（分八等）</td><td>先定一根标准木材的高度与厚度为「材」，梁、栱、斗、椽等构件尺寸皆按材的倍数推导</td></tr>
+          <tr><td>《工程做法则例》</td><td>清代雍正十二年，1734 年颁行，工部编</td><td>斗口（分十一等）</td><td>改以斗口为基准模数，把大木作的构件尺寸进一步规格化、清单化</td></tr>
+        </table>
+        <p>效果与 Utzon 的球面解惊人地相似：<b>构件可以在工场加工、编号，运到现场按榫卯装配</b>，不必每根梁都重新设计。把这个制度性成果保存下来的证据也依然存在——清代<b>样式雷</b>家族世代主持皇家建筑设计（圆明园、颐和园、清东陵等）所留下的图样与烫样，如今主要收藏于中国国家图书馆等机构，并已列入联合国教科文组织《世界记忆名录》。</p>
+
+        <h3>三、但两者的差异必须先说清，否则会出错</h3>
+        <ul>
+          <li><b>性质不同：</b>中国的模数制是一项<b>长期累积的行业规范</b>，目的是统一样式等级、核算工料、便于验收与传承；Utzon 的球面解是一次<b>针对单个项目的几何发现</b>，目的是让某一栋房子的重复施工成为可能。</li>
+          <li><b>约束不同：</b>《营造法式》以「材分八等」把房屋等级写进尺寸里——<b>等级越高，材越大</b>，这是礼制在度量上的体现；球面解只受制于几何与造价，与等级无关。</li>
+          <li><b>可迁移性不同：</b>模数制可以脱离具体建筑独立流传八百年；球面解离开了悉尼的那几片壳体，就只是几何学里一句平平无奇的话。</li>
+        </ul>
+        <p><b>所以别把它讲成「西方科学 vs 中国经验」。</b>准确的说法是：人类在不同地方分别发现，<b>复杂不得自由生长，必须先被规训进一套可重复的秩序里</b>。</p>
+
+        <h3>四、关于 authorship：作者身份的另一层含义</h3>
+        <p>课文第四段收在一个尖锐的地方：<b>解出难题的人，未必被允许把作品做完</b>。这里有一个值得带着走的问题——一个作品的「作者」究竟由什么决定？是那个最初的想法，还是把它落地并维护下去的一整套工作？</p>
+        <p>本课恰好给出了两种答案，可以把它们放在一起看：</p>
+        <table class="facts">
+          <tr><th></th><th>Utzon（1957—2008）</th><th>样式雷家族（清康熙至清末）</th></tr>
+          <tr><td>留下什么</td><td>一次性的解法，以及 1999 年重新受聘后写下的<b>设计原则</b></td><td>成套的图样、烫样与做法惯性，可代代相传</td></tr>
+          <tr><td>如何被承认</td><td>1966 年离职；1999 年被重新聘任为顾问；2003 年获普利兹克奖</td><td>以家族执业的形式持续承接皇家工程，留下大量档案</td></tr>
+          <tr><td>共同点</td><td colspan="2">作者身份最终都不靠图纸本身维持，而靠<b>一套能被别人继续执行的东西</b>——设计原则也好，做法成规也好</td></tr>
+        </table>
+
+        <h3>五、传说与史实：橘子是真的吗</h3>
+        <p>流传最广的说法是 Utzon 剥橘子时灵光一现。悉尼歌剧院官方的叙述把这件事拨正了：这个想法出自他<b>独自在丹麦工作室里把模型的壳体摞起来腾桌子</b>的那一刻——摞在一起才有可比性，正如本课第 3 段所写。用水果来解释薄壳屋顶的做法另有其人：美籍芬兰裔建筑师<b>埃罗·沙里宁</b>（Eero Saarinen，本案评审之一）早年曾在早餐时用葡萄柚向人演示自己设计的薄壳屋顶。</p>
+        <p>这个修正很有价值。它提醒我们<b>灵感叙事往往比灵感本身更好卖</b>：一个剥橘子的动作比一句「我在收拾桌子」更上镜，于是慢慢取代了原版。读文学、读历史都同理——遇到过于漂亮的故事，值得问一句出处。</p>
+
+        <h3>六、关键时间线 Timeline</h3>
+        <table class="facts">
+          <tr><th>1956—1957</th><td>新南威尔士州政府发起国际设计竞赛；丹麦建筑师 Jørn Utzon 的方案入选</td></tr>
+          <tr><th>1958.03</th><td>提交「红皮书」全套图纸；壳体缺乏统一几何，难以施工</td></tr>
+          <tr><th>1958—1961</th><td>先后尝试抛物线、椭球面；基座平台已先行动工</td></tr>
+          <tr><th>1961 年底</th><td>项目濒临搁浅，业主一度考虑更换顾问团队</td></tr>
+          <tr><th>1962.01</th><td>提交「黄皮书」38 页图纸，确立球面解</td></tr>
+          <tr><th>1966</th><td>Utzon 因造价与工期争议辞职；内部装修交由本地建筑师完成</td></tr>
+          <tr><th>1973.10.20</th><td>建筑落成。历时约 14 年，造价约 1.02 亿澳元，外壳贴装逾一百万块瑞典产瓷砖</td></tr>
+          <tr><th>1999</th><td>Utzon 被重新聘任为顾问，负责制定日后改建的设计原则</td></tr>
+          <tr><th>2003 / 2004 / 2007</th><td>获普利兹克建筑奖／按其设计建成的 Utzon Room 开放／列入《世界遗产名录》</td></tr>
+          <tr><th>2008</th><td>Utzon 逝世，生前未再回过澳大利亚</td></tr>
+        </table>
+        <p class="source">说明：本文所述史实与数字取自悉尼歌剧院官方网站、澳大利亚环境与遗产部门的世界遗产条目等公开资料；关于工程造价与建造周期，不同资料统计口径略有出入，本文采用通行的约数。</p>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>读懂一个反直觉的工程故事：</b>悉尼歌剧院之所以难，不是因为长得怪，而是因为最初的每一块都不重复。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>掌握 11 个 B2 核心词：</b>audacious · acclaim · iteration · derive · viable · uniform · draft · resign · arbitrary · conceal · authorship。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>能识别并仿写 5 个高级句型：</b>What 主语从句、不定式主表对称、with 复合结构、过去分词作状语、对照式分词并列。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>能拆解 5 个语法点：</b>名词性从句作主语、不定式作主语与表语、with 复合结构四种形态、垂悬分词的避免、破折号同位语从句。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>建立一处中外对照：</b>球面解的「统一母体」思路与中国古代木构的「模数制」；并主动辨析两者在性质、约束与可迁移性上的差别。</div></div>
+        <div class="goal"><span class="ic">🤔</span><div><b>带走一个开放问题：</b>一件作品的作者身份，究竟由最初的想法决定，还是由把它做完的漫长工作决定？</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🧭 学习建议 How to Use This Page</h3>
+        <p><b>第一遍：</b>只看「全文阅读」，不开词表，先猜大意，把看不懂的高亮词记在一张纸上。<br>
+        <b>第二遍：</b>点开不懂的高亮词看释义，再对照「词汇表」里的例句，确认自己猜得对不对。<br>
+        <b>第三遍：</b>逐段点 ▶ 听朗读，跟读一遍；读不顺的地方通常是自己不会断开的从句。<br>
+        <b>第四遍：</b>带着「句型练习」的 5 个句子回原文，用荧光笔把它们划出来，看清它们是如何在文中承上启下的。<br>
+        <b>最后：</b>做「练习测验」六题；答错的两题，请回到「语法点」里找到对应条目重读一遍。</p>
+        <p><b>打印提示：</b>本页已做打印优化，打印时会自动隐藏导航与按钮，七个板块全部展开，可当讲义使用。</p>
+        <button class="print-btn" onclick="window.print()">🖨 打印本页 Print</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🗝 答案速查 Answer Key</h3>
+        <p>1. C（每一片模板都不一样，无法复用）｜2. B（所有壳体取自同一球体，从而实现批量预制）｜3. D（收拾模型时把壳体摞了起来）｜4. A（1966 年辞职，1999 年重新受聘，2003 年获普利兹克奖，终生未再赴澳）｜5. B（过去分词短语作状语，被动含义，修饰主句主语）｜6. D（解出难题不保证能被允许把它做完）</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-09 · 艺术鉴赏 Arts｜悉尼歌剧院的球面解</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["For most visitors the Sydney Opera House needs no explanation. Completed in 1973 and set on a headland in Sydney Harbour, its white roofs are read at once as sails, shells, or the segments of a peeled orange. What the building does not advertise is how close it came to never being built. When the Danish architect Jørn Utzon won an international competition in 1957, his audacious entry drew immediate acclaim — and rested on almost no engineering at all. To look at the finished roof today is to look at a problem that was solved late, at enormous expense, and for nearly four years not at all.",
+  "Successive iterations of the design, submitted to the government in March 1958, gave every shell a different curve. For the engineers at Ove Arup & Partners the consequence was brutal: each would need its own formwork, built from scratch and discarded after one use. Since no contractor could price such work and no schedule could absorb it, Utzon spent three years testing parabolas, then ellipsoids, hunting for a single geometry from which all the shapes might be derived. By late 1961, with the podium already rising beneath him, the project was barely viable, and the client had begun asking whether other engineers should be brought in.",
+  "The answer arrived by accident. Alone one evening in his Danish studio, Utzon was stacking the shells of a large wooden model to clear his desk when he noticed how alike they looked. Spread out, each had seemed distinct; piled together, each could be cut from the surface of one ideal sphere. That was the trick. Because every segment now came from the same parent form, ribs and tiles could be mass-produced in uniform batches, and only half of each profile needed drawing, the rest being a mirror image. Drafted in January 1962 as thirty-eight pages of drawings, the so-called spherical solution rescued the project. Popular retellings credit a piece of fruit; Utzon's own account credits a tidy desk.",
+  "Utzon did not see it through. Disputes over cost and schedule led him to resign in 1966; the interiors passed to architects working locally, and although he was re-engaged in 1999 to write the principles that would govern all future changes, he never returned to Australia. Awarded the Pritzker Prize in 2003, he died five years later without having stood beneath his own roof. The building therefore holds two lessons, and only one of them concerns geometry. A shape that looks arbitrary may conceal an exact rule; the harder lesson concerns authorship — that solving a problem earns no one the right to finish it."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Why were the roof designs submitted in March 1958 almost impossible to build? 为什么 1958 年 3 月提交的屋顶方案几乎无法施工？",
+   opts:["They were too heavy for the Sydney soil to carry 它们太重，悉尼的土质承载不了","They had never been approved by the international jury 它们从未获得国际评审团通过","Each shell had its own curve, so every piece of formwork would have had to be made separately 每片壳体曲线各不相同，每一块模板都得单独制作","No contractor in Australia owned cranes long enough 当时澳大利亚没有臂长足够的起重机"],
+   ans:2,
+   fb:"正确！关键在于「不能复用」：模板（formwork）浇筑完就被拆掉，十片壳体各有曲线就等于十套一次性模具，既报不出价也排不进工期。课文第二段的 viability（可行性）正是被这一点击穿的。"},
+  {q:"What was the so-called spherical solution of January 1962? 1962 年 1 月所谓的「球面解」是什么？",
+   opts:["A plan to replace all the shells with a single concrete dome 用一座混凝土穹顶取代所有壳体的方案","Realising that every shell could be cut from the surface of one imagined sphere, so that identical parts could be mass-produced 认识到每片壳体都能从同一个想象球体的表面截取，从而批量生产规格统一的构件","A way of building the shells entirely out of shipbuilding steel 完全用造船钢材建造壳体的方法","A mathematical proof that parabolas can be folded by hand 一项证明抛物线可以手工折出来的数学证明"],
+   ans:1,
+   fb:"正确！同出一个母体的结果是重复：肋拱与面砖可以按统一规格批量生产（mass-produced in uniform batches），剖面也只需画一半，另一半是镜像。"},
+  {q:"According to Utzon's own account, how did he reach the spherical solution? 按 Utzon 本人的说法，他是怎么想到球面解的？",
+   opts:["While peeling an orange at breakfast with Eero Saarinen 与埃罗·沙里宁共进早餐时剥橘子想到的","After a computer simulation finally produced a result at last 计算机模拟终于跑出结果之后","By copying the vaulted roofs of Mediterranean churches 模仿地中海教堂的拱顶","While stacking the shells of a wooden model to clear his desk 收拾桌子、把木模型的壳体摞起来的时候"],
+   ans:3,
+   fb:"正确！橘子版本流传最广，但悉尼歌剧院官方的记载并不是这样：他独自在丹麦工作室腾桌子时把壳体摞起来，才发现它们其实彼此相似。详见扩展第五部分。"},
+  {q:"Which statement about Utzon is true according to the final paragraph? 根据最后一段，关于 Utzon 的哪一项是真的？",
+   opts:["He resigned in 1966, was re-engaged in 1999, received the Pritzker Prize in 2003, and never returned to Australia 他 1966 年辞职，1999 年被重新聘任，2003 年获普利兹克奖，此生再未回到澳大利亚","He completed the interiors and opened the building himself in 1973 他亲自完成了内部装修并于 1973 年主持开幕","He returned to Sydney every year and died during a site visit 他每年回悉尼一次，并在一次工地考察时去世","He refused the Pritzker Prize on principle 他出于原则拒绝了普利兹克奖"],
+   ans:0,
+   fb:"正确！注意句首 Awarded the Pritzker Prize in 2003 是过去分词短语作状语，逻辑主语就是主句的 he，与语法点第④条对应。"},
+  {q:"In the sentence 'Drafted in January 1962 as thirty-eight pages of drawings, the so-called spherical solution rescued the project', what is the function of 'Drafted in January 1962...'? 该句中画线部分充当什么成分？",
+   opts:["A dangling modifier that should be corrected 应当修改的垂悬分词","A past-participle adverbial modifying the subject 'the so-called spherical solution', with a passive sense 修饰主句主语 solution 的过去分词状语，含被动意味","A present-participle adverbial expressing cause 表示原因的现在分词状语","An imperative verb introducing the sentence 置于句首的祈使语气动词"],
+   ans:1,
+   fb:"正确！还原后就是 When it was drafted in January 1962...；这里的 it 正是主句主语 the so-called spherical solution，逻辑主语一致，所以不是垂悬分词。"},
+  {q:"What does the writer mean by saying the building holds a lesson about authorship? 作者说这座建筑教人思考 authorship，意思是什么？",
+   opts:["Architecture is a collaborative art, so nobody deserves credit 建筑是集体艺术，因此无人独占功劳","Utzon's drawings were later found to be the work of several hands 后来发现 Utzon 的图纸出自多人之手","Very large public buildings always overrun their budgets 大型公共建筑总会超预算","The person who solves a problem is not always the one allowed to finish the work 解开难题的人，未必就是被允许把作品做完的人"],
+   ans:3,
+   fb:"正确！破折号后面的 that 从句是 authorship 的同位语，两者内容等同：solving a problem earns no one the right to finish it。扩展第四部分把这个问题和中国营造里的「样式雷」图档放在一起对照过。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#0369a1';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

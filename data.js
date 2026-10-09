@@ -7290,6 +7290,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-09",
+    "title": "The Sails That Hide a Sphere",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-09-the-sails-that-hide-a-sphere",
+    "url": "lessons/b2/2026-10-09-the-sails-that-hide-a-sphere.html",
+    "vocab": [
+      {
+        "word": "audacious",
+        "zh": "大胆的；敢为常人所不敢的（名词 audacity 既可褒指『胆识』，也可贬指『放肆』；副词 audaciously）",
+        "ex": "\"His audacious entry drew immediate acclaim.\""
+      },
+      {
+        "word": "acclaim",
+        "zh": "赞誉；喝彩（不可数名词；动词 acclaim 称赞；形容词 acclaimed 广受好评的；win / draw acclaim 获得赞誉）",
+        "ex": "\"His audacious entry drew immediate acclaim.\""
+      },
+      {
+        "word": "iteration",
+        "zh": "迭代版本；反复重做的第几轮（动词 iterate；与 version 的区别在于它强调过程：successive iterations 一轮接一轮的修改稿）",
+        "ex": "\"Successive iterations of the design gave every shell a different curve.\""
+      },
+      {
+        "word": "derive",
+        "zh": "派生；源自（derive A from B 从 B 中取得 A；be derived from 由……衍生而来；名词 derivation）",
+        "ex": "\"Hunting for a geometry from which all the shapes might be derived.\""
+      },
+      {
+        "word": "viable",
+        "zh": "可行的；能存续下去的（名词 viability 可行性；a viable plan / alternative 可行的方案／替代选项；barely viable 勉强撑得住）",
+        "ex": "\"By late 1961 the project was barely viable.\""
+      },
+      {
+        "word": "uniform",
+        "zh": "统一的；一致的（名词 uniformity 整齐划一；一词多性：uniform 作名词是『制服』）",
+        "ex": "\"Ribs and tiles could be mass-produced in uniform batches.\""
+      },
+      {
+        "word": "draft",
+        "zh": "起草；绘制（design draft 设计草案；名词 draft 草稿；英式拼写 draught 另有『穿堂风』之义，勿混）",
+        "ex": "\"Drafted in January 1962 as thirty-eight pages of drawings.\""
+      },
+      {
+        "word": "resign",
+        "zh": "辞职（resign from a post 辞去职务）；引申：resign oneself to 只好接受、听任（名词 resignation 辞职／辞呈）",
+        "ex": "\"Disputes over cost and schedule led him to resign in 1966.\""
+      },
+      {
+        "word": "arbitrary",
+        "zh": "任意的；缺乏依据的；武断的（名词 arbitrariness；英语强调『没有依据』，比中文的『随便』语气更重）",
+        "ex": "\"A shape that looks arbitrary may conceal an exact rule.\""
+      },
+      {
+        "word": "conceal",
+        "zh": "隐藏；掩盖（conceal A from B 对 B 隐瞒 A；名词 concealment；近义 hide，但 conceal 更书面、常用于抽象物）",
+        "ex": "\"A shape that looks arbitrary may conceal an exact rule.\""
+      },
+      {
+        "word": "authorship",
+        "zh": "创作者身份；作品的归属（author + 后缀 -ship，表示『身份／地位』；本课引申为『谁算作成者』这一问题）",
+        "ex": "\"The harder lesson concerns authorship.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
