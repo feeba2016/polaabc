@@ -9158,5 +9158,72 @@ const EPISODES = [
         "ex": "“…remains the standard counterpoint to structural accounts of world politics.”"
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-09",
+    "title": "The Hedge That Carried the Claim",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-09-the-hedge-that-carried-the-claim",
+    "url": "lessons/c1/2026-10-09-the-hedge-that-carried-the-claim.html",
+    "vocab": [
+      {
+        "word": "provisional",
+        "zh": "临时的、暂时成立的；有待进一步确认的（existing for the present, possibly to be changed later；a provisional conclusion 暂定结论、provisional licence 临时执照；词根 provision 含「预备」之意；学术写作中指「在现有证据下成立、随时可被推翻」，正是科学的常态）",
+        "ex": "“…the novice writer accordingly strips out every provisional qualifier, assuming that qualification signals doubt.”"
+      },
+      {
+        "word": "calibrate",
+        "zh": "校准；使说法的力度与证据的强度相匹配（to adjust the force of something to match a standard；calibrate a claim 校准一项断言、calibrate an instrument 校准仪器；名词 calibration 校准；学术写作的核心动作——力度恰等于证据能撑住的程度）",
+        "ex": "“In this genre certainty is not asserted; it is calibrated.”"
+      },
+      {
+        "word": "modal",
+        "zh": "情态的；modal verb 情态动词（may, might, will, must 等；语言学区分 epistemic modality 认识情态——说话人对命题真实性的判断，与 deontic modality 义务情态——允许与应当；本文取前一义）",
+        "ex": "“The instrument is small: modal verbs, epistemic adjectives, reporting verbs such as suggest and appear.”"
+      },
+      {
+        "word": "epistemic",
+        "zh": "认识（论）的；与知识的根据和确定性有关的（relating to knowledge or to the degree of its certainty；epistemic status 认识状态、epistemic humility 认知谦逊；源自希腊语 epistēmē「知识」；说一句话是 epistemic 判断，谈的是「我有多大把握」而非「事情本身如何」）",
+        "ex": "“…epistemic adjectives, reporting verbs such as suggest and appear.”"
+      },
+      {
+        "word": "booster",
+        "zh": "增强语、强化词；与 hedge 相对，指提高断言力度的语言手段（如 clearly, certainly, will, demonstrate；Hyland 语料库中 will 一项出现 483 次，是最常见的增强语；学术写作不是一味求软，而是该强处强、该软处软）",
+        "ex": "“Hyland counted 1,929 boosters in his corpus, the modal will alone supplying 483.”"
+      },
+      {
+        "word": "attenuate",
+        "zh": "减弱、削弱（断言、影响、信号的力度）（to reduce the force, effect, or severity of；attenuate a claim 弱化一项断言、attenuate the signal 使信号衰减；名词 attenuation；比 weaken 正式，多见于技术与学术文本）",
+        "ex": "“…a writer boosts the measured result and attenuates the inference drawn from it.”"
+      },
+      {
+        "word": "discriminate",
+        "zh": "区分、辨别出差别；起到区分作用（to recognize or constitute a distinction；discriminate between A and B 区分 A 与 B；本文为不及物用法，指一个词「还能分辨高下」；注意与「歧视」义区别，学术文本多取「分辨」义；名词 discrimination）",
+        "ex": "“When every result is robust, the adjective stops discriminating.”"
+      },
+      {
+        "word": "overstate",
+        "zh": "夸大陈述；把结论说得超过证据所能支撑的程度（to state something too strongly；overstate the significance of a finding 夸大发现的意义；名词 overstatement 夸大其辞；审稿人最常点名的问题之一——不是结论错，而是结论说得比数据大）",
+        "ex": "“To overstate is to spend credibility the evidence has not earned.”"
+      },
+      {
+        "word": "corroborate",
+        "zh": "佐证、进一步证实（to confirm or give support to a statement, theory, or finding；corroborate the results with a second dataset 用第二份数据佐证结果；名词 corroboration；比 confirm 弱一层——指提供了独立的支持性证据，而非盖棺定论）",
+        "ex": "“…it anticipates objection, invites corroboration, and states how far a finding travels before its generalizability fails.”"
+      },
+      {
+        "word": "generalizability",
+        "zh": "可推广性、外部效度（the extent to which results hold beyond the sample, setting, or population studied；question the generalizability of the findings 质疑结论能否推广；与 external validity 近义；实证研究中几乎必谈的一条局限）",
+        "ex": "“…how far a finding travels before its generalizability fails.”"
+      },
+      {
+        "word": "hedge",
+        "zh": "模糊限制语；给断言加上缓冲（a word or phrase reducing the force of a claim：may, might, suggest, appear, possibly, in most cases；动词 to hedge a claim；学术语境下它不是「没底气」，而是对证据强度负责；名词 hedging 指这一整套语言策略）",
+        "ex": "“The hedge, in short, is not modesty. It is measurement.”"
+      }
+    ]
   }
 ];

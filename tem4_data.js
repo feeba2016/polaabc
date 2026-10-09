@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E2/F1/F2/F3/G1 已上线（26 主题 / 130 Part / 780 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E3/F1/F2/F3/G1 已上线（27 主题 / 135 Part / 810 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1837,7 +1837,87 @@ const TEM4_THEMES = [
         ]
       }
     ]},
-  {id:"E3", cat:"E", zh:"实验室与科学", name:"Lab & Science",   status:"soon", words:70,  desc:"试管、显微镜、实验"},
+  {
+    id:"E3", cat:"E", zh:"实验室与科学", name:"Lab & Science", status:"live",
+    date:"2026-10-09", words:30, desc:"从清晨进实验室到写下结论：初入实验室、化学反应、显微镜下、力与运动、数据与结论",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"E3-P1", slug:"tem4-E3-P1", title:"初入实验室", shape:"拱门",
+        poster:"assets/tem4/posters/E3_P1.png",
+        sentence:"This morning we put on the transparent goggles and white coats, gathered the beakers and test tubes, and the teacher gave us an earnest warning: never be reckless near the acid bottles, keep the window open so that nobody is exposed to the fumes, and remember that every good result must rest on empirical evidence, not guesswork.",
+        sentenceCn:"今天早上我们戴上透明的护目镜、穿上白大褂，收集好烧杯和试管；老师郑重提醒我们：在酸瓶附近切不可鲁莽行事，要开着窗通风，别让任何人暴露在酸雾里，还要记住一切可靠的结果都必须以实验证据为依据，而不是凭空猜测。",
+        scene:"清晨明亮的学校实验室，小叶学姐戴上透明护目镜穿上白大褂，同学们把烧杯试管收集到实验台上，货架上是彩色玻璃器皿。",
+        words:[
+          {word:"transparent", ipa:"/trænsˈpærənt/", pos:"adj.", zh:"透明的，透光的；易懂的；显而易见的", forms:["transparent"]},
+          {word:"gather",      ipa:"/ˈɡæðə/",        pos:"v.",   zh:"聚集，集拢；搜集，采集；渐增，积聚；推测", forms:["gathered"]},
+          {word:"earnest",     ipa:"/ˈɜːnɪst/",      pos:"adj.", zh:"认真的，诚挚的，热切的", forms:["earnest"]},
+          {word:"reckless",    ipa:"/ˈreklɪs/",      pos:"adj.", zh:"轻率的，鲁莽的，不计后果的", forms:["reckless"]},
+          {word:"expose",      ipa:"/ɪkˈspəʊz/",     pos:"vt.",  zh:"揭露，暴露，曝光；使遭受，使处于…作用下；陈列", forms:["exposed"]},
+          {word:"empirical",   ipa:"/emˈpɪrɪkəl/",   pos:"adj.", zh:"以实验为根据的，非理论的，经验主义的", forms:["empirical"]}
+        ]
+      },
+      {
+        id:"E3-P2", slug:"tem4-E3-P2", title:"化学反应", shape:"叶形",
+        poster:"assets/tem4/posters/E3_P2.png",
+        sentence:"Then the experiment began: the little burner blazed under the flask, the blue crystals dissolved quickly in the warm water, tiny bubbles were trapped in the tube, a few grains began to glint at the bottom, the fume hood exhausted the strange gas away, and the wire from the negative terminal made the meter needle swing.",
+        sentenceCn:"实验开始了：小酒精灯在烧瓶下燃起火焰，蓝色晶体很快在温水里溶解，试管里困住了细小的气泡，管底有几粒晶体闪闪发亮，通风橱把怪味气体抽走，接在负极上的导线让仪表指针摆动起来。",
+        scene:"化学实验台前，小酒精灯燃着柔和火焰加热圆底烧瓶，蓝色晶体在温水中溶解，试管里升起细小气泡，小叶学姐俯身专注观察。",
+        words:[
+          {word:"blaze",    ipa:"/bleɪz/",      pos:"n. / v.",   zh:"火；光辉，灿烂；迸发 v. 燃烧，冒火焰；发光，放光彩", forms:["blazed"]},
+          {word:"dissolve", ipa:"/dɪˈzɒlv/",    pos:"v.",        zh:"（使）溶解，（使）液化；解散；中止；（使）衰弱，减退", forms:["dissolved"]},
+          {word:"trap",     ipa:"/træp/",       pos:"n. / v.",   zh:"捕捉器，陷阱；诡计，圈套 v. 设陷阱捕捉；使陷入困境", forms:["trapped"]},
+          {word:"glint",    ipa:"/ɡlint/",      pos:"n. / vi.",  zh:"闪光；闪闪发亮", forms:["glint"]},
+          {word:"exhaust",  ipa:"/ɪɡˈzɔːst/",   pos:"v. / n.",   zh:"排空，抽完；用完，花光；使筋疲力尽 n. 排气；废气，废液", forms:["exhausted"]},
+          {word:"negative", ipa:"/ˈneɡətɪv/",   pos:"n. / adj.", zh:"否定词；底片 adj. 否定的；消极的；（电）负极的", forms:["negative"]}
+        ]
+      },
+      {
+        id:"E3-P3", slug:"tem4-E3-P3", title:"显微镜下", shape:"椭圆",
+        poster:"assets/tem4/posters/E3_P3.png",
+        sentence:"After lunch we turned to the microscopes: through the lens we spied a whole hidden world, cells of every feature drifting slowly past, the lamp's harsh glare softened by a filter, a small shadow cast across the slide when our hands waved, and Xiao Ye said that even a quick glance at these tiny creatures shows how life learned to evolve.",
+        sentenceCn:"午饭后我们转到显微镜前：透过镜片我们发现了一个隐藏的世界，各种形态的细胞缓缓漂过，滤光片柔化了刺眼的灯光，我们挥手时一小片影子投在载玻片上；小叶学姐说，哪怕匆匆一瞥这些微小的生物，也能看出生命是如何学会演化的。",
+        scene:"显微镜前的奇幻微观世界，圆形视野里柔软的细胞缓缓漂过，小叶学姐好奇地凑近目镜，台灯的柔光晕染开来。",
+        words:[
+          {word:"spy",     ipa:"/spaɪ/",            pos:"n. / v.",  zh:"间谍；窥视者 v. 侦察，秘密监视；观察，发现", forms:["spied"]},
+          {word:"feature", ipa:"/ˈfiːtʃə/",         pos:"n. / vt.", zh:"特征，特色；[pl.] 面貌；（电影）正片；特写 vt. 以…为特色", forms:["feature"]},
+          {word:"glare",   ipa:"/ɡleə/",            pos:"v. / n.",  zh:"瞪眼，怒视；令人目眩地照射 n. 令人目眩的光，强烈的阳光", forms:["glare"]},
+          {word:"cast",    ipa:"/kɑːst; kæst/",     pos:"v. / n.",  zh:"投，掷，抛；投射（光、影等）；投（票）n. 演员阵容；铸型", forms:["cast"]},
+          {word:"glance",  ipa:"/ɡlɑːns; ɡlæns/",   pos:"v. / n.",  zh:"一瞥，扫视；闪光，闪耀 n. 一瞥，眼光", forms:["glance"]},
+          {word:"evolve",  ipa:"/ɪˈvɒlv/",          pos:"v.",       zh:"（使）发展，进化，演化；设计；使逐步形成；推论", forms:["evolve"]}
+        ]
+      },
+      {
+        id:"E3-P4", slug:"tem4-E3-P4", title:"力与运动", shape:"超圆角",
+        poster:"assets/tem4/posters/E3_P4.png",
+        sentence:"In the physics corner our model car was streamlined to cut through the air, a pulley lifted the small weight smoothly, we used a rope to survey the width of the sandbox, reckoned the speed of the rolling ball, timed its pace lap after lap, and found it surprisingly hard to fathom why friction slowed everything down.",
+        sentenceCn:"在物理角，我们把模型小车设计成流线型以减小空气阻力，滑轮平稳地举起了小重物，我们用绳子测量沙箱的宽度，计算滚动小球的速度，一圈又一圈地记录它的节奏，最后发现摩擦力为什么会拖慢一切，竟然出人意料地难以理解。",
+        scene:"物理教室一角，流线型小车在斜坡轨道上飞驰，滑轮平稳举起重物，小球留下点状运动轨迹，同学们拿秒表欢呼。",
+        words:[
+          {word:"streamline", ipa:"/ˈstriːmlaɪn/", pos:"n. / v.",  zh:"把…设计或制成流线型；使精简", forms:["streamlined"]},
+          {word:"lift",       ipa:"/lɪft/",        pos:"n. / v.",  zh:"电梯，升降机；免费乘车 v. 提高；举起；（云等）消散", forms:["lifted"]},
+          {word:"survey",     ipa:"/sɜːˈveɪ/",     pos:"n. / v.",  zh:"检查，鉴定；测量，查勘", forms:["survey"]},
+          {word:"reckon",     ipa:"/ˈrekən/",      pos:"v.",       zh:"计算，算出；考虑，认为；料想，估计", forms:["reckoned"]},
+          {word:"pace",       ipa:"/peɪs/",        pos:"n. / v.",  zh:"步伐，速度；一步，步距 v. 踱步；为…定速度", forms:["pace"]},
+          {word:"fathom",     ipa:"/ˈfæðəm/",      pos:"n. / vt.", zh:"（测水深的单位）英寻 vt. 测量…的深度；理解，充分了解", forms:["fathom"]}
+        ]
+      },
+      {
+        id:"E3-P5", slug:"tem4-E3-P5", title:"数据与结论", shape:"波浪",
+        poster:"assets/tem4/posters/E3_P5.png",
+        sentence:"Back at our desks we ran a careful analysis of the numbers, tried to infer the rule behind them, supposed a hypothesis first and then tested it, dared to predict the result of the next trial, refused to speculate without data, and at last wrote down the proof that our whole experiment needed.",
+        sentenceCn:"回到座位上，我们对数据做了仔细的分析，努力推断其背后的规律，先提出一个假设再加以检验，敢于预测下一次实验的结果，拒绝在没有数据的情况下凭空推测，最后写下了整个实验所需要的证明。",
+        scene:"傍晚的实验室木桌前，小叶学姐用羽毛笔在笔记本上写结论，桌上有彩色饼图与柱状图卡片、放大镜和绿植，伙伴们围着讨论。",
+        words:[
+          {word:"analysis",  ipa:"/əˈnæləsɪs/",    pos:"n.", zh:"分析，分解", forms:["analysis"]},
+          {word:"infer",     ipa:"/ɪnˈfɜː/",       pos:"v.", zh:"推断，推论，推测", forms:["infer"]},
+          {word:"suppose",   ipa:"/səˈpəʊz/",      pos:"v.", zh:"认定，假定；推测，猜想；认为", forms:["supposed"]},
+          {word:"predict",   ipa:"/prɪˈdɪkt/",     pos:"v.", zh:"预言，预测", forms:["predict"]},
+          {word:"speculate", ipa:"/ˈspekjuleɪt/",  pos:"v.", zh:"思索，推测；投机，做投机生意", forms:["speculate"]},
+          {word:"proof",     ipa:"/pruːf/",        pos:"n.", zh:"证据，证明；校样；检验，考验 adj. 防…的，耐…的", forms:["proof"]}
+        ]
+      }
+    ]},
   {id:"E4", cat:"E", zh:"科技与人工智能", name:"Tech & AI",     status:"soon", words:90,  desc:"电脑、手机、机器人"},
   /* ===== F 旅行与地理 ===== */
   {

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Hedge That Carried the Claim — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#831843;
+  --accent2:#3f6212;
+  --bg:#faf7f8;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#fbe7ef;
+  --border:#e8cfdb;
+  --soft:#fdf2f7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(131,24,67,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(131,24,67,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(131,24,67,.55);}70%{box-shadow:0 0 0 12px rgba(131,24,67,0);}100%{box-shadow:0 0 0 0 rgba(131,24,67,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#f6cadd;}
+#tip{position:fixed;z-index:1200;background:#500724;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(131,24,67,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fbe7ef;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 学术论文 Academic Writing</span>
+      <h1 class="title">The Hedge That Carried the Claim</h1>
+      <p class="subtitle">Hedging, boosters, and why peer review rewards calibrated certainty · 2026-10-09 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The novice intuition</div>
+            <p>A confident sentence looks like a defended one, and the novice writer accordingly strips out every <span class="kw" data-def="临时的、暂时成立的；有待进一步确认的（arranged or existing for the present, possibly to be changed later；a provisional conclusion 暂定结论、provisional licence 临时执照；词根 provision「供应、预备」；学术写作中指「结论在现有证据下成立，但随时可被推翻」——正是科学的常态）">provisional</span> qualifier, assuming that qualification signals doubt. Ken Hyland's corpus work points the other way: across eight disciplines and some 330,000 words of published articles, he found tentativeness to be not decoration but the machinery by which a claim is made acceptable to readers equipped to test it. In this genre certainty is not asserted; it is <span class="kw" data-def="校准、使（说法的强度）与证据的强度相匹配（to adjust the scale or force of something to match a standard；calibrate a claim 校准一项断言、calibrate the instrument 校准仪器；名词 calibration；学术写作的核心动作——说的力度要正好等于证据能撑住的力度，多一点叫夸大，少一点叫稀释）">calibrated</span>.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The instrument</div>
+            <p>The instrument is small: <span class="kw" data-def="情态的（与情态动词、可能性有关的）；（语言学）modal verb 情态动词（may, might, will, must 等；语言学上区分 epistemic modality「认识情态」——说话人对命题真实性的判断，与 deontic modality「义务情态」——允许、应当；本文取前者）">modal</span> verbs, <span class="kw" data-def="认识（论）的；与知识的根据与确定性有关的（relating to knowledge or its degree of certainty；epistemic modality 认识情态、epistemic status 认识状态；词源希腊语 epistēmē「知识」；说一句话是 epistemic 判断，即谈的是「我有多大把握」，而不是「事情本身如何」）">epistemic</span> adjectives, reporting verbs such as suggest and appear. Hyland counted 1,929 <span class="kw" data-def="增强语、强化词（与 hedge 相对：提高而非降低断言力度的语言手段；如 clearly, certainly, will, demonstrate；Hyland 语料库中 will 一项就出现 483 次，是最常见的增强语；学术写作不是一味求软，而是该强的地方强、该软的地方软）">boosters</span> in his corpus, the modal will alone supplying 483, and found that hedges and boosters cluster in modally harmonic combinations. What matters is the switching. Within one paragraph a writer boosts the measured result and <span class="kw" data-def="减弱、削弱（断言、影响、力度）（to reduce the force or severity of；attenuate a claim 弱化一项断言、attenuate the signal 衰减信号；形容词 attenuation；比 weaken 正式、更常用于技术与学术文本；文中指把「由结果推出的推论」的力度压低）">attenuates</span> the inference drawn from it, because the two rest on different evidence. Calibration is local, not global.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The drift</div>
+            <p>Practice has drifted. Tracking positive words in PubMed abstracts from 1974 to 2014, Vinkers, Tijdink and Otte found their frequency rise from 2.0 per cent to 17.5, a relative increase of 880 per cent, with robust, novel and unprecedented climbing by up to 15,000 per cent. Neutral words did not move; nor did those words in digitised books. The change belongs to one genre. When every result is robust, the adjective stops <span class="kw" data-def="区分、辨别出差别（to recognize or constitute a distinction between things；此处为不及物用法，意为「起到区分作用、还能分辨高下」；the test discriminates between A and B 该检验能区分 A 与 B；注意别与「歧视」义混淆，学术文本中多取「分辨」义；名词 discrimination）">discriminating</span>.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The two failures</div>
+            <p>Two failures therefore bracket the skill. To <span class="kw" data-def="夸大陈述、把……说得超过证据所能支撑的程度（to state something too strongly；overstate the case / the significance of a finding；名词 overstatement 夸大其辞；学术写作中最常被审稿人点名的问题之一——不是结论错，而是结论说得比数据大）">overstate</span> is to spend credibility the evidence has not earned; to hedge everything is to spend the reader's patience, for stacked qualifiers say less than one well-chosen one. Hyland's own conclusion is that hedging is a social act: it anticipates objection, invites <span class="kw" data-def="佐证、进一步证实（to confirm or give support to a statement, theory, or finding；corroborate the results with a second dataset 用第二份数据佐证结果；名词 corroboration；与 confirm 相比更弱一层——它指「提供了独立的支持性证据」，而非「盖棺定论」）">corroboration</span>, and states how far a finding travels before its <span class="kw" data-def="可推广性、外部效度（the extent to which results hold beyond the sample, setting, or population studied；question the generalizability of the findings 质疑结论能否推广；源自 general + -izability；与 external validity 近义，实证研究中几乎必谈的一条局限）">generalizability</span> fails. The <span class="kw" data-def="模糊限制语、缓和语（n.）；(v.) 用模糊限制语弱化断言（a word or phrase that reduces the force of a claim：may, might, suggest, appear, possibly, in most cases；动词 to hedge a claim 给断言加上缓冲；学术语境下它不是「没底气」，而是对证据强度负责。名词 hedging 指这一整套语言策略）">hedge</span>, in short, is not modesty. It is measurement.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="sec" style="border:none;padding:0;margin:0 0 10px;">🧭 篇章结构 Structure at a Glance</h2>
+        <div class="ext">
+        <table>
+          <tr><th>段</th><th>功能</th><th>关键句</th></tr>
+          <tr><td>1</td><td>先立一个普遍直觉（越肯定越有力），再用语料库研究推翻它</td><td>In this genre certainty is not asserted; it is calibrated.</td></tr>
+          <tr><td>2</td><td>交代机制：hedge 与 booster 成对出现，且切换发生在段落内部</td><td>Calibration is local, not global.</td></tr>
+          <tr><td>3</td><td>给出反向证据：四十年来摘要越来越「正面」，并把变化锁定在单一体裁</td><td>The change belongs to one genre.</td></tr>
+          <tr><td>4</td><td>点明两端失守（夸大 / 过度缓和），落到 hedging 的社会性与度量本质</td><td>The hedge, in short, is not modesty. It is measurement.</td></tr>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (11 · C1–C2)</h2>
+      <div class="card">
+        <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="provisional">🔊</button><div class="word">provisional<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">临时的、暂时成立的；有待进一步确认的（existing for the present, possibly to be changed later；a provisional conclusion 暂定结论、provisional licence 临时执照；词根 provision 含「预备」之意；学术写作中指「在现有证据下成立、随时可被推翻」，正是科学的常态）</div><div class="ex">“…the novice writer accordingly strips out every provisional qualifier, assuming that qualification signals doubt.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="calibrate">🔊</button><div class="word">calibrate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">校准；使说法的力度与证据的强度相匹配（to adjust the force of something to match a standard；calibrate a claim 校准一项断言、calibrate an instrument 校准仪器；名词 calibration 校准；学术写作的核心动作——力度恰等于证据能撑住的程度）</div><div class="ex">“In this genre certainty is not asserted; it is calibrated.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="modal">🔊</button><div class="word">modal<span class="pos">adj. / n.</span></div><span class="lvl">C2</span><div class="zh">情态的；modal verb 情态动词（may, might, will, must 等；语言学区分 epistemic modality 认识情态——说话人对命题真实性的判断，与 deontic modality 义务情态——允许与应当；本文取前一义）</div><div class="ex">“The instrument is small: modal verbs, epistemic adjectives, reporting verbs such as suggest and appear.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="epistemic">🔊</button><div class="word">epistemic<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">认识（论）的；与知识的根据和确定性有关的（relating to knowledge or to the degree of its certainty；epistemic status 认识状态、epistemic humility 认知谦逊；源自希腊语 epistēmē「知识」；说一句话是 epistemic 判断，谈的是「我有多大把握」而非「事情本身如何」）</div><div class="ex">“…epistemic adjectives, reporting verbs such as suggest and appear.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="booster">🔊</button><div class="word">booster<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">增强语、强化词；与 hedge 相对，指提高断言力度的语言手段（如 clearly, certainly, will, demonstrate；Hyland 语料库中 will 一项出现 483 次，是最常见的增强语；学术写作不是一味求软，而是该强处强、该软处软）</div><div class="ex">“Hyland counted 1,929 boosters in his corpus, the modal will alone supplying 483.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="attenuate">🔊</button><div class="word">attenuate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">减弱、削弱（断言、影响、信号的力度）（to reduce the force, effect, or severity of；attenuate a claim 弱化一项断言、attenuate the signal 使信号衰减；名词 attenuation；比 weaken 正式，多见于技术与学术文本）</div><div class="ex">“…a writer boosts the measured result and attenuates the inference drawn from it.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="discriminate">🔊</button><div class="word">discriminate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">区分、辨别出差别；起到区分作用（to recognize or constitute a distinction；discriminate between A and B 区分 A 与 B；本文为不及物用法，指一个词「还能分辨高下」；注意与「歧视」义区别，学术文本多取「分辨」义；名词 discrimination）</div><div class="ex">“When every result is robust, the adjective stops discriminating.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="overstate">🔊</button><div class="word">overstate<span class="pos">v.</span></div><span class="lvl">C1</span><div class="zh">夸大陈述；把结论说得超过证据所能支撑的程度（to state something too strongly；overstate the significance of a finding 夸大发现的意义；名词 overstatement 夸大其辞；审稿人最常点名的问题之一——不是结论错，而是结论说得比数据大）</div><div class="ex">“To overstate is to spend credibility the evidence has not earned.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="corroborate">🔊</button><div class="word">corroborate<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">佐证、进一步证实（to confirm or give support to a statement, theory, or finding；corroborate the results with a second dataset 用第二份数据佐证结果；名词 corroboration；比 confirm 弱一层——指提供了独立的支持性证据，而非盖棺定论）</div><div class="ex">“…it anticipates objection, invites corroboration, and states how far a finding travels before its generalizability fails.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="generalizability">🔊</button><div class="word">generalizability<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">可推广性、外部效度（the extent to which results hold beyond the sample, setting, or population studied；question the generalizability of the findings 质疑结论能否推广；与 external validity 近义；实证研究中几乎必谈的一条局限）</div><div class="ex">“…how far a finding travels before its generalizability fails.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hedge">🔊</button><div class="word">hedge<span class="pos">n. / v.</span></div><span class="lvl">C1</span><div class="zh">模糊限制语；给断言加上缓冲（a word or phrase reducing the force of a claim：may, might, suggest, appear, possibly, in most cases；动词 to hedge a claim；学术语境下它不是「没底气」，而是对证据强度负责；名词 hedging 指这一整套语言策略）</div><div class="ex">“The hedge, in short, is not modesty. It is measurement.”</div></div>
+        </div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. find + O + to be + not A but B（发现……不是 A 而是 B）</h3>
+          <div class="zh">文献综述与结果讨论里最好用的一句「定性」句式。结构是 <i>find + 宾语 + (to be) + 补语</i>，其中的 <i>to be</i> 常常省略（<i>found the effect significant</i>），保留时语气更正式。补语部分用 <i>not A but B</i> 对举，两侧词性必须一致（此处均为名词）。妙处在于它先承认读者的既有印象（A），再把它扭向作者判断（B），比直接否定温和得多。雅思 Task 2 里可写成：<i>Research suggests the cause to be not laziness but misaligned incentives.</i></div>
+          <div class="eg">…he found tentativeness to be not decoration but the machinery by which a claim is made acceptable to readers equipped to test it.</div>
+          <div class="practice">✍️ 仿写：研究者发现这个变量不是噪声，而是模型遗漏掉的关键一环。<input type="text" placeholder="They found the variable to be not noise but..."></div>
+        </div>
+        <div class="item">
+          <h3>2. N is not V-ed; it is V-ed.（被动对举 + 分号，一锤定音）</h3>
+          <div class="zh">把读者默认的想法（asserted）与作者的主张（calibrated）放进同一句的被动结构里，中间用<b>分号</b>而非连词连接。分号的作用是让后半句获得独立的重量——换成 <i>but</i> 会变成拖尾，换成句号又断了气。两处被动共用主语 certainty，省略第二个主语（用 <i>it</i> 回指），节奏极紧。这个句型几乎就是为段落末句而生的：上一段铺陈完毕，末句用它收口，读者记得住。</div>
+          <div class="eg">In this genre certainty is not asserted; it is calibrated.</div>
+          <div class="practice">✍️ 仿写：在这类研究里，结论不是宣布出来的，而是被反复检验出来的。<input type="text" placeholder="In this line of research, a conclusion is not...; it is..."></div>
+        </div>
+        <div class="item">
+          <h3>3. What matters is N.（what-主语 + 尾重原则的极简版）</h3>
+          <div class="zh">承上启下的短句神器。<i>What matters / What counts / What is at issue</i> 把前面一段话压缩成一个名词（此处 switching），既总结了上文，又给下文开了口子。它是 <i>What matters is that…</i> 的紧缩形式：省掉 that 从句、直接跟名词，句子更短更硬。注意主语从句 <i>What matters</i> 视为单数，谓语用 is；若表语是复数名词，口语中偶见 <i>What matters are these two points</i>，但正式写作里仍以 is 为稳妥。</div>
+          <div class="eg">What matters is the switching.</div>
+          <div class="practice">✍️ 仿写：真正要紧的并不是样本大小，而是抽样方式。<input type="text" placeholder="What matters is not..."></div>
+        </div>
+        <div class="item">
+          <h3>4. To V1 is to V2 …; to V3 is to V4.（不定式对举的两端）</h3>
+          <div class="zh">对称到近乎格言的一句，最适合写「两个极端都不可取」。两侧均为<b>不定式作主语</b>，表语也用不定式（<i>to spend</i>），前后完全平行；中间仍用分号，让两端各自站住。后半句再挂一个 <i>for</i> 引导的理由（<i>for</i> 作并列连词，相当于 because，但更书面）。注意 <i>to spend credibility</i> 是比喻用法：credibility 被当作可以透支的账户——这类「抽象名词当资源」的搭配在英文学术评论里非常常见。</div>
+          <div class="eg">To overstate is to spend credibility the evidence has not earned; to hedge everything is to spend the reader's patience.</div>
+          <div class="practice">✍️ 仿写：过度简化是牺牲了真相，过度复杂则是牺牲了读者。<input type="text" placeholder="To oversimplify is to...; to overcomplicate is to..."></div>
+        </div>
+        <div class="item">
+          <h3>5. V1 A, V2 B, and V3 + 宾语从句（三重并列 + how far / before 从句）</h3>
+          <div class="zh">给一个抽象概念下定义时最有力的骨架：三个动词并列（anticipates / invites / states），前两项接名词，第三项接一个 <i>how far</i> 引导的宾语从句，从句内部再套一个 <i>before</i> 时间—条件从句（<i>before its generalizability fails</i>，直译「在可推广性失效之前」）。三层信息密度极高，却因为并列结构清晰而并不难读。要点：三项必须<b>语法层级相同</b>；and 前加牛津逗号；<i>how far</i> 比 <i>the extent to which</i> 轻快，比 <i>how much</i> 精确。</div>
+          <div class="eg">…it anticipates objection, invites corroboration, and states how far a finding travels before its generalizability fails.</div>
+          <div class="practice">✍️ 仿写：一个好的局限性说明会承认边界、提出检验方式，并讲清结论在哪个环节上会失效。<input type="text" placeholder="A good limitations section acknowledges..., proposes..., and states where..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 认识情态（epistemic modality）与情态和谐</h3>
+          <div class="zh">第 2 段：<i>modal verbs, <b>epistemic</b> adjectives… hedges and boosters cluster in <b>modally harmonic</b> combinations.</i> 情态动词有两套用法：<b>义务情态</b>（deontic，谈允许与应当，如 <i>You must submit by Friday</i>）与<b>认识情态</b>（epistemic，谈把握大小，如 <i>It must be a typo</i>）。学术写作几乎全用后者，并天然形成强度梯度：<i>might &lt; may &lt; could &lt; should &lt; would &lt; will &lt; must</i>。「情态和谐」（modally harmonic，Lyons 提出）指同一串句子会<b>维持同一种强度</b>：既然前文用了 may，后面就不要突然冒出 clearly——除非作者有意切换，那正是本段所说的 switching。</div>
+          <div class="eg">Hyland counted 1,929 boosters in his corpus, the modal will alone supplying 483, and found that hedges and boosters cluster in modally harmonic combinations.</div>
+        </div>
+        <div class="item">
+          <h3>2. nor 前置的部分倒装</h3>
+          <div class="zh">第 3 段：<i>Neutral words did not move; <b>nor did those words</b> in digitised books.</i> 否定词（nor / neither / never / seldom / not only 等）置于句首时，助动词要提到主语之前：此处 did 提到 those words 之前。因为前句用了 did not，后句用 did（过去时、非第三人称单数），时态须与前文一致；若前句是 <i>has not</i>，后句就写 <i>nor has…</i>。这一招在「两组数据都无变化」这类对比里极省字：不必重复 <i>those words did not move either</i>。</div>
+          <div class="eg">Neutral words did not move; nor did those words in digitised books.</div>
+        </div>
+        <div class="item">
+          <h3>3. 句首现在分词短语作状语（及悬垂分词的禁忌）</h3>
+          <div class="zh">第 3 段：<i><b>Tracking positive words in PubMed abstracts from 1974 to 2014</b>, Vinkers, Tijdink and Otte found their frequency rise…</i> 分词短语放在句首作状语，相当于一个省略的时间/方式状语从句，主语必须与<b>主句主语一致</b>——此处 tracking 的是三位研究者，主句主语正是他们。若写成 <i>Tracking these words, the frequency rose…</i>，分词就悬垂了（frequency 自己不会去追踪），属于典型语病。压缩定语从句时判断 -ing / -ed 的方法（见前期课程）在这里同样适用。</div>
+          <div class="eg">Tracking positive words in PubMed abstracts from 1974 to 2014, Vinkers, Tijdink and Otte found their frequency rise from 2.0 per cent to 17.5.</div>
+        </div>
+        <div class="item">
+          <h3>4. 零关系代词定语从句</h3>
+          <div class="zh">第 4 段：<i>To overstate is to spend credibility <b>the evidence has not earned</b>.</i> credibility 后面省略了关系代词 <i>that / which</i>——当关系代词在从句中作<b>宾语</b>（evidence has not earned [that]）时可以省略，作主语时则不可。这一类省略在学术写作里密度极高：<i>the model they proposed</i>、<i>the data we collected</i>、<i>the mechanism the authors posit</i>。判断方法：把先行词填回从句，若从句缺少的是宾语，就能省；缺主语则必须保留 who / which / that。</div>
+          <div class="eg">To overstate is to spend credibility the evidence has not earned.</div>
+        </div>
+        <div class="item">
+          <h3>5. 数据的名词化表达：rise from X to Y / a relative increase of N per cent / stop V-ing</h3>
+          <div class="zh">第 3 段整段几乎都是名词化写法：不写 <i>the frequency rose</i>（动词句）而用 <i>found their frequency <b>rise</b> from…</i>（find + 宾语 + 原形不定式）；再用 <i>a relative increase of 880 per cent</i> 把增幅打包成一个名词短语；末句 <i>the adjective <b>stops discriminating</b></i> 则用 stop + V-ing（停止做某事，不定式 stop to do 是「停下来去做」，意思完全不同）。学术英文的惯例是：<b>变化用名词、状态用动词</b>，把变化名词化后仍能塞进各种介词框架，信息密度立刻上去。</div>
+          <div class="eg">…found their frequency rise from 2.0 per cent to 17.5, a relative increase of 880 per cent… When every result is robust, the adjective stops discriminating.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (6 · IELTS / TOEFL style)</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card"><div id="score" style="font-weight:700;color:var(--accent);font-size:16px;">作答后可在下方查看每题解析；全部做完可对照本页上方的篇章结构表复盘。</div></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 Deep Dive</h2>
+      <div class="card ext">
+        <h3>一、hedging 是怎么成为一个研究课题的</h3>
+        <p>「模糊限制语」进入语言学，通常追溯到 George Lakoff 1972 年前后关于 <i>hedges</i> 的研究：他关注的是一类「有意把事情弄得模糊一些或清晰一些」的词（如 loosely speaking、sort of、technically）。彼时的兴趣在语义的模糊边界，与学术写作无关。</p>
+        <p>把 hedging 真正带进科学话语研究的是两条线。其一是 John Skelton 1988 年提出的「不精确契约」（contract of inexactitude）：科学声称追求确定的真理，但其话语却系统地使用不确定的表达，二者构成一种约定——读者接受适度的不精确，作者因此获得可辩护的陈述空间。</p>
+        <p>其二是 Ken Hyland 的语料库工作。1996 年他在 <i>Written Communication</i> 13(2): 251–281 发表《Talking to the Academy》，分析 26 篇分子生物学研究论文，指出 hedging 不是修辞装饰，而是「让读者接受主张」的修辞手段；1998 年出版专著《Hedging in Scientific Research Articles》（John Benjamins，Pragmatics &amp; Beyond 第 54 辑，307 页），并在 <i>Text</i> 18(3): 349–382 发表《Boosting, Hedging and the Negotiation of Academic Knowledge》。后者的语料横跨八个学科、约 33 万词，并辅以对论文作者的访谈；本文正文第 2 段的两组数字（1,929 个 booster、will 占 483）与「情态和谐」（modally harmonic，借自 Lyons 1977）一说，均出自该文第 351–356 页。</p>
+        <p>此后 Hyland 于 2005 年把这些手段纳入更大的「元话语」（metadiscourse）框架：interactive（组织语篇）与 interactional（表达立场、拉入读者）两大类，hedge 与 booster 同属后者。今天的 EAP（学术英语）教材里那一整套「该软则软」的写法，源头就在这里。</p>
+
+        <h3>二、Vinkers、Tijdink 与 Otte（BMJ, 2015）</h3>
+        <p>正文第 3 段的数据来自 Christiaan H. Vinkers、Joeri K. Tijdink 与 Willem M. Otte 发表于 <i>The BMJ</i> 的研究（2015 年 12 月 14 日，351: h6467，doi: 10.1136/bmj.h6467），对 1974—2014 年间 PubMed 全部摘要做了回顾性词频分析。</p>
+        <table>
+          <tr><th>量</th><th>数值</th><th>口径（务必看清楚）</th></tr>
+          <tr><td>正面词绝对频率</td><td>2.0%（1974–80）→ 17.5%（2014）</td><td>占摘要词数的比例；相对增幅 880%</td></tr>
+          <tr><td>负面词绝对频率</td><td>1.3%（1974–80）→ 3.2%（2014）</td><td>相对增幅 257%，涨幅远小于正面词</td></tr>
+          <tr><td>单个词最高增幅</td><td>robust、novel、innovative、unprecedented 等最高约 15,000%</td><td>相对频率增幅，非绝对占比</td></tr>
+          <tr><td>对照一：中性词与随机词</td><td>同期无明显增长</td><td>说明不是「所有词都变多了」</td></tr>
+          <tr><td>对照二：Google Books（约已数字化图书的 4%）</td><td>正面词使用无相应上升</td><td>把变化锁定在<b>学术摘要这一体裁</b>，而非英语整体</td></tr>
+          <tr><td>子分析：高影响因子期刊</td><td>趋势同样存在，但较弱</td><td>作者自述为 comparable but less pronounced</td></tr>
+        </table>
+        <p>研究者自己在结论里就留了一道闸门：科学家似乎更爱往好处看了，「但这一印象是否符合现实，应当被打上问号」。他们同时列出了方法上的局限——每类只预设 25 个词、未分析词在句子中出现的位置、也未测度真实的科学进步。至于常被媒体转述的「按此速度，novel 一词到 2123 年会出现在每篇论文里」，那是按既有增速做的<b>算术外推</b>，不是预测，引用时务必注明。</p>
+
+        <h3>三、两端都会失守：夸大与过度缓和</h3>
+        <ul>
+          <li><b>过度断言（overstatement）</b>：把 proves、demonstrates、confirms 用在只有一组数据支撑的结论上。代价不是「显得自信」，而是被审稿人判定为对方法局限缺乏认识。</li>
+          <li><b>堆叠式缓和（stacked hedges）</b>：一句话里摞上 might possibly seem to suggest 之类多个缓和词。经验法则是<b>每个分句一个缓和词就够</b>；摞得越多，反而越像作者自己都不信。</li>
+          <li><b>校准的操作化做法</b>：写每一句关键主张前先问一句「我的证据实际撑得住哪一级」——既有事实 / 稳健发现 / 可能的模式 / 若干解释中的一种 / 纯推测。前两级可以用强表述，后三级逐级加码。</li>
+          <li><b>中文学术写作的迁移问题</b>：中文论说文讲究层层推进、末句有力，这会让 Discussion 段落不自觉地用强断言收尾；而英文讨论段的每一句解读本质上都是推论，恰恰是 hedging 密度最高的地方。这是语言习惯差异，不是水平差异。</li>
+        </ul>
+
+        <h3>四、一个正在展开的新变量：AI 代笔与 hedging</h3>
+        <p>近年的语料库比较研究（包括 Jiang 与 Hyland 2025 年前后的系列研究）报告了一个耐人寻味的现象：生成式模型写出的学术文本，<b>交互类元话语（hedge、booster、立场标记、作者自称）的密度低于人类作者</b>，而结构性、组织性的标记反而更多——读起来条理清楚、四平八稳，却少了那层「我知道自己有几分把握」的语气。另有 2025 年关于语言表达不确定性（linguistic confidence）的研究指出，模型在默认提示下很少主动使用缓和语，只有在被要求时才接近人类水平。</p>
+        <p>需要提醒的是：这类结论对<b>模型版本与提示词极其敏感</b>，2026 年已有方法论论文专门就此提出警告（prompt sensitivity）。因此它们只能作为初步发现引用，不能当作定论。</p>
+
+        <div class="box">
+          <b>📌 事实与立场</b><br>
+          ① 本文只讨论已发表的学术文献与可核对的出版事实，不评价任何国家、机构、期刊、政党或政策；也不涉及任何具体学科之外的价值判断。<br>
+          ② 正文中的数字全部取自原始论文（Hyland 1998；Vinkers 等 2015），属作者公开发表的统计结果，具有条件性与统计性；如需正式引用，请以原文页面与补充材料为准。<br>
+          ③ Vinkers 等研究中「非英语为官方多数语言的国家的作者使用了显著更多的正面词」是一项<b>机构层面的相关性发现</b>。原作者本人将其归因于发表压力与成果的市场化包装，<b>而非</b>语言能力或学术水平；本页引用时不作任何引申，也提醒读者勿据此对任何个人、机构或国家作出判断。<br>
+          ④ 关于 AI 代笔的一节属于初步发现，结论随模型版本与提示词而变，已在文中标注。<br>
+          ⑤ 本页对「中文学术写作习惯」的描述指的是通行文体惯例，不构成对任何写作者的评价。
+        </div>
+
+        <h3>五、术语对照表</h3>
+        <table>
+          <tr><th>英文</th><th>中文</th><th>一句话解释</th></tr>
+          <tr><td>hedge / hedging</td><td>模糊限制语／缓和语</td><td>降低断言力度以匹配证据强度的语言手段</td></tr>
+          <tr><td>booster</td><td>增强语／强化词</td><td>提高断言力度的手段，如 clearly、demonstrate</td></tr>
+          <tr><td>epistemic modality</td><td>认识情态</td><td>说话人对命题真实性把握程度的编码</td></tr>
+          <tr><td>metadiscourse</td><td>元话语</td><td>关于语篇本身与作者—读者关系的语言层</td></tr>
+          <tr><td>contract of inexactitude</td><td>不精确契约</td><td>Skelton：科学话语中约定俗成的适度不精确</td></tr>
+          <tr><td>stacked hedge</td><td>堆叠式缓和</td><td>同一分句内摞用多个缓和词，反致可信度下降</td></tr>
+          <tr><td>generalizability</td><td>可推广性／外部效度</td><td>结论在样本与情境之外仍然成立的程度</td></tr>
+        </table>
+
+        <h3>六、延伸阅读</h3>
+        <ul>
+          <li>Ken Hyland, “Talking to the Academy: Forms of Hedging in Science Research Articles,” <i>Written Communication</i> 13(2), 1996: 251–281。</li>
+          <li>Ken Hyland, <i>Hedging in Scientific Research Articles</i> (John Benjamins, 1998)；及 “Boosting, Hedging and the Negotiation of Academic Knowledge,” <i>Text</i> 18(3), 1998: 349–382。</li>
+          <li>Ken Hyland, <i>Metadiscourse</i> (Continuum, 2005)——把 hedge 与 booster 纳入元话语框架。</li>
+          <li>Vinkers, C. H., Tijdink, J. K., &amp; Otte, W. M., “Use of positive and negative words in scientific PubMed abstracts between 1974 and 2014: retrospective analysis,” <i>The BMJ</i> 351: h6467, 2015。</li>
+          <li>John Skelton, “Comment: On the Ethos of Science and the Contract of Inexactitude,” 1988——「不精确契约」的原始表述。</li>
+        </ul>
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <p><b>主题：</b>学术论文 Academic Writing · hedging（模糊限制语）与 booster（增强语）如何把断言的力度校准到证据的强度；以及四十年间学术摘要为何越写越「正面」。</p>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🎯 学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div>读懂英语学术论说文的标准推进结构：<b>直觉 → 机制 → 反向证据 → 两端边界</b>，并能独立画出篇章结构表。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div>掌握 11 个 C1–C2 学术词汇，其中 <i>hedge</i>、<i>booster</i>、<i>overstate</i>、<i>corroborate</i>、<i>generalizability</i> 可直接迁移到雅思写作与托福独立写作。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div>掌握 5 个高级学术句型，尤其是用于「先承认读者印象再扭向己方判断」的 <i>find O to be not A but B</i>。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div>能识别并复现 5 个高级语法结构：认识情态与情态和谐、nor 前置倒装、句首分词状语、零关系代词定语从句、数据的名词化表达。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div>写议论文时能主动校准语气：知道什么时候该用 <i>suggest</i> 而不是 <i>prove</i>，也知道什么时候<b>不该</b>再叠第二个缓和词。</div></div>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🧪 考试技巧 Exam Skills</h3>
+        <ul>
+          <li><b>主旨题（Gist）：</b>本文主旨是一个<b>语言策略</b>及其规范基础，不是某位学者或某本期刊。选项中出现人名、刊名作主语的，多半是细节冒充主旨。</li>
+          <li><b>数字配对题（Matching figures）：</b>本篇有三组数字（1,929 / 483；2.0%→17.5%；880%、15,000%），雅思阅读常在这里设<b>张冠李戴</b>陷阱：把 booster 的数安到 hedge 头上，或把相对增幅当成绝对占比。定位后逐词比对，不要凭印象。</li>
+          <li><b>推断题（Inference）：</b>第 3 段拿 digitised books 作对照，答案不会逐字写出，但要能从「对照组无变化」推出「变化属于单一体裁」。凡是出现对照组，先问：它在排除什么可能？</li>
+          <li><b>词汇题（Vocabulary in context）：</b><i>discriminating</i> 在本文取「起到区分作用」，与「歧视」无关。做法是把四个选项逐一代回原句，看哪个既合词义又合句意。</li>
+          <li><b>NOT / EXCEPT 题：</b>把三个选项逐一回原文定位，剩下那个即为答案。干扰项常常是<b>原文提到过、但被换了主语或换了结论方向</b>的句子，例如把「作者质疑这一印象是否符合现实」改写成「作者断定科学进步了 880%」。</li>
+        </ul>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">📌 使用建议 How to Use</h3>
+        <ul>
+          <li>第一遍：不看文本，连听四段音频，抓住每段的功能（直觉 / 机制 / 证据 / 边界）。</li>
+          <li>第二遍：逐段精读，把高亮词的中文释义先遮住，靠上下文猜，再点开核对。</li>
+          <li>第三遍：到「句型练习」做仿写，写完后与本课的原文句子逐词比对结构。</li>
+          <li>第四遍：挑一段自己写过的英文，把里面所有 <i>prove / show / clearly</i> 圈出来，逐句问一遍「证据撑得住吗」，改完再读一遍。</li>
+          <li>最后：完成 6 道测验，把错题对应的段落回读一遍。</li>
+        </ul>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+      <footer>Pola News · Advanced English · 每日一课，日积月累 🦘</footer>
+    </section>
+  </main>
+</div>
+
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["A confident sentence looks like a defended one, and the novice writer accordingly strips out every provisional qualifier, assuming that qualification signals doubt. Ken Hyland's corpus work points the other way: across eight disciplines and some 330,000 words of published articles, he found tentativeness to be not decoration but the machinery by which a claim is made acceptable to readers equipped to test it. In this genre certainty is not asserted; it is calibrated.","The instrument is small: modal verbs, epistemic adjectives, reporting verbs such as suggest and appear. Hyland counted 1,929 boosters in his corpus, the modal will alone supplying 483, and found that hedges and boosters cluster in modally harmonic combinations. What matters is the switching. Within one paragraph a writer boosts the measured result and attenuates the inference drawn from it, because the two rest on different evidence. Calibration is local, not global.","Practice has drifted. Tracking positive words in PubMed abstracts from 1974 to 2014, Vinkers, Tijdink and Otte found their frequency rise from 2.0 per cent to 17.5, a relative increase of 880 per cent, with robust, novel and unprecedented climbing by up to 15,000 per cent. Neutral words did not move; nor did those words in digitised books. The change belongs to one genre. When every result is robust, the adjective stops discriminating.","Two failures therefore bracket the skill. To overstate is to spend credibility the evidence has not earned; to hedge everything is to spend the reader's patience, for stacked qualifiers say less than one well-chosen one. Hyland's own conclusion is that hedging is a social act: it anticipates objection, invites corroboration, and states how far a finding travels before its generalizability fails. The hedge, in short, is not modesty. It is measurement."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["The decline of editorial standards in biomedical journals over four decades","How academic writers calibrate the force of a claim to the strength of its evidence","The career of Ken Hyland and the eight disciplines he has analysed","The gradual disappearance of negative words from published abstracts"],ans:1,
+   fb:"正确。四段分明：段 1 用直觉与语料库研究对举，提出「确定性是被校准的」；段 2 交待机制（hedge 与 booster 成对、切换发生在段落内部）；段 3 给出反向的历时证据；段 4 落到两端失守与 hedging 的本质。B 覆盖全文主线。A 只是段 3 的背景，且 decline 一词原文未下此判断；C 把论据当议题；D 与原文相反——负面词的频率是上升的（1.3% 到 3.2%）。"},
+  {q:"2. According to paragraph 2, what did Hyland report about his corpus? 依第二段，Hyland 就自己的语料库报告了什么？",opts:["It contained 1,929 hedges, of which 483 were modal verbs","It covered 330,000 articles drawn from a single discipline","It yielded 1,929 boosters, with the modal will alone supplying 483 of them","It showed hedges to be three times as frequent as boosters"],ans:2,
+   fb:"正确。原文：Hyland counted 1,929 boosters in his corpus, the modal will alone supplying 483。C 几乎是原文的同义转述。A 把 booster 偷换成 hedge——这正是雅思数字配对题最典型的陷阱；B 把 330,000 words 说成 330,000 articles，且 eight disciplines 被改成 single discipline；D 的「三倍」原文无据。"},
+  {q:"3. Why does the author mention digitised books in paragraph 3? 作者为何在第三段提到已数字化的图书？",opts:["To argue that books are a more reliable source than abstracts","To show that the rise in positive words is confined to one genre rather than a change in English itself","To suggest that scientific writers borrow vocabulary from books","To explain why neutral words increased after 1990"],ans:1,
+   fb:"正确。这是推断题：对照组的用处在于排除其他解释。原文先说中性词与随机词没有变化，再说图书里的正面词也没有相应上升，结论是 The change belongs to one genre。B 正确。A 包含一个原文没有的价值判断；C 无据，原文从未说学术写作向图书借词；D 与原文相反——中性词并未增加。"},
+  {q:"4. The word discriminating in paragraph 3 is closest in meaning to: 第三段中的 discriminating 最接近下列哪一项？",opts:["Serving to mark a difference","Expressing unfair disapproval","Becoming increasingly frequent","Requiring further experimental testing"],ans:0,
+   fb:"正确。此处为不及物用法：当一个词失去区分能力，它就无法再告诉读者「这个结果比别的结果更稳」。A 正确。B 是 discriminate 另一个常见义项（歧视），属于典型的同词异义干扰；C 把「失去功能」误读成「变多」；D 无据。词汇题的诀窍：把选项逐一代回原句，看哪个既合词义又合句意。"},
+  {q:"5. In paragraph 4, the phrase stacked qualifiers refers to: 第四段中的 stacked qualifiers 指的是？",opts:["Claims supported by several independent datasets","Several hedging devices piled into the same clause","Qualifiers placed at the very beginning of a paragraph","Criticisms raised one after another by reviewers"],ans:1,
+   fb:"正确。原文紧跟着给出解释：for stacked qualifiers say less than one well-chosen one——几个缓和词摞在一起，反而比一个精心挑选的缓和词说得更少。B 正确。A 讲的是证据强度，与缓和词叠加无关；C 把「堆叠」误解为「位置靠前」；D 把 reviewer 这一外部角色搬了进来，原文此处并未提及审稿人。"},
+  {q:"6. Which of the following is NOT stated in the passage? 下列哪一项是文中<b>没有</b>说的？",opts:["Hedging anticipates objection and invites corroboration","Overstating spends credibility the evidence has not earned","The BMJ authors concluded that scientific progress had increased by 880 per cent","Calibration operates within a paragraph rather than across an entire text"],ans:2,
+   fb:"正确。原文说正面词的<b>使用频率</b>相对增长 880%，而作者本人在结论中明确写道：这一印象是否符合现实，应当被打上问号。C 把「词的频率」偷换成「科学进步」，正是 NOT / EXCEPT 题最爱用的手法——说法似曾相识，主语却已被换掉。A、B 见段 4，D 对应段 2 末句 Calibration is local, not global。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
