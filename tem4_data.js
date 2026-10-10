@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E3/F1/F2/F3/G1 已上线（27 主题 / 135 Part / 810 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1 已上线（28 主题 / 140 Part / 840 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -1918,7 +1918,87 @@ const TEM4_THEMES = [
         ]
       }
     ]},
-  {id:"E4", cat:"E", zh:"科技与人工智能", name:"Tech & AI",     status:"soon", words:90,  desc:"电脑、手机、机器人"},
+  {
+    id:"E4", cat:"E", zh:"科技与人工智能", name:"Tech & AI", status:"live",
+    date:"2026-10-10", words:30, desc:"从智能新伙伴到人机共学：智能新伙伴、AI 的思考、走进机器工厂、一次小故障、人机共学",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"E4-P1", slug:"tem4-E4-P1", title:"智能新伙伴", shape:"拱门",
+        poster:"assets/tem4/posters/E4_P1.png",
+        sentence:"Our classroom's new AI robot looked intelligent yet docile: it could sense who was speaking, identify every student by voice, handle dozens of questions calmly, and obey Miss Ye's every command.",
+        sentenceCn:"教室里的新 AI 机器人看起来既聪明又温顺：它能感知谁在说话，通过声音识别每一位同学，从容处理几十个问题，并听从小叶学姐的每一条指令。",
+        scene:"明亮粉彩的教室科技角，小叶学姐开心地介绍身旁蓝白色的 AI 机器人助手，机器人有大眼睛和小天线，周围是平板电脑、绿植和书架。",
+        words:[
+          {word:"intelligent", ipa:"/ɪnˈtelɪdʒənt/",           pos:"adj.",      zh:"聪明的，理智的，明智的；智能的", forms:["intelligent"]},
+          {word:"docile",      ipa:"/ˈdəʊsaɪl/",               pos:"adj.",      zh:"驯服的；易控制的；易教的", forms:["docile"]},
+          {word:"sense",       ipa:"/sens/",                   pos:"n. / vt.",  zh:"感觉；判断力 vt. 感知，理会，明白", forms:["sense"]},
+          {word:"identify",    ipa:"/aɪˈdentɪfaɪ/",            pos:"v.",        zh:"认明，识别，鉴定；认同", forms:["identify"]},
+          {word:"handle",      ipa:"/ˈhændl/",                 pos:"n. / v.",   zh:"柄，把手 v. 操纵，处理，对待；经营", forms:["handle"]},
+          {word:"command",     ipa:"/kəˈmɑːnd; kəˈmænd/",      pos:"v. / n.",   zh:"命令，指挥；控制 n. 命令；运用能力", forms:["command"]}
+        ]
+      },
+      {
+        id:"E4-P2", slug:"tem4-E4-P2", title:"AI 的思考", shape:"叶形",
+        poster:"assets/tem4/posters/E4_P2.png",
+        sentence:"In the demo we watched the AI analyze thousands of examples, synthesize their hidden patterns, reason step by step, give accurate answers, keep improving through feedback, and finally pass every test criterion.",
+        sentenceCn:"在演示中，我们看到 AI 分析了成千上万个例子，合成其中隐藏的模式，一步步进行推理，给出准确的答案，通过反馈不断改进，最终通过了每一项测试标准。",
+        scene:"粉彩演示室里，小叶学姐指着桌上悬浮的全息 AI 大脑，柔和的光流把大脑、笔记本电脑和小机器人连在一起，空中飘着小齿轮和星光。",
+        words:[
+          {word:"analyze",    ipa:"/ˈænəlaɪz/",     pos:"vt.",      zh:"分析", forms:["analyze"]},
+          {word:"synthesize", ipa:"/ˈsɪnθəsaɪz/",   pos:"vt.",      zh:"用合成法制造；合成，综合", forms:["synthesize"]},
+          {word:"reason",     ipa:"/ˈriːzən/",      pos:"n. / v.",  zh:"理由；理性，判断力 v. 推理，思考", forms:["reason"]},
+          {word:"accurate",   ipa:"/ˈækjərət/",     pos:"adj.",     zh:"准确的，精确的", forms:["accurate"]},
+          {word:"feedback",   ipa:"/ˈfiːdbæk/",     pos:"n.",       zh:"反馈；反馈的信息", forms:["feedback"]},
+          {word:"criterion",  ipa:"/kraɪˈtɪəriən/", pos:"n.",       zh:"[pl. criteria] 标准，准则", forms:["criterion"]}
+        ]
+      },
+      {
+        id:"E4-P3", slug:"tem4-E4-P3", title:"走进机器工厂", shape:"椭圆",
+        poster:"assets/tem4/posters/E4_P3.png",
+        sentence:"The robot arms that the factory manufactures are built on a fully mechanized line; a friendly mechanic showed us how the gears revolve, how an old part is detached, and how a new one is joined in seconds.",
+        sentenceCn:"工厂生产的机械臂来自一条完全机械化的流水线；一位友善的机械师向我们展示齿轮如何旋转、旧零件如何被拆下、新零件又如何在几秒内被接上。",
+        scene:"粉彩机器人工厂的参观走廊，小叶学姐和同学们在玻璃栈道上观看传送带旁友好的机械臂组装小机器人，一位技工拿着扳手微笑讲解。",
+        words:[
+          {word:"manufacture", ipa:"/ˌmænjuˈfæktʃə/", pos:"v. / n.", zh:"（用机器大量）生产，制造 n. 制造，制造业；[pl.] 产品", forms:["manufactures"]},
+          {word:"mechanize",   ipa:"/ˈmekənaɪz/",     pos:"vt.",     zh:"使（过程、工厂等）机械化", forms:["mechanized"]},
+          {word:"mechanic",    ipa:"/mɪˈkænɪk/",      pos:"n.",      zh:"机械师，技工", forms:["mechanic"]},
+          {word:"revolve",     ipa:"/rɪˈvɒlv/",       pos:"v.",      zh:"（使）旋转，（使）绕转；考虑，深思", forms:["revolve"]},
+          {word:"detach",      ipa:"/dɪˈtætʃ/",       pos:"vt.",     zh:"拆卸，使分离；派遣", forms:["detached"]},
+          {word:"join",        ipa:"/dʒɔɪn/",         pos:"v. / n.", zh:"连接，结合；与…会合 n. 连接处，结合点", forms:["joined"]}
+        ]
+      },
+      {
+        id:"E4-P4", slug:"tem4-E4-P4", title:"一次小故障", shape:"超圆角",
+        poster:"assets/tem4/posters/E4_P4.png",
+        sentence:"During the show the little robot began to whirl in circles — something was clearly amiss; the engineer soon diagnosed a mistaken sensor setting that made it shift into reverse and regulate its speed poorly, but one quick fix set everything right.",
+        sentenceCn:"演示进行到一半，小机器人突然开始打转——显然出了故障；工程师很快诊断出一处弄错的传感器设置，正是它让机器人换挡倒转、把速度调得乱七八糟；小小一修，一切恢复正常。",
+        scene:"粉彩维修工坊里，小机器人晕头转向地打转，小叶学姐拿着发光的螺丝刀蹲在旁边，一位工程师打开机器人背板检查零件。",
+        words:[
+          {word:"whirl",    ipa:"/wɜːl/",          pos:"v. / n.",      zh:"使旋转，使急转 n. 旋转，晕眩", forms:["whirl"]},
+          {word:"amiss",    ipa:"/əˈmɪs/",         pos:"adj. / adv.",  zh:"错误的，有缺陷的 adv. 错误地，不顺当地", forms:["amiss"]},
+          {word:"diagnose", ipa:"/ˈdaɪəɡnəʊz/",    pos:"vt.",          zh:"诊断（疾病）；调查分析（问题等的）原因", forms:["diagnosed"]},
+          {word:"mistaken", ipa:"/mɪsˈteɪkən/",    pos:"adj.",         zh:"错误的，误解的，弄错的", forms:["mistaken"]},
+          {word:"shift",    ipa:"/ʃɪft/",          pos:"v. / n.",      zh:"移动，转移，变换 n. 改变，变换；轮班", forms:["shift"]},
+          {word:"regulate", ipa:"/ˈreɡjʊleɪt/",    pos:"vt.",          zh:"管理，控制；调整，调节", forms:["regulate"]}
+        ]
+      },
+      {
+        id:"E4-P5", slug:"tem4-E4-P5", title:"人机共学", shape:"波浪",
+        poster:"assets/tem4/posters/E4_P5.png",
+        sentence:"On the way home Miss Ye reminded us that machines must never dominate our thinking or make us feel inferior; only a solid foundation of knowledge and the courage to innovate will keep us growing — nobody can foretell the future, yet we are lucky to witness this wonderful new era.",
+        sentenceCn:"回家路上小叶学姐提醒我们：机器永远不能支配我们的思考，也不能让我们觉得自己低人一等；只有扎实的知识基础和创新的勇气才能让我们不断成长——没人能预言未来，但我们有幸见证这个精彩的新时代。",
+        scene:"夕阳暖光的粉彩书房，小叶学姐和蓝白小机器人头挨头共读一本图画书，悬浮的小屏幕上闪着星星和爱心，猫兔同学在懒人沙发上休息。",
+        words:[
+          {word:"dominate",   ipa:"/ˈdɒmɪneɪt/",   pos:"v.",      zh:"支配，统治，控制；占首要地位", forms:["dominate"]},
+          {word:"inferior",   ipa:"/ɪnˈfɪəriə/",   pos:"adj.",    zh:"（质量等）较劣的，次等的；下级的", forms:["inferior"]},
+          {word:"foundation", ipa:"/faʊnˈdeɪʃən/", pos:"n.",      zh:"基础，根据；创立，设立；基金会", forms:["foundation"]},
+          {word:"innovate",   ipa:"/ˈɪnəveɪt/",    pos:"v.",      zh:"革新，改革，创新", forms:["innovate"]},
+          {word:"foretell",   ipa:"/fɔːˈtel/",     pos:"v.",      zh:"预言，预测", forms:["foretell"]},
+          {word:"witness",    ipa:"/ˈwɪtnəs/",     pos:"n. / v.", zh:"目击者，证人 v. 目睹；表明，证明", forms:["witness"]}
+        ]
+      }
+    ]},
   /* ===== F 旅行与地理 ===== */
   {
     id:"F1", cat:"F", zh:"旅行与观光", name:"Travel & Tourism", status:"live",

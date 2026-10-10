@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Cage That Holds a City Up</title>
+<style>
+:root{
+  --accent:#b91c1c;
+  --accent2:#7f1d1d;
+  --bg:#fdf6f5;
+  --card:#ffffff;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --highlight:#fecaca;
+  --border:#f2d7d3;
+  --soft:#fef4f3;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(185,28,28,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(185,28,28,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(185,28,28,.55);}70%{box-shadow:0 0 0 12px rgba(185,28,28,0);}100%{box-shadow:0 0 0 0 rgba(185,28,28,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fca5a5;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fca5a5;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(185,28,28,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fecaca;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · History</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Cage That Holds a City Up</h1>
+      <p class="subtitle">1755 年诸圣节早晨，里斯本在十分钟内变成瓦砾；重建时，工程师把一具木笼子砌进了每一道墙里。半个世纪后人们才发现，那次灾难同时催生了地震学与一份写给每个教区的问卷｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A City at Prayer 一座正在祈祷的城市</div>
+            <p>On the morning of 1 November 1755, All Saints' Day, much of Lisbon was at prayer when the ground moved. Three shocks, whose <span class="kw" data-def="震级；量级（名词；a magnitude 8.5 earthquake 8.5 级地震；短语 of some magnitude 相当重要／相当规模的；注意它是名词，不是形容词 large）">magnitude</span> modern seismologists put at 8.5 to 9.0, were followed by fires that burned for days and by a wave that swept up the Tagus <span class="kw" data-def="河口湾；江河入海处的喇叭形水域（名词；与 river mouth 近义，但 estuary 特指受潮汐影响的河海过渡段）">estuary</span>. Churches crowded with worshippers collapsed, and the royal library and its archives went with them. <span class="kw" data-def="（此处）同时代的；当时的（形容词；另一个常用义是『当代的』，如 contemporary art 当代艺术；读史料时务必分清是哪一个意思）">Contemporary</span> estimates of the dead vary wildly, from a few tens of thousands upward, and historians still argue over them. What nobody disputes is the scale: the capital of a global empire was reduced to <span class="kw" data-def="瓦砾；碎石（不可数名词；reduce ... to rubble 把……化为瓦砾；in ruins 侧重『成为废墟的状态』，rubble 侧重『碎砖烂瓦本身』）">rubble</span> in under ten minutes.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Questions Sent to Every Parish 发往每一个教区的问卷</div>
+            <p>Into the ruins stepped Sebastião José de Carvalho e Melo, chief minister to King Joseph I and afterwards Marquis of Pombal. Asked what should be done first, he is said to have answered: bury the dead and feed the living. Within weeks his government sent a printed questionnaire to every <span class="kw" data-def="教区（名词；既是宗教单位也是当时基层行政单位，所以庞巴尔才会把问卷发到 parish——这是理解本段的关键）">parish</span> in the kingdom — the same questions, asked everywhere: how long the shaking lasted, how many aftershocks followed, in which direction walls fell, whether wells rose or sank. Those replies, still held in the national <span class="kw" data-def="档案馆；档案（名词，常用复数 archives；动词 archive 归档；注意发音 /ˈɑːkaɪv/，重音在第一个音节）">archive</span>, are often described as the first <span class="kw" data-def="实证的；以观察或实验为根据的（形容词；反义 theoretical／a priori；empirical evidence 实证证据；名词 empiricism 经验主义）">empirical</span> dataset assembled for a single earthquake. <span class="kw" data-def="Not until 置于句首时主句必须部分倒装（助动词提到主语前）；此处 did seismologists stop 就是倒装，意为『直到……才』">Not until</span> the late twentieth century did seismologists stop using them to locate the source fault.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Something That Bends Instead of Breaking 会弯而不折的东西</div>
+            <p>The rebuilding is where the story turns practical. Pombal's engineers — Manuel da Maia, Eugénio dos Santos and Carlos Mardel among them — cleared the medieval plan and laid out a grid of wide avenues and squares able to hold a crowd. The real <span class="kw" data-def="创新；新发明（名词；动词 innovate；形容词 innovative；区别于 invention：innovation 强调『被采用并改变了做法』）">innovation</span>, however, was hidden. Inside each wall they set a <span class="kw" data-def="格构；格栅（名词；a lattice of timber 木格栅；形容词 latticed；也可指数学上的『格』，如 lattice point 格点）">lattice</span> of timber: uprights, beams and diagonal <span class="kw" data-def="支撑；斜撑（名词；动词 brace 支撑、使稳固；brace oneself for 为……做好准备；St Andrew's cross 指 X 形交叉斜撑）">braces</span> forming a three-dimensional cage, which was afterwards filled with <span class="kw" data-def="（砖石）砌体；圬工（不可数名词；mason 石匠；masonry wall 砌体墙；注意它是集合名词，不用复数）">masonry</span>. Because timber bends where stone snaps, the frame <span class="kw" data-def="耗散；使消散（动词，正式；dissipate energy／heat 耗散能量／热量；也可指『挥霍』或人群『散去』；名词 dissipation）">dissipates</span> the energy of a shock rather than resisting it. Scale models were reportedly tested by marching troops around them in step — an improvised ancestor of the modern shake table.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What the Ruins Were Kept For 废墟被留下做什么</div>
+            <p>Not everything was rebuilt. The roofless nave of the Carmo Convent was <span class="kw" data-def="刻意地；蓄意地（副词；形容词 deliberate 有意的、从容的；与 on purpose 近义，但 deliberately 更书面，也可含『明知故犯』的贬义）">deliberately</span> left as it fell, and it still stands open to the sky in the middle of the modern city — a scar kept rather than a wound closed. Elsewhere the legacy is invisible: walk through the Baixa today and the cage is buried behind plaster and tile. <span class="kw" data-def="Were + 主语 + to do 是虚拟条件句的倒装，等于 If another great earthquake were to strike（万一再发生一次大地震）；were 不能换成 was">Were</span> another great earthquake <span class="kw" data-def="to strike 与 Were 共同构成倒装虚拟条件；分句后要用逗号，主句用 would／could／might + 动词原形">to strike</span>, engineers would be watching those walls closely, for <span class="kw" data-def="比较的；对比的（形容词；comparative study 比较研究；comparative literature 比较文学；副词 comparatively 相对而言）">comparative</span> studies rate the system as the most advanced anti-seismic construction of its century. <span class="kw" data-def="Only by + 动名词置于句首时主句部分倒装；此处 did Lisbon build 就是倒装，强调『唯有通过……才』">Only by</span> leaving a skeleton inside its walls did Lisbon build a city capable of surviving the thing that had destroyed it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="magnitude">🔊</button><div class="word">magnitude<span class="pos">n.</span></div><div class="zh">震级；量级；重大程度（a magnitude 8.5 earthquake 8.5 级地震；of some magnitude 相当规模的／相当重要的；它是名词，别当形容词用）</div><div class="ex">"Three shocks, whose magnitude modern seismologists put at 8.5 to 9.0."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="estuary">🔊</button><div class="word">estuary<span class="pos">n.</span></div><div class="zh">河口湾；受潮汐影响的河海过渡水域（the Tagus estuary 塔霍河口；与 river mouth 近义，但 estuary 特指喇叭形、咸淡水交汇的河口）</div><div class="ex">"A wave that swept up the Tagus estuary."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="contemporary">🔊</button><div class="word">contemporary<span class="pos">adj./n.</span></div><div class="zh">一词两义，读史料时务必分清：① 同时代的、当时的（contemporary estimates 当时的估算）；② 当代的（contemporary art 当代艺术）。作名词指『同时代的人』</div><div class="ex">"Contemporary estimates of the dead vary wildly."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rubble">🔊</button><div class="word">rubble<span class="pos">n.</span></div><div class="zh">瓦砾；碎砖烂瓦（不可数名词；be reduced to rubble 化为瓦砾；rubble 指碎石本身，in ruins 指『成为废墟』的状态）</div><div class="ex">"The capital of a global empire was reduced to rubble in under ten minutes."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="parish">🔊</button><div class="word">parish<span class="pos">n.</span></div><div class="zh">教区（同时也是 18 世纪葡萄牙的基层行政单位——正因为它兼管民事登记，庞巴尔的问卷才能发到每一个 parish；形容词 parochial 另有『狭隘的』之义）</div><div class="ex">"His government sent a printed questionnaire to every parish in the kingdom."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="archive">🔊</button><div class="word">archive<span class="pos">n./v.</span></div><div class="zh">档案馆；档案（作名词常用复数 archives；也可作动词『归档』；读音 /ˈɑːkaɪv/，重音在第一音节）</div><div class="ex">"Those replies, still held in the national archive."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="empirical">🔊</button><div class="word">empirical<span class="pos">adj.</span></div><div class="zh">实证的；以观察或实验为依据的（反义 theoretical／a priori；empirical evidence 实证证据；empirical data 实测数据；名词 empiricism 经验主义）</div><div class="ex">"Often described as the first empirical dataset assembled for a single earthquake."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="innovation">🔊</button><div class="word">innovation<span class="pos">n.</span></div><div class="zh">创新；新做法（动词 innovate；形容词 innovative；与 invention 的区别：invention 是『发明出来』，innovation 是『被采用并改变了做法』）</div><div class="ex">"The real innovation, however, was hidden."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="lattice">🔊</button><div class="word">lattice<span class="pos">n.</span></div><div class="zh">格构；格栅（a lattice of timber 木格栅；形容词 latticed；数学里还有『格』的意思，如 lattice point 格点）</div><div class="ex">"Inside each wall they set a lattice of timber."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="dissipate">🔊</button><div class="word">dissipate<span class="pos">v.</span></div><div class="zh">耗散；使消散（正式用词；dissipate energy／heat 耗散能量／热量；也可指人群『散去』或财富『被挥霍』；名词 dissipation）</div><div class="ex">"The frame dissipates the energy of a shock rather than resisting it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="deliberately">🔊</button><div class="word">deliberately<span class="pos">adv.</span></div><div class="zh">刻意地；蓄意地（形容词 deliberate 有意的、从容不迫的；与 on purpose 近义但更书面，且常带『明知故犯』的贬义色彩）</div><div class="ex">"The roofless nave of the Carmo Convent was deliberately left as it fell."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Themes within the text</h3>
+        <p class="ext"><b>① 灾害词链：</b>shock 震动 → aftershock 余震 → tremor 颤动 → fault 断层 → magnitude 震级 → seismologist 地震学家 → shake table 振动台。<br>
+        <b>② 建筑词链：</b>timber 木材 → upright 立柱 → beam 横梁 → brace 斜撑 → lattice 格构 → cage 笼架 → masonry 砌体 → plaster 灰泥。<br>
+        <b>③ 学术动词：</b>assemble 汇编（数据）· estimate 估算 · rate 评定等级 · locate 定位 · dissipate 耗散。<br>
+        <b>④ 易混后缀：</b>-ary 表场所（archive 档案、library 图书馆）；-ical 构成形容词（empirical 的 -al，historical、geological）。</p>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. Were + 主语 + to do · 倒装虚拟条件句</h3>
+          <div class="zh">把 <b>were</b> 提到主语前、省掉 <b>if</b>，就是虚拟条件句的倒装式。它表示<b>假设性很强、可能性较低</b>的将来情况，语气比 If ... happens 更保留。</div>
+          <div class="eg">课文原句：<b>Were another great earthquake to strike, engineers would be watching those walls closely.</b> 万一再发生一次大地震，工程师们一定会密切注视那些墙。<br>
+          还原：<b>If another great earthquake were to strike, ...</b><br>
+          注意：虚拟语气里一律用 <b>were</b>，即使在第三人称单数后也不用 was；同类结构还有 <b>Had I known ...</b>（If I had known）和 <b>Should it happen ...</b>（If it should happen）。</div>
+          <div class="practice">仿写：把「万一明天下雨，比赛就会推迟」译成英语。<input placeholder="Were it to rain tomorrow, ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. Not until ... + 部分倒装 · 直到……才</h3>
+          <div class="zh"><b>Not until</b> 置于句首时，主句必须<b>部分倒装</b>——把助动词（did / do / was / had）提到主语前面。这是 B2 阶段最容易被漏掉的一条倒装规则。</div>
+          <div class="eg">课文原句：<b>Not until the late twentieth century did seismologists stop using them.</b> 直到 20 世纪晚期，地震学家才不再使用它们。<br>
+          不倒装的写法（弱）：<b>Seismologists did not stop using them until the late twentieth century.</b><br>
+          判断口诀：句首出现否定或半否定词（never, rarely, seldom, not only, not until, under no circumstances），主句一律倒装。</div>
+          <div class="practice">仿写：「直到他亲耳听到，他才相信这件事」。<input placeholder="Not until he heard it himself ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. Only by + 动名词 + 部分倒装 · 唯有通过……才</h3>
+          <div class="zh"><b>Only + 状语</b>（介词短语、副词、状语从句）置于句首，主句同样要部分倒装。<b>Only by</b> 后面接的是<b>动名词</b>，因为 by 是介词。</div>
+          <div class="eg">课文原句：<b>Only by leaving a skeleton inside its walls did Lisbon build a city capable of surviving the thing that had destroyed it.</b> 唯有把一副骨架留在墙里，里斯本才建成了一座能够熬过那场毁灭它的灾难的城市。<br>
+          拆解：<b>Only by leaving ...</b>（状语）＋ <b>did Lisbon build</b>（倒装主句）。<br>
+          易错：若 Only 后面跟的是<b>主语</b>（如 Only he knew），<b>不倒装</b>。</div>
+          <div class="practice">仿写：「唯有每天练习，你才能说得流利」。<input placeholder="Only by practising every day ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. rather than + 平行结构 · 而不是</h3>
+          <div class="zh"><b>rather than</b> 前后两边的<b>词性与形式必须一致</b>，这是它最核心的语法要求；课文里前面是谓语动词 dissipates，后面就只能用动名词 resisting。</div>
+          <div class="eg">课文原句：<b>The frame dissipates the energy of a shock rather than resisting it.</b> 这个框架把冲击的能量耗散掉，而不是硬扛。<br>
+          对比三种平行：<b>to do ... rather than (to) do</b> · <b>doing ... rather than doing</b> · <b>noun ... rather than noun</b>。<br>
+          延伸：<b>would rather do ... than do ...</b>（宁愿……也不愿……）里的 than 后接动词原形，别混淆。</div>
+          <div class="practice">仿写：「他选择解释原因，而不是道歉」。<input placeholder="He chose to explain the reason rather than ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. 冒号展开 + 非限制性定语从句 · 学术长句的两种扩容法</h3>
+          <div class="zh">学术写作里把一个名词撑开有两种常用手段：<b>冒号后列举具体内容</b>，以及<b>逗号加 which 引导非限制性定语从句</b>。本课两种都出现了。</div>
+          <div class="eg">① <b>the same questions, asked everywhere: how long the shaking lasted, how many aftershocks followed, whether wells rose or sank</b> —— 冒号后是三个并列的名词性从句，充当 questions 的同位语。<br>
+          ② <b>a three-dimensional cage, which was afterwards filled with masonry</b> —— which 引导非限制性定语从句，只作补充说明，去掉后主句仍完整。<br>
+          区别：限制性定语从句（无逗号、可用 that）用来<b>限定</b>是哪个；非限制性（有逗号、只能用 which）用来<b>补充</b>。</div>
+          <div class="practice">仿写：「他提出三个条件：谁来付钱、谁来监督、工期多长」。<input placeholder="He set three conditions: ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Points</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>① 虚拟条件句的倒装：Were / Had / Should 提前</h3>
+          <div class="zh">把 <b>were / had / should</b> 提到句首即可省去 <b>if</b>。三种对应不同的时间：Were 表将来或现在（假设性强），Had 表过去（与事实相反），Should 表将来（可能性较小）。</div>
+          <div class="eg"><b>Were</b> another great earthquake <b>to strike</b>, engineers <b>would be</b> watching those walls.（将来／现在）<br>
+          <b>Had</b> the ground <b>moved</b> an hour later, the dead <b>would have been</b> counted differently.（过去，与事实相反）<br>
+          <b>Should</b> another shock <b>occur</b>, the plan <b>would</b> change again.（将来，可能性小）<br>
+          易错：虚拟语气中一律 <b>were</b>，第三人称单数也不用 was；<b>Was I you ...</b> 是错的。</div>
+        </div>
+
+        <div class="item">
+          <h3>② 否定或半否定词前置引起的部分倒装</h3>
+          <div class="zh">句首出现 <b>not until, never, rarely, seldom, hardly, no sooner, not only, under no circumstances</b> 等，主句必须部分倒装：把助动词／情态动词／be 提到主语前；若谓语是实义动词的一般现在或一般过去，则要借 <b>do / does / did</b>。</div>
+          <div class="eg">Not until the late twentieth century <b>did</b> seismologists <b>stop</b> using them.（borrow did，stop 回原形）<br>
+          误：<b>Not until the late twentieth century seismologists stopped ...</b>（未倒装，正式写作算错）<br>
+          记忆口诀：<b>否定开头，助词提前；实义动词，借 do 上殿。</b></div>
+        </div>
+
+        <div class="item">
+          <h3>③ Only + 状语倒装，Only + 主语不倒装</h3>
+          <div class="zh"><b>Only</b> 置于句首时，要看它修饰的是什么：修饰<b>状语</b>（介词短语、副词、状语从句）则主句倒装；修饰<b>主语</b>则完全不倒装。</div>
+          <div class="eg">倒装：<b>Only by leaving a skeleton inside its walls did Lisbon build a city.</b>（Only by ... 是方式状语）<br>
+          不倒装：<b>Only the engineers knew what was inside the walls.</b>（Only 修饰主语 the engineers）<br>
+          同理：<b>Only after the fire died out did the counting begin.</b>（Only after ... 是时间状语）</div>
+        </div>
+
+        <div class="item">
+          <h3>④ rather than 的平行原则与两种句型</h3>
+          <div class="zh"><b>rather than</b> 是并列连词，要求前后<b>形式对称</b>。另有一个形近但用法不同的结构 <b>would rather ... than ...</b>，后面接动词原形。</div>
+          <div class="eg">平行：<b>dissipates ... rather than resisting</b>（谓语 vs 动名词，因为 rather than 在这里连接的是两种作用方式）<br>
+          更常见的对称：<b>I would walk rather than drive.</b>（原形 vs 原形）／<b>Walking rather than driving saves money.</b>（动名词）<br>
+          别混：<b>I would rather walk than drive.</b>（would rather ... than ...，两个都接原形）</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 非限制性定语从句：逗号与 which 都不能省</h3>
+          <div class="zh">非限制性从句只是<b>补充说明</b>，删掉后主句意思依然完整，所以必须<b>用逗号隔开</b>，且关系词<b>只能用 which（指物）或 who（指人），不能用 that</b>。</div>
+          <div class="eg">课文：<b>a three-dimensional cage, which was afterwards filled with masonry</b><br>
+          比较：<b>The cage that was filled with masonry collapsed.</b>（限制性：特指「被填满砌体的那一个笼架」）<br>
+          注意：非限制性从句里的 which 有时可以指代<b>整个主句</b>，如 <b>The city was rebuilt, which took more than a decade.</b></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、本课到底讲了什么：一次灾难，两份遗产</h3>
+        <p>1755 年 11 月 1 日是诸圣节，里斯本许多人在教堂里做礼拜时地面开始震动。今天地震学家估算其震级约 <b>8.5 至 9.0</b>，震源大致位于大西洋亚速尔—直布罗陀转换断层一带的马蹄深渊平原附近。震动之后是持续数日的大火，以及涌入塔霍河口的巨浪——<b>震、火、浪三重打击</b>，是这次灾难破坏力远超普通地震的直接原因。</p>
+        <p>本课把这件事拆成两条线。第一条是<b>知识线</b>：庞巴尔在灾后数周内把一份统一的印刷问卷发到全国每一个教区，问的都是可核对的事实——震动持续多久、余震几次、墙朝哪个方向倒、井水是涨是落。这些答卷至今保存在葡萄牙国家档案馆（Torre do Tombo），被普遍视为<b>人类第一次为单次地震系统地收集实证数据</b>，因此这一年也常被称为地震学的起点。</p>
+        <p>第二条是<b>工程线</b>：重建时，工程师在每道墙里嵌入一副三维木笼（葡萄牙语 <b>gaiola pombalina</b>，庞巴尔笼）——立柱、横梁与 X 形斜撑构成柔性骨架，再以砖石填充。木与石的分工很清楚：<b>石头抗压但脆，木头能弯而不断</b>。地震来时，木框架先把能量「吃掉」一部分，墙体因此不整体崩塌。联合国教科文组织的预备名录文件称，比较研究认为这是<b>18 世纪最先进的抗震结构体系</b>。</p>
+
+        <h3>二、中外对照：中国木构建筑的抗震思路</h3>
+        <p>「让建筑在震动中变形而不折断」这个想法，中国古代木构建筑走的是另一条路径，而且成熟得更早。可以先看两处最常被提到的实物：</p>
+        <table class="facts">
+          <tr><th></th><th>要点</th><th>与本课的关系</th></tr>
+          <tr><td>应县木塔（佛宫寺释迦塔）</td><td>辽清宁二年，即 1056 年建成，现存最高的木结构楼阁式塔；历代经历多次地震与战火仍存</td><td>纯木框架＋层层叠压的铺作层，本身就是一个巨大的柔性体系</td></tr>
+          <tr><td>紫禁城等官式大木作</td><td>柱脚不做刚性固定（俗称「平摆浮搁」），斗栱铺作层起缓冲与耗能作用</td><td>与庞巴尔笼的「斜撑耗能」在原理上相通，只是材料与构造方式不同</td></tr>
+        </table>
+        <p>一句老话可以概括中国做法的精髓：<b>墙倒屋不塌</b>。墙体在官式木构里主要起围护与分隔作用，真正承重的是柱与梁组成的框架；地震时墙可以先倒，框架却能靠榫卯的微量转动与复位把能量卸掉。这与本课所讲「把骨架留在墙里」的方向是一致的——<b>都承认建筑必须允许自己动一动。</b></p>
+
+        <h3>三、但两者的差异必须先说清，否则会出错</h3>
+        <ul>
+          <li><b>结构体系不同：</b>中国官式大木作是<b>木框架承重、墙体仅作围护</b>；庞巴尔笼是<b>砌体承重墙内嵌木骨架</b>的混合结构。前者「墙不承重」，后者「墙必须承重，但要靠木笼帮忙」。</li>
+          <li><b>诞生方式不同：</b>中国做法是千百年营造经验层累而成的行业成规，并被《营造法式》（北宋崇宁二年，1103 年刊行）之类的文献规范为模数制度；庞巴尔笼是<b>一次灾后针对一座城市、在几年内被明确设计出来</b>的技术方案。</li>
+          <li><b>适用对象不同：</b>木构体系适用于低层、大屋顶的东方建筑；庞巴尔笼面对的是欧洲城市里四、五层、联排、需要沿街立面的住宅，它必须长得像砖石房子。</li>
+        </ul>
+        <p><b>所以别把它讲成「西方科学 vs 中国经验」。</b>准确的说法是：面对同一类威胁，两地在相隔七百年、互不知情的情况下，分别走到了同一个结论——<b>与其把房子造得更硬，不如让它有地方可以让。</b></p>
+
+        <h3>四、从「天谴」到「数据」：这场地震还摇动了哲学</h3>
+        <p>如果只看建筑，本课只是一篇工程史。但 1755 年之所以被反复书写，还因为它发生在<b>一个天主教国家的首都、一个宗教节日的早晨、挤满礼拜者的教堂里</b>——这让它同时成了一道神学难题：如果世界由一位仁慈且全能的主宰掌管，为什么礼拜的人会死在教堂里？</p>
+        <p>三位思想家的回应，把问题从神学推向了别处：</p>
+        <table class="facts">
+          <tr><th>人物</th><th>回应</th><th>关键转移</th></tr>
+          <tr><td>伏尔泰 Voltaire</td><td>1756 年作《里斯本灾祸诗》，1759 年又在哲理小说《老实人》中嘲讽「一切皆善」的乐观主义</td><td>把矛头指向「这是所有可能世界中最好的一个」这一命题本身</td></tr>
+          <tr><td>卢梭 Rousseau</td><td>在致伏尔泰的信中指出：自然并没有让人把两万人塞进六七层高的房子</td><td>把责任从「天意」转向<b>人的居住选择与城市规划</b></td></tr>
+          <tr><td>康德 Kant</td><td>1756 年就里斯本地震发表论文（其后又续写），尝试用自然成因解释地震</td><td>把地震归为<b>可被自然因果解释的物理事件</b>（其具体机制后来被证明有误，但方向是自然主义的）</td></tr>
+        </table>
+        <p>庞巴尔的问卷其实属于同一个转向：一份问卷问「墙朝哪个方向倒」「井水是涨是落」，等于默认这件事<b>有参数可以测量</b>，而不是只需要祈祷或悔改。所以本课第 2 段才说，这场灾难的第一份遗产不是石头，而是<b>数据</b>。</p>
+
+        <h3>五、中国这边的对照：记录最长，解释框架不同</h3>
+        <p>做中外对照时很容易讲歪，所以先把两点摆清楚：</p>
+        <p><b>其一，中国有世界上延续时间最长的地震记载传统。</b>《国语·周语》记周幽王二年（公元前 780 年）泾、渭、洛三川地震，借伯阳父之口给出的解释是「阳伏而不能出，阴迫而不能烝」——<b>用阴阳二气的失序来解释，不是用神明的喜怒来解释</b>。这与欧洲中世纪常见的「天谴」话语并不一样，切勿简单类比。此后历代正史、方志、笔记中留下了连绵不断的地震记录，20 世纪 50—60 年代中国学者系统整理这些文献编成《中国地震资料年表》，至今仍是绘制历史地震烈度与区划的重要基础材料。<b>记录传统本身就是极宝贵的科学素材。</b></p>
+        <p><b>其二，真正与中国形成对照的，是「解释框架之后的下一步」。</b>东汉张衡于阳嘉元年（132 年）所造的候风地动仪，《后汉书》称其「验之以事，契合若神」；但原器早已不存，后世几种复原方案在学界仍有争议，因此本课不把它当作定论使用。可以确定的是：中国这一脉长期<b>以「灾异」话语要求执政者修省</b>，也长期保持观测与记录，却并没有在同一时期发展出「据测量结果改写全城建筑规范」的制度动作。</p>
+        <p>里斯本 1755 年之后的那一步，正是把三件事连成了一条链：<b>系统测量 → 归纳出规律 → 写进建筑做法并强制推行</b>。对照的重点应该是这条链，而不是「谁更早、谁更聪明」。</p>
+
+        <h3>六、传说与史料：哪些说法要留个心眼</h3>
+        <ul>
+          <li><b>「埋葬死者，喂养活人」：</b>这句名言见于大量转述，正文中因此写作 <i>he is said to have answered</i>。传世名言往往比档案更整齐，遇到时值得问一句出处。</li>
+          <li><b>「士兵绕模型行军以模拟地震」：</b>流传极广，但主要见于后来的转述性资料，所以在正文里用了 <i>reportedly</i>。它的象征意义很清楚——这是<b>用可控实验来检验结构</b>的早期思路——但不要把传说当一手史料引用。</li>
+          <li><b>死亡人数：</b>当时的估算出入极大，今天的研究给出的区间也仍然很宽（常见说法从数万到更高不等）。这正是本课第 1 段写 <i>estimates vary wildly</i> 的原因；<b>遇到一个过于精确的历史伤亡数字，先看它是谁估的、怎么估的。</b></li>
+          <li><b>卡尔莫修道院：</b>其无顶的中殿被有意保留为废墟，至今敞开在里斯本城中，内设里斯本地震博物馆。它是本课第 4 段「a scar kept rather than a wound closed」的实物。</li>
+        </ul>
+
+        <h3>七、关键时间线 Timeline</h3>
+        <table class="facts">
+          <tr><th>1755.11.01</th><td>诸圣节上午，里斯本发生大地震（现代估算震级约 8.5—9.0），随后火灾与海啸接踵而至</td></tr>
+          <tr><th>1755 年末</th><td>庞巴尔主持救灾：清理遗体与遗骸、维持秩序、控制物价；政府向全国各教区发放统一问卷</td></tr>
+          <tr><th>1756</th><td>伏尔泰《里斯本灾祸诗》；康德发表关于地震成因的论文</td></tr>
+          <tr><th>1758 年底</th><td>由 Manuel da Maia、Eugénio dos Santos、Carlos Mardel 等人参与制定的重建方案获准：网格路网、统一街廓、广场兼作避难点</td></tr>
+          <tr><th>约 1760 年代起</th><td>gaiola pombalina（庞巴尔笼）在 Baixa 区广泛应用；据称以模型配合士兵行军进行震动试验</td></tr>
+          <tr><th>1777</th><td>若泽一世去世，庞巴尔失势离任；此时 Baixa 区主体已基本建成</td></tr>
+          <tr><th>2004</th><td>葡萄牙将「庞巴尔式里斯本」列入世界遗产预备名单，评语称其为「西方世界第一座现代城市」</td></tr>
+        </table>
+        <p class="source">说明：本文所述史实与数字取自联合国教科文组织世界遗产预备名录文件、葡萄牙国家档案馆相关公开资料及通行研究；震级、伤亡人数与重建年代在不同资料中统计口径略有出入，本文采用通行的区间表述，凡属传世说法均在正文与扩展中标明 reportedly / is said to 等限定语。</p>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>读懂一个「灾难如何变成知识」的历史案例：</b>1755 年里斯本大地震留下的两份遗产——一份问卷与一具墙里的木笼。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>掌握 11 个 B2 核心词：</b>magnitude · estuary · contemporary · rubble · parish · archive · empirical · innovation · lattice · dissipate · deliberately。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>能识别并仿写 5 个高级句型：</b>Were 倒装虚拟、Not until 部分倒装、Only by 部分倒装、rather than 平行结构、冒号展开＋非限制性定语从句。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>能拆解 5 个语法点：</b>虚拟条件句倒装三式、否定前置倒装、Only 倒装与不倒装的界限、rather than 的平行原则、限制性 vs 非限制性定语从句。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>建立两处中外对照：</b>中国木构「墙倒屋不塌」与庞巴尔笼的抗震原理之同异；中国连续两千余年的地震记录传统与欧洲 1755 年后的解释框架之别。</div></div>
+        <div class="goal"><span class="ic">🤔</span><div><b>养成一个史料习惯：</b>遇到过于整齐的传世名言与伤亡数字，先问一句出处——本课正文里的 reportedly 与 is said to 就是示范。</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🧭 学习建议 How to Use This Page</h3>
+        <p><b>第一遍：</b>只看「全文阅读」，不开词表，先猜大意，把看不懂的高亮词记在一张纸上。<br>
+        <b>第二遍：</b>点开不懂的高亮词看释义，再对照「词汇表」里的例句，确认自己猜得对不对。<br>
+        <b>第三遍：</b>逐段点 ▶ 听朗读，跟读一遍；读不顺的地方通常是自己不会断开的从句。<br>
+        <b>第四遍：</b>带着「句型练习」的 5 个句子回原文，用荧光笔把它们划出来，看清它们是如何在文中承上启下的。<br>
+        <b>最后：</b>做「练习测验」六题；答错的两题，请回到「语法点」里找到对应条目重读一遍。</p>
+        <p><b>打印提示：</b>本页已做打印优化，打印时会自动隐藏导航与按钮，七个板块全部展开，可当讲义使用。</p>
+        <button class="print-btn" onclick="window.print()">🖨 打印本页 Print</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🗝 答案速查 Answer Key</h3>
+        <p>1. C（震、火、浪三重打击，缺一不可）｜2. B（同一套可核对的问题发到全国各教区，形成首份单次地震实证数据集）｜3. D（墙内三维木格构可弯可耗能，砌体则负责防火与围护）｜4. A（无顶中殿被有意保留为废墟，至今敞开于城中）｜5. C（否定词前置引起的部分倒装，助动词 did 提到主语前）｜6. B（Were 提前的倒装虚拟条件句，等于 If ... were to strike）</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-10 · 历史事件 History｜里斯本大地震与庞巴尔笼</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["On the morning of 1 November 1755, All Saints' Day, much of Lisbon was at prayer when the ground moved. Three shocks, whose magnitude modern seismologists put at 8.5 to 9.0, were followed by fires that burned for days and by a wave that swept up the Tagus estuary. Churches crowded with worshippers collapsed, and the royal library and its archives went with them. Contemporary estimates of the dead vary wildly, from a few tens of thousands upward, and historians still argue over them. What nobody disputes is the scale: the capital of a global empire was reduced to rubble in under ten minutes.", "Into the ruins stepped Sebastião José de Carvalho e Melo, chief minister to King Joseph I and afterwards Marquis of Pombal. Asked what should be done first, he is said to have answered: bury the dead and feed the living. Within weeks his government sent a printed questionnaire to every parish in the kingdom — the same questions, asked everywhere: how long the shaking lasted, how many aftershocks followed, in which direction walls fell, whether wells rose or sank. Those replies, still held in the national archive, are often described as the first empirical dataset assembled for a single earthquake. Not until the late twentieth century did seismologists stop using them to locate the source fault.", "The rebuilding is where the story turns practical. Pombal's engineers — Manuel da Maia, Eugénio dos Santos and Carlos Mardel among them — cleared the medieval plan and laid out a grid of wide avenues and squares able to hold a crowd. The real innovation, however, was hidden. Inside each wall they set a lattice of timber: uprights, beams and diagonal braces forming a three-dimensional cage, which was afterwards filled with masonry. Because timber bends where stone snaps, the frame dissipates the energy of a shock rather than resisting it. Scale models were reportedly tested by marching troops around them in step — an improvised ancestor of the modern shake table.", "Not everything was rebuilt. The roofless nave of the Carmo Convent was deliberately left as it fell, and it still stands open to the sky in the middle of the modern city — a scar kept rather than a wound closed. Elsewhere the legacy is invisible: walk through the Baixa today and the cage is buried behind plaster and tile. Were another great earthquake to strike, engineers would be watching those walls closely, for comparative studies rate the system as the most advanced anti-seismic construction of its century. Only by leaving a skeleton inside its walls did Lisbon build a city capable of surviving the thing that had destroyed it."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What made the 1755 Lisbon disaster so unusually destructive? 1755 年里斯本这场灾难破坏力异常之大，原因是什么？",
+   opts:["Its epicentre lay directly beneath the royal palace 震中就在王宫正下方","It struck at night, when every family was asleep 它发生在夜里，家家户户都在睡梦中","Three shocks were followed by fires that burned for days and by a wave up the Tagus estuary 三次震动之后，是持续数日的大火与涌入塔霍河口的巨浪","The city had no stone buildings at all 这座城市根本没有石造建筑"],
+   ans:2,
+   fb:"正确！关键在于<b>三重打击</b>：震、火、浪。正文第一句之后的 fires that burned for days 与 a wave that swept up the Tagus estuary 缺一不可。选项 A 也是常见误记——震源在大西洋海底，并不在城市正下方。"},
+  {q:"Why is Pombal's parish questionnaire considered so significant? 庞巴尔发放的教区问卷为何被认为意义重大？",
+   opts:["It was the first law requiring all churches to be rebuilt in stone 它是第一部要求所有教堂改用石材重建的法令","It asked the same checkable questions in every parish, producing what is often called the first empirical dataset for a single earthquake 它在每个教区问同一批可核对的问题，形成了通常所说的首份单次地震实证数据集","It proved that animals can sense earthquakes in advance 它证明了动物能提前感知地震","It was written and signed by the king himself 它由国王本人撰写并签署"],
+   ans:1,
+   fb:"正确！注意 empirical 的含义：以观察为据，而非推测。选项 C 是个陷阱——问卷确实问过动物是否有异常，但「问过」不等于「证明了」。"},
+  {q:"How does the gaiola pombalina, or Pombaline cage, actually work? 庞巴尔笼究竟是如何起作用的？",
+   opts:["It makes walls so thick that they cannot fall 它把墙做得极厚，因此塌不下来","It replaces stone entirely with cast concrete 它用浇筑混凝土完全取代石材","It hides steel cables inside every floor slab 它在每块楼板里藏入钢索","A three-dimensional timber lattice inside the wall bends and dissipates energy, while the surrounding masonry resists fire 墙内的三维木格构可弯并耗散能量，外围砌体则负责防火与围护"],
+   ans:3,
+   fb:"正确！课文第 3 段那句 Because timber bends where stone snaps, the frame dissipates the energy of a shock rather than resisting it 就是标准答案。木与石各司其职：木耗能，石防火。"},
+  {q:"What is true of the Carmo Convent according to the final paragraph? 根据最后一段，关于卡尔莫修道院哪一项是真的？",
+   opts:["Its roofless nave was deliberately left as it fell and still stands open to the sky 它那无顶的中殿被刻意保留在坍塌的模样，至今敞开向天","It was fully rebuilt within ten years 它在十年内被完全重建","It was converted into the new royal library 它被改建成了新的王家图书馆","It was the only building left untouched by the fire 它是唯一没有被火烧到的建筑"],
+   ans:0,
+   fb:"正确！注意 deliberately 这个词：留下废墟不是偷懒，而是一个决定——课文称之为 a scar kept rather than a wound closed。"},
+  {q:"In 'Not until the late twentieth century did seismologists stop using them', what grammatical feature is being used? 该句使用了什么语法现象？",
+   opts:["A dangling participle that ought to be corrected 应当修改的垂悬分词","A restrictive relative clause introduced by that 由 that 引导的限制性定语从句","Inversion after a negative expression placed at the front, with the auxiliary did placed before the subject 否定词语前置引起的部分倒装，助动词 did 提到主语之前","An inverted subjunctive conditional with if omitted 省略 if 的倒装虚拟条件句"],
+   ans:2,
+   fb:"正确！规则是：句首出现 not until / never / rarely 等否定或半否定词语，主句必须部分倒装。由于 stop 是实义动词的过去式，所以要借 did，并把 stop 还原为原形。"},
+  {q:"What does 'Were another great earthquake to strike, engineers would be watching those walls closely' mean? 该句应如何理解？",
+   opts:["It reports a real past event witnessed by engineers 它记录了一件工程师亲眼所见的真实往事","It is an inverted subjunctive conditional meaning 'If another great earthquake were to strike' 它是倒装虚拟条件句，等于 If another great earthquake were to strike","It is an order telling engineers to watch the walls 它是一道命令工程师盯住那些墙的指令","It is a prediction the writer considers certain to happen 它是作者认定必定会发生的预言"],
+   ans:1,
+   fb:"正确！Were + 主语 + to do 是虚拟条件句的倒装式，省略了 if，表示<b>假设性强、可能性不确定</b>的将来情况；主句因此用 would be watching。注意虚拟语气里第三人称单数也用 were，不用 was。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -7357,6 +7357,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-10",
+    "title": "The Cage That Holds a City Up",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-10-the-cage-that-holds-a-city-up",
+    "url": "lessons/b2/2026-10-10-the-cage-that-holds-a-city-up.html",
+    "vocab": [
+      {
+        "word": "magnitude",
+        "zh": "震级；量级；重大程度（a magnitude 8.5 earthquake 8.5 级地震；of some magnitude 相当规模的／相当重要的；它是名词，别当形容词用）",
+        "ex": "\"Three shocks, whose magnitude modern seismologists put at 8.5 to 9.0.\""
+      },
+      {
+        "word": "estuary",
+        "zh": "河口湾；受潮汐影响的河海过渡水域（the Tagus estuary 塔霍河口；与 river mouth 近义，但 estuary 特指喇叭形、咸淡水交汇的河口）",
+        "ex": "\"A wave that swept up the Tagus estuary.\""
+      },
+      {
+        "word": "contemporary",
+        "zh": "一词两义，读史料时务必分清：① 同时代的、当时的（contemporary estimates 当时的估算）；② 当代的（contemporary art 当代艺术）。作名词指『同时代的人』",
+        "ex": "\"Contemporary estimates of the dead vary wildly.\""
+      },
+      {
+        "word": "rubble",
+        "zh": "瓦砾；碎砖烂瓦（不可数名词；be reduced to rubble 化为瓦砾；rubble 指碎石本身，in ruins 指『成为废墟』的状态）",
+        "ex": "\"The capital of a global empire was reduced to rubble in under ten minutes.\""
+      },
+      {
+        "word": "parish",
+        "zh": "教区（同时也是 18 世纪葡萄牙的基层行政单位——正因为它兼管民事登记，庞巴尔的问卷才能发到每一个 parish；形容词 parochial 另有『狭隘的』之义）",
+        "ex": "\"His government sent a printed questionnaire to every parish in the kingdom.\""
+      },
+      {
+        "word": "archive",
+        "zh": "档案馆；档案（作名词常用复数 archives；也可作动词『归档』；读音 /ˈɑːkaɪv/，重音在第一音节）",
+        "ex": "\"Those replies, still held in the national archive.\""
+      },
+      {
+        "word": "empirical",
+        "zh": "实证的；以观察或实验为依据的（反义 theoretical／a priori；empirical evidence 实证证据；empirical data 实测数据；名词 empiricism 经验主义）",
+        "ex": "\"Often described as the first empirical dataset assembled for a single earthquake.\""
+      },
+      {
+        "word": "innovation",
+        "zh": "创新；新做法（动词 innovate；形容词 innovative；与 invention 的区别：invention 是『发明出来』，innovation 是『被采用并改变了做法』）",
+        "ex": "\"The real innovation, however, was hidden.\""
+      },
+      {
+        "word": "lattice",
+        "zh": "格构；格栅（a lattice of timber 木格栅；形容词 latticed；数学里还有『格』的意思，如 lattice point 格点）",
+        "ex": "\"Inside each wall they set a lattice of timber.\""
+      },
+      {
+        "word": "dissipate",
+        "zh": "耗散；使消散（正式用词；dissipate energy／heat 耗散能量／热量；也可指人群『散去』或财富『被挥霍』；名词 dissipation）",
+        "ex": "\"The frame dissipates the energy of a shock rather than resisting it.\""
+      },
+      {
+        "word": "deliberately",
+        "zh": "刻意地；蓄意地（形容词 deliberate 有意的、从容不迫的；与 on purpose 近义但更书面，且常带『明知故犯』的贬义色彩）",
+        "ex": "\"The roofless nave of the Carmo Convent was deliberately left as it fell.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
