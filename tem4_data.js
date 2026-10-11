@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1 已上线（28 主题 / 140 Part / 840 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1/G2 已上线（29 主题 / 145 Part / 870 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -2329,7 +2329,88 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"G2", cat:"G", zh:"影视与电视", name:"Movies & TV",      status:"soon", words:80,  desc:"影院、追剧、导演"},
+  {
+    id:"G2", cat:"G", zh:"影视与电视", name:"Movies & TV", status:"live",
+    date:"2026-10-11", words:30, desc:"从影院首映到影评追星：悬念、惊悚、笑泪、追星",
+    color:"#4A90D9",
+    parts:[
+      {
+        id:"G2-P1", slug:"tem4-G2-P1", title:"影院首映", shape:"拱门",
+        poster:"assets/tem4/posters/G2_P1.png",
+        sentence:"The premiere will commence at seven: its conspicuous posters draw fans who surge into the lobby, and the charismatic hero's spectacular stunts justify the film's three-hour duration.",
+        sentenceCn:"首映礼七点开始：醒目的海报吸引影迷涌进大堂，魅力主角的精彩特技足以对得起这三个小时的片长。",
+        scene:"小叶学姐与利奥站在影院门口，首映海报前影迷涌向入口，彩灯闪烁。",
+        words:[
+          {word:"commence",    ipa:"/kəˈmens/",      pos:"v.",   zh:"开始",                   forms:["commence"]},
+          {word:"conspicuous", ipa:"/kənˈspɪkjuəs/", pos:"adj.", zh:"显著的，引人注目的",      forms:["conspicuous"]},
+          {word:"surge",       ipa:"/sɜːdʒ/",        pos:"vi.",  zh:"涌动，蜂拥；急剧上升",    forms:["surge"]},
+          {word:"charismatic", ipa:"/ˌkærɪzˈmætɪk/", pos:"adj.", zh:"有号召力的",             forms:["charismatic"]},
+          {word:"spectacular", ipa:"/spekˈtækjulə/", pos:"adj.", zh:"壮观的，引人入胜的",      forms:["spectacular"]},
+          {word:"duration",    ipa:"/djʊəˈreɪʃən/",  pos:"n.",   zh:"持续（时间）",           forms:["duration"]}
+        ]
+      },
+      {
+        id:"G2-P2", slug:"tem4-G2-P2", title:"悬念与高潮", shape:"叶形",
+        poster:"assets/tem4/posters/G2_P2.png",
+        sentence:"The clever plot conceals the villain's identity, yet attentive viewers suspect the quiet neighbour, deduce the truth from each clue and foresee the twist before the shocking climax arrives.",
+        sentenceCn:"巧妙的情节藏起了反派的身份：细心的观众怀疑起那个安静的邻居，从每条线索推断真相，在震撼的高潮到来前就预见了反转。",
+        scene:"影厅里小叶学姐专注观影，屏幕光影映在脸上，膝上的小本子写满推理笔记。",
+        words:[
+          {word:"plot",    ipa:"/plɒt/",      pos:"n.", zh:"情节 v. 密谋，策划",        forms:["plot"]},
+          {word:"conceal", ipa:"/kənˈsiːl/",  pos:"v.", zh:"隐藏",                     forms:["conceals"]},
+          {word:"suspect", ipa:"/səˈspekt/",  pos:"v.", zh:"猜想；怀疑 n. 嫌疑犯",      forms:["suspect"]},
+          {word:"deduce",  ipa:"/dɪˈdjuːs/",  pos:"vt.", zh:"推论，演绎",               forms:["deduce"]},
+          {word:"foresee", ipa:"/fɔːˈsiː/",   pos:"v.", zh:"预见；预知",               forms:["foresee"]},
+          {word:"climax",  ipa:"/ˈklaɪmæks/", pos:"n.", zh:"高潮，顶点",               forms:["climax"]}
+        ]
+      },
+      {
+        id:"G2-P3", slug:"tem4-G2-P3", title:"惊悚一幕", shape:"椭圆",
+        poster:"assets/tem4/posters/G2_P3.png",
+        sentence:"In the horror scene a hideous monster suddenly appears to terrify the whole cinema: Leo shrieks and ducks behind his popcorn bucket, some viewers dread to watch yet peep through their fingers, and the ending horrifies everyone.",
+        sentenceCn:"恐怖片段里，一只面目可憎的怪物突然现身，吓得全场屏息：利奥尖叫着躲到爆米花桶后，有人不敢看却仍从指缝里偷看，结尾更让所有人毛骨悚然。",
+        scene:"怪物登场的瞬间全场惊呼，利奥抱紧爆米花桶，邻座观众从指缝偷看银幕。",
+        words:[
+          {word:"hideous", ipa:"/ˈhɪdɪəs/",  pos:"adj.",     zh:"丑陋的；骇人的",         forms:["hideous"]},
+          {word:"terrify", ipa:"/ˈterɪfaɪ/", pos:"vt.",      zh:"使恐怖，惊吓",           forms:["terrify"]},
+          {word:"shriek",  ipa:"/ʃriːk/",    pos:"v.",       zh:"发出尖叫 n. 尖叫声",     forms:["shrieks"]},
+          {word:"dread",   ipa:"/dred/",     pos:"n. / v.",  zh:"畏惧；厌恶；担忧",       forms:["dread"]},
+          {word:"peep",    ipa:"/piːp/",     pos:"n. / vi.", zh:"偷看，一瞥",             forms:["peep"]},
+          {word:"horrify", ipa:"/ˈhɒrɪfaɪ/", pos:"vt.",      zh:"使毛骨悚然；使震惊",     forms:["horrifies"]}
+        ]
+      },
+      {
+        id:"G2-P4", slug:"tem4-G2-P4", title:"泪点与笑点", shape:"超圆角",
+        poster:"assets/tem4/posters/G2_P4.png",
+        sentence:"Then the tone softens: the heroine's pathetic farewell letter brings an emotional silence, until an absurd misunderstanding makes the audience roar with laughter, and some snicker at the awkward waiter who embarrasses himself on screen.",
+        sentenceCn:"随后画风转柔：女主角伤感的告别信让影厅陷入动情的安静，直到一场荒谬的误会逗得观众哄堂大笑，还有人窃笑银幕上手足无措、当众出丑的服务生。",
+        scene:"泪点画面中小叶学姐悄悄抹泪，前排观众被逗得前仰后合，笑声一片。",
+        words:[
+          {word:"pathetic",  ipa:"/pəˈθetɪk/",   pos:"adj.",     zh:"感伤的，悲惨的；引起怜悯的", forms:["pathetic"]},
+          {word:"emotional", ipa:"/ɪˈməʊʃənəl/", pos:"adj.",     zh:"感情（上）的，情绪（上）的", forms:["emotional"]},
+          {word:"absurd",    ipa:"/əbˈsɜːd/",    pos:"adj.",     zh:"不合理的，荒谬的，可笑的",   forms:["absurd"]},
+          {word:"snicker",   ipa:"/ˈsnɪkə/",     pos:"n. / vi.", zh:"暗笑，窃笑",               forms:["snicker"]},
+          {word:"awkward",   ipa:"/ˈɔːkwəd/",    pos:"adj.",     zh:"尴尬的；笨拙的，不熟练的",   forms:["awkward"]},
+          {word:"embarrass", ipa:"/ɪmˈbærəs/",   pos:"vt.",      zh:"使窘迫，使困扰",           forms:["embarrasses"]}
+        ]
+      },
+      {
+        id:"G2-P5", slug:"tem4-G2-P5", title:"影评与追星", shape:"波浪",
+        poster:"assets/tem4/posters/G2_P5.png",
+        sentence:"On the way home they discuss the reviews: effusive fanatics defend their idol's status at any cost, tabloids hunt for scandal, and thoughtful critics satirize such blind worship — the paradox of fame amuses them all the way.",
+        sentenceCn:"回家路上他们聊起影评：狂热的粉丝不惜一切代价捍卫偶像的地位，小报四处挖掘丑闻，而清醒的评论家则讽刺这种盲目追捧——名气的悖论让他们一路回味。",
+        scene:"夜色归途，小叶学姐与利奥边走边看手机上的影评，路灯下热聊剧情。",
+        words:[
+          {word:"effusive", ipa:"/ɪˈfjuːsɪv/", pos:"adj.", zh:"过分热情的，太动感情的",       forms:["effusive"]},
+          {word:"fanatic",  ipa:"/fəˈnætɪk/",  pos:"n.",   zh:"狂热者，入迷者 adj. 狂热的",  forms:["fanatics"]},
+          {word:"status",   ipa:"/ˈsteɪtəs/",  pos:"n.",   zh:"身份，地位；威望，名望",      forms:["status"]},
+          {word:"scandal",  ipa:"/ˈskændəl/",  pos:"n.",   zh:"丑事，丑闻；流言蜚语",        forms:["scandal"]},
+          {word:"satirize", ipa:"/ˈsætəraɪz/", pos:"vt.",  zh:"讽刺，讥讽",                 forms:["satirize"]},
+          {word:"paradox",  ipa:"/ˈpærədɒks/", pos:"n.",   zh:"自相矛盾的事物；悖论",        forms:["paradox"]}
+        ]
+      }
+    ]
+  },
   {id:"G3", cat:"G", zh:"运动与健身", name:"Sports & Fitness", status:"soon", words:90,  desc:"球场、跑步、瑜伽"},
   {id:"G4", cat:"G", zh:"节日与庆典", name:"Festival & Celebration", status:"soon", words:70, desc:"圣诞、新年、生日"},
   /* ===== H 健康与心理 ===== */
