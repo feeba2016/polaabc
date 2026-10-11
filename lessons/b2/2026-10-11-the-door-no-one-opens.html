@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Door No One Opens</title>
+<style>
+:root{
+  --accent:#334155;
+  --accent2:#8c6239;
+  --bg:#faf8f5;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#e6ded1;
+  --soft:#f6f1e9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(51,65,85,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(51,65,85,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(51,65,85,.5);}70%{box-shadow:0 0 0 12px rgba(51,65,85,0);}100%{box-shadow:0 0 0 0 rgba(51,65,85,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(51,65,85,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Philosophy</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Door No One Opens</h1>
+      <p class="subtitle">1973 年，勒古恩发表了只有几千字的《离开奥梅拉斯的人》：一座人人幸福的城市，全靠地窖里一个孩子维持。真正难的不是感动，而是回答｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A City Too Happy to Write About 幸福得难以描写的城市</div>
+            <p>In 1973 the writer Ursula K. Le Guin published a very short piece called <i>The Ones Who Walk Away from Omelas</i>, subtitled <i>Variations on a theme by William James</i>. It won the Hugo Award for best short story the next year and has unsettled readers ever since. The town it describes rides through a summer festival of banners and music. The narrator calls it a <span class="kw" data-def="乌托邦；理想国（名词，可数；形容词 utopian。注意读音 /ˈjuːtəpiə/，重音在第二音节-u 上；复数直接加 s。本课里它不是褒义词——叙述者反复提醒我们，别急着相信它）">utopia</span>, though not a simple one; its citizens have no kings, no slaves and no secret police. Before going further she asks us to notice a habit of mind: we have been taught that <span class="kw" data-def="这里的 Only 修饰的是主语 pain 与 evil，因此主句完全不倒装（＝ Only pain is intellectual）。判断口诀：Only 后面若是名词／代词（主语），照常写；若是介词短语、副词或从句（状语），助动词必须提前，如 Only by leaving ... did ...">only</span> pain is intellectual and only evil is interesting, that happiness is boring.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Room With One Locked Door 只有一扇上锁的门</div>
+            <p>Then the secret. Beneath a public building, or in the cellar of a private house, is a room with one locked door and no window. Inside sits a child, about six to look at and nearly ten in fact. Nobody speaks kindly to it; it crouches in the dark in its own filth. Every citizen old enough to understand is taken to see it, and the terms are stated: all the prosperity, beauty and delight of Omelas depend entirely upon this child's <span class="kw" data-def="凄惨的；卑贱的；彻底屈辱的（形容词，正式；abject poverty 赤贫；abject misery 极度的苦难；注意重音在第一个音节 /ˈæbdʒekt/）">abject</span> <span class="kw" data-def="屈辱；堕落；被羞辱的状态（名词；动词 degrade 贬低／使堕落；degrading 有辱人格的。与 abject 搭配时，语气比 suffering 更重，因为它强调『被剥夺人的尊严』）">degradation</span>. <span class="kw" data-def="Were + 主语 + to be done 是虚拟条件句的倒装式，省略了 if，意为『万一／如果这个孩子被……』；were 不能换成 was">Were</span> the child to be carried up into the sunlight, washed and comforted, the happiness of the whole city would wither in that very hour. <span class="kw" data-def="Nor 或 Neither 置于句首时，主句必须部分倒装：把 be 动词、助动词或情态动词提到主语前。此处 is any reason 就是倒装，意为『也没有给出任何理由』">Nor</span> is any reason offered. <span class="kw" data-def="过去分词短语作状语：Stated but never explained = Although the terms are stated but never explained（尽管条款被陈述，却从不被解释）。它的逻辑主语必须是主句主语 the terms，否则就是垂悬分词错误">Stated but never explained</span>, the terms admit no appeal.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · What James Assumed and What the Story Assumes 詹姆士的假设与这篇小说的假设</div>
+            <p>It rests on an older idea. Le Guin named it herself — the <span class="kw" data-def="替罪羊；代人受过者（名词；动词 scapegoat 转嫁罪责于某人。词源可追溯到《圣经·利未记》第十六章的赎罪仪式：一头山羊被放逐旷野，带走众人的罪。西方政治与文学里这个词使用极频繁）">scapegoat</span> — and credited William James. In his 1891 essay <i>The Moral Philosopher and the Moral Life</i>, James imagines millions kept permanently happy on one condition: that a lost soul should lead a life of lonely torture at the far edge of things. James was confident about our answer: how <span class="kw" data-def="丑恶的；令人憎恶的（形容词，语气极强，比 ugly 重得多；hideous crime 令人发指的罪行；名词 hideousness）">hideous</span>, he wrote, would be the enjoyment of a happiness <span class="kw" data-def="刻意地；明知地（副词；形容词 deliberate 有意的、从容的；deliberately 常暗示『明知如此仍然这样做』，所以带有贬义色彩）">deliberately</span> accepted as the fruit of such a <span class="kw" data-def="交易；协议；（引申）一场交换条件（名词；drive a hard bargain 讨价还价；本课里 the terms of the bargain 指那笔『以一换众』的交易条件，不是便宜货）">bargain</span>. Omelas quietly reverses his confidence. At first sight the young visitors are <span class="kw" data-def="感到惊骇的（形容词，作表语；动词 appal 使惊骇；appalling conduct 令人发指的行为。注意它描述的是『人的感受』，appalling 描述的是『引起感受的事物的性质』）">appalled</span>; they weep, they rage. Then, months later, most of them learn to <span class="kw" data-def="为……找理由；使合理化（动词，正式；rationalize a decision 为自己的决定找说辞。它是本课最冷的一个词：合理化意味着人还在原来的位置上，只是换了说法）">rationalize</span> what they have seen. <span class="kw" data-def="共谋；同流合污（名词，正式；complicity in wrongdoing 参与作恶；形容词 complicit。它比 guilt 更精确：你不必亲手去做，只要继续留下并继续受益）">Complicity</span>, the narrator suggests, is less a decision than a skill, acquired slowly.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Ones Who Leave 离开的那些人</div>
+            <p><span class="kw" data-def="Terrible though the sight is = Though the sight is terrible。形容词表语前置到 though 之前，是让步状语从句的一种书面倒装（若不倒装句子仍然正确，但语气较弱）">Terrible though</span> the sight is, a few do not learn that skill. They leave the festival, walk out through a dark gate and go on along grey roads towards a place even harder to imagine than the city they have <span class="kw" data-def="forsake 的过去分词，意为『抛弃；弃之而去』（动词，文学用语；过去式 forsook，过去分词 forsaken。比 leave 郑重得多，暗示放弃本应守护的东西）">forsaken</span>. It is possible, she says, that the place does not exist. But they seem to know where they are going, the ones who walk away from Omelas. What the walk itself means remains disputed. One reading treats it as the only honest answer left. Another, argued by N. K. Jemisin in her 2018 story <i>The Ones Who Stay and Fight</i>, holds that an objection which changes nothing has not answered the city, only abandoned it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="utopia">🔊</button><div class="word">utopia<span class="pos">n.</span></div><div class="zh">乌托邦；理想国（可数名词，复数 utopias；形容词 utopian 乌托邦的、不切实际的；读音 /juːˈtəʊpiə/，重音在 -to-。注意本课里它并非褒义：叙述者反复提醒读者别轻信这座城）</div><div class="ex">"The narrator calls it a utopia, though not a simple one."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="abject">🔊</button><div class="word">abject<span class="pos">adj.</span></div><div class="zh">凄惨的；卑贱的；屈辱到极点的（正式用词，语气极重；abject poverty 赤贫；abject misery 极度的苦难；发音 /ˈæbdʒekt/，重音在第一音节）</div><div class="ex">"All the prosperity, beauty and delight of Omelas depend entirely upon this child's abject degradation."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="degradation">🔊</button><div class="word">degradation<span class="pos">n.</span></div><div class="zh">屈辱；堕落；被剥夺尊严的状态（动词 degrade 贬低／使堕落；形容词 degrading 有辱人格的。比 suffering 更重，因为它强调『人的尊严被拿走』）</div><div class="ex">"The terms are then stated: ... depend entirely upon this child's abject degradation."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scapegoat">🔊</button><div class="word">scapegoat<span class="pos">n./v.</span></div><div class="zh">替罪羊；代人受过者（也可作动词『拿某人当替罪羊』。词源可追溯到《圣经·利未记》第十六章的赎罪仪式：一头山羊被放往旷野，带走众人的罪。西方政治与文学里使用极频繁）</div><div class="ex">"Le Guin herself named it the scapegoat."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hideous">🔊</button><div class="word">hideous<span class="pos">adj.</span></div><div class="zh">丑恶的；令人憎恶的（语气远强于 ugly；a hideous crime 令人发指的罪行；名词 hideousness。它形容的是『让人想移开目光』的那种性质）</div><div class="ex">"How hideous, he wrote, would be the enjoyment of a happiness deliberately accepted."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="deliberately">🔊</button><div class="word">deliberately<span class="pos">adv.</span></div><div class="zh">刻意地；明知地（形容词 deliberate 有意的、从容不迫的。它常暗含『明知如此仍然去做』，因此带贬义色彩，与 on purpose 近义但更书面）</div><div class="ex">"...a happiness deliberately accepted as the fruit of such a bargain."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bargain">🔊</button><div class="word">bargain<span class="pos">n./v.</span></div><div class="zh">交易；协议；交换条件（另一常用义是『便宜货』，如 a real bargain 真便宜；本课取第一个意思。drive a hard bargain 极力讨价还价；keep one's side of the bargain 履行自己那一份）</div><div class="ex">"How hideous ... would be the enjoyment of a happiness deliberately accepted as the fruit of such a bargain."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="appalled">🔊</button><div class="word">appalled<span class="pos">adj.</span></div><div class="zh">感到惊骇的（作表语，be appalled at/by；动词 appal 使惊骇；形容词 appalling 令人发指的。务必分清：appalled 说的是人的感受，appalling 说的是引起感受的事物的性质）</div><div class="ex">"At first sight the young visitors are appalled; they weep, they rage."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rationalize">🔊</button><div class="word">rationalize<span class="pos">v.</span></div><div class="zh">为……找理由；使合理化（正式用词；rationalize a decision 给自己的决定找说辞；名词 rationalization。本课里它是最冷的一个词：合理化意味着人并没有离开原来的位置，只是换了说法）</div><div class="ex">"Most of them learn to rationalize what they have seen."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="complicity">🔊</button><div class="word">complicity<span class="pos">n.</span></div><div class="zh">共谋；同流合污（正式；complicity in wrongdoing 参与作恶；形容词 complicit。它比 guilt 更精确：你不必亲手去做，只要继续留下并继续从中受益）</div><div class="ex">"Complicity, the narrator suggests, is less a decision than a skill."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="forsaken">🔊</button><div class="word">forsake<span class="pos">v.</span></div><div class="zh">抛弃；弃之而去（文学用语，过去式 forsook，过去分词 forsaken。比 leave／abandon 郑重得多，暗示放弃本应守护的东西；作定语时常用过去分词，如 the forsaken city）</div><div class="ex">"...towards a place even harder to imagine than the city they have forsaken."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 道德评价词链（由轻到重）：</b>uncomfortable 不安 → uneasy 不自在 → disturbed 被搅扰 → shocked 震惊 → <b>appalled 惊骇</b> → outraged 义愤。<br>
+        <b>② 外表与丑恶：</b>ugly 丑 → unpleasant 令人不适 → horrid 讨厌的 → <b>hideous 丑恶得让人移开目光</b> → grotesque 怪诞的。<br>
+        <b>③ 离开的三种说法：</b>leave（中性）· abandon（放弃、弃守，带责任意味）· <b>forsake（文学化，带背叛意味）</b>。<br>
+        <b>④ 名词后缀 -ation／-ion 表过程或结果：</b>rationalize → rationalization；degrade → degradation；imagine → imagination；explain → explanation。<br>
+        <b>⑤ 本课生僻但值得认识的几个词：</b>filth 污物（正式且刺目）· wretched 可怜的 · wither 枯萎 · cellar 地窖 · prosperity 繁荣。</p>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. Were + 主语 + to be done · 倒装虚拟条件句（将来／假设）</h3>
+          <div class="zh">把 <b>were</b> 提到主语之前即可省掉 <b>if</b>。它表示<b>假设性强、说话人并不认为会发生</b>的情况，语气比 If ... happens 更保留、更书面。这里是被动式 <b>to be + 过去分词</b>。</div>
+          <div class="eg">课文原句：<b>Were the child to be carried up into the sunlight, washed and comforted, the happiness of the whole city would wither in that very hour.</b> 万一这个孩子被抱到阳光下、洗干净并得到安抚，整座城市的幸福就会在那一刻枯萎。<br>
+          还原：<b>If the child were to be carried up into the sunlight, ...</b><br>
+          注意：虚拟语气中一律用 <b>were</b>，即使在第三人称单数后也不用 was；主句相应使用 <b>would / could / might + 动词原形</b>。</div>
+          <div class="practice">仿写：把「万一这项提议被否决，我们就必须重来」译成英语。<input placeholder="Were the proposal to be rejected, ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. Nor / Neither + 部分倒装 · 也不……</h3>
+          <div class="zh"><b>Nor</b> 或 <b>Neither</b> 置于句首引出「另一件事也同样不成立」时，句子必须<b>部分倒装</b>：把 be 动词、助动词或情态动词提到主语之前。</div>
+          <div class="eg">课文原句：<b>Nor is any reason offered.</b> 也没有给出任何理由。<br>
+          不倒装的中性写法：<b>No reason is offered either.</b>（信息相同，但失去了前句带来的推力）<br>
+          同理：<b>Nor did the narrator explain who locks the door.</b>／<b>Nor can the children change the terms.</b></div>
+          <div class="practice">仿写：「她也说不出为什么，我也不明白」。<input placeholder="She could not say why, and nor ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. Only + 主语（不倒装） vs Only + 状语（必须倒装）</h3>
+          <div class="zh">第一课里我们见过 <i>Only by ... did ...</i> 的倒装。本课第 1 段给出了<b>相反</b>的情形：<b>Only</b> 修饰的是主语，因此<b>完全不倒装</b>。这是最容易判断错的一条规则。</div>
+          <div class="eg">课文原句（不倒装）：<b>... only evil interesting.</b>（only 修饰主语 evil）<br>
+          对比（必须倒装）：<b>Only by walking away can a few citizens keep their integrity.</b>（Only by ... 是方式状语）<br>
+          判断口诀：<b>Only 后面若是名词或代词（＝主语），照常写；若是介词短语、副词或从句（＝状语），助词提前。</b></div>
+          <div class="practice">仿写：「唯有如此，我们才开始明白」。（Only then ...）<input placeholder="Only then did we begin to ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. 过去分词短语作状语 · 表示被动与完成</h3>
+          <div class="zh">把状语从句简化为<b>过去分词短语</b>，是学术写作最常用的压缩手段之一。它同时表达<b>被动</b>（terms 是被 stated 的）与<b>已发生</b>。使用前提是：<b>分词的逻辑主语必须等于主句主语</b>。</div>
+          <div class="eg">课文原句：<b>Stated but never explained, the terms admit no appeal.</b> 这些条件被陈述出来，却从不被解释，因此无处申辩。<br>
+          还原：<b>Although the terms are stated, they are never explained, so they admit no appeal.</b><br>
+          同类：<b>Written in plain language, the questionnaire reached every household.</b>／误：<b>Written in a hurry, the ink was still wet.</b>（主语错位，垂悬分词）</div>
+          <div class="practice">仿写：「这份报告基于十年的数据，值得认真对待」。<input placeholder="Based on ten years of data, ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. 表语（形容词）提前 + though · 书面让步倒装</h3>
+          <div class="zh">让步状语从句可以把<b>表语形容词</b>提到 <b>though</b> 之前，形成书面色彩很强的倒装。句子仍然正确，但语气更凝练、更像议论文。若换成 <b>as</b>，则这种前置是<b>强制</b>的。</div>
+          <div class="eg">课文原句：<b>Terrible though the sight is, a few do not learn that skill.</b> 尽管所见如此可怖，仍有少数人学不会这项本事。<br>
+          还原：<b>Though the sight is terrible, ...</b>（语法同样正确，但节奏变散）<br>
+          用 as 时必须前置：<b>Terrible as the sight was, ...</b>（不能说 As the sight was terrible）</div>
+          <div class="practice">仿写：「尽管这个结论令人不安，数据并不支持别的解释」。<input placeholder="Disturbing though the conclusion is, ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Points</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>① 虚拟条件句倒装三式：Were / Had / Should</h3>
+          <div class="zh">把 <b>were / had / should</b> 提到主语之前，即可省去 <b>if</b>。三者对应不同时间：<b>Were (to do)</b> 表将来或现在的强假设；<b>Had (done)</b> 表与过去事实相反；<b>Should (do)</b> 表将来、可能性较小。</div>
+          <div class="eg"><b>Were</b> the child <b>to be carried</b> into the sunlight, the city's happiness <b>would wither</b>.（将来／现在的强假设）<br>
+          <b>Had</b> the citizens <b>refused</b> the bargain in 1973, the story <b>would not have been</b> written.（与过去事实相反）<br>
+          <b>Should</b> anyone <b>open</b> that door, the terms <b>would</b> change at once.（将来，可能性小）<br>
+          易错：虚拟语气中一律 <b>were</b> 不用 was；倒装后<b>不加逗号以外的连词</b>，主句用 would / could / might + 原形。</div>
+        </div>
+
+        <div class="item">
+          <h3>② Nor / Neither / Never 等前置时的部分倒装</h3>
+          <div class="zh">句首出现 <b>nor, neither, never, rarely, seldom, hardly, no sooner, not until, under no circumstances</b> 这类否定或半否定词语，主句必须<b>部分倒装</b>：be 动词、情态动词、have 直接提前；实义动词的一般现在／一般过去要借 <b>do / does / did</b> 并把动词还原为原形。</div>
+          <div class="eg"><b>Nor is</b> any reason offered.（be 动词提前）<br>
+          <b>Nor did</b> the narrator <b>explain</b> who locked the door.（借 did，explain 回原形）<br>
+          <b>Never had</b> they <b>seen</b> the child in daylight.（过去完成时，had 提前）<br>
+          注意：<b>Nor</b> 用于「另一件同样不成立的事」；若只是重复同一个主语的否定，用 <b>and ... not</b> 或 <b>nor + 倒装</b> 均可。</div>
+        </div>
+
+        <div class="item">
+          <h3>③ Only 的两种身份：修饰主语不倒装，修饰状语必倒装</h3>
+          <div class="zh">判断的唯一依据是 <b>Only 后面跟的是什么成分</b>，而不是 Only 出现在句子的哪个位置。</div>
+          <div class="eg"><b>Only pain is intellectual.</b>（Only + 主语 pain → 不倒装）<br>
+          <b>Only by walking away can a few citizens keep their integrity.</b>（Only + by 介词短语 → 倒装）<br>
+          <b>Only then did they understand the terms.</b>（Only + 副词 then → 倒装）<br>
+          <b>Only when the door is opened will the city change.</b>（Only + 状语从句 → 主句倒装，注意倒的是<b>主句</b>）</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 过去分词短语作状语：被动 + 完成 + 主语一致</h3>
+          <div class="zh">过去分词短语在句首作状语，相当于一个<b>被动语态的状语从句</b>（时间、原因、让步、条件均可），可译为「被……之后／因为被……／尽管被……」。它的<b>逻辑主语必须等于主句主语</b>，否则构成<b>垂悬分词</b>错误。</div>
+          <div class="eg">正确：<b>Stated but never explained, the terms admit no appeal.</b>（the terms 被 stated → 主语一致）<br>
+          正确：<b>Based on ten years of data, the report deserves attention.</b><br>
+          错误：<b>Written in a hurry, the conclusion was unclear.</b>（conclusion 不会 write，应改为 <i>Written in a hurry, the essay ...</i>）<br>
+          对比现在分词：<b>Standing at the door, she hesitated.</b>（现在分词表主动、进行）</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 让步状语从句的表语前置：though 可选，as 强制</h3>
+          <div class="zh">把<b>表语形容词（或名词、动词原形）</b>提到连词之前，是议论文里常见的强调式让步。用 <b>though</b> 时倒装是<b>可选项</b>（不倒装也对，但语气变弱）；用 <b>as</b> 时倒装是<b>强制项</b>。</div>
+          <div class="eg"><b>Terrible though the sight is, a few do not learn that skill.</b>（＝ Though the sight is terrible）<br>
+          <b>Terrible as the sight was, ...</b>（as 必须前置，不可说 As the sight was terrible）<br>
+          名词前置时<b>省略冠词</b>：<b>Child though he was, he understood the terms.</b>（不说 A child though he was）<br>
+          动词前置：<b>Try as they might, they could not open the door.</b></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、本课到底讲了什么：一篇只有几千字的「心理神话」</h3>
+        <p>1973 年 10 月，美国作家<b>厄休拉·勒古恩</b>（Ursula K. Le Guin，1929—2018）在科幻选集 <i>New Dimensions 3</i> 上发表了一篇极短的作品《离开奥梅拉斯的人》（<i>The Ones Who Walk Away from Omelas</i>），副标题是「<b>威廉·詹姆士主题变奏</b>」。它第二年获得<b>雨果奖最佳短篇小说</b>，1975 年收入短篇集《风之十二方位》，此后被反复重印。勒古恩自己称之为 <b>psychomyth</b>——心理神话：它不讲故事（没有情节、没有主角），只把一个构思摆在你面前，让你自己挣扎。</p>
+        <p>全篇分三层。<b>第一层</b>写奥梅拉斯这座城：海边的夏日节庆，旗帜、奔跑的孩子、街头的音乐，没有国王、没有奴隶、没有秘密警察。叙述者特别强调，这些市民并不幼稚——他们成熟、聪明、热爱自由。<b>第二层</b>写代价：一扇上锁的门后面关着一个孩子，全城的繁华与欢乐都依赖于它的极度凄惨；万一它被抱上楼、洗干净、得到安抚，全城的幸福会在那一刻枯萎。<b>第三层</b>写反应：每个市民长大到一定年纪都会被带去看见它；少数人后来离开了这座城，走进谁也说不清的黑暗。</p>
+        <p>值得注意的是，勒古恩<b>没有解释为什么</b>这座城必须这样运转。这个「不解释」是刻意的：如果给出了机制，读者就会去讨论机制能不能改；不给机制，读者只能面对<b>这笔交易本身</b>——你愿不愿意接受。</p>
+
+        <h3>二、思想的源头：詹姆士 1891，以及更早的陀思妥耶夫斯基</h3>
+        <p>勒古恩在 1975 年版的前言里写得很清楚：这个构思的核心意象是「<b>替罪羊</b>」（scapegoat），她把功劳归给了威廉·詹姆士。詹姆士 1891 年的论文《道德哲学家与道德生活》里有这么一段：</p>
+        <blockquote>……假设有人向我们提出这样一个世界：傅立叶、贝拉米与莫里斯所设想的种种乌托邦都要被比下去，成千上万人得以永远幸福，唯一的条件是某个被遗忘的灵魂要在世界的边缘独自承受折磨——即便我们心里已经生出抓住这份幸福的冲动，一种特定的、独立的情感仍会让我们立刻感到：<b>蓄意接受这样一笔交易换来的幸福，其享受将是何等丑恶。</b><em>—— William James, “The Moral Philosopher and the Moral Life”, 1891（本课译文）</em></blockquote>
+        <p>詹姆士的信心在于：他<b>假定</b>人一定会拒绝。奥梅拉斯做了一件很小却很关键的事——它把这个假定反过来：多数人先是惊骇，随后学会了把所见的合理化。</p>
+        <table class="facts">
+          <tr><th></th><th>詹姆士的假设</th><th>《奥梅拉斯》的假设</th></tr>
+          <tr><td>面对这笔交易</td><td>人会因为「丑恶感」当场拒绝</td><td>多数人最终会接受，并学会为它辩护</td></tr>
+          <tr><td>情感的角色</td><td>情感是可靠的道德指南</td><td>情感会强烈，但会随时间钝化</td></tr>
+          <tr><td>结果</td><td>不必写下去</td><td>这才有了故事：极少数人走掉</td></tr>
+        </table>
+        <p>这个意象其实出现得更早。陀思妥耶夫斯基 1880 年的《卡拉马佐夫兄弟》里，伊万对阿廖沙说：如果为了建成人类命运的大厦，必须折磨一个小小的人，你肯不肯做？勒古恩后来坦白，她 25 岁以后就没再读陀思妥耶夫斯基，<b>「我完全忘了他用过这个构思」</b>——她在詹姆士那里与它重逢时，是「一阵认识的震惊」。<b>同一个思想实验被两个人独立想到</b>，这件事本身就说明它击中了某种普遍的东西。</p>
+
+        <h3>三、为什么它是哲学题而不是故事题</h3>
+        <p>伦理学课上它被反复引用，通常被当作给<b>功利主义</b>（utilitarianism）的一道难题。边沁与密尔主张以「最大多数人的最大幸福」作为判断标准，做法是：<b>把幸福加总，看总量</b>。奥梅拉斯正是这个算法的极端形态——全城数万人的全部欢乐，对一个孩子的全部苦难。直觉上我们拒绝，但如果拒绝，就等于承认<b>有些东西不能被加进总量。</b></p>
+        <p>不过要说清一处常被忽略的细节：它并不完全是一次标准的功利主义计算。现实里不存在那样一条<b>魔法般的因果链</b>——放出一个孩子不会毁掉一座城。所以它的威力不在于反驳某个公式，而在于<b>把「总量可以换算」这个直觉推到最刺眼的位置</b>，逼你回答：我拒绝的到底是什么？</p>
+        <ul>
+          <li><b>若读成效用计算：</b>数万份欢乐 vs 一份苦难，答案似乎是留下来。</li>
+          <li><b>若读成权利边界：</b>有些对待方式本身就不可以做，无论它能换来什么——答案似乎是拒绝。</li>
+          <li><b>若读成共谋问题：</b>关键不是你做没做，而是你是否继续领取这笔红利。</li>
+        </ul>
+        <p>三种读法给出的三者答案并不一致，这正是它能被一代代老师用来「让学生吵起来」的原因。勒古恩自己说，这篇作品「有一段漫长而快乐的职业生涯：被老师们拿来让学生不安、并激烈争论道德」。</p>
+
+        <h3>四、最大的争议：走，还是留下？</h3>
+        <p>结尾一直是争论的焦点。走出城门的人被写得庄重——他们去往的地方比幸福之城更难想象，「<b>那个地方可能并不存在。但他们似乎知道自己去哪里</b>」。但也有一个很强的反驳：<b>离开一个人也没有救活。</b>孩子还在地窖里，城市照旧运转，只是少了一个领取红利的人。</p>
+        <p>美国作家 <b>N. K. 杰米辛</b>把这个反驳写成了一篇小说：2018 年的短篇集《还有多久才算黑色未来月？》开篇就是<b>《留下来战斗的人》</b>（<i>The Ones Who Stay and Fight</i>），标题直接回应勒古恩。她在《巴黎评论》的访谈中说，许多读者误以为勒古恩主张「创造更好社会的唯一办法就是离开」，而她认为勒古恩真正主张的是你得去<b>修</b>——「尤其是当根本无处可走的时候」。</p>
+        <table class="facts">
+          <tr><th></th><th>「离开」的读法</th><th>「留下」的读法</th></tr>
+          <tr><td>被去除的是什么</td><td>我不再当共谋者</td><td>什么也没被去除：孩子仍旧在地窖里</td></tr>
+          <tr><td>代价</td><td>放弃全城的一切</td><td>要忍受理性与他人的敌意</td></tr>
+          <tr><td>隐含前提</td><td>有些处境干净不了，只能不参与</td><td>没有「干净的外部」；你所在之处就是你要修的地方</td></tr>
+          <tr><td>主要风险</td><td>退场可能只是良心的安慰</td><td>留下的合理化与麻木，只差一步</td></tr>
+        </table>
+        <p>两种读法各有软肋，本课不替你选。可以自己试着回答一个更具体的问题：<b>如果你留在奥梅拉斯，你打算做什么——而这件事与「为自己找说法」的区别在哪里？</b></p>
+
+        <h3>五、中外对照：孟子早就给过一个不含计算的答案</h3>
+        <p>中国古典里最能正面回应这个难题的，是《孟子·公孙丑上》里那句极短的话：</p>
+        <blockquote>行一不义，杀一不辜，而得天下，皆不为也。<em>——《孟子·公孙丑上》</em></blockquote>
+        <p>它说的是：<b>做一件不义的事、杀一个无罪的人，哪怕因此得到天下，也不做。</b>值得注意的是它的结构——它<b>不是</b>「天下 vs 一人」的加总比较，而是先划一道线：<b>有些行为不在可交易之列</b>，后面的收益多大都不进入讨论。这与上面「权利边界」那一种读法正好对应。</p>
+        <p>另一句更常被引用的是《论语·颜渊》的「<b>己所不欲，勿施于人</b>」。它提供的是<b>换位</b>的方法（把自己放到那个位置上），而不是答案本身——因为奥梅拉斯的市民未必愿意自己进地窖，但他们仍然可以同意那笔交易。<b>所以「恕」能阻止某些事，却未必能解决这个难题。</b></p>
+        <p>至于「替罪羊」这个意象本身，中国的传统路径不太一样。 <b>scapegoat</b> 这个词直接来自《圣经·利未记》第十六章的赎罪仪式：大祭司把众人的罪按在羊头上，把它放往旷野。中国一侧没有这样制度化的宗教模板，相近的说法多是世俗性的，如「<b>代人受过</b>」「<b>李代桃僵</b>」（语出《乐府诗集·鸡鸣》，原写桃李相依，后引申为代人受祸）。</p>
+        <p><b>但对照时必须说清三点差异，否则会讲歪：</b></p>
+        <ul>
+          <li><b>性质不同：</b>孟子讲的是<b>行为边界</b>（义与不义），不是后果计算；功利主义讲的是<b>后果总量</b>。奥梅拉斯的锋利之处，恰恰是把这两者逼到互相冲突的位置。</li>
+          <li><b>主体不同：</b>「行一不义」约束的是<b>执政者个人的施政选择</b>；奥梅拉斯的市民既不是发布足以改变条款的法律的人，也不是把孩子关进去的人——他们只是<b>受益人</b>。</li>
+          <li><b>语境不同：</b>中国古典伦理传统里，这类命题通常落在「士」的自我要求上，而奥梅拉斯问的是<b>所有人</b>——包括那些手里没有任何权力、只想过日子的人。</li>
+        </ul>
+        <p><b>所以别把它讲成「东方义务论 vs 西方功利主义」。</b>准确的写法是：面对同一个难题，孟子给出的是一条<b>不进入计算的边界</b>，詹姆士给出的是一种<b>无法被压抑的情感反应</b>，勒古恩给出的则是一个<b>让人做完这一切之后仍然回不了家的结尾</b>。</p>
+
+        <h3>六、传说与出处：哪些细节值得留意</h3>
+        <ul>
+          <li><b>「奥梅拉斯」这个名字：</b>勒古恩在前言里说，它来自美国俄勒冈州城市 Salem（塞勒姆）的路牌——她在后视镜里把它倒过来读，就成了 Omelas。她有这个习惯（例如把 stop 读成 pots）。</li>
+          <li><b>副标题：</b>《新维度 3》初版就带着「威廉·詹姆士主题变奏」。1975 年收入《风之十二方位》时，她加了两页前言专门解释这件事。</li>
+          <li><b>关于陀思妥耶夫斯基：</b>她坦承自己 25 岁后就没重读过，把这个构思忘了，因此在前言里把功劳给了詹姆士；后来才被人指出《卡拉马佐夫兄弟》里伊万的话也是同一个构思。</li>
+          <li><b>关于孩子：</b>原文用「<b>it</b>」来称呼这个孩子，孩子性别不明。这个代词本身就是叙述的一部分——要让这个角色保持「不可被当作某个人」。读的时候别把它当成笔误。</li>
+          <li><b>关于现实关联：</b>本课没有把它直接套用到现实中的任何一种具体制度或具体群体。这不是回避，而是尊重故事的设定：它是一个<b>被刻意抽空了机制的思想实验</b>，用来检验我们先于理论的直觉。</li>
+          <li><b>它被怎么被用：</b>2018 年杰米辛写了《留下来战斗的人》；专辑与影视作品里也多次出现「Omelas」的意象。一篇 1973 年的短作至今仍在被回应，本身就是它有效的证据。</li>
+        </ul>
+
+        <h3>七、关键时间线 Timeline</h3>
+        <table class="facts">
+          <tr><th>1880</th><td>陀思妥耶夫斯基《卡拉马佐夫兄弟》出版，书中伊万向阿廖沙提出「以折磨一个小小的人来建成人类命运大厦」的假设</td></tr>
+          <tr><th>1891</th><td>威廉·詹姆士发表论文《道德哲学家与道德生活》，提出「成千上万人永远幸福，条件是某个被遗忘的灵魂独自承受折磨」的思想实验，并假定人会拒绝</td></tr>
+          <tr><th>1973.10</th><td>勒古恩《离开奥梅拉斯的人》发表于罗伯特·西尔弗伯格主编的科幻选集《新维度 3》，副标题「威廉·詹姆士主题变奏」</td></tr>
+          <tr><th>1974</th><td>获得雨果奖最佳短篇小说</td></tr>
+          <tr><th>1975</th><td>收入短篇集《风之十二方位》；勒古恩补写两页前言，说明构思来源与「Omelas」一名的由来</td></tr>
+          <tr><th>1993</th><td>以独立单行本形式出版（面向年轻读者的 31 页精装本）</td></tr>
+          <tr><th>2012</th><td>收入短篇集《虚幻与真实》第二卷；勒古恩在此感慨它被老师们广泛用于「让学生不安并激烈争论」</td></tr>
+          <tr><th>2018</th><td>N. K. 杰米辛短篇集出版，开篇《留下来战斗的人》直接回应本作，主张留下修缮而非离开</td></tr>
+        </table>
+        <p class="source">说明：本文所述情节、副标题、获奖与出版信息取自勒古恩作品通行版本与作者前言；詹姆士 1891 年论文、陀思妥耶夫斯基《卡拉马佐夫兄弟》相关段落为本课自译，仅供理解。凡属作者自述来源（如 Omega 之名、构思出处）均已在正文中标明。本课为伦理学思想实验的教学素材，不指向任何现实中的具体制度、国家、民族或群体；任何跨文化的对照都只取可比的伦理命题本身。</p>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>读懂一个伦理学思想实验的完整结构：</b>勒古恩《离开奥梅拉斯的人》的三层推进（幸福之城 → 上锁的门 → 走掉的人），以及它为何不解释机制。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>掌握 11 个 B2 核心词：</b>utopia · abject · degradation · scapegoat · hideous · deliberately · bargain · appalled · rationalize · complicity · forsake。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>能识别并仿写 5 个高级句型：</b>Were 倒装虚拟、Nor 部分倒装、Only 修饰主语不倒装 vs 修饰状语倒装、过去分词短语作状语、表语前置的让步倒装。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>能拆解 5 个语法点：</b>虚拟条件倒装三式、否定前置倒装、Only 的两种身份、过去分词的逻辑主语一致、though 可选与 as 强制的让步倒装。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>建立两处对照：</b>詹姆士「人会拒绝」与勒古恩「多数人会接受」的反转让渡；《孟子·公孙丑上》「行一不义，杀一不辜，而得天下，皆不为也」所给出的、不进入计算的边界。</div></div>
+        <div class="goal"><span class="ic">🤔</span><div><b>养成一个思辨习惯：</b>区分「我拒绝了什么」——是不接受效用加总，是不接受参与，还是不接受留下。三者答案并不一致。</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🧭 学习建议 How to Use This Page</h3>
+        <p><b>第一遍：</b>只看「全文阅读」，不开词表，读到第 2 段时先停下来，自己回答「我会怎么做」，再往下读。<br>
+        <b>第二遍：</b>点开不懂的高亮词看释义，再对照「词汇表」里的例句确认。<br>
+        <b>第三遍：</b>逐段点 ▶ 听朗读并跟读；读不顺的地方通常是自己不会断开的从句或分词短语。<br>
+        <b>第四遍：</b>带着「句型练习」的 5 个句子回原文，用荧光笔把它们划出来，看清每个句子分别承担了什么功能（假设／补充／让步／转折）。<br>
+        <b>最后：</b>做「练习测验」六题；答错的两题，请回到「语法点」里找到对应条目重读一遍。</p>
+        <p><b>打印提示：</b>本页已做打印优化，打印时会自动隐藏导航与按钮，七个板块全部展开，可当讲义使用。</p>
+        <button class="print-btn" onclick="window.print()">🖨 打印本页 Print</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🗝 答案速查 Answer Key</h3>
+        <p>1. B（勒古恩把功劳给了威廉·詹姆士 1891 年的论文；陀思妥耶夫斯基的更早，但她自称已忘）｜2. D（全城的幸福完全依赖那个孩子的极度凄惨，一旦它到阳光下，幸福当场枯萎）｜3. A（起初惊骇，随后大多数人学会了把所见合理化）｜4. C（Were 提前的倒装虚拟条件句，等于 If the child were to be carried up）｜5. A（Only 后面跟的是主语 pain／evil，不是状语，因此不倒装）｜6. D（他们去的地方比幸福之城更难想象，也许并不存在，但他们似乎知道自己去哪里）</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-11 · 哲学思考 Philosophy｜《离开奥梅拉斯的人》与替罪羊</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["In 1973 the writer Ursula K. Le Guin published a very short piece called The Ones Who Walk Away from Omelas, subtitled Variations on a theme by William James. It won the Hugo Award for best short story the next year and has unsettled readers ever since. The town it describes rides through a summer festival of banners and music. The narrator calls it a utopia, though not a simple one; its citizens have no kings, no slaves and no secret police. Before going further she asks us to notice a habit of mind: we have been taught that only pain is intellectual and only evil is interesting, that happiness is boring.","Then the secret. Beneath a public building, or in the cellar of a private house, is a room with one locked door and no window. Inside sits a child, about six to look at and nearly ten in fact. Nobody speaks kindly to it; it crouches in the dark in its own filth. Every citizen old enough to understand is taken to see it, and the terms are stated: all the prosperity, beauty and delight of Omelas depend entirely upon this child's abject degradation. Were the child to be carried up into the sunlight, washed and comforted, the happiness of the whole city would wither in that very hour. Nor is any reason offered. Stated but never explained, the terms admit no appeal.","It rests on an older idea. Le Guin named it herself — the scapegoat — and credited William James. In his 1891 essay The Moral Philosopher and the Moral Life, James imagines millions kept permanently happy on one condition: that a lost soul should lead a life of lonely torture at the far edge of things. James was confident about our answer: how hideous, he wrote, would be the enjoyment of a happiness deliberately accepted as the fruit of such a bargain. Omelas quietly reverses his confidence. At first sight the young visitors are appalled; they weep, they rage. Then, months later, most of them learn to rationalize what they have seen. Complicity, the narrator suggests, is less a decision than a skill, acquired slowly.","Terrible though the sight is, a few do not learn that skill. They leave the festival, walk out through a dark gate and go on along grey roads towards a place even harder to imagine than the city they have forsaken. It is possible, she says, that the place does not exist. But they seem to know where they are going, the ones who walk away from Omelas. What the walk itself means remains disputed. One reading treats it as the only honest answer left. Another, argued by N. K. Jemisin in her 2018 story The Ones Who Stay and Fight, holds that an objection which changes nothing has not answered the city, only abandoned it."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Whom did Le Guin credit for the central idea of the story? 勒古恩把这篇小说的核心构思归功于谁？",
+   opts:["Fyodor Dostoevsky, whose Brothers Karamazov she had just re-read 她刚重读过的陀思妥耶夫斯基","William James, whose 1891 essay The Moral Philosopher and the Moral Life states the same bargain 威廉·詹姆士，其 1891 年论文《道德哲学家与道德生活》写下了同一笔交易","Plato, in the myth of the ring in the Republic 柏拉图《理想国》中的戒指神话","Jeremy Bentham, in his defence of utilitarianism 边沁的功利主义辩护"],
+   ans:1,
+   fb:"正确！副标题已经写明：Variations on a theme by William James。陀思妥耶夫斯基的《卡拉马佐夫兄弟》里确实有同一个构思，而且更早（1880 年），但勒古恩在 1975 年前言里坦承自己 25 岁后就没再读他、完全忘了这件事——所以她在发表时把功劳给了詹姆士。"},
+  {q:"What do the terms of the bargain actually say? 这笔交易的条件究竟是什么？",
+   opts:["The child must be released for one hour every year 孩子每年必须被放出地窖一小时","The child is being punished for a crime committed by its parents 孩子在替父母受罚","The child will be freed as soon as the city becomes poor 城市一旦变穷，孩子就会被释放","All the prosperity, beauty and delight of Omelas depend entirely upon the child's abject degradation; were it carried into the sunlight, the city's happiness would wither that hour 奥梅拉斯全部的繁荣、美好与欢乐都完全依赖这孩子凄惨的处境；它一旦被抱到阳光下，全城的幸福会在那一刻枯萎"],
+   ans:3,
+   fb:"正确！注意两点：一是 abject degradation 强调的不只是痛苦，而是人的尊严被剥夺；二是 Were the child to be carried up ... 这个倒装虚拟，表达的正是那个反事实条件——而这事从未发生。"},
+  {q:"According to paragraph 3, what happens to most young visitors over time? 根据第 3 段，那些被带去看过孩子的年轻人，随着时间推移大多变成了什么样？",
+   opts:["They are appalled at first, then learn to rationalize what they have seen 起初惊骇，后来学会了把所见合理化","They set the child free at once 他们立刻把孩子放了","They vote to brick up the door permanently 他们投票决定永久砌死那扇门","They are told they imagined the whole thing 他们被告知一切都是幻觉"],
+   ans:0,
+   fb:"正确！这正是本课的核心转折：詹姆士假定人会因为 hideous 之感而拒绝，勒古恩把这个假定反过来。课文最后那句 Complicity is less a decision than a skill 就是这个意思——共谋不是一次决定，而是一项慢慢学会的本事。"},
+  {q:"What grammatical structure is used in 'Were the child to be carried up into the sunlight, ... the happiness of the whole city would wither'? 该句使用了什么语法结构？",
+   opts:["A past participle phrase used as an adverbial 过去分词短语作状语","Inversion after a negative word placed at the front 否定词前置引起的部分倒装","An inverted subjunctive conditional, equivalent to 'If the child were to be carried up ...' 倒装虚拟条件句，等于 If the child were to be carried up ...","A concessive inversion with the predicative placed before though 表语前置的让步倒装"],
+   ans:2,
+   fb:"正确！Were 提到主语之前即可省略 if，虚拟语气里第三人称单数也用 were 不用 was；主句因此用 would + 动词原形。选项 A 对应的是另一句 Stated but never explained，选项 D 对应 Terrible though the sight is。"},
+  {q:"In 'only pain is intellectual and only evil is interesting', why is there no inversion after 'only'? 句中 only 之后为什么没有倒装？",
+   opts:["Because 'only' modifies the subjects pain and evil, not an adverbial 因为 only 修饰的是主语 pain 与 evil，而不是状语","Because the sentence is negative 因为句子是否定句","Because no auxiliary verb is available 因为没有可用的助动词","Because inversion after 'only' is always optional 因为 only 之后的倒装永远可选"],
+   ans:0,
+   fb:"正确！唯一判断依据是 only 后面跟的成分：跟名词或代词（主语）→ 不倒装；跟介词短语、副词或状语从句 → 助动词必须提前，如 Only by walking away can a few citizens keep their integrity。选 D 是最常见的误解。"},
+  {q:"Which statement about the ending is supported by the passage? 关于结尾，哪一项是文章支持的？",
+   opts:["The walkers are certain to reach a better city 离开的人一定会抵达一座更好的城市","The narrator gives a detailed description of their destination 叙述者详细描写了他们的目的地","The story states plainly that leaving is the only right answer 小说明确说离开是唯一正确的答案","Where they go is even harder to imagine than the city; the place may not exist, yet they seem to know where they are going 他们去的地方比那座城更难想象，那个地方也许并不存在，但他们似乎知道自己去哪里"],
+   ans:3,
+   fb:"正确！这正是结尾最有分量的两句：It is possible that it does not exist 与 they seem to know where they are going。选项 C 不成立——本课第 4 段特意指出，「走」的含义至今仍有争议，杰米辛 2018 年的《留下来战斗的人》就是反对意见。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

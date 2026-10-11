@@ -7424,6 +7424,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-11",
+    "title": "The Door No One Opens",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-11-the-door-no-one-opens",
+    "url": "lessons/b2/2026-10-11-the-door-no-one-opens.html",
+    "vocab": [
+      {
+        "word": "utopia",
+        "zh": "乌托邦；理想国（可数名词，复数 utopias；形容词 utopian 乌托邦的、不切实际的；读音 /juːˈtəʊpiə/，重音在 -to-。注意本课里它并非褒义：叙述者反复提醒读者别轻信这座城）",
+        "ex": "\"The narrator calls it a utopia, though not a simple one.\""
+      },
+      {
+        "word": "abject",
+        "zh": "凄惨的；卑贱的；屈辱到极点的（正式用词，语气极重；abject poverty 赤贫；abject misery 极度的苦难；发音 /ˈæbdʒekt/，重音在第一音节）",
+        "ex": "\"All the prosperity, beauty and delight of Omelas depend entirely upon this child's abject degradation.\""
+      },
+      {
+        "word": "degradation",
+        "zh": "屈辱；堕落；被剥夺尊严的状态（动词 degrade 贬低／使堕落；形容词 degrading 有辱人格的。比 suffering 更重，因为它强调『人的尊严被拿走』）",
+        "ex": "\"The terms are then stated: ... depend entirely upon this child's abject degradation.\""
+      },
+      {
+        "word": "scapegoat",
+        "zh": "替罪羊；代人受过者（也可作动词『拿某人当替罪羊』。词源可追溯到《圣经·利未记》第十六章的赎罪仪式：一头山羊被放往旷野，带走众人的罪。西方政治与文学里使用极频繁）",
+        "ex": "\"Le Guin herself named it the scapegoat.\""
+      },
+      {
+        "word": "hideous",
+        "zh": "丑恶的；令人憎恶的（语气远强于 ugly；a hideous crime 令人发指的罪行；名词 hideousness。它形容的是『让人想移开目光』的那种性质）",
+        "ex": "\"How hideous, he wrote, would be the enjoyment of a happiness deliberately accepted.\""
+      },
+      {
+        "word": "deliberately",
+        "zh": "刻意地；明知地（形容词 deliberate 有意的、从容不迫的。它常暗含『明知如此仍然去做』，因此带贬义色彩，与 on purpose 近义但更书面）",
+        "ex": "\"...a happiness deliberately accepted as the fruit of such a bargain.\""
+      },
+      {
+        "word": "bargain",
+        "zh": "交易；协议；交换条件（另一常用义是『便宜货』，如 a real bargain 真便宜；本课取第一个意思。drive a hard bargain 极力讨价还价；keep one's side of the bargain 履行自己那一份）",
+        "ex": "\"How hideous ... would be the enjoyment of a happiness deliberately accepted as the fruit of such a bargain.\""
+      },
+      {
+        "word": "appalled",
+        "zh": "感到惊骇的（作表语，be appalled at/by；动词 appal 使惊骇；形容词 appalling 令人发指的。务必分清：appalled 说的是人的感受，appalling 说的是引起感受的事物的性质）",
+        "ex": "\"At first sight the young visitors are appalled; they weep, they rage.\""
+      },
+      {
+        "word": "rationalize",
+        "zh": "为……找理由；使合理化（正式用词；rationalize a decision 给自己的决定找说辞；名词 rationalization。本课里它是最冷的一个词：合理化意味着人并没有离开原来的位置，只是换了说法）",
+        "ex": "\"Most of them learn to rationalize what they have seen.\""
+      },
+      {
+        "word": "complicity",
+        "zh": "共谋；同流合污（正式；complicity in wrongdoing 参与作恶；形容词 complicit。它比 guilt 更精确：你不必亲手去做，只要继续留下并继续从中受益）",
+        "ex": "\"Complicity, the narrator suggests, is less a decision than a skill.\""
+      },
+      {
+        "word": "forsaken",
+        "zh": "抛弃；弃之而去（文学用语，过去式 forsook，过去分词 forsaken。比 leave／abandon 郑重得多，暗示放弃本应守护的东西；作定语时常用过去分词，如 the forsaken city）",
+        "ex": "\"...towards a place even harder to imagine than the city they have forsaken.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
