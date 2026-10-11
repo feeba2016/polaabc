@@ -9359,5 +9359,67 @@ const EPISODES = [
         "ex": "“The hedge, in short, is not modesty. It is measurement.”"
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-11",
+    "title": "The Ruler That Stretched",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-11-the-ruler-that-stretched",
+    "url": "lessons/c1/2026-10-11-the-ruler-that-stretched.html",
+    "vocab": [
+      {
+        "word": "presuppose",
+        "zh": "预设、默然以……为前提（to require as a prior condition, or to take for granted in advance；the argument presupposes comparability 这一论证预设了可比性；名词 presupposition 预设、前提；比 assume 更重一层——指「这个说法要成立，必须先有某件事为真」，而那件事往往没被说出来）",
+        "ex": "“What the comparison quietly presupposes is that a point on a five-step scale stands for the same quantity of feeling…”"
+      },
+      {
+        "word": "render",
+        "zh": "翻译、把……译成（正式用法，to express something in another language；render a poem into English 把诗译成英语；rendered into Chinese 译成中文；另有「致使」（render something useless 使某物无用）与「给予」（render assistance 提供帮助）两义；学术文本中取「翻译」义时通常不用 translate）",
+        "ex": "“…in every language it is rendered into.”"
+      },
+      {
+        "word": "acquiescence",
+        "zh": "默许、顺从；（调查方法中）acquiescent response style 顺从型应答风格——不管题目问什么都偏向答「同意」（to accept without protest；动词 acquiesce + 后缀 -ence；它是与题目内容无关的应答习惯，会系统性抬高「同意」类答案的比例；注意拼写中的 quie 不发音为 kwai，读作 /ˌækwiˈesns/）",
+        "ex": "“…she found wide variation in acquiescence and in the pull towards the endpoints.”"
+      },
+      {
+        "word": "endpoint",
+        "zh": "端点、量表两端的选项（the two extreme points of a rating scale；the endpoints of a five-point scale 五点量表的两个端点；与 extreme response style「极端应答风格」直接相关——倾向选端点的人会把同样的感受标得更强；统计学中也指区间的端点）",
+        "ex": "“…wide variation in acquiescence and in the pull towards the endpoints.”"
+      },
+      {
+        "word": "administer",
+        "zh": "施行、施测（问卷或测试）；管理（to give or apply a test formally；administer a survey to 512 respondents 对 512 名受访者施测；名词 administration；学术写作里几乎不写 give a questionnaire，而写 administer a questionnaire）",
+        "ex": "“…questionnaires administered in English elicited more middle responses…”"
+      },
+      {
+        "word": "elicit",
+        "zh": "引出、诱出（回答、反应、数据）（to draw out or evoke a response；elicit a reply 引出回答、elicit data 取得数据；注意与 illicit「非法的」拼写区分，二者同音不同形 /ɪˈlɪsɪt/）",
+        "ex": "“…questionnaires administered in English elicited more middle responses, those in a respondent's own language more extreme ones.”"
+      },
+      {
+        "word": "construct",
+        "zh": "构念（不可直接观测、须由量表间接测量的理论概念，如「外向性」「焦虑」）（an abstract entity inferred from indicators；construct validity 构念效度；名词重音在前 CÓN-struct，动词在后 con-STRUCT，务必区分）",
+        "ex": "“The deep one is whether the construct survives the journey, the question of measurement invariance.”"
+      },
+      {
+        "word": "invariance",
+        "zh": "不变性；测量不变性（measurement invariance）指同一量表在不同群体中测量到的是同一个东西（configural 结构不变 / metric 载荷不变 / scalar 截距不变 三级递进；形容词 invariant 不变的；词根 vary + in- 否定）",
+        "ex": "“The deep one is whether the construct survives the journey, the question of measurement invariance.”"
+      },
+      {
+        "word": "scalar",
+        "zh": "标量的；测量不变性的第三级 scalar invariance 尺度（截距）不变性——不仅各题与潜变量的关系相同，连每题的起点也相同，只有在这一级上才可以直接比较各组平均值（本义与 vector「向量的」相对）",
+        "ex": "“…Dong and Dumas found none that achieved scalar invariance across cultural or ethnic groups.”"
+      },
+      {
+        "word": "comparability",
+        "zh": "可比性（不同群体、不同时点的数字能否放在一起比较的性质）（the quality of being able to be compared；question the comparability of two datasets 质疑两份数据能否互比；形容词 comparable，搭配 comparable with / to；跨文化研究中它不是默认属性，而是需要被检验出来的结果）",
+        "ex": "“Comparability is therefore not the premise of a cross-cultural study but its first result.”"
+      }
+    ]
   }
 ];

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Ruler That Stretched — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#065f46;
+  --accent2:#a16207;
+  --bg:#f7faf9;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#d7f0e4;
+  --border:#cfe3d8;
+  --soft:#f0f9f5;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(6,95,70,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(6,95,70,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(6,95,70,.55);}70%{box-shadow:0 0 0 12px rgba(6,95,70,0);}100%{box-shadow:0 0 0 0 rgba(6,95,70,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#b7e4cd;}
+#tip{position:fixed;z-index:1200;background:#04402c;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(6,95,70,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#d7f0e4;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 跨文化比较 Cross-cultural</span>
+      <h1 class="title">The Ruler That Stretched</h1>
+      <p class="subtitle">Response styles, measurement invariance, and why comparability has to be earned · 2026-10-11 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The default assumption</div>
+            <p>A number that crosses a border is assumed to arrive unchanged. Cross-national surveys invite exactly that assumption: a mean of 3.4 here and 4.1 there is read as a difference in what people want. What the comparison quietly <span class="kw" data-def="预设、默然以……为前提（to take for granted in advance, or to require as a prior condition；presuppose the comparability of two samples 预设两份样本可比；名词 presupposition 预设、前提；比 assume 更重一层——它指「这个说法要成立，必须先有某件事为真」，而那件事往往没被说出来）">presupposes</span> is that a point on a five-step scale stands for the same quantity of feeling in every language it is <span class="kw" data-def="翻译、把……译成（此处为正式用法，to express or translate something in another language；render a poem into English 把一首诗译成英语；rendered into Chinese 译成中文；常见义项还有「致使、使成为」（render something useless）与「给予」（render assistance），学术文本中取「翻译」义时通常不用 translate）">rendered</span> into. That is a premise, not a finding, and it can be tested.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Style before substance</div>
+            <p>Anne-Wil Harzing's 26-country study shows how easily it fails. Measuring how respondents use a scale regardless of what the items ask, she found wide variation in <span class="kw" data-def="默许、倾向性同意；（心理学／调查方法中）acquiescent response style 顺从型应答风格——不管题目问什么，都偏向答「同意／是」（to accept something without protest；名词，源自动词 acquiesce 默然接受 + -ence；调查方法论中它是与题目内容无关的应答习惯，会系统性抬高「同意」类答案的比例）">acquiescence</span> and in the pull towards the <span class="kw" data-def="端点、量表两端的选项（the two extreme points of a rating scale；the endpoints of a five-point scale 五点量表的两个端点；与 extreme response style「极端应答风格」直接相关——倾向选端点的人会把同样的感受标得更强；数学／统计学中也指区间的端点）">endpoints</span>, variation that tracks country-level indices such as power distance. The sharper result concerns the instrument: questionnaires <span class="kw" data-def="施行、施测（问卷、测试）；管理（to give or apply a test or questionnaire formally；administer a survey to 512 respondents 对 512 名受访者施测；名词 administration；学术文本里几乎不说 give a questionnaire，而说 administer）">administered</span> in English <span class="kw" data-def="引出、诱出（回答、反应、数据）（to draw out or evoke a response；elicit more middle responses 引出更多中间选项的回答；elicit a reply / elicit data 引出回答／取得数据；注意与 illicit「非法的」拼写区分，二者同音不同形）">elicited</span> more middle responses, those in a respondent's own language more extreme ones. Some of what looks like cultural distance may be translation distance.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The deeper question</div>
+            <p>Style is the shallow problem. The deep one is whether the <span class="kw" data-def="构念（心理学与社会科学中不可直接观测、由量表间接测量的理论概念，如「外向性」「工作满意度」）（an abstract theoretical entity inferred from observed indicators；the construct of well-being 幸福感这一构念；construct validity 构念效度；动词 construct 是「建造」，名词重音在第一个音节 CÓN-struct，务必与动词 con-STRUCT 区分）">construct</span> survives the journey, the question of measurement <span class="kw" data-def="不变性；（测量不变性 measurement invariance）指同一量表在不同群体中测量到的是同一个东西（the property of a measurement that remains unchanged across groups or occasions；configural / metric / scalar invariance 分别是「结构不变／载荷不变／截距不变」三级；形容词 invariant 不变的；词根 vary 变化 + in- 否定）">invariance</span>. It is graded: a scale may share its structure across groups, share its loadings, and still not yield comparable scores. Surveying 95 tests of personality instruments, Dong and Dumas found none that achieved <span class="kw" data-def="标量的；（测量不变性的第三级）scalar invariance 尺度／截距不变性——不仅各题与潜变量的关系相同，连每一题的起点也相同，只有在这一级上才可以直接比较各组的平均值（scalar 本义「标量的」，与 vector「向量的」相对；此处借指「刻度原点一致」；低于这一级的比较只能谈结构，不能谈均分高低）">scalar</span> invariance across cultural or ethnic groups, though many did across gender and age. Most comparisons never ask.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Care upstream is not enough</div>
+            <p>Care upstream does not settle it. Tan and colleagues translated a standard adolescent inventory into Chinese, back-translated it, confirmed its reliability, and administered it to 1,574 young people in China and 512 in the United States; six of the sixteen subscales still failed. <span class="kw" data-def="可比性（不同群体、不同时点的数字能否放在一起比较的性质）（the quality of being able to be compared；question the comparability of the two datasets 质疑两份数据能否互相比较；形容词 comparable，注意搭配 comparable with / to；跨文化研究里它不是一个默认属性，而是需要被检验出来的结果）">Comparability</span> is therefore not the premise of a cross-cultural study but its first result. Before asking how far apart two groups stand, ask whether both were measured on the same ruler.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="sec" style="border:none;padding:0;margin:0 0 10px;">🧭 篇章结构 Structure at a Glance</h2>
+        <div class="ext">
+        <table>
+          <tr><th>段</th><th>功能</th><th>关键句</th></tr>
+          <tr><td>1</td><td>先立一个默认假设（数字跨国不变），随即指出它是<b>前提</b>而非事实，并且可检验</td><td>That is a premise, not a finding, and it can be tested.</td></tr>
+          <tr><td>2</td><td>用 26 国研究给出两层证据：应答风格差异，以及<b>施测语言本身</b>就能移动答案</td><td>Some of what looks like cultural distance may be translation distance.</td></tr>
+          <tr><td>3</td><td>推进到更深的一层：构念能否跨群体存活（测量不变性），并给出综述结论</td><td>Most comparisons never ask.</td></tr>
+          <tr><td>4</td><td>用一项翻译严谨的研究收口：上游的严谨不等于可比，落到方法论自觉</td><td>Before asking how far apart two groups stand, ask whether both were measured on the same ruler.</td></tr>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (10 · C1–C2)</h2>
+      <div class="card">
+        <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="presuppose">🔊</button><div class="word">presuppose<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">预设、默然以……为前提（to require as a prior condition, or to take for granted in advance；the argument presupposes comparability 这一论证预设了可比性；名词 presupposition 预设、前提；比 assume 更重一层——指「这个说法要成立，必须先有某件事为真」，而那件事往往没被说出来）</div><div class="ex">“What the comparison quietly presupposes is that a point on a five-step scale stands for the same quantity of feeling…”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="render">🔊</button><div class="word">render<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">翻译、把……译成（正式用法，to express something in another language；render a poem into English 把诗译成英语；rendered into Chinese 译成中文；另有「致使」（render something useless 使某物无用）与「给予」（render assistance 提供帮助）两义；学术文本中取「翻译」义时通常不用 translate）</div><div class="ex">“…in every language it is rendered into.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="acquiescence">🔊</button><div class="word">acquiescence<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">默许、顺从；（调查方法中）acquiescent response style 顺从型应答风格——不管题目问什么都偏向答「同意」（to accept without protest；动词 acquiesce + 后缀 -ence；它是与题目内容无关的应答习惯，会系统性抬高「同意」类答案的比例；注意拼写中的 quie 不发音为 kwai，读作 /ˌækwiˈesns/）</div><div class="ex">“…she found wide variation in acquiescence and in the pull towards the endpoints.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="endpoint">🔊</button><div class="word">endpoint<span class="pos">n.</span></div><span class="lvl">C1</span><div class="zh">端点、量表两端的选项（the two extreme points of a rating scale；the endpoints of a five-point scale 五点量表的两个端点；与 extreme response style「极端应答风格」直接相关——倾向选端点的人会把同样的感受标得更强；统计学中也指区间的端点）</div><div class="ex">“…wide variation in acquiescence and in the pull towards the endpoints.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="administer">🔊</button><div class="word">administer<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">施行、施测（问卷或测试）；管理（to give or apply a test formally；administer a survey to 512 respondents 对 512 名受访者施测；名词 administration；学术写作里几乎不写 give a questionnaire，而写 administer a questionnaire）</div><div class="ex">“…questionnaires administered in English elicited more middle responses…”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="elicit">🔊</button><div class="word">elicit<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">引出、诱出（回答、反应、数据）（to draw out or evoke a response；elicit a reply 引出回答、elicit data 取得数据；注意与 illicit「非法的」拼写区分，二者同音不同形 /ɪˈlɪsɪt/）</div><div class="ex">“…questionnaires administered in English elicited more middle responses, those in a respondent's own language more extreme ones.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="construct">🔊</button><div class="word">construct<span class="pos">n. / v.</span></div><span class="lvl">C2</span><div class="zh">构念（不可直接观测、须由量表间接测量的理论概念，如「外向性」「焦虑」）（an abstract entity inferred from indicators；construct validity 构念效度；名词重音在前 CÓN-struct，动词在后 con-STRUCT，务必区分）</div><div class="ex">“The deep one is whether the construct survives the journey, the question of measurement invariance.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="invariance">🔊</button><div class="word">invariance<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">不变性；测量不变性（measurement invariance）指同一量表在不同群体中测量到的是同一个东西（configural 结构不变 / metric 载荷不变 / scalar 截距不变 三级递进；形容词 invariant 不变的；词根 vary + in- 否定）</div><div class="ex">“The deep one is whether the construct survives the journey, the question of measurement invariance.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scalar">🔊</button><div class="word">scalar<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">标量的；测量不变性的第三级 scalar invariance 尺度（截距）不变性——不仅各题与潜变量的关系相同，连每题的起点也相同，只有在这一级上才可以直接比较各组平均值（本义与 vector「向量的」相对）</div><div class="ex">“…Dong and Dumas found none that achieved scalar invariance across cultural or ethnic groups.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="comparability">🔊</button><div class="word">comparability<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">可比性（不同群体、不同时点的数字能否放在一起比较的性质）（the quality of being able to be compared；question the comparability of two datasets 质疑两份数据能否互比；形容词 comparable，搭配 comparable with / to；跨文化研究中它不是默认属性，而是需要被检验出来的结果）</div><div class="ex">“Comparability is therefore not the premise of a cross-cultural study but its first result.”</div></div>
+        </div>
+      </div>
+    </section>
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. N + 定语从句 + be assumed to V（被动 + 补足不定式 + 空间隐喻）</h3>
+          <div class="zh">开篇第一句的骨架。<i>A number</i> 后接 <i>that crosses a border</i> 定语从句，谓语用被动 <i>is assumed</i>，再接<b>补足不定式</b> <i>to arrive unchanged</i>（不是 to be arriving，也不是 arriving）——「被假定会如何」一律用 <i>be assumed / believed / thought / reported to do</i>。妙处在于<b>空间隐喻</b>：抽象的数字被写成会「跨越边境」「抵达」，抵达时本该 unchanged，后文正是要拆掉这个 unchanged。雅思写作里可写成：<i>Data collected in one setting are often assumed to travel intact to another.</i></div>
+          <div class="eg">A number that crosses a border is assumed to arrive unchanged.</div>
+          <div class="practice">✍️ 仿写：在一种语言里成立的量表，常被假定在另一种语言里同样成立。<input type="text" placeholder="A scale validated in one language is assumed to..."></div>
+        </div>
+        <div class="item">
+          <h3>2. What S quietly presupposes is that …（what 主语从句 + that 表语从句）</h3>
+          <div class="zh">指出「隐藏前提」时最锋利的一句。<i>What</i> 引导的名词性从句作主语（整体视为单数，谓语用 is），<i>that</i> 引导表语从句，中间插入副词 <i>quietly</i>——这个副词是灵魂：它说明该前提<b>从未被明说</b>，作者只是把它点破。整句相当于 <i>It is quietly presupposed that…</i>，但把 presuppose 变成主动、把隐藏的东西放到句首当主语，力度大得多。</div>
+          <div class="eg">What the comparison quietly presupposes is that a point on a five-step scale stands for the same quantity of feeling in every language it is rendered into.</div>
+          <div class="practice">✍️ 仿写：这项研究默默预设的是，受访者对「满意」一词的理解彼此一致。<input type="text" placeholder="What the study quietly presupposes is that..."></div>
+        </div>
+        <div class="item">
+          <h3>3. Measuring how …, she found …（句首现在分词 + 嵌套 wh- 从句）</h3>
+          <div class="zh">一句话塞进「方法 + 结果」的标准学术写法。句首 <i>Measuring</i> 是现在分词短语作状语，逻辑主语必须与主句主语一致（此处为 she，即研究者本人）；它带一个 <i>how</i> 引导的宾语从句，从句里又套一个 <i>regardless of what the items ask</i>（介词后接 what 从句）。这三层压缩让「先说怎么测、再说测出什么」只用一句完成，非常适合 literature review 与结果段的开头。</div>
+          <div class="eg">Measuring how respondents use a scale regardless of what the items ask, she found wide variation in acquiescence and in the pull towards the endpoints.</div>
+          <div class="practice">✍️ 仿写：追踪同一份问卷在两种语言下的作答分布，研究者发现端点选项的使用率相差近一倍。<input type="text" placeholder="Tracking how the same questionnaire was answered in two languages, the researchers found..."></div>
+        </div>
+        <div class="item">
+          <h3>4. 冒号 + 省略式对举（gapping）：X did A, those in Y more B</h3>
+          <div class="zh">冒号前先抛出结论（<i>The sharper result concerns the instrument</i>），冒号后用一组对举给出证据。第二分句 <i>those in a respondent's own language more extreme ones</i> 省略了与第一分句相同的动词 <i>elicited</i>——这种省略叫 <b>gapping</b>，是英文学术写作里密度最高的并列手法之一，前提是<b>被省略的动词完全相同</b>、且两分句结构平行（此处均为「介词短语 + 宾语」）。省略后节奏更紧，对比更硬。</div>
+          <div class="eg">The sharper result concerns the instrument: questionnaires administered in English elicited more middle responses, those in a respondent's own language more extreme ones.</div>
+          <div class="practice">✍️ 仿写：差异出现在年龄段上：老年组偏好中间选项，年轻组偏好两端。<input type="text" placeholder="The difference appears across age groups: older respondents preferred..., younger ones..."></div>
+        </div>
+        <div class="item">
+          <h3>5. Before V-ing …, ask whether …（介词短语前置 + 祈使句收尾）</h3>
+          <div class="zh">末段收口用的一记重拳。<i>Before</i> 在这里是<b>介词</b>，后面必须接动名词（<i>before asking</i>），不能接原形；介词短语整体前置，主句用祈使句 <i>ask whether…</i>，把作者的方法论主张变成一条读者可以直接执行的操作。这种「介词短语前置 + 祈使句」的组合在论文的 Discussion 结尾与政策建议段里极为常见，比 <i>We should first ask whether…</i> 更有力，也更短。</div>
+          <div class="eg">Before asking how far apart two groups stand, ask whether both were measured on the same ruler.</div>
+          <div class="practice">✍️ 仿写：在讨论两地的差距有多大之前，先问这两组数据是不是用同一把尺子量出来的。<input type="text" placeholder="Before discussing how large the gap is, ask whether..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 被动结构 + 补足不定式：be assumed to do</h3>
+          <div class="zh">第 1 段：<i>A number … <b>is assumed to arrive</b> unchanged.</i> 「主语 + be + 过去分词 + to do」是学术英语里最高频的句型之一，用于转述普遍看法而不必指明是谁这么看。三种时态要分清：<i>to do</i>（与谓语同时或之后，<i>is assumed to arrive</i>）、<i>to be doing</i>（正在进行）、<i>to have done</i>（先于谓语，<i>is assumed to have arrived</i>）。它可与形式主语结构互换：<i>It is assumed that a number arrives unchanged</i>——但把 number 提前当主语，句子重心就落在了「数字」上，这正是本文要讨论的对象。</div>
+          <div class="eg">A number that crosses a border is assumed to arrive unchanged.</div>
+        </div>
+        <div class="item">
+          <h3>2. what 引导的名词性从句作主语 + that 表语从句</h3>
+          <div class="zh">第 1 段：<i><b>What the comparison quietly presupposes</b> is <b>that</b> a point on a five-step scale stands for…</i> 两个要点：① <i>what</i> 从句整体视为<b>单数</b>，谓语用 is（即使表语是复数名词，正式写作中仍以 is 稳妥）；② <i>what</i> 本身在从句里充当成分（此处作 presupposes 的宾语），所以它兼具先行词与关系代词两职，等于 <i>the thing that</i>。表语从句的 <i>that</i> 在正式文体中<b>不建议省略</b>——主语越长，读者越需要这个 that 来定位谓语之后的结构起点。</div>
+          <div class="eg">What the comparison quietly presupposes is that a point on a five-step scale stands for the same quantity of feeling in every language it is rendered into.</div>
+        </div>
+        <div class="item">
+          <h3>3. 句首现在分词短语 + 嵌套 wh- 宾语从句（及悬垂禁忌）</h3>
+          <div class="zh">第 2 段：<i><b>Measuring how respondents use a scale regardless of what the items ask</b>, she found…</i> 分词短语作状语时，其逻辑主语<b>必须</b>与主句主语一致——此处 measuring 的人是 she。若写成 <i>Measuring these responses, the variation was large</i>，分词就悬垂了（variation 不会去测量）。从句内部是两层 wh-：<i>how</i> 引导宾语从句，<i>regardless of</i> 这个介词短语后面又接了 <i>what the items ask</i>（介词后只能接 wh- 从句，不能接 that 从句）。</div>
+          <div class="eg">Measuring how respondents use a scale regardless of what the items ask, she found wide variation in acquiescence.</div>
+        </div>
+        <div class="item">
+          <h3>4. 并列结构中的动词省略（gapping）与 those 的指代</h3>
+          <div class="zh">第 2 段：<i>…administered in English elicited more middle responses, <b>those</b> in a respondent's own language more extreme ones.</i> 第二分句省去了与第一分句相同的动词 <i>elicited</i>，只保留主语与宾语（<i>those … more extreme ones</i>），这就是 gapping。要点有三：① 被省略的动词形式必须与第一分句完全相同；② 用 <i>those</i> 指代前文复数名词 questionnaires，避免重复（单数用 <i>that</i>）；③ 两个分句的语法角色要一一对应，否则读者无法填回被省略的词。</div>
+          <div class="eg">questionnaires administered in English elicited more middle responses, those in a respondent's own language more extreme ones.</div>
+        </div>
+        <div class="item">
+          <h3>5. not A but B 的平行结构 + therefore 的插入位置</h3>
+          <div class="zh">第 4 段：<i>Comparability is <b>therefore</b> not the premise of a cross-cultural study <b>but</b> its first result.</i> 两个考点：① <i>not A but B</i> 要求 A 与 B <b>语法形式一致</b>——此处同为名词短语（the premise of a cross-cultural study / its first result）；② 连接副词 <i>therefore</i> 放在 be 动词<b>之后</b>、实义动词<b>之前</b>（<i>is therefore not…</i> / <i>therefore yields…</i>），放在句末则要加逗号。这一句同时完成了「否定常识 + 给出替代定位」，是 Discussion 段落收束观点的标准手法。</div>
+          <div class="eg">Comparability is therefore not the premise of a cross-cultural study but its first result.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (6 · IELTS / TOEFL style)</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card"><div id="score" style="font-weight:700;color:var(--accent);font-size:16px;">作答后可在下方查看每题解析；全部做完可对照本页上方的篇章结构表复盘。</div></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 Deep Dive</h2>
+      <div class="card ext">
+        <h3>一、两条不同的问题：答题习惯 ≠ 构念不等价</h3>
+        <p>跨文化调查里「数字不可比」有两种完全不同的成因，正文把它们分成了两段，这里再把边界说清楚。</p>
+        <p>第一种是<b>应答风格</b>（response style）：受访者在使用量表时有稳定的个人／群体习惯，与题目问什么无关。最常见的是三种——顺从型（acquiescence，偏向答同意）、极端型（extreme response style，偏向选两端）、中间型（middle response style，偏向选中点）。它们改变的是<b>答案的分布形状</b>，不改变题目在问什么。</p>
+        <p>第二种是<b>测量不变性</b>（measurement invariance）缺失：同一份问卷在不同群体里测到的<b>根本不是同一个东西</b>。这比第一种严重得多——前者是读数偏了，后者是尺子本身换了刻度。</p>
+        <p>不变性检验是分级的，必须逐级通过才能逐级下结论：</p>
+        <table>
+          <tr><th>级别</th><th>英文</th><th>检验的是什么</th><th>通过了能说什么</th></tr>
+          <tr><td>一级</td><td>configural invariance（结构不变）</td><td>各组的题项归在同一个因子结构下</td><td>只能说「大家测的因子数量与归属相同」，不能比大小</td></tr>
+          <tr><td>二级</td><td>metric invariance（载荷不变）</td><td>每题与潜变量的关系强度相同</td><td>可以比较<b>相关与回归系数</b>，仍不能比均分</td></tr>
+          <tr><td>三级</td><td>scalar invariance（截距不变）</td><td>每题的起点（截距）也相同</td><td>才可以比较<b>各组的平均值</b></td></tr>
+          <tr><td>四级</td><td>strict invariance（严格不变）</td><td>连残差方差也相同</td><td>可比较方差与信度，实践中极少达到</td></tr>
+        </table>
+        <p>这就是正文第 3 段说 <i>scalar</i> 而不说 <i>metric</i> 的原因：绝大多数跨文化研究的目标是「比较两个国家的平均分」，而平均分恰恰需要最高那一级的通行证。</p>
+
+        <h3>二、Harzing（2006）：26 个国家，69 道题</h3>
+        <p>Anne-Wil Harzing 的研究发表于 <i>International Journal of Cross Cultural Management</i> 6(2): 243–266（doi: 10.1177/1470595806066332）。样本覆盖 26 个国家，问卷含 69 个题项；应答风格不是按单个构念算分，而是<b>用全部 69 题统一计算</b>，让每题贡献相等，这样得到的才是「与题目内容无关」的答题习惯。</p>
+        <table>
+          <tr><th>发现</th><th>内容</th><th>怎么读</th></tr>
+          <tr><td>国家间差异显著</td><td>顺从型与极端型风格在国别间差异很大</td><td>是<b>群体层面的统计倾向</b>，不能推到任何个人身上</td></tr>
+          <tr><td>与国家层面指标相关</td><td>权力距离、集体主义、不确定性规避、外向性均显著影响应答风格</td><td>原文为相关性分析，不是因果断言</td></tr>
+          <tr><td>施测语言的影响</td><td>英文版问卷引出更多中间回答；母语版引出更多极端回答</td><td>意思的一部分可能来自<b>工具</b>而非人——正文第 2 段的 translation distance 由此而来</td></tr>
+          <tr><td>英语能力的影响</td><td>英语能力越高，越倾向极端回答；越倾向不选中间项</td><td>说明「语言」与「文化」两条线索纠缠在一起，很难只用文化解释</td></tr>
+        </table>
+        <p>研究者本人还专门讨论了一个反例，值得单独记一笔：既有文献中，一部分研究报告某些受访群体<b>倾向极端</b>，另一部分报告同一群体<b>倾向中间</b>，二者看似矛盾。Culpepper 等（2002）的解法是看题型——对「久经验证、广为接受」的常识性问题，受访者反而不觉得有必要权衡正反，倾向给极端答案；而对需要<b>个别化判断</b>的复杂题目，则更可能给出审慎的中间答案。同一个群体在两类题目上方向相反，这个事实本身就说明：<b>不存在一把可以贴在任何人身上的标签</b>。</p>
+
+        <h3>三、Dong 与 Dumas（2020）：没有一项通过</h3>
+        <p>这篇系统综述检索了 PsycINFO、PsycARTICLES 等四个数据库，初检 1,647 篇，最终纳入 75 篇同行评议论文中的 <b>95 项</b>测量不变性检验。</p>
+        <ul>
+          <li><b>跨文化／跨族裔分组</b>：没有一项达到 scalar 或 strict 不变性。</li>
+          <li><b>性别分组</b>：有 13 项（44.83%）达到；<b>年龄分组</b>：有 10 项（58.82%）达到。</li>
+          <li>序数逻辑回归进一步显示：性别组与年龄组达到不变性的水平显著高于跨文化的分组；且<b>纳入比较的群体越多，越难达到</b>。</li>
+        </ul>
+        <p>换句话说：不是「人格量表有问题」，而是<b>把人按文化／族裔分组，比按性别或年龄分组更难保证可比</b>。这一条常被误读成「跨文化比较不可做」，作者的结论恰恰相反——正因为难，才必须在做之前检验、在做之后报告。</p>
+        <p>相关的旁证还有两条：一项对儿童青少年精神病理学量表的系统综述（Stevanovic 等，2017）检视了 26 个量表，<b>没有一个</b>具备充分的跨文化效度证据；另有综述报告，《Journal of Cross-Cultural Psychology》上的跨文化定量比较研究中，只有约 17% 真正检验过测量等价性（Boer 等，2018）。也就是说，<b>问题的一半是不通过，另一半是根本没查</b>。</p>
+
+        <h3>四、Tan 等（2020）：严谨到这一步，仍然失败</h3>
+        <p>正文第 4 段的具体案例来自 Tony Xing Tan、Zhiyao Yi、Eunsook Kim、Zhengjie Li 与 Ke Cheng 发表于 <i>Cross-Cultural Research</i> 54(4): 323–345（2020）的研究。他们把 BASC-3-SRP（儿童青少年人格自评量表第三版）译成中文，做了<b>回译</b>，确认内部一致性，也确认了构念效度，随后对中国 1,574 名、美国 512 名青少年施测。</p>
+        <p>结果是 16 个分量表中有 <b>6 个未通过不变性检验</b>。其中三个（对学校的消极态度、对教师的消极态度、自尊）属于学界已知在集体主义倾向的社会中<b>概念化方式不同</b>的构念；另外三个（非典型性、不足感、多动）则没有已知的文化原因——这一类更麻烦，因为它提醒研究者：<b>失败不总在你预料到的地方</b>。</p>
+        <p>这篇文章的价值正在于它的「上游严谨」：翻译规范、信效度良好，问题依然出现。可见翻译质量与信效度是必要条件，不是充分条件。</p>
+
+        <h3>五、如果还要做跨文化比较，可以怎么办</h3>
+        <ul>
+          <li><b>先检验再比较</b>：把测量不变性检验写进分析计划，而不是等审稿人问。检验不了就明确写「本研究不比较均分」。</li>
+          <li><b>锚定情境题</b>（anchoring vignettes）：让受访者先对一段标准化的虚构情境打分，再用它校准自评，把「刻度不同」从答案里剥离出去。</li>
+          <li><b>项目功能差异分析</b>（DIF）：用项目反应理论逐题检查，找出在特定群体中格外「偏」的题项，而不是整份问卷一刀切。</li>
+          <li><b>更灵活的替代方法</b>：当传统多组验证性因子分析过于苛刻时，可考虑 alignment 方法、MIMIC 模型、贝叶斯 SEM 等；它们放宽的是统计假设，不是报告标准。</li>
+          <li><b>报告样本构成</b>：当各组的语言背景、施测语言、翻译版本不一致时，把这些写进局限，让读者自己判断可比到什么程度。</li>
+          <li><b>题目写得具体</b>：行为锚定式的题目（「你是否在下次作业前收到了反馈」）比抽象评价式的题目（「请评价教学质量」）更经得起跨语言搬运。</li>
+        </ul>
+
+        <h3>六、对中文使用者的两点提醒</h3>
+        <p>其一，中文语境里常把「倾向选中间项」与「中庸」直接挂钩，这个联想<b>可以理解但不足以作为解释</b>。前面提到的题型分型已经说明：同一个群体在不同题型上会朝相反方向移动。任何单一文化概念都解释不了这种双向性。</p>
+        <p>其二，这类研究全部是<b>群体层面的统计规律</b>，个体差异远大于群体差异。它们唯一正当的用法，是提醒研究者在比较之前先检查工具；用来预判某个具体的人会怎么答，既在统计上无效，也不公平。</p>
+
+        <div class="box">
+          <b>📌 事实与立场</b><br>
+          ① 本页只讨论调查方法论与已发表的学术文献，不评价任何国家、地区、民族、语言群体、机构或政策；也不对任何文化作价值排序。<br>
+          ② 文中所有数字均取自原始论文（Harzing 2006；Dong &amp; Dumas 2020；Tan 等 2020），属作者公开发表的统计结果，具有条件性与统计性；正式引用请以原文页面与补充材料为准。<br>
+          ③ 应答风格的国别差异是<b>群体层面的平均倾向</b>，个体差异远大于群体差异。本页引用这些发现，目的恰恰是说明「看起来像文化差距的东西可能是工具造成的」，<b>不得</b>反过来用于对任何个人、群体或国家作判断或贴标签。<br>
+          ④ 「只有约 17% 的跨文化研究检验过测量等价性」一项为二手转述（Boer 等，2018），属对某一期刊发表实践的统计，不代表整个学科，引用时须注明出处与范围。<br>
+          ⑤ 本页对中文语境中「中庸」与中间选项之联想的讨论，指的是一种常见的通俗解释，不构成对任何文化传统的评价。
+        </div>
+
+        <h3>七、术语对照表</h3>
+        <table>
+          <tr><th>英文</th><th>中文</th><th>一句话解释</th></tr>
+          <tr><td>response style</td><td>应答风格</td><td>与题目内容无关的稳定答题习惯</td></tr>
+          <tr><td>acquiescence</td><td>顺从型应答</td><td>不管问什么都偏向答「同意」</td></tr>
+          <tr><td>extreme response style</td><td>极端应答风格</td><td>偏向选择量表两端的选项</td></tr>
+          <tr><td>measurement invariance</td><td>测量不变性</td><td>同一量表在各组中测到同一构念的程度</td></tr>
+          <tr><td>configural / metric / scalar</td><td>结构／载荷／截距不变</td><td>由松到紧三级，比较均分须过第三级</td></tr>
+          <tr><td>construct</td><td>构念</td><td>不可直接观测、由量表间接测量的理论概念</td></tr>
+          <tr><td>back-translation</td><td>回译</td><td>译回原语言以检验翻译是否等值</td></tr>
+          <tr><td>anchoring vignettes</td><td>锚定情境题</td><td>用标准情境校准受访者的评分尺度</td></tr>
+          <tr><td>differential item functioning</td><td>项目功能差异</td><td>某一题在特定群体中系统性偏斜</td></tr>
+          <tr><td>comparability</td><td>可比性</td><td>不同群体的数字能否放在一起比较</td></tr>
+        </table>
+
+        <h3>八、延伸阅读</h3>
+        <ul>
+          <li>Harzing, A.-W., “Response Styles in Cross-national Survey Research: A 26-country Study,” <i>International Journal of Cross Cultural Management</i> 6(2), 2006: 243–266。</li>
+          <li>Dong, D. &amp; Dumas, D., “Are personality measures valid for different populations? A systematic review of measurement invariance across cultures, gender, and age,” <i>Personality and Individual Differences</i>, 2020。</li>
+          <li>Tan, T. X., Yi, Z., Kim, E., Li, Z. &amp; Cheng, K., “Linguistic Equivalence, Construct Validity, But Lack Measurement Invariance,” <i>Cross-Cultural Research</i> 54(4), 2020: 323–345。</li>
+          <li>Stevanovic, D. 等, “Can we really use available scales for child and adolescent psychopathology across cultures?” <i>Transcultural Psychiatry</i>, 2017。</li>
+          <li>Hui, C. H. &amp; Triandis, H. C., 关于应答风格跨文化差异的经典实验研究（1989）。</li>
+        </ul>
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <p><b>主题：</b>跨文化比较 Cross-cultural · 应答风格与测量不变性：为什么「可比性」不是跨文化研究的前提，而是它要交出的第一个结果。</p>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🎯 学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div>读懂英语学术论说文的标准推进结构：<b>默认假设 → 表层证据 → 深层问题 → 收口反例</b>，并能独立画出篇章结构表。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div>掌握 10 个 C1–C2 学术词汇，其中 <i>presuppose</i>、<i>elicit</i>、<i>administer</i>、<i>comparability</i>、<i>invariance</i> 可直接迁移到雅思写作与托福独立写作。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div>掌握 5 个高级学术句型，尤其是用于「点破隐藏前提」的 <i>What S quietly presupposes is that…</i> 与用于收尾的 <i>Before V-ing…, ask whether…</i>。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div>能识别并复现 5 个高级语法结构：被动 + 补足不定式、what 主语从句 + that 表语从句、句首分词状语与嵌套 wh- 从句、并列省略（gapping）、not A but B 平行结构。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div>建立一条方法论直觉：看到任何跨群体比较的数字，先问「两组的尺子是不是同一把」，再问差距有多大。</div></div>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🧪 考试技巧 Exam Skills</h3>
+        <ul>
+          <li><b>主旨题（Gist）：</b>本文主旨是一个<b>方法论主张</b>，不是某位学者或某项调查。凡是选项以人名、刊名、国名作主语的，多半是把论据当成了议题。</li>
+          <li><b>推断题（Inference）：</b>第 2 段末句 <i>Some of what looks like cultural distance may be translation distance</i> 是全篇的转轴，答案不会逐字写出。凡是出现「A 可能其实是 B」的句式，先问：作者在用 B 消解什么直觉？</li>
+          <li><b>数字配对题（Matching figures）：</b>本篇有四组数字（26 国、95 项检验、1,574 与 512、六分之十六）。雅思阅读常在这里设<b>张冠李戴</b>陷阱：把「未通过不变性的分量表数」当成「样本量」，或把「检验总数」当成「论文篇数」。定位后逐词比对主语。</li>
+          <li><b>词汇题（Vocabulary in context）：</b><i>rendered into</i> 在本文取「译成」，不是「致使」；<i>endpoint</i> 指的是量表两端的选项。做法是把四个选项逐一代回原句，看哪个既合词义又合句意。</li>
+          <li><b>NOT / EXCEPT 题：</b>把三个选项逐一回原文定位。干扰项常常是<b>原文提到过、但被换了主语或换了方向</b>的句子——例如把「大多数研究从未检验」改写成「大多数研究检验后未通过」。</li>
+        </ul>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">📌 使用建议 How to Use</h3>
+        <ul>
+          <li>第一遍：不看文本，连听四段音频，抓住每段的功能（假设 / 风格 / 构念 / 收口）。</li>
+          <li>第二遍：逐段精读，把高亮词的中文释义先遮住，靠上下文猜，再点开核对。</li>
+          <li>第三遍：到「句型练习」做仿写，写完后与本课的原文句子逐词比对结构，重点是能否复现 gapping 与 what-主语从句。</li>
+          <li>第四遍：找一份你读过的跨国调查或排行榜，问三个问题：它检验过不变性吗？施测语言一致吗？它比较的是结构、相关还是均分？</li>
+          <li>最后：完成 6 道测验，把错题对应的段落回读一遍。</li>
+        </ul>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+      <footer>Pola News · Advanced English · 每日一课，日积月累 🦘</footer>
+    </section>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["A number that crosses a border is assumed to arrive unchanged. Cross-national surveys invite exactly that assumption: a mean of 3.4 here and 4.1 there is read as a difference in what people want. What the comparison quietly presupposes is that a point on a five-step scale stands for the same quantity of feeling in every language it is rendered into. That is a premise, not a finding, and it can be tested.", "Anne-Wil Harzing's 26-country study shows how easily it fails. Measuring how respondents use a scale regardless of what the items ask, she found wide variation in acquiescence and in the pull towards the endpoints, variation that tracks country-level indices such as power distance. The sharper result concerns the instrument: questionnaires administered in English elicited more middle responses, those in a respondent's own language more extreme ones. Some of what looks like cultural distance may be translation distance.", "Style is the shallow problem. The deep one is whether the construct survives the journey, the question of measurement invariance. It is graded: a scale may share its structure across groups, share its loadings, and still not yield comparable scores. Surveying 95 tests of personality instruments, Dong and Dumas found none that achieved scalar invariance across cultural or ethnic groups, though many did across gender and age. Most comparisons never ask.", "Care upstream does not settle it. Tan and colleagues translated a standard adolescent inventory into Chinese, back-translated it, confirmed its reliability, and administered it to 1,574 young people in China and 512 in the United States; six of the sixteen subscales still failed. Comparability is therefore not the premise of a cross-cultural study but its first result. Before asking how far apart two groups stand, ask whether both were measured on the same ruler."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["The difficulty of translating psychological inventories into Chinese","Whether numbers collected in different cultural groups can legitimately be compared","The 26-country survey conducted by Anne-Wil Harzing and what it reveals about national character","A defence of personality testing against its recent critics"],ans:1,
+   fb:"正确。四段分明：段 1 提出「数字跨国不变」这一默认假设，并指出它是前提而非事实；段 2 用应答风格与施测语言的证据削弱它；段 3 推进到测量不变性这一更深的问题；段 4 用一项翻译严谨却仍然失败的研究收口。B 覆盖这条主线。A 只是段 4 的例子；C 把论据当议题，且 national character 一说原文从未使用；D 无据——本文讨论的是测量工具，不是为某种测试辩护。"},
+  {q:"2. According to paragraph 2, what did Harzing's study find about the questionnaire itself? 依第二段，Harzing 就问卷本身发现了什么？",opts:["Respondents were more willing to answer when the questionnaire was in their own language","Questionnaires in English produced more extreme answers than those in a respondent's own language","Questionnaires administered in English elicited more middle responses, while those in a respondent's own language elicited more extreme ones","The language of administration had no measurable effect once national income was controlled for"],ans:2,
+   fb:"正确。原文：questionnaires administered in English elicited more middle responses, those in a respondent's own language more extreme ones。C 几乎是原文的同义转述。A 的 willingness（作答意愿）原文未涉及；B 把两种语言的方向说反了，这正是雅思配对题最典型的陷阱；D 与原文相反，且 national income 这一变量原文从未出现。"},
+  {q:"3. The author's remark that some cultural distance may be translation distance primarily suggests that: 作者说「有些看似文化距离的东西也许是翻译距离」，主要意在说明？",opts:["Survey translation should be abandoned in favour of a single global language","Part of an apparent difference between groups may be produced by the instrument rather than by the people","Respondents answering in a second language understand the items better than monolinguals do","Cultural differences are in fact smaller than researchers have long claimed"],ans:1,
+   fb:"正确。这是推断题。作者把 cultural distance 与 translation distance 两相对举，用意在于指出差距有一部分来自工具，而不是来自人。B 正确。A 是原文完全没有的极端主张；C 无据，原文只谈答案的分布，不谈理解的优劣；D 把 some（一部分）说成了整体更小——may be 这一缓和表达被偷换成确定判断，是推断题的常见陷阱。"},
+  {q:"4. The phrase rendered into in paragraph 1 is closest in meaning to: 第一段中的 rendered into 最接近下列哪一项？",opts:["Translated into","Reduced to","Handed over to","Made useless by"],ans:0,
+   fb:"正确。render 在学术与文学语境中常取「翻译、把……译成」之义（render a poem into English）。A 正确。B 与 C 是 render 另外两个常见义项（使沦为、交给），属于典型的同词异义干扰；D 把 render something useless 这一搭配搬了进来，但与 into 根本无法搭配。词汇题的诀窍：把选项逐一代回原句，看哪个既合词义又合搭配。"},
+  {q:"5. What does the review by Dong and Dumas, described in paragraph 3, indicate? 第三段提到的 Dong 与 Dumas 的综述说明了什么？",opts:["Personality instruments are unreliable in every population that has been studied","None of the 95 tests achieved scalar invariance across cultural or ethnic groups, although many did across gender and age","Roughly half of the 95 tests found strict invariance across cultural groups","Cultural groups turn out to be easier to compare than gender or age groups"],ans:1,
+   fb:"正确。原文：Surveying 95 tests of personality instruments, Dong and Dumas found none that achieved scalar invariance across cultural or ethnic groups, though many did across gender and age。B 几乎是原文转述。A 把「未达到不变性」夸大为 unreliable（不可用），且 every population 与原文冲突；C 的「约一半」原文无据；D 与原文相反——性别组与年龄组反而更容易达到。"},
+  {q:"6. Which of the following is NOT stated in the passage? 下列哪一项是文中<b>没有</b>说的？",opts:["Comparability should be treated as a result to be established rather than a premise","Six of the sixteen subscales in Tan and colleagues' study failed the invariance test","Harzing concluded that cultural distance is entirely an artefact of translation","A scale may share its structure and its loadings across groups without yielding comparable scores"],ans:2,
+   fb:"正确。原文说的是 Some of what looks like cultural distance may be translation distance——some 与 may be 两处缓和都不可省，C 把它改成 entirely（完全），正是 NOT / EXCEPT 题最爱用的手法：说法似曾相识，力度却被换掉了。A 见段 4，B 见段 4，D 见段 3。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
