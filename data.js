@@ -9488,5 +9488,67 @@ const EPISODES = [
         "ex": "“Comparability is therefore not the premise of a cross-cultural study but its first result.”"
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-12",
+    "title": "The Copy That Was Never a Copy",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-12-the-copy-that-was-never-a-copy",
+    "url": "lessons/c1/2026-10-12-the-copy-that-was-never-a-copy.html",
+    "vocab": [
+      {
+        "word": "infidelity",
+        "zh": "不忠实、背离（字面是婚姻意义上的「不忠」，fidelity 忠实 + 否定前缀 in-）（unfaithfulness to an original； Stam 盘点改编批评用语时列举的六个词之一：infidelity, betrayal, deformation, violation, vulgarization, desecration；要点在于这些是<b>道德词汇</b>而非美学词汇，先定罪再谈美学）",
+        "ex": "“Robert Stam catalogued the vocabulary that question arrives in: infidelity, betrayal, deformation, violation, vulgarization, desecration.”"
+      },
+      {
+        "word": "desecration",
+        "zh": "亵渎、玷污神圣之物（de- 除去 + sacred 神圣）（the act of treating something sacred as if it were not；the desecration of a literary classic 对文学经典的亵渎；动词 desecrate；与 infidelity 同族，都属于「先定罪」的道德控诉语汇，正是改编研究要 dismantle 的对象）",
+        "ex": "“…vulgarization, desecration.”"
+      },
+      {
+        "word": "dismantle",
+        "zh": "拆解、逐步拆除（原指拆开机械，引申为把论证或制度逐块拆掉）（to take apart piece by piece；dismantle an argument 拆解一个论证；名词 dismantling；比 refute 更形象——refute 是「驳倒」，dismantle 是「一块一块拆给你看」，常与前提、范式、话语搭配）",
+        "ex": "“That premise is what the field dismantled.”"
+      },
+      {
+        "word": "multitrack",
+        "zh": "多轨的（电影符号学与录音术语；multi- 多 + track 轨）（using several simultaneous channels of expression；film is a multitrack medium 电影是多轨媒介——同时动用活动影像、人声、音乐、噪音与文字，而小说只有文字一条轨；由此「逐字忠实」在媒介层面就不成立）",
+        "ex": "“a novel is made of words, whereas film is a multitrack medium of image, sound and silence”"
+      },
+      {
+        "word": "unattainable",
+        "zh": "达不到的、无法实现的（un- 否定 + attain 达到 + -able）（impossible to achieve；an unattainable ideal 无法实现的理想；Leitch 用 unattainable / undesirable / possible only in a trivial sense 三重并列评价「忠实于原著」这一标准；动词 attain，名词 attainment）",
+        "ex": "“Thomas Leitch went further, calling it unattainable, undesirable, and possible only in a trivial sense…”"
+      },
+      {
+        "word": "replication",
+        "zh": "复制、原样复现（与 repetition 相对：repetition 是「再说一遍」，replication 是「原样再做一个」）（the act of copying something exactly；repetition without replication 有重复而无复制；动词 replicate；科研语境中 replicability 指「可重复性」，与本课的文艺学用法同一词根）",
+        "ex": "“adaptation is repetition without replication”"
+      },
+      {
+        "word": "revisitation",
+        "zh": "重访、再度造访（比 revisit 更名词化、更有仪式感；re- 再 + visit 访问）（the act of returning to something；a deliberate, announced, and extended revisitation of a prior work 对一个前文本的、有意的、公开宣告的、延展的重访——Hutcheon 给改编下的定义；动词 revisit；常用于「重新讨论某个经典命题」）",
+        "ex": "“an adaptation is a deliberate, announced revisitation”"
+      },
+      {
+        "word": "register",
+        "zh": "（本文义）被记录下、被某种框架捕捉到（to be recorded, noticed or taken into account by a system or framework）（forces that the theory cannot register 这套理论捕捉不到的力量；failure to register the economic constraints 未能把经济约束纳入考量；另有「登记」「流露（表情）」「语域」诸义；学术写作中「被理论／数据 register」这一用法非常地道）",
+        "ex": "“That position is shaped by forces fidelity discourse cannot register…”"
+      },
+      {
+        "word": "palimpsestically",
+        "zh": "如羊皮纸覆写般地、带着前文本记忆地（源自 palimpsest：中世纪羊皮纸刮去旧字再写新字，旧字仍隐约可辨）（with awareness of an earlier text showing through a later one；read palimpsestically 带着「新旧叠压」的意识去读；形容词 palimpsestic；Hutcheon 的 palimpsestic pleasure 指观众同时看见两层文本时的快感——改编的愉悦正在于差异，而非同一）",
+        "ex": "“An audience that knows the earlier work reads palimpsestically, holding both together…”"
+      },
+      {
+        "word": "covertly",
+        "zh": "隐秘地、暗地里（常指与公开宣称的立场相反）（in a hidden or secret way；covertly applying the very standard one rejects 暗中使用自己公开反对的标准；形容词 covert（covert operation 秘密行动），反义词 overt 公开的；读音 /ˈkʌvərtli/，亦可读 /ˈkoʊvɜːrtli/）",
+        "ex": "“…scholars who denounced fidelity were covertly practising it…”"
+      }
+    ]
   }
 ];
