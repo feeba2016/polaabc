@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Song Nobody Wrote Down</title>
+<style>
+:root{
+  --accent:#166534;
+  --accent2:#115e59;
+  --bg:#faf8f5;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#e6ded1;
+  --soft:#f6f1e9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(22,101,52,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(22,101,52,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,101,52,.5);}70%{box-shadow:0 0 0 12px rgba(22,101,52,0);}100%{box-shadow:0 0 0 0 rgba(22,101,52,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(22,101,52,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Literature</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Song Nobody Wrote Down</h1>
+      <p class="subtitle">《奥德赛》一万二千行、<i>《伊利亚特》</i>一万五千七百行——在没有文字可以依靠的年代，它们是怎么被唱出来的？1930 年代，一个美国学者跑进巴尔干的山里，用铝质唱片录下了答案｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Question Everyone Had Read Past 两千年里所有人都读漏了的问题</div>
+            <p>For more than two thousand years readers have asked how the <i>Iliad</i> and the <i>Odyssey</i> were made. The <i>Odyssey</i> runs to some 12,100 lines of dactylic hexameter, the <i>Iliad</i> to roughly 15,700; reciting either aloud takes the better part of a day. For most of that time the answer seemed obvious: a poet, pen in hand. In the 1920s a young American scholar, Milman Parry, looked again at the lines themselves. Certain phrases, he noticed, return again and again and always fill the same part of the verse — swift-footed Achilles, grey-eyed Athena, rosy-fingered Dawn. He called the fixed pairing of a name and its <span class="kw" data-def="特性形容修饰语；修饰性称号（名词，学术用语；读作 /ˈepɪθet/，重音在第一音节。荷马史诗里的 epithet 是『名词＋固定形容词』的成套搭配，如 swift-footed Achilles；注意勿与贬义的『绰号、蔑称』混淆，那是另一义）">epithet</span> the basic unit of a system no one had yet described.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Economy of a Line 一行诗里的节约机制</div>
+            <p>His claim was structural. Working line by line through the <span class="kw" data-def="（文献、作品的）总集；语料库（名词，学术用语，复数为 corpora /ˈkɔːpərə/。a corpus of epic poetry 史诗语料总集；语言学里的 corpus 指可用于统计的文本集合。注意它的复数形式不规则）">corpus</span>, he defined a <span class="kw" data-def="程式；固定词组（名词，学术用语。帕里的定义是：在相同格律条件下、为表达某个既定基本意思而反复使用的一组词。复数为 formulas 或 formulae，念作 /ˈfɔːmjʊlə/。日常英语里 formula 多指『公式、配方』，本课取学术义）">formula</span> as a group of words regularly used, under the same metrical conditions, to express a given essential idea. <span class="kw" data-def="What 引导的是名词性关系从句，整个从句作主句的主语，等于 The thing that。判断方法：把 What ... 整块换成 the thing that，句子依然成立">What</span> made the system remarkable was its <span class="kw" data-def="节约；经济（名词。帕里的术语是 economy of the formulaic system：对同一个意思、在同一格律位置上，几乎只存在一个可用程式，没有第二个同义选项。此处绝不可译成『经济』，它是『不浪费、不冗余』的意思）">economy</span>: for any one idea in any one position in the line, there was usually only a single formula available. <span class="kw" data-def="So + 形容词提到句首时，主句必须部分倒装：So tight was the fit = The fit was so tight。这是书面语里很出彩的一种倒装，后面接 that 结果从句">So</span> tight was the fit that a singer, having chosen his opening words, could let the rest of the verse assemble itself. Such economy, Parry reasoned, could not be the habit of a man writing at leisure; it was the signature of composition at the speed of performance.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Field Test 一次田野检验</div>
+            <p>Textual analysis, however, could only take him so far: an argument about how verses are made needs singers who actually make them. So in 1933 and 1935 Parry travelled with his assistant Albert Lord to the mountains of Bosnia, Herzegovina and Montenegro, where epic singers known as guslari still performed to the one-stringed gusle. Most of them were <span class="kw" data-def="不识字的；不会读写的（形容词。名词 illiteracy 文盲率。注意它的前缀 il- 是否定前缀（用于 l 开头的词根），同类的还有 illegal、illegible。学术写作里这个词是中性描述，不带贬义，不要写成『没文化的』）">illiterate</span>. Recording on aluminium discs, the team gathered what Lord later called half a ton of epic, now kept at Harvard as the Milman Parry Collection of Oral Literature. The method was an <span class="kw" data-def="类比；类推（名词，读作 /əˈnælədʒi/，重音在第二音节。by analogy with 通过与……类比；draw an analogy between 在两者之间作类比。学术里它指『用一个已知系统去推断另一个系统』，是一种启发而不是证明）">analogy</span>: a living tradition used as a laboratory for a dead one. Its results were necessarily <span class="kw" data-def="暂时性的；有待修订的（形容词，正式。a provisional answer 暂时性的答案；provisionally 暂时地。学术写作里它常用来自我设限，表示结论还有被推翻的余地，不是『随便的』）">provisional</span> — a comparison is not a proof — yet they gave Parry the <span class="kw" data-def="实证的；以观察或实验为依据的（形容词，正式，读作 /ɪmˈpɪrɪkəl/。empirical evidence 实证证据；empirical study 实证研究。它的反义词是 theoretical 或 a priori 先验的。注意与 empiric『经验主义的（旧义）』区分）">empirical</span> test his reading of the texts had lacked.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Butcher Who Sang an Odyssey 唱出一整部《奥德赛》的屠夫</div>
+            <p>The finest singer they met was Avdo Međedović, a butcher from Bijelo Polje. <span class="kw" data-def="强调句：It was Avdo who ... 用来把句子的某一成分（这里是主语 Avdo）拎出来加以强调。结构是 It is/was + 被强调成分 + that/who + 其余部分。去掉 It was 与 who 之后句子仍然完整，这是判断强调句最可靠的办法">It was</span> Avdo <span class="kw" data-def="强调句的连接词：被强调的是人时可用 who 或 that，被强调的物、时间、地点一律用 that，不用 which 或 where">who</span>, asked for a song as long as the <i>Iliad</i>, <span class="kw" data-def="口述；听写（动词，读作 /dɪkˈteɪt/，重音在第二音节。dictate a letter to a secretary 向秘书口授信件；名词 dictation 听写／口述。注意它还有另一个常见义『支配、决定』，如 Circumstances dictate our choice）">dictated</span> <i>The Wedding of Meho Smailagić</i> over several days — 12,323 lines, <span class="kw" data-def="非限制性定语从句：关系代词 which 指代的是前面整个情况（12,323 lines 这个事实），而不是某一个名词。这类从句前有逗号，去掉后主句依旧完整。不可用 that，也不可省略">which</span> is longer than the <i>Odyssey</i> itself. He claimed several more of similar length in his <span class="kw" data-def="全部曲目；保留剧目；（引申）一个人掌握的全部本领（名词，读作 /ˈrepətwɑː/。a singer's repertoire 一位歌手的全部曲目；repertoire of skills 技能储备。注意与 report、repetition 拼写不同）">repertoire</span>. No two performances were identical: rather than reciting a fixed text, he <span class="kw" data-def="即兴创作；临场编创（动词。名词 improvisation，形容词 improvisatory。它在口头诗学里是个技术词：不是『乱编』，而是在传统提供的规则之内即时组合，所以帕里说歌手既不背诵也不自由发挥）">improvised</span> within rules he had spent a lifetime absorbing. Parry died in December 1935, aged thirty-three, and never wrote the book. <span class="kw" data-def="Had 提到主语之前＝省略 if 的虚拟条件句，与过去事实相反：Had he lived longer = If he had lived longer。主句用 would/could/might + have + 过去分词。注意这里不能用 has 或 would">Had</span> he lived longer, the argument might have appeared under his own name; instead Lord set it out in <i>The Singer of Tales</i> in 1960.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="epithet">🔊</button><div class="word">epithet<span class="pos">n.</span></div><div class="zh">特性形容修饰语；修饰性称号（读作 /ˈepɪθet/，重音在第一音节。荷马史诗里的 epithet 是「名词＋固定形容词」的成套搭配，如 swift-footed Achilles「捷足的阿基琉斯」。注意它还有一义是带贬义的「绰号、蔑称」，本课取学术义）</div><div class="ex">"He called the fixed pairing of a name and its epithet the basic unit of a system no one had yet described."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="corpus">🔊</button><div class="word">corpus<span class="pos">n.</span></div><div class="zh">（文献、作品的）总集；语料库（学术用语，复数 corpora /ˈkɔːpərə/。a corpus of epic poetry 史诗语料总集。语言学与古典学里，它指可供统计与比对的文本集合，是一个中性、可计数的对象）</div><div class="ex">"Working line by line through the corpus, he defined a formula as ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="formula">🔊</button><div class="word">formula<span class="pos">n.</span></div><div class="zh">程式；固定词组（复数为 formulas 或 formulae。帕里的定义是：在相同格律条件下、为表达某个既定基本意思而反复使用的一组词。日常英语里它多指「公式、配方」，本课取帕里的学术义）</div><div class="ex">"... he defined a formula as a group of words regularly used, under the same metrical conditions, to express a given essential idea."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="economy">🔊</button><div class="word">economy<span class="pos">n.</span></div><div class="zh">节约；简省（帕里的术语是 the economy of the formulaic system：同一个意思、同一格律位置，几乎只有一个可用程式，没有第二个同义选项。此处不可译成「经济」，它是「不浪费、不冗余」的意思；形容词 economical 节约的）</div><div class="ex">"What made the system remarkable was its economy."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="illiterate">🔊</button><div class="word">illiterate<span class="pos">adj.</span></div><div class="zh">不识字的；不会读写的（名词 illiteracy 文盲率。前缀 il- 是否定前缀，用于 l 开头的词根，同类的还有 illegal、illegible。学术写作里它是中性描述，不含贬义，不应写成「没文化的」）</div><div class="ex">"Most of them were illiterate."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="analogy">🔊</button><div class="word">analogy<span class="pos">n.</span></div><div class="zh">类比；类推（读作 /əˈnælədʒi/，重音在第二音节。by analogy with 通过与……类比；draw an analogy between A and B 在 A 与 B 之间作类比。学术上它指用一个已知系统去推断另一个系统，是启发而非证明）</div><div class="ex">"The method was an analogy: a living tradition used as a laboratory for a dead one."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="provisional">🔊</button><div class="word">provisional<span class="pos">adj.</span></div><div class="zh">暂时性的；有待修订的（正式。a provisional answer 暂时性的答案；副词 provisionally。学术写作里常用来自我设限，表示结论留有被推翻的余地，不等于「随便的、临时的」）</div><div class="ex">"Its results were necessarily provisional — a comparison is not a proof."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="empirical">🔊</button><div class="word">empirical<span class="pos">adj.</span></div><div class="zh">实证的；以观察或实验为依据的（正式，读作 /ɪmˈpɪrɪkəl/。empirical evidence 实证证据；empirical study 实证研究。反义为 theoretical 或 a priori 先验的。本课里它与 textual analysis 相对：一个是看书，一个是看人）</div><div class="ex">"... yet they gave Parry the empirical test his texts could not."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="dictate">🔊</button><div class="word">dictate<span class="pos">v.</span></div><div class="zh">口述；听写（读作 /dɪkˈteɪt/，重音在第二音节。dictate a letter to a secretary 向秘书口授信件；名词 dictation。另一常见义是「支配、决定」，如 Circumstances dictate our choice 形势决定了我们的选择）</div><div class="ex">"... he dictated The Wedding of Meho Smailagić over several days."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="repertoire">🔊</button><div class="word">repertoire<span class="pos">n.</span></div><div class="zh">全部曲目；保留剧目；（引申）一个人掌握的全部本领（读作 /ˈrepətwɑː/。a singer's repertoire 一位歌手的全部曲目；a repertoire of skills 技能储备。注意拼写，不要写成 report 或 repetition）</div><div class="ex">"He claimed several more of similar length in his repertoire."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="improvise">🔊</button><div class="word">improvise<span class="pos">v.</span></div><div class="zh">即兴创作；临场编创（名词 improvisation。在口头诗学里它是技术词：不是「乱编」，而是在传统提供的规则之内即时组合。帕里的立场是歌手既不逐字背诵，也不凭空发明，两者之间有第三条路）</div><div class="ex">"... rather than reciting a fixed text, he improvised within rules he had spent a lifetime absorbing."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 学术方法论词链：</b>hypothesis 假设 → inference 推断 → <b>analogy 类比</b> → evidence 证据 → <b>empirical test 实证检验</b> → proof 证明。<br>
+        <b>② 与「文本」有关的名词：</b>text 文本 · manuscript 手稿 · <b>corpus 语料总集</b> · edition 版本 · variant 异文 · transcription 转写本。<br>
+        <b>③ -ate 动词族：</b>dictate 口述 · create 创造 · generate 产生 · illustrate 说明 · demonstrate 证明（重音多在第二音节）。<br>
+        <b>④ provisional 的同义与反义：</b>近义 tentative 试探性的、interim 过渡期的；反义 definitive 确定的、final 最终的。<br>
+        <b>⑤ 本课值得顺手认识的几个词：</b>hexameter 六音步诗行 · metre 格律 · bard 游吟歌手 · verse 诗行 · recite 背诵／朗诵 · stanza 诗节。<br>
+        <b>⑥ 形近词提醒：</b>epithet 修饰语 ≠ epitaph 墓志铭 ≠ episode 插曲；formula 程式 ≠ formality 礼节。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. What 引导的名词性关系从句作主语 · What ... was ...</h3>
+          <div class="zh"><b>What</b> 在这里不是疑问词，而是「<b>所……的事物</b>」，等于 <b>the thing that</b>。整个从句充当主句的主语，所以后面还要再跟一个谓语动词（was / is / 实义动词）。这是学术写作里极常见的开场方式。</div>
+          <div class="eg">课文原句：<b>What made the system remarkable was its economy.</b> 让这套系统显得不寻常的，是它的节约机制。<br>
+          替换检验：把 What 换成 <b>The thing that</b>，句子依然成立 → 说明它就是名词性关系从句，而不是疑问句。<br>
+          同类：<b>What Parry needed was singers, not manuscripts.</b>／<b>What the recordings showed was that no two performances were identical.</b></div>
+          <div class="practice">仿写：「让他惊讶的不是长度，而是速度」。<input placeholder="What surprised him was not ... but ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. So + 形容词前置 · 部分倒装 + that 结果从句</h3>
+          <div class="zh">把 <b>so + 形容词</b>（或 <b>such + 名词短语</b>）提到句首表示强调时，主句必须<b>部分倒装</b>：be 动词直接提前；实义动词则借 do / does / did，或把情态动词提前。</div>
+          <div class="eg">课文原句：<b>So tight was the fit that a singer, having chosen his opening words, could let the rest of the verse assemble itself.</b> 契合得如此紧密，以致歌手一旦选好开头的词，剩下的诗行就能自己组装完成。<br>
+          还原：<b>The fit was so tight that ...</b>（信息相同，但失去了句首那个强调位）<br>
+          借助动词的情况：<b>So quickly did he sing that the scribe could barely keep up.</b>／<b>Such was his memory that ...</b></div>
+          <div class="practice">仿写：「这个方法如此有效，以致后来被用到了一百多种传统上」。<input placeholder="So effective was the method that ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. 强调句 It was + 被强调成分 + who / that ...</h3>
+          <div class="zh">把一个句子里的某一成分（主语、宾语、状语）拎到 <b>It is/was ... that/who ...</b> 的框架里加以强调。<b>判别方法</b>：把 It was 与 that/who 去掉，剩下的部分若能补成一个完整句子，就是强调句；补不成，多半是定语从句或形式主语句。</div>
+          <div class="eg">课文原句：<b>It was Avdo who, asked for a song as long as the Iliad, dictated The Wedding of Meho Smailagić over several days.</b><br>
+          去掉框架后：<b>Avdo ... dictated The Wedding ...</b>（句子完整 → 确认是强调句）<br>
+          强调宾语：<b>It was a wedding song that he dictated.</b>／强调状语：<b>It was in 1935 that the recordings were made.</b><br>
+          易错：被强调的是<b>人</b>时可用 who 或 that；强调物、时间、地点<b>一律用 that</b>，不用 which 或 where。</div>
+          <div class="practice">仿写：「正是洛德，而不是帕里，最终把这套论证写成了书」。<input placeholder="It was Lord, not Parry, who ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. 非限制性定语从句 · 逗号 + which 指代整个前文</h3>
+          <div class="zh">非限制性定语从句前<b>必有逗号</b>，去掉后主句仍然完整。它常常不用 which 指代某个名词，而是<b>指代前面整个事实或整个分句</b>，相当于「<b>而这件事……</b>」。此时<b>不可用 that，也不可省略</b>。</div>
+          <div class="eg">课文原句：<b>... 12,323 lines, which is longer than the Odyssey itself.</b> ……一万二千三百二十三行，而这一长度超过了《奥德赛》本身。<br>
+          这里的 which 指的是「他口述了 12,323 行」这件事，不是 lines 这个词的定语。<br>
+          同类：<b>He sang for five days, which left the scribe exhausted.</b>／<b>The discs survived two moves, which is something of a miracle.</b><br>
+          对比限制性（无逗号，去掉后意思不完整）：<b>The song that he dictated runs to 12,323 lines.</b></div>
+          <div class="practice">仿写：「她把全部录音都转写了出来，而这花了她三年时间」。<input placeholder="She transcribed every recording, which took her ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. Had 提前的倒装虚拟条件句 · 与过去事实相反</h3>
+          <div class="zh">把 <b>had</b> 提到主语之前即可省去 <b>if</b>，表示<b>与过去事实相反</b>的假设。主句相应使用 <b>would / could / might + have + 过去分词</b>。这是书面议论文里最凝练的一种假设表达。</div>
+          <div class="eg">课文原句：<b>Had he lived longer, the argument might have appeared under his own name.</b> 要是他活得久一点，这套论证或许会以他本人的名字问世。<br>
+          还原：<b>If he had lived longer, ...</b><br>
+          注意时态配对：<b>had + 过去分词</b>（从句）↔ <b>would/could/might have + 过去分词</b>（主句）。写作里最常见的错误是把主句写成 would + 原形。</div>
+          <div class="practice">仿写：「要是那些铝质唱片丢失了，我们今天就不会有这些证据」。<input placeholder="Had the discs been lost, we ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Points</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>① 名词性关系从句：what / whatever / whoever</h3>
+          <div class="zh"><b>what</b> 引导的从句叫名词性关系从句，等于 <b>the thing(s) that</b>；<b>whatever / whoever</b> 等于 <b>anything that / anyone who</b>。它可以在句中作<b>主语、宾语或表语</b>。与定语从句的区别是：它没有先行词——<b>what 自身就包含了先行词</b>。</div>
+          <div class="eg"><b>What</b> made the system remarkable <b>was</b> its economy.（作主语，谓语随之用单数 was）<br>
+          <b>What</b> they recorded <b>has</b> been kept at Harvard ever since.（作宾语）<br>
+          <b>Whatever</b> he sang <b>was</b> new, even when the story was old.（＝ Anything that）<br>
+          <b>Whoever</b> heard him <b>remembered</b> the performance.（＝ Anyone who）<br>
+          易错：不要写成 <b>What made the system remarkable, it was its economy.</b>（多了一个 it）</div>
+        </div>
+
+        <div class="item">
+          <h3>② So / Such 前置引起的部分倒装</h3>
+          <div class="zh">为了强调，把 <b>so + 形容词／副词</b> 或 <b>such + 名词短语</b> 移到句首时，主句必须部分倒装。<b>be 动词、情态动词直接提前</b>；实义动词的一般现在／过去要<b>借 do / does / did</b>，并把动词还原为原形；完成时把 <b>have / has / had</b> 提前。</div>
+          <div class="eg"><b>So tight was</b> the fit that ...（be 动词提前）<br>
+          <b>So quickly did</b> he <b>sing</b> that the scribe fell behind.（借 did，sing 回原形）<br>
+          <b>Such was</b> the power of the tradition that ...（such + 名词短语）<br>
+          <b>So often had</b> they <b>heard</b> the tale that ...（过去完成时，had 提前）<br>
+          对比：不前置时<b>不倒装</b>——<b>The fit was so tight that ...</b></div>
+        </div>
+
+        <div class="item">
+          <h3>③ 强调句 It is/was ... that/who ... 与定语从句的判别</h3>
+          <div class="zh">强调句的结构是 <b>It is/was + 被强调成分 + that/who + 其余部分</b>。它可以强调主语、宾语、状语，但<b>不能强调谓语动词</b>。判别口诀：<b>去掉 It is/was 与 that/who，把剩下的词重新排列，能成句就是强调句。</b></div>
+          <div class="eg"><b>It was Avdo who dictated the song.</b> → Avdo dictated the song.（成立 → 强调句）<br>
+          <b>It was the song that he dictated.</b> → 强调宾语，用 that 不用 which。<br>
+          <b>It was in 1960 that Lord published the book.</b> → 强调时间状语，用 that 不用 when。<br>
+          对比定语从句（有真正的先行词，去掉后不成句）：<b>The book that Lord published in 1960 changed the field.</b><br>
+          反例（形式主语 it，不是强调句）：<b>It is likely that the poems were performed for centuries before they were written down.</b>——去掉框架后不成立。</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 非限制性定语从句：which 指代整句，以及 as 的用法</h3>
+          <div class="zh">非限制性从句用逗号隔开，只作补充说明，去掉后主句依然完整。关系词<b>不可用 that，也不可省略</b>。<b>which</b> 除指代名词外，还可指代<b>前面整个分句或整个事实</b>（谓语动词通常用单数）。<b>as</b> 也能指代整句，但它更常出现在固定说法里，位置也更灵活。</div>
+          <div class="eg"><b>... 12,323 lines, which is longer than the Odyssey itself.</b>（which 指代整件事，谓语用 is）<br>
+          <b>He sang for five days, which surprised everyone present.</b><br>
+          <b>As Lord later wrote, no two performances were identical.</b>（as 指代后文，可放句首）<br>
+          <b>He was a butcher by trade, as Parry noted.</b>（as 放句末，意为「正如」）<br>
+          易错：指代整句时不要写成 <b>..., that is longer ...</b>，也不要漏掉逗号。</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 虚拟条件句倒装三式：Were / Had / Should</h3>
+          <div class="zh">把 <b>were / had / should</b> 提到主语之前即可省去 <b>if</b>。三者对应不同的时间关系：<b>Were (to do)</b> 表将来或现在的强假设；<b>Had (done)</b> 表与过去事实相反（本课句型）；<b>Should (do)</b> 表将来、可能性较小。</div>
+          <div class="eg"><b>Had</b> he <b>lived</b> longer, the argument <b>might have appeared</b> under his own name.（与过去事实相反）<br>
+          <b>Were</b> a singer <b>to compose</b> without formulae, he <b>would</b> need far more time.（将来／现在的强假设）<br>
+          <b>Should</b> anyone <b>find</b> earlier recordings, the picture <b>would</b> change.（将来，可能性小）<br>
+          否定式：<b>Had he not died</b> in 1935, ...（not 放在主语之后，不可用 hadn't he）<br>
+          时态配对要牢记：<b>had done ↔ would/could/might have done</b>。</div>
+        </div>
+
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、本课到底讲了什么：一个被问了两千年的问题</h3>
+        <p>《伊利亚特》约一万五千七百行，《奥德赛》约一万二千一百行，全部用<b>六音步长短短格</b>（dactylic hexameter）写成。光是把《伊利亚特》不间断地念一遍，就要二十多个小时。两千年来的默认答案是：有一位诗人，手里拿着笔。</p>
+        <p>问题在于证据对不上。<b>帕里</b>（Milman Parry，1902—1935）1928 年在巴黎提交博士论文《荷马史诗中的传统修饰语》，做法是数数：把史诗里反复出现的「名词＋固定形容词」搭配一个一个挑出来，看它们出现在诗行的哪个位置。他发现的不只是「重复很多」，而是<b>重复得极有规律</b>——同一个意思，在诗行的同一个格律位置上，几乎<b>只有一个</b>说法可用。</p>
+        <p>这一步很关键。写东西的人不需要这种规律：他可以停下来想，可以划掉重写。只有在<b>边唱边编</b>的人那里，「不用想就能接上下半句」才是一种必需的能力。所以帕里把话说得很明确：荷马的程式<b>不是装饰，是工具</b>。</p>
+
+        <h3>二、帕里的三步：从文本到田野</h3>
+        <p>很多人以为帕里是「去了一趟南斯拉夫才提出理论」，其实顺序正好相反。他的论证分三步，田野是最后一步。</p>
+        <table class="facts">
+          <tr><th></th><th>做法</th><th>能证明什么</th><th>不能证明什么</th></tr>
+          <tr><td>① 文本分析</td><td>统计程式与名词—修饰语搭配，找出「节约性」（economy）</td><td>荷马的语言是<b>传统的</b>、成系统的</td><td>它是<b>口头的</b>——这一点文本自己说不出口</td></tr>
+          <tr><td>② 比较与类比</td><td>读当时关于活形态口头诗歌的民族志，尤其是穆尔科（Matija Murko）的南斯拉夫研究</td><td>这种传统式的编创方式，可以在没有文字的社会里存在</td><td>古希腊一定也是这样</td></tr>
+          <tr><td>③ 田野作业</td><td>1933—1935 年赴巴尔干山区，录下<b>古斯勒歌手</b>（guslari）的演唱</td><td>不识字的歌手确实能现场编出几千上万行</td><td>荷马本人就是这样唱的（这是类比，不是证明）</td></tr>
+        </table>
+        <p>1933 与 1935 年的两趟行程，帕里带着助手<b>艾伯特·洛德</b>（Albert Lord，1912—1991）和本地通译<b>尼古拉·武伊诺维奇</b>（Nikola Vujnović），在波斯尼亚、黑塞哥维那与黑山一带的山区走访了多个地区。他们用当时最新的<b>铝质唱片</b>录音机录下演唱，同时由人速记转写。这批材料后来入藏哈佛大学威德纳图书馆，即<b>米尔曼·帕里口头文学特藏</b>（Milman Parry Collection of Oral Literature），包含数千张双面铝质唱片与大量转写笔记本。洛德后来说他们带回了「<b>半吨史诗</b>」。</p>
+
+        <h3>三、阿夫多：那个屠夫</h3>
+        <p>他们遇到的歌手中最出色的，是<b>阿夫多·梅杰多维奇</b>（Avdo Međedović，约 1875—1955），比耶洛波列人，本行是屠夫，不识字。帕里需要一个直接回答：一个口传歌手能不能撑住《伊利亚特》那样的长度？阿夫多的表现是，他口述了一首《斯马伊拉吉奇·梅霍的婚礼》，<b>一万二千三百二十三行</b>；另有一次演唱长达<b>一万三千三百三十一行</b>。而《奥德赛》只有一万二千一百零九行。</p>
+        <blockquote>他不是在用记忆，也不完全是在自由创造：他是在一套他用了整整一辈子去吸收的规则内部即兴工作。<em>——本课第 4 段，改写自帕里—洛德的核心论断</em></blockquote>
+        <p>这里要澄清一个常见误解：说歌手「即兴」，不等于说他随手乱编。<b>程式（formula）</b>、<b>主题或典型场景</b>（theme / typical scene，如「披挂上阵」「设宴待客」这类可整段调用的固定段落）、<b>故事范型</b>（story-pattern），这三个结构单元加起来，才是口头诗学给出的解释。它同时否掉了两个极端：<b>既不是逐字背诵，也不是凭空发明</b>。</p>
+        <h3>四、它改变了什么：「作者」这个词被搬走了</h3>
+        <p>如果史诗是口头编创的，那么「荷马是谁、他写了什么」这个问法本身就要改。帕里—洛德理论最颠覆的一点在于：<b>我们手里的手稿，是长达数百年的演述过程末端的一次固定</b>。它不是某个人写下的第一版，而是一条长链上最后留下的那一环。</p>
+        <p>田野作业给出了一条最朴素、也最难反驳的观察。把同一位歌手在不同时候演唱的「同一个故事」并排放在一起，文本并不相同；把同一地区不同歌手演唱的同一个故事并排放在一起，文本也不同。于是研究者得出结论：<b>在有一定长度的民间叙事里，没有两次演述是完全一样的；歌手每次唱出的，都是「新」的一首。</b></p>
+        <p>这件事也改变了读法。受过文学训练的人看到重复，第一反应是「陈词滥调」；而在现场编创里，重复是歌手与听众<b>共同预期</b>的一部分，是让长篇叙事得以撑住的结构。翻译者因此陷入两难：照直译出程式的重复，读起来笨拙；把它润色掉，又抹掉了这门手艺本身。</p>
+
+        <h3>五、争议与修正：类比不是证明</h3>
+        <p>本课正文第 3 段已经写明，这些结果<b>本质上是暂时性的</b>（provisional）。理由很简单：一个活着的传统与一个死了两千年的传统之间的比较，是论证，不是证明。学界至少在三个方向上持续争论。</p>
+        <ul>
+          <li><b>书写介入的时间点。</b>《故事的歌手》出版后，不断有学者主张：史诗可能在很早的阶段就被口授记录，形成了某种相对固定的「原型文本」，此后才是抄写与流传。争论的不是「有没有口头性」，而是<b>文字在其中到底扮演了什么角色</b>。</li>
+          <li><b>演进模型。</b>后来研究者提出，史诗是在长期的演述与流布中逐渐成形、最终才结晶为我们今天读到的文本。这一思路强调传统自身的创造力，而不把成就记在某一个人名下；反对者则担心它低估了个别诗人的作用，难以解释两部史诗在精神取向与艺术结构上的高度统一。</li>
+          <li><b>适用范围。</b>这套分析主要建立在印欧语材料上——六音步格律、名词—修饰语搭配、词尾变化丰富的语言，天然更容易生成程式。此后该方法被应用到世界范围内上百种口头传统，但搬到其他语言（尤其是声调语言、或格律单位与印欧语不同的传统）时，<b>「程式」的定义必须重新检验</b>，不能照抄结论。</li>
+        </ul>
+        <p>被这些争论共同保留下来的是核心那一条：<b>口头编创是在一套有规则、可习得、被传统长期磨合过的系统内进行的。</b>它既不神秘，也不低劣，而是一门需要多年才能掌握的技艺。</p>
+
+        <h3>六、中外对照：中国仍然「活着」的史诗</h3>
+        <p>中国一侧最值得对照的，不是某部古籍，而是<b>至今仍在被演述的口头史诗</b>。中国境内流传着三大英雄史诗：藏族的<b>《格萨尔》</b>、蒙古族的<b>《江格尔》</b>、柯尔克孜族的<b>《玛纳斯》</b>。</p>
+        <p>其中《格萨尔》据中国学界的搜集整理，篇幅达<b>一百多万行、两千多万字</b>，常被称为世界上篇幅最长的史诗，也被称作「<b>东方的荷马史诗</b>」。更特殊的是：<b>它至今仍以口头形式在流传</b>，因而常被称为「<b>活着的史诗</b>」。说唱艺人多为不识字的牧民，却能在数小时甚至数日里连续演述；艺人类型在学界有<b>神授、闻知、掘藏、圆光、吟诵</b>等不同划分，「神授」艺人自称在经历一场奇异的梦境或病痛之后忽然能够说唱，其成因至今没有定论。</p>
+        <p>《格萨尔》2006 年被列入<b>中国第一批国家级非物质文化遗产名录</b>，2009 年列入<b>联合国教科文组织人类非物质文化遗产代表作名录</b>。近二十年来，中国学者把帕里—洛德理论用于本土史诗研究，结合中国多民族、多语言的材料，逐渐形成了有自身问题意识的<b>口头传统研究路径</b>，学界也有「口头传统研究的中国学派」的提法。</p>
+        <p><b>但对照时必须说清三点差异，否则会讲歪：</b></p>
+        <ul>
+          <li><b>证据形态不同，两者是互补而不是高下。</b>荷马史诗只剩下文字定本，口头环节只能靠类比去推断；《格萨尔》今天还能被现场录音、能比较同一艺人的不同场次。<b>帕里跑到巴尔干去找的东西，中国本来就还在。</b>这不是谁更优越，而是材料类型不同。</li>
+          <li><b>「程式」的定义不能照搬。</b>帕里的分析建立在印欧语的格律与名词—修饰语搭配上。把它用于藏语、蒙古语、柯尔克孜语时，需要先回答：这一传统里的「程式单位」到底是什么，是句、是段、还是某种固定的对句或套语。直接套用结论是最常见的错误。</li>
+          <li><b>「神授」与学者的解释不在同一个层面。</b>「神授」是艺人自身对自己本领的说明，属于传统的内部解释；学者讨论的是传承、训练与规则习得。两者回答的不是同一个问题，不必互相否定，也不应被写成「迷信 vs 科学」。</li>
+        </ul>
+        <p><b>所以别把它讲成「西方有荷马，中国有格萨尔」。</b>准确的写法是：帕里用一套方法去追问一个只能靠推断回答的问题，而中国的活形态史诗提供了能够直接观察的现场——两者合起来，才让「人是怎样在没有文字的情况下唱出上万行诗的」这个问题有了可以检验的答案。</p>
+
+        <h3>七、关键时间线 Timeline</h3>
+        <table class="facts">
+          <tr><th>1928</th><td>帕里在巴黎提交博士论文《荷马史诗中的传统修饰语》，从「名词＋固定形容词」的统计入手，指出荷马的程式系统是传统的、成系统的</td></tr>
+          <tr><th>1930—1932</th><td>先后发表两篇核心论文，主张荷马的语言是一种「口头诗歌的语言」，程式是现场编创的工具</td></tr>
+          <tr><th>1933—1935</th><td>帕里与助手洛德、通译武伊诺维奇赴巴尔干山区，用铝质唱片录下大量古斯勒歌手（guslari）的史诗演唱，并记录转写本</td></tr>
+          <tr><th>1935</th><td>阿夫多·梅杰多维奇口述《斯马伊拉吉奇·梅霍的婚礼》，共 12,323 行，长于《奥德赛》；另有一次演唱达 13,331 行</td></tr>
+          <tr><th>1935.12</th><td>帕里去世，年仅 33 岁，未能亲自完成这项研究的著述</td></tr>
+          <tr><th>1960</th><td>洛德出版《故事的歌手》（The Singer of Tales），系统阐述帕里—洛德理论</td></tr>
+          <tr><th>1971</th><td>帕里的论文集《荷马诗行的制作》由其子亚当·帕里编订出版</td></tr>
+          <tr><th>1974</th><td>洛德译注出版阿夫多的《婚礼》，附英译对照与歌手生平谈话</td></tr>
+          <tr><th>2000</th><td>《故事的歌手》第二版出版，增补多媒体材料</td></tr>
+        </table>
+
+        <h3>八、传说与出处：哪些细节值得留意</h3>
+        <ul>
+          <li><b>关于行数。</b>《伊利亚特》约 15,700 行、《奥德赛》约 12,100 行，是依据中世纪手稿分卷得出的通行计数，不同版本会有出入。本课取整数说法。</li>
+          <li><b>关于「half a ton of epic」。</b>这是洛德对这批材料规模的形容，指唱片的物理重量与体量，不是精确统计。</li>
+          <li><b>关于阿夫多的口述天数。</b>不同资料有三日、五日等不同说法，本课因此只写「over several days」／「几天之内」，不写具体天数。</li>
+          <li><b>关于帕里的死因。</b>1935 年 12 月他因枪支走火去世，年仅 33 岁；此后一直有不同猜测。本课只陈述史实，不作推测。</li>
+          <li><b>关于本课立场。</b>本课讲的是一种学术方法与它的证据，不评价任何民族、语言或文化的高低。跨文化的对照只取可比的问题本身。</li>
+        </ul>
+
+        <p class="source">说明：本课所述帕里的生平、田野时间、收藏机构与阿夫多的演唱行数，均取自通行学术介绍与相关机构的公开说明；行数、天数等细节在不同资料中有出入，凡无把握者已在正文中略去或取整。中文译文为本课自译，仅供理解。本课为文学与语言学教学素材，不指向任何现实中的具体制度、国家、民族或群体。</p>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>读懂一个学术论证的完整链条：</b>帕里的三步（文本分析 → 比较类比 → 田野作业），以及每一步能证明什么、不能证明什么。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>掌握 11 个 B2 核心词：</b>epithet · corpus · formula · economy · illiterate · analogy · provisional · empirical · dictate · repertoire · improvise。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>能识别并仿写 5 个高级句型：</b>What 名词性关系从句作主语、So＋形容词前置的部分倒装、It was ... who 强调句、which 指代整句的非限制性定语从句、Had 提前的倒装虚拟条件句。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>能拆解 5 个语法点：</b>what/whatever/whoever 的用法边界、So 与 Such 前置倒装、强调句与定语从句的判别、非限制性从句的 which 与 as、虚拟条件句倒装三式。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>建立两处对照：</b>「作者」这一概念在口头传统里被如何重新理解；中国三大史诗（尤其至今仍在演述的《格萨尔》）为何能提供帕里当年必须远赴巴尔干才能拿到的证据。</div></div>
+        <div class="goal"><span class="ic">🤔</span><div><b>养成一个思辨习惯：</b>区分「类比」与「证明」——看到 a comparison is not a proof 这类自我设限的表述时，知道它正是学术写作中最该被尊重的部分。</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🧭 学习建议 How to Use This Page</h3>
+        <p><b>第一遍：</b>只看「全文阅读」，不开词表，读到第 2 段末尾时先停下来，自己回答一句：为什么「只有一个说法可用」会指向口头？<br>
+        <b>第二遍：</b>点开不懂的高亮词看释义，再对照「词汇表」里的例句确认。<br>
+        <b>第三遍：</b>逐段点 ▶ 听朗读并跟读；读不顺的地方，通常是自己不会断开的从句或分词短语。<br>
+        <b>第四遍：</b>带着「句型练习」的 5 个句子回原文，用荧光笔把它们划出来，看清每个句子分别承担了什么功能（下定义／强调／补充／假设）。<br>
+        <b>最后：</b>做「练习测验」六题；答错的两题，请回到「语法点」里找到对应条目重读一遍。</p>
+        <p><b>打印提示：</b>本页已做打印优化，打印时会自动隐藏导航与按钮，七个板块全部展开，可当讲义使用。</p>
+        <button class="print-btn" onclick="window.print()">🖨 打印本页 Print</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🗝 答案速查 Answer Key</h3>
+        <p>1. C（程式系统的「节约性」：同一意思在同一格律位置几乎只有一个说法，这只对需要边唱边编的人有用）｜2. B（用一个仍然活着的口头史诗传统，去检验他基于文本得出的论证）｜3. D（被要求唱一首和《伊利亚特》一样长的歌，他口述了 12,323 行，比《奥德赛》本身还长）｜4. B（so＋形容词前置引起的部分倒装，后接 that 结果从句；还原为 The fit was so tight that ...）｜5. C（which 指代的是前面整个陈述，因此不能用 that，逗号也不可省）｜6. C（没有两次演述完全相同；歌手是在传统规则之内即兴编创，而不是背诵固定文本）</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-12 · 文学选段 Literature｜荷马史诗与口头程式理论</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["For more than two thousand years readers have asked how the Iliad and the Odyssey were made. The Odyssey runs to some 12,100 lines of dactylic hexameter, the Iliad to roughly 15,700; reciting either aloud takes the better part of a day. For most of that time the answer seemed obvious: a poet, pen in hand. In the 1920s a young American scholar, Milman Parry, looked again at the lines themselves. Certain phrases, he noticed, return again and again and always fill the same part of the verse — swift-footed Achilles, grey-eyed Athena, rosy-fingered Dawn. He called the fixed pairing of a name and its epithet the basic unit of a system no one had yet described.", "His claim was structural. Working line by line through the corpus, he defined a formula as a group of words regularly used, under the same metrical conditions, to express a given essential idea. What made the system remarkable was its economy: for any one idea in any one position in the line, there was usually only a single formula available. So tight was the fit that a singer, having chosen his opening words, could let the rest of the verse assemble itself. Such economy, Parry reasoned, could not be the habit of a man writing at leisure; it was the signature of composition at the speed of performance.", "Textual analysis, however, could only take him so far: an argument about how verses are made needs singers who actually make them. So in 1933 and 1935 Parry travelled with his assistant Albert Lord to the mountains of Bosnia, Herzegovina and Montenegro, where epic singers known as guslari still performed to the one-stringed gusle. Most of them were illiterate. Recording on aluminium discs, the team gathered what Lord later called half a ton of epic, now kept at Harvard as the Milman Parry Collection of Oral Literature. The method was an analogy: a living tradition used as a laboratory for a dead one. Its results were necessarily provisional — a comparison is not a proof — yet they gave Parry the empirical test his reading of the texts had lacked.", "The finest singer they met was Avdo Međedović, a butcher from Bijelo Polje. It was Avdo who, asked for a song as long as the Iliad, dictated The Wedding of Meho Smailagić over several days — 12,323 lines, which is longer than the Odyssey itself. He claimed several more of similar length in his repertoire. No two performances were identical: rather than reciting a fixed text, he improvised within rules he had spent a lifetime absorbing. Parry died in December 1935, aged thirty-three, and never wrote the book. Had he lived longer, the argument might have appeared under his own name; instead Lord set it out in The Singer of Tales in 1960."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What led Parry to suspect that the Homeric poems were composed orally? 是什么让帕里怀疑荷马史诗是口头编创的？",
+   opts:["The surviving manuscripts contain obvious copying errors 现存手稿里有明显的抄写错误","The poems mention singers but never mention writing 诗中提到歌手，却从不提到书写","The economy of the formulaic system: for one idea in one metrical position there was usually only a single formula, which only helps a singer composing at speed 程式系统的节约性：同一意思在同一格律位置通常只有一个程式，而这只对需要边唱边编的人有用","The dialect of the poems is a mixture spoken nowhere else 诗中的方言是别处都不说的混合体"],
+   ans:2,
+   fb:"正确！关键在 economy 这个词：写东西的人可以停下来想、可以划掉重写，不需要这种「唯一选项」；只有在边唱边编的人那里，「不用想就能接上下半句」才是必需的。选项 A、B、D 本身都不成立——本课正文从未这样说。"},
+  {q:"Why did Parry travel to Bosnia, Herzegovina and Montenegro? 帕里为什么要去波斯尼亚、黑塞哥维那和黑山？",
+   opts:["To collect melodies that he believed had survived from antiquity 去采集他认为从古代留存下来的曲调","To test his textual argument against a living tradition of oral epic singing 用一个仍然活着的口头史诗传统，来检验他基于文本得出的论证","To learn the gusle so that he could perform the epics himself 去学弹古斯勒琴，以便自己演唱史诗","To find a manuscript older than any known copy 去找一份比已知抄本更早的手稿"],
+   ans:1,
+   fb:"正确！注意顺序——他是先在文本里得出推断，才去找活着的歌手做检验，而不是反过来。选项 C、D 都没有依据：他要的不是乐器，也不是更早的抄本。"},
+  {q:"What did the singer Avdo Međedović do? 歌手阿夫多·梅杰多维奇做了什么？",
+   opts:["He refused to sing unless he was paid in advance 他拒绝演唱，除非预先付钱","He wrote the whole Odyssey down from memory 他凭记忆把整部《奥德赛》写了下来","He taught Parry to play the gusle in five days 他在五天内教会帕里弹古斯勒琴","Asked for a song as long as the Iliad, he dictated 12,323 lines, which is longer than the Odyssey itself 被要求唱一首和《伊利亚特》一样长的歌，他口述了 12,323 行，比《奥德赛》本身还长"],
+   ans:3,
+   fb:"正确！三个数字要记住：阿夫多口述 12,323 行，另有一次演唱 13,331 行，而《奥德赛》是 12,109 行。选项 B 错得最典型——他并不识字，而且他不是「写下来」，是 dictated（口述）。"},
+  {q:"What structure is used in 'So tight was the fit that a singer could let the rest of the verse assemble itself'? 该句使用了什么结构？",
+   opts:["A cleft sentence emphasising the subject 强调主语的强调句","A non-restrictive relative clause with which 由 which 引导的非限制性定语从句","An inverted subjunctive conditional 倒装虚拟条件句","Partial inversion after so + adjective placed at the front, followed by a that-clause of result so＋形容词前置引起的部分倒装，后接 that 结果从句"],
+   ans:3,
+   fb:"正确！还原之后是 The fit was so tight that ...；把 so tight 提到句首，was 就必须跟到主语 the fit 之前。选项 A 对应第 3 个句型 It was Avdo who ...，选项 C 对应最后一个句型 Had he lived longer ..."},
+  {q:"In '12,323 lines, which is longer than the Odyssey itself', what does 'which' refer to? 句中的 which 指代什么？",
+   opts:["The noun lines, and it could be replaced by that 指代名词 lines，可以换成 that","Avdo himself 指代阿夫多本人","The whole preceding statement — that he dictated 12,323 lines — so that cannot be used and the comma is required 指代前面整个陈述，所以不能用 that，逗号也不可省","An indirect question 引出一个间接疑问句"],
+   ans:2,
+   fb:"正确！这是本课第 4 个句型。判断方法：看谓语动词 is 是单数——它对应的不是 lines 这个复数名词，而是「他口述了 12,323 行」这一整件事。非限制性从句里不可用 that，也不能省略关系词。"},
+  {q:"Which statement is supported by the passage? 下列哪一项是文章支持的？",
+   opts:["Parry proved that Homer never existed 帕里证明了荷马其人从未存在","The guslari memorised their songs word for word 古斯勒歌手逐字背诵他们的歌","No two performances were identical; the singers improvised within traditional rules rather than reciting a fixed text 没有两次演述完全相同；歌手是在传统规则之内即兴编创，而不是背诵固定文本","Lord published the field recordings in 1935 洛德在 1935 年出版了这批田野录音"],
+   ans:2,
+   fb:"正确！这是全文的落点：既不逐字背诵，也不凭空发明，第三条路是在传统规则之内即时组合。选项 A 不成立（本课从未这样说，理论改变的是「作者」这个问法本身）；选项 D 的年份错了——1960 年洛德出版的是《故事的歌手》。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

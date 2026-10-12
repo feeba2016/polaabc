@@ -7491,6 +7491,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-12",
+    "title": "The Song Nobody Wrote Down",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-12-the-song-nobody-wrote-down",
+    "url": "lessons/b2/2026-10-12-the-song-nobody-wrote-down.html",
+    "vocab": [
+      {
+        "word": "epithet",
+        "zh": "特性形容修饰语；修饰性称号（读作 /ˈepɪθet/，重音在第一音节。荷马史诗里的 epithet 是「名词＋固定形容词」的成套搭配，如 swift-footed Achilles「捷足的阿基琉斯」。注意它还有一义是带贬义的「绰号、蔑称」，本课取学术义）",
+        "ex": "\"He called the fixed pairing of a name and its epithet the basic unit of a system no one had yet described.\""
+      },
+      {
+        "word": "corpus",
+        "zh": "（文献、作品的）总集；语料库（学术用语，复数 corpora /ˈkɔːpərə/。a corpus of epic poetry 史诗语料总集。语言学与古典学里，它指可供统计与比对的文本集合，是一个中性、可计数的对象）",
+        "ex": "\"Working line by line through the corpus, he defined a formula as ...\""
+      },
+      {
+        "word": "formula",
+        "zh": "程式；固定词组（复数为 formulas 或 formulae。帕里的定义是：在相同格律条件下、为表达某个既定基本意思而反复使用的一组词。日常英语里它多指「公式、配方」，本课取帕里的学术义）",
+        "ex": "\"... he defined a formula as a group of words regularly used, under the same metrical conditions, to express a given essential idea.\""
+      },
+      {
+        "word": "economy",
+        "zh": "节约；简省（帕里的术语是 the economy of the formulaic system：同一个意思、同一格律位置，几乎只有一个可用程式，没有第二个同义选项。此处不可译成「经济」，它是「不浪费、不冗余」的意思；形容词 economical 节约的）",
+        "ex": "\"What made the system remarkable was its economy.\""
+      },
+      {
+        "word": "illiterate",
+        "zh": "不识字的；不会读写的（名词 illiteracy 文盲率。前缀 il- 是否定前缀，用于 l 开头的词根，同类的还有 illegal、illegible。学术写作里它是中性描述，不含贬义，不应写成「没文化的」）",
+        "ex": "\"Most of them were illiterate.\""
+      },
+      {
+        "word": "analogy",
+        "zh": "类比；类推（读作 /əˈnælədʒi/，重音在第二音节。by analogy with 通过与……类比；draw an analogy between A and B 在 A 与 B 之间作类比。学术上它指用一个已知系统去推断另一个系统，是启发而非证明）",
+        "ex": "\"The method was an analogy: a living tradition used as a laboratory for a dead one.\""
+      },
+      {
+        "word": "provisional",
+        "zh": "暂时性的；有待修订的（正式。a provisional answer 暂时性的答案；副词 provisionally。学术写作里常用来自我设限，表示结论留有被推翻的余地，不等于「随便的、临时的」）",
+        "ex": "\"Its results were necessarily provisional — a comparison is not a proof.\""
+      },
+      {
+        "word": "empirical",
+        "zh": "实证的；以观察或实验为依据的（正式，读作 /ɪmˈpɪrɪkəl/。empirical evidence 实证证据；empirical study 实证研究。反义为 theoretical 或 a priori 先验的。本课里它与 textual analysis 相对：一个是看书，一个是看人）",
+        "ex": "\"... yet they gave Parry the empirical test his texts could not.\""
+      },
+      {
+        "word": "dictate",
+        "zh": "口述；听写（读作 /dɪkˈteɪt/，重音在第二音节。dictate a letter to a secretary 向秘书口授信件；名词 dictation。另一常见义是「支配、决定」，如 Circumstances dictate our choice 形势决定了我们的选择）",
+        "ex": "\"... he dictated The Wedding of Meho Smailagić over several days.\""
+      },
+      {
+        "word": "repertoire",
+        "zh": "全部曲目；保留剧目；（引申）一个人掌握的全部本领（读作 /ˈrepətwɑː/。a singer's repertoire 一位歌手的全部曲目；a repertoire of skills 技能储备。注意拼写，不要写成 report 或 repetition）",
+        "ex": "\"He claimed several more of similar length in his repertoire.\""
+      },
+      {
+        "word": "improvise",
+        "zh": "即兴创作；临场编创（名词 improvisation。在口头诗学里它是技术词：不是「乱编」，而是在传统提供的规则之内即时组合。帕里的立场是歌手既不逐字背诵，也不凭空发明，两者之间有第三条路）",
+        "ex": "\"... rather than reciting a fixed text, he improvised within rules he had spent a lifetime absorbing.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
