@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1/G2 已上线（29 主题 / 145 Part / 870 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1/G2/G3 已上线（30 主题 / 150 Part / 900 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -2411,7 +2411,85 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"G3", cat:"G", zh:"运动与健身", name:"Sports & Fitness", status:"soon", words:90,  desc:"球场、跑步、瑜伽"},
+  {id:"G3", cat:"G", zh:"运动与健身", name:"Sports & Fitness", status:"live", date:"2026-10-12", words:30, desc:"晨练报名、百米冲刺、绿茵对决与接力夺冠",
+    parts:[
+      {
+        id:"G3-P1", slug:"tem4-G3-P1", title:"晨练报名", shape:"拱门",
+        poster:"assets/tem4/posters/G3_P1.png",
+        sentence:"At Monday's assembly Miss Xiaoye invites everyone to volunteer for the spring sports meet; Leo and I enlist for the relay, the whole class joins our morning fitness campaign, and we promise to follow a regular training plan, jogging gently each day to slacken muscles grown slack over a whole winter.",
+        sentenceCn:"周一晨会上，小叶学姐邀请大家自愿报名春季运动会；我和利奥报了接力赛，全班同学都加入我们的晨练计划，大家约定按规律的方案训练，每天轻缓慢跑，放松整个冬天都松弛下来的肌肉。",
+        scene:"晨光操场，小叶学姐领跑热身慢跑，小猫和小熊同学在报名板前商量报哪个项目。",
+        words:[
+          {word:"volunteer", ipa:"/ˌvɒlənˈtɪə/", pos:"n.",   zh:"志愿者；志愿兵 v. 自愿效劳，自告奋勇", forms:["volunteer"]},
+          {word:"enlist",    ipa:"/ɪnˈlɪst/",    pos:"v.",   zh:"入伍，征募；获得，赢得；参加",        forms:["enlist"]},
+          {word:"campaign",  ipa:"/kæmˈpeɪn/",   pos:"n.",   zh:"有组织的活动；竞选 vi. 参加运动",     forms:["campaign"]},
+          {word:"regular",   ipa:"/ˈreɡjʊlə/",   pos:"adj.", zh:"规则的；正规的；平常的",             forms:["regular"]},
+          {word:"slacken",   ipa:"/ˈslækən/",    pos:"v.",   zh:"（使）变松，放松",                   forms:["slacken"]},
+          {word:"slack",     ipa:"/slæk/",       pos:"adj.", zh:"松弛的，没拉紧的；萧条的",           forms:["slack"]}
+        ]
+      },
+      {
+        id:"G3-P2", slug:"tem4-G3-P2", title:"百米赛道", shape:"叶形",
+        poster:"assets/tem4/posters/G3_P2.png",
+        sentence:"On the red track the starting gun fires; we trot one easy lap around the field first, then lengthen every stride down the straight, run as swift as the wind while the crowd roars, gasp through the last fifty metres, and finally catch our breath at the finish line with trembling, happy legs.",
+        sentenceCn:"红色跑道上发令枪响；我们先绕场轻松小跑一圈热身，然后在直道上迈开每一个大步，跑得快如疾风、观众呐喊声阵阵，最后五十米一路喘着粗气，终于在终点线大口喘匀了呼吸。",
+        scene:"红色跑道百米冲刺，小叶学姐迈开大步快如疾风，场边小动物同学挥舞小旗呐喊。",
+        words:[
+          {word:"track",  ipa:"/træk/",        pos:"n.",   zh:"跑道，田径运动；小径 v. 跟踪",  forms:["track"]},
+          {word:"trot",   ipa:"/trɒt/",        pos:"v.",   zh:"小跑，快步走 n.（马）快步",     forms:["trot"]},
+          {word:"stride", ipa:"/straɪd/",      pos:"v.",   zh:"大步行走；跨越 n. 大步，阔步",  forms:["stride"]},
+          {word:"swift",  ipa:"/swɪft/",       pos:"adj.", zh:"快捷的，迅速的；敏捷的",        forms:["swift"]},
+          {word:"gasp",   ipa:"/ɡɑːsp; ɡæsp/", pos:"v.",   zh:"喘气，喘息，透不过气 n. 喘气",  forms:["gasp"]},
+          {word:"breath", ipa:"/breθ/",        pos:"n.",   zh:"呼吸；气息",                   forms:["breath"]}
+        ]
+      },
+      {
+        id:"G3-P3", slug:"tem4-G3-P3", title:"绿茵对决", shape:"椭圆",
+        poster:"assets/tem4/posters/G3_P3.png",
+        sentence:"In the afternoon soccer final the ball bounces across the wet pitch; Leo kicks a clever pass, our captain intercepts a risky through-ball, the two sides clash again and again in midair, our striker smashes the ball into the net just as sudden rain batters the stand's roof, and the whole school cheers louder than the storm.",
+        sentenceCn:"下午的足球决赛上，皮球在湿滑的场地上不停弹跳；利奥踢出一记巧妙的传球，队长截下对方冒险的直塞球，双方在空中一次次激烈碰撞，前锋将球轰入球门的瞬间，骤雨正猛敲看台顶棚，而全校的欢呼比风雨更响亮。",
+        scene:"绿茵场足球决赛，骤雨初落彩虹升起，小叶学姐带球突破，两名小对手跃起争球。",
+        words:[
+          {word:"bounce",   ipa:"/baʊns/",       pos:"v.",   zh:"（球）反跳，弹起；使跳出 n. 弹力", forms:["bounces"]},
+          {word:"kick",     ipa:"/kɪk/",         pos:"v.",   zh:"踢 n. 踢；（枪的）反冲后坐力",    forms:["kicks"]},
+          {word:"intercept", ipa:"/ˌɪntəˈsept/", pos:"vt.",  zh:"中途拦截，截击；窃听",           forms:["intercepts"]},
+          {word:"clash",    ipa:"/klæʃ/",        pos:"vi.",  zh:"冲突；不协调；发出刺耳的撞击声",  forms:["clash"]},
+          {word:"smash",    ipa:"/smæʃ/",        pos:"v.",   zh:"（使）破碎，粉碎；猛击；打破（记录）", forms:["smashes"]},
+          {word:"batter",   ipa:"/ˈbætə/",       pos:"v.",   zh:"连续猛击；炮击；打烂",           forms:["batters"]}
+        ]
+      },
+      {
+        id:"G3-P4", slug:"tem4-G3-P4", title:"带伤坚持", shape:"超圆角",
+        poster:"assets/tem4/posters/G3_P4.png",
+        sentence:"Halfway through the relay Leo feels a sharp strain in his ankle; he limps on with a stiff leg, too stubborn to surrender and reluctant to let the team down, so Miss Xiaoye binds it with soft gauze and whispers that a calm mind helps a sprained ankle heal faster than panic ever will.",
+        sentenceCn:"接力赛半程，利奥感到脚踝一阵剧烈的拉伤；他用僵硬的腿一瘸一拐地坚持奔跑，倔强地不肯认输，也不愿让队友失望，于是小叶学姐用柔软的纱布为他包扎，轻声说镇定的心远比惊慌更能让扭伤的脚踝愈合。",
+        scene:"接力赛场上，小叶学姐蹲身为扭伤脚踝的小猫队友包扎，周围队友举手打气、爱心飘扬。",
+        words:[
+          {word:"strain",    ipa:"/streɪn/",     pos:"n.",   zh:"拉紧；劳累；扭筋，脱臼 v. 拉紧", forms:["strain"]},
+          {word:"limp",      ipa:"/lɪmp/",       pos:"vi.",  zh:"跛行，一瘸一拐地走 adj. 柔弱的", forms:["limps"]},
+          {word:"stiff",     ipa:"/stɪf/",       pos:"adj.", zh:"僵硬的，僵直的；拘谨的；剧烈的", forms:["stiff"]},
+          {word:"reluctant", ipa:"/rɪˈlʌktənt/", pos:"adj.", zh:"勉强的，不愿的",                forms:["reluctant"]},
+          {word:"surrender", ipa:"/səˈrendə/",   pos:"v.",   zh:"投降，认输；交出，放弃",        forms:["surrender"]},
+          {word:"heal",      ipa:"/hiːl/",       pos:"v.",   zh:"治愈（伤口等），使恢复健康",     forms:["heal"]}
+        ]
+      },
+      {
+        id:"G3-P5", slug:"tem4-G3-P5", title:"冲线夺冠", shape:"波浪",
+        poster:"assets/tem4/posters/G3_P5.png",
+        sentence:"Cheered on by the whole class, Leo conquers the pain in the day's final event, prevails over Class Three's strongest runner in the last hundred metres, surpasses his personal best, and excels in the closing sprint just when his strength runs low; as the referee hands our team the gold pennant, Miss Xiaoye smiles and says we are worthy champions whose courage will light up many ordinary days to come.",
+        sentenceCn:"在全班的欢呼声中，利奥在当天最后一个项目里战胜了疼痛，于最后一百米压过三班最强的选手，超越了自己的最好成绩，并在体力将尽的最后冲刺中依然出色发挥；当裁判把金色锦旗交到我们手上时，小叶学姐微笑着说，我们无愧于冠军之名，这份勇气将点亮此后许多个平凡的日子。",
+        scene:"终点线前彩带气球纷飞，小叶学姐高举金色锦旗，小猫小熊队友捧着奖杯欢呼雀跃。",
+        words:[
+          {word:"conquer",  ipa:"/ˈkɒŋkə/",    pos:"v.",   zh:"征服，战胜；克服（困难等）",        forms:["conquers"]},
+          {word:"prevail",  ipa:"/prɪˈveɪl/",  pos:"vi.",  zh:"战胜；盛行，流行",                forms:["prevails"]},
+          {word:"surpass",  ipa:"/səˈpɑːs/",   pos:"vt.",  zh:"超越，凌驾，胜过",                forms:["surpasses"]},
+          {word:"excel",    ipa:"/ɪkˈsel/",    pos:"v.",   zh:"胜过，优于，擅长；突出",           forms:["excels"]},
+          {word:"champion", ipa:"/ˈtʃæmpiən/", pos:"n.",   zh:"冠军；拥护者 vt. 拥护，支持",      forms:["champions"]},
+          {word:"event",    ipa:"/ɪˈvent/",    pos:"n.",   zh:"事件，大事；（运动会等的）比赛项目", forms:["event"]}
+        ]
+      }
+    ]
+  },
   {id:"G4", cat:"G", zh:"节日与庆典", name:"Festival & Celebration", status:"soon", words:70, desc:"圣诞、新年、生日"},
   /* ===== H 健康与心理 ===== */
   {id:"H1", cat:"H", zh:"身体与健康", name:"Body & Health",    status:"soon", words:100, desc:"医院、运动、饮食"},

@@ -7538,12 +7538,12 @@ const EPISODES = [
       {
         "word": "empirical",
         "zh": "实证的；以观察或实验为依据的（正式，读作 /ɪmˈpɪrɪkəl/。empirical evidence 实证证据；empirical study 实证研究。反义为 theoretical 或 a priori 先验的。本课里它与 textual analysis 相对：一个是看书，一个是看人）",
-        "ex": "\"... yet they gave Parry the empirical test his texts could not.\""
+        "ex": "\"... yet they gave Parry the empirical test his reading of the texts had lacked.\""
       },
       {
         "word": "dictate",
         "zh": "口述；听写（读作 /dɪkˈteɪt/，重音在第二音节。dictate a letter to a secretary 向秘书口授信件；名词 dictation。另一常见义是「支配、决定」，如 Circumstances dictate our choice 形势决定了我们的选择）",
-        "ex": "\"... he dictated The Wedding of Meho Smailagić over several days.\""
+        "ex": "\"It was Avdo who, asked for a song as long as the Iliad, dictated The Wedding of Meho Smailagić over several days.\""
       },
       {
         "word": "repertoire",
