@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1/G2/G3 已上线（30 主题 / 150 Part / 900 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1/G2/G3/G4 已上线（31 主题 / 155 Part / 930 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -2490,7 +2490,85 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"G4", cat:"G", zh:"节日与庆典", name:"Festival & Celebration", status:"soon", words:70, desc:"圣诞、新年、生日"},
+  {id:"G4", cat:"G", zh:"节日与庆典", name:"Festival & Celebration", status:"live", date:"2026-10-14", words:30, desc:"节日筹备、烛光平安夜、颂歌之夜、跨年倒数与新年心愿",
+    parts:[
+      {
+        id:"G4-P1", slug:"tem4-G4-P1", title:"节日筹备", shape:"拱门",
+        poster:"assets/tem4/posters/G4_P1.png",
+        sentence:"As the forthcoming festival draws near, volunteers congregate in the decorated hall, tie a neat knot on every ribbon, stack gift parcels without any fuss, and prepare the stage in happy haste for the big day.",
+        sentenceCn:"随着节日临近，志愿者们聚集在装饰一新的礼堂，在每条丝带上打出整齐的结，井井有条地码放礼品包裹，欢快地加紧布置舞台，迎接盛大的节日。",
+        scene:"节日前夜，小叶学姐踮脚挂彩带，小猫小熊志愿者围坐系丝带结、码放礼品包裹。",
+        words:[
+          {word:"forthcoming", ipa:"/ˈfɔːθˈkʌmɪŋ/", pos:"adj.", zh:"即将发生的，即将到来的；现成的", forms:["forthcoming"]},
+          {word:"congregate",  ipa:"/ˈkɒŋɡrɪɡeɪt/", pos:"v.",   zh:"集合，聚集",                    forms:["congregate"]},
+          {word:"knot",        ipa:"/nɒt/",         pos:"n.",   zh:"（绳等的）结 v. 在…上打结",      forms:["knot"]},
+          {word:"parcel",      ipa:"/ˈpɑːsəl/",     pos:"n.",   zh:"包，包裹",                      forms:["parcels"]},
+          {word:"fuss",        ipa:"/fʌs/",         pos:"n.",   zh:"大惊小怪，忙乱 v. 小题大做",     forms:["fuss"]},
+          {word:"haste",       ipa:"/heɪst/",       pos:"n.",   zh:"急速，仓促；草率",              forms:["haste"]}
+        ]
+      },
+      {
+        id:"G4-P2", slug:"tem4-G4-P2", title:"烛光平安夜", shape:"叶形",
+        poster:"assets/tem4/posters/G4_P2.png",
+        sentence:"On the holy night before Christmas, the children kindle one silver taper after another until hundreds of tiny flames dazzle the dark windows; the gentle charm of candlelight enchants everyone who gathers around the tree.",
+        sentenceCn:"在圣诞节前神圣的夜晚，孩子们一支接一支点亮银色细蜡烛，直到数百簇小小的火光把漆黑的窗棂照得熠熠生辉；烛光的温柔魅力让围坐在圣诞树旁的每一个人都如痴如醉。",
+        scene:"平安夜壁炉旁，小叶学姐点亮细蜡烛，烛光映亮挂满饰品的圣诞树，小猫小熊围坐惊叹。",
+        words:[
+          {word:"holy",    ipa:"/ˈhəʊli/",    pos:"adj.", zh:"神圣的，神的；圣洁的",           forms:["holy"]},
+          {word:"kindle",  ipa:"/ˈkɪndl/",    pos:"v.",   zh:"点燃，燃起；着火",              forms:["kindle"]},
+          {word:"taper",   ipa:"/ˈteɪpə/",    pos:"n.",   zh:"蜡捻子，细蜡烛 v. 逐渐变窄",     forms:["taper"]},
+          {word:"dazzle",  ipa:"/ˈdæzl/",     pos:"v.",   zh:"耀眼；使惊奇，使倾倒 n. 闪耀",   forms:["dazzle"]},
+          {word:"charm",   ipa:"/tʃɑːm/",     pos:"n.",   zh:"魅力，魔力 v. 迷住，使陶醉",     forms:["charm"]},
+          {word:"enchant", ipa:"/ɪnˈtʃɑːnt/", pos:"vt.",  zh:"使入迷，使陶醉；用魔法迷惑",     forms:["enchants"]}
+        ]
+      },
+      {
+        id:"G4-P3", slug:"tem4-G4-P3", title:"颂歌之夜", shape:"椭圆",
+        poster:"assets/tem4/posters/G4_P3.png",
+        sentence:"At the evening carol concert the host bellows a hearty welcome, huge speakers amplify every verse, and soon the delighted crowd yells with joy and mingles in the aisles, glorifying the season with one warm blessing after another.",
+        sentenceCn:"晚上的颂歌音乐会上，主持人中气十足地大声致欢迎词，巨大的音响把每段歌声放得洪亮，很快欣喜的人群欢呼起来、在过道间亲密交融，用一声声温暖的祝福赞美这个节日。",
+        scene:"颂歌音乐会上，小叶学姐站在话筒前领唱，台下小动物们挥手欢呼、互道祝福。",
+        words:[
+          {word:"bellow",   ipa:"/ˈbeləʊ/",     pos:"v.",  zh:"吼叫，怒叫；大声发出",            forms:["bellows"]},
+          {word:"amplify",  ipa:"/ˈæmplɪfaɪ/",  pos:"v.",  zh:"放大（声音等），增强（音量）",     forms:["amplify"]},
+          {word:"yell",     ipa:"/jel/",        pos:"v.",  zh:"叫喊，叫嚷 n. 叫喊声",           forms:["yells"]},
+          {word:"mingle",   ipa:"/ˈmɪŋɡl/",     pos:"v.",  zh:"使混合，混入",                   forms:["mingles"]},
+          {word:"glorify",  ipa:"/ˈɡlɔːrɪfaɪ/", pos:"vt.", zh:"赞美；使增光；美化",             forms:["glorifying"]},
+          {word:"blessing", ipa:"/ˈblesɪŋ/",    pos:"n.",  zh:"祝福；使人感到幸福的事情",        forms:["blessing"]}
+        ]
+      },
+      {
+        id:"G4-P4", slug:"tem4-G4-P4", title:"跨年倒数", shape:"超圆角",
+        poster:"assets/tem4/posters/G4_P4.png",
+        sentence:"Although the winter wind makes everyone shiver on the square, nobody minds the excess of fireworks: brilliant sparks crown the sky, an incredible swell of cheering rises with each burst, and the midnight chime finally unifies every happy voice.",
+        sentenceCn:"虽然广场上的寒风让每个人都瑟瑟发抖，但没有人在意烟花的过量燃放：绚烂的火花点亮夜空，每一声爆响都掀起难以置信的欢呼浪潮，午夜的钟声最终把所有欢乐的声音汇成一片。",
+        scene:"跨年夜广场，烟花在夜空绽放，小叶学姐裹着围巾与伙伴们一起仰望欢呼。",
+        words:[
+          {word:"shiver",    ipa:"/ˈʃɪvə/",          pos:"n./v.", zh:"颤抖，发抖",                    forms:["shiver"]},
+          {word:"excess",    ipa:"/ɪkˈses; ˈekses/", pos:"n.",    zh:"过多，过度；无节制 adj. 过量的", forms:["excess"]},
+          {word:"brilliant", ipa:"/ˈbrɪljənt/",      pos:"adj.",  zh:"光辉的，辉煌的；卓越的",         forms:["brilliant"]},
+          {word:"incredible", ipa:"/ɪnˈkredəbl/",    pos:"adj.",  zh:"难以置信的；精彩的",            forms:["incredible"]},
+          {word:"swell",     ipa:"/swel/",           pos:"v.",    zh:"膨胀，增大；（使）鼓起 n. 增大", forms:["swell"]},
+          {word:"unify",     ipa:"/ˈjuːnɪfaɪ/",      pos:"v.",    zh:"（使）成一体，使统一",          forms:["unifies"]}
+        ]
+      },
+      {
+        id:"G4-P5", slug:"tem4-G4-P5", title:"新年心愿", shape:"波浪",
+        poster:"assets/tem4/posters/G4_P5.png",
+        sentence:"By family convention we close the holiday by recalling each happy episode of the past year; then we swear to devote more hours to reading, and my own intention is to inaugurate a little book club when the new term begins.",
+        sentenceCn:"按照家里的传统，我们在节日尾声回顾过去一年的每一段快乐插曲；然后大家郑重许诺把更多时间投入阅读，而我的心愿是在新学期开始时创办一个小小的读书会。",
+        scene:"新年清晨，小叶学姐在黑板前画下心愿涂鸦，伙伴们举手分享各自的新年计划。",
+        words:[
+          {word:"convention", ipa:"/kənˈvenʃən/",   pos:"n.",  zh:"（传统性的）习惯；代表大会",      forms:["convention"]},
+          {word:"episode",    ipa:"/ˈepɪsəʊd/",     pos:"n.",  zh:"插曲，一段情节；一个事件",        forms:["episode"]},
+          {word:"swear",      ipa:"/sweə/",         pos:"v.",  zh:"发誓，宣誓；诅咒",              forms:["swear"]},
+          {word:"devote",     ipa:"/dɪˈvəʊt/",      pos:"vt.", zh:"奉献；把…专用于",               forms:["devote"]},
+          {word:"intention",  ipa:"/ɪnˈtenʃən/",    pos:"n.",  zh:"意图，打算，目的",              forms:["intention"]},
+          {word:"inaugurate", ipa:"/ɪˈnɔːɡjʊreɪt/", pos:"vt.", zh:"为…举行开幕式；使正式就任；开创", forms:["inaugurate"]}
+        ]
+      }
+    ]
+  },
   /* ===== H 健康与心理 ===== */
   {id:"H1", cat:"H", zh:"身体与健康", name:"Body & Health",    status:"soon", words:100, desc:"医院、运动、饮食"},
   {id:"H2", cat:"H", zh:"看医生",     name:"Hospital Visit",  status:"soon", words:70,  desc:"诊室、药方、检查"},

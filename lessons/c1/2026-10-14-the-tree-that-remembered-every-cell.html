@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Tree That Remembered Every Cell — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#4f46e5;
+  --accent2:#0f766e;
+  --bg:#f7f8ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#e0e7ff;
+  --border:#c7d2fe;
+  --soft:#eef2ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(79,70,229,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(79,70,229,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,70,229,.55);}70%{box-shadow:0 0 0 12px rgba(79,70,229,0);}100%{box-shadow:0 0 0 0 rgba(79,70,229,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#c7d2fe;}
+#tip{position:fixed;z-index:1200;background:#312e81;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fcd34d;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(79,70,229,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e0e7ff;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 前沿科技 Tech Frontier</span>
+      <h1 class="title">The Tree That Remembered Every Cell</h1>
+      <p class="subtitle">DNA Typewriter, a mouse embryo, and the largest mammalian lineage tree yet built · 2026-10-14 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The ledger no one could keep</div>
+            <p>Every mammal begins as a single cell, and developmental biology has long wanted the ledger of what follows: which cell divided, when, and into what. For transparent embryos that ledger could be kept by eye; for mammals it could not. John Sulston and his colleagues traced the entire <span class="kw" data-def="谱系、世系；细胞谱系指「哪个细胞来自哪个细胞」的完整关系（line 线 + -age 集合名词后缀）（descent traced from a common ancestor；a cell lineage 细胞谱系；the entire lineage of a nematode 线虫的完整谱系；形容词 linear 线性的与之同根；学术写作中 lineage tree 谱系树、lineage tracing 谱系追踪、lineage commitment 谱系定向都是固定搭配）">lineage</span> of a nematode, all 959 somatic cells of the adult. A mammalian embryo permits no such thing: it is <span class="kw" data-def="不透明的；引申为「难以从外部观察、难以看穿的」（op- 反义前缀，与 opaque 同源的词还有 opal 蛋白石）（not letting light through, and by extension not open to observation；an opaque embryo 不透明的胚胎；an opaque decision-making process 不透明的决策过程；反义词 transparent；本文用它对比线虫胚胎：线虫透明可用显微镜一路看，小鼠胚胎不透明，只能换办法）">opaque</span>, its cells run to the millions.</p>
+          </div>
+          <button class="play-btn" data-i="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Writing instead of watching</div>
+            <p>DNA Typewriter, described in 2022, replaces watching with writing. Its blank medium, DNA Tape, is a tandem array of partial CRISPR target sites of which only the first is active; an insertional edit <span class="kw" data-def="写下、铭刻；引申为「把信息写进某种载体」（in- 进入 + scribe 写，同根词 describe、prescribe、transcribe）（to write or mark something onto a surface, or to record it in a durable medium；inscribe the identity of a guide 把某个向导的身份写进去；inscriptions on stone 石碑铭文；名词 inscription；学术写作中常用喻义：inscribed in the genome 写进基因组里的）">inscribes</span> the identity of the guide that made it and shifts the writing head one unit along. The record is thus <span class="kw" data-def="累积的、逐步累加的（cumul- 堆积 + -ative；动词 accumulate）（increasing by successive additions；the cumulative effect of small edits 小编辑的累积效应；a cumulative record 逐条累积的记录；注意与 accumulative 近义但 cumulative 更常用于正式学术语境；副词 cumulatively；本文用它强调「每写一笔都叠在前一笔之上」，这正是顺序信息能保存的原因）">cumulative</span> and ordered. Because each mark is <span class="kw" data-def="可遗传的、能传给后代的（herit 继承 + -able）（able to be passed from a parent to its offspring or descendant cells；a heritable mark 可遗传的标记；heritable variation 可遗传变异；名词 heritability 遗传力；本文关键在于：标记一旦写进 DNA，子细胞复制 DNA 时就会一并继承，于是「历史」随细胞分裂自动传播）">heritable</span>, a daughter cell inherits its parent's history and appends to it — the genome becomes its own chronicler.</p>
+          </div>
+          <button class="play-btn" data-i="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · A tree of more than a million cells</div>
+            <p>Reporting in Science on 8 October 2026, researchers at the Seattle Hub for Synthetic Biology injected the system into a fertilised mouse egg and let the embryo develop for 13.5 days, roughly two-thirds of gestation. They read the marks in 1.58 million cell nuclei and <span class="kw" data-def="重建、重组、复原（re- 再 + constitute 构成）（to build or put something back together from its parts；reconstitute a lineage tree 重建一棵谱系树；reconstituted from 1.58 million nuclei 由 158 万个细胞核复原而来；名词 reconstitution；比 reconstruct 更常用于「把分散数据复原为整体」，在生物学里也有「重新配制（冻干粉）」的字面义）">reconstituted</span> a time-<span class="kw" data-def="校准过的、带有时间／量度标度的（calibr- 源自 caliber 口径、量规）（marked or adjusted against a standard so that readings mean something；a time-calibrated tree 带有时间标度的树；calibrate an instrument 校准仪器；名词 calibration；本文的要点是：这棵树不只是「谁来自谁」，而是「谁在什么时候来自谁」——分支长度有时间含义）">calibrated</span> tree of more than 1.28 million cells: about a tenth of the embryo's total, and by far the largest lineage tree yet built for a mammal. Marking at the first division even yielded two independent copies of the same experiment.</p>
+          </div>
+          <button class="play-btn" data-i="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What the tree records, and what it unsettles</div>
+            <p>The tree unsettles an old expectation. The two cells born of the first division did not contribute equally; their <span class="kw" data-def="后代、子代（正式用语，比 offspring 更书面；pro- 向前 + gen 产生）（descendants or offspring；the progeny of a single cell 单个细胞的后代；在生物学里可指细胞、也可指个体；注意它与 progeny 单复数同形无关的另一点：发音 /ˈprɒdʒəni/，重音在第一音节；学术写作中常用于「某一祖先的所有后代」这一整体，而非某一个后代）">progeny</span> split roughly 57 to 42 per cent. Yet each supplied almost the same proportion of every cell type, as though the body plan were indifferent to an early numerical <span class="kw" data-def="差距、悬殊（dis- 分离 + par 相等 + -ity；形容词 disparate 迥异的）（a great difference between things that might have been expected to match；a numerical disparity 数量上的差距；disparities between groups 组间差异；注意它暗含「本该相当却不相当」的评价，纯中性的差别更常用 difference；本文用它是因为 57 与 42 本被预期为接近 50 与 50）">disparity</span>. That is what a reference map is for: to show where a healthy trajectory <span class="kw" data-def="偏离、分岔（di- 分开 + verge 转向）（to move away from a shared path；where a trajectory diverges into disease 轨迹在哪里偏转入疾病；divergent views 分歧的观点；名词 divergence，形容词 divergent；本文用法是空间隐喻：正常发育是一条路，疾病是这条路在某个节点分出去的岔道）">diverges</span> into disease. The team has published the tree, with a browser called NextCell, for anyone to read.</p>
+          </div>
+          <button class="play-btn" data-i="3">▶</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="sec" style="border:none;padding:0;margin:0 0 10px;">🧭 篇章结构 Structure at a Glance</h2>
+        <div class="ext">
+        <table>
+          <tr><th>段</th><th>功能</th><th>关键句</th></tr>
+          <tr><td>1</td><td>立问题：发育生物学想要一份「细胞账本」，但透明胚胎能用眼睛记，哺乳动物不行</td><td>For transparent embryos that ledger could be kept by eye; for mammals it could not.</td></tr>
+          <tr><td>2</td><td>给出办法：把「看」换成「写」——DNA Tape 的写入机制与为什么顺序能保存</td><td>replaces watching with writing</td></tr>
+          <tr><td>3</td><td>报成果：2026 年 10 月 8 日《科学》论文，13.5 天小鼠胚胎、158 万细胞核、128 万细胞树</td><td>the largest lineage tree yet built for a mammal</td></tr>
+          <tr><td>4</td><td>讲意义与边界：57 比 42 的意外，参照图谱的用途，数据公开</td><td>to show where a healthy trajectory diverges into disease</td></tr>
+        </table>
+        </div>
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary (10 · C1–C2)</h2>
+      <div class="card">
+        <div class="vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="lineage">🔊</button><div class="word">lineage<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">谱系、世系；细胞谱系指「哪个细胞来自哪个细胞」的完整关系（line 线 + -age 集合名词后缀）（descent traced from a common ancestor；a cell lineage 细胞谱系；the entire lineage of a nematode 线虫的完整谱系；形容词 linear 线性的与之同根；学术写作中 lineage tree 谱系树、lineage tracing 谱系追踪、lineage commitment 谱系定向都是固定搭配）</div><div class="ex">“John Sulston and his colleagues traced the entire lineage of a nematode, all 959 somatic cells of the adult.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="opaque">🔊</button><div class="word">opaque<span class="pos">adj.</span></div><span class="lvl">C1</span><div class="zh">不透明的；引申为「难以从外部观察、难以看穿的」（反义词 transparent）（not letting light through, and by extension not open to observation；an opaque embryo 不透明的胚胎；an opaque decision-making process 不透明的决策过程；本文用它对比线虫胚胎：线虫透明，可用显微镜一路看到成体；小鼠胚胎不透明，只能换办法）</div><div class="ex">“A mammalian embryo permits no such thing: it is opaque, its cells run to the millions…”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="inscribe">🔊</button><div class="word">inscribe<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">写下、铭刻；引申为「把信息写进某种载体」（in- 进入 + scribe 写；同根词 describe、prescribe、transcribe）（to write or mark something onto a surface, or to record it in a durable medium；inscribe the identity of a guide 把某个向导的身份写进去；名词 inscription 铭文；学术写作中常用喻义：inscribed in the genome 写进基因组里的）</div><div class="ex">“…an insertional edit inscribes the identity of the guide that made it and shifts the writing head one unit along.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cumulative">🔊</button><div class="word">cumulative<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">累积的、逐步累加的（动词 accumulate；副词 cumulatively）（increasing by successive additions；the cumulative effect of small edits 小编辑的累积效应；a cumulative record 逐条累积的记录；与 accumulative 近义，但 cumulative 更常用于正式学术语境；本文用它强调「每写一笔都叠在前一笔之上」，这正是顺序信息得以保存的原因）</div><div class="ex">“The record is thus cumulative and ordered.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="heritable">🔊</button><div class="word">heritable<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">可遗传的、能传给后代的（herit 继承 + -able；名词 heritability 遗传力）（able to be passed from a parent to its offspring or descendant cells；a heritable mark 可遗传的标记；heritable variation 可遗传变异；本文关键在于：标记一旦写进 DNA，子细胞复制 DNA 时就会一并继承，于是「历史」随细胞分裂自动传播）</div><div class="ex">“Because each mark is heritable, a daughter cell inherits its parent's history and appends to it…”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reconstitute">🔊</button><div class="word">reconstitute<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">重建、重组、复原（re- 再 + constitute 构成；名词 reconstitution）（to build or put something back together from its parts；reconstitute a lineage tree 重建一棵谱系树；reconstituted from 1.58 million nuclei 由 158 万个细胞核复原而来；比 reconstruct 更常用于「把分散数据复原为整体」；生物学另有字面义「重新配制（冻干粉）」）</div><div class="ex">“They read the marks in 1.58 million cell nuclei and reconstituted a time-calibrated tree…”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="calibrated">🔊</button><div class="word">calibrated<span class="pos">adj.</span></div><span class="lvl">C2</span><div class="zh">校准过的、带有时间或量度标度的（源自 caliber 口径、量规；动词 calibrate，名词 calibration）（marked or adjusted against a standard so that readings mean something；a time-calibrated tree 带有时间标度的树；calibrate an instrument 校准仪器；本文要点：这棵树不只是「谁来自谁」，而是「谁在什么时间来自谁」，分支长度有时间含义）</div><div class="ex">“…reconstituted a time-calibrated tree of more than 1.28 million cells”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="progeny">🔊</button><div class="word">progeny<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">后代、子代（正式书面语，比 offspring 更书面；pro- 向前 + gen 产生；发音 /ˈprɒdʒəni/，重音在第一音节）（descendants or offspring；the progeny of a single cell 单个细胞的后代；可指细胞也可指个体；学术写作中常用于「某一祖先的所有后代」这一整体，而非某一个后代）</div><div class="ex">“The two cells born of the first division did not contribute equally; their progeny split roughly 57 to 42 per cent.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="disparity">🔊</button><div class="word">disparity<span class="pos">n.</span></div><span class="lvl">C2</span><div class="zh">差距、悬殊（dis- 分离 + par 相等 + -ity；形容词 disparate 迥异的）（a great difference between things that might have been expected to match；a numerical disparity 数量上的差距；disparities between groups 组间差异；注意它暗含「本该相当却不相当」的评价，纯中性的差别更常用 difference；本文用它是因为 57 与 42 本被预期接近 50 与 50）</div><div class="ex">“…as though the body plan were indifferent to an early numerical disparity.”</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="diverge">🔊</button><div class="word">diverge<span class="pos">v.</span></div><span class="lvl">C2</span><div class="zh">偏离、分岔（di- 分开 + verge 转向；名词 divergence，形容词 divergent）（to move away from a shared path；where a trajectory diverges into disease 轨迹在哪里偏转入疾病；divergent views 分歧的观点；本文是空间隐喻：正常发育是一条路，疾病是这条路在某个节点分出去的岔道）</div><div class="ex">“…to show where a healthy trajectory diverges into disease”</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. For X, Y could be done by Z; for W it could not.（两组 for 短语对举）</h3>
+          <div class="zh">全文第一段的骨架，也是英语科技写作最经济的对比方式。三个要点：① 两个 <i>for</i> 短语结构完全对称，都放在句首，形成节拍；② 后半句的 <i>it could not</i> 用 <i>it</i> 替代整个 <i>that ledger could be kept</i>，避免重复，助动词 <i>could</i> 保留而实义部分省略，这是英语<b>动词性省略</b>（verbal ellipsis）的标准做法；③ 分号连接两个独立分句，比用 <i>but</i> 更冷静，也更符合学术语气。雅思写作可写成：<i>For wealthy districts, the scheme could be funded locally; for poorer ones it could not.</i></div>
+          <div class="eg">For transparent embryos that ledger could be kept by eye; for mammals it could not.</div>
+          <div class="practice">✍️ 仿写：对大医院来说这套设备买得起；对小诊所则买不起。<input type="text" placeholder="For large hospitals the equipment could be...; for small clinics..."></div>
+        </div>
+        <div class="item">
+          <h3>2. X replaces A with B.（介词固定 + 过去分词插入语）</h3>
+          <div class="zh">第 2 段首句，一句话完成「旧方法 → 新方法」的切换。① 搭配是 <b>replace A with B</b>（用 B 替换 A），介词 <i>with</i> 不可换成 <i>by</i>——<i>by</i> 只在被动语态里出现（<i>watching was replaced by writing</i>）；② <i>described in 2022</i> 是过去分词短语作<b>后置定语</b>，等于 <i>which was described in 2022</i>，作用是给专有名词补一句出处而不另起一句；③ 用一对动名词 <i>watching / writing</i> 对比，比抽象名词（observation / recording）更有画面感，这是科技新闻常用技巧。</div>
+          <div class="eg">DNA Typewriter, described in 2022, replaces watching with writing.</div>
+          <div class="practice">✍️ 仿写：这套新方案于去年提出，用持续监测取代了事后抽查。<input type="text" placeholder="The new protocol, proposed last year, replaces...with..."></div>
+        </div>
+        <div class="item">
+          <h3>3. Because X, Y — Z.（原因从句 + 破折号带出结论）</h3>
+          <div class="zh">第 2 段末句，一句话里装了「机制 → 结果 → 比喻性总结」三层。① <i>Because</i> 从句放句首时，主句前<b>必须用逗号</b>；② 主句用 and 连接两个并列谓语（<i>inherits… and appends…</i>），第二个谓语的宾语 <i>it</i> 回指 <i>history</i>；③ 破折号后的 <i>the genome becomes its own chronicler</i> 不是补充说明，而是<b>全句的收束判断</b>——破折号在这里起到「由此得出」的作用，语气比 therefore 更有节奏感，也比另起一句更紧凑。注意：学术正式文体中同一段不宜反复使用破折号。</div>
+          <div class="eg">Because each mark is heritable, a daughter cell inherits its parent's history and appends to it — the genome becomes its own chronicler.</div>
+          <div class="practice">✍️ 仿写：因为每一笔交易都会留痕，审计员不必追问当事人——账本自己会说话。<input type="text" placeholder="Because every transaction leaves a trace, auditors need not..."></div>
+        </div>
+        <div class="item">
+          <h3>4. X did not …; … Yet …（先报差异，再用 Yet 取消它的意义）</h3>
+          <div class="zh">第 4 段的核心推进，也是科技新闻报「意外发现」的标准写法。① 第一句用分号连接「否定判断 + 具体数字」，数字放在句末制造悬念；② <i>Yet</i> 是<b>副词</b>（不是连词），因此可以带逗号独立引出下一句，语气比 <i>but</i> 更正式、更书面；③ 转折的落点不是「差异不存在」，而是「差异<b>不重要</b>」——先承认事实再取消其解释力，这是比直接否定更可信的论证方式。托福综合写作描述研究结果时可直接套用。</div>
+          <div class="eg">The two cells born of the first division did not contribute equally; their progeny split roughly 57 to 42 per cent. Yet each supplied almost the same proportion of every cell type…</div>
+          <div class="practice">✍️ 仿写：两组学生的答题速度并不相同，一组平均快了四分钟。然而两组的正确率几乎一致。<input type="text" placeholder="The two groups did not work at the same speed; one finished... Yet their accuracy..."></div>
+        </div>
+        <div class="item">
+          <h3>5. That is what X is for: to do Y.（末句收口：点明某物的正当用途）</h3>
+          <div class="zh">全文最后一句的前半，用来回答一个隐含的质疑：这么大的工程有什么用？① <i>That</i> 回指上文的整个发现，不是指代某个名词；② <i>what a reference map is for</i> 是<b>名词性关系从句</b>——<i>what</i> 同时充当 <i>for</i> 的宾语和从句的引导词，等于 <i>the thing that a reference map is for</i>；注意介词 <i>for</i> 留在句末，口语与新闻体都可接受，最正式的论文写作可改写为 <i>that is the purpose for which a reference map exists</i>；③ 冒号后接不定式表目的，比 <i>in order to</i> 更干净。</div>
+          <div class="eg">That is what a reference map is for: to show where a healthy trajectory diverges into disease.</div>
+          <div class="practice">✍️ 仿写：归根到底，这正是基准测试的用途：显示系统在什么条件下开始偏离预期。<input type="text" placeholder="That, in the end, is what a benchmark is for: to show where..."></div>
+        </div>
+      </div>
+    </section>
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar (5)</h2>
+      <div class="card">
+        <div class="item">
+          <h3>1. 冒号后的并列 wh- 成分作同位列举</h3>
+          <div class="zh">第 1 段：<i>the ledger of what follows: <b>which cell divided, when, and into what</b></i>。冒号后的三项是 <i>what follows</i> 的同位展开，把一件模糊的事拆成三个可回答的问题。语法上要注意：① 三项都是 <b>wh- 成分</b>（which cell / when / into what），形式平行才能并列；② 第二、三项是省略结构，补全为 <i>when it divided</i> 与 <i>into what it divided</i>，省略后更紧凑；③ 冒号前必须是<b>完整句子</b>，不能只接半个分句。同类写法：<i>The question is simple: who benefits, who pays, and who decides.</i></div>
+          <div class="eg">Every mammal begins as a single cell, and developmental biology has long wanted the ledger of what follows: which cell divided, when, and into what.</div>
+        </div>
+        <div class="item">
+          <h3>2. 句首现在分词短语与悬垂分词陷阱</h3>
+          <div class="zh">第 3 段：<i><b>Reporting</b> in Science on 8 October 2026, researchers at the Seattle Hub… injected the system…</i> 现在分词短语作状语时，其<b>逻辑主语必须等于主句主语</b>——此处是 researchers，他们在报告，所以成立。经典错误：<i>Reporting in Science, the experiment attracted wide attention.</i>（experiment 不会 report，属于悬垂分词 dangling participle）。改法有二：把主句主语换成能 report 的名词，或把分词短语改成从句 <i>As reported in Science…</i>。另外注意：<i>Reporting…</i> 表<b>伴随／同时</b>，<i>Having reported…</i> 才表先后。</div>
+          <div class="eg">Reporting in Science on 8 October 2026, researchers at the Seattle Hub for Synthetic Biology injected the system into a fertilised mouse egg…</div>
+        </div>
+        <div class="item">
+          <h3>3. 非限制性定语从句中的 of which（部分与整体）</h3>
+          <div class="zh">第 2 段：<i>a tandem array of partial CRISPR target sites <b>of which only the first is active</b></i>。① <i>of which</i> 引导非限制性定语从句，逗号不可省（此处因结构紧贴而用零逗号，正式文体建议保留）；② 语义表示<b>整体中的一部分</b>，等于 <i>of the sites, only the first is active</i>；同类高频用法：<i>a committee of whom three resigned</i>、<i>two theories, neither of which survives testing</i>；③ 若先行词是人用 <i>of whom</i>，是物用 <i>of which</i>，<b>不能用 of that</b>；④ 这个结构在雅思阅读的科技类文章里极常见，是长句拆解的关键节点。</div>
+          <div class="eg">Its blank medium, DNA Tape, is a tandem array of partial CRISPR target sites of which only the first is active…</div>
+        </div>
+        <div class="item">
+          <h3>4. as though / as if 后的虚拟语气 were</h3>
+          <div class="zh">第 4 段：<i>…<b>as though the body plan were</b> indifferent to an early numerical disparity.</i> ① <i>as though</i> 与 <i>as if</i> 后接<b>与事实相反</b>的假设时，正式英语用<b>虚拟语气 were</b>（不分人称）；口语中 <i>was</i> 也可接受，但学术写作一律写 <i>were</i>；② 此处「身体蓝图对早期数量差距漠不关心」是作者的<b>比喻性推测</b>，并非已证实的事实，所以用虚拟语气；③ 同句型迁移：<i>The results behave as though the mechanism were compensating for the loss.</i> 判断方法：把 as though 换成 in fact 若句子变成明显假命题，就该用 were。</div>
+          <div class="eg">Yet each supplied almost the same proportion of every cell type, as though the body plan were indifferent to an early numerical disparity.</div>
+        </div>
+        <div class="item">
+          <h3>5. what 型名词性关系从句 + 介词悬留（for 收尾）</h3>
+          <div class="zh">第 4 段：<i>That, in the end, is <b>what a reference map is for</b>: to show where…</i> ① <i>what</i> 在此不是疑问词，而是<b>名词性关系代词</b>，等于 <i>the thing that</i>；它同时充当主句表语与从句中介词 for 的宾语，因此<b>不能再加 that</b>（写成 what that… 是错的）；② 介词 <i>for</i> 被留在从句末尾，即所谓<b>介词悬留</b>（preposition stranding）——新闻与口语完全自然，最正式的论文体可改写为 <i>the purpose for which a reference map exists</i>；③ 冒号后的不定式 <i>to show…</i> 是全句的目的补足，逻辑主语是 a reference map。</div>
+          <div class="eg">That is what a reference map is for: to show where a healthy trajectory diverges into disease.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz (6 · IELTS / TOEFL style)</h2>
+      <div class="card" id="quizBox"></div>
+      <div class="card"><div id="score" style="font-weight:700;color:var(--accent);font-size:16px;">作答后可在下方查看每题解析；全部做完可对照本页上方的篇章结构表复盘。</div></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 Deep Dive</h2>
+      <div class="card ext">
+        <h3>一、谱系追踪：一个比基因组计划还老的问题</h3>
+        <p>「一个受精卵怎样变成一个完整的动物」是胚胎学最古老的问题之一。十九世纪末，美国动物学家 Charles Otis Whitman 与 Edwin Conklin 就开始逐次观察早期卵裂，记录每一个分裂球（blastomere）的去向；他们靠的是眼睛与耐心，因此只能做<b>细胞少、胚胎透明</b>的物种。</p>
+        <p>这条路线的最高成就是线虫。John Sulston 与合作者在 1983 年发表线虫的胚胎细胞谱系，把从受精卵到成体的每一次分裂都画了出来；雌雄同体成体的体细胞核共 959 个，每一个都能在图上找到位置。Sulston 因此与 Sydney Brenner、Robert Horvath 共享 2002 年诺贝尔生理学或医学奖。问题在于：线虫的细胞数是<b>固定且很少</b>的，小鼠不是——它不透明、细胞数以百万计、每次分裂的位置也无法预先知道。观察这条路，走到线虫就基本到头了。</p>
+
+        <h3>二、从「看」到「写」：DNA Typewriter 的机制</h3>
+        <p>DNA Typewriter 由 Junhong Choi、Wei Chen、Jay Shendure 等人于 2022 年 7 月 6 日发表在《自然》(Nature 608: 98–107，doi: 10.1038/s41586-022-04922-8)，思路是把基因组当成存储介质：</p>
+        <table>
+          <tr><th>组件</th><th>英文</th><th>作用</th></tr>
+          <tr><td>空白介质</td><td>DNA Tape（DNA 磁带）</td><td>一串首尾相接的部分 CRISPR–Cas9 靶位点，除第一个外都在 5′ 端被截断，因此处于失活状态</td></tr>
+          <tr><td>书写工具</td><td>prime editor（先导编辑器）</td><td>执行插入式编辑的酶</td></tr>
+          <tr><td>内容</td><td>pegRNA（先导编辑向导 RNA）</td><td>决定写进什么；编辑同时把「书写头」沿磁带前移一格</td></tr>
+        </table>
+        <p>关键在于<b>顺序</b>：只有当第一个位点有活性时，编辑才会发生；编辑完成后，下一格被激活，书写头随之右移一格。于是每一笔都叠在前一笔之后，记录天然带有时间顺序——这正是早期分子记录器做不到的事。</p>
+        <p>2022 年那篇概念验证的规模要小得多：它与单细胞转录组测序结合，重建了一个由 <b>3,257 个细胞</b>组成的单系谱系，并证明在多拷贝磁带上，顺序编辑的泊松式累积至少能在 20 代、25 天的体外克隆扩增中保持稳定。2024 年，Hanna Liao、Junhong Choi 与 Jay Shendure 又在《Nature Protocols》发表了完整的实验方案，把这项技术交到别的实验室手里。从 3,257 到 1,280,000，中间隔了四年。</p>
+
+        <h3>三、本次研究的数字</h3>
+        <table>
+          <tr><th>项目</th><th>数值</th><th>含义</th></tr>
+          <tr><td>发表时间与期刊</td><td>2026 年 10 月 8 日，《科学》</td><td>doi: 10.1126/science.ael0508</td></tr>
+          <tr><td>研究团队</td><td>Seattle Hub for Synthetic Biology</td><td>由艾伦研究所（Allen Institute）、华盛顿大学医学院（UW Medicine）与 Biohub 组成</td></tr>
+          <tr><td>发育时长</td><td>13.5 天</td><td>约为小鼠妊娠期的三分之二</td></tr>
+          <tr><td>测定的细胞核</td><td>158 万个</td><td>读取其中累积的遗传标记</td></tr>
+          <tr><td>重建的细胞数</td><td>超过 128 万个</td><td>约为该阶段胚胎细胞总数的 10%</td></tr>
+          <tr><td>规模地位</td><td>迄今最大的哺乳动物谱系树</td><td>此前哺乳动物的数据集比它小几个数量级</td></tr>
+        </table>
+        <div class="box">
+          <b>一个方法上的意外收获</b><br>
+          共同第一作者 Haedong Kim 提到，他们对「第一次卵裂时标记就发生得如此充分」感到意外。受精卵一分为二之后，两个子细胞各自带着不同的标记继续分裂，相当于<b>在同一个胚胎里天然获得了两份独立重复</b>——于是每一个结论都可以自己核对一遍，这在发育生物学里是很少见的奢侈。
+        </div>
+
+        <h3>四、57 比 42：为什么这个数字有意思</h3>
+        <p>直觉上，受精卵第一次分裂产生的两个细胞，对胚胎的贡献应该大致相当。结果表明并不相当：两支后代约占 57% 与 42%（两组数字相加不足 100%，原文即如此给出，读者不必据此反推）。</p>
+        <p>真正有意思的是后半句：<b>两支产生的细胞类型比例却基本一致</b>。也就是说，早期多分裂或少分裂几个细胞，并不会让身体的总规划跑偏——发育过程似乎对这种早期的数量波动不敏感，各谱系按比例补足即可。</p>
+        <p>这类结论正是「参照图谱」的价值所在。先天缺陷、发育障碍、肿瘤扩散，本质上都是正常路径在某处偏了；没有一张正常路径的图，就无从说清「偏在哪里、从哪一步开始偏」。研究者提出的应用方向包括：追踪癌细胞的来源与扩散路径、评估干细胞治疗的效果、观察衰老对不同器官细胞的影响。</p>
+
+        <h3>五、限制与边界（读科技新闻时务必一起读）</h3>
+        <ul>
+          <li><b>覆盖率只有约 10%。</b>这棵树包含 128 万个细胞，是迄今最大，但仍只是胚胎细胞总数的十分之一；剩下九成没有进入这张图。</li>
+          <li><b>样本量是 1。</b>同一胚胎内的两份重复提高了内部一致性，但不等于在多个胚胎之间重复过；个体层面的普遍性还需后续验证。</li>
+          <li><b>小鼠不是人。</b>小鼠妊娠期约 20 天，人与之在发育时程、细胞总量与许多细节上差别很大；「为理解人类疾病提供参照」是方向与可能性，不是已经实现的结果。</li>
+          <li><b>参照图谱不等于诊断工具。</b>它能帮助定位「偏离发生在哪里」，本身并不预测某一个体是否会发病。</li>
+        </ul>
+
+        <h3>六、中文语境的一个对照：「谱系」这个词走了多远</h3>
+        <p>中文里「谱」本指按类别编排的表册——家谱、年谱、乐谱；「系」是连属、统绪。传统的<b>族谱</b>记录的是一个祖先之下逐代分出的各支，读它时能顺着一条线回溯到共同起点。现代生物学借用的正是这套隐喻：<b>细胞谱系树</b>同样是一个起点、逐层分支、每个后代都能沿分支回溯到祖先。</p>
+        <p>但两者有一个关键差别，恰好能帮助理解本课的技术：族谱是<b>回溯性</b>的记录，是后代回头追认祖先；而细胞谱系树要真正成立，必须在分裂发生的当时就留下可继承的印记，是<b>前瞻性</b>的写入。这也解释了为什么光靠看不够——看是在事后追认，写才是当场记录。当然，这只是帮助理解的比方，两者的对象、方法与用途完全不同，不宜作更多引申。</p>
+        <p>另外值得记一笔：同期《科学》上也有中国研究团队的成果（例如中国科学院上海微系统与信息技术研究所在晶圆级低对称性石墨烯莫尔超晶格方向的进展，2026 年 10 月 8 日发表）。前沿科学的推进是国际性的，读单篇报道时不必把它想象成某一方的独角戏。</p>
+
+        <div class="box">
+          <b>📌 事实与立场</b><br>
+          ① 本页只介绍一项已发表的<b>研究方法与结果</b>，不涉及任何医疗建议、药物、诊疗方案或商业产品，也不对任何机构作评价。<br>
+          ② 文中数字均取自公开发表的论文与发布方新闻稿：2022 年《自然》论文（Nature 608: 98–107）、2024 年《Nature Protocols》方案、2026 年 10 月 8 日《科学》论文（doi: 10.1126/science.ael0508）及艾伦研究所发布的新闻稿。转述力求与原文一致，正式引用请以原刊页面为准。<br>
+          ③ 关于 57% 与 42%：原文即如此给出，二者相加不足 100%，原文未就此作进一步说明，本页不作推算或解释。<br>
+          ④ 第五节的「限制与边界」是本课的一部分，不是附加免责：读任何科学报道时，覆盖率、样本量、物种差异与结论层级都应同时读出。<br>
+          ⑤ 第六节的「族谱／谱系树」对照仅为帮助中文读者理解，两者性质不同，<b>不作等价判断</b>。
+        </div>
+
+        <h3>七、术语对照表</h3>
+        <table>
+          <tr><th>英文</th><th>中文</th><th>一句话解释</th></tr>
+          <tr><td>cell lineage / lineage tree</td><td>细胞谱系／谱系树</td><td>记录哪个细胞来自哪个细胞的层级关系</td></tr>
+          <tr><td>lineage tracing</td><td>谱系追踪</td><td>以标记手段回溯细胞来源的技术总称</td></tr>
+          <tr><td>molecular recording</td><td>分子记录</td><td>把事件以永久性改变写进 DNA，事后读出</td></tr>
+          <tr><td>DNA Tape</td><td>DNA 磁带</td><td>由串联靶位点组成的空白记录介质</td></tr>
+          <tr><td>prime editing</td><td>先导编辑</td><td>无需双链断裂即可插入小段序列的编辑方式</td></tr>
+          <tr><td>insertional edit</td><td>插入式编辑</td><td>写进 DNA 的那一「笔」，同时记录内容与顺序</td></tr>
+          <tr><td>time-calibrated</td><td>带时间标度的</td><td>分支长度具有时间含义，而非仅表示层级</td></tr>
+          <tr><td>blastomere</td><td>分裂球</td><td>早期卵裂产生的细胞</td></tr>
+          <tr><td>gestation</td><td>妊娠（期）</td><td>从受精到出生的整个时期</td></tr>
+          <tr><td>reference map / model</td><td>参照图谱／参照模型</td><td>正常过程的基线，用来定位异常偏离何处</td></tr>
+        </table>
+
+        <h3>八、延伸阅读</h3>
+        <ul>
+          <li>John Sulston 等，The embryonic cell lineage of the nematode Caenorhabditis elegans, <i>Developmental Biology</i> 100(1), 1983——观察路线的巅峰之作。</li>
+          <li>Junhong Choi 等，A time-resolved, multi-symbol molecular recorder via sequential genome editing, <i>Nature</i> 608, 2022: 98–107——DNA Typewriter 的原始论文，开放获取。</li>
+          <li>Hanna Liao、Junhong Choi、Jay Shendure，Molecular recording using DNA Typewriter, <i>Nature Protocols</i>, 2024——可操作的实验方案。</li>
+          <li>Allen Institute 新闻稿（2026 年 10 月 8 日）与 NextCell 交互式浏览器——可自行查看这棵细胞家谱树。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <p><b>主题：</b>前沿科技 Tech Frontier · 用 DNA 记录细胞分裂：DNA Typewriter 的机制，以及它产出的迄今最大的哺乳动物细胞谱系树。</p>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🎯 学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div>读懂英语科技报道的一种高阶推进结构：<b>立问题（老办法的极限）→ 给机制 → 报数据 → 讲意义并划边界</b>，并能独立画出篇章结构表。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div>掌握 10 个 C1–C2 学术词汇，其中 <i>cumulative</i>、<i>heritable</i>、<i>inscribe</i>、<i>calibrated</i> 可直接迁移到雅思与托福的写作；<i>lineage</i>、<i>progeny</i>、<i>diverge</i> 是生命科学论文的高频词。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div>掌握 5 个高级句型，尤其是用于对比的 <i>For X, Y could be done; for Z it could not.</i>、用于报意外发现的 <i>X did not…; … Yet…</i>，以及用于收口的 <i>That is what X is for: to do Y.</i></div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div>能识别并复现 5 个高级语法结构：冒号后的并列 wh- 同位列举、句首现在分词与悬垂分词陷阱、of which 的部分—整体用法、as though 后的虚拟语气 were、what 型名词性关系从句与介词悬留。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div>建立一条阅读习惯：看到任何「迄今最大／首次」的科学报道，立刻问四个问题——覆盖率多少、样本量多少、用的什么物种、结论属于哪一层级。</div></div>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🧪 考试技巧 Exam Skills</h3>
+        <ul>
+          <li><b>主旨题（Gist）：</b>本文主旨是<b>一项方法及其产物</b>，不是某个疾病、某位学者或某个数字。凡是选项以单一数字或单一人名作核心的，多半把细节当成了主线。写作中同理：论文的主题是问题，不是数据。</li>
+          <li><b>目的题（Rhetorical purpose）：</b>第 1 段提线虫的 959 个细胞，不是为了讲线虫，而是为了<b>说明直接观察这条路能走到哪里、又在哪里走不下去</b>。凡是问「作者为什么提到 X」的题，答案几乎总是 X 在论证中的功能，而不是 X 本身。</li>
+          <li><b>细节题（Detail）：</b>机制题的干扰项常把<b>顺序</b>弄丢——例如说「标记被随机插入、事后排序」。原文的关键正是「写完一格、书写头前移一格」，顺序是当场生成的，不是事后算出来的。</li>
+          <li><b>词汇题（Vocabulary in context）：</b><i>heritable</i> 在本文取「可传给子代细胞」，不是法律上的「可继承」；<i>disparity</i> 暗含「本该接近却不接近」。做法是把四个选项逐一代回原句，同时检查词义与搭配。</li>
+          <li><b>NOT / EXCEPT 题：</b>把三个选项逐一回原文定位。干扰项常常是<b>原文说过、但被换了程度</b>的句子——例如把「13.5 天，约为妊娠期的三分之二」改写成「一直到出生」。本题第 6 题正是这一型。</li>
+        </ul>
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">📌 使用建议 How to Use</h3>
+        <ul>
+          <li>第一遍：不看文本，连听四段音频，抓住每段的功能（立问题 / 给机制 / 报数据 / 讲意义与边界）。</li>
+          <li>第二遍：逐段精读，把高亮词的中文释义先遮住，靠上下文猜，再点开核对。</li>
+          <li>第三遍：到「句型练习」做仿写，写完后与原文句子逐词比对结构，重点是能否复现 <i>replace A with B</i> 的介词与 as though 后的 were。</li>
+          <li>第四遍：读一遍第六节的「限制与边界」，然后回到新闻标题想一想——如果只让你写一句话概括这项研究，你会怎么把边界一起写进去？</li>
+          <li>最后：完成 6 道测验，把错题对应的段落回读一遍。</li>
+        </ul>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+      <footer>Pola News · Advanced English · 每日一课，日积月累 🦘</footer>
+    </section>
+  </main>
+</div>
+<div id="tip"></div>
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Every mammal begins as a single cell, and developmental biology has long wanted the ledger of what follows: which cell divided, when, and into what. For transparent embryos that ledger could be kept by eye; for mammals it could not. John Sulston and his colleagues traced the entire lineage of a nematode, all 959 somatic cells of the adult. A mammalian embryo permits no such thing: it is opaque, its cells run to the millions.", "DNA Typewriter, described in 2022, replaces watching with writing. Its blank medium, DNA Tape, is a tandem array of partial CRISPR target sites of which only the first is active; an insertional edit inscribes the identity of the guide that made it and shifts the writing head one unit along. The record is thus cumulative and ordered. Because each mark is heritable, a daughter cell inherits its parent's history and appends to it — the genome becomes its own chronicler.", "Reporting in Science on 8 October 2026, researchers at the Seattle Hub for Synthetic Biology injected the system into a fertilised mouse egg and let the embryo develop for 13.5 days, roughly two-thirds of gestation. They read the marks in 1.58 million cell nuclei and reconstituted a time-calibrated tree of more than 1.28 million cells: about a tenth of the embryo's total, and by far the largest lineage tree yet built for a mammal. Marking at the first division even yielded two independent copies of the same experiment.", "The tree unsettles an old expectation. The two cells born of the first division did not contribute equally; their progeny split roughly 57 to 42 per cent. Yet each supplied almost the same proportion of every cell type, as though the body plan were indifferent to an early numerical disparity. That is what a reference map is for: to show where a healthy trajectory diverges into disease. The team has published the tree, with a browser called NextCell, for anyone to read."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["A history of embryology from the nematode to the mouse","A method of recording cell divisions in the genome and the mammalian lineage tree it produced","Why birth defects are harder to study than cancer","The difficulties of keeping mouse embryos alive outside the body"],ans:1,
+   fb:"正确。四段分明：段 1 立出「细胞账本」这个老问题，并说明直接观察只适用于透明且细胞数少的物种；段 2 给出办法，讲 DNA Tape 如何当场保存顺序；段 3 报数据——13.5 天、158 万个细胞核、超过 128 万个细胞的谱系树；段 4 讲这条发现的意义与用途。B 覆盖这条主线。A 把一段里的背景当成了全文；C 无据，本文从不比较两类疾病；D 只是实验中的一个技术环节。"},
+  {q:"2. According to paragraph 2, how does DNA Typewriter preserve the order of events? 依第二段，DNA Typewriter 如何保存事件的先后顺序？",opts:["The marks are time-stamped by a molecular clock running inside each cell","Each daughter cell receives a fresh, empty tape of its own","Marks are sorted afterwards by comparing the nuclei of neighbouring cells","An edit records the guide that made it and then shifts the writing head one unit along"],ans:3,
+   fb:"正确。原文：an insertional edit inscribes the identity of the guide that made it and shifts the writing head one unit along。D 几乎是原文的转述。A 无据，文中没有分子钟；B 与原文相反——子细胞继承的是母细胞已经写好的记录，不是空白磁带；C 把「事后排序」安给了这套系统，而顺序恰恰是当场写出来的，这正是它相对于早期方法的关键优势。"},
+  {q:"3. Why does the author mention the nematode traced by John Sulston and his colleagues? 作者为什么提到 Sulston 等人追踪的线虫？",opts:["To show that mammalian embryos were long believed impossible to study","To establish that direct observation worked only where the embryo was transparent and small","To argue that nematodes are superior to mice as model organisms","To explain why CRISPR editing was first tested in nematodes"],ans:1,
+   fb:"正确。这是目的题。作者提线虫不是为了讲线虫，而是为了说明「直接观察」这条路的适用边界：线虫透明、细胞数固定且少，所以看得完；紧接着一句 For transparent embryos that ledger could be kept by eye; for mammals it could not，可见 B 正是它在论证中的功能。A 过头了，原文从未说哺乳动物被认为无法研究；C 无据，本文不作模式生物的高下比较；D 无据。"},
+  {q:"4. In paragraph 2, the word heritable is closest in meaning to: 第二段中的 heritable 最接近下列哪一项？",opts:["Capable of being passed from a parent cell to its descendants","Capable of being edited after the fact","Legally transmissible to an heir","Easily reversed by a later mutation"],ans:0,
+   fb:"正确。原句 Because each mark is heritable, a daughter cell inherits its parent's history——标记能被传给子代细胞，故 A 正确。B（事后可编辑）、C（法律上可继承）、D（易被后续突变逆转）都是别的义项或无关词义。词汇题的诀窍：把四个选项逐一代回原句，看哪个既合词义又合搭配——此处主语是 mark，只有「可传给后代」能与之搭配。"},
+  {q:"5. What do the figures 57 and 42 in paragraph 4 suggest? 第四段中的 57 与 42 这两个数字说明了什么？",opts:["The first two cells have entirely fixed and different fates from the outset","One of the two daughter cells must have been damaged at the first division","An early numerical imbalance need not disturb the final proportions of cell types","The body plan is decided within the first few divisions and cannot be adjusted"],ans:2,
+   fb:"正确。原文说两支后代的数量约为 57 比 42，却各自提供了几乎相同的细胞类型比例，作者用 as though the body plan were indifferent to an early numerical disparity 来概括。C 正是这个意思。A 过头——若命运从一开始就完全固定，比例就应当是分配好的，与原文强调的「不敏感」相反；B 无据，原文没说任何一支受损；D 无据，本文恰恰在说身体规划不因早期数量波动而改变。"},
+  {q:"6. Which of the following is NOT stated in the passage? 下列哪一项是文中没有说的？",opts:["The tree accounts for roughly a tenth of the embryo's cells","The team read genetic marks in 1.58 million cell nuclei","The embryo was followed all the way to birth","The tree and a browser called NextCell were made publicly available"],ans:2,
+   fb:"正确。第 3 段原句是 let the embryo develop for 13.5 days, roughly two-thirds of gestation——三分之二，不是到出生。C 把「三分之二」换成了「全程」，这正是 NOT / EXCEPT 题最常用的手法：说法似曾相识，程度却被换掉。A 见第 3 段（about a tenth of the embryo's total）；B 见第 3 段（1.58 million cell nuclei）；D 见第 4 段末（published the tree, with a browser called NextCell）。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -9550,5 +9550,67 @@ const EPISODES = [
         "ex": "“…scholars who denounced fidelity were covertly practising it…”"
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-14",
+    "title": "The Tree That Remembered Every Cell",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-14-the-tree-that-remembered-every-cell",
+    "url": "lessons/c1/2026-10-14-the-tree-that-remembered-every-cell.html",
+    "vocab": [
+      {
+        "word": "lineage",
+        "zh": "谱系、世系；细胞谱系指「哪个细胞来自哪个细胞」的完整关系（line 线 + -age 集合名词后缀）（descent traced from a common ancestor；a cell lineage 细胞谱系；the entire lineage of a nematode 线虫的完整谱系；形容词 linear 线性的与之同根；学术写作中 lineage tree 谱系树、lineage tracing 谱系追踪、lineage commitment 谱系定向都是固定搭配）",
+        "ex": "“John Sulston and his colleagues traced the entire lineage of a nematode, all 959 somatic cells of the adult.”"
+      },
+      {
+        "word": "opaque",
+        "zh": "不透明的；引申为「难以从外部观察、难以看穿的」（反义词 transparent）（not letting light through, and by extension not open to observation；an opaque embryo 不透明的胚胎；an opaque decision-making process 不透明的决策过程；本文用它对比线虫胚胎：线虫透明，可用显微镜一路看到成体；小鼠胚胎不透明，只能换办法）",
+        "ex": "“A mammalian embryo permits no such thing: it is opaque, its cells run to the millions…”"
+      },
+      {
+        "word": "inscribe",
+        "zh": "写下、铭刻；引申为「把信息写进某种载体」（in- 进入 + scribe 写；同根词 describe、prescribe、transcribe）（to write or mark something onto a surface, or to record it in a durable medium；inscribe the identity of a guide 把某个向导的身份写进去；名词 inscription 铭文；学术写作中常用喻义：inscribed in the genome 写进基因组里的）",
+        "ex": "“…an insertional edit inscribes the identity of the guide that made it and shifts the writing head one unit along.”"
+      },
+      {
+        "word": "cumulative",
+        "zh": "累积的、逐步累加的（动词 accumulate；副词 cumulatively）（increasing by successive additions；the cumulative effect of small edits 小编辑的累积效应；a cumulative record 逐条累积的记录；与 accumulative 近义，但 cumulative 更常用于正式学术语境；本文用它强调「每写一笔都叠在前一笔之上」，这正是顺序信息得以保存的原因）",
+        "ex": "“The record is thus cumulative and ordered.”"
+      },
+      {
+        "word": "heritable",
+        "zh": "可遗传的、能传给后代的（herit 继承 + -able；名词 heritability 遗传力）（able to be passed from a parent to its offspring or descendant cells；a heritable mark 可遗传的标记；heritable variation 可遗传变异；本文关键在于：标记一旦写进 DNA，子细胞复制 DNA 时就会一并继承，于是「历史」随细胞分裂自动传播）",
+        "ex": "“Because each mark is heritable, a daughter cell inherits its parent's history and appends to it…”"
+      },
+      {
+        "word": "reconstitute",
+        "zh": "重建、重组、复原（re- 再 + constitute 构成；名词 reconstitution）（to build or put something back together from its parts；reconstitute a lineage tree 重建一棵谱系树；reconstituted from 1.58 million nuclei 由 158 万个细胞核复原而来；比 reconstruct 更常用于「把分散数据复原为整体」；生物学另有字面义「重新配制（冻干粉）」）",
+        "ex": "“They read the marks in 1.58 million cell nuclei and reconstituted a time-calibrated tree…”"
+      },
+      {
+        "word": "calibrated",
+        "zh": "校准过的、带有时间或量度标度的（源自 caliber 口径、量规；动词 calibrate，名词 calibration）（marked or adjusted against a standard so that readings mean something；a time-calibrated tree 带有时间标度的树；calibrate an instrument 校准仪器；本文要点：这棵树不只是「谁来自谁」，而是「谁在什么时间来自谁」，分支长度有时间含义）",
+        "ex": "“…reconstituted a time-calibrated tree of more than 1.28 million cells”"
+      },
+      {
+        "word": "progeny",
+        "zh": "后代、子代（正式书面语，比 offspring 更书面；pro- 向前 + gen 产生；发音 /ˈprɒdʒəni/，重音在第一音节）（descendants or offspring；the progeny of a single cell 单个细胞的后代；可指细胞也可指个体；学术写作中常用于「某一祖先的所有后代」这一整体，而非某一个后代）",
+        "ex": "“The two cells born of the first division did not contribute equally; their progeny split roughly 57 to 42 per cent.”"
+      },
+      {
+        "word": "disparity",
+        "zh": "差距、悬殊（dis- 分离 + par 相等 + -ity；形容词 disparate 迥异的）（a great difference between things that might have been expected to match；a numerical disparity 数量上的差距；disparities between groups 组间差异；注意它暗含「本该相当却不相当」的评价，纯中性的差别更常用 difference；本文用它是因为 57 与 42 本被预期接近 50 与 50）",
+        "ex": "“…as though the body plan were indifferent to an early numerical disparity.”"
+      },
+      {
+        "word": "diverge",
+        "zh": "偏离、分岔（di- 分开 + verge 转向；名词 divergence，形容词 divergent）（to move away from a shared path；where a trajectory diverges into disease 轨迹在哪里偏转入疾病；divergent views 分歧的观点；本文是空间隐喻：正常发育是一条路，疾病是这条路在某个节点分出去的岔道）",
+        "ex": "“…to show where a healthy trajectory diverges into disease”"
+      }
+    ]
   }
 ];
