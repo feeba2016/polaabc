@@ -7558,6 +7558,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-15",
+    "title": "The Desert That Was Not Empty",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-15-the-desert-that-was-not-empty",
+    "url": "lessons/b2/2026-10-15-the-desert-that-was-not-empty.html",
+    "vocab": [
+      {
+        "word": "coin",
+        "zh": "造（词）；铸造（coin a phrase／a term 造出一个说法；The word was coined in the 1990s 这个词是 1990 年代造出来的。它只用于“新造”，不用于一般的“使用”。与 invent 的区别：coin 几乎只搭配 word／phrase／term）",
+        "ex": "\"In the early 1990s a resident of a public housing scheme ... is said to have coined a phrase for her own neighbourhood.\""
+      },
+      {
+        "word": "intervention",
+        "zh": "干预（措施）；介入（读作 /ˌɪntəˈvenʃn/，重音在第三音节。a policy intervention 一项政策干预；surgical intervention 手术干预。社会科学里它指“人为施加的、意在改变结果的措施”，是中性名词，本身不含褒贬。动词 intervene）",
+        "ex": "\"The intervention assumed that distance was the binding constraint.\""
+      },
+      {
+        "word": "disparity",
+        "zh": "差距；悬殊（正式，读作 /dɪˈspærəti/。a disparity between A and B A 与 B 之间的差距；income disparity 收入差距。它比 difference 更重，通常指不平等意义上的差距，因此常出现在社会议题里）",
+        "ex": "\"... one new store would narrow the disparity in diet quality between districts.\""
+      },
+      {
+        "word": "empirical",
+        "zh": "实证的；以观察或实验为依据的（正式，读作 /ɪmˈpɪrɪkəl/。empirical evidence 实证证据；the empirical record 已有的实证记录。反义是 theoretical 或 a priori 先验的。本课里它与“想当然的推理”相对）",
+        "ex": "\"The empirical record has been stubborn.\""
+      },
+      {
+        "word": "quasi-experimental",
+        "zh": "准实验的（研究方法术语。前缀 quasi- 意为“类似的、准的”。quasi-experimental study 指没有随机分组、但设置了对照组的前后对比研究，证据强度介于观察性研究与随机对照试验之间）",
+        "ex": "\"Four quasi-experimental studies tracked neighbourhoods before and after a new store opened.\""
+      },
+      {
+        "word": "perception",
+        "zh": "感知；看法（读作 /pəˈsepʃn/。the perception of improved access 对“买菜更方便了”的感受；perceived access 主观感受到的可达性。学术写作里常用 perception 与 measured outcome 对举——人们说自己觉得好了，但指标没变）",
+        "ex": "\"The perception of better access was real. The shopping was not.\""
+      },
+      {
+        "word": "attribute",
+        "zh": "把……归因于（读作 /əˈtrɪbjuːt/，重音在第二音节。attribute A to B 把 A 归因于 B；名词 attribution。另一义项是“认为是……所作”，如 The painting is attributed to Vermeer 这幅画被认为是维米尔所作）",
+        "ex": "\"Researchers attribute the gap less to distance than to price, habit and the route home from work.\""
+      },
+      {
+        "word": "metaphor",
+        "zh": "隐喻；比喻说法（读作 /ˈmetəfə/，重音在第一音节。a culinary metaphor 一个饮食隐喻；mix one’s metaphors 比喻前后不一致。学术写作里这个词常带一点警惕意味：它是理解工具，却也可能框住问题）",
+        "ex": "\"A desert, it turns out, was the wrong metaphor.\""
+      },
+      {
+        "word": "prevalent",
+        "zh": "普遍的；流行的（读作 /ˈprevələnt/，重音在第一音节。be prevalent among／in 在……中普遍存在；名词 prevalence 普遍程度／患病率。注意介词用 among 或 in，不用 between）",
+        "ex": "\"... an abundance of cheap, energy-dense food, far more prevalent and far cheaper than the fresh alternative.\""
+      },
+      {
+        "word": "inundate",
+        "zh": "淹没；使应接不暇（正式，读作 /ˈɪnʌndeɪt/，重音在第一音节。本义是“被水淹没”，引申为“数量过多而压倒”。be inundated with requests 被请求淹没。本课用的是 Rose 等人论文里的原义）",
+        "ex": "\"... the food swamp, where healthy options are inundated by unhealthy ones.\""
+      },
+      {
+        "word": "affordability",
+        "zh": "可负担性；支付得起（由 affordable + -ity 构成。affordability of housing 住房可负担性；concerns about affordability 对买不起的担忧。它与 availability“有没有”是两回事：东西在货架上，和买得起，是两件事）",
+        "ex": "\"... affordability, time, skill and habit decide a meal as much as any map.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

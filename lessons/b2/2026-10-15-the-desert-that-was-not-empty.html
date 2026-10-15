@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Desert That Was Not Empty</title>
+<style>
+:root{
+  --accent:#be123c;
+  --accent2:#5b21b6;
+  --bg:#faf8f5;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#e6ded1;
+  --soft:#f6f1e9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(190,18,60,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(190,18,60,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(190,18,60,.5);}70%{box-shadow:0 0 0 12px rgba(190,18,60,0);}100%{box-shadow:0 0 0 0 rgba(190,18,60,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(190,18,60,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Social Issues</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Desert That Was Not Empty</h1>
+      <p class="subtitle">「食物沙漠」这个词，是 1990 年代苏格兰一位公共住房居民随口说出来的。三十年后，它成了一张地图、一笔五亿美元的预算，和一叠让人意外的实验结果｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Word Somebody Made Up 一个被人随口造出来的词</div>
+            <p>In the early 1990s a resident of a public housing scheme in the west of Scotland is said to have <span class="kw" data-def="造（词）；铸造（动词。coin a phrase／a term 造出一个说法；The word was coined in the 1990s 这个词是 1990 年代造出来的。它只用于『新造』，不用于一般的『使用』。注意与动词 invent 的区别：coin 几乎只搭配 word／phrase／term）">coined</span> a phrase for her neighbourhood: a food desert. The complaint was concrete: shops had closed, buses were infrequent, and fresh food meant a journey. By 1995 it had reached a British government report; within a decade it was a technical term with a map. In the United States the Department of Agriculture drew the boundaries officially: a census tract counted as a desert where a fifth of households lived below the poverty line and a third lived more than a mile from a supermarket, or ten miles in the countryside. <span class="kw" data-def="What 引导的是名词性关系从句，整个从句作主句的主语，等于 The thing that。判断方法：把 What ... 整块换成 the thing that，句子依然成立——What had begun as a complaint = The thing that had begun as a complaint">What</span> had begun as one resident's complaint had become a unit of measurement.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Logic Nobody Doubted 一个没人怀疑过的推理</div>
+            <p>The reasoning seemed unanswerable. If people cannot reach healthy food, they will not eat it; build the shop, and the diet will follow. <span class="kw" data-def="分词完成式作状语：Having + 过去分词，表示该动作发生在主句动作之前，且两个动作主语一致（此处都是 governments）。还原成从句即 After governments had accepted ...。若两个动作几乎同时或先后不明显，用一般式 doing即可">Having</span> accepted that chain of inference, governments spent accordingly: America's Healthy Food Financing Initiative, running since 2011, has directed more than half a billion dollars towards new supermarkets in underserved neighbourhoods. The <span class="kw" data-def="干预（措施）；介入（名词，读作 /ˌɪntəˈvenʃn/，重音在第三音节。a policy intervention 一项政策干预；surgical intervention 手术干预。在社会科学里它指『人为施加的、意在改变结果的措施』，是中性名词，本身不含褒贬）">intervention</span> assumed that distance was the binding constraint — that the obstacle stood between the doorstep and the shop, and nowhere else. <span class="kw" data-def="Were 提到主语之前＝省略 if 的虚拟条件句，此处与现在／将来的事实相反：Were that true = If that were true。主句用 would + 动词原形。注意不可用 was，正式文体一律用 were">Were</span> that true, the remedy would be simple, and one new store would narrow the <span class="kw" data-def="差距；悬殊（名词，正式，读作 /dɪˈspærəti/。a disparity between A and B A 与 B 之间的差距；income disparity 收入差距。它比 difference 更重，通常指不平等意义上的差距，因此常出现在社会议题里）">disparity</span> in diet quality between districts.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Four Tests That Said No 四项说“不”的检验</div>
+            <p>The <span class="kw" data-def="实证的；以观察或实验为依据的（形容词，正式，读作 /ɪmˈpɪrɪkəl/。empirical evidence 实证证据；the empirical record 已有的实证记录。反义是 theoretical 或 a priori 先验的。本课里它与『想当然的推理』相对）">empirical</span> record has been stubborn. Four <span class="kw" data-def="准实验的（形容词，研究方法术语。quasi- 是前缀，意为『类似的、准的』。quasi-experimental study 指没有随机分组、但设置了对照组的前后对比研究，证据强度介于观察性研究与随机对照试验之间）">quasi-experimental</span> studies tracked neighbourhoods before and after a new store opened, comparing them with districts that received none. In Philadelphia just over half of residents shopped there and roughly a quarter made it their main source of food; fruit and vegetable intake did not move, <span class="kw" data-def="nor 引起的否定倒装：nor + 助动词／情态动词／be + 主语，意为『……也一样不』。nor did body mass index = body mass index did not move either。注意 nor 后面必须倒装，且前面通常是否定句">nor</span> did body mass index. In New York only 13 per cent of participants reported shopping there. Pittsburgh recorded a fall in added sugars, yet among the two-thirds who shopped there regularly there was no measurable gain over neighbours who never entered it. The <span class="kw" data-def="感知；看法（名词，读作 /pəˈsepʃn/。the perception of improved access 对『买菜更方便了』的感受；perceived access 主观感受到的可达性。学术写作里常用 perception 与 measured outcome 对举——人们说自己觉得好了，但指标没变）">perception</span> of better access was real. The shopping was not. Researchers <span class="kw" data-def="把……归因于（动词，读作 /əˈtrɪbjuːt/，重音在第二音节。attribute A to B 把 A 归因于 B。名词是 attribution。注意它还有另一个义项『认为是……所作』，如 The painting is attributed to Vermeer）">attribute</span> the gap less to distance than to price, habit and the route home from work.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · A Swamp, Not a Desert 是沼泽，不是沙漠</div>
+            <p>A desert, it turns out, was the wrong <span class="kw" data-def="隐喻；比喻说法（名词，读作 /ˈmetəfə/，重音在第一音节。a culinary metaphor 一个饮食隐喻；mix one's metaphors 比喻前后不一致。学术写作里 metaphor 常带有一点警惕意味：它是理解工具，却也可能框住问题——本课正是讲一个隐喻框错了方向）">metaphor</span>. One study found supermarkets stocking half to three-quarters more unhealthy snacks than fruit and vegetables; what surrounds a low-income household is less often an absence than an abundance of cheap, energy-dense food, far more <span class="kw" data-def="普遍的；流行的（形容词，读作 /ˈprevələnt/，重音在第一音节。be prevalent among／in 在……中普遍存在；名词 prevalence 患病率／普遍程度。注意介词用 among 或 in，不用 between）">prevalent</span> and cheaper. In 2009 Donald Rose and his colleagues proposed a different image for New Orleans — the food swamp, where healthy options are <span class="kw" data-def="淹没；使应接不暇（动词，正式，读作 /ˈɪnʌndeɪt/，重音在第一音节。本义是『被水淹没』，引申为『数量过多而压倒』。be inundated with requests 被请求淹没。本课用的是 Rose 等人论文里的原义：健康选项被不健康选项淹没）">inundated</span> by unhealthy ones. Others added the food mirage: a shop close enough to see and too expensive to use, so that <span class="kw" data-def="邻近；接近（名词，正式，读作 /prɒkˈsɪməti/，重音在第二音节。in close proximity to 紧邻……；proximity to a shop 离商店近。形容词是 proximate。注意它不等于 access：近不等于用得上）">proximity</span> is not the same as access. None of this proves that distance is irrelevant; <span class="kw" data-def="可负担性；支付得起（名词，由 affordable + -ity 构成。affordability of housing 住房可负担性；concerns about affordability 对买不起的担忧。它与 availability『有没有』是两回事：东西在货架上和买得起是两件事）">affordability</span>, time, skill and habit decide a meal as much as any map. <span class="kw" data-def="独立主格：名词 + 过去分词，自带逻辑主语（the shelves／the trolleys），在句中作伴随状语。它不是一个完整句子——没有谓语动词。可改写为 While the shelves were stacked ..., the trolleys were still filled ...">The shelves</span> stacked with fresh produce, the trolleys still filled with snacks.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="coin">🔊</button><div class="word">coin<span class="pos">v.</span></div><div class="zh">造（词）；铸造（coin a phrase／a term 造出一个说法；The word was coined in the 1990s 这个词是 1990 年代造出来的。它只用于“新造”，不用于一般的“使用”。与 invent 的区别：coin 几乎只搭配 word／phrase／term）</div><div class="ex">"In the early 1990s a resident of a public housing scheme ... is said to have coined a phrase for her own neighbourhood."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="intervention">🔊</button><div class="word">intervention<span class="pos">n.</span></div><div class="zh">干预（措施）；介入（读作 /ˌɪntəˈvenʃn/，重音在第三音节。a policy intervention 一项政策干预；surgical intervention 手术干预。社会科学里它指“人为施加的、意在改变结果的措施”，是中性名词，本身不含褒贬。动词 intervene）</div><div class="ex">"The intervention assumed that distance was the binding constraint."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="disparity">🔊</button><div class="word">disparity<span class="pos">n.</span></div><div class="zh">差距；悬殊（正式，读作 /dɪˈspærəti/。a disparity between A and B A 与 B 之间的差距；income disparity 收入差距。它比 difference 更重，通常指不平等意义上的差距，因此常出现在社会议题里）</div><div class="ex">"... one new store would narrow the disparity in diet quality between districts."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="empirical">🔊</button><div class="word">empirical<span class="pos">adj.</span></div><div class="zh">实证的；以观察或实验为依据的（正式，读作 /ɪmˈpɪrɪkəl/。empirical evidence 实证证据；the empirical record 已有的实证记录。反义是 theoretical 或 a priori 先验的。本课里它与“想当然的推理”相对）</div><div class="ex">"The empirical record has been stubborn."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="quasi-experimental">🔊</button><div class="word">quasi-experimental<span class="pos">adj.</span></div><div class="zh">准实验的（研究方法术语。前缀 quasi- 意为“类似的、准的”。quasi-experimental study 指没有随机分组、但设置了对照组的前后对比研究，证据强度介于观察性研究与随机对照试验之间）</div><div class="ex">"Four quasi-experimental studies tracked neighbourhoods before and after a new store opened."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="perception">🔊</button><div class="word">perception<span class="pos">n.</span></div><div class="zh">感知；看法（读作 /pəˈsepʃn/。the perception of improved access 对“买菜更方便了”的感受；perceived access 主观感受到的可达性。学术写作里常用 perception 与 measured outcome 对举——人们说自己觉得好了，但指标没变）</div><div class="ex">"The perception of better access was real. The shopping was not."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="attribute">🔊</button><div class="word">attribute<span class="pos">v.</span></div><div class="zh">把……归因于（读作 /əˈtrɪbjuːt/，重音在第二音节。attribute A to B 把 A 归因于 B；名词 attribution。另一义项是“认为是……所作”，如 The painting is attributed to Vermeer 这幅画被认为是维米尔所作）</div><div class="ex">"Researchers attribute the gap less to distance than to price, habit and the route home from work."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="metaphor">🔊</button><div class="word">metaphor<span class="pos">n.</span></div><div class="zh">隐喻；比喻说法（读作 /ˈmetəfə/，重音在第一音节。a culinary metaphor 一个饮食隐喻；mix one’s metaphors 比喻前后不一致。学术写作里这个词常带一点警惕意味：它是理解工具，却也可能框住问题）</div><div class="ex">"A desert, it turns out, was the wrong metaphor."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="prevalent">🔊</button><div class="word">prevalent<span class="pos">adj.</span></div><div class="zh">普遍的；流行的（读作 /ˈprevələnt/，重音在第一音节。be prevalent among／in 在……中普遍存在；名词 prevalence 普遍程度／患病率。注意介词用 among 或 in，不用 between）</div><div class="ex">"... an abundance of cheap, energy-dense food, far more prevalent and far cheaper than the fresh alternative."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="inundate">🔊</button><div class="word">inundate<span class="pos">v.</span></div><div class="zh">淹没；使应接不暇（正式，读作 /ˈɪnʌndeɪt/，重音在第一音节。本义是“被水淹没”，引申为“数量过多而压倒”。be inundated with requests 被请求淹没。本课用的是 Rose 等人论文里的原义）</div><div class="ex">"... the food swamp, where healthy options are inundated by unhealthy ones."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="affordability">🔊</button><div class="word">affordability<span class="pos">n.</span></div><div class="zh">可负担性；支付得起（由 affordable + -ity 构成。affordability of housing 住房可负担性；concerns about affordability 对买不起的担忧。它与 availability“有没有”是两回事：东西在货架上，和买得起，是两件事）</div><div class="ex">"... affordability, time, skill and habit decide a meal as much as any map."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 研究方法词链：</b>hypothesis 假设 → <b>intervention 干预</b> → control group 对照组 → <b>quasi-experimental 准实验的</b> → <b>empirical evidence 实证证据</b> → <b>attribute A to B 把 A 归因于 B</b>。<br>
+        <b>② “近”与“用得上”的一对词：</b><b>proximity 空间上的近</b> vs <b>access 实际能获得</b>；availability 有货 vs <b>affordability 买得起</b>；perceived access 主观感受 vs measured intake 实测摄入。<br>
+        <b>③ 造词与说法：</b>coin a term 造词 · borrow a term 借用 · redefine 重新定义 · repurpose an old word 旧词新用（本课 food desert → food swamp → food mirage 全是这一类）。<br>
+        <b>④ -ity 抽象名词族：</b>affordability 可负担性 · availability 可得性 · accessibility 可达性 · visibility 可见性 · vulnerability 脆弱性（重音都在 -bil- 上）。<br>
+        <b>⑤ 表示“普遍”的形容词递进：</b>common 常见 → widespread 广泛 → <b>prevalent 普遍存在（正式）</b> → ubiquitous 无处不在。<br>
+        <b>⑥ 形近词提醒：</b>attribute 归因 ≠ contribute 贡献 ≠ distribute 分配；perception 感知 ≠ perspective 视角 ≠ perception／conception 概念；metaphor 隐喻 ≠ simile 明喻。</p>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. What 引导的名词性关系从句作主语 · What ... had become ...</h3>
+          <div class="zh"><b>What</b> 在这里不是疑问词，而是“<b>所……的事物</b>”，等于 <b>the thing that</b>。整个从句充当主句的主语，后面还要再跟一个谓语动词。这是学术写作里极常见的收束方式：用一个从句概括前文，再用主句点出它的新身份。</div>
+          <div class="eg">课文原句：<b>What had begun as one resident’s complaint had become a unit of measurement.</b> 从一位居民的抱怨开始的东西，最终变成了一个计量单位。<br>
+          替换检验：把 What 换成 <b>The thing that</b>，句子依然成立 → 确认是名词性关系从句，而不是疑问句。<br>
+          同类：<b>What surprised the researchers was the shopping data, not the survey answers.</b>／<b>What looks like a geography problem is often a price problem.</b></div>
+          <div class="practice">仿写：「起初只是一个比喻的东西，后来变成了一份预算」。<input placeholder="What had begun as ... had become ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. 分词完成式作状语 · Having + 过去分词, ...</h3>
+          <div class="zh">当状语动作<b>明显早于</b>主句动作，且两个动作<b>主语相同</b>时，用 <b>Having + 过去分词</b>。它相当于一个省略了主语与连接词的时间／原因状语从句（After ... had done / Because ... had done）。若两个动作几乎同时，用一般式 <b>doing</b> 即可。</div>
+          <div class="eg">课文原句：<b>Having accepted that chain of inference, governments spent accordingly.</b> 在接受了那一串推理之后，各国政府据此开支。<br>
+          还原：<b>After governments had accepted that chain of inference, they spent accordingly.</b><br>
+          表原因：<b>Having read four null results, the review panel changed its advice.</b>（＝ Because the panel had read ...）<br>
+          否定式：<b>Not having measured prices, the study could not explain the gap.</b>（not 放在 having 之前）</div>
+          <div class="practice">仿写：「在核对过三份数据集之后，她撤回了原来的结论」。<input placeholder="Having checked ... , she withdrew ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. Were 提前的倒装虚拟条件句 · Were that true, ... would ...</h3>
+          <div class="zh">把 <b>were</b> 提到主语之前即可省去 <b>if</b>，表示<b>与现在或将来事实相反</b>的假设；主句用 <b>would / could / might + 动词原形</b>。它是议论文里最凝练的一种“<b>假如真是那样</b>”，通常紧接着就会被现实推翻。</div>
+          <div class="eg">课文原句：<b>Were that true, the remedy would be simple, and one new store would narrow the disparity in diet quality between districts.</b> 假如真是那样，对策就很简单了——一家新超市就能缩小各区之间的饮食质量差距。<br>
+          还原：<b>If that were true, ...</b>（注意正式文体一律用 were，不用 was，即使在第三人称单数后）<br>
+          同类：<b>Were price the only obstacle, a subsidy would suffice.</b>／<b>Were such data available in 2005, the policy might have looked different.</b></div>
+          <div class="practice">仿写：「假如距离是唯一的障碍，那么一份地图就够了」。<input placeholder="Were distance the only obstacle, ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. nor 引起的否定倒装 · ..., nor + 助动词 + 主语</h3>
+          <div class="zh">前一句是否定句时，用 <b>nor / neither + 助动词／情态动词／be + 主语</b> 表示“<b>……也一样不</b>”，<b>必须倒装</b>。助动词的选择要看前一句的时态与前一句主语的情况，不必与后一句主语的人称一致。</div>
+          <div class="eg">课文原句：<b>Fruit and vegetable intake did not move, nor did body mass index.</b> 果蔬摄入量没有变化，体重指数也一样没有变化。<br>
+          还原：<b>... and body mass index did not move either.</b>（信息相同，但失去了紧凑感）<br>
+          同类：<b>The survey did not ask about price, nor did it record where people actually shopped.</b>／<b>She had not visited the new store, nor had her neighbours.</b><br>
+          肯定方向则用 <b>so</b>：<b>Residents said it felt better, and so it did — for access, not for diet.</b></div>
+          <div class="practice">仿写：「这项研究没有测量价格，也没有记录人们的实际购物地点」。<input placeholder="The study did not measure price, nor ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. 独立主格结构 · 名词 + 过去分词，名词 + 形容词</h3>
+          <div class="zh">独立主格由“<b>逻辑主语 + 分词／形容词／介词短语</b>”构成，<b>自带主语、没有谓语动词</b>，在句中作伴随或补充说明的状语。它是书面语的收尾利器：用一个画面把论点说完，而不必再写一个完整的句子。</div>
+          <div class="eg">课文原句：<b>The shelves stacked with fresh produce, the trolleys still filled with snacks.</b> 货架上摆满了生鲜，购物车里装的却还是零食。<br>
+          改写成从句：<b>While the shelves were stacked with fresh produce, the trolleys were still filled with snacks.</b><br>
+          同类：<b>The map redrawn, the meals unchanged.</b>（名词 + 过去分词）／<b>The meeting over, nobody moved.</b>（名词 + 副词）<br>
+          <b>with 复合结构</b>是它的近亲，但带 with：<b>With the shelves stacked with produce, sales still fell.</b></div>
+          <div class="practice">仿写：「地铁通了，通勤时间却一点没变」。<input placeholder="The new line opened, ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Points</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>① 名词性关系从句：what / whatever / whoever</h3>
+          <div class="zh"><b>what</b> 引导的从句叫名词性关系从句，等于 <b>the thing(s) that</b>；<b>whatever</b> = anything that，<b>whoever</b> = anyone who。它可以在句中作<b>主语、宾语或表语</b>。与定语从句最大的区别是：<b>它没有先行词——what 自身就包含了先行词</b>，所以它前面不能出现名词。</div>
+          <div class="eg"><b>What</b> had begun as one resident’s complaint <b>had become</b> a unit of measurement.（作主语，谓语随之用单数）<br>
+          <b>What</b> the four studies showed <b>was</b> that access alone changed little.（作主语）<br>
+          <b>Whatever</b> the map recorded <b>was</b> distance, not behaviour.（＝ Anything that）<br>
+          <b>Whoever</b> coined the phrase <b>could</b> hardly have imagined its career.（＝ Anyone who）<br>
+          易错：不要写成 <b>The thing what began as a complaint ...</b>（what 前不可有先行词），也不要写成 <b>What had begun ..., it had become ...</b>（多了一个 it）</div>
+        </div>
+
+        <div class="item">
+          <h3>② 分词作状语：doing / having done / done 的分工</h3>
+          <div class="zh">分词短语作状语时，其<b>逻辑主语必须与主句主语一致</b>，否则就是垂悬分词。<b>doing</b> 表与主句动作同时或几乎同时、主动；<b>having done</b> 表<b>明显早于</b>主句动作、主动；<b>done</b> 表被动或已完成的状态。</div>
+          <div class="eg"><b>Having accepted</b> that chain of inference, governments spent accordingly.（先接受，后开支；主语都是 governments）<br>
+          <b>Tracking</b> neighbourhoods for three years, the team found no change in intake.（同时）<br>
+          <b>Compared with</b> the control district, the new-store district looked identical.（被动／状态）<br>
+          <b>Not having measured</b> prices, the study could not explain the gap.（否定式：not 置前）<br>
+          易错垂悬：<b>Having opened the store, the diet did not improve.</b>（diet 不会 open store，应改为 ... , residents did not change their diet）</div>
+        </div>
+
+        <div class="item">
+          <h3>③ 虚拟条件句倒装三式：Were / Had / Should</h3>
+          <div class="zh">把 <b>were / had / should</b> 提到主语之前即可省去 <b>if</b>。三者的时间关系不同：<b>Were (to do)</b> 表与现在／将来事实相反；<b>Had (done)</b> 表与过去事实相反；<b>Should (do)</b> 表将来且可能性较小。否定式把 not 放在<b>主语之后</b>（不可用 weren’t he / hadn’t he 的形式）。</div>
+          <div class="eg"><b>Were</b> that <b>true</b>, the remedy <b>would be</b> simple.（与现在／将来相反）<br>
+          <b>Were</b> distance <b>to be</b> the only obstacle, a map <b>would</b> suffice.<br>
+          <b>Had</b> the studies <b>measured</b> price, the conclusion <b>might have been</b> different.（与过去相反）<br>
+          <b>Should</b> a future trial <b>show</b> otherwise, policy <b>would</b> have to change.（将来，可能性小）<br>
+          时态配对要牢记：<b>were/did ↔ would/could/might do</b>；<b>had done ↔ would/could/might have done</b>。</div>
+        </div>
+
+        <div class="item">
+          <h3>④ Nor / Neither / So 引起的倒装</h3>
+          <div class="zh">为避免重复，英语常用 <b>so / nor / neither + 助动词 + 主语</b> 回应前一句。<b>so</b> 用于<b>肯定</b>（……也一样），<b>nor / neither</b> 用于<b>否定</b>（……也一样不），<b>都必须倒装</b>。还有一种不倒装的 <b>so + 主语 + 助动词</b>，表示“<b>确实如此</b>”，用来附和而不是类比。</div>
+          <div class="eg">Intake did not move, <b>nor did</b> body mass index.（否定类比，倒装）<br>
+          Residents felt better served, and <b>so did</b> the local press.（肯定类比，倒装）<br>
+          “The results were disappointing.” — “<b>So they were.</b>”（附和，<b>不倒装</b>，意为“确实如此”）<br>
+          <b>Neither</b> of the two studies measured cooking skills.（neither 作代词，谓语用单数）<br>
+          易错：<b>nor</b> 后面的助动词要看前句的时态：<b>has not ... , nor has ...</b>；<b>will not ... , nor will ...</b>。</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 独立主格：自带主语、没有谓语的状语</h3>
+          <div class="zh">独立主格的形式是“<b>名词／代词 + 现在分词／过去分词／形容词／副词／介词短语</b>”。它<b>不是完整句子</b>——没有限定动词——因此与主句之间用逗号连接。它常放在<b>句末作收尾</b>，画面感强；也可放句首表时间或原因。加上 <b>with</b> 就变成 with 复合结构，功能相近但更口语化一些。</div>
+          <div class="eg"><b>The shelves stacked with fresh produce, the trolleys still filled with snacks.</b>（名词 + 过去分词，句末收尾）<br>
+          <b>The data in hand, researchers could finally compare the two districts.</b>（名词 + 介词短语，表原因）<br>
+          <b>Prices falling, intake still did not rise.</b>（名词 + 现在分词，表让步）<br>
+          <b>With</b> the map <b>redrawn</b>, nothing else changed.（with 复合结构）<br>
+          易错：不要把它写成完整句——<b>The shelves were stacked ..., the trolleys were still filled ...</b> 是逗号拼接错误（comma splice），应改为分号或改写为独立主格。</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、一个词是怎么变成一份预算的</h3>
+        <p>“食物沙漠”（food desert）这个说法，据 Cummins 与 Macintyre 2002 年发表在《英国医学杂志》上的一篇短文考证，<b>最早出自 1990 年代初苏格兰西部一处公共住房的居民之口</b>——据说是一位居民用来形容自家街区买不到新鲜食物的抱怨。1995 年，它出现在英国营养工作组低收入项目小组的一份政策文件里，第一次进入官方文本；此后被学术界、政策界与社区组织反复使用。</p>
+        <p>三十年间，这个词完成了一次典型的概念旅行：<b>抱怨 → 术语 → 指标 → 预算</b>。美国农业部后来给出了可操作的界定：一个人口普查区若贫困线以下家庭达到一定比例，且三分之一居民住在离超市一英里以外（农村地区为十英里），即可被划为食物沙漠。有了指标就能画地图，有了地图就能分配资金——美国的“健康食品融资计划”（Healthy Food Financing Initiative）自 2011 年起投入超过五亿美元，用于在缺乏服务的社区新建超市。</p>
+
+        <h3>二、四项准实验研究说了什么</h3>
+        <p>关键在于：这些钱花出去之后，研究者真的回头测了。下面四组是被引得最多的“前后对比 + 对照组”研究（<b>quasi-experimental</b>，即没有随机分组，但设了对照组）：</p>
+        <table class="facts">
+          <tr><th></th><th>新店使用情况</th><th>饮食指标</th><th>居民感受</th></tr>
+          <tr><td>费城（宾州）</td><td>略过半数居民去新超市买过东西，约四分之一把它当作主要采购点</td><td>果蔬摄入量无变化，BMI 无变化</td><td>普遍认为“买菜方便了”</td></tr>
+          <tr><td>纽约市（布朗克斯）</td><td>仅 13% 的受访者表示在新店购物</td><td>健康食物的可得性与摄入量均无改善</td><td>—</td></tr>
+          <tr><td>匹兹堡</td><td>约三分之二居民定期在新店购物</td><td>添加糖摄入下降；果蔬、全谷物与 BMI 无变化</td><td>感知改善明显</td></tr>
+          <tr><td>南洛杉矶（反向）</td><td>2008 年起限制新开快餐店</td><td>快餐消费与肥胖率<b>未见改善</b></td><td>—</td></tr>
+        </table>
+        <p>把四组放在一起看，规律很清楚：<b>主观感受改变了，实测摄入没改变</b>。而且匹兹堡那一组尤其能说明问题——在真正常去新店的三分之二居民中，与从没进过这家店的邻居相比，并没有可测量的差异。</p>
+
+        <h3>三、为什么“建超市”这条推理链断了</h3>
+        <p>研究者把缺口归因于几个距离之外的因素：</p>
+        <ul>
+          <li><b>价格优先于距离。</b>如果居民惯常去的那家店更便宜，新店再近也不会成为首选。证据显示，家庭愿意为了更好的价格走更远的路。</li>
+          <li><b>购物动线不在家门口。</b>很多人是在下班路上、或与其他日用品一起采购，而不是从家出发去最近的超市。法国的一项研究里，只有约 30% 的人在离家最近的超市买菜。</li>
+          <li><b>超市本身不是“健康”的同义词。</b>一项调查发现，超市里的不健康零食比果蔬多出一半到四分之三；便利店与药店则多出约九成。低收入社区的门店，不健康食品占比可能更高。</li>
+          <li><b>时间与技能。</b>新鲜食材需要清洗、烹饪与计划。对同时打两份工的家庭来说，省时间的往往不是“近”，而是“不用做”。</li>
+        </ul>
+
+        <h3>四、隐喻的更替：沙漠、沼泽、海市蜃楼</h3>
+        <p>概念失效之后，研究者并没有放弃打比方，而是换了一批比方：</p>
+        <table class="facts">
+          <tr><th>说法</th><th>提出时间与出处</th><th>它想抓住的东西</th></tr>
+          <tr><td>food desert 食物沙漠</td><td>1990 年代初，苏格兰；1995 年进入英国官方文件</td><td>“什么都没有”——供给的<b>缺席</b></td></tr>
+          <tr><td>food swamp 食物沼泽</td><td>2009 年，Donald Rose 等人在新奥尔良的研究报告</td><td>“坏东西太多”——健康选项被高能量零食<b>淹没</b></td></tr>
+          <tr><td>food mirage 食物海市蜃楼</td><td>Breyer 与 Voss-Andreae 2013 年提出</td><td>“看得见、买不起”——店在眼前，价格超出负担能力</td></tr>
+          <tr><td>food haven 食物港湾</td><td>近年公共卫生文献中的建设性提法</td><td>从“缺什么”转向“什么样的环境才算好”</td></tr>
+        </table>
+        <p>值得注意的是，这串隐喻替换本身就是一条方法论线索：<b>每一次换词，都是在承认上一个词把问题框窄了</b>。沙漠框的是“有无”，沼泽框的是“比例”，海市蜃楼框的是“价格”。</p>
+
+        <h3>五、一个更一般的教训：factoid</h3>
+        <p>Cummins 与 Macintyre 的文章标题是《“食物沙漠”——卫生政策制定中的证据与假设》。他们造了一个词：<b>factoid</b>，指<b>被重复得足够多次、以至于被当成事实的假设</b>。他们的原话大意是，在合适的社会氛围里，一个关于社会世界的说法可以在实证资料还很缺乏的时候，就被假定为真并据此制定政策。</p>
+        <blockquote>“Assumptions or speculations reported and repeated so often that they are popularly considered true.”
+        <em>——被反复报道与重复的假设或推测，最终被普遍当作事实。</em></blockquote>
+        <p>需要说清楚的是：<b>指出证据不足，并不等于说问题不存在</b>。低收入社区的饮食质量差距、肥胖与慢病负担，这些都有大量独立证据。被质疑的是“<b>距离是主要原因</b>”这一条因果链，而不是差距本身。这个区分，是阅读所有社会科学新闻时最值得带走的一条。</p>
+
+        <h3>六、本土对照：为什么“超市可达性”这个指标不能照搬</h3>
+        <p>食物沙漠是一个<b>在英国产生、主要在英语国家研究</b>的概念。近十多年，学者对它提出了两条相当有力的批评，而这两条批评恰好能帮我们看清指标体系与本地现实之间的距离。</p>
+        <p><b>第一条：它把食物获取简化成了“有没有超市”。</b>在不少城市，居民实际的食物来源是<b>摊贩、小铺、露天市场、自家种植，以及家庭之间的食物转移</b>——这些都不进超市统计。研究者指出，在非洲多国的城市里，人们光顾这些非零售渠道的频率高于正规零售；巴西的一项研究也显示，捕鱼、耕作与家庭菜园对食物安全的贡献不可忽视。换句话说，<b>“附近没有超市”并不自动等于“附近没有食物”</b>。</p>
+        <p><b>第二条：它把食物获取当成了二选一。</b>现实里，交通、收入、时间、家庭分工与消费习惯是同时起作用的连续变量，不是“在或不在沙漠里”这样一个开关。</p>
+        <p>放到中国的城市语境里，这两条尤其明显。中国城市长期保有<b>密度很高的菜市场与社区生鲜业态</b>，近年来又叠加了<b>生鲜电商、社区团购与即时配送</b>；同时，城市规划中普遍推进的“<b>一刻钟便民生活圈</b>”，把买菜、修鞋、看病、吃饭等基本服务纳入步行可达的范围。若直接套用“到最近超市的距离”这一把尺子，很可能<b>测不到真正的瓶颈</b>——真正需要测的也许是价格、时间成本、以及加工食品与外卖的营销密度。</p>
+        <p>这里有两处必须辨析清楚，否则容易两边都讲错：</p>
+        <ul>
+          <li><b>对照的是方法，不是高下。</b>菜市场体系发达，说明的是“<b>指标要换</b>”，不说明“<b>问题更小</b>”。不同食物体系的主要矛盾不同，需要各自的测量工具。</li>
+          <li><b>同样要警惕本土版本的事实。</b>“买菜很方便”是很多人真实的生活经验，但它同样可能与实测摄入脱节——方便的可能是高油高盐的外卖，而不是新鲜食材。这正是本课核心方法最该被用回来的地方：<b>把主观感受与实测指标分开看</b>。</li>
+        </ul>
+
+        <h3>七、本课的三句话</h3>
+        <p><b>①</b> 一个比喻可以让问题被看见，也可以让问题被看窄。<br>
+        <b>②</b> 政策最需要的不是“听起来对”，而是“有对照组”。<br>
+        <b>③</b> 地图能记录距离，一顿饭却是由价格、时间、技能和习惯决定的。</p>
+        <p class="source">说明：本课只讨论一个公共卫生概念的定义演变与研究方法边界，<b>不评价任何国家、地区或城市的政策优劣</b>；文中提到的研究与数据均用于说明测量方法本身，不构成对任何现实制度的判断。文中未使用任何跨国排名或地区间的比较结论。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>读懂一条推理链是如何被建立又被推翻的：</b>“买不到 → 所以吃不好 → 那就建超市”这三个环节，以及实证研究在哪一环上给出了否定答案。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>掌握 11 个 B2 核心词：</b>coin · intervention · disparity · empirical · quasi-experimental · perception · attribute · metaphor · prevalent · inundate · affordability。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>能识别并仿写 5 个高级句型：</b>What 名词性关系从句作主语、Having + 过去分词作状语、Were 提前的倒装虚拟条件句、nor 引起的否定倒装、独立主格。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>能拆解 5 个语法点：</b>what/whatever/whoever 的用法边界、分词作状语的三种形式与垂悬分词、虚拟条件句倒装三式、Nor/Neither/So 的倒装与不倒装、独立主格与逗号拼接错误的区别。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>建立一个方法论意识：</b>factoid——被重复到被当成事实的假设；以及“指出证据不足 ≠ 否认问题存在”这条区分。</div></div>
+        <div class="goal"><span class="ic">🤔</span><div><b>学会看指标本身：</b>为什么以“到最近超市的距离”为唯一尺子的框架，在菜市场与非正规渠道占重要地位的城市里会测不准。</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🧭 学习建议 How to Use This Page</h3>
+        <p><b>第一遍：</b>只看“全文阅读”，不开词表。读到第 2 段末尾先停一下，自己回答一句：如果“距离是唯一障碍”为真，那么结果应该是什么？<br>
+        <b>第二遍：</b>点开不懂的高亮词看释义，再对照“词汇表”里的例句确认。<br>
+        <b>第三遍：</b>逐段点 ▶ 听朗读并跟读。读不顺的地方，通常是自己不会断开的分词短语或倒装结构。<br>
+        <b>第四遍：</b>带着“句型练习”的 5 个句子回原文，把它们划出来，看清每个句子分别承担了什么功能（概括／铺垫／假设／并列否定／收束画面）。<br>
+        <b>最后：</b>做“练习测验”六题；答错的两题，请回到“语法点”里找到对应条目重读一遍。</p>
+        <p><b>打印提示：</b>本页已做打印优化，打印时会自动隐藏导航与按钮，七个板块全部展开，可当讲义使用。</p>
+        <button class="print-btn" onclick="window.print()">🖨 打印本页 Print</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🗝 答案速查 Answer Key</h3>
+        <p>1. C（据 Cummins 与 Macintyre 考证，该词最早出自 1990 年代初苏格兰西部一处公共住房的居民；1995 年才进入英国官方文件）｜2. B（贫困线以下家庭比例 + 三分之一居民住在离超市一英里以外，农村为十英里）｜3. D（居民普遍感到“买菜更方便了”，但果蔬摄入与体重指数没有变化）｜4. C（Were 提前＝省略 if 的虚拟条件句，与现在／将来事实相反，主句用 would + 原形）｜5. A（nor 引起的否定倒装，必须把助动词提到主语之前）｜6. C（A 错在“什么都没有”——缺的是买得起的健康食物而非食物本身；B 错在沼泽强调的是坏选项的比例；D 与正文相反，正文明确说这不证明距离无关）</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-15 · 社会问题 Social Issues｜食物沙漠：一个隐喻、一笔预算与四项否定的实验</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["In the early 1990s a resident of a public housing scheme in the west of Scotland is said to have coined a phrase for her neighbourhood: a food desert. The complaint was concrete: shops had closed, buses were infrequent, and fresh food meant a journey. By 1995 it had reached a British government report; within a decade it was a technical term with a map. In the United States the Department of Agriculture drew the boundaries officially: a census tract counted as a desert where a fifth of households lived below the poverty line and a third lived more than a mile from a supermarket, or ten miles in the countryside. What had begun as one resident's complaint had become a unit of measurement.", "The reasoning seemed unanswerable. If people cannot reach healthy food, they will not eat it; build the shop, and the diet will follow. Having accepted that chain of inference, governments spent accordingly: America's Healthy Food Financing Initiative, running since 2011, has directed more than half a billion dollars towards new supermarkets in underserved neighbourhoods. The intervention assumed that distance was the binding constraint — that the obstacle stood between the doorstep and the shop, and nowhere else. Were that true, the remedy would be simple, and one new store would narrow the disparity in diet quality between districts.", "The empirical record has been stubborn. Four quasi-experimental studies tracked neighbourhoods before and after a new store opened, comparing them with districts that received none. In Philadelphia just over half of residents shopped there and roughly a quarter made it their main source of food; fruit and vegetable intake did not move, nor did body mass index. In New York only 13 per cent of participants reported shopping there. Pittsburgh recorded a fall in added sugars, yet among the two-thirds who shopped there regularly there was no measurable gain over neighbours who never entered it. The perception of better access was real. The shopping was not. Researchers attribute the gap less to distance than to price, habit and the route home from work.", "A desert, it turns out, was the wrong metaphor. One study found supermarkets stocking half to three-quarters more unhealthy snacks than fruit and vegetables; what surrounds a low-income household is less often an absence than an abundance of cheap, energy-dense food, far more prevalent and cheaper. In 2009 Donald Rose and his colleagues proposed a different image for New Orleans — the food swamp, where healthy options are inundated by unhealthy ones. Others added the food mirage: a shop close enough to see and too expensive to use, so that proximity is not the same as access. None of this proves that distance is irrelevant; affordability, time, skill and habit decide a meal as much as any map. The shelves stacked with fresh produce, the trolleys still filled with snacks."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where does the phrase “food desert” most likely come from? “食物沙漠”这个说法最可能源自哪里？",
+   opts:["A 1995 report by a UK government nutrition task force 1995 年英国政府营养工作组的一份报告","A USDA study of American census tracts 美国农业部对人口普查区的一项研究","A resident of a public housing scheme in the west of Scotland, in the early 1990s 1990 年代初苏格兰西部一处公共住房的一位居民","A 2009 report on food access in New Orleans 2009 年一份关于新奥尔良食物获取情况的报告"],
+   ans:2,
+   fb:"正确！这正是本课第一个句型所在的那一段。注意区分两个时间点：1990 年代初居民随口说出这个词，1995 年它才首次出现在英国官方文件里——选项 A 是它“进入官方文本”的地方，不是它“被造出来”的地方。选项 D 是 food swamp 的出处（2009 年 Donald Rose 等人）。"},
+  {q:"According to the definition given in the passage, when did a US census tract count as a food desert? 根据正文给出的界定，美国的人口普查区在什么条件下被划为食物沙漠？",
+   opts:["Whenever the nearest shop was more than a mile away, whatever the income level 只要最近的商店在一英里以外，无论收入水平如何","When at least a fifth of households lived below the poverty line and a third lived more than a mile from a supermarket 当至少五分之一的家庭生活在贫困线以下，且三分之一居民住在离超市一英里以外时","When no shop within ten miles sold fresh fruit or vegetables 当十英里内没有店铺售卖新鲜果蔬时","When residents reported that they could not afford fresh food 当居民表示买不起新鲜食物时"],
+   ans:1,
+   fb:"正确！记住两条是<b>并列</b>的：低收入 + 低可达性，缺一条都不成立。农村地区的距离门槛是十英里，选项 C 把“十英里”错安到了“有没有果蔬”上。选项 D 描述的反而是后文 food mirage（海市蜃楼）关心的价格问题。"},
+  {q:"What did the four quasi-experimental studies find? 四项准实验研究发现了什么？",
+   opts:["Diets improved in every neighbourhood where a supermarket opened 凡是有新超市开业的社区，饮食都改善了","Residents refused to shop at the new stores because prices were too high 居民拒绝在新店购物，因为价格太高","New supermarkets lowered both prices and body mass index across all districts studied 新超市在所有被研究的地区同时降低了价格与体重指数","Residents said they felt better served, but fruit and vegetable intake and body mass index did not change 居民说他们觉得更方便了，但果蔬摄入量与体重指数没有变化"],
+   ans:3,
+   fb:"正确！这正是本课的核心反差：<b>perception 变了，measured intake 没变</b>。选项 B 错在“拒绝”——居民并没有抵制新店，费城有略过半数的人去过；只是去过之后饮食没变。选项 D 式的“全都有用／全都没用”说法，正文本身已经明确否掉了：它说这不证明距离无关。"},
+  {q:"What structure is used in “Were that true, the remedy would be simple”? 该句使用了什么结构？",
+   opts:["A real conditional describing a past event 描述过去事件的真实条件句","A non-restrictive relative clause introduced by which 由 which 引导的非限制性定语从句","An inverted conditional without if: were + subject, expressing a counterfactual in the present or future, with would + base form in the main clause 省略 if 的倒装条件句：were + 主语，表示与现在或将来事实相反，主句用 would + 动词原形","A passive construction with the auxiliary were 由 were 构成的被动结构"],
+   ans:2,
+   fb:"正确！还原之后是 <b>If that were true, ...</b>。注意两处：正式文体一律用 were 不用 was；主句搭配 <b>would + 原形</b>，而不是 would have done（那是与过去事实相反，要配 Had 提前）。选项 B、D 都与句子结构无关。"},
+  {q:"In “fruit and vegetable intake did not move, nor did body mass index”, why does “did” come before “body mass index”? 句中为什么 did 会出现在 body mass index 之前？",
+   opts:["Because nor and neither at the start of a clause require inversion — the auxiliary goes before the subject 因为 nor／neither 置于句首时必须倒装，助动词要提到主语之前","Because the sentence is a question 因为这是一个疑问句","Because body mass index is the direct object of move 因为 body mass index 是 move 的直接宾语","Because this is the emphatic use of do 因为这是 do 的强调用法"],
+   ans:0,
+   fb:"正确！<b>nor / neither + 助动词 + 主语</b> 是固定的否定倒装，意为“……也一样不”。还原后是 <i>and body mass index did not move either</i>。选项 D 的强调 do 也是把 do 提前，但那是 <b>do + 主语 + 动词原形</b>（They did move），而且主句必须是肯定句，两者不要混。"},
+  {q:"Which statement is best supported by the passage? 下列哪一项最符合文章意思？",
+   opts:["A food desert is a place where there is no food at all 食物沙漠是根本没有食物的地方","The “food swamp” metaphor claims that healthy food has disappeared completely “食物沼泽”这个比喻说的是健康食物完全消失了","The problem is often not an absence of food but an abundance of cheap, energy-dense options — and none of this proves that distance is irrelevant 问题往往不是食物缺席，而是廉价高能量食物过多；而且这些都不能证明距离无关紧要","The studies proved that building new supermarkets is worthless 这些研究证明新建超市毫无价值"],
+   ans:2,
+   fb:"正确！这正是第 4 段的两句话：<b>less often an absence than an abundance</b>，以及 <b>None of this proves that distance is irrelevant</b>。选项 A 恰恰是被推翻的那个旧隐喻；选项 B 说反了——沼泽讲的是“坏选项比例过高”，不是健康食物消失；选项 D 也过头了，正文的立场比它谨慎得多。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
