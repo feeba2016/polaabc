@@ -9679,5 +9679,67 @@ const EPISODES = [
         "ex": "“…to show where a healthy trajectory diverges into disease”"
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-15",
+    "title": "The Number That Would Not Settle",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-15-the-number-that-would-not-settle",
+    "url": "lessons/c1/2026-10-15-the-number-that-would-not-settle.html",
+    "vocab": [
+      {
+        "word": "coercion",
+        "zh": "强制；胁迫（以威胁或压力迫使对方就范）。",
+        "ex": "The literature asks whether economic <b>coercion</b> can substitute for the use of force."
+      },
+      {
+        "word": "attribution",
+        "zh": "归因；因果归属。把某一结果判定给某一原因的过程。",
+        "ex": "Most of the disagreement concerns errors of <b>attribution</b> rather than errors of arithmetic."
+      },
+      {
+        "word": "indeterminate",
+        "zh": "不确定的；无法判定的。常用于结果与结论。",
+        "ex": "Four cases were left <b>indeterminate</b> — neither clear successes nor clear failures."
+      },
+      {
+        "word": "imposition",
+        "zh": "（制裁、税、规则的）实施、强加。本课中与「威胁」相对。",
+        "ex": "A dataset built only from <b>impositions</b> will miss every case settled before that point."
+      },
+      {
+        "word": "concession",
+        "zh": "让步。也可指「特许经营权」，本文取前者。",
+        "ex": "The index records how far the target's <b>concession</b> actually went."
+      },
+      {
+        "word": "confound",
+        "zh": "混淆；混杂（变量）。使两个因素的影响无法分开。",
+        "ex": "Where force was also used, it <b>confounds</b> any estimate of the sanction's own effect."
+      },
+      {
+        "word": "stringent",
+        "zh": "严格的；苛刻的（标准、检验、法规）。",
+        "ex": "Applying a more <b>stringent</b> test cut the count of successes from forty to five."
+      },
+      {
+        "word": "verdict",
+        "zh": "裁决；定论。学术写作常用 the verdict is still out（尚无定论）。",
+        "ex": "The literature offers no <b>verdict</b>, only a set of defensible measurement choices."
+      },
+      {
+        "word": "aggregate",
+        "zh": "汇总的；总量。与 disaggregate（拆分）相对。",
+        "ex": "The <b>aggregate</b> figure conceals wide variation across goal types."
+      },
+      {
+        "word": "denominator",
+        "zh": "分母；引申为「统计口径的基础」。lowest common denominator 亦常见。",
+        "ex": "Before quoting a rate, ask what sits in the <b>denominator</b>."
+      }
+    ]
   }
 ];
