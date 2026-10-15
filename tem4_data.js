@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1/G2/G3/G4 已上线（31 主题 / 155 Part / 930 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1-G4/H1 已上线（32 主题 / 160 Part / 960 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -2570,7 +2570,85 @@ const TEM4_THEMES = [
     ]
   },
   /* ===== H 健康与心理 ===== */
-  {id:"H1", cat:"H", zh:"身体与健康", name:"Body & Health",    status:"soon", words:100, desc:"医院、运动、饮食"},
+  {id:"H1", cat:"H", zh:"身体与健康", name:"Body & Health", status:"live", date:"2026-10-15", words:30, desc:"感冒来袭、校医务室、卧床休养、康复锻炼与健康习惯",
+    parts:[
+      {
+        id:"H1-P1", slug:"tem4-H1-P1", title:"感冒来袭", shape:"拱门",
+        poster:"assets/tem4/posters/H1_P1.png",
+        sentence:"An acute flu epidemic swept the campus, infecting dozens of students whose first symptom was a hoarse throat and a dizzy head.",
+        sentenceCn:"一场急性流感疫情席卷校园，数十名学生被传染，最初的症状是喉咙沙哑、头晕目眩。",
+        scene:"深秋校园小路，小叶学姐捂着纸巾打喷嚏，戴口罩的同学们在医务室路牌前排队。",
+        words:[
+          {word:"acute",    ipa:"/əˈkjuːt/",    pos:"adj.", zh:"急性的；剧烈的，严重的",  forms:["acute"]},
+          {word:"epidemic", ipa:"/ˌepɪˈdemɪk/", pos:"n.",   zh:"流行病 adj. 流行性的",   forms:["epidemic"]},
+          {word:"infect",   ipa:"/ɪnˈfekt/",    pos:"vt.",  zh:"传染；感染",            forms:["infecting"]},
+          {word:"symptom",  ipa:"/ˈsɪmptəm/",   pos:"n.",   zh:"症状；征兆",            forms:["symptom"]},
+          {word:"hoarse",   ipa:"/hɔːs/",       pos:"adj.", zh:"（声音）沙哑的",         forms:["hoarse"]},
+          {word:"dizzy",    ipa:"/ˈdɪzi/",      pos:"adj.", zh:"头晕目眩的",            forms:["dizzy"]}
+        ]
+      },
+      {
+        id:"H1-P2", slug:"tem4-H1-P2", title:"校医务室", shape:"叶形",
+        poster:"assets/tem4/posters/H1_P2.png",
+        sentence:"In the clinical room the doctor prescribed the right dose, administered the medicine, dispensed a mask, and advised every student to vaccinate before winter.",
+        sentenceCn:"在诊室里，医生开出合适的剂量、给药、发放口罩，并建议每位同学入冬前接种疫苗。",
+        scene:"粉彩校医务室，猫头鹰医生给坐在检查床上的小叶学姐递药瓶，架上摆满素色药瓶。",
+        words:[
+          {word:"clinical",   ipa:"/ˈklɪnɪkəl/",  pos:"adj.", zh:"诊所的，医院的；临床的",      forms:["clinical"]},
+          {word:"prescribe",  ipa:"/prɪˈskraɪb/", pos:"v.",   zh:"处（方），开（药）；规定",     forms:["prescribed"]},
+          {word:"dose",       ipa:"/dəʊs/",       pos:"n.",   zh:"（药物的一次）剂量，一服",    forms:["dose"]},
+          {word:"administer", ipa:"/ədˈmɪnɪstə/", pos:"v.",   zh:"给予，用（药等）；执行",      forms:["administered"]},
+          {word:"dispense",   ipa:"/dɪˈspens/",   pos:"v.",   zh:"配（药）；分配，分发",        forms:["dispensed"]},
+          {word:"vaccinate",  ipa:"/ˈvæksɪneɪt/", pos:"v.",   zh:"给…注射疫苗",               forms:["vaccinate"]}
+        ]
+      },
+      {
+        id:"H1-P3", slug:"tem4-H1-P3", title:"卧床休养", shape:"椭圆",
+        poster:"assets/tem4/posters/H1_P3.png",
+        sentence:"After three days of fever she felt faint and dazed, too frail and feeble to rise, and lay in bed in agony as she suffered the worst cold of her life.",
+        sentenceCn:"发烧三天后，她感到虚弱眩晕、恍恍惚惚，孱弱乏力难以起身，躺在床上痛苦不堪，熬着此生最重的一场感冒。",
+        scene:"傍晚宿舍卧室，小叶学姐额头贴退热贴、含着体温计躺在粉被窝里，床头热茶冒着热气。",
+        words:[
+          {word:"faint",  ipa:"/feɪnt/",  pos:"adj.", zh:"虚弱的，眩晕的；微弱的",  forms:["faint"]},
+          {word:"daze",   ipa:"/deɪz/",   pos:"v.",   zh:"使茫然 n. 恍惚",        forms:["dazed"]},
+          {word:"frail",  ipa:"/freɪl/",  pos:"adj.", zh:"虚弱的，脆弱的",         forms:["frail"]},
+          {word:"feeble", ipa:"/ˈfiːbl/", pos:"adj.", zh:"虚弱的，无力的",         forms:["feeble"]},
+          {word:"agony",  ipa:"/ˈæɡəni/", pos:"n.",   zh:"极度的痛苦",            forms:["agony"]},
+          {word:"suffer", ipa:"/ˈsʌfə/",  pos:"v.",   zh:"受苦，患病；遭受",       forms:["suffered"]}
+        ]
+      },
+      {
+        id:"H1-P4", slug:"tem4-H1-P4", title:"康复锻炼", shape:"超圆角",
+        poster:"assets/tem4/posters/H1_P4.png",
+        sentence:"To recover, she did gentle physical exercise, monitored her heart rate, took every precaution against a new sprain or bruise, and soon grew as hardy as her teammates.",
+        sentenceCn:"为了康复，她做温和的体育锻炼、监测心率、处处预防再度扭伤或淤青，很快又变得和队友一样强壮。",
+        scene:"晨光操场跑道，痊愈的小叶学姐穿白色运动服开心慢跑，小羊同学在旁拉伸加油。",
+        words:[
+          {word:"physical",   ipa:"/ˈfɪzɪkəl/",   pos:"adj.", zh:"身体的；物质的",           forms:["physical"]},
+          {word:"monitor",    ipa:"/ˈmɒnɪtə/",    pos:"v.",   zh:"监测 n. 监护仪",           forms:["monitored"]},
+          {word:"precaution", ipa:"/prɪˈkɔːʃən/", pos:"n.",   zh:"预防，预防措施",           forms:["precaution"]},
+          {word:"sprain",     ipa:"/spreɪn/",     pos:"v.",   zh:"扭，扭伤 n. 扭伤",         forms:["sprain"]},
+          {word:"bruise",     ipa:"/bruːz/",      pos:"n.",   zh:"青肿，伤痕 v. 使淤青",      forms:["bruise"]},
+          {word:"hardy",      ipa:"/ˈhɑːdi/",     pos:"adj.", zh:"强壮的，能吃苦耐劳的",      forms:["hardy"]}
+        ]
+      },
+      {
+        id:"H1-P5", slug:"tem4-H1-P5", title:"健康习惯", shape:"波浪",
+        poster:"assets/tem4/posters/H1_P5.png",
+        sentence:"Wholesome meals nourish the body, proper sleep restores mental energy, and subtle daily care keeps chronic tiredness and severe illness away from a once vulnerable body.",
+        sentenceCn:"健康的饭菜滋养身体，充足的睡眠恢复精神，日常点滴细致的调理让慢性疲劳和重病远离曾经脆弱的身体。",
+        scene:"明亮餐厨间，小叶学姐面对沙拉、水果和牛奶的健康早餐微笑，窗外阳光洒满粉彩窗帘。",
+        words:[
+          {word:"nourish",    ipa:"/ˈnʌrɪʃ; ˈnɜːrɪʃ/", pos:"vt.",  zh:"滋养，养育",             forms:["nourish"]},
+          {word:"mental",     ipa:"/ˈmentəl/",          pos:"adj.", zh:"心智的，精神的",          forms:["mental"]},
+          {word:"subtle",     ipa:"/ˈsʌtl/",            pos:"adj.", zh:"微妙的，难以察觉的",       forms:["subtle"]},
+          {word:"chronic",    ipa:"/ˈkrɒnɪk/",          pos:"adj.", zh:"慢性的；长期的",          forms:["chronic"]},
+          {word:"severe",     ipa:"/sɪˈvɪə/",           pos:"adj.", zh:"严重的；剧烈的",          forms:["severe"]},
+          {word:"vulnerable", ipa:"/ˈvʌlnərəbl/",       pos:"adj.", zh:"脆弱的，易受伤害的",       forms:["vulnerable"]}
+        ]
+      }
+    ]
+  },
   {id:"H2", cat:"H", zh:"看医生",     name:"Hospital Visit",  status:"soon", words:70,  desc:"诊室、药方、检查"},
   {id:"H3", cat:"H", zh:"心理与情绪", name:"Psychology",       status:"soon", words:70,  desc:"大脑、对话、冥想"}
 ];

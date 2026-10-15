@@ -9703,7 +9703,7 @@ const EPISODES = [
       {
         "word": "indeterminate",
         "zh": "不确定的；无法判定的。常用于结果与结论。",
-        "ex": "Four cases were left <b>indeterminate</b> — neither clear successes nor clear failures."
+        "ex": "Three cases were left <b>indeterminate</b> — neither clear successes nor clear failures."
       },
       {
         "word": "imposition",
