@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1-G4/H1 已上线（32 主题 / 160 Part / 960 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1-G4/H1-H2 已上线（33 主题 / 165 Part / 990 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -2649,7 +2649,85 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"H2", cat:"H", zh:"看医生",     name:"Hospital Visit",  status:"soon", words:70,  desc:"诊室、药方、检查"},
+  {id:"H2", cat:"H", zh:"看医生", name:"Hospital Visit", status:"live", date:"2026-10-16", words:30, desc:"深夜急诊、候诊长廊、诊室问诊、检验处置与医嘱康复",
+    parts:[
+      {
+        id:"H2-P1", slug:"tem4-H2-P1", title:"深夜急诊", shape:"拱门",
+        poster:"assets/tem4/posters/H2_P1.png",
+        sentence:"Late that night, Xiao Song staggered back to the dorm, pale, fragile and oddly haggard, shuddering with chills; when he suddenly collapsed and a bump swelled on his forehead, we rushed him straight to the campus hospital.",
+        sentenceCn:"深夜，小松摇摇晃晃回到宿舍，脸色苍白、身体虚弱、面容憔悴，冷得直打寒战；他突然倒下，额头上肿起一个包，我们立刻把他送往校医院。",
+        scene:"深夜宿舍，小叶学姐扶住倒在地毯上、额头肿包的灰猫同学，仓鼠同学在一旁担忧，窗外月色朦胧。",
+        words:[
+          {word:"stagger",  ipa:"/ˈstæɡə/",    pos:"v.",   zh:"（使）摇晃，蹒跚而行",      forms:["staggered"]},
+          {word:"fragile",  ipa:"/ˈfrædʒaɪl/", pos:"adj.", zh:"易碎的；脆弱的，虚弱的",    forms:["fragile"]},
+          {word:"haggard",  ipa:"/ˈhæɡəd/",    pos:"adj.", zh:"憔悴的，形容枯槁的",       forms:["haggard"]},
+          {word:"shudder",  ipa:"/ˈʃʌdə/",     pos:"vi.",  zh:"战栗，发抖",              forms:["shuddering"]},
+          {word:"collapse", ipa:"/kəˈlæps/",   pos:"vi.",  zh:"倒下；（健康等）垮掉",      forms:["collapsed"]},
+          {word:"bump",     ipa:"/bʌmp/",      pos:"n.",   zh:"碰撞；肿块",              forms:["bump"]}
+        ]
+      },
+      {
+        id:"H2-P2", slug:"tem4-H2-P2", title:"候诊长廊", shape:"叶形",
+        poster:"assets/tem4/posters/H2_P2.png",
+        sentence:"In the crowded corridor, the invalid groaned in distress on a bench, trembling in his blanket yet still conscious enough to joke; the queue crept along, and even gentle Xiao Ye grew impatient.",
+        sentenceCn:"拥挤的候诊长廊里，病人躺在长椅上痛苦地呻吟，裹着毯子瑟瑟发抖，却仍神志清醒地开玩笑；队伍挪得很慢，连温柔的小叶学姐也等得焦急起来。",
+        scene:"粉彩候诊长廊，灰猫同学裹着毯子躺在长椅上，小叶学姐递上温水轻拍他的头，仓鼠同学张望叫号牌。",
+        words:[
+          {word:"invalid",   ipa:"/ɪnˈvælɪd/",   pos:"n.",   zh:"病人；病弱者",           forms:["invalid"]},
+          {word:"groan",     ipa:"/ɡrəʊn/",      pos:"v.",   zh:"呻吟 n. 呻吟声",        forms:["groaned"]},
+          {word:"distress",  ipa:"/dɪˈstres/",   pos:"n.",   zh:"痛苦，不适，疼痛",       forms:["distress"]},
+          {word:"tremble",   ipa:"/ˈtrembl/",    pos:"vi.",  zh:"哆嗦，震颤",            forms:["trembling"]},
+          {word:"conscious", ipa:"/ˈkɒnʃəs/",    pos:"adj.", zh:"神志清醒的；有意识的",    forms:["conscious"]},
+          {word:"impatient", ipa:"/ɪmˈpeɪʃənt/", pos:"adj.", zh:"不耐烦的；焦急的",       forms:["impatient"]}
+        ]
+      },
+      {
+        id:"H2-P3", slug:"tem4-H2-P3", title:"诊室问诊", shape:"椭圆",
+        poster:"assets/tem4/posters/H2_P3.png",
+        sentence:"In the consulting room, the doctor patiently listened to his misery: he had vomited twice in the night, every smell disgusted him, and a stab of pain shot through his stomach when he coughed; learning that he was sensitive to penicillin, she explained how the virus might still affect his gut for a few days.",
+        sentenceCn:"诊室里，医生耐心听完他的痛苦描述：夜里吐了两次，闻到任何气味都恶心，一咳嗽胃部就一阵刺痛；得知他对青霉素过敏后，她解释说病毒可能还会影响他的肠胃几天。",
+        scene:"暖黄诊室，熊猫医生坐在圆桌前倾听，小叶学姐拿小本子记录，灰猫同学捂着肚子坐在检查椅上。",
+        words:[
+          {word:"misery",    ipa:"/ˈmɪzəri/",   pos:"n.",   zh:"痛苦，悲惨",               forms:["misery"]},
+          {word:"vomit",     ipa:"/ˈvɒmɪt/",    pos:"v.",   zh:"呕吐，作呕",              forms:["vomited"]},
+          {word:"disgust",   ipa:"/dɪsˈɡʌst/",  pos:"n.",   zh:"厌恶，恶心 vt. 使作呕",    forms:["disgusted"]},
+          {word:"stab",      ipa:"/stæb/",      pos:"n.",   zh:"刺，刺痛，伤痛 v. 刺",     forms:["stab"]},
+          {word:"sensitive", ipa:"/ˈsensɪtɪv/", pos:"adj.", zh:"敏感的；（神经）过敏的",    forms:["sensitive"]},
+          {word:"affect",    ipa:"/əˈfekt/",    pos:"vt.",  zh:"影响；（疾病）侵袭",       forms:["affect"]}
+        ]
+      },
+      {
+        id:"H2-P4", slug:"tem4-H2-P4", title:"检验处置", shape:"超圆角",
+        poster:"assets/tem4/posters/H2_P4.png",
+        sentence:"The nurse disinfected the scrape on his arm and drew a blood sample; the X-ray showed every bone was intact, though he had twisted his ankle in the fall, and the doctor noticed that the fever had split his lips and burst a tiny vessel in his nose before asking if he had ever been immunized against influenza.",
+        sentenceCn:"护士为他手臂的擦伤消毒并抽了血样；X 光显示骨头全部完好，只是摔倒时扭到了脚踝；医生还发现高烧使他的嘴唇干裂、鼻子里一根细小血管破裂，随后问他是否接种过流感疫苗。",
+        scene:"明亮处置室，兔护士为灰猫同学的手臂消毒，小叶学姐握着他的爪子安慰，墙上 X 光片显示骨头形状。",
+        words:[
+          {word:"disinfect",   ipa:"/ˌdɪsɪnˈfekt/",    pos:"vt.",  zh:"杀菌消毒",               forms:["disinfected"]},
+          {word:"immunize",    ipa:"/ˈɪmjʊnaɪz/",      pos:"vt.",  zh:"使免疫",                forms:["immunized"]},
+          {word:"intact",      ipa:"/ɪnˈtækt/",        pos:"adj.", zh:"完好无缺的，无损伤的",     forms:["intact"]},
+          {word:"twist",       ipa:"/twɪst/",          pos:"v.",   zh:"拧，扭；转动",           forms:["twisted"]},
+          {word:"split",       ipa:"/splɪt/",          pos:"v.",   zh:"裂开，破裂",             forms:["split"]},
+          {word:"burst",       ipa:"/bɜːst/",          pos:"v.",   zh:"爆裂，炸破",             forms:["burst"]}
+        ]
+      },
+      {
+        id:"H2-P5", slug:"tem4-H2-P5", title:"医嘱康复", shape:"波浪",
+        poster:"assets/tem4/posters/H2_P5.png",
+        sentence:"At last she handed him the medicine with firm advice: take it after meals so it will not harm his stomach, never abuse the antibiotics, restrain himself from jogging this week—a week of good rest will rehabilitate him completely—and return at once if the fever resumes its torment.",
+        sentenceCn:"最后她把药递给他，叮嘱得很坚决：饭后服药以免伤胃，切勿滥用抗生素，这周克制自己别去跑步——好好休息一周就能完全康复——若高烧再度折磨他，务必马上回来复诊。",
+        scene:"清晨校医院门口，熊猫医生递上药袋，痊愈的灰猫同学额头贴着小创可贴微笑，小叶学姐拎着水果探病篮。",
+        words:[
+          {word:"harm",         ipa:"/hɑːm/",            pos:"n./vt.", zh:"损害，伤害，危害",       forms:["harm"]},
+          {word:"abuse",        ipa:"/əˈbjuːz/",         pos:"vt.",    zh:"滥用；虐待，辱骂",       forms:["abuse"]},
+          {word:"restrain",     ipa:"/rɪˈstreɪn/",       pos:"vt.",    zh:"克制，抑制，约束",       forms:["restrain"]},
+          {word:"rehabilitate", ipa:"/ˌriːhəˈbɪlɪteɪt/", pos:"v.",     zh:"使恢复正常生活",        forms:["rehabilitate"]},
+          {word:"resume",       ipa:"/rɪˈzjuːm/",        pos:"v.",     zh:"重新开始，恢复",        forms:["resumes"]},
+          {word:"torment",      ipa:"/ˈtɔːment/",        pos:"n.",     zh:"痛苦，折磨",            forms:["torment"]}
+        ]
+      }
+    ]
+  },
   {id:"H3", cat:"H", zh:"心理与情绪", name:"Psychology",       status:"soon", words:70,  desc:"大脑、对话、冥想"}
 ];
 
