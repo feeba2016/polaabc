@@ -7625,6 +7625,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-16",
+    "title": "The Ceiling That Was Too Bright",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-16-the-ceiling-that-was-too-bright",
+    "url": "lessons/b2/2026-10-16-the-ceiling-that-was-too-bright.html",
+    "vocab": [
+      {
+        "word": "commission",
+        "zh": "委托（创作）；委员会（名词，读作 /kəˈmɪʃn/。accept a commission 接受一项委托；a commission from the pope 来自教皇的委托。另一义项是“委员会”，如 the European Commission 欧盟委员会。动词 commission 意为“委托创作”，及物：commission an artist to paint a ceiling 委托一位画家画天顶）",
+        "ex": "\"... he accepted the painter's commission.\""
+      },
+      {
+        "word": "plaster",
+        "zh": "灰泥；灰浆（读作 /ˈplɑːstə/，美音 /ˈplæstər/。wet plaster 湿灰泥；a coat of plaster 一层灰泥。湿壁画的要害就在这个词上：颜料必须在灰泥还湿的时候画上去，干了就再也进不去。动词 plaster 意为“涂抹”；plaster cast 石膏模型）",
+        "ex": "\"Because he painted in buon fresco — pigment brushed into wet lime plaster — ...\""
+      },
+      {
+        "word": "sombre",
+        "zh": "阴沉的；暗淡的（英式拼写，美式 somber，读作 /ˈsɒmbə/。a sombre palette 暗淡的用色；a sombre mood 沉重的心情。它不只指颜色深，还带一点“情绪沉重”的意味——正因如此，19 世纪的评论家才会把一层烟灰读成米开朗基罗的性格）",
+        "ex": "\"... the sombre Michelangelo they admired was, in part, five hundred years of dirt.\""
+      },
+      {
+        "word": "solvent",
+        "zh": "溶剂；有偿付能力的（读作 /ˈsɒlvənt/。an organic solvent 有机溶剂；a solvent gel 溶剂凝胶。形容词义指“有偿付能力的”，如 a solvent company 一家有偿付能力的公司，常见于财经文本。同族词：dissolve 溶解 · solution 溶液 · soluble 可溶的）",
+        "ex": "\"In 1979 the Vatican's chief restorer ... tested a solvent on an area the size of a postage stamp ...\""
+      },
+      {
+        "word": "oxidised",
+        "zh": "氧化了的（英式拼写，美式 oxidized，读作 /ˈɒksɪdaɪzd/。oxidised glue 氧化了的动物胶；oxidised metal 氧化金属。动词 oxidise／oxidize，名词 oxidation 氧化作用。本课里胶层氧化后变成不透明的褐色，正是天顶变暗的主因之一）",
+        "ex": "\"What came off the ceiling ... was soot, saltpetre and oxidised glue.\""
+      },
+      {
+        "word": "grime",
+        "zh": "污垢；积垢（不可数名词，读作 /ɡraɪm/，特指“一层层积起来的脏东西”，比 dirt 更强调“附着、结成层”。covered in grime 积满污垢；layers of grime 一层层积垢。形容词 grimy 脏兮兮的。注意它不可数，不说 a grime）",
+        "ex": "\"... James Beck ... argued that the dark layer was not merely grime.\""
+      },
+      {
+        "word": "scrutiny",
+        "zh": "仔细审查；详细检查（正式，读作 /ˈskruːtəni/，重音在第一音节。close scrutiny 仔细审查；under scrutiny 受到审查；subject a claim to scrutiny 对某个说法加以检验。动词 scrutinise／scrutinize。它比 examination 更强调“挑剔地、一寸一寸地看”）",
+        "ex": "\"The restorers answered with cross-sections: under scrutiny the dirt sat above the pigment, not inside it.\""
+      },
+      {
+        "word": "pigment",
+        "zh": "颜料；色素（读作 /ˈpɪɡmənt/。mineral pigments 矿物颜料；the pigment layer 颜料层。它指“有颜色的粉末物质”本身，与 paint（调和好的涂料）、colour（颜色这一属性）、dye（染料）都不同。本课的关键：脏东西在颜料层之上，不在颜料层里面）",
+        "ex": "\"... the dirt sat above the pigment, not inside it.\""
+      },
+      {
+        "word": "retouching",
+        "zh": "补笔；润饰（读作 /ˌriːˈtʌtʃɪŋ/，指后人在原作上补画、加笔以掩盖缺损的部分。动词 retouch，如 retouch a photograph 修图。文物保护里这是个敏感词：后人的补笔属于“后来加上的东西”，原则上必须与艺术家本人的笔触区分开）",
+        "ex": "\"... though some retouching by later hands went with it.\""
+      },
+      {
+        "word": "irreversible",
+        "zh": "不可逆转的；无法恢复原状的（读作 /ˌɪrɪˈvɜːsəbl/。an irreversible decision 不可撤销的决定；irreversible damage 不可修复的损害。前缀 ir- 是 in- 在 r 前的变体，反义 reversible。这个词是整场修复之争的分量所在：洗错了可以承认，洗掉的东西却放不回去）",
+        "ex": "\"Cleaning, once undertaken, is irreversible: a shadow aged five centuries cannot be put back.\""
+      },
+      {
+        "word": "consensus",
+        "zh": "共识；一致意见（读作 /kənˈsensəs/，重音在第二音节。a broad consensus 广泛共识；reach a consensus 达成共识；the consensus among experts is that ... 专家的共识是……。注意拼写是 -ensus 不是 -ence；它通常作单数，但指“多数人的一致意见”而非“全体同意”）",
+        "ex": "\"The consensus among conservators today is that the bulk of what was removed was soot and later varnish.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

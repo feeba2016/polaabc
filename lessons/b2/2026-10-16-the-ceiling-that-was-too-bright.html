@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Ceiling That Was Too Bright</title>
+<style>
+:root{
+  --accent:#1e3a8a;
+  --accent2:#a16207;
+  --bg:#faf8f5;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#e6ded1;
+  --soft:#f6f1e9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(30,58,138,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(30,58,138,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,58,138,.5);}70%{box-shadow:0 0 0 12px rgba(30,58,138,0);}100%{box-shadow:0 0 0 0 rgba(30,58,138,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(30,58,138,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Arts</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Ceiling That Was Too Bright</h1>
+      <p class="subtitle">米开朗基罗画了四年，烟熏了五百年，清洗了十四年。1980—1994 年那次修复把天顶洗成了明亮的绿与粉，也让艺术史吵了四十年｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Ceiling Nobody Saw Clearly 一幅谁也没真正看清过的天顶</div>
+            <p>Michelangelo painted the Sistine Chapel ceiling between 1508 and 1512, and he did so unwillingly: a sculptor by training, he accepted the painter's <span class="kw" data-def="委托（创作）；委员会（名词，读作 /kəˈmɪʃn/。accept／refuse a commission 接受／拒绝一项委托；a commission from the pope 来自教皇的委托。本课取第一义。同一词的另一义是“委员会”，如 the European Commission。动词 commission 意为“委托创作”，注意它是及物的：commission an artist to paint a ceiling）">commission</span>. He worked standing on a scaffold of his own design, not lying on his back as the legend has it. Because he painted in buon fresco — pigment brushed into wet lime <span class="kw" data-def="灰泥；灰浆（名词，读作 /ˈplɑːstə/，美音 /ˈplæstər/。wet plaster 湿灰泥；a coat of plaster 一层灰泥。湿壁画的要害就在这个词上：颜料必须在灰泥还湿的时候画上去，干了就再也进不去了。动词 plaster 意为“涂抹、粘贴”）">plaster</span> — he could finish only as much as one day's plaster allowed; restorers later counted roughly three hundred patches. Then the ceiling began to disappear under candle smoke, dust, saltpetre, and the glue and varnish of earlier repairers. <span class="kw" data-def="So + 形容词置于句首，主句必须部分倒装：助动词／be 提到主语之前。还原为正常语序是 the surface had become so dark that ...。这个句型的作用是把“程度”推到最前面，读者还没看到主语就先感受到那个程度，常用于叙事的转折处。注意与 such 的区别：so + 形容词／副词，such + (a) + 名词">So</span> dark had the surface become by the nineteenth century that critics mistook soot for style: the <span class="kw" data-def="阴沉的；暗淡的（形容词，英式拼写，美式为 somber，读作 /ˈsɒmbə/。a sombre palette 暗淡的用色；a sombre mood 沉重的心情。它不仅指颜色深，还带一点“情绪沉重”的意味——正因如此，19 世纪的评论家才会把一层烟灰读成米开朗基罗的性格）">sombre</span> Michelangelo they admired was, in part, five hundred years of dirt.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The Patch the Size of a Stamp 邮票大小的那一小块</div>
+            <p>In 1979 the Vatican's chief restorer, Gianluigi Colalucci, tested a <span class="kw" data-def="溶剂；有偿付能力的（名词／形容词，读作 /ˈsɒlvənt/。an organic solvent 有机溶剂；a solvent gel 溶剂凝胶。本课取名词义。形容词义指“有偿付能力的”，如 a solvent company 一家有偿付能力的公司，常见于财经文本。动词 dissolve 溶解，名词 solution 溶液，三个词同源）">solvent</span> on an area the size of a postage stamp and found colour underneath that no photograph had prepared him for. The cleaning ran from 1980 to 1994, funded by a Japanese television network in exchange for filming rights. The instrument was unglamorous: a gel known as AB 57 — ammonium and sodium bicarbonate in a cellulose thickener — applied for three minutes and rinsed away. <span class="kw" data-def="What 引导名词性关系从句，等于 the thing that，整个从句作主句主语。这里两个 What 从句并列对举，形成“下来的 / 露出来的”的对照：What came off ... What came through ...。注意它没有先行词，前面不能再加名词">What</span> came off the ceiling, the team recorded in dated vials, was soot, saltpetre and <span class="kw" data-def="氧化的；已氧化的（形容词，读作 /ˈɒksɪdaɪzd/，英式拼写 oxidised，美式 oxidized。oxidised glue 氧化了的动物胶；oxidised metal 氧化金属。动词 oxidise／oxidize，名词 oxidation 氧化作用。本课里胶层氧化后变成不透明的褐色，正是天顶变暗的主因之一）">oxidised</span> glue. What came through was lime green, coral pink, turquoise and gold. <span class="kw" data-def="Had 提前＝省略 if 的虚拟条件句，与过去事实相反。还原为 If anyone in 1900 had been shown the result, they would not have recognised ...。注意时态配对：从句 had done ↔ 主句 would have done。Had 提前时 not 要放在主语之后，不可写成 Hadn't anyone">Had</span> anyone in 1900 been shown the result, they would not have recognised the ceiling they knew.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Objection 反对意见</div>
+            <p><span class="kw" data-def="Not + everyone／all／every／both 构成“部分否定”，意思是“并非所有人都……”，不是“所有人都不是……”。全部否定要说 No one was persuaded 或 Nobody was persuaded。这是英语里最容易翻错的一处：Not all the glue was old = 并非所有胶都是旧的（有些是新的）；All the glue was not old 在正式文体里通常也按部分否定理解，但歧义大，写作时应避开">Not</span> everyone was persuaded. James Beck, a Columbia art historian who had written three books on Michelangelo, argued that the dark layer was not merely grime. In his reading, each panel was finished in two stages: the figure painted into wet plaster, then, once the plaster had cured, shadows and half-tones added a secco — on the dry wall — in a glue medium. To a restorer such passages would look exactly like glue-trapped soot, and no solvent can tell sixteenth-century glue from nineteenth-century glue; both are protein, both dissolve. Beck called the cleaning an artistic disaster and founded a group to oppose it. A petition signed by artists, among them Andy Warhol, asked that the work <span class="kw" data-def="be 这里是虚拟语气：表示“要求、建议、命令、坚持”的动词（ask / demand / insist / require / recommend / suggest）后面的 that 从句，谓语用“(should) + 动词原形”，第三人称单数也不加 -s。英式英语常保留 should（... asked that the work should be halted），美式英语通常省略 should，直接说 ... asked that the work be halted。判断标志：无论主语是什么人称，动词都是原形">be</span> halted. It continued.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What the Argument Was Really About 这场争论真正在争什么</div>
+            <p>The restorers answered with cross-sections: under <span class="kw" data-def="仔细审查；详细检查（名词，正式，读作 /ˈskruːtəni/，重音在第一音节。close／careful scrutiny 仔细审查；under scrutiny 受到审查；subject a claim to scrutiny 对某个说法加以检验。动词 scrutinise／scrutinize。它比 examination 更强调“挑剔地、一寸一寸地看”）">scrutiny</span> the dirt sat above the <span class="kw" data-def="颜料；色素（名词，读作 /ˈpɪɡmənt/。mineral pigments 矿物颜料；pigment layer 颜料层。它指“有颜色的粉末物质”本身，与 paint（调和好的涂料）、colour（颜色这个属性）、dye（染料）都不同。本课的关键：脏东西在颜料层之上，不在颜料层里面）">pigment</span>, not inside it. The <span class="kw" data-def="共识；一致看法（名词，读作 /kənˈsensəs/，重音在第二音节。the consensus among conservators 修复师群体的共识；a broad consensus 广泛共识。它通常作单数，指“多数人的一致意见”，并不等于“全体同意”——本课用它正是这个分寸：多数人接受修复方的判断，但异议并未消失）">consensus</span> among conservators today is that the bulk of what was removed was soot and later varnish, though some <span class="kw" data-def="补笔；润饰（名词，读作 /ˌriːˈtʌtʃɪŋ/。指后人在原作上补画、加笔以掩盖缺损的部分。动词 retouch，如 retouch a photograph 修图。文物保护里 retouching 是个敏感词：后人的补笔属于“后来加的东西”，原则上应当与艺术家本人的笔触区分开）">retouching</span> by later hands went with it. The dispute never quite closed — and it changed the field. Cleaning, once undertaken, is <span class="kw" data-def="不可逆转的；无法恢复原状的（形容词，读作 /ˌɪrɪˈvɜːsəbl/。an irreversible decision 不可撤销的决定；irreversible damage 不可修复的损害。前缀 ir- 是 in- 在 r 前的变体，反义 reversible。这个词是整场修复之争的分量所在：洗掉的烟灰可以承认洗错了，但洗掉的东西放不回去）">irreversible</span>: a shadow aged five centuries cannot be put back. Museums turned towards prevention instead — climate control, filtration, minimum intervention. Colalucci himself put the difficulty best, noting that around the dimmed and smoky Michelangelo a whole culture had formed. The paint beneath the soot, the argument above it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+        <div class="card" style="background:var(--soft);">
+          <p style="margin:0;font-size:14.5px;color:#4b5563;"><b>背景速览：</b>西斯廷礼拜堂建于 1473—1481 年，得名于教皇西克斯图斯四世。米开朗基罗 1508—1512 年绘制天顶，1536—1541 年又画了祭坛墙上的《最后的审判》。修复由梵蒂冈博物馆修复部门主导，首席修复师为 Gianluigi Colalucci；工程自 1980 年持续至 1994 年，资金来自日本电视台 NTV，条件是取得拍摄与影像使用权。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="commission">🔊</button><div class="word">commission<span class="pos">n. / v.</span></div><div class="zh">委托（创作）；委员会（名词，读作 /kəˈmɪʃn/。accept a commission 接受一项委托；a commission from the pope 来自教皇的委托。另一义项是“委员会”，如 the European Commission 欧盟委员会。动词 commission 意为“委托创作”，及物：commission an artist to paint a ceiling 委托一位画家画天顶）</div><div class="ex">"... he accepted the painter's commission."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="plaster">🔊</button><div class="word">plaster<span class="pos">n.</span></div><div class="zh">灰泥；灰浆（读作 /ˈplɑːstə/，美音 /ˈplæstər/。wet plaster 湿灰泥；a coat of plaster 一层灰泥。湿壁画的要害就在这个词上：颜料必须在灰泥还湿的时候画上去，干了就再也进不去。动词 plaster 意为“涂抹”；plaster cast 石膏模型）</div><div class="ex">"Because he painted in buon fresco — pigment brushed into wet lime plaster — ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sombre">🔊</button><div class="word">sombre<span class="pos">adj.</span></div><div class="zh">阴沉的；暗淡的（英式拼写，美式 somber，读作 /ˈsɒmbə/。a sombre palette 暗淡的用色；a sombre mood 沉重的心情。它不只指颜色深，还带一点“情绪沉重”的意味——正因如此，19 世纪的评论家才会把一层烟灰读成米开朗基罗的性格）</div><div class="ex">"... the sombre Michelangelo they admired was, in part, five hundred years of dirt."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="solvent">🔊</button><div class="word">solvent<span class="pos">n. / adj.</span></div><div class="zh">溶剂；有偿付能力的（读作 /ˈsɒlvənt/。an organic solvent 有机溶剂；a solvent gel 溶剂凝胶。形容词义指“有偿付能力的”，如 a solvent company 一家有偿付能力的公司，常见于财经文本。同族词：dissolve 溶解 · solution 溶液 · soluble 可溶的）</div><div class="ex">"In 1979 the Vatican's chief restorer ... tested a solvent on an area the size of a postage stamp ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="oxidised">🔊</button><div class="word">oxidised<span class="pos">adj.</span></div><div class="zh">氧化了的（英式拼写，美式 oxidized，读作 /ˈɒksɪdaɪzd/。oxidised glue 氧化了的动物胶；oxidised metal 氧化金属。动词 oxidise／oxidize，名词 oxidation 氧化作用。本课里胶层氧化后变成不透明的褐色，正是天顶变暗的主因之一）</div><div class="ex">"What came off the ceiling ... was soot, saltpetre and oxidised glue."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="grime">🔊</button><div class="word">grime<span class="pos">n.</span></div><div class="zh">污垢；积垢（不可数名词，读作 /ɡraɪm/，特指“一层层积起来的脏东西”，比 dirt 更强调“附着、结成层”。covered in grime 积满污垢；layers of grime 一层层积垢。形容词 grimy 脏兮兮的。注意它不可数，不说 a grime）</div><div class="ex">"... James Beck ... argued that the dark layer was not merely grime."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="scrutiny">🔊</button><div class="word">scrutiny<span class="pos">n.</span></div><div class="zh">仔细审查；详细检查（正式，读作 /ˈskruːtəni/，重音在第一音节。close scrutiny 仔细审查；under scrutiny 受到审查；subject a claim to scrutiny 对某个说法加以检验。动词 scrutinise／scrutinize。它比 examination 更强调“挑剔地、一寸一寸地看”）</div><div class="ex">"The restorers answered with cross-sections: under scrutiny the dirt sat above the pigment, not inside it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pigment">🔊</button><div class="word">pigment<span class="pos">n.</span></div><div class="zh">颜料；色素（读作 /ˈpɪɡmənt/。mineral pigments 矿物颜料；the pigment layer 颜料层。它指“有颜色的粉末物质”本身，与 paint（调和好的涂料）、colour（颜色这一属性）、dye（染料）都不同。本课的关键：脏东西在颜料层之上，不在颜料层里面）</div><div class="ex">"... the dirt sat above the pigment, not inside it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="retouching">🔊</button><div class="word">retouching<span class="pos">n.</span></div><div class="zh">补笔；润饰（读作 /ˌriːˈtʌtʃɪŋ/，指后人在原作上补画、加笔以掩盖缺损的部分。动词 retouch，如 retouch a photograph 修图。文物保护里这是个敏感词：后人的补笔属于“后来加上的东西”，原则上必须与艺术家本人的笔触区分开）</div><div class="ex">"... though some retouching by later hands went with it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="irreversible">🔊</button><div class="word">irreversible<span class="pos">adj.</span></div><div class="zh">不可逆转的；无法恢复原状的（读作 /ˌɪrɪˈvɜːsəbl/。an irreversible decision 不可撤销的决定；irreversible damage 不可修复的损害。前缀 ir- 是 in- 在 r 前的变体，反义 reversible。这个词是整场修复之争的分量所在：洗错了可以承认，洗掉的东西却放不回去）</div><div class="ex">"Cleaning, once undertaken, is irreversible: a shadow aged five centuries cannot be put back."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="consensus">🔊</button><div class="word">consensus<span class="pos">n.</span></div><div class="zh">共识；一致意见（读作 /kənˈsensəs/，重音在第二音节。a broad consensus 广泛共识；reach a consensus 达成共识；the consensus among experts is that ... 专家的共识是……。注意拼写是 -ensus 不是 -ence；它通常作单数，但指“多数人的一致意见”而非“全体同意”）</div><div class="ex">"The consensus among conservators today is that the bulk of what was removed was soot and later varnish."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 修复现场的词链：</b>surface 表面 → <b>grime 积垢</b> → <b>solvent 溶剂</b> → <b>pigment 颜料</b>（矿物颜料，不是涂料）→ <b>plaster 灰泥</b> → <b>retouching 后人补笔</b> → <b>irreversible 不可逆</b>。这条链几乎就是一次修复报告的顺序。<br>
+        <b>② “脏”的三个词，程度递进：</b>dust 浮尘（能扫掉）→ <b>grime 积垢</b>（结成层的）→ <b>accretion 累积物</b>（专业术语，指几百年一层层加上去的一切，包括前人好心办坏事的修补）。<br>
+        <b>③ 化学同族词：</b><b>oxidise 氧化</b> → oxidation 氧化作用 → antioxidant 抗氧化剂；dissolve 溶解 → <b>solvent 溶剂</b> → solution 溶液 → soluble 可溶的 → insoluble 不溶的。<br>
+        <b>④ 否定前缀 ir-／il-／im-：</b><b>irreversible 不可逆的</b>（ir- + r）· illegal 非法的（il- + l）· impossible 不可能的（im- + p／b／m）· irresponsible 不负责任的。<b>规则：前缀尾字母与词根首字母同化。</b><br>
+        <b>⑤ 表示“一致”的一对词：</b>agreement 两人之间的同意／协议 → <b>consensus 一群人的共识</b>（未必人人同意）。<b>consensus 是单数不可随意加 s。</b><br>
+        <b>⑥ 形近词提醒：</b><b>sombre 阴沉的</b> ≠ sober 清醒的／素净的；<b>pigment 颜料</b> ≠ pavement 人行道 ≠ segment 片段；<b>scrutiny 审查</b> ≠ scrutiny／security 安全；commission 委托 ≠ committee 委员会 ≠ commission／permission 许可。</p>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. So + 形容词置于句首的部分倒装 · So dark had the surface become that ...</h3>
+          <div class="zh">把 <b>So + 形容词／副词</b>（或 <b>Such + 名词短语</b>）放到句首表示强调时，主句<b>必须部分倒装</b>——把助动词、情态动词或 be 提到主语之前。它常用于叙事的转折处：读者还没看到主语，就已经先感受到那个“程度”。</div>
+          <div class="eg">课文原句：<b>So dark had the surface become by the nineteenth century that critics mistook soot for style.</b> 到十九世纪，那层表面已经暗到评论家把烟灰当成了风格。<br>
+          还原为正常语序：<b>The surface had become so dark that critics mistook soot for style.</b><br>
+          同类：<b>So rapidly did the colour emerge that the team photographed it before cleaning further.</b>／<b>So complete was the change that early copies no longer matched the original.</b><br>
+          注意：<b>so + 形容词／副词</b>，<b>such + (a) + 形容词 + 名词</b>——<b>Such was the shock that ...</b>（such 单独作表语时也要倒装）。</div>
+          <div class="practice">仿写：「这层清漆厚到修复师决定先做局部试验」。<input placeholder="So thick ... that the restorers decided to ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. What 名词性关系从句并列对举 · What came off ... What came through ...</h3>
+          <div class="zh"><b>What</b> 等于 <b>the thing that</b>，整个从句充当主句的主语或宾语。把两个 What 从句<b>并列对举</b>，是英语说明文里极干净的一种对照写法：结构完全对称，只换掉关键的两个词，对比就自己站起来了。</div>
+          <div class="eg">课文原句：<b>What came off the ceiling was soot, saltpetre and oxidised glue. What came through was lime green, coral pink, turquoise and gold.</b> 从天顶上下来的是烟灰、硝石和氧化了的胶；透出来的是青柠绿、珊瑚粉、绿松石蓝与金色。<br>
+          替换检验：把 What 换成 <b>The thing that</b>，两句依然成立 → 确认是名词性关系从句。<br>
+          同类：<b>What the critics defended was a tradition; what the restorers defended was a surface.</b><br>
+          <b>What looks like damage is often someone else's repair.</b></div>
+          <div class="practice">仿写：「被争论的是方法，被忽略的是证据」。<input placeholder="What was argued over was ... ; what was ignored was ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. Had 提前的倒装虚拟条件句 · Had anyone ... been shown ..., they would not have recognised ...</h3>
+          <div class="zh">把 <b>had</b> 提到主语之前即可省去 <b>if</b>，表示<b>与过去事实相反</b>的假设；主句用 <b>would / could / might have done</b>。它比 <b>If ... had ...</b> 更凝练，常用来做“<b>要是当时有人看到，会怎样</b>”的反事实收束。</div>
+          <div class="eg">课文原句：<b>Had anyone in 1900 been shown the result, they would not have recognised the ceiling they knew.</b> 假如 1900 年有人看到这个结果，他认不出自己熟悉的那面天顶。<br>
+          还原：<b>If anyone in 1900 had been shown the result, they would not have recognised ...</b><br>
+          同类：<b>Had the glue been Michelangelo's, the cross-sections would have shown it inside the plaster.</b><br>
+          否定式：<b>Had he not tested the stamp-sized patch, the project might never have begun.</b>（<b>not 放在主语之后</b>，不可写成 Hadn't he）</div>
+          <div class="practice">仿写：「假如当年的修复师用的是别的方法，我们今天看到的颜色会不同」。<input placeholder="Had the restorers used a different method, ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. 部分否定 · Not everyone was persuaded.</h3>
+          <div class="zh">英语里 <b>not</b> 与 <b>all / every / everyone / everything / both / always</b> 连用时，构成的是<b>部分否定</b>：“<b>并非全部</b>”，而不是“<b>全部都不</b>”。要表达全部否定，必须换成 <b>no one / none / nothing / neither / never</b>。这是中英互译最容易翻错的一处。</div>
+          <div class="eg">课文原句：<b>Not everyone was persuaded.</b> 并非所有人都被说服了。（＝ 有人信，有人不信）<br>
+          对比全部否定：<b>No one was persuaded.</b> 谁也没被说服。<br>
+          同类：<b>Not all of the dark layer was grime.</b>（部分否定，暗含“有一部分是”）／<b>None of the dark layer was grime.</b>（全部否定）<br>
+          <b>Both accounts are not accurate.</b> 属于歧义句，正式写作应避开，改写为 <b>Neither account is accurate.</b></div>
+          <div class="practice">仿写：「并非所有被洗掉的东西都是后人的添加物」。<input placeholder="Not everything removed was ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. 名词性从句中的虚拟语气 · asked that the work be halted</h3>
+          <div class="zh">表示<b>要求、建议、命令、坚持</b>的动词（ask / demand / insist / require / request / recommend / propose / suggest）后面的 <b>that</b> 从句，谓语用<b>“(should) + 动词原形”</b>——<b>不管主语是第几人称，一律用原形</b>。英式英语常保留 should，美式英语通常省略。这一式也叫 <b>mandative subjunctive</b>。</div>
+          <div class="eg">课文原句：<b>A petition signed by artists ... asked that the work be halted.</b> 一份由艺术家签名的请愿书要求停止这项工作。<br>
+          英式变体：<b>... asked that the work should be halted.</b><br>
+          同类：<b>The committee insisted that the solvent be tested on a small area first.</b>／<b>Critics demanded that the photographs be released.</b>／<b>It is essential that every stage be documented.</b><br>
+          易错：<b>suggest</b> 作“表明”讲时<b>不用</b>虚拟语气——<b>The cross-sections suggest that the dirt was on the surface.</b>（陈述事实，用 was）</div>
+          <div class="practice">仿写：「修复团队要求每一步都被拍照记录」。<input placeholder="The team required that every stage ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Points</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>① So / Such 置于句首引起的部分倒装</h3>
+          <div class="zh"><b>So + 形容词／副词</b> 或 <b>Such + 名词短语</b> 移到句首表示强调时，主句要<b>部分倒装</b>：把 be、助动词或情态动词提到主语之前；若谓语是一般动词，则借助 <b>do / does / did</b>。倒装<b>只发生在主句</b>，that 引导的结果从句语序不变。</div>
+          <div class="eg"><b>So dark had</b> the surface <b>become</b> that critics mistook soot for style.（过去完成，提 had）<br>
+          <b>So quickly did</b> the colour <b>appear</b> that the team stopped to photograph it.（一般过去，借 did）<br>
+          <b>Such was</b> the outcry that the Vatican published its method.（such 单独作表语，全部倒装）<br>
+          <b>Such a thin layer was</b> left that the plaster showed through.（such + a + 名词，部分倒装）<br>
+          易错：不要写成 <b>So dark the surface had become that ...</b>（没倒装，不成句），也不要把 that 从句也倒装。</div>
+        </div>
+
+        <div class="item">
+          <h3>② What 引导的名词性关系从句</h3>
+          <div class="zh"><b>what</b> 引导的从句叫名词性关系从句，等于 <b>the thing(s) that</b>；<b>whatever</b> = anything that，<b>whoever</b> = anyone who。它可在句中作<b>主语、宾语或表语</b>。与定语从句最大的区别在于：<b>它没有先行词——what 自身就包含先行词</b>，所以它前面不能再出现名词。</div>
+          <div class="eg"><b>What</b> came off the ceiling <b>was</b> soot.（作主语，谓语通常用单数）<br>
+          <b>What</b> the cross-sections showed <b>was</b> that the dirt sat above the pigment.（作主语）<br>
+          <b>Whatever</b> was removed <b>was</b> recorded in dated vials.（＝ Anything that）<br>
+          <b>Whoever</b> signed the petition <b>expected</b> an answer.（＝ Anyone who）<br>
+          易错：不要写成 <b>The thing what came off ...</b>（what 前不可有先行词）；也不要写成 <b>What came off the ceiling, it was soot.</b>（多出一个 it）。<br>
+          注意主谓一致：表语是复数名词时，谓语可用复数——<b>What looked like shadows were later additions.</b></div>
+        </div>
+
+        <div class="item">
+          <h3>③ 虚拟条件句倒装三式：Were / Had / Should</h3>
+          <div class="zh">把 <b>were / had / should</b> 提到主语之前即可省去 <b>if</b>。三者时间关系不同：<b>Were (to do)</b> 与现在／将来事实相反；<b>Had (done)</b> 与过去事实相反；<b>Should (do)</b> 表将来且可能性较小。否定式把 <b>not</b> 放在<b>主语之后</b>（不可用 weren't he / hadn't he 的缩写形式倒装）。</div>
+          <div class="eg"><b>Had</b> anyone in 1900 <b>been shown</b> the result, they <b>would not have recognised</b> it.（与过去相反）<br>
+          <b>Were</b> the dark layer <b>to be</b> Michelangelo's own, the case <b>would be</b> different.（与现在／将来相反）<br>
+          <b>Should</b> a future analysis <b>find</b> otherwise, the record <b>would</b> have to be revised.（将来，可能性小）<br>
+          时态配对要牢记：<b>had done ↔ would / could / might have done</b>；<b>were / did ↔ would / could / might do</b>。<br>
+          易错：不可混搭——<b>Had he tested it, he will see ...</b> 属于时态错配。</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 部分否定与全部否定</h3>
+          <div class="zh"><b>not</b> 与 <b>all / every / everyone / everything / both / always / altogether</b> 连用，得到的是<b>部分否定</b>（并非全部）；要表示<b>全部否定</b>，须改用 <b>no / none / nothing / no one / neither / never</b>。两组词不能混用，否则意思正好相反。</div>
+          <div class="eg">部分否定：<b>Not everyone was persuaded.</b>／<b>Not all of the layer was grime.</b>／<b>The two accounts are not both reliable.</b><br>
+          全部否定：<b>No one was persuaded.</b>／<b>None of the layer was grime.</b>／<b>Neither account is reliable.</b><br>
+          频率副词同理：<b>The method does not always work.</b>（并非总是有效）vs <b>The method never works.</b>（从不有效）<br>
+          易错：<b>All ... not ...</b> 是歧义结构（All that glitters is not gold 属文学用法），学术与说明文写作中应改写为 <b>Not all ...</b> 或 <b>None ...</b>，把意思说死。</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 名词性从句中的虚拟语气（Mandative Subjunctive）</h3>
+          <div class="zh">在表示<b>要求、建议、命令、坚持、必要</b>的动词、形容词或名词之后，<b>that</b> 从句的谓语用<b>“(should) + 动词原形”</b>。触发词：ask / demand / insist / require / request / recommend / propose / urge；形容词 essential / vital / necessary / crucial / imperative；名词 proposal / demand / recommendation。被动式为 <b>(should) be done</b>。</div>
+          <div class="eg">They asked that the work <b>be halted</b>.（被动，不用 was halted）<br>
+          The committee insisted that every stage <b>be photographed</b>.<br>
+          <b>It is essential that</b> the solvent <b>be tested</b> on a small area first.<br>
+          <b>It is vital that</b> no original pigment <b>be removed</b>.<br>
+          英式常保留 should：<b>... asked that the work should be halted.</b><br>
+          陷阱：<b>suggest / indicate / show</b> 作“表明、显示”讲时<b>不</b>触发虚拟语气——<b>The tests suggest that the dirt was above the pigment.</b>（陈述事实，用 was，不用 be）</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、一幅画是怎么在五百年里慢慢变暗的</h3>
+        <p>西斯廷礼拜堂建于 1473—1481 年，得名于教皇西克斯图斯四世。米开朗基罗 1508—1512 年绘制天顶，二十多年后又在祭坛墙上画了《最后的审判》（1536—1541）。他画的是<b>湿壁画</b>：把矿物颜料刷进还湿着的石灰灰泥里，灰泥干燥碳化时，颜料被“锁”进墙里，成为墙的一部分。</p>
+        <p>这套方法决定了他的工作节奏。湿灰泥几小时就干，所以他每天只能画完一小块——意大利语叫 <b>giornata</b>，字面意思就是“一天的工作量”。修复师后来在天花板上数出大约<b>三百块</b>这样的接缝。这也意味着一件事：<b>画错了不能改，只能把那一块灰泥凿掉重抹重画。</b></p>
+        <p>四个半世纪里，天顶一直在被覆盖：蜡烛的烟、香火的尘、渗水带来的硝石；更麻烦的是前人一次次的“修补”——17、18 世纪的修复者往画面上刷动物胶与清漆，本意是保护与提色，胶层却在氧化后变成不透明的褐色。到十九世纪，画面已经暗到评论家把这种阴沉当成了米开朗基罗本人的气质：一个忧郁的、雕塑家式的画家。还有一个流传的说法是，某次十九世纪的清洗之后，人们因为<b>不习惯明亮的米开朗基罗</b>，又主动把画面弄暗了回去。</p>
+        <p>换句话说，被几代人当作“风格”来欣赏的东西，其实是一层累积物。这本身就是这一课最值得记住的一点：<b>你以为看到的是作品，看到的可能只是时间。</b></p>
+
+        <h3>二、1979 年那块邮票大小的试验</h3>
+        <p>转机来自一次极小心的试探。梵蒂冈博物馆首席修复师 <b>Gianluigi Colalucci</b> 在一块邮票大小的区域上试了一种溶剂，底下露出的颜色让他决定停下来重新评估整个方案。1980 年，正式清洗开始；天顶部分做到 1989 年，《最后的审判》1990—1994 年完成。资金来自日本电视台 NTV，条件是取得拍摄与影像使用权，总额为数百万美元。</p>
+        <table class="facts">
+          <tr><th>环节</th><th>具体做法</th><th>为什么重要</th></tr>
+          <tr><td>清洁材料</td><td>AB 57：碳酸氢铵、碳酸氢钠、表面活性剂与羧甲基纤维素配成的凝胶，由罗马中央修复研究所的 Paolo Mora 与 Laura Mora 研发</td><td>它本来用于清除石材与壁画表面的硬结盐类，并非为这幅天顶定制</td></tr>
+          <tr><td>操作</td><td>敷上凝胶约三分钟，再用蒸馏水洗净，逐寸推进</td><td>时间被严格控制，是为了让溶剂只作用于表层</td></tr>
+          <tr><td>记录</td><td>每一阶段拍照，用过的棉垫按日期留样，存下从天顶上取下来的脏东西</td><td>“拿掉了什么”是可被复查的证据，而不是说法</td></tr>
+          <tr><td>参照</td><td>某些角落被<b>刻意留下不洗</b>，作为对比区</td><td>今天站在礼拜堂里，仍可自己比对洗过与未洗过的部分</td></tr>
+        </table>
+        <p>结果震撼了艺术史：利比亚女先知从照片里的土褐色，变成了青柠绿与珊瑚粉；约拿的身影露出了明亮的蓝与金。用色之大胆，被不少学者拿来与后来的样式主义甚至马蒂斯相比。</p>
+
+        <h3>三、反对者到底在说什么</h3>
+        <p>反对最有力的是哥伦比亚大学艺术史教授 <b>James Beck</b>——他写过三本关于米开朗基罗的书，绝不是外行。他的论证是技术性的，但可以讲得很清楚：</p>
+        <ul>
+          <li><b>两阶段说。</b>米开朗基罗可能把每一块画成两步：先在湿灰泥里画完主体（<b>buon fresco</b>），等灰泥固化后，再用胶调和的颜料在<b>干墙</b>上加暗部、加中间调（<b>a secco</b>，即“干壁画”）。</li>
+          <li><b>无法区分。</b>在修复师眼里，这些干壁画笔触与被胶黏住的烟灰几乎一模一样；而溶剂分不出哪个是十六世纪的胶，哪个是十九世纪的胶——<b>两者都是蛋白质，都会被溶掉。</b></li>
+          <li><b>后果。</b>如果 Beck 是对的，那么清洗就是在抹掉艺术家最后的定型笔触，同时告诉自己“我们只是在除清漆”。他把这个结果称作艺术界的切尔诺贝利，并参与创立了 ArtWatch International 予以监督。</li>
+        </ul>
+        <p>当时还有一份由艺术界人士发起的请愿，签名者中包括罗伯特·马瑟韦尔与安迪·沃霍尔，要求停工。工程没有停。</p>
+
+        <h3>四、修复方的回答，与今天的共识</h3>
+        <p>修复团队拿出的证据主要是<b>横截面</b>：在显微镜下，脏层位于颜料层<b>之上</b>，而不是<b>之内</b>。团队还指出，同时代其他湿壁画家并没有使用 Beck 所描述的那种胶层，而且干壁画本身就极脆弱，经过四百多年大多已经剥落——能留下的本来就不多。</p>
+        <p>今天多数文物保护者的判断是这样的：<b>被洗下来的大部分确实是烟灰、盐析、氧化胶与清漆，而非米开朗基罗的笔触</b>；但同时也承认，某些后人补笔与画面一起被带走了。也就是说，这不是“一方全对、一方全错”，而是<b>主体结论站得住，细节损失难以完全排除</b>。</p>
+        <p>Colalucci 本人的一句话把困难说透了：在那个昏暗、烟熏的米开朗基罗周围，已经<b>长出一整套文化</b>；要改变这个形象是个大问题，很多人不会接受。他接着说，我们太习惯破损与变暗的画了，以至于看到如此清新明净的东西，几乎是一种震动。</p>
+        <blockquote>“We are so used to ruined things and darkened paintings that it is literally a shock for us to see something so fresh and clear.”
+        <em>——我们太习惯被毁坏的东西和变暗的画了，以至于看到如此清新明净的东西，对我们来说简直是一种震动。｜Gianluigi Colalucci</em></blockquote>
+
+        <h3>五、这场争论为什么改写了整个行业</h3>
+        <p>四十多年后再看，西斯廷之争最大的成果不是那片颜色，而是<b>一整套规矩</b>：</p>
+        <ul>
+          <li><b>干预的不可逆性被写进常识。</b>清洗一旦实施就无法撤销——五百年的影子放不回去。因此“能不能不做”成了必须先回答的问题。</li>
+          <li><b>从“治疗”转向“预防”。</b>恒温恒湿、空气过滤、游客承载量控制、光照管理，取代了对画面本身的大动作。预防性保护成为主流。</li>
+          <li><b>最低限度干预与可再处理性。</b>能少做就少做，且今天做的处理应当不妨碍将来更好的处理。</li>
+          <li><b>记录与公开。</b>这次争议中，影像资料一度由资助方掌握、外界难以查阅，被认为是激化不信任的重要原因。此后“过程必须可查、证据必须公开”成为行业共识。</li>
+        </ul>
+        <p>还有一个更细、也更有用的教训：<b>留出参照区。</b>正因为有刻意未清洗的角落，今天任何人都还可以自己比对，而不必听任何一方的一面之词。<b>给争论留下证据，比赢得争论更重要。</b></p>
+
+        <h3>六、本土对照：石窟壁画面对的是另一种困境</h3>
+        <p>把目光移回中国，最容易犯的错误是拿“谁修得更好”去比。真正值得注意的是：<b>两边面对的困境在类型上就不一样。</b></p>
+        <p><b>西斯廷的麻烦是“被盖住了”。</b>脏东西在颜料<b>上面</b>，理论上可以拿掉——争的只是“该不该拿、拿掉的是不是也有作者的笔”。这是<b>可逆性与作者意图</b>之争。</p>
+        <p><b>敦煌莫高窟的麻烦往往是“自己变了”。</b>壁画中的铅丹（红色四氧化三铅）在湿度与光照作用下会氧化成棕黑色的二氧化铅，人物肤色因此逐渐变深变暗；此外还有起甲、酥碱、空鼓等由地仗层盐分与湿度引起的病害。这里的变色发生在<b>颜料物质本身</b>，既不是脏东西盖上去，也没有“洗掉就还原”这一说。因此中国石窟保护的主要工作是<b>延缓与稳定</b>——控制窟内微环境、限制游客承载量、加固地仗，以及用数字化手段留下现状记录（“数字敦煌”资源库即属此类）。</p>
+        <p><b>另一条线索是整体搬迁。</b>山西芮城永乐宫的元代壁画，在三门峡水库工程的背景下于 1959—1964 年被揭取、加固、复原并整体迁往新址，是世界壁画保护史上的大型工程。</p>
+        <p>这里有三处必须辨析清楚，否则两边都会被讲错：</p>
+        <ul>
+          <li><b>对照的是“困境类型”，不是水平高下。</b>一个是覆盖物要不要去除，一个是物质自身已经改变。工具不同、目标不同，不构成优劣比较。</li>
+          <li><b>永乐宫搬迁是特定工程条件下的抢救性、例外性措施，不能被当成常规做法。</b>中国文物保护的基本立场是<b>原址保护、不改变文物原状</b>；把一次被迫的整体迁移讲成“壁画可以随便搬”，是对史实的误读。</li>
+          <li><b>方法论上两边是相通的。</b>《中国文物古迹保护准则》（2000 年发布、2015 年修订）所强调的<b>不改变原状、最低限度干预、可再处理性、以及全过程记录</b>，与前文那几条国际共识高度一致。这说明文物保护争论的结论往往是<b>共同的</b>：先试验后扩大、全程留证、给未来留下余地。</li>
+        </ul>
+
+        <h3>七、本课的三句话</h3>
+        <p><b>①</b> 你以为看到的是风格，看到的可能只是时间。<br>
+        <b>②</b> 清洗是不可逆的：争论可以重开，被洗掉的东西不会回来。<br>
+        <b>③</b> 给争论留下证据，比赢得争论更重要。</p>
+        <p class="source">说明：本课只讨论一件艺术品的材料、工艺与保护方法史，<b>不涉及任何宗教立场、也不评价任何国家、机构或个人的能力与政策优劣</b>；文中提到的修复工程、批评意见与行业规范均用于说明文物保护的方法论本身，不构成对任何现实制度或机构的判断。文中未使用任何跨国排名。涉及的年代与做法，不同资料在个别细节上说法不一，正文与扩展均取较通行的表述。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🎯 学习目标 Learning Objectives</h3>
+        <div class="goal"><span class="ic">📖</span><div><b>读懂一次修复为什么比一幅画更难评判：</b>烟灰、胶层与作者笔触混在一起时，“清洗”同时是一道材料题和一道解释题。</div></div>
+        <div class="goal"><span class="ic">🔤</span><div><b>掌握 11 个 B2 核心词：</b>commission · plaster · sombre · solvent · oxidised · grime · scrutiny · pigment · retouching · irreversible · consensus。</div></div>
+        <div class="goal"><span class="ic">💡</span><div><b>能识别并仿写 5 个高级句型：</b>So + 形容词置于句首的倒装、What 名词性关系从句并列对举、Had 提前的倒装虚拟条件句、部分否定 Not everyone、名词性从句中的虚拟语气（asked that ... be halted）。</div></div>
+        <div class="goal"><span class="ic">📐</span><div><b>能拆解 5 个语法点：</b>So／Such 前置倒装与 such／so 的分工、What 从句无先行词的用法边界、虚拟条件句倒装三式 Were／Had／Should、部分否定与全部否定的对立、mandative subjunctive 的触发词与 suggest 的陷阱。</div></div>
+        <div class="goal"><span class="ic">🌏</span><div><b>建立一个方法论意识：</b>不可逆性——为什么今天的文物保护把“能不能不做”放在“做得好不好”之前。</div></div>
+        <div class="goal"><span class="ic">🤔</span><div><b>学会区分困境的类型：</b>西斯廷面对的是“被盖住了、能不能拿掉”，中国石窟壁画面对的往往是“物质自身变了、拿不掉也回不去”——两者不是同一种题，不该放在一起比高下。</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🧭 学习建议 How to Use This Page</h3>
+        <p><b>第一遍：</b>只看“全文阅读”，不开词表。读完第 1 段就先停一下，自己回答：如果十九世纪的评论家看到的是烟灰而不是风格，那么他们写的那些“阴沉、忧郁”算不算错？<br>
+        <b>第二遍：</b>点开不懂的高亮词看释义，再对照“词汇表”里的例句确认。<br>
+        <b>第三遍：</b>逐段点 ▶ 听朗读并跟读。读不顺的地方，通常是自己不会断开的倒装结构或插入语。<br>
+        <b>第四遍：</b>带着“句型练习”的 5 个句子回原文，把它们划出来，看清每个句子分别承担了什么功能（铺垫程度／并列对照／反事实收束／异议转折／引述主张）。<br>
+        <b>最后：</b>做“练习测验”六题；答错的两题，请回到“语法点”里找到对应条目重读一遍。</p>
+        <p><b>打印提示：</b>本页已做打印优化，打印时会自动隐藏导航与按钮，七个板块全部展开，可当讲义使用。</p>
+        <button class="print-btn" onclick="window.print()">🖨 打印本页 Print</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">🗝 答案速查 Answer Key</h3>
+        <p>1. B（湿壁画法要求颜料在灰泥还湿时画入，几小时就干，所以每天只能完成一小块 giornata；A 无中生有，C 与史实不符——他确有配制颜料的助手，D 只说对了一半，脚手架需要移动，但不是限制每日进度的原因）｜2. D（修复团队记录下来的主要是烟灰、硝石、氧化胶与变暗的清漆；A 恰恰是 Beck 的怀疑对象，不是修复方的主张）｜3. A（Beck 的论证是技术性的：干壁画定型笔触与被胶黏住的烟灰难以区分，而溶剂分不出胶的年代）｜4. C（Had 提前＝省略 if 的虚拟条件句，与过去事实相反；配对为 had done ↔ would have done）｜5. B（Not everyone 是部分否定＝“并非所有人都”，不是“所有人都不”；全部否定要说 No one was persuaded）｜6. D（A 过头——多数保护者接受清洗的基本判断；B 是课文明确否掉的传说，米开朗基罗是站在脚手架上仰头作画；C 说反了，清洗恰恰是不可逆的，行业因此转向预防）</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-16 · 艺术鉴赏 Arts｜西斯廷天顶：一次清洗，一场延续四十年的争论</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Michelangelo painted the Sistine Chapel ceiling between 1508 and 1512, and he did so unwillingly: a sculptor by training, he accepted the painter's commission. He worked standing on a scaffold of his own design, not lying on his back as the legend has it. Because he painted in buon fresco — pigment brushed into wet lime plaster — he could finish only as much as one day's plaster allowed; restorers later counted roughly three hundred patches. Then the ceiling began to disappear under candle smoke, dust, saltpetre, and the glue and varnish of earlier repairers. So dark had the surface become by the nineteenth century that critics mistook soot for style: the sombre Michelangelo they admired was, in part, five hundred years of dirt.","In 1979 the Vatican's chief restorer, Gianluigi Colalucci, tested a solvent on an area the size of a postage stamp and found colour underneath that no photograph had prepared him for. The cleaning ran from 1980 to 1994, funded by a Japanese television network in exchange for filming rights. The instrument was unglamorous: a gel known as AB 57 — ammonium and sodium bicarbonate in a cellulose thickener — applied for three minutes and rinsed away. What came off the ceiling, the team recorded in dated vials, was soot, saltpetre and oxidised glue. What came through was lime green, coral pink, turquoise and gold. Had anyone in 1900 been shown the result, they would not have recognised the ceiling they knew.","Not everyone was persuaded. James Beck, a Columbia art historian who had written three books on Michelangelo, argued that the dark layer was not merely grime. In his reading, each panel was finished in two stages: the figure painted into wet plaster, then, once the plaster had cured, shadows and half-tones added a secco — on the dry wall — in a glue medium. To a restorer such passages would look exactly like glue-trapped soot, and no solvent can tell sixteenth-century glue from nineteenth-century glue; both are protein, both dissolve. Beck called the cleaning an artistic disaster and founded a group to oppose it. A petition signed by artists, among them Andy Warhol, asked that the work be halted. It continued.","The restorers answered with cross-sections: under scrutiny the dirt sat above the pigment, not inside it. The consensus among conservators today is that the bulk of what was removed was soot and later varnish, though some retouching by later hands went with it. The dispute never quite closed — and it changed the field. Cleaning, once undertaken, is irreversible: a shadow aged five centuries cannot be put back. Museums turned towards prevention instead — climate control, filtration, minimum intervention. Colalucci himself put the difficulty best, noting that around the dimmed and smoky Michelangelo a whole culture had formed. The paint beneath the soot, the argument above it."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Why could Michelangelo finish only a small patch of the ceiling each day? 为什么米开朗基罗每天只能完成天顶的一小块？",
+   opts:["Because the pope limited how much he was allowed to paint each month 因为教皇限制了他每月能画多少","Because he painted in buon fresco — pigment brushed into wet lime plaster, which dries within hours 因为他用的是湿壁画法：颜料要刷进湿石灰灰泥，而灰泥几小时就干","Because he had no assistants and did every part of the work alone 因为他没有助手，所有工序都是一个人完成的","Because the scaffold had to be moved to the other half of the chapel every week 因为脚手架每周都得挪到礼拜堂的另一半"],
+   ans:1,
+   fb:"正确！这正是湿壁画法（buon fresco）的技术约束：灰泥一干，颜料就再也进不去，画错了只能凿掉重抹。修复师后来数出的约三百块 giornata（意大利语“一天的工作量”）就是这个节奏留下的痕迹。选项 D 说对了一半——脚手架确实需要拆装移动，但那不是限制每日进度的原因。"},
+  {q:"According to the restorers’ own record, what came off the ceiling? 根据修复团队自己的记录，从天顶上被洗下来的是什么？",
+   opts:["Layers of Michelangelo’s own a secco shadows 米开朗基罗本人的干壁画暗部","Only candle wax applied in the twentieth century 只有二十世纪涂上去的蜡烛蜡","Original buon fresco pigment, which then had to be repainted 需要重新补画的湿壁画原颜料","Soot, saltpetre, oxidised glue and darkened varnish 烟灰、硝石、氧化了的胶与变暗的清漆"],
+   ans:3,
+   fb:"正确！注意题干问的是<b>修复方的主张</b>，不是反对者的怀疑——选项 A 恰恰是 Beck 认为也可能被一并洗掉的东西。团队把每一阶段拍了照，用过的棉垫按日期留样，就是为了把“拿掉了什么”变成可复查的证据。"},
+  {q:"What was James Beck’s central objection to the cleaning? 詹姆斯·贝克对这次清洗的核心反对意见是什么？",
+   opts:["That a solvent cannot tell Michelangelo’s own a secco passages from later glue-trapped soot, so the cleaning may have removed the artist’s finishing touches 溶剂分不出米开朗基罗本人的干壁画笔触与后来被胶黏住的烟灰，因此清洗可能抹掉了艺术家的定型笔触","That the chapel should never have been built in the fifteenth century 这座礼拜堂根本不该在十五世纪建成","That the bright colours were invented by the television network that funded the project 那些明亮的颜色是出资的电视台编造出来的","That fresco should never be cleaned under any circumstances 湿壁画在任何情况下都不应该被清洗"],
+   ans:0,
+   fb:"正确！Beck 的论证是技术性的，而不是情绪性的：他的“两阶段说”认为艺术家在灰泥固化后会用胶调和的颜料加暗部，而这些笔触在修复师眼里与被胶黏住的烟灰几乎一样；更麻烦的是，<b>十六世纪的胶和十九世纪的胶都是蛋白质，溶剂一律溶掉</b>。选项 B、D 都不是他的论点，C 属于没有依据的说法。"},
+  {q:"What structure is used in “Had anyone in 1900 been shown the result, they would not have recognised the ceiling they knew”? 该句使用了什么结构？",
+   opts:["A real conditional describing a future possibility 描述将来可能性的真实条件句","An inverted conditional with were, expressing something contrary to present fact 由 were 引导的倒装条件句，与现在事实相反","An inverted conditional with had, expressing something contrary to past fact — if-clause had done, main clause would have done 由 had 引导的倒装条件句，与过去事实相反：从句 had done，主句 would have done","A past perfect used simply to show that one action happened before another 单纯用来表示一动作先于另一动作发生的过去完成时"],
+   ans:2,
+   fb:"正确！还原之后是 <b>If anyone in 1900 had been shown the result, they would not have recognised ...</b>。记住配对：<b>had done ↔ would / could / might have done</b>。与现在／将来相反则用 Were 提前配 would do（选项 B 是另一种，不是本句），将来可能性小用 Should 提前。选项 D 忽略了主句里的 would have，只看了从句。"},
+  {q:"What does “Not everyone was persuaded” mean? 这句话是什么意思？",
+   opts:["Nobody was persuaded 谁也没有被说服","Some people were persuaded, but not all 有人被说服了，但不是所有人","Everyone was persuaded 所有人都被说服了","Everyone actively opposed the restoration 所有人都积极反对这次修复"],
+   ans:1,
+   fb:"正确！<b>not + everyone / all / every / both</b> 构成的是<b>部分否定</b>——“并非全部”。要表达“全部否定”，必须换成 <b>No one was persuaded</b>（选项 A）或 <b>None of them was persuaded</b>。这是中英互译里最容易翻错的一处，也是本课第 3 段转折的关键：不是“大家都反对”，而是“异议始终存在”。"},
+  {q:"Which statement is best supported by the passage? 下列哪一项最符合文章意思？",
+   opts:["The restoration was a complete failure and every colour seen today is fake 这次修复彻底失败，今天看到的颜色全部是假的","Michelangelo painted the ceiling lying on his back 米开朗基罗是仰面躺着画完天顶的","The dispute proved that cleaning is reversible, so any decision can simply be undone 这场争论证明清洗是可逆的，任何决定都可以随时撤销","Most conservators today accept that the bulk of what was removed was soot and later varnish, though some later retouching went with it — and the dispute pushed the field towards prevention and minimum intervention 今天多数保护者接受：被洗掉的绝大部分是烟灰与后来的清漆，虽然后人的补笔也一并被带走了；这场争论还推动整个行业转向预防性保护与最低限度干预"],
+   ans:3,
+   fb:"正确！这正是第 4 段的两层意思：一个是今天的判断（<b>主体结论站得住，细节损失难以完全排除</b>），一个是它对行业的影响（<b>不可逆 → 转向预防</b>）。选项 B 是正文明确否掉的传说，米开朗基罗站在自己设计的脚手架上仰头作画；选项 C 说反了，清洗恰恰是不可逆的；选项 A 也过头了，多数保护者并不持这个看法。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
