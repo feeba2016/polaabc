@@ -9808,5 +9808,67 @@ const EPISODES = [
         "ex": "Before quoting a rate, ask what sits in the <b>denominator</b>."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-16",
+    "title": "The Conclusion That Outran the Data",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-16-the-conclusion-that-outran-the-data",
+    "url": "lessons/c1/2026-10-16-the-conclusion-that-outran-the-data.html",
+    "vocab": [
+      {
+        "word": "spin",
+        "zh": "倾向性表述。指无论出于何种动机，用特定报告策略使干预显得比结果所支持的更有效，或把读者从无显著性的结果上引开。",
+        "ex": "Methodologists call this <b>spin</b>: the use of specific reporting strategies, from whatever motive, to highlight that an intervention is beneficial."
+      },
+      {
+        "word": "nonsignificant",
+        "zh": "无统计学显著性的。指差异未达预先设定的显著性水平。注意：它与「没有效果」不是一回事，也可能只是样本量不足。",
+        "ex": "A <b>nonsignificant</b> primary outcome does not license the claim that the two arms are equivalent."
+      },
+      {
+        "word": "appraise",
+        "zh": "系统评估、鉴定。用于对文献、证据、研究质量作正式评价，比 evaluate 更强调依据标准逐项核对。",
+        "ex": "Two readers independently <b>appraised</b> each report using a pretested abstraction form."
+      },
+      {
+        "word": "recur",
+        "zh": "反复出现、一再发生。形容词 recurrent 更常见；写作文时用于归纳规律：a recurring pattern。",
+        "ex": "Three strategies <b>recurred</b> across the sample, regardless of the therapeutic area."
+      },
+      {
+        "word": "equivalence",
+        "zh": "等效性。指两种处理的效果差异落在预先设定的可接受范围内；与「没有差异」不同，它需要专门的设计与足够的样本量才能下结论。",
+        "ex": "Recasting a null result as <b>equivalence</b> requires a design powered for that comparison."
+      },
+      {
+        "word": "empirical",
+        "zh": "实证的、以观察或实验为依据的。与 theoretical（理论的）、normative（规范的）相对。",
+        "ex": "Whether reporting practices affect readers is an <b>empirical</b> question, and it has been tested."
+      },
+      {
+        "word": "rigorous",
+        "zh": "严谨的、严格的。形容研究设计、标准、审查。副词 rigorously 常修饰 test、evaluate、examine。",
+        "ex": "The same abstract, rewritten without spin, was rated as the more <b>rigorous</b> of the two."
+      },
+      {
+        "word": "overstate",
+        "zh": "夸大、言过其实。名词 overstatement。学术写作提醒自己别越界的常用说法：do not overstate the findings。",
+        "ex": "Two qualifications guard against <b>overstating</b> what the trial actually showed."
+      },
+      {
+        "word": "persist",
+        "zh": "持续存在、经久不消。形容词 persistent。用于描述某种现象并未随时间改善。",
+        "ex": "Fifteen years after the first survey, the pattern <b>persists</b> in a format that did not then exist."
+      },
+      {
+        "word": "prespecified",
+        "zh": "预先设定的。指在看数据之前就定好的（主要结局、分析方案）。它是区分确证性分析与事后探索的关键修饰语。",
+        "ex": "Report the <b>prespecified</b> primary outcome first, then any secondary findings."
+      }
+    ]
   }
 ];
