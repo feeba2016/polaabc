@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Room That Understands Nothing</title>
+<style>
+:root{
+  --accent:#5b21b6;
+  --accent2:#0e7490;
+  --bg:#faf8f5;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#e6ded1;
+  --soft:#f4f1f8;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(91,33,182,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(91,33,182,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(91,33,182,.5);}70%{box-shadow:0 0 0 12px rgba(91,33,182,0);}100%{box-shadow:0 0 0 0 rgba(91,33,182,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(91,33,182,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Philosophy</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Room That Understands Nothing</h1>
+      <p class="subtitle">1980 年，哲学家塞尔设想了一间屋子：里面的人一个中文字也不认识，却能让门外的人相信他懂中文。这个例子要问的是——说出正确的话，和知道自己在说什么，是一回事吗｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Room, a Rule Book, a Man 一个房间、一本规则手册、一个人</div>
+            <p>In 1980 the philosopher John Searle described a room. Inside it sits a man who speaks no Chinese, a rule book written in English, and paper enough to last a lifetime. Slips covered in Chinese characters are pushed under the door; the man matches their shapes against the book and pushes other slips back out. Questions go in, <span class="kw" data-def="连贯的；条理清楚的（形容词，读作 /kəʊˈhɪərənt/，英式亦作 /koˈhɪərənt/。a coherent answer 条理分明的回答；a coherent argument 自洽的论证；coherent policy 前后一致的政策。副词 coherently，名词 coherence 连贯性。反义词 incoherent 语无伦次的。注意它不用于形容人“讲道理”，那要用 reasonable">coherent</span> answers come out, and a native speaker examining the replies would find them <span class="kw" data-def="无法区分的；难以分辨的（形容词，读作 /ˌɪndɪˈstɪŋɡwɪʃəbl/，重音在第三音节。indistinguishable from 与……无法区分；virtually indistinguishable 几乎一模一样。动词 distinguish（区分）+ 否定前缀 in- + 形容词后缀 -able。注意别与 indistinct 模糊不清的 混淆：indistinguishable 强调“两个东西之间分不出”，indistinct 强调“单个东西看不清”">indistinguishable</span> from those of a person who understands. <span class="kw" data-def="分裂句 It is + 被强调成分 + that ...，用来把句子某一部分推到焦点。这里强调的是主语 the room（与后面的 the man 形成对照）。检验办法：把 It is 和 that 去掉，句子仍然完整（The room passes every outward test）。被强调的可以是主语、宾语、状语，但不能是谓语动词">It is</span> the room that passes every outward test; the man inside does all the work and understands none of it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Syntax Is Not Semantics 句法不等于语义</div>
+            <p><span class="kw" data-def="假分裂句（pseudo-cleft）：What + 主语从句 + be + 补语。这里 What the argument is meant to show 整体作主语，相当于 the thing that the argument is meant to show。它的作用是把已知信息放到从句、把新信息放到句末焦点位置。比较：The argument is meant to show this（平淡）→ What the argument is meant to show is this（强调“要说明的正是这个”）">What</span> the argument is meant to show is narrow: running a program is a matter of <span class="kw" data-def="操作；操纵（动词，读作 /məˈnɪpjuleɪt/，及物。manipulate symbols 操作符号；manipulate data 处理数据；manipulate public opinion 操纵舆论（贬义）。名词 manipulation。本课用的是中性义：按规则搬动符号，不涉及用意。注意它强调“用手/按规则摆弄”，引申义常带负面色彩">manipulating</span> symbols according to formal rules, and doing that is not the same as grasping what the symbols mean. Searle called the first <span class="kw" data-def="句法；符号之间的形式规则（不可数名词，读作 /ˈsɪntæks/，重音在首音节。语言学指组词成句的规则，计算机科学指符号的形式结构。形容词 syntactic 句法的。与 semantics 语义 成对出现，是理解本课的关键一对概念">syntax</span> and the second <span class="kw" data-def="语义；意义（不可数名词，读作 /sɪˈmæntɪks/，重音在第二音节。研究语言意义的学科叫 semantics。形容词 semantic 语义的。本课的核心命题就是：syntax is not sufficient for semantics（仅有句法不足以产生语义）。形近词别混：semantics 语义 vs semaphore 旗语">semantics</span>, and he held that the first is not sufficient for the second. A <span class="kw" data-def="模拟；仿真（名词，读作 /ˌsɪmjuˈleɪʃn/。a computer simulation of something 对某物的计算机模拟；run a simulation 进行一次模拟。动词 simulate 模拟，形容词 simulated 模拟的。注意 simulate 特指“模仿某系统的行为特征”，与 imitate 模仿（外观）不同，也与 stimulate 刺激 拼写不同">simulation</span> of a storm makes nothing wet; a simulation of digestion supplies no nutrition. <span class="kw" data-def="Nor 置于句首（且在句首引导一个并列分句）时，主句要部分倒装：助动词提到主语之前。这里还原为 a simulation of understanding does not entail understanding either。比较 nor 与 neither：neither 多用于 neither ... nor ... 结构，nor 单独引导分句更常见。注意它后面接的动词要与前一句的助动词一致（本句前句无 be、无情态，故借 does）">Nor</span>, he concluded, does a simulation of understanding <span class="kw" data-def="必然导致；蕴含（动词，读作 /ɪnˈteɪl/，正式，及物。A entails B A 必然导致 B；entail considerable risk 必然带来相当风险。它比 cause 强，比 imply 弱，是学术写作里的高频逻辑动词。名词 entailment。注意它不用进行时">entail</span> understanding. What he denied was the claim he labelled strong artificial intelligence — that a machine following the right program would not merely model a mind but have one. <span class="kw" data-def="Were + 主语 + to do ＝ 省略 if 的虚拟条件句，表示与将来事实相反或可能性极小。还原为 If the room's answers were to become perfect。三种倒装形式对比：Were he to come（将来）／ Had he come（过去）／ Should he come（将来可能性）">Were</span> the room's answers to become perfect, the objection would not change in the slightest.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Systems Reply 系统回应</div>
+            <p>The most persistent objection is the systems reply: the man may understand no Chinese, but the system <span class="kw" data-def="介词 + which 引导定语从句，正式文体常用。还原为 the system that he is a part of。规则：关系代词作介词宾语时，介词可前置，此时只能用 which（物）／whom（人），不能用 that，也不能省略。口语里更常说 the system he is a part of（介词留在句末）。写作中 of which 比 in which 更常出现在 part / member / result 这类名词之后">of which</span> he is a part does. Searle's answer was to make the man <span class="kw" data-def="内化；使成为自身的一部分（动词，读作 /ɪnˈtɜːnəlaɪz/，英式亦作 /ɪnˈtɜːnəlaɪz/。internalise the rules 把规则内化；internalise a principle 把原则变成自觉。源自 internal 内部的 + -ise。心理学与教育学高频词，与 externalise 外化 相对">internalise</span> it. He memorises the rule book, keeps the data in his head and does the calculation mentally — one person alone in the countryside, no room left to point at — and still, Searle insists, he understands nothing. His critics <span class="kw" data-def="承认（尤指不情愿地）；让步（动词，读作 /kənˈsiːd/。concede that ... 承认……；concede defeat 认输；concede a point 在一个点上让步。它比 admit 正式，常带有“论辩中被迫承认”的意味。名词 concession 让步。注意别与 conceive 构想、conceit 自负 混淆">concede</span> the force of the picture while denying its conclusion. Some add the other-minds reply: we attribute understanding to other people on the evidence of their behaviour and never inspect their consciousness directly, so why demand more of a machine? That, they argue, is a standard we do not apply to one another.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Only Now 直到现在</div>
+            <p><span class="kw" data-def="Only + 状语（副词、介词短语、状语从句）置于句首时，主句部分倒装。还原为 The question has stopped being hypothetical only now。规则：only 修饰的是状语时才倒装；若 only 修饰主语（Only she knew），绝不倒装。另注意本句谓语动词是完成时，因此把助动词 has 提到主语 the question 之前">Only</span> now, with systems that produce fluent text in hundreds of languages, has the question stopped being hypothetical. Searle's defenders say fluency is precisely what the room was always capable of; his critics say the <span class="kw" data-def="直觉（名词，读作 /ˌɪntjuˈɪʃn/，重音在第三音节。trust one's intuition 相信直觉；contrary to intuition 与直觉相反。形容词 intuitive 直觉的，也常用于形容器“界面直观好用”。它在哲学论证里常指“未经论证就觉得对的感觉”，本课正是指出它作为论据并不牢靠">intuition</span> that made the example persuasive is a poor instrument for settling what understanding consists in. Nor has either side carried the matter <span class="kw" data-def="决定性地；结论性地（副词，读作 /kənˈkluːsɪvli/。prove something conclusively 决定性地证明；nothing has been settled conclusively 尚无定论。形容词 conclusive 决定性的，反义词 inconclusive 非决定性的。注意它与 finally 最后 不同：conclusively 强调的是“证据充分到可以结束争论”">conclusively</span>, and that is the honest state of it. What the thought experiment still does, better than most, is hold two questions apart that we tend to run together: can a system produce the right words, and does anything in it know what those words are about. The first is being answered every day. The second is not.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+        <div class="card" style="background:var(--soft);">
+          <p style="margin:0;font-size:14.5px;color:#4b5563;"><b>背景速览：</b>美国哲学家约翰·塞尔（John Searle）1980 年在《行为与脑科学》（Behavioral and Brain Sciences）发表《心灵、大脑与程序》（Minds, Brains, and Programs），同期刊出二十余篇同行评论与他的回应。他要反驳的是他称为“强人工智能”（strong AI）的立场：一个运行着恰当程序的系统，不是“像”在思考，而是真的在思考。塞尔并不否认计算机有用（他称之为“弱 AI”），他否认的是符号操作本身足以产生理解。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="coherent">🔊</button><div class="word">coherent<span class="pos">adj.</span></div><div class="zh">连贯的；条理清楚的（读作 /kəʊˈhɪərənt/。a coherent answer 条理分明的回答；a coherent argument 自洽的论证；a coherent policy 前后一致的政策。副词 coherently，名词 coherence 连贯性。反义词 incoherent 语无伦次的。形容人“讲道理”要用 reasonable，不用 coherent）</div><div class="ex">"Questions go in, coherent answers come out, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="indistinguishable">🔊</button><div class="word">indistinguishable<span class="pos">adj.</span></div><div class="zh">无法区分的；难以分辨的（读作 /ˌɪndɪˈstɪŋɡwɪʃəbl/，重音在第三音节。indistinguishable from 与……无法区分；virtually indistinguishable 几乎一模一样。构词：distinguish 区分 + 否定前缀 in- + 形容词后缀 -able。别与 indistinct 模糊不清的 混淆：本词强调两者之间分不出，indistinct 强调单个东西看不清）</div><div class="ex">"... would find them indistinguishable from those of a person who understands."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="manipulate">🔊</button><div class="word">manipulate<span class="pos">v.</span></div><div class="zh">操作；操纵（及物，读作 /məˈnɪpjuleɪt/。manipulate symbols 操作符号；manipulate data 处理数据；manipulate public opinion 操纵舆论（贬义）。名词 manipulation。本课用中性义，指按规则搬动符号，不含负面色彩）</div><div class="ex">"... running a program is a matter of manipulating symbols according to formal rules, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="syntax">🔊</button><div class="word">syntax<span class="pos">n.</span></div><div class="zh">句法；符号之间的形式规则（不可数，读作 /ˈsɪntæks/，重音在首音节。语言学指组词成句的规则，计算机科学指符号的形式结构。形容词 syntactic 句法的。与 semantics 语义 成对出现，是理解本课的关键一对概念）</div><div class="ex">"Searle called the first syntax and the second semantics, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="semantics">🔊</button><div class="word">semantics<span class="pos">n.</span></div><div class="zh">语义；意义（不可数，读作 /sɪˈmæntɪks/，重音在第二音节。研究语言意义的学科也叫 semantics。形容词 semantic 语义的。本课核心命题即：syntax is not sufficient for semantics。形近词注意：semantics 语义，semaphore 旗语）</div><div class="ex">"Searle called the first syntax and the second semantics, and he held that the first is not sufficient for the second."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="simulation">🔊</button><div class="word">simulation<span class="pos">n.</span></div><div class="zh">模拟；仿真（读作 /ˌsɪmjuˈleɪʃn/。a computer simulation of something 对某物的计算机模拟；run a simulation 进行一次模拟。动词 simulate 模拟，形容词 simulated 模拟的。simulate 特指模仿某系统的行为特征，与 imitate 模仿外观 不同，也与 stimulate 刺激 拼写不同）</div><div class="ex">"A simulation of a storm makes nothing wet; a simulation of digestion supplies no nutrition."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="entail">🔊</button><div class="word">entail<span class="pos">v.</span></div><div class="zh">必然导致；蕴含（正式，及物，读作 /ɪnˈteɪl/。A entails B A 必然导致 B；entail considerable risk 必然带来相当风险。它比 cause 强、比 imply 弱，是学术写作高频逻辑动词。名词 entailment。它不用进行时）</div><div class="ex">"Nor, he concluded, does a simulation of understanding entail understanding."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="internalise">🔊</button><div class="word">internalise<span class="pos">v.</span></div><div class="zh">内化；使成为自身的一部分（读作 /ɪnˈtɜːnəlaɪz/，美式拼作 internalize。internalise the rules 把规则内化；internalise a principle 把原则变成自觉。源自 internal 内部的 + -ise。心理学与教育学高频词，与 externalise 外化 相对）</div><div class="ex">"Searle's answer was to make the man internalise it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="concede">🔊</button><div class="word">concede<span class="pos">v.</span></div><div class="zh">承认（尤指不情愿地）；让步（读作 /kənˈsiːd/。concede that ... 承认……；concede defeat 认输；concede a point 在某一点上让步。它比 admit 正式，常带“论辩中被迫承认”的意味。名词 concession 让步。别与 conceive 构想、conceit 自负 混淆）</div><div class="ex">"His critics concede the force of the picture while denying its conclusion."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="intuition">🔊</button><div class="word">intuition<span class="pos">n.</span></div><div class="zh">直觉（读作 /ˌɪntjuˈɪʃn/，重音在第三音节。trust one's intuition 相信直觉；contrary to intuition 与直觉相反。形容词 intuitive 直觉的，也常形容界面“直观好用”。哲学论证里多指未经论证就觉得对的感觉，本课正是指出它作为论据并不牢靠）</div><div class="ex">"... his critics say the intuition that made the example persuasive is a poor instrument ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="conclusively">🔊</button><div class="word">conclusively<span class="pos">adv.</span></div><div class="zh">决定性地；结论性地（读作 /kənˈkluːsɪvli/。prove something conclusively 决定性地证明；nothing has been settled conclusively 尚无定论。形容词 conclusive 决定性的，反义 inconclusive 非决定性的。注意它与 finally 不同：conclusively 强调证据充分到可以结束争论）</div><div class="ex">"Nor has either side carried the matter conclusively, and that is the honest state of it."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. 假分裂句 · What the argument is meant to show is narrow: ...</h3>
+          <div class="zh">结构：<b>What + 主语从句 + be + 补语</b>，相当于 the thing that ...。作用是把已知信息塞进从句、把新信息放到句末焦点。比较：平淡的 <i>The argument is meant to show this</i> 与强调的 <i>What the argument is meant to show is this</i>。</div>
+          <div class="eg"><b>What</b> the argument is meant to show <b>is</b> narrow: running a program is a matter of manipulating symbols according to formal rules.</div>
+          <div class="practice">✍️ 仿写：真正需要回答的，是第二个问题。<input type="text" placeholder="What ... is ..."></div>
+        </div>
+        <div class="item">
+          <h3>2. 分裂句强调主语 · It is the room that passes every outward test; the man inside ... understands none of it.</h3>
+          <div class="zh">结构：<b>It is / was + 被强调成分 + that + 其余部分</b>。检验办法：把 It is 与 that 去掉，句子仍完整（<i>The room passes every outward test</i>）。被强调的可以是主语、宾语或状语，<b>但不能是谓语动词</b>。</div>
+          <div class="eg"><b>It is</b> the room <b>that</b> passes every outward test; the man inside does all the work and understands none of it.</div>
+          <div class="practice">✍️ 仿写：通过测试的是房间，不是里面的人。<input type="text" placeholder="It is ... that ..."></div>
+        </div>
+        <div class="item">
+          <h3>3. Were 提前的虚拟条件句 · Were the room's answers to become perfect, the objection would not change.</h3>
+          <div class="zh">结构：<b>Were + 主语 + to do</b> ＝ If + 主语 + were to do，表示与<b>将来</b>事实相反或可能性极小；主句用 <b>would / could / might do</b>。此处事实是：答案还远不完美，而即便完美，反对意见也照样成立。</div>
+          <div class="eg"><b>Were</b> the room's answers <b>to become</b> perfect, the objection <b>would not change</b> in the slightest.</div>
+          <div class="practice">✍️ 仿写：即便机器能流畅地回答问题，争论也不会结束。<input type="text" placeholder="Were ... to ... , ... would ..."></div>
+        </div>
+        <div class="item">
+          <h3>4. 介词 + which 引导定语从句 · ... the system of which he is a part does.</h3>
+          <div class="zh">结构：<b>介词 + which（物）／whom（人）+ 从句</b>，正式文体常用；口语里更常说 the system he is a part of。规则：介词一旦前置，就<b>只能用 which / whom，不能用 that，也不能省略</b>。</div>
+          <div class="eg">... the man may understand no Chinese, but the system <b>of which</b> he is a part does.</div>
+          <div class="practice">✍️ 仿写：他只是其中一个部件的那一整套系统。<input type="text" placeholder="the system of which ..."></div>
+        </div>
+        <div class="item">
+          <h3>5. Only + 状语提前的倒装 · Only now ... has the question stopped being hypothetical.</h3>
+          <div class="zh">结构：<b>Only + 状语</b> 置于句首，主句要<b>部分倒装</b>：be、助动词或情态动词提到主语之前。本句谓语是现在完成时，故把 has 提到 the question 之前。<b>易错：</b>only 修饰主语（Only she knew）时绝不倒装。</div>
+          <div class="eg"><b>Only now</b>, with systems that produce fluent text in hundreds of languages, <b>has</b> the question <b>stopped</b> being hypothetical.</div>
+          <div class="practice">✍️ 仿写：直到那一刻，他才明白自己并不理解。<input type="text" placeholder="Only then did / Only at that moment did ..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar in Depth</h2>
+      <p class="subtitle">5 个语法点，例句均来自本课正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① 虚拟条件句的倒装：Were / Had / Should 提前</h3>
+          <div class="zh">省略 if 后把 <b>had / were / should</b> 提到句首即可。三种情况的时态配对必须记死：<br>· 与<b>过去</b>相反：<b>Had + 主语 + done</b> ↔ 主句 <b>would / could / might have done</b>；<br>· 与<b>现在</b>相反：<b>Were + 主语</b>（be 动词一律用 were）↔ 主句 <b>would do</b>；<br>· 与<b>将来</b>相反或可能性极小：<b>Were + 主语 + to do</b>，或 <b>Should + 主语 + do</b>。<br>注意否定词位置：<b>Were he not to understand ...</b>（not 在主语之后），不可写成 Werén't he。</div>
+          <div class="eg">正文原句：<b>Were the room's answers to become perfect</b>, the objection would not change in the slightest.<br>对照：<b>Had he memorised</b> the rule book, he would still have understood nothing.</div>
+        </div>
+        <div class="item">
+          <h3>② 分裂句与假分裂句</h3>
+          <div class="zh">· <b>分裂句 It is / was + 被强调成分 + that / who + 其余</b>：把某一成分推到焦点，被强调成分不能是谓语动词。<br>· <b>假分裂句 What / All / The only thing + 从句 + be + 补语</b>：把新信息放在句末。本课用了两处：正文第 2 段 <i>What the argument is meant to show is narrow</i> 与第 4 段 <i>What the thought experiment still does ... is hold two questions apart</i>。<br>· 注意 <b>What 从句作主语时，谓语动词通常用单数</b>；若补语是复数名词，也可随之用复数（<i>What we need are better examples</i>），但考试中以单数最稳妥。</div>
+          <div class="eg">正文原句：<b>It is the room that passes every outward test</b>; the man inside does all the work and understands none of it.<br>正文原句：<b>What he denied was the claim</b> he labelled strong artificial intelligence.</div>
+        </div>
+        <div class="item">
+          <h3>③ 介词 + which / whom 引导定语从句</h3>
+          <div class="zh">关系代词作介词宾语时，介词可前置到关系词之前，构成正式文体常见的 <b>介词 + which / whom</b>。<br><b>三条规则：</b>（a）介词前置后<b>只能用 which（物）或 whom（人）</b>，不能用 that，也不能省略；（b）固定动词短语不宜拆开，如 <i>look after</i> 应写成 <i>the child (whom) she looks after</i>，而不是 after whom；（c）表示“其中一部分”时，<b>of which / of whom</b> 可用于 part、most、some、none 之后，本课正是 <i>the system of which he is a part</i>。</div>
+          <div class="eg">正文原句：... but the system <b>of which</b> he is a part does.<br>扩展：<i>There are several replies, <b>none of which</b> has settled the matter.</i></div>
+        </div>
+        <div class="item">
+          <h3>④ 独立主格（nominative absolute）</h3>
+          <div class="zh">结构：<b>名词 / 代词 + 分词、形容词、副词或介词短语</b>，自带逻辑主语，与主句主语不同，因此不可能是“悬垂分词”。它多作状语，表示伴随、原因或补充说明，书面语色彩浓。<br>· <i>名词 + 现在分词</i>：<b>The rain having stopped</b>, we went on.<br>· <i>名词 + 过去分词</i>：<b>no room left to point at</b>（本课原句）；<b>All things considered</b>, the plan is sound.<br>· <i>名词 + 介词短语 / 形容词</i>：<b>book in hand</b>, he walked in.<br>改写成 with 复合结构（<b>with + 宾语 + 分词</b>）意思相同，口语更自然。</div>
+          <div class="eg">正文原句：... one person alone in the countryside, <b>no room left to point at</b> — and still, Searle insists, he understands nothing.</div>
+        </div>
+        <div class="item">
+          <h3>⑤ 部分倒装：Only / nor / not until 提前</h3>
+          <div class="zh">· <b>Only + 状语</b> 提前 → 主句部分倒装；only 修饰主语时不倒装。<br>· <b>Nor / Neither / Neither ... nor</b> 引导并列分句 → 分句部分倒装，助动词要与前句一致（前句无助动词则借 do）。<br>· <b>Not until + 时间状语</b> 提前 → <b>主句</b>倒装（not until 本身是从句，不倒装）：<i>Not until 1969 did anyone land on the Moon.</i><br>· 倒装只发生在<b>被提前成分所在的那个分句</b>，后续分句恢复正常语序，这一点与 Not only ... but also 相同。</div>
+          <div class="eg">正文原句：<b>Only now ... has the question stopped</b> being hypothetical.<br>正文原句：<b>Nor</b>, he concluded, <b>does</b> a simulation of understanding entail understanding.<br>正文原句：<b>Nor has</b> either side carried the matter conclusively.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、先把问题说窄：塞尔否认的不是什么</h3>
+        <p>中文房间常被转述成“机器没有意识”或者“人工智能是假的”，但塞尔的论证比这两句都要窄。他自己区分了两个立场：<b>弱人工智能</b>（weak AI）——计算机是研究心灵的有用工具，他不反对；<b>强人工智能</b>（strong AI）——运行着恰当程序的计算机<b>本身就</b>具有认知状态和理解，他反对。</p>
+        <p>换句话说，他并不否认机器可以表现得很好，也不否认这种方法在工程上有效。他否认的是<b>表现得对</b>等于<b>理解了</b>。把这一点说清楚很重要：一个论证如果能被轻易地“反驳”成它本来没有主张的东西，通常说明转述出了偏差。</p>
+
+        <h3>二、论证结构</h3>
+        <table class="facts">
+          <tr><th>环节</th><th>内容</th></tr>
+          <tr><td>场景</td><td>一个不懂中文的人，靠英文规则手册处理中文符号，输出让母语者满意的回答</td></tr>
+          <tr><td>前提一</td><td>运行程序＝按形式规则操作符号（句法）</td></tr>
+          <tr><td>前提二</td><td>这个人（以及整个房间）并不理解中文（语义）</td></tr>
+          <tr><td>结论</td><td>因此，句法不足以产生语义；通过图灵测试只是<b>模拟</b>理解，不等于<b>拥有</b>理解</td></tr>
+          <tr><td>对照句</td><td>模拟一场暴风雨，什么也不会被打湿；模拟消化，得不到任何营养</td></tr>
+        </table>
+
+        <h3>三、几种经典反驳，以及塞尔的回应</h3>
+        <table class="facts">
+          <tr><th>反驳</th><th>主张</th><th>塞尔的回应</th></tr>
+          <tr><td>系统回应</td><td>这个人不懂，但由他、规则手册和纸片组成的<b>整个系统</b>懂</td><td>让人把手册和数据库全部记住、在脑子里算。此时除了这个人之外没有别的东西可以指，而他仍然不懂</td></tr>
+          <tr><td>机器人回应</td><td>把系统装进机器人，让它看真实的椅子、拿真实的杯子，符号就有了<b>落脚点</b></td><td>增加输入输出通道并没有改变系统在做的事——仍然是操作符号；加进来的是因果联系，不是语义</td></tr>
+          <tr><td>大脑模拟回应</td><td>如果程序逐神经元地模拟一位中文母语者的大脑，它总该理解了吧</td><td>模拟不等于复现：模拟消化不产生营养，模拟大脑也不自动产生理解</td></tr>
+          <tr><td>他心回应</td><td>我们判断别人是否理解，靠的也只是他们的表现，从未直接检查过别人的意识；那为什么对机器另立标准</td><td>塞尔承认这是最有力的反驳之一，但认为它恰好暴露了争论的症结：双方对“理解”的构成条件理解不同，而不是证据不够</td></tr>
+        </table>
+
+        <h3>四、五十年后：为什么这个老例子突然又被提起</h3>
+        <p>1980 年，能流畅回答问题的系统还只存在于设想里。今天，能生成通顺文本的系统已经进入日常使用，于是这个思想实验从“课堂里的假设”变成了“每天都会遇到的事”。</p>
+        <p>但有意思的是，技术往前走了很远，争论的位置却几乎没动。塞尔的支持者说：<b>流畅恰恰是那间屋子一直就有的本事</b>，输出变得更好并不等于多出了理解。塞尔的批评者说：既然我们对他人的理解也只能靠表现来判断，那么靠直觉说“机器不懂”更像是在回避问题，而不是在回答问题。</p>
+        <p>本课对<b>任何具体产品、公司或技术路线不作评价</b>。这里值得学的不是“该站哪一边”，而是这个例子提供了一种能力：把两个常常被混在一起的问题——<b>能不能说出正确的话</b>和<b>有没有人在里面知道这些话在说什么</b>——拆开来看。</p>
+
+        <h3>五、中外对照：濠梁之辩</h3>
+        <p>中国思想史上与中文房间最贴近的一段对话，是《庄子·秋水》里的“濠梁之辩”。</p>
+        <blockquote>庄子与惠子游于濠梁之上。庄子曰：「鯈鱼出游从容，是鱼之乐也。」惠子曰：「子非鱼，安知鱼之乐？」庄子曰：「子非我，安知我不知鱼之乐？」惠子曰：「我非子，固不知子矣；子固非鱼也，子之不知鱼之乐，全矣！」庄子曰：「请循其本。子曰『汝安知鱼乐』云者，既已知吾知之而问我，我知之濠上也。」<em>——《庄子·秋水》</em></blockquote>
+        <p>这段对话通常被读成庄子“赢了”的机智故事，但更值得注意的，是惠子提出的要求：<b>你要主张另一个存在者的内在状态，就得说清你是怎么知道的。</b>这个要求和中文房间的问法有真实的重叠——两者都拒绝把外部表现直接等同于内部状态。</p>
+
+        <h3>六、三点辨析：这两件事为什么不能互相解释</h3>
+        <ul>
+          <li><b>问法不同。</b>惠子问的是<b>认识论</b>问题：凭什么说你知道？塞尔问的是<b>心灵哲学</b>问题：理解由什么构成、符号操作之外还需不需要别的东西。一个问题要求证据，一个问题要求条件，答案不能互相推出。</li>
+          <li><b>落点不同。</b>濠梁之辩最后落在“处境”上——庄子说“我知之濠上也”，即“知道”是在具体情境中发生的关系，而不是一个可以脱离场景核对的结论。中文房间的争论双方其实都承认“仅有外部行为不足以单独确定理解”，分歧在于<b>还缺什么</b>，而不是<b>缺不缺</b>。</li>
+          <li><b>不能写成“庄子早就提出了中文房间”。</b>先秦名家关心的“名实”关系（《公孙龙子·名实论》所谓“夫名，实谓也”）讲的是名称与事物是否相副，与心灵哲学并不处在同一条线索上。把它们放到一起比较是<b>为了看清问题的形态</b>，不是为了排定谁更早、谁更高。</li>
+        </ul>
+
+        <h3>七、一句可以直接搬用的方法</h3>
+        <p>课文最后那句提供了本课最好用的工具：<b>can a system produce the right words, and does anything in it know what those words are about.</b> 遇到“这个系统懂不懂”这类问题时，先把问题拆成两句——<b>它的输出对不对</b>，以及<b>它内部有没有东西在为这个输出负责</b>。前者可以测，后者很难测。<b>先分清在问哪一个，讨论才有意义。</b></p>
+
+        <p class="source"><b>说明：</b>本课只讨论哲学论证本身，不涉及任何国家、民族、制度、宗教或现实政策的评价，不对任何具体产品、公司或技术路线作判断，不作任何跨国或跨机构排名。塞尔原文发表于 1980 年《行为与脑科学》（Behavioral and Brain Sciences）；课文中对该论证的批评意见均来自公开学术讨论，属中立综述，不代表本课立场。争论至今尚无定论，凡有分歧处已标明“尚无定论”。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>🤔 哲学思考 Philosophy　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>塞尔的中文房间与“句法是否足以产生语义”</p>
+        <p>1980 年，哲学家约翰·塞尔设想了一间屋子：里面的人一个中文字也不认识，靠着英文规则手册处理中文符号，却能让门外的人相信屋里有一位中文使用者。塞尔要用它反驳“强人工智能”——仅仅运行正确的程序，并不等于拥有理解。他最有力的反驳来自“系统回应”：也许那个人不懂，但整个系统懂。塞尔的答复是让这个人把规则手册和数据库全部记住、在脑子里算，这时再没有别的系统可以指，而他依然不懂。<b>半个世纪过去，机器已经能流畅作答，但这个例子提出的那个区分——说出正确的话，与知道自己在说什么——仍然没有被取消。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级学术／抽象词汇（coherent · indistinguishable · syntax · semantics · entail · internalise · concede · intuition 等），能在写作中正确使用 entail、concede 这类逻辑动词。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 470 词的思想实验类说明文，能区分“例子描述了什么”与“例子要证明什么”。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——Were / Had 虚拟倒装、分裂句 It is ... that ...、假分裂句 What ... is ...、介词 + which 定语从句、独立主格。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>方法：</b>学会把“输出是否正确”与“内部是否有理解”当作两个问题分开处理。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过《庄子·秋水》濠梁之辩，理解“外部表现不等于内部状态”这一思路在中国思想中的另一种表达，并辨析二者的差异。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. It is the room that passes every outward test; the man inside does all the work and understands none of it.</div>
+          <div class="eg" style="margin-top:8px;">2. What the argument is meant to show is narrow: running a program is a matter of manipulating symbols according to formal rules.</div>
+          <div class="eg" style="margin-top:8px;">3. Nor, he concluded, does a simulation of understanding entail understanding.</div>
+          <div class="eg" style="margin-top:8px;">4. Were the room's answers to become perfect, the objection would not change in the slightest.</div>
+          <div class="eg" style="margin-top:8px;">5. Only now has the question stopped being hypothetical.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-18 · 哲学思考 Philosophy｜塞尔的中文房间与“句法不等于语义”</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+
+const segmentTexts=["In 1980 the philosopher John Searle described a room. Inside it sits a man who speaks no Chinese, a rule book written in English, and paper enough to last a lifetime. Slips covered in Chinese characters are pushed under the door; the man matches their shapes against the book and pushes other slips back out. Questions go in, coherent answers come out, and a native speaker examining the replies would find them indistinguishable from those of a person who understands. It is the room that passes every outward test; the man inside does all the work and understands none of it.", "What the argument is meant to show is narrow: running a program is a matter of manipulating symbols according to formal rules, and doing that is not the same as grasping what the symbols mean. Searle called the first syntax and the second semantics, and he held that the first is not sufficient for the second. A simulation of a storm makes nothing wet; a simulation of digestion supplies no nutrition. Nor, he concluded, does a simulation of understanding entail understanding. What he denied was the claim he labelled strong artificial intelligence — that a machine following the right program would not merely model a mind but have one. Were the room's answers to become perfect, the objection would not change in the slightest.", "The most persistent objection is the systems reply: the man may understand no Chinese, but the system of which he is a part does. Searle's answer was to make the man internalise it. He memorises the rule book, keeps the data in his head and does the calculation mentally — one person alone in the countryside, no room left to point at — and still, Searle insists, he understands nothing. His critics concede the force of the picture while denying its conclusion. Some add the other-minds reply: we attribute understanding to other people on the evidence of their behaviour and never inspect their consciousness directly, so why demand more of a machine? That, they argue, is a standard we do not apply to one another.", "Only now, with systems that produce fluent text in hundreds of languages, has the question stopped being hypothetical. Searle's defenders say fluency is precisely what the room was always capable of; his critics say the intuition that made the example persuasive is a poor instrument for settling what understanding consists in. Nor has either side carried the matter conclusively, and that is the honest state of it. What the thought experiment still does, better than most, is hold two questions apart that we tend to run together: can a system produce the right words, and does anything in it know what those words are about. The first is being answered every day. The second is not."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What is the conclusion Searle draws from the Chinese room? 塞尔从中文房间得出了什么结论？",
+   opts:["That no computer will ever be able to produce fluent answers 任何计算机都永远无法输出流畅的回答","That understanding requires a biological brain, and that he has proved this 理解必须有生物大脑，而他已经证明了这一点","That following rules for manipulating symbols is not by itself enough for understanding 仅仅按规则操作符号，本身不足以构成理解","That the Turing test should be abandoned as a measure of intelligence 图灵测试作为衡量智能的标准应当被废除"],
+   ans:2,
+   fb:"正确！塞尔的结论很窄也很锋利：<b>syntax is not sufficient for semantics</b>——按形式规则搬动符号，不等于把握这些符号的意义。注意选项 A 和 B 都不是他的主张：他并不否认机器能流畅作答，也不认为这个例子“证明”了必须有生物大脑（那属于另一个主张）。选项 D 超出了文本范围。"},
+  {q:"What is the systems reply? 系统回应指的是什么？",
+   opts:["The rules are so detailed that the man picks up Chinese without noticing 规则极其细致，那个人不知不觉学会了中文","The man may understand no Chinese, but the system of which he is a part does 这个人可能不懂中文，但他所属的那个系统懂","Understanding belongs to the paper in the room rather than to its occupant 理解属于屋里的纸张，而不属于屋里的人","Several people working together would understand what one person cannot 几个人合作就能理解一个人无法理解的东西"],
+   ans:1,
+   fb:"正确！原文：<i>the man may understand no Chinese, but the system <b>of which</b> he is a part does</i>。这也是本课语法点③的例句——介词前置后只能用 which，不能用 that，也不能省略。"},
+  {q:"Why does Searle ask us to imagine the man memorising the entire rule book? 塞尔为什么要我们设想那个人把整本规则手册背下来？",
+   opts:["To show that the programme would run faster 为了说明程序会跑得更快","To prove that human memory has no limits 为了证明人的记忆没有极限","To show that brains are superior to computers 为了说明大脑优于计算机","To leave no system separate from the man, so that the systems reply cannot place understanding somewhere else 为了不留下任何独立于这个人的系统，使系统回应无法把理解安放到别处"],
+   ans:3,
+   fb:"正确！这是塞尔最有力的一步：把规则手册和数据库全部内化之后，除了这个人之外没有别的东西可以指，而他仍然不懂。塞尔认为，系统回应只是<b>把谜团挪了个位置</b>，并没有解释它。"},
+  {q:"What does “Only now has the question stopped being hypothetical” mean? 这句话是什么意思？",
+   opts:["For a long time the question was only theoretical; only recently has it become practical 这个问题很长时间里只是理论性的，直到最近才成为实际问题","The question has recently been settled 这个问题最近被解决了","The question is no longer worth discussing 这个问题已经不值得讨论了","Nobody raised the question until this year 直到今年才有人提出这个问题"],
+   ans:0,
+   fb:"正确！注意 <b>Only + 状语</b> 提前时主句要部分倒装：本句谓语是现在完成时，所以把 <b>has</b> 提到主语 the question 之前。若 only 修饰的是主语（Only she knew），则绝不倒装。"},
+  {q:"What is the other-minds reply? 他心回应指的是什么？",
+   opts:["People who work with machines understand them better 与机器打交道的人更理解机器","Machine understanding is a kind of group mind 机器的理解是一种集体心智","We attribute understanding to other people on the evidence of their behaviour and never inspect their consciousness directly, so demanding more of a machine may be inconsistent 我们对他人理解的判断依据也只是他们的行为，从未直接检查过别人的意识，因此对机器另立标准可能不一致","Other people's minds are easier to study than machines 别人的心智比机器更容易研究"],
+   ans:2,
+   fb:"正确！这是塞尔本人认为最有意思的反驳之一。它不否认房间里没人懂中文，而是反过来追问：<b>我们凭什么断定别人懂？</b>标准若不一致，直觉就不足以充当论据。"},
+  {q:"Which statement best matches the passage's position on the debate? 哪一项最符合文章对这场争论的态度？",
+   opts:["Searle's argument has been refuted beyond doubt 塞尔的论证已被彻底驳倒","Searle's argument has been proved correct beyond doubt 塞尔的论证已被彻底证明正确","Neither side has carried the matter conclusively; the dispute remains open 双方都还没有决定性地赢下这场争论，问题仍然开放","The dispute ended once fluent systems appeared 流畅的系统一出现，争论就结束了"],
+   ans:2,
+   fb:"正确！原文：<i>Nor has either side carried the matter conclusively, and that is the honest state of it.</i> 本课不替任何一方下判断，而是指出这个例子真正的用处——把“能否说出正确的话”与“内部是否有人在理解”这两个问题分开。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

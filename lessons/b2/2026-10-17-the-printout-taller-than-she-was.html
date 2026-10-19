@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Printout Taller Than She Was</title>
+<style>
+:root{
+  --accent:#c2410c;
+  --accent2:#0c4a6e;
+  --bg:#faf8f5;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#fde68a;
+  --border:#e6ded1;
+  --soft:#fdf2ea;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(194,65,12,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(194,65,12,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(194,65,12,.5);}70%{box-shadow:0 0 0 12px rgba(194,65,12,0);}100%{box-shadow:0 0 0 0 rgba(194,65,12,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fcd34d;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(194,65,12,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fde68a;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · History</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Printout Taller Than She Was</h1>
+      <p class="subtitle">1969 年 7 月 20 日，阿波罗 11 号在着陆前几分钟报出 1202 警报。让这次着陆得以继续的，不是运气，而是一套当时被管理层认为多余的优先级调度｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Beside the Paper 站在纸堆旁边</div>
+            <p>In 1969 a photographer at the Massachusetts Institute of Technology photographed Margaret Hamilton beside the printed listings of the software she had helped write. The paper is as tall as she is. It was the source code for the Apollo Guidance Computer — the small onboard machine that had to steer two men down to the Moon and bring them back. Hamilton joined the laboratory as a young mathematician and ended up leading the division that wrote the flight software. Software was not then regarded as engineering at all; it was what programmers did after the real engineers finished. She began using a phrase that colleagues found comic: software engineering. <span class="kw" data-def="Were + 主语 + 过去分词 ＝ 省略 if 的被动虚拟条件句，与现在或将来事实相反。还原为 If it were only a name。三种形式：Were he to come（将来）／ Were it done（被动）／ Had he come（过去）。注意 not 放在主语之后：Were it not for ... 若非……">Were</span> it only a name, the story would end there.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Counting Every Instruction 每一条指令都要数着用</div>
+            <p><span class="kw" data-def="假分裂句（pseudo-cleft）：What 引导的名词性关系从句作主语，相当于 the thing that。这里 What the machine could do 是主语，was fixed 是谓语。作用是把新信息放在句末焦点位置。比较：The thing that the machine could do was fixed by what it could hold（更冗长）">What</span> the machine could do was fixed by what it could hold. The <span class="kw" data-def="约束；限制条件（读作 /kənˈstreɪnt/。impose a constraint on something 对某事施加限制；under severe constraints 在严苛的限制下；budget constraints 预算约束。动词 constrain 限制。注意与 restraint 克制 区分：constraint 是外部限制，restraint 是自己按住自己）">constraint</span> was not ambition but memory. The guidance computer had roughly thirty-six thousand words of fixed memory, <span class="kw" data-def="独立主格（nominative absolute）：名词 + 分词，自带逻辑主语，与主句主语不同，在句中作状语表伴随、原因或补充。这里 each rope 是逻辑主语，taking 是现在分词。若把分词换成过去分词则为被动：each rope taken ...。它常可改写为 with 复合结构：with each rope taking weeks to make。注意独立主格前不能加连词 and，否则就变成并列谓语了">each rope taking</span> weeks to make and impossible to rewind once finished, and about two thousand words of erasable memory for working data. The software therefore had to do something no flight program had been asked to do: run several jobs at once, against a hard deadline, on a machine <span class="kw" data-def="介词 + which 引导定语从句，正式文体常用。还原为 a machine that every instruction had to be counted in。规则：介词前置后只能用 which（物）／whom（人），不能用 that，也不能省略；固定动词短语一般不宜拆开前置">in which</span> every instruction had to be counted. Hamilton's team built an executive that <span class="kw" data-def="分配；配置（动词，读作 /ˈæləkeɪt/，及物。allocate resources 配置资源；allocate time to something 把时间分配给某事；allocate memory 分配内存。名词 allocation。它强调“按计划分给某一方”，比 distribute 分发 更强调决策过程">allocated</span> the computer's attention by <span class="kw" data-def="优先；优先事项（名词，读作 /praɪˈɒrəti/，重音在第二音节。by priority 按优先级；give priority to something 优先考虑某事；a top priority 首要任务。形容词 prior 在先的，短语 prior to 在……之前。注意 priority 的复数形式是 priorities">priority</span> — a <span class="kw" data-def="有意的；从容的（形容词读作 /dɪˈlɪbərət/，动词读作 /dɪˈlɪbəreɪt/。a deliberate choice 有意的选择；deliberate on a question 仔细考虑一个问题。副词 deliberately 故意地。注意形容词与动词的重音位置不同：形容词重音在第二音节，动词在第三音节）">deliberate</span> departure from running jobs in a fixed order, and one that her managers, so the story goes, thought <span class="kw" data-def="多余的；冗余的（形容词，读作 /rɪˈdʌndənt/。be made redundant 被裁员（英式）；redundant systems 冗余系统；render something redundant 使某物变得多余。工程里的 redundancy 冗余 是褒义（备份），日常里 redundant 多为贬义（多余）。一词两义，须看语境）">redundant</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Alarm 那道 1202 警报</div>
+            <p><span class="kw" data-def="分裂句 It was + 被强调成分 + that ...，用来把句子某一部分推到焦点。这里强调的是时间状语 on the twentieth of July 1969。检验办法：把 It was 和 that 去掉，句子仍完整（The design was tested on the twentieth of July 1969）。被强调的可以是主语、宾语、状语，但不能是谓语动词">It was</span> on the twentieth of July 1969 that the design was tested. Minutes before touchdown, the computer flashed a code no one had <span class="kw" data-def="预料；预见（动词，读作 /ænˈtɪsɪpeɪt/，及物。anticipate a problem 预见问题；anticipate that ... 预料到……；as anticipated 不出所料。名词 anticipation。它比 expect 更主动，强调“事先想到并有所准备”，后接名词或动名词，不接不定式">anticipated</span> seeing in flight: 1202. A switch left in the wrong position had loaded the processor with extra work from the rendezvous radar, and the machine had more to do than time to do it in. On a modern computer the result would have been a frozen screen. The executive did what it had been built to do: it <span class="kw" data-def="丢弃；抛弃（动词，读作 /dɪsˈkɑːd/，及物。discard an idea 放弃一个想法；discarded files 被丢弃的文件。它比 throw away 正式，强调“因为无用而主动丢掉”。注意拼写：dis- + card，不是 dischard">discarded</span> the low-priority jobs, restarted, and protected the calculations that guided the descent. Five such alarms came and went. Mission control, <span class="kw" data-def="排练；预演（动词，读作 /rɪˈhɜːs/。rehearse a scene 排练一场戏；rehearse a speech 演练讲稿。引申为“事先把某种情况演练一遍”，本课正是这个用法。名词 rehearsal 排练／预演。与 practice 练习 的区别：rehearse 是为正式场合做的完整预演">having rehearsed</span> precisely this, said go.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · An Assumption, Not a Hope 一个假定，而不是一份指望</div>
+            <p><span class="kw" data-def="not until + 时间状语 置于句首时，主句要部分倒装（not until 引导的从句本身不倒装）。还原为 The work was not called pioneering until decades later。规则：Only + 状语、Not until + 状语、nor／neither 提前，这几种情况都要部分倒装；若句子里没有助动词或 be，要借 do / does / did">Not until</span> decades later was the work called pioneering. Hamilton had learned that lesson earlier, in a quieter way: her young daughter, playing at a simulator console, had once selected a pre-launch program and crashed the run. When Hamilton proposed guarding against it, she was told astronauts were trained not to make that mistake. On Apollo 8 one of them made it, and the <span class="kw" data-def="防护措施；保障（名词／动词，读作 /ˈseɪfɡɑːd/。as a safeguard against something 作为防范……的措施；safeguard the data 保护数据。它是可数名词，常见搭配 put a safeguard in place。动词用法后接名词（safeguard public health），不接不定式">safeguard</span> went in. What her software <span class="kw" data-def="体现；包含（动词，读作 /ɪmˈbɒdi/，正式，及物。embody an idea 体现一种思想；embody the spirit of ... 体现……的精神。形容词 embodied 具体化的。它比 include 重得多：include 是“含有”，embody 是“把抽象的东西做成可见的样子”。名词 embodiment 化身／体现">embodied</span> was an assumption rather than a hope — that things would go wrong, and that a system should decide in advance what it will protect. <span class="kw" data-def="Were + 主语 + 过去分词 ＝ 被动虚拟条件句，与现在或将来事实相反。还原为 If the hardware were rebuilt today。注意时态配对：从句 were done ↔ 主句 would do。它与 Had the hardware been rebuilt（与过去相反）的区别全在主句形态：would survive vs would have survived">Were</span> the hardware rebuilt today, the assumption would survive it. She received the Presidential Medal of Freedom in 2016, long after the hardware itself had become <span class="kw" data-def="过时的；淘汰的（形容词，读作 /ˈɒbsəliːt/，重音在首音节。become obsolete 变得过时；obsolete technology 被淘汰的技术。名词 obsolescence。注意它与 outdated 有细微差别：obsolete 指已被新事物取代、不再被使用，outdated 只指“不再时髦／不再适用”，可能仍在使用">obsolete</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+        <div class="card" style="background:var(--soft);">
+          <p style="margin:0;font-size:14.5px;color:#4b5563;"><b>背景速览：</b>阿波罗制导计算机（Apollo Guidance Computer, AGC）由麻省理工学院仪器实验室（后为查尔斯·斯塔克·德雷珀实验室）设计，装有约 3.6 万字固定存储器与约 2 千字可擦写存储器，合计约 72 KB。固定存储器采用磁芯绳（rope memory），由工人手工穿线制成，改一次程序就要重织。玛格丽特·汉密尔顿是该实验室飞行软件部门负责人；据 NASA 说法，她推动并普及了“软件工程”（software engineering）这一说法。1969 年 7 月 20 日阿波罗 11 号着陆前，制导计算机先后报出数次 1202／1201 警报。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="anticipate">🔊</button><div class="word">anticipate<span class="pos">v.</span></div><div class="zh">预料；预见（及物，读作 /ænˈtɪsɪpeɪt/。anticipate a problem 预见问题；anticipate that ... 预料到……；as anticipated 不出所料。名词 anticipation。它比 expect 更主动，强调事先想到并有所准备；后接名词或动名词，不接不定式）</div><div class="ex">"Minutes before touchdown, the computer flashed a code no one had anticipated seeing in flight: 1202."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="discard">🔊</button><div class="word">discard<span class="pos">v.</span></div><div class="zh">丢弃；抛弃（及物，读作 /dɪsˈkɑːd/。discard an idea 放弃一个想法；discarded files 被丢弃的文件。它比 throw away 正式，强调因为无用而主动丢掉。拼写注意 dis- + card，不是 dischard）</div><div class="ex">"The executive did what it had been built to do: it discarded the low-priority jobs, restarted, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rehearse">🔊</button><div class="word">rehearse<span class="pos">v.</span></div><div class="zh">排练；预演（读作 /rɪˈhɜːs/。rehearse a scene 排练一场戏；rehearse a speech 演练讲稿。引申为事先把某种情况演练一遍，本课正是这个用法。名词 rehearsal 排练／预演。与 practice 的区别：rehearse 是为正式场合做的完整预演）</div><div class="ex">"Mission control, having rehearsed precisely this, said go."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="safeguard">🔊</button><div class="word">safeguard<span class="pos">n. / v.</span></div><div class="zh">防护措施；保障（读作 /ˈseɪfɡɑːd/。as a safeguard against something 作为防范……的措施；safeguard the data 保护数据。它是可数名词，常见搭配 put a safeguard in place。动词用法后接名词（safeguard public health），不接不定式）</div><div class="ex">"On Apollo 8 one of them made it, and the safeguard went in."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="embody">🔊</button><div class="word">embody<span class="pos">v.</span></div><div class="zh">体现；包含（正式，及物，读作 /ɪmˈbɒdi/。embody an idea 体现一种思想；embody the spirit of ... 体现……的精神。形容词 embodied。它比 include 重得多：include 是含有，embody 是把抽象的东西做成可见的样子。名词 embodiment 化身／体现）</div><div class="ex">"What her software embodied was an assumption rather than a hope — ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="obsolete">🔊</button><div class="word">obsolete<span class="pos">adj.</span></div><div class="zh">过时的；淘汰的（读作 /ˈɒbsəliːt/，重音在首音节。become obsolete 变得过时；obsolete technology 被淘汰的技术。名词 obsolescence。与 outdated 的细微差别：obsolete 指已被新事物取代、不再使用，outdated 只指不再时髦或不再适用，可能仍在使用）</div><div class="ex">"... long after the hardware itself had become obsolete."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="allocate">🔊</button><div class="word">allocate<span class="pos">v.</span></div><div class="zh">分配；配置（及物，读作 /ˈæləkeɪt/。allocate resources 配置资源；allocate time to something 把时间分配给某事；allocate memory 分配内存。名词 allocation。它强调按计划分给某一方，比 distribute 分发 更强调决策过程）</div><div class="ex">"Hamilton's team built an executive that allocated the computer's attention by priority ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="priority">🔊</button><div class="word">priority<span class="pos">n.</span></div><div class="zh">优先；优先事项（读作 /praɪˈɒrəti/，重音在第二音节。by priority 按优先级；give priority to something 优先考虑某事；a top priority 首要任务。形容词 prior 在先的，短语 prior to 在……之前。复数形式是 priorities）</div><div class="ex">"... allocated the computer's attention by priority ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="redundant">🔊</button><div class="word">redundant<span class="pos">adj.</span></div><div class="zh">多余的；冗余的（读作 /rɪˈdʌndənt/。be made redundant 被裁员（英式）；redundant systems 冗余系统；render something redundant 使某物变得多余。工程里的 redundancy 冗余 是褒义（备份），日常里 redundant 多为贬义（多余）。一词两义，须看语境）</div><div class="ex">"... a design, so the story goes, that her managers thought redundant."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="constraint">🔊</button><div class="word">constraint<span class="pos">n.</span></div><div class="zh">约束；限制条件（读作 /kənˈstreɪnt/。impose a constraint on something 对某事施加限制；under severe constraints 在严苛的限制下；budget constraints 预算约束。动词 constrain 限制。注意与 restraint 克制 区分：constraint 是外部限制，restraint 是自己按住自己）</div><div class="ex">"The constraint was not ambition but memory."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="deliberate">🔊</button><div class="word">deliberate<span class="pos">adj. / v.</span></div><div class="zh">有意的；从容的（形容词读作 /dɪˈlɪbərət/，动词读作 /dɪˈlɪbəreɪt/。a deliberate choice 有意的选择；deliberate on a question 仔细考虑一个问题。副词 deliberately 故意地。注意形容词与动词的重音位置不同：形容词重音在第二音节，动词在第三音节）</div><div class="ex">"... a deliberate departure from running jobs in a fixed order, and one that her managers, so the story goes, thought redundant."</div></div>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. 分裂句强调时间状语 · It was on the twentieth of July 1969 that the design was tested.</h3>
+          <div class="zh">结构：<b>It was + 被强调成分 + that + 其余部分</b>。检验办法：把 It was 与 that 去掉，句子仍完整（<i>The design was tested on the twentieth of July 1969</i>）。被强调的可以是主语、宾语、状语，<b>但不能是谓语动词</b>。</div>
+          <div class="eg"><b>It was</b> on the twentieth of July 1969 <b>that</b> the design was tested.</div>
+          <div class="practice">✍️ 仿写：正是在那间实验室里，这套软件被写了出来。<input type="text" placeholder="It was ... that ..."></div>
+        </div>
+        <div class="item">
+          <h3>2. 假分裂句 · What the machine could do was fixed by what it could hold.</h3>
+          <div class="zh">结构：<b>What + 从句 + be + 补语</b>，相当于 the thing that ...。作用是把新信息放到句末焦点。本句里后半段又用了一次 <i>what it could hold</i>，形成了工整的对照：<b>能做什么</b> 由 <b>能装多少</b> 决定。</div>
+          <div class="eg"><b>What</b> the machine could do <b>was</b> fixed by <b>what</b> it could hold.</div>
+          <div class="practice">✍️ 仿写：她真正需要的不是更强的机器，而是更清晰的规定。<input type="text" placeholder="What ... was ..."></div>
+        </div>
+        <div class="item">
+          <h3>3. 介词 + which 引导定语从句 · ... on a machine in which every instruction had to be counted.</h3>
+          <div class="zh">结构：<b>介词 + which（物）／whom（人）+ 从句</b>。介词前置后<b>只能用 which / whom，不能用 that，也不能省略</b>。口语里更常说 <i>a machine that every instruction had to be counted in</i>（介词留在句末）。</div>
+          <div class="eg">... run several jobs at once, against a hard deadline, on a machine <b>in which</b> every instruction had to be counted.</div>
+          <div class="practice">✍️ 仿写：那台内存以字计的计算机。<input type="text" placeholder="a machine in which ..."></div>
+        </div>
+        <div class="item">
+          <h3>4. Not until 提前的倒装 · Not until decades later was the work called pioneering.</h3>
+          <div class="zh">结构：<b>Not until + 时间状语</b> 置于句首时，<b>主句</b>要部分倒装（not until 引导的成分本身不倒装）。还原为 <i>The work was not called pioneering until decades later</i>。若句中无 be 或助动词，要借 do / does / did。</div>
+          <div class="eg"><b>Not until</b> decades later <b>was</b> the work <b>called</b> pioneering.</div>
+          <div class="practice">✍️ 仿写：直到事故发生之后，人们才重视那项规定。<input type="text" placeholder="Not until ... did ..."></div>
+        </div>
+        <div class="item">
+          <h3>5. 被动式虚拟倒装 · Were the hardware rebuilt today, the assumption would survive it.</h3>
+          <div class="zh">结构：<b>Were + 主语 + 过去分词</b> ＝ If + 主语 + were + 过去分词，与<b>现在／将来</b>事实相反；主句用 <b>would / could / might do</b>。此处事实是：硬件并未重建，而且它早就过时了。注意它与 <b>Had the hardware been rebuilt</b>（与过去相反，主句用 would have done）的区别。</div>
+          <div class="eg"><b>Were</b> the hardware <b>rebuilt</b> today, the assumption <b>would survive</b> it.</div>
+          <div class="practice">✍️ 仿写：若这套系统今天重做，那条原则依然成立。<input type="text" placeholder="Were ... , ... would ..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar in Depth</h2>
+      <p class="subtitle">5 个语法点，例句均来自本课正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① 虚拟条件句的倒装：Were / Had / Should 提前</h3>
+          <div class="zh">省略 if 后，把 <b>had / were / should</b> 提到句首即可。三种情况的配对：<br>· 与<b>过去</b>相反：<b>Had + 主语 + done</b> ↔ 主句 <b>would have done</b>；<br>· 与<b>现在／将来</b>相反：<b>Were + 主语</b>（be 一律用 were）↔ 主句 <b>would do</b>；<br>· <b>Were + 主语 + to do</b> 或 <b>Should + 主语 + do</b>：将来可能性极小。<br>本课两句都用了<b>被动</b>形式：<i>Were <b>it</b> only a name</i> 与 <i>Were <b>the hardware</b> rebuilt today</i>。否定词放在主语之后：<b>Were it not for her team, the mission would have failed</b>。</div>
+          <div class="eg">正文原句：<b>Were it only a name</b>, the story would end there.<br>正文原句：<b>Were the hardware rebuilt today</b>, the assumption would survive it.</div>
+        </div>
+        <div class="item">
+          <h3>② 分裂句与假分裂句</h3>
+          <div class="zh">· <b>分裂句 It is / was + 被强调成分 + that / who + 其余</b>：不能强调谓语动词；指人时可用 who 或 that，指物、时间、地点一律用 that。<br>· <b>假分裂句 What / All / The only thing + 从句 + be + 补语</b>：把新信息置于句末。<br>· 本课还有一处值得注意的假分裂句：<i>What her software embodied was an assumption rather than a hope</i> —— 主语是 what 从句，补语是 an assumption，中间用 rather than 做对比。<br>· <b>What 从句作主语时谓语通常用单数</b>，这是写作中最稳妥的选择。</div>
+          <div class="eg">正文原句：<b>It was</b> on the twentieth of July 1969 <b>that</b> the design was tested.<br>正文原句：<b>What the machine could do was</b> fixed by what it could hold.</div>
+        </div>
+        <div class="item">
+          <h3>③ 部分倒装：Only / Not until / nor 提前</h3>
+          <div class="zh">· <b>Only + 状语</b> 提前 → 主句倒装；only 修饰主语时<b>不</b>倒装。<br>· <b>Not until + 时间状语</b> 提前 → 主句倒装，not until 部分本身不倒装。<br>· <b>Nor / Neither</b> 引导并列分句 → 分句倒装，助动词与前句一致；前句无助动词时借 do。<br>· 倒装只发生在<b>被提前成分所在的那个分句</b>，后续分句恢复正常语序。<br>· 若句中没有 be、助动词或情态动词，一律借 <b>do / does / did</b>，并把动词还原为原形。</div>
+          <div class="eg">正文原句：<b>Not until</b> decades later <b>was</b> the work called pioneering.<br>对照：<i><b>Only in 2016 did</b> she receive the medal.</i>　<i><b>Nor did</b> the team relax afterwards.</i></div>
+        </div>
+        <div class="item">
+          <h3>④ 独立主格（nominative absolute）</h3>
+          <div class="zh">结构：<b>名词 / 代词 + 分词、形容词、副词或介词短语</b>，自带逻辑主语，与主句主语<b>不同</b>，因此不会构成“悬垂分词”。它多作状语，表示伴随、原因或补充说明，书面语色彩浓。<br>· <i>名词 + 现在分词</i>（主动、进行）：<b>each rope taking weeks to make</b>（本课原句）；<i>Weather permitting, we start at six.</i><br>· <i>名词 + 过去分词</i>（被动、完成）：<i>All things considered, the plan is sound.</i><br>· <i>名词 + 介词短语 / 形容词</i>：<i>He waited, hands in pockets.</i><br>改写成 <b>with 复合结构</b>（with + 宾语 + 分词）意思相同，口语更自然。</div>
+          <div class="eg">正文原句：The guidance computer had roughly thirty-six thousand words of fixed memory, <b>each rope taking weeks to make and impossible to rewind once finished</b>, ...</div>
+        </div>
+        <div class="item">
+          <h3>⑤ 介词 + which / whom 引导定语从句</h3>
+          <div class="zh">关系代词作介词宾语时，介词可前置，构成正式文体常见的 <b>介词 + which / whom</b>。<br><b>四条易错处：</b>（a）介词前置后<b>只能用 which / whom，不能用 that，也不能省略</b>；（b）固定动词短语不宜拆开，如 <i>the child (whom) she looks after</i> 一般不说 after whom；（c）表示整体中的一部分时，用 <b>of which / of whom</b>，如 <i>several replies, none of which convinced him</i>；（d）whose 既可指人也可指物：<i>a machine whose memory was tiny</i>。</div>
+          <div class="eg">正文原句：... on a machine <b>in which</b> every instruction had to be counted.<br>扩展：<i>The team had two computers, <b>neither of which</b> could be repaired in flight.</i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、那台机器到底有多小</h3>
+        <p>阿波罗制导计算机（Apollo Guidance Computer，简称 AGC）由麻省理工学院仪器实验室（后为查尔斯·斯塔克·德雷珀实验室）研制，装有约 3.6 万字的固定存储器与约 2 千字的可擦写磁芯存储器，合计约 72 KB。它是最早大量使用硅集成电路的计算机之一，时钟频率约为 2 MHz。</p>
+        <p>固定存储器采用所谓<b>磁芯绳</b>（rope memory）：用铜线穿过或不穿过一个个小磁环来编码 0 和 1，由工厂里的女工手工编织完成。每一根绳的织造周期以周计，一旦织成便无法改写。<b>这意味着软件改一次就要重织一次，代价极高。</b>于是“在地面把事情想清楚”不再是一种工作习惯，而成了工程上的硬性要求。</p>
+
+        <h3>二、着陆前那几分钟</h3>
+        <table class="facts">
+          <tr><th>环节</th><th>发生了什么</th></tr>
+          <tr><td>异常来源</td><td>交会雷达的一个开关处在非预期位置，持续向处理器输送额外数据（常被引作约占百分之十几的计算量）；同时机组请求显示高度等数据，使同时运行的作业数超过设计上限</td></tr>
+          <tr><td>警报含义</td><td>1202 与 1201 表示执行程序“溢出”——不是计算机坏了，而是<b>它太忙了</b></td></tr>
+          <tr><td>系统反应</td><td>执行程序按优先级丢弃低优先级作业，重启，保住制导与显示这类关键任务</td></tr>
+          <tr><td>为什么能继续</td><td>这类重启情况在地面已被反复演练，休斯敦据此在数秒内判断可以继续着陆</td></tr>
+          <tr><td>结果</td><td>阿波罗 11 号完成着陆，剩余燃料常被引作不足 30 秒</td></tr>
+        </table>
+        <p class="source">说明：具体数值（警报次数、计算量占比、燃料余量）在不同来源的表述上略有出入，本课只取各方一致的部分——计算机过载、优先级调度保护了关键任务、着陆继续进行。</p>
+
+        <h3>三、防御性编程是怎么来的</h3>
+        <p>据汉密尔顿本人回忆，阿波罗 8 号准备期间，她年幼的女儿 Lauren 在实验室的模拟器控制台前“扮演宇航员”，选中了一个发射前程序 P01，把模拟中的任务搞崩溃了。汉密尔顿由此提议：<b>应当防止有人在飞行中误选这个程序。</b>当时得到的答复大意是——宇航员受过训练，不会犯这种错。</p>
+        <p>而在阿波罗 8 号任务中，宇航员 Jim Lovell 在飞行中触发了同类情况，导航数据丢失，团队花了数小时才恢复。此后，那道保护被加入了软件。</p>
+        <p>这个故事常被当作<b>防御性编程</b>与容错设计的起源叙事之一。它说明的道理其实很朴素：<b>危险的错误不必愚蠢，只要可能发生就够了。</b>需说明的是，细节属当事人回忆，在不同转述中略有差异。</p>
+
+        <h3>四、迟来的承认</h3>
+        <p>2003 年，汉密尔顿获 NASA Exceptional Space Act Award。2016 年 11 月 22 日，她获美国总统自由勋章。关于“software engineering”这一说法的归属，学界有讨论：NASA 的表述是她推动并普及了该词，而 1968 年的北约软件工程会议也使用过它。<b>本课采用最稳妥的说法——她是最早使用并推动其普及的人之一。</b></p>
+
+        <h3>五、中外对照：都江堰的岁修与六字诀</h3>
+        <p>都江堰渠首工程约建于公元前三世纪中期，由秦蜀郡守李冰主持修建。它两千多年持续发挥作用，靠的不只是渠首本身，还有一整套<b>把长期经验写成规则</b>的维护制度：每年枯水期的<b>岁修</b>，以及后世总结出的六字诀与八字格言。</p>
+        <table class="facts">
+          <tr><th>口诀</th><th>含义</th><th>为什么重要</th></tr>
+          <tr><td>深淘滩</td><td>河床淘淤要淘到规定深度（以埋设的卧铁为标志）</td><td>淘浅了，进入灌区的水量就不足</td></tr>
+          <tr><td>低作堰</td><td>飞沙堰的堰顶不宜过高</td><td>堰高了，排沙不畅，反而造成淤塞</td></tr>
+          <tr><td>遇弯截角，逢正抽心</td><td>弯道处截去凸岸淤积，顺直段深挖河槽中心</td><td>把不同河段的处置方式分别规定下来</td></tr>
+        </table>
+        <p>这些口诀的价值在于：它们把“什么时候做、做到什么程度”变成了后人可以直接执行的判断，换不同的人来做也能维持大致相同的效果。</p>
+
+        <h3>六、三点辨析：可比的是方法，不是高低</h3>
+        <ul>
+          <li><b>规范的对象不同。</b>岁修口诀约束的是<b>人的行为与时序</b>（何时淘、淘多深）；AGC 的优先级调度是<b>机器内部</b>的取舍机制，不需要人在现场临时判断。</li>
+          <li><b>失效的代价不同。</b>堤堰淤积是渐进过程，可以靠下一年的岁修补救；着陆阶段留给人的反应时间以秒计，因此取舍必须由系统<b>自动且预先</b>完成。<b>这正是两种规范形态走向不同的根源。</b></li>
+          <li><b>不能讲成中西优劣。</b>两者面对的工程问题、时代条件与可动用的技术手段完全不同。把它们放在一起，是为了看清“<b>如何把经验变成可以重复执行的规则</b>”这一共同方法，而不是为了排定谁更早、谁更强。</li>
+        </ul>
+        <p class="source">另需说明：六字诀与八字格言的具体成文年代，学界说法不一，通常认为是在后世岁修实践中逐步总结并刻石流传的，本课不作定论。</p>
+
+        <h3>七、一句可以直接搬用的方法</h3>
+        <p>课文最后一句是本课最值得记住的原则：<b>an assumption rather than a hope — that things would go wrong, and that a system should decide in advance what it will protect.</b> 做任何复杂的事之前，先问两个问题：<b>哪些环节一定会出问题</b>，以及<b>资源不够时我先保哪一个</b>。<b>把这两个问题的答案提前写下来，就是工程思维和“到时候再说”之间的全部差别。</b></p>
+
+        <p class="source"><b>说明：</b>本课只讲述技术史与工程方法，不涉及任何国家、机构、政策的优劣评价，不作任何跨国或跨机构排名，不对任何现实政治议题表态。文中数据与史实取自 NASA、MIT 及相关研究机构的公开资料；凡各来源说法不一致处，已在文中标注。玛格丽特·汉密尔顿于 2026 年 9 月 30 日逝世，享年 90 岁（据 MIT 与美联社报道），谨此记述。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>📜 历史事件 History　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>玛格丽特·汉密尔顿与阿波罗制导计算机的优先级调度</p>
+        <p>1969 年，一位摄影师拍下玛格丽特·汉密尔顿站在她参与编写的软件打印稿旁边，纸堆几乎和她一样高。那台机器只有约 72 KB 的存储，程序被手工织进磁芯绳里，改一次就要重织一次。就在这样的条件下，她的团队为制导计算机设计了一套按优先级分配注意力的执行程序——当时被认为多余。同年 7 月 20 日，阿波罗 11 号在着陆前几分钟报出 1202 警报：计算机没有坏，它只是太忙了。执行程序丢掉低优先级作业、重启、保住制导计算，着陆得以继续。<b>让那次着陆成功的不是运气，而是有人事先假定过它会出问题，并提前写好了取舍的顺序。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级学术／技术词汇（constraint · allocate · priority · redundant · anticipate · discard · rehearse · safeguard · embody · obsolete 等），能在写作中正确使用 constraint 与 restraint、redundant 的两种含义。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 470 词的技术史说明文，能区分“事实陈述”与“来源不一致时的稳妥表述”。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——被动式虚拟倒装 Were it ...、分裂句 It was ... that ...、假分裂句 What ... was ...、介词 + which 定语从句、独立主格。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>方法：</b>学会区分“规范约束的是人”还是“规范内建在系统里”，并理解这种差别来自失效代价的不同。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过都江堰岁修口诀与阿波罗优先级调度的对比，理解“把经验写成可重复执行的规则”这一共同方法。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. It was on the twentieth of July 1969 that the design was tested.</div>
+          <div class="eg" style="margin-top:8px;">2. What the machine could do was fixed by what it could hold.</div>
+          <div class="eg" style="margin-top:8px;">3. Were it only a name, the story would end there.</div>
+          <div class="eg" style="margin-top:8px;">4. Not until decades later was the work called pioneering.</div>
+          <div class="eg" style="margin-top:8px;">5. What her software embodied was an assumption rather than a hope.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-17 · 历史事件 History｜玛格丽特·汉密尔顿与阿波罗制导计算机</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+
+const segmentTexts=["In 1969 a photographer at the Massachusetts Institute of Technology photographed Margaret Hamilton beside the printed listings of the software she had helped write. The paper is as tall as she is. It was the source code for the Apollo Guidance Computer — the small onboard machine that had to steer two men down to the Moon and bring them back. Hamilton joined the laboratory as a young mathematician and ended up leading the division that wrote the flight software. Software was not then regarded as engineering at all; it was what programmers did after the real engineers finished. She began using a phrase that colleagues found comic: software engineering. Were it only a name, the story would end there.", "What the machine could do was fixed by what it could hold. The constraint was not ambition but memory. The guidance computer had roughly thirty-six thousand words of fixed memory, each rope taking weeks to make and impossible to rewind once finished, and about two thousand words of erasable memory for working data. The software therefore had to do something no flight program had been asked to do: run several jobs at once, against a hard deadline, on a machine in which every instruction had to be counted. Hamilton's team built an executive that allocated the computer's attention by priority — a deliberate departure from running jobs in a fixed order, and one that her managers, so the story goes, thought redundant.", "It was on the twentieth of July 1969 that the design was tested. Minutes before touchdown, the computer flashed a code no one had anticipated seeing in flight: 1202. A switch left in the wrong position had loaded the processor with extra work from the rendezvous radar, and the machine had more to do than time to do it in. On a modern computer the result would have been a frozen screen. The executive did what it had been built to do: it discarded the low-priority jobs, restarted, and protected the calculations that guided the descent. Five such alarms came and went. Mission control, having rehearsed precisely this, said go.", "Not until decades later was the work called pioneering. Hamilton had learned that lesson earlier, in a quieter way: her young daughter, playing at a simulator console, had once selected a pre-launch program and crashed the run. When Hamilton proposed guarding against it, she was told astronauts were trained not to make that mistake. On Apollo 8 one of them made it, and the safeguard went in. What her software embodied was an assumption rather than a hope — that things would go wrong, and that a system should decide in advance what it will protect. Were the hardware rebuilt today, the assumption would survive it. She received the Presidential Medal of Freedom in 2016, long after the hardware itself had become obsolete."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What did the 1202 alarm indicate during the Apollo 11 landing? 阿波罗 11 号着陆过程中，1202 警报表示什么？",
+   opts:["That the guidance computer had failed completely 制导计算机彻底失效了","That the lunar module had run out of fuel 登月舱燃料已经耗尽","That the computer was overloaded — it had more work arriving than time to finish it 计算机过载：待处理的工作超过了可用时间","That a mistake had been made in navigation 导航上出现了失误"],
+   ans:2,
+   fb:"正确！课文说得很清楚：这不是崩溃，而是<b>过载</b>。区分这两者很重要——崩溃意味着无法继续，过载意味着必须做出取舍。选项 A 恰恰是当时最容易被误读的方向。"},
+  {q:"What did the executive do when the overload occurred? 过载发生时，执行程序做了什么？",
+   opts:["It discarded the low-priority jobs, restarted, and protected the guidance calculations 它丢弃低优先级作业、重启，并保住制导计算","It shut the guidance system down and waited for Houston 它关闭制导系统，等待休斯敦指示","It asked the crew to land the module by hand 它要求机组手动着陆","It saved everything and aborted the landing 它保存全部数据并中止着陆"],
+   ans:0,
+   fb:"正确！原文：<i>it discarded the low-priority jobs, restarted, and protected the calculations that guided the descent</i>。这正是今天所说的 graceful degradation（优雅降级）——资源不足时先舍弃次要功能，保住核心功能。"},
+  {q:"What does “Were it only a name, the story would end there” mean? 这句话是什么意思？",
+   opts:["The phrase was soon forgotten, so nothing else happened 那个说法很快被遗忘，之后没有别的事","It is an ordinary conditional sentence about the future 这是一个关于将来的普通条件句","The hardware was rebuilt and given a new name 硬件被重建并换了个名字","It is an inverted subjunctive: if the phrase were only a name there would be nothing more to tell — but the work behind it mattered 这是倒装虚拟语气：若那只是一个说法，故事就到此为止了——但它背后的工作确有分量"],
+   ans:3,
+   fb:"正确！还原为 <b>If it were only a name</b>（与现在／将来事实相反），主句用 <b>would + 原形</b>。这是一个<b>被动</b>结构：Were + 主语 + 过去分词。与过去相反时则要写成 Had it been only a name, the story would have ended there。"},
+  {q:"What does “Not until decades later was the work called pioneering” tell us? 这句话告诉我们什么？",
+   opts:["The work was recognised as pioneering immediately 这项工作立刻就被认为具有开创性","The work was not recognised as pioneering until many years later 这项工作在很多年之后才被认为具有开创性","The work was never recognised at all 这项工作从未得到认可","The work was abandoned before anyone noticed it 这项工作在有人注意到之前就被放弃了"],
+   ans:1,
+   fb:"正确！注意 <b>Not until + 时间状语</b> 提前时，<b>主句</b>要部分倒装（was 提到主语 the work 之前），而 not until 部分本身不倒装。原句还原为：The work was not called pioneering until decades later。"},
+  {q:"Why does the passage mention Hamilton's daughter? 文章为什么提到汉密尔顿的女儿？",
+   opts:["To warn that simulators were dangerous for children 为了提醒模拟器对儿童有危险","To show that a mistake any person could plausibly make should be guarded against inside the system 为了说明任何人都可能犯的错误，应当在系统内部加以防范","To explain why the astronauts were replaced 为了解释宇航员为何被替换","To argue that machines are safer than people 为了论证机器比人更安全"],
+   ans:1,
+   fb:"正确！这正是<b>防御性编程</b>的由来：不要假设操作者不会出错，而是把可能出错的地方提前挡住。课文中对应的表述是 <b>an assumption rather than a hope</b>——一个假定，而不是一份指望。"},
+  {q:"Which statement is best supported by the passage? 下列哪一项最符合文章意思？",
+   opts:["Software was already regarded as a branch of engineering at the time 当时软件已被视为工程学的一个分支","The computer failed during the Apollo 11 landing 阿波罗 11 号着陆时计算机失效了","The team had rehearsed this kind of overload, which is why the landing could continue 团队事先演练过这类过载，这正是着陆得以继续的原因","Hamilton designed the guidance computer entirely on her own 汉密尔顿独自设计了制导计算机"],
+   ans:2,
+   fb:"正确！原文：<i>Mission control, having rehearsed precisely this, said go.</i> 关键不在机器有多可靠，而在<b>出问题的情形被事先演练过</b>。选项 A 与正文相反（当时软件不被视为工程），选项 B 把过载误读为失效，选项 D 正文中没有依据。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

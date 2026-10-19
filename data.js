@@ -7693,6 +7693,140 @@ const EPISODES = [
   },
   {
     "level": "B2",
+    "date": "2026-10-17",
+    "title": "The Printout Taller Than She Was",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-17-the-printout-taller-than-she-was",
+    "url": "lessons/b2/2026-10-17-the-printout-taller-than-she-was.html",
+    "vocab": [
+      {
+        "word": "anticipate",
+        "zh": "预料；预见（及物，读作 /ænˈtɪsɪpeɪt/。anticipate a problem 预见问题；anticipate that ... 预料到……；as anticipated 不出所料。名词 anticipation。它比 expect 更主动，强调事先想到并有所准备；后接名词或动名词，不接不定式）",
+        "ex": "\"Minutes before touchdown, the computer flashed a code no one had anticipated seeing in flight: 1202.\""
+      },
+      {
+        "word": "discard",
+        "zh": "丢弃；抛弃（及物，读作 /dɪsˈkɑːd/。discard an idea 放弃一个想法；discarded files 被丢弃的文件。它比 throw away 正式，强调因为无用而主动丢掉。拼写注意 dis- + card，不是 dischard）",
+        "ex": "\"The executive did what it had been built to do: it discarded the low-priority jobs, restarted, ...\""
+      },
+      {
+        "word": "rehearse",
+        "zh": "排练；预演（读作 /rɪˈhɜːs/。rehearse a scene 排练一场戏；rehearse a speech 演练讲稿。引申为事先把某种情况演练一遍，本课正是这个用法。名词 rehearsal 排练／预演。与 practice 的区别：rehearse 是为正式场合做的完整预演）",
+        "ex": "\"Mission control, having rehearsed precisely this, said go.\""
+      },
+      {
+        "word": "safeguard",
+        "zh": "防护措施；保障（读作 /ˈseɪfɡɑːd/。as a safeguard against something 作为防范……的措施；safeguard the data 保护数据。它是可数名词，常见搭配 put a safeguard in place。动词用法后接名词（safeguard public health），不接不定式）",
+        "ex": "\"On Apollo 8 one of them made it, and the safeguard went in.\""
+      },
+      {
+        "word": "embody",
+        "zh": "体现；包含（正式，及物，读作 /ɪmˈbɒdi/。embody an idea 体现一种思想；embody the spirit of ... 体现……的精神。形容词 embodied。它比 include 重得多：include 是含有，embody 是把抽象的东西做成可见的样子。名词 embodiment 化身／体现）",
+        "ex": "\"What her software embodied was an assumption rather than a hope — ...\""
+      },
+      {
+        "word": "obsolete",
+        "zh": "过时的；淘汰的（读作 /ˈɒbsəliːt/，重音在首音节。become obsolete 变得过时；obsolete technology 被淘汰的技术。名词 obsolescence。与 outdated 的细微差别：obsolete 指已被新事物取代、不再使用，outdated 只指不再时髦或不再适用，可能仍在使用）",
+        "ex": "\"... long after the hardware itself had become obsolete.\""
+      },
+      {
+        "word": "allocate",
+        "zh": "分配；配置（及物，读作 /ˈæləkeɪt/。allocate resources 配置资源；allocate time to something 把时间分配给某事；allocate memory 分配内存。名词 allocation。它强调按计划分给某一方，比 distribute 分发 更强调决策过程）",
+        "ex": "\"Hamilton's team built an executive that allocated the computer's attention by priority ...\""
+      },
+      {
+        "word": "priority",
+        "zh": "优先；优先事项（读作 /praɪˈɒrəti/，重音在第二音节。by priority 按优先级；give priority to something 优先考虑某事；a top priority 首要任务。形容词 prior 在先的，短语 prior to 在……之前。复数形式是 priorities）",
+        "ex": "\"... allocated the computer's attention by priority ...\""
+      },
+      {
+        "word": "redundant",
+        "zh": "多余的；冗余的（读作 /rɪˈdʌndənt/。be made redundant 被裁员（英式）；redundant systems 冗余系统；render something redundant 使某物变得多余。工程里的 redundancy 冗余 是褒义（备份），日常里 redundant 多为贬义（多余）。一词两义，须看语境）",
+        "ex": "\"... a design, so the story goes, that her managers thought redundant.\""
+      },
+      {
+        "word": "constraint",
+        "zh": "约束；限制条件（读作 /kənˈstreɪnt/。impose a constraint on something 对某事施加限制；under severe constraints 在严苛的限制下；budget constraints 预算约束。动词 constrain 限制。注意与 restraint 克制 区分：constraint 是外部限制，restraint 是自己按住自己）",
+        "ex": "\"The constraint was not ambition but memory.\""
+      },
+      {
+        "word": "deliberate",
+        "zh": "有意的；从容的（形容词读作 /dɪˈlɪbərət/，动词读作 /dɪˈlɪbəreɪt/。a deliberate choice 有意的选择；deliberate on a question 仔细考虑一个问题。副词 deliberately 故意地。注意形容词与动词的重音位置不同：形容词重音在第二音节，动词在第三音节）",
+        "ex": "\"... a deliberate departure from running jobs in a fixed order, and one that her managers, so the story goes, thought redundant.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-10-18",
+    "title": "The Room That Understands Nothing",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-18-the-room-that-understands-nothing",
+    "url": "lessons/b2/2026-10-18-the-room-that-understands-nothing.html",
+    "vocab": [
+      {
+        "word": "coherent",
+        "zh": "连贯的；条理清楚的（读作 /kəʊˈhɪərənt/。a coherent answer 条理分明的回答；a coherent argument 自洽的论证；a coherent policy 前后一致的政策。副词 coherently，名词 coherence 连贯性。反义词 incoherent 语无伦次的。形容人“讲道理”要用 reasonable，不用 coherent）",
+        "ex": "\"Questions go in, coherent answers come out, ...\""
+      },
+      {
+        "word": "indistinguishable",
+        "zh": "无法区分的；难以分辨的（读作 /ˌɪndɪˈstɪŋɡwɪʃəbl/，重音在第三音节。indistinguishable from 与……无法区分；virtually indistinguishable 几乎一模一样。构词：distinguish 区分 + 否定前缀 in- + 形容词后缀 -able。别与 indistinct 模糊不清的 混淆：本词强调两者之间分不出，indistinct 强调单个东西看不清）",
+        "ex": "\"... would find them indistinguishable from those of a person who understands.\""
+      },
+      {
+        "word": "manipulate",
+        "zh": "操作；操纵（及物，读作 /məˈnɪpjuleɪt/。manipulate symbols 操作符号；manipulate data 处理数据；manipulate public opinion 操纵舆论（贬义）。名词 manipulation。本课用中性义，指按规则搬动符号，不含负面色彩）",
+        "ex": "\"... running a program is a matter of manipulating symbols according to formal rules, ...\""
+      },
+      {
+        "word": "syntax",
+        "zh": "句法；符号之间的形式规则（不可数，读作 /ˈsɪntæks/，重音在首音节。语言学指组词成句的规则，计算机科学指符号的形式结构。形容词 syntactic 句法的。与 semantics 语义 成对出现，是理解本课的关键一对概念）",
+        "ex": "\"Searle called the first syntax and the second semantics, ...\""
+      },
+      {
+        "word": "semantics",
+        "zh": "语义；意义（不可数，读作 /sɪˈmæntɪks/，重音在第二音节。研究语言意义的学科也叫 semantics。形容词 semantic 语义的。本课核心命题即：syntax is not sufficient for semantics。形近词注意：semantics 语义，semaphore 旗语）",
+        "ex": "\"Searle called the first syntax and the second semantics, and he held that the first is not sufficient for the second.\""
+      },
+      {
+        "word": "simulation",
+        "zh": "模拟；仿真（读作 /ˌsɪmjuˈleɪʃn/。a computer simulation of something 对某物的计算机模拟；run a simulation 进行一次模拟。动词 simulate 模拟，形容词 simulated 模拟的。simulate 特指模仿某系统的行为特征，与 imitate 模仿外观 不同，也与 stimulate 刺激 拼写不同）",
+        "ex": "\"A simulation of a storm makes nothing wet; a simulation of digestion supplies no nutrition.\""
+      },
+      {
+        "word": "entail",
+        "zh": "必然导致；蕴含（正式，及物，读作 /ɪnˈteɪl/。A entails B A 必然导致 B；entail considerable risk 必然带来相当风险。它比 cause 强、比 imply 弱，是学术写作高频逻辑动词。名词 entailment。它不用进行时）",
+        "ex": "\"Nor, he concluded, does a simulation of understanding entail understanding.\""
+      },
+      {
+        "word": "internalise",
+        "zh": "内化；使成为自身的一部分（读作 /ɪnˈtɜːnəlaɪz/，美式拼作 internalize。internalise the rules 把规则内化；internalise a principle 把原则变成自觉。源自 internal 内部的 + -ise。心理学与教育学高频词，与 externalise 外化 相对）",
+        "ex": "\"Searle's answer was to make the man internalise it.\""
+      },
+      {
+        "word": "concede",
+        "zh": "承认（尤指不情愿地）；让步（读作 /kənˈsiːd/。concede that ... 承认……；concede defeat 认输；concede a point 在某一点上让步。它比 admit 正式，常带“论辩中被迫承认”的意味。名词 concession 让步。别与 conceive 构想、conceit 自负 混淆）",
+        "ex": "\"His critics concede the force of the picture while denying its conclusion.\""
+      },
+      {
+        "word": "intuition",
+        "zh": "直觉（读作 /ˌɪntjuˈɪʃn/，重音在第三音节。trust one's intuition 相信直觉；contrary to intuition 与直觉相反。形容词 intuitive 直觉的，也常形容界面“直观好用”。哲学论证里多指未经论证就觉得对的感觉，本课正是指出它作为论据并不牢靠）",
+        "ex": "\"... his critics say the intuition that made the example persuasive is a poor instrument ...\""
+      },
+      {
+        "word": "conclusively",
+        "zh": "决定性地；结论性地（读作 /kənˈkluːsɪvli/。prove something conclusively 决定性地证明；nothing has been settled conclusively 尚无定论。形容词 conclusive 决定性的，反义 inconclusive 非决定性的。注意它与 finally 不同：conclusively 强调证据充分到可以结束争论）",
+        "ex": "\"Nor has either side carried the matter conclusively, and that is the honest state of it.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
     "date": "2026-10-19",
     "title": "The Sequel That Was Not His",
     "category": "general",
