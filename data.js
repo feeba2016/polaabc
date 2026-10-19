@@ -7692,6 +7692,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-19",
+    "title": "The Sequel That Was Not His",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-19-the-sequel-that-was-not-his",
+    "url": "lessons/b2/2026-10-19-the-sequel-that-was-not-his.html",
+    "vocab": [
+      {
+        "word": "spurious",
+        "zh": "伪造的；假冒的（读作 /ˈspjʊəriəs/。a spurious sequel 伪造的续作；a spurious argument 站不住脚的论证。它比 fake 正式，强调“挂着真名的赝品”，常用于学术与法律文本。别与 spontaneous 自发的 混淆）",
+        "ex": "\"... a spurious second part appeared in Tarragona.\""
+      },
+      {
+        "word": "contempt",
+        "zh": "轻蔑；鄙视（不可数名词，读作 /kənˈtempt/。with contempt 带着轻蔑；hold someone in contempt 蔑视某人；beneath contempt 卑劣到不值一提。形容词 contemptuous 轻蔑的。法律上另有固定短语 contempt of court 藐视法庭）",
+        "ex": "\"What he did not hide was his contempt.\""
+      },
+      {
+        "word": "restraint",
+        "zh": "克制；节制（读作 /rɪˈstreɪnt/。show restraint 表现出克制；exercise restraint 加以节制；without restraint 毫无顾忌地。动词 restrain 抑制，形容词 restrained 克制的（褒义，指分寸感好）。注意与 constraint 约束 区分：restraint 是自己按住自己，constraint 多指外部限制）",
+        "ex": "\"His preface performs a show of restraint: ...\""
+      },
+      {
+        "word": "retaliation",
+        "zh": "报复；反击（读作 /rɪˌtæliˈeɪʃn/，重音在倒数第二音节。in retaliation for 为了报复……；a swift retaliation 迅速的反击。动词 retaliate，不及物：retaliate against someone。它指“以同样方式回敬”，比 revenge 更中性，不一定带情绪）",
+        "ex": "\"... you are expecting retaliation, he tells the reader, ...\""
+      },
+      {
+        "word": "devise",
+        "zh": "设计；想出（及物动词，读作 /dɪˈvaɪz/。devise a plan／a method 设计一套方案；devise a way of doing something 想出做某事的办法。它强调“动脑筋想出来”，比 design 更抽象。同族名词 device 装置／手段，注意拼写为 -ce 不是 -se；devise 与 device 一动词一名词）",
+        "ex": "\"The retaliation he devised was not an argument but a plot.\""
+      },
+      {
+        "word": "rival",
+        "zh": "竞争的；对手（读作 /ˈraɪvl/。a rival version 竞争版本；rival claims 相互冲突的说法；without rival 无可匹敌。作动词意为“与……相匹敌”，如 Nothing rivals it。作形容词时没有比较级，因为它本身已含“并列对抗”之意）",
+        "ex": "\"... Don Quixote learns that a rival chronicle of his deeds exists, ...\""
+      },
+      {
+        "word": "apocryphal",
+        "zh": "伪托的；出处可疑的（读作 /əˈpɒkrɪfəl/，重音在第二音节。an apocryphal continuation 伪托的续作；an apocryphal story 不足凭信的传闻。本义指未收入《圣经》正典的“次经”，引申为“流传很广但真实性可疑”。名词 apocrypha 次经。它比 spurious 多一层“流传已久而真伪难辨”）",
+        "ex": "\"... where the proofs of the apocryphal continuation are even then being corrected.\""
+      },
+      {
+        "word": "affidavit",
+        "zh": "宣誓书面证词（法律术语，读作 /ˌæfɪˈdeɪvɪt/，重音在第三音节。swear an affidavit 立下宣誓证词；sign an affidavit before a magistrate 当着治安法官签署证词。它必须书面且经宣誓，因此比 statement 陈述 重得多）",
+        "ex": "\"... is made to swear an affidavit before a magistrate that he has never met the real Don Quixote.\""
+      },
+      {
+        "word": "attest",
+        "zh": "证实；作证（正式，读作 /əˈtest/。attest to something 证实某事；attest that ... 证明……。名词 attestation 证明（书）。它比 prove 弱一档，指“以身份或记录为某事背书”，常见于法律与学术文本）",
+        "ex": "\"... and a notary attests that the death was natural — ...\""
+      },
+      {
+        "word": "preclude",
+        "zh": "排除；阻止（正式，及物，读作 /prɪˈkluːd/。preclude the possibility of something 排除某事的可能性；preclude someone from doing something 使某人无法做某事。它比 prevent 更书面，强调“事先就使某事不可能发生”。形近词别混：preclude 排除 · precede 先于 · proceed 继续）",
+        "ex": "\"... a clause meant to preclude any further resurrection, ...\""
+      },
+      {
+        "word": "canon",
+        "zh": "正典；公认的经典作品总集（读作 /ˈkænən/。the literary canon 文学正典；outside the canon 被排除在正典之外；a canonical text 经典文本。原指宗教上被承认的正式经目，引申为一个文化“公认值得反复读的那些书”。拼写别混：canon 正典 · cannon 大炮 · canyon 峡谷）",
+        "ex": "\"Avellaneda's continuation is now unread and outside the canon.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
