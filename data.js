@@ -9937,5 +9937,67 @@ const EPISODES = [
         "ex": "Report the <b>prespecified</b> primary outcome first, then any secondary findings."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-19",
+    "title": "The Forgetting That Never Happened",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-19-the-forgetting-that-never-happened",
+    "url": "lessons/c1/2026-10-19-the-forgetting-that-never-happened.html",
+    "vocab": [
+      {
+        "word": "obscurity",
+        "zh": "默默无闻、湮没无闻。常见搭配 rise from obscurity（从默默无闻中崛起）、die in obscurity（在寂寂无名中去世）。",
+        "ex": "The story of Herman Melville is usually told as a resurrection from <b>obscurity</b>."
+      },
+      {
+        "word": "posthumous",
+        "zh": "死后的、身后的。指在当事人去世之后才发生或出现的，如 posthumous publication（遗著出版）、posthumous fame（身后之名）。",
+        "ex": "What followed reads as <b>posthumous</b> vindication."
+      },
+      {
+        "word": "vindication",
+        "zh": "平反、被证明为正确。指先前的判断或抱负后来被证实是对的，动词 vindicate。注意它是回顾性的评价，不等于当时的承认。",
+        "ex": "What followed reads as posthumous <b>vindication</b>."
+      },
+      {
+        "word": "eclipse",
+        "zh": "黯然失色、（名声的）沉寂期。原义为日食月食，引申为被遮蔽的时期；作动词时意为「使…相形见绌」。",
+        "ex": "What repaired the <b>eclipse</b> is itself a story."
+      },
+      {
+        "word": "hagiography",
+        "zh": "圣徒传式的写作、美化式的传记。引申为不加批判地颂扬传主、隐去缺点的写法；形容词 hagiographic。",
+        "ex": "He printed an unfinished novella as finished — a portrait close to <b>hagiography</b>."
+      },
+      {
+        "word": "apocryphal",
+        "zh": "传闻的、真实性可疑的。指流传很广却缺乏可靠来源的说法。注意：说某个细节是 apocryphal，并不等于说它是假的，只是说它未经证实。",
+        "ex": "The silence, in other words, is the <b>apocryphal</b> part."
+      },
+      {
+        "word": "archival",
+        "zh": "档案的、来自原始文献的。指依据书信、票据、日记等材料而非转述；学术写作中 archival evidence 与 second-hand account 相对。",
+        "ex": "Nor, the <b>archival</b> record suggests, had he been wholly unread."
+      },
+      {
+        "word": "retrospective",
+        "zh": "回顾的、追溯的。指站在后来者的位置上回头叙述过去；常含「后见之明」的意味，因为叙述者已经知道结局。名词可作「回顾展」。",
+        "ex": "<b>Retrospective</b> narrative consecrates by contrast."
+      },
+      {
+        "word": "consecrate",
+        "zh": "使神圣化、正式确立（地位）。原义为祝圣，引申为通过仪式或权威把某事物确立为值得尊崇的；文学语境中指把作家确立为经典。",
+        "ex": "Retrospective narrative <b>consecrates</b> by contrast."
+      },
+      {
+        "word": "anachronism",
+        "zh": "时代错误。指把后世才有的事物或观念放进早先的时代，引申为用后来的眼光去读过去；形容词 anachronistic。",
+        "ex": "The <b>anachronism</b> lies with us — we need the genius to have been alone."
+      }
+    ]
   }
 ];

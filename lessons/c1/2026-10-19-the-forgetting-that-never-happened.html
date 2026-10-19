@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Forgetting That Never Happened — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#9f1239;
+  --accent2:#0e7490;
+  --bg:#f9f7f8;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#ffe4e6;
+  --border:#fecdd3;
+  --soft:#fff1f2;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(159,18,57,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(159,18,57,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(159,18,57,.55);}70%{box-shadow:0 0 0 12px rgba(159,18,57,0);}100%{box-shadow:0 0 0 0 rgba(159,18,57,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#fecdd3;}
+#tip{position:fixed;z-index:1200;background:#4c0519;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(159,18,57,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ffe4e6;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 文学评论 Literary Criticism</span>
+      <h1 class="title">The Forgetting That Never Happened</h1>
+      <p class="subtitle">What a literary revival needs in order to look like one · 2026-10-19 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The shape everyone repeats</div>
+            <p>The story of Herman Melville is usually told as a resurrection from <span class="kw" data-def="obscurity（名词）：默默无闻、湮没无闻。指不为公众所知的狀態；常见搭配 rise from obscurity（从默默无闻中崛起）、die in obscurity（在寂寂无名中去世）。">obscurity</span>: a wasted genius, ignored for thirty years, then restored. It is a handsome shape, and not an empty one. <i>Moby-Dick</i> sold some 3,700 copies in his lifetime, and in 1891 one newspaper printed a notice of a few lines. What followed reads as <span class="kw" data-def="posthumous（形容词）：死后的、身后的。指在人去世之后才发生或出现的，如 posthumous publication（遗著出版）、posthumous fame（身后之名）。">posthumous</span> <span class="kw" data-def="vindication（名词）：平反、被证明为正确。指先前的判断、抱负或做法后来被证实是对的；动词 vindicate。注意：它是回顾性的评价，不等于当时的承认。">vindication</span>.</p>
+          </div>
+          <button class="play-btn" data-i="0" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The machinery of a revival</div>
+            <p>What repaired the <span class="kw" data-def="eclipse（名词）：黯然失色、（名声的）沉寂期。原义为日食月食，引申为被遮蔽的时期；也可作动词 eclipse（使…相形见绌）。">eclipse</span> is itself a story. In 1919 a young Columbia lecturer, Raymond Weaver, was asked for a short centenary piece; the biography of 1921 and the 1924 edition of <i>Billy Budd</i> did the work. He read the early novels as autobiography and printed an unfinished novella as finished — a portrait close to <span class="kw" data-def="hagiography（名词）：圣徒传式的写作、美化式的传记。原指圣徒传记，引申为不加批判地颂扬传主、隐去缺点的写法；形容词 hagiographic。">hagiography</span>.</p>
+          </div>
+          <button class="play-btn" data-i="1" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · What the archive undid</div>
+            <p>What later scholarship undid was not the revival but the darkness before it. As early as 1866 a reviewer could speak of his literary reputation, experience and cultivation; the documentary life of 1951, assembled day by day from letters and receipts, showed a writer who never stopped working and turned to poetry deliberately. The silence, in other words, is the <span class="kw" data-def="apocryphal（形容词）：传闻的、真实性可疑的。指流传很广却缺乏可靠来源的说法；原指未入正典的经文。注意：说某个细节是 apocryphal，并不等于说它是假的，只是说它未经证实。">apocryphal</span> part. Nor, the <span class="kw" data-def="archival（形容词）：档案的、来自原始文献的。指依据档案材料（书信、票据、日记等）而非转述的；名词 archive。学术写作中 archival evidence 与 second-hand account 相对。">archival</span> record suggests, had he been wholly unread.</p>
+          </div>
+          <button class="play-btn" data-i="2" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · A fall that the story required</div>
+            <p>So the forgetting was less a fact than a premise. A revival needs a fall to answer: the darker the burial, the cleaner the recovery. <span class="kw" data-def="retrospective（形容词）：回顾的、追溯的。指站在后来者的位置上回头叙述过去的；名词 retrospection。它常带有「后见之明」的意味，因为叙述者已经知道结局。">Retrospective</span> narrative <span class="kw" data-def="consecrate（动词）：使…神圣化、正式确立（地位）。原义为祝圣，引申为通过仪式或权威把某事物确立为值得尊崇的；在文学语境中指把一位作家确立为经典。">consecrates</span> by contrast, and the <span class="kw" data-def="anachronism（名词）：时代错误。指把后世才有的事物或观念放进早先的时代；引申为用后来的眼光去读过去。形容词 anachronistic。">anachronism</span> lies with us — we need the genius to have been alone. A reviewer warned of it in 1924: that the revival of his fame carried undoubted dangers, one being that he might be overrated. What was recovered, in the end, was not merely a writer but a story about one.</p>
+          </div>
+          <button class="play-btn" data-i="3" data-icon="▶">▶</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary（10 个 C1–C2 学术词）</h2>
+      <div class="card">
+        <p style="color:var(--muted);font-size:14px;margin-top:0;">点击右下角 🔊 听发音；例句均取自本课正文，可直接迁移到雅思 / 托福写作。</p>
+        <div class="vocab-grid">
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="obscurity">🔊</button>
+            <div class="word">obscurity<span class="pos">n. C1</span></div>
+            <div class="zh">默默无闻、湮没无闻。常见搭配 rise from obscurity（从默默无闻中崛起）、die in obscurity（在寂寂无名中去世）。</div>
+            <div class="ex">The story of Herman Melville is usually told as a resurrection from <b>obscurity</b>.</div>
+            <span class="lvl">本文核心词</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="posthumous">🔊</button>
+            <div class="word">posthumous<span class="pos">adj. C2</span></div>
+            <div class="zh">死后的、身后的。指在当事人去世之后才发生或出现的，如 posthumous publication（遗著出版）、posthumous fame（身后之名）。</div>
+            <div class="ex">What followed reads as <b>posthumous</b> vindication.</div>
+            <span class="lvl">C2</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="vindication">🔊</button>
+            <div class="word">vindication<span class="pos">n. C2</span></div>
+            <div class="zh">平反、被证明为正确。指先前的判断或抱负后来被证实是对的，动词 vindicate。注意它是回顾性的评价，不等于当时的承认。</div>
+            <div class="ex">What followed reads as posthumous <b>vindication</b>.</div>
+            <span class="lvl">观点类高频</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="eclipse">🔊</button>
+            <div class="word">eclipse<span class="pos">n. / v. C1</span></div>
+            <div class="zh">黯然失色、（名声的）沉寂期。原义为日食月食，引申为被遮蔽的时期；作动词时意为「使…相形见绌」。</div>
+            <div class="ex">What repaired the <b>eclipse</b> is itself a story.</div>
+            <span class="lvl">C1</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="hagiography">🔊</button>
+            <div class="word">hagiography<span class="pos">n. C2</span></div>
+            <div class="zh">圣徒传式的写作、美化式的传记。引申为不加批判地颂扬传主、隐去缺点的写法；形容词 hagiographic。</div>
+            <div class="ex">He printed an unfinished novella as finished — a portrait close to <b>hagiography</b>.</div>
+            <span class="lvl">批评术语</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="apocryphal">🔊</button>
+            <div class="word">apocryphal<span class="pos">adj. C2</span></div>
+            <div class="zh">传闻的、真实性可疑的。指流传很广却缺乏可靠来源的说法。注意：说某个细节是 apocryphal，并不等于说它是假的，只是说它未经证实。</div>
+            <div class="ex">The silence, in other words, is the <b>apocryphal</b> part.</div>
+            <span class="lvl">史料批判核心词</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="archival">🔊</button>
+            <div class="word">archival<span class="pos">adj. C1</span></div>
+            <div class="zh">档案的、来自原始文献的。指依据书信、票据、日记等材料而非转述；学术写作中 archival evidence 与 second-hand account 相对。</div>
+            <div class="ex">Nor, the <b>archival</b> record suggests, had he been wholly unread.</div>
+            <span class="lvl">学术高频</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="retrospective">🔊</button>
+            <div class="word">retrospective<span class="pos">adj. C2</span></div>
+            <div class="zh">回顾的、追溯的。指站在后来者的位置上回头叙述过去；常含「后见之明」的意味，因为叙述者已经知道结局。名词可作「回顾展」。</div>
+            <div class="ex"><b>Retrospective</b> narrative consecrates by contrast.</div>
+            <span class="lvl">论点核心词</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="consecrate">🔊</button>
+            <div class="word">consecrate<span class="pos">v. C2</span></div>
+            <div class="zh">使神圣化、正式确立（地位）。原义为祝圣，引申为通过仪式或权威把某事物确立为值得尊崇的；文学语境中指把作家确立为经典。</div>
+            <div class="ex">Retrospective narrative <b>consecrates</b> by contrast.</div>
+            <span class="lvl">C2</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="anachronism">🔊</button>
+            <div class="word">anachronism<span class="pos">n. C2</span></div>
+            <div class="zh">时代错误。指把后世才有的事物或观念放进早先的时代，引申为用后来的眼光去读过去；形容词 anachronistic。</div>
+            <div class="ex">The <b>anachronism</b> lies with us — we need the genius to have been alone.</div>
+            <span class="lvl">C2</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns（5 个高级学术句型）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. The story of X is usually told as a Y: …</h3>
+          <div class="zh">学术评论里最常用的<b>开篇姿态</b>：先把一个广为流传的说法陈述出来，再用冒号展开细节。它的价值在于<b>随后可以推翻它</b>——先立靶子再拆，比一上来就抛出自己的论点更有说服力。注意被动语态 <i>is told</i> 把「谁在这么讲」虚化掉了，语气更客观。</div>
+          <div class="eg">The story of Herman Melville is usually told as a resurrection from <b>obscurity</b>.</div>
+          <div class="practice">✍️ 仿写：某位科学家的经历通常被讲成一个天才灵光一现的故事。<br><input placeholder="The story of ... is usually told as ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. It is a handsome shape, and not an empty one.</h3>
+          <div class="zh">一句<b>先扬后抑的让步</b>。<i>handsome</i> 在此形容叙事结构「漂亮、对称」，<i>not an empty one</i> 承认它并非毫无根据。这样处理的好处是：接下来推翻它时不会显得轻率。比单纯的 <i>but it is wrong</i> 老练得多。</div>
+          <div class="eg">It is a handsome shape, and <b>not an empty one</b>.</div>
+          <div class="practice">✍️ 仿写：这个说法很有说服力，而且并非全无依据。<br><input placeholder="It is a ... claim, and not ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. What repaired the X is itself a Y.</h3>
+          <div class="zh"><b>what 引导的名词性关系从句</b>作主语（= the thing that），谓语动词用单数；主语补足语前加反身代词 <i>itself</i> 进行强调，意为「本身也是……」。一句话完成两件事：承上指代、并提示「这件事同样值得审视」。</div>
+          <div class="eg">What repaired the <b>eclipse</b> is itself a story.</div>
+          <div class="practice">✍️ 仿写：纠正那个错误的过程，本身也值得研究。<br><input placeholder="What corrected ... is itself ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. X was less a A than a B.</h3>
+          <div class="zh">取舍结构：<b>与其说是 A，不如说是 B</b>。两侧必须<b>词性对称</b>（此处同为带不定冠词的名词短语）。它比 <i>not A but B</i> 温和，保留了 A 的部分合理性，适合用来修正一个半对半错的说法。</div>
+          <div class="eg">So the forgetting was <b>less a fact than a premise</b>.</div>
+          <div class="practice">✍️ 仿写：这与其说是发现，不如说是重新命名。<br><input placeholder="It was less a discovery than ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. What was recovered, in the end, was not merely X but a story about one.</h3>
+          <div class="zh">收口句的<b>分裂句（cleft）</b>形态：<i>What + be + 表语</i> 把焦点钉在最后一个词上，中间插入 <i>in the end</i> 控制节奏，末尾用 <i>not merely … but …</i> 递进。注意 <i>one</i> 回指前文的 X，避免重复。</div>
+          <div class="eg">What was recovered, in the end, was <b>not merely a writer but a story about one</b>.</div>
+          <div class="practice">✍️ 仿写：最终被保存下来的，不只是一份记录，而是关于它的一份叙事。<br><input placeholder="What survived, in the end, was not merely ... but ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar（5 个高级结构）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. 双重比较级平行结构（the + 比较级…, the + 比较级…）</h3>
+          <div class="zh">两个 <i>the + 比较级</i> 分句并列，意为「越……，越……」。前半句相当于一个条件从句，后半句是结果。两个 <i>the</i> 都不是冠词而是副词；分句很短时可以省略动词（本文即省略了 is），读起来像格言。这是收尾段落最有力的节奏之一。</div>
+          <div class="eg">A revival needs a fall to answer: <b>the darker the burial, the cleaner the recovery</b>.</div>
+          <div class="practice">✍️ 仿写：证据越细，结论越难被一句话说完。<input placeholder="the more detailed the evidence, the harder ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. 破折号引出的名词短语同位语</h3>
+          <div class="zh">单个破折号后接名词短语，对前面<b>整个命题</b>作概括性补充，相当于一个省略了 <i>which is</i> 的非限定从句。它比括号更正式，比冒号更有停顿感；去掉后主句依然完整。学术写作里用它来给一长串描述「下判语」，一句话就能把立场亮出来。</div>
+          <div class="eg">He printed an unfinished novella as finished <b>— a portrait close to hagiography</b>.</div>
+          <div class="practice">✍️ 仿写：他把传闻当成证据写进了论文——一种对读者的轻视。<input placeholder="He treated hearsay as evidence — ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. 否定词 Nor 前置的部分倒装（含插入语）</h3>
+          <div class="zh">当 <i>nor</i> 位于句首、且承接前一句的否定时，助动词要提到主语之前（<i>had he been</i>）。此处中间还插入了 <i>the archival record suggests</i>，把倒装的主谓隔开——这种「断开」是高级写作的标记，它同时给出<b>判断的出处</b>与<b>判断本身</b>。去掉插入语后结构依旧成立。</div>
+          <div class="eg">The silence, in other words, is the apocryphal part. <b>Nor</b>, the archival record suggests, <b>had he been</b> wholly unread.</div>
+          <div class="practice">✍️ 仿写：这个数字并不支持该结论。证据同样也不支持。<input placeholder="The figure does not support the claim. Nor ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. what 引导的名词性关系从句作主语与表语</h3>
+          <div class="zh"><i>what</i> 在此等于 <i>the thing that</i>，整个从句可作主语或表语，谓语动词用<b>单数</b>。它一次完成两件事：回指前文、并把话题推进到真正的关键点上。本文出现了三次（<i>What repaired…</i>／<i>What later scholarship undid…</i>／<i>What was recovered…</i>），构成了全篇的骨架。</div>
+          <div class="eg">What was recovered, in the end, was not merely a writer but a story about one.</div>
+          <div class="practice">✍️ 仿写：真正改变的不是结论，而是提问的方式。<input placeholder="What changed was not the conclusion but ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. less A than B 与 not merely A but B 的对称要求</h3>
+          <div class="zh">两个结构都要求<b>两侧词性严格对称</b>：前者为取舍（<i>less a fact than a premise</i>，同为名词短语），后者为递进（<i>not merely a writer but a story</i>，同为名词短语）。写作时最容易出的错是一侧接名词、另一侧接从句；检查办法是把两侧各自单独放到 <i>was</i> 后面读一遍。</div>
+          <div class="eg">So the forgetting was <b>less a fact than a premise</b>. … What was recovered, in the end, was <b>not merely a writer but a story about one</b>.</div>
+          <div class="practice">✍️ 仿写：这与其说是疏忽，不如说是设计；它留下来的不只是一个问题，还有解决它的工具。<input placeholder="It was less an oversight than a design; ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz（6 题 · 雅思 / 托福风格）</h2>
+      <div class="card">
+        <p style="color:var(--muted);font-size:14px;margin-top:0;">先通读全文再作答；每题点「检查答案」即可看解析。</p>
+        <div id="quizBox"></div>
+      </div>
+    </section>
+
+    <!-- 6. CHINESE EXTENSION -->
+    <section id="ext" class="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 Deep Dive</h2>
+      <div class="card">
+
+        <h3>一、一句话概括</h3>
+        <p>梅尔维尔的文学史地位通常被讲成一次复活：天才被整整一代人忽略，三十年后才被重新发现。这个叙事里有真材实料——《白鲸》在他生前确实卖得极差，1891 年他去世时也确实只有一家报纸刊出一则短讯。但后来的档案研究显示，故事里那一段「彻底的沉默」并不成立。被推翻的不是复兴本身，而是复兴所预设的那个深渊。</p>
+
+        <h3>二、史料的分层：哪些是可证的，哪些是转述的</h3>
+        <p>文学史材料并非等值的。本课把用到的史实分三层处理，这也是阅读任何史料时必须养成的习惯。</p>
+        <table>
+          <tr><th>层级</th><th>内容</th><th>处理方式</th></tr>
+          <tr>
+            <td><b>可证的</b></td>
+            <td>出版记录、销量数据、讣告、评论原文、书信与票据</td>
+            <td>直接陈述，并注明来源年代。例如 1866 年那篇评论、1919 年的约稿、1921 与 1924 年的出版。</td>
+          </tr>
+          <tr>
+            <td><b>后人转述的</b></td>
+            <td>手稿被存放在面包箱里、由孙女交给学者等细节</td>
+            <td>本文正文<b>完全不写</b>。这类轶事流传极广，但细节依赖回忆，学界对具体情节有保留。</td>
+          </tr>
+          <tr>
+            <td><b>推论性的</b></td>
+            <td>「他因为出版商拒绝而放弃小说」这类因果解释</td>
+            <td>不予采用。现有材料只能支持「他转向诗歌是一种选择」，不足以支持对原因的单一解释。这正是第 6 题的考点。</td>
+          </tr>
+        </table>
+
+        <h3>三、三个数字与它们的口径</h3>
+        <table>
+          <tr><th>项目</th><th>数字</th><th>口径说明</th></tr>
+          <tr>
+            <td>《白鲸》生前销量</td>
+            <td>约 3,715 册（美国 3,215 + 英国 500）</td>
+            <td>常见的流通说法是「约 3,700 册」，本课正文取整。首印 2,915 册，出版后 11 天内售出约 1,500 册，此后 34 年间年均约 27 册，晚年绝版。</td>
+          </tr>
+          <tr>
+            <td>同期对照</td>
+            <td>《泰比》约 16,300 册、《奥穆》约 13,300 册</td>
+            <td>《白鲸》的失败之所以刺眼，是因为他前两本书卖得很好。没有这个对照，「失败」二字没有尺度。</td>
+          </tr>
+          <tr>
+            <td>1891 年的讣闻</td>
+            <td>一家报纸，三到四行（一说六行）</td>
+            <td>两种说法都在流传，行数不一。本课正文只写「一则几行的短讯」，不做精确断言。</td>
+          </tr>
+        </table>
+        <p style="color:var(--muted);font-size:14px;">要点：旧材料里还流传着《白鲸》「只卖出 50 册」的说法。这个数字已被反复证伪——它被保留下来的原因，恰恰是它比真相更像一个故事。这本身就是本课主题的例证。</p>
+
+        <h3>四、为什么「被遗忘」是个前提，而不是个事实</h3>
+        <p>复兴叙事需要一个可供反转的起点。若梅尔维尔一直是被讨论、被评论、有读者的作家，那么 1920 年代那批学者的工作就只能叫「持续关注」，无法叫「重新发现」。于是叙述的重心自然地向沉默那一端倾斜：他的社交被写成隐居，他的转向被写成搁笔，他的读者被写成零。</p>
+        <p>档案方法恰恰是这套叙事的克星。逐日编排的书信与票据不讲故事，只记录：某日收到某笔款项、某日购入某本书、某日某刊刊出某篇评论。把几千条这样的记录排在一起，「完全被遗忘」就很难维持——1866 年已有评论者谈起他的文学声望、阅历与修养；他也没有停止写作，只是换了体裁。</p>
+        <p>值得强调的是：这一修正<b>不是为了翻案</b>。他在世时声望的下滑是真实的，经济与家庭的代价也是真实的。被修正的只是「彻底」二字 —— 从「无人知晓」改回「知者寥寥」。</p>
+
+        <h3>五、对雅思与托福的可迁移之处</h3>
+        <ul>
+          <li><b>主旨题（Gist）</b>：本文主旨不是「梅尔维尔的生平」，而是「一个广为流传的文学史叙事之所以流行，是因为它符合复兴故事的需要」。凡选项以单个人名、单本书或单一数字作核心的，多半把细节当成了主线。</li>
+          <li><b>推理题（Inference）</b>：由「1866 年已有评论者谈起他的文学声望」可推出——他在生前并非无人知晓。推理题的正确答案通常是对原文的一次换说法，而不是新信息；凡引入原文没有的强度（从未、无人、必然），基本是干扰项。</li>
+          <li><b>细节题（Detail）</b>：数字题的干扰项常做两件事：把 A 的销量安到 B 上（如把首印 2,915 说成总销量），或换掉时间范围（把 11 天说成 11 年）。</li>
+          <li><b>词汇题（Vocabulary in context）</b>：<i>eclipse</i> 在此是名词，取「沉寂期」而非「日食」；<i>hagiography</i> 取「美化式传记」而非宗教义；<i>apocryphal</i> 意为「未经证实的」，不等于「假的」。做法是把四个选项逐一代回原句，同时检查词义与搭配。</li>
+          <li><b>NOT / EXCEPT 题</b>：把三个选项逐一回原文定位。干扰项常常是<b>说得通、但文中没说</b>的因果解释，例如把「转向诗歌」的原因说成出版商拒绝。</li>
+          <li><b>写作（Task 2）</b>：遇到「某说法是否成立」这类题，可以先把问题拆成两层——流传的说法说了什么、证据支持到什么程度。开头用 <i>The story of X is usually told as a Y</i> 立靶，结尾用 <i>What was recovered, in the end, was not merely…</i> 收口。</li>
+        </ul>
+
+        <h3>六、限制与边界</h3>
+        <div class="box">
+          <ul style="margin:0;">
+            <li>销量数据来自出版记录与后世统计，不同来源的口径不一（含总收入有 1,260 美元与约 556 美元等不同算法），本课正文只采用取整后的册数，不引入收益数字。</li>
+            <li>讣闻行数的两种说法并存，本课不取其一，只保留「几行」这一量级描述。</li>
+            <li>1866 年那篇评论<b>整体是负面的</b>：它在承认对方文学声望的同时，也断言他不适合写诗。本课引用其承认的那一面，不等于该文是一篇褒扬之作。</li>
+            <li>「从未彻底被遗忘」是<b>程度判断</b>，不是对 1891 年前声誉状况的否定。他晚年声望低落是可证的事实。</li>
+            <li>本课讲的是<b>文学史叙事的形成机制</b>，不是对早期梅尔维尔研究者工作的评价。他们的编辑与传记工作让这批作品得以传世，这一点不受本课论点影响。</li>
+          </ul>
+        </div>
+
+        <h3>七、事实与立场</h3>
+        <div class="box">
+          <ul style="margin:0;">
+            <li>本课只讨论<b>文学史的叙事与研究方法</b>，不涉及任何国家、政党、政体、民族或当代议题的评判。</li>
+            <li>文中出现的人名、机构名、刊物名仅用于交代史实的学术来源，不含任何价值判断；引述其研究成果不等于支持其全部结论。</li>
+            <li>本课对早期研究者的批评<b>限于方法论层面</b>（把小说当作自传来读、把手稿当作定稿刊行），不构成对其个人操守或贡献的判断。</li>
+            <li>本课的教学目标是让读者学会<b>区分「流传的说法」与「可核对的证据」</b>，而不是记住任何一位作家的生平结论。</li>
+          </ul>
+        </div>
+
+        <h3>八、关键术语中英对照</h3>
+        <table>
+          <tr><th>English</th><th>中文</th><th>备注</th></tr>
+          <tr><td>obscurity</td><td>湮没无闻</td><td>rise from obscurity 从默默无闻中崛起</td></tr>
+          <tr><td>posthumous</td><td>死后的、身后的</td><td>posthumous fame 身后之名</td></tr>
+          <tr><td>vindication</td><td>平反</td><td>回顾性评价，不等于当时承认</td></tr>
+          <tr><td>eclipse</td><td>沉寂期／使黯然失色</td><td>名词与动词同形</td></tr>
+          <tr><td>hagiography</td><td>美化式传记</td><td>原指圣徒传</td></tr>
+          <tr><td>apocryphal</td><td>传闻的、未经证实的</td><td>不等于「假的」</td></tr>
+          <tr><td>archival</td><td>档案的</td><td>与 second-hand account 相对</td></tr>
+          <tr><td>retrospective</td><td>回顾的</td><td>含「后见之明」的意味</td></tr>
+          <tr><td>consecrate</td><td>确立为经典</td><td>原义为祝圣</td></tr>
+          <tr><td>anachronism</td><td>时代错误</td><td>用后来的眼光读过去</td></tr>
+          <tr><td>canonisation</td><td>经典化</td><td>作品进入经典序列的过程</td></tr>
+          <tr><td>documentary biography</td><td>文献传记</td><td>以原始材料按日编排，不作叙述</td></tr>
+        </table>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <p><b>主题：</b>文学评论 Literary Criticism · 一段广为流传的「天才被彻底遗忘」叙事，为什么恰好是后来那场复兴所需要的：史实、史料批判与档案方法的修正。</p>
+
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🎯 学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div>读懂英语文学评论的一种高阶推进结构：<b>复述一个通行的叙事 → 交代它的史实支点 → 用档案证据修正其中一项 → 说明这个叙事为何会被需要</b>，并能独立画出篇章结构表。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div>掌握 10 个 C1–C2 学术词汇，其中 <i>apocryphal</i>、<i>archival</i>、<i>hagiography</i> 是史料批判的核心词，<i>anachronism</i>、<i>retrospective</i>、<i>consecrate</i> 可直接迁移到雅思与托福写作。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div>掌握 5 个高级句型，尤其是用于开篇立靶的 <i>The story of X is usually told as a Y</i>、用于修正的 <i>X was less a A than a B</i>，以及用于收口的 <i>What was recovered, in the end, was not merely…</i>。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div>能识别并复现 5 个高级语法结构：双重比较级平行、破折号引出的名词短语同位语、Nor 前置的部分倒装（含插入语）、what 名词性关系从句作主语与表语、less A than B 与 not merely A but B 的对称要求。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div>建立一条阅读习惯：读到任何以「某人／某事长期被忽视」开头的叙述，先问一句——<b>这个「被忽视」是被证明的，还是被需要的？</b></div></div>
+
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🧪 考试技巧 Exam Skills</h3>
+        <ul>
+          <li><b>主旨题（Gist）：</b>本文主旨<b>不是</b>「梅尔维尔的生平」，而是「一个流行的文学史叙事之所以流行，是因为它符合复兴故事的形式需要」。凡选项以单个人名、单本书或单一数字作核心的，多半把细节当成了主线。</li>
+          <li><b>推理题（Inference）：</b>由「1866 年已有评论者谈起他的文学声望」可推出——他在生前并非无人知晓。推理题的正确答案通常是对原文的一次换说法，而不是新信息；凡引入原文没有的强度（从未、无人、必然），基本是干扰项。</li>
+          <li><b>细节题（Detail）：</b>数字题的干扰项常做两件事——把 A 的量安到 B 上（如把首印数说成总销量），或换掉时间范围（把 11 天说成 11 年）。</li>
+          <li><b>词汇题（Vocabulary in context）：</b><i>eclipse</i> 在此取「沉寂期」而非「日食」；<i>hagiography</i> 取「美化式传记」而非宗教义；<i>apocryphal</i> 意为「未经证实的」，不等于「假的」。把四个选项逐一代回原句，同时检查词义与搭配。</li>
+          <li><b>NOT / EXCEPT 题：</b>把三个选项逐一回原文定位。干扰项常常是<b>说得通、但文中没说</b>的因果解释，例如把「转向诗歌」的原因说成出版商拒绝。本题第 6 题正是这一型。</li>
+        </ul>
+
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">📌 使用建议 How to Use</h3>
+        <ul>
+          <li>第一遍：不看文本，连听四段音频，抓住每段的功能（立叙事 / 讲机制 / 给反证 / 讲为什么会被需要）。</li>
+          <li>第二遍：逐段精读，把高亮词的中文释义先遮住，靠上下文猜，再点开核对。</li>
+          <li>第三遍：到「句型练习」做仿写，写完后与原文句子逐词比对结构，重点看 <i>the darker…, the cleaner…</i> 与 <i>Nor… had he been…</i> 两处的节奏。</li>
+          <li>第四遍：读一遍第六节的「限制与边界」与「事实与立场」，想一想：如果只让你用一句话转述本课论点，你会怎么把「被修正的是彻底二字，不是事实本身」这一层一起说清楚？</li>
+          <li>最后：完成 6 道测验，把错题对应的段落回读一遍。</li>
+        </ul>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+      <footer>Pola News · Advanced English · 每日一课，日积月累 🦘</footer>
+    </section>
+  </main>
+</div>
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+320>window.innerWidth)left=window.innerWidth-330;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/dacey/i.test(v.name)); if(v)return v;
+  v=match(v=>/tim/i.test(v.name)); if(v)return v;
+  v=match(v=>/daniel/i.test(v.name)); if(v)return v;
+  v=match(v=>/alex/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=1.0; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=[
+  "The story of Herman Melville is usually told as a resurrection from obscurity: a wasted genius, ignored for thirty years, then restored. It is a handsome shape, and not an empty one. Moby-Dick sold some 3,700 copies in his lifetime, and in 1891 one newspaper printed a notice of a few lines. What followed reads as posthumous vindication.",
+  "What repaired the eclipse is itself a story. In 1919 a young Columbia lecturer, Raymond Weaver, was asked for a short centenary piece; the biography of 1921 and the 1924 edition of Billy Budd did the work. He read the early novels as autobiography and printed an unfinished novella as finished — a portrait close to hagiography.",
+  "What later scholarship undid was not the revival but the darkness before it. As early as 1866 a reviewer could speak of his literary reputation, experience and cultivation; the documentary life of 1951, assembled day by day from letters and receipts, showed a writer who never stopped working and turned to poetry deliberately. The silence, in other words, is the apocryphal part. Nor, the archival record suggests, had he been wholly unread.",
+  "So the forgetting was less a fact than a premise. A revival needs a fall to answer: the darker the burial, the cleaner the recovery. Retrospective narrative consecrates by contrast, and the anachronism lies with us — we need the genius to have been alone. A reviewer warned of it in 1924: that the revival of his fame carried undoubted dangers, one being that he might be overrated. What was recovered, in the end, was not merely a writer but a story about one."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["How Herman Melville came to write Moby-Dick and why it failed in 1851","Why the story of his neglect suited the revival that reversed it, and what archival evidence shows instead","A comparison of the 1921 biography with later documentary scholarship","The reasons nineteenth-century reviewers disliked his prose"],ans:1,
+   fb:"正确。四段分明：段 1 复述通行的叙事并承认它有史实支点；段 2 讲是谁、用什么把这段沉寂修复的；段 3 用 1866 年的评论与 1951 年的文献传记来修正其中「彻底沉默」那一项；段 4 说明这个叙事为何会被需要，并让一位同时代的评论者出来提醒「被高估」的危险。B 覆盖这条主线。A 与 D 都是背景，本文不讨论创作过程，也不归纳评论界的好恶；C 把用于对照的两件工作误当成了比较的对象。"},
+  {q:"2. According to paragraph 1, approximately how many copies did Moby-Dick sell during Melville's lifetime? 依第一段，《白鲸》在他生前售出约多少册？",opts:["Some 3,700","50","16,300","2,915"],ans:0,
+   fb:"正确。原文写的是 sold some 3,700 copies in his lifetime，A 正是对它的换说法。B 是流传极广却已被证伪的旧说法；C 是《泰比》的约数，属于把 A 书销量安到 B 书上；D 是首印册数，属于把「一次印刷」误当「总销量」。数字题的干扰项几乎总是这样产生的：换对象、换时间范围，或换口径。"},
+  {q:"3. The reviewer of 1866 is mentioned primarily in order to: 作者提到 1866 年的那位评论者，主要是为了：",opts:["Show that his poetry was better received than his prose","Illustrate the hostility of contemporary periodicals to serious fiction","Undercut the claim that he was entirely unknown in his own lifetime","Explain why he abandoned the novel and turned to poetry"],ans:2,
+   fb:"正确。这是目的题。段 3 的骨架是「后来被推翻的不是复兴，而是复兴之前的黑暗」，1866 年那段引文紧接着这个判断出现，功能正是提供反证：既然当时已有人谈起他的文学声望、阅历与修养，那么「生前无人知晓」就无法成立。C 正是它在论证中的位置。A 无据，该文还断言他不适合写诗；B 过头了，作者引用的是其中承认声望的那一面，而不是要归纳刊物的态度；D 时间错位，转向诗歌是后文的另一条线索，与这条引文无关。"},
+  {q:"4. Why does the author refer to the documentary life of 1951? 作者为什么提到 1951 年那部文献传记？",opts:["To argue that archival compilation is a superior form of biography","To show that the revival had already begun before 1921","To suggest that his letters were more valuable than his novels","To show that day-by-day evidence produced a different picture from the revival narrative"],ans:3,
+   fb:"正确。注意原文对这部书的描述：assembled day by day from letters and receipts。它靠的不是论断而是逐日编排的原始材料，得出的却是一条不同的轨迹——一个从未停止写作、并主动转向诗歌的人。D 正是它的论证功能。A 过头了，作者从未比较两种体裁的优劣；B 时间错，这部书晚于复兴三十年；C 无据，本文从未对书信与小说作价值排序。"},
+  {q:"5. In paragraph 2, the word hagiography most nearly means: 第二段中的 hagiography 最接近下列哪个意思？",opts:["A study of the historical sources behind a literary work","An idealising account that plays down the flaws of its subject","A biography written by a personal acquaintance of the writer","A critical edition reconstructed from manuscript evidence"],ans:1,
+   fb:"正确。上文说他把手稿当定稿刊行、把小说当自传来读，破折号后的判语就落在这个词上：一种不加批判地颂扬传主、隐去问题的写法。B 正确。A 说的是来源研究，与本处无关；C 把「熟悉程度」当成了词义；D 说的是校勘整理，恰好是原文所批评的对象没有做的事。做词汇题时把四个选项逐一代回原句，同时检查词义与搭配，是排除这三项最快的办法。"},
+  {q:"6. Which of the following is NOT stated in the passage? 下列哪一项是文中没有表述的？",opts:["In 1891 one newspaper printed a notice of a few lines","Weaver was asked for a short centenary piece in 1919","He gave up the novel because publishers refused to print his prose","The documentary life of 1951 was assembled day by day from letters and receipts"],ans:2,
+   fb:"正确。全文只说他 turned to poetry deliberately（转向诗歌是一种选择），从未交代原因，更没有提到出版商。C 属于 NOT / EXCEPT 题最常用的手法：一个说得通的因果解释，但文中并没有说。A 见第 1 段；B 见第 2 段；D 见第 3 段。做这类题的办法是把三个选项逐一回原文定位，剩下那一项往往不是错的，而是「未被言及」。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
