@@ -1,6 +1,6 @@
 /* ===== TEM-4 词汇漫画 · 数据层 =====
  * 架构：8 大类 × 40 主题 × 每主题多 Part × 每 Part 6 词
- * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1-G4/H1-H2 已上线（33 主题 / 165 Part / 990 词），其余主题 status:"soon" 待生产
+ * 状态：A1-A6/B1-B5/C1-C5/D1-D4/E1-E4/F1/F2/F3/G1-G4/H1-H3 已上线（34 主题 / 170 Part / 1020 词），其余主题 status:"soon" 待生产
  * 新主题上线流程：把 parts 数组填上 + status 改 "live" 即可，页面自动渲染
  */
 
@@ -2728,7 +2728,85 @@ const TEM4_THEMES = [
       }
     ]
   },
-  {id:"H3", cat:"H", zh:"心理与情绪", name:"Psychology",       status:"soon", words:70,  desc:"大脑、对话、冥想"}
+  {id:"H3", cat:"H", zh:"心理与情绪", name:"Psychology",       status:"live", date:"2026-10-19", words:30, desc:"期中重压、觉察情绪、情绪图谱、倾诉时刻与走出阴霾",
+    parts:[
+      {
+        id:"H3-P1", slug:"tem4-H3-P1", title:"期中重压", shape:"拱门",
+        poster:"assets/tem4/posters/H3_P1.png",
+        sentence:"Midterm week swept over campus like a storm: piles of papers overwhelmed the little hamster, worry oppressed him day and night, strange dreams disturbed his sleep, his mind turned dull in lectures, the ticking clock harried him at every desk, and he bore the brunt of it all before the first test even began.",
+        sentenceCn:"期中考试周像风暴一样席卷校园：成堆的试卷压垮了小仓鼠，忧虑日夜压迫着他，怪梦搅扰着他的睡眠，课堂上他的头脑变得迟钝，滴答的时钟在每张课桌上烦扰着他，考试还没开始他就承受了全部冲击。",
+        scene:"深夜书桌前，小叶学姐端着热饮安抚被成堆试卷包围、趴在桌上打瞌睡的小仓鼠同学，台灯暖光，窗外月色温柔。",
+        words:[
+          {word:"overwhelm", ipa:"/ˌəʊvəˈhwelm/", pos:"vt.",  zh:"压倒；（感情）淹没",      forms:["overwhelmed"]},
+          {word:"oppress",   ipa:"/əˈpres/",      pos:"vt.",  zh:"压迫；压抑，使烦恼",     forms:["oppressed"]},
+          {word:"disturb",   ipa:"/dɪˈstɜːb/",    pos:"v.",   zh:"打扰，扰乱；使不安",     forms:["disturbed"]},
+          {word:"dull",      ipa:"/dʌl/",         pos:"adj.", zh:"迟钝的；单调乏味的",     forms:["dull"]},
+          {word:"harry",     ipa:"/ˈhæri/",       pos:"vt.",  zh:"（不断）烦扰，折磨",     forms:["harried"]},
+          {word:"brunt",     ipa:"/brʌnt/",       pos:"n.",   zh:"冲击；主要压力",        forms:["brunt"]}
+        ]
+      },
+      {
+        id:"H3-P2", slug:"tem4-H3-P2", title:"觉察情绪", shape:"叶形",
+        poster:"assets/tem4/posters/H3_P2.png",
+        sentence:"That afternoon, Doctor Panda\u2019s psychology lecture taught everyone to pause and ponder: we learned to perceive the tiny signals of our feelings, to stay aware of each passing mood, to imagine how others might feel instead of judging, to tell a daydream\u2019s fantasy from a real need, and even a lesson that used to bore us could become a mirror of the heart.",
+        sentenceCn:"那天下午，熊猫医生的心理讲座教大家停下来沉思：我们学会察觉情绪的细微信号，对每一种掠过的心情保持觉察，去想象他人的感受而不是急于评判，分清白日梦的幻想与真实的需要——就连曾经让我们觉得乏味的课，也能成为一面心灵的镜子。",
+        scene:"心理讲座教室，熊猫医生在画满爱心与云朵的白板前讲课，小叶学姐和兔子、小鸭同学认真听讲记笔记。",
+        words:[
+          {word:"perceive", ipa:"/pəˈsiːv/",   pos:"v.",   zh:"察觉，发觉；领悟",      forms:["perceive"]},
+          {word:"aware",    ipa:"/əˈweə/",     pos:"adj.", zh:"意识到的，察觉到的",     forms:["aware"]},
+          {word:"ponder",   ipa:"/ˈpɒndə/",    pos:"v.",   zh:"仔细考虑，沉思",        forms:["ponder"]},
+          {word:"imagine",  ipa:"/ɪˈmædʒɪn/",  pos:"v.",   zh:"想象，设想；猜想",      forms:["imagine"]},
+          {word:"fantasy",  ipa:"/ˈfæntəsi/",  pos:"n.",   zh:"想象，幻想",           forms:["fantasy"]},
+          {word:"bore",     ipa:"/bɔː/",       pos:"v.",   zh:"使厌烦；钻（孔）",      forms:["bore"]}
+        ]
+      },
+      {
+        id:"H3-P3", slug:"tem4-H3-P3", title:"情绪图谱", shape:"椭圆",
+        poster:"assets/tem4/posters/H3_P3.png",
+        sentence:"The doctor then drew a map of emotions on the whiteboard: melancholy is a slow grey rain, a dreary week can sink anyone\u2019s heart, dismay strikes when plans fall apart, envy of a friend\u2019s success is normal, arrogant pride often hides a fragile core, and hidden discontent whispers louder than anger.",
+        sentenceCn:"医生随后在白板上画了一张情绪地图：忧郁是一场缓慢的灰雨，沉闷乏味的一周会让任何人心情低落，计划落空时会惊慌沮丧，羡慕朋友的成就很正常，傲慢的骄傲背后往往藏着一颗脆弱的心，而暗藏的不满比愤怒更低声却更响亮。",
+        scene:"白板前，小叶学姐指着画有雨云与闪电等情绪表情的图示讲解，仓鼠、兔子和小鸭同学在旁认真聆听。",
+        words:[
+          {word:"melancholy", ipa:"/ˈmelənkəli/",   pos:"n./adj.", zh:"忧郁（的），悲伤（的）",  forms:["melancholy"]},
+          {word:"dreary",     ipa:"/ˈdrɪəri/",      pos:"adj.",    zh:"令人沮丧的，沉闷的",    forms:["dreary"]},
+          {word:"dismay",     ipa:"/dɪsˈmeɪ/",      pos:"vt.",     zh:"使惊恐；使沮丧",       forms:["dismay"]},
+          {word:"envy",       ipa:"/ˈenvi/",        pos:"n./vt.",  zh:"妒忌，羡慕",          forms:["envy"]},
+          {word:"arrogant",   ipa:"/ˈærəɡənt/",     pos:"adj.",    zh:"傲慢的，骄傲自大的",    forms:["arrogant"]},
+          {word:"discontent", ipa:"/ˌdɪskənˈtent/", pos:"n.",      zh:"不满，不满足",         forms:["discontent"]}
+        ]
+      },
+      {
+        id:"H3-P4", slug:"tem4-H3-P4", title:"倾诉时刻", shape:"超圆角",
+        poster:"assets/tem4/posters/H3_P4.png",
+        sentence:"In the cozy counseling room, everyone found a safe way to vent their feelings, felt the doctor\u2019s warm compassion like afternoon sunshine, learned to refrain from harsh words when angry, to endure pressure without breaking, to moderate their temper little by little, and to keep a sober, honest look at their own hearts.",
+        sentenceCn:"在温馨的咨询室里，每个人都找到了安全发泄情绪的方式，感受到医生如午后阳光般温暖的同情，学会在生气时克制住伤人的话语，忍受压力而不被压垮，一点一点缓和自己的脾气，并保持清醒镇定，诚实地审视自己的内心。",
+        scene:"温馨咨询室，兔子同学坐在扶手椅上倾诉心事，小叶学姐与熊猫医生捧着热茶在旁温暖陪伴。",
+        words:[
+          {word:"vent",       ipa:"/vent/",        pos:"v.",   zh:"发泄（情感）；排放",     forms:["vent"]},
+          {word:"compassion", ipa:"/kəmˈpæʃən/",   pos:"n.",   zh:"同情，怜悯",           forms:["compassion"]},
+          {word:"refrain",    ipa:"/rɪˈfreɪn/",    pos:"v.",   zh:"抑制，克制；避免",      forms:["refrain"]},
+          {word:"endure",     ipa:"/ɪnˈdjʊə/",     pos:"v.",   zh:"忍受，忍耐；持续",      forms:["endure"]},
+          {word:"moderate",   ipa:"/ˈmɒdəreɪt/",   pos:"v.",   zh:"（使）和缓，节制",      forms:["moderate"]},
+          {word:"sober",      ipa:"/ˈsəʊbə/",      pos:"adj.", zh:"清醒的；镇定的",       forms:["sober"]}
+        ]
+      },
+      {
+        id:"H3-P5", slug:"tem4-H3-P5", title:"走出阴霾", shape:"波浪",
+        poster:"assets/tem4/posters/H3_P5.png",
+        sentence:"On Friday morning the sun returned: with steady steps they overcame the fear of the final exam, surmounted one practice paper after another, no longer frightened by a single bad grade, urged each other on with smiles, held a quiet desire to grow stronger, and refused to doubt the effort they had made.",
+        sentenceCn:"周五早晨，太阳重新露面：大家迈着稳健的步伐战胜了对期末考试的恐惧，接连攻克一份份模拟卷，不再因一次糟糕的成绩而惊慌，微笑着互相激励，怀着变强的真切渴望，也不再怀疑自己付出的努力。",
+        scene:"阳光明媚的草地上，小叶学姐张开双臂欢笑，仓鼠、兔子同学和小鸭带着书本向她奔来，篮子里装满模拟卷。",
+        words:[
+          {word:"overcome", ipa:"/ˌəʊvəˈkʌm/", pos:"v.",     zh:"战胜，克服；压倒",     forms:["overcame"]},
+          {word:"surmount", ipa:"/sɜːˈmaʊnt/", pos:"vt.",    zh:"克服，战胜；越过",     forms:["surmounted"]},
+          {word:"frighten", ipa:"/ˈfraɪtən/",  pos:"vt.",    zh:"使惊恐，使害怕",      forms:["frightened"]},
+          {word:"urge",     ipa:"/ɜːdʒ/",      pos:"v.",     zh:"催促，力劝；激励",    forms:["urged"]},
+          {word:"desire",   ipa:"/dɪˈzaɪə/",   pos:"n./vt.", zh:"渴望；要求",         forms:["desire"]},
+          {word:"doubt",    ipa:"/daʊt/",      pos:"v./n.",  zh:"怀疑，不确信",       forms:["doubt"]}
+        ]
+      }
+    ]
+  }
 ];
 
 /* ===== 工具函数 ===== */
