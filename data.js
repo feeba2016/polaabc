@@ -7744,7 +7744,7 @@ const EPISODES = [
       {
         "word": "redundant",
         "zh": "多余的；冗余的（读作 /rɪˈdʌndənt/。be made redundant 被裁员（英式）；redundant systems 冗余系统；render something redundant 使某物变得多余。工程里的 redundancy 冗余 是褒义（备份），日常里 redundant 多为贬义（多余）。一词两义，须看语境）",
-        "ex": "\"... a design, so the story goes, that her managers thought redundant.\""
+        "ex": "\"... and one that her managers, so the story goes, thought redundant.\""
       },
       {
         "word": "constraint",
