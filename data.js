@@ -10214,17 +10214,17 @@ const EPISODES = [
       {
         "word": "stagnant",
         "zh": "停滞的、不增长的。经济学里指技术进步缓慢、每小时产出几乎不提高的部门；常见搭配 stagnant sector、stagnant wages。注意它描述的是增长速度，不是绝对水平。",
-        "ex": "Unit costs in <b>stagnant</b> sectors therefore drift upward."
+        "ex": "Unit costs in <b>stagnant</b> sectors drift upward."
       },
       {
         "word": "drift",
         "zh": "缓慢地、非刻意地移动。经济写作里常指价格、成本、比率在没有明显推手的情况下逐渐上行；drift upward 即「缓缓走高」。它比 rise 更强调那种没有方向感的漂移。",
-        "ex": "Unit costs in stagnant sectors therefore <b>drift</b> upward."
+        "ex": "Unit costs in stagnant sectors <b>drift</b> upward."
       },
       {
         "word": "aggregate",
         "zh": "总体的、加总的。指把各部分合并后得到的总量，如 aggregate demand（总需求）、aggregate productivity growth（总生产率增长）。它强调的是合并后的那个数，而不是各个部分。",
-        "ex": "If the <b>aggregate</b> rate is the weighted average of the sectoral ones, the average falls."
+        "ex": "If the <b>aggregate</b> rate is the weighted average of the sectoral ones … the average falls."
       },
       {
         "word": "intermediate",
