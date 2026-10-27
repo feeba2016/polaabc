@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Quartet That Never Got Faster — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#1d4ed8;
+  --accent2:#b91c1c;
+  --bg:#f8f9fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#dbeafe;
+  --border:#bfdbfe;
+  --soft:#eff6ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(29,78,216,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,78,216,.55);}70%{box-shadow:0 0 0 12px rgba(29,78,216,0);}100%{box-shadow:0 0 0 0 rgba(29,78,216,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bfdbfe;}
+#tip{position:fixed;z-index:1200;background:#1e3a8a;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(29,78,216,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#dbeafe;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 经济学人 Economist-style</span>
+      <h1 class="title">The Quartet That Never Got Faster</h1>
+      <p class="subtitle">Why a theorem about slow services survived the objection that should have killed it · 2026-10-27 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The observation</div>
+            <p>A Schubert quartet takes four players and as much time as it did a century ago, yet musicians' wages rise with everyone else's. Because all sectors hire in one labour market, pay rises even where hourly output does not; unit costs in <span class="kw" data-def="stagnant（形容词）：停滞的、不增长的。经济学里指技术进步缓慢、每小时产出几乎不提高的部门；常见搭配 stagnant sector（停滞部门）、stagnant wages（停滞的工资）。注意它描述的是增长速度，不是绝对水平。">stagnant</span> sectors <span class="kw" data-def="drift（动词）：缓慢地、非刻意地移动。经济写作里常指价格、成本、比率在没有明显推手的情况下逐渐上行；drift upward 即「缓缓走高」。它比 rise 更强调「无方向感的漂移」。">drift</span> upward — not through failure, but through shared wages. If the <span class="kw" data-def="aggregate（形容词）：总体的、加总的。指把各个部分合并后得到的总量，如 aggregate demand（总需求）、aggregate productivity growth（总生产率增长）。名词亦可作「合计」。注意它与其形容词「各自的」相对，强调的是合并后的那个数。">aggregate</span> rate is the weighted average of the sectoral ones, and the weight keeps migrating to the slow sector, the average falls.</p>
+          </div>
+          <button class="play-btn" data-i="0" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The mechanism, measured</div>
+            <p>Nordhaus named this the growth disease and tested it on American industry data from 1948 to 2001. A sector growing one point more slowly than the rest saw its relative price rise by about one point more; for real output the figure was roughly three-quarters of a point. Slow sectors were not merely dearer: they claimed a larger share of spending while producing less.</p>
+          </div>
+          <button class="play-btn" data-i="1" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The objection</div>
+            <p>The model assumes that what the slow sector sells goes to the final consumer. In 2014 some 71 per cent of British business services output went to other firms, 75 per cent of American — against economy-wide figures of 40.8 and 40.7. Oulton observed in 2001 that this reverses the arithmetic: an <span class="kw" data-def="intermediate（形容词）：中间的、作为中间投入的。在国民核算里 intermediate input 指被其他企业买去用于生产、而非卖给最终消费者的产品与服务；与 final good（最终产品）相对。注意它不等于「中等的」。">intermediate</span> service, however sluggish, <span class="kw" data-def="accrue（动词）：累积、归到…名下。正式用法里常接 to，表示收益、成本或增长「落到某处」，如 the gains accrue to the final good（这些增益计入最终产品）。它是不及物动词，不用被动语态表达此义。">accrues</span> to the final good it enters. His <span class="kw" data-def="conjecture（名词）：猜想、推测。指尚未被证实、但被提出以待检验的命题；语气弱于 theory，强于 guess。动词 conjecture。学术写作中用它来标明「这只是个待检验的说法」。">conjecture</span> rested on two <span class="kw" data-def="proviso（名词）：限制性条件、附条件。指某项主张成立所必须满足的前提，常用复数 provisos 或短语 on the proviso that（条件是…）。它比 condition 更正式，且通常写在主张之后而非之前。">provisos</span> — that productivity in such services be positive, and their weight keep rising. Meet both, and <span class="kw" data-def="tertiarisation（名词）：第三产业化、经济重心向服务业转移的过程。由 tertiary sector（第三产业）加后缀构成，是结构变迁文献的专门术语；对应的通俗说法是 the shift to services。">tertiarisation</span> lifts the aggregate rate. Baumol conceded the point.</p>
+          </div>
+          <button class="play-btn" data-i="2" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What the data said</div>
+            <p>Whether the provisos hold is <span class="kw" data-def="empirical（形容词）：经验的、实证的。指依靠观测或数据而非纯推理得出的，如 empirical evidence（实证证据）、an empirical question（一个要靠数据回答的问题）。它与 theoretical 相对，但两者并不互斥。">empirical</span>, and the evidence has not <span class="kw" data-def="oblige（动词）：施恩、帮忙、顺从要求。此处是较文雅的用法：the evidence has not obliged 意为「证据并没有配合（这个说法）」。obliged 作表语时常见义为「感激的」，如 I am much obliged（不胜感激），要注意区分。">obliged</span>. Using two releases of a shared productivity database, Hartwig and Krämer examined six of the largest seven economies: the weight of business services rose in every one, yet measured productivity there was negative, so structural change depressed growth throughout. Oulton blames measurement error; the compilers list organisational change and unobserved inputs among the alternatives. Half a century on, the quarrel is less about the theorem than about what the statistics record.</p>
+          </div>
+          <button class="play-btn" data-i="3" data-icon="▶">▶</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary（10 个 C1–C2 学术词）</h2>
+      <div class="card">
+        <p style="color:var(--muted);font-size:14px;margin-top:0;">点击右下角 🔊 听发音；例句均取自本课正文，可直接迁移到雅思 / 托福写作。</p>
+        <div class="vocab-grid">
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="stagnant">🔊</button>
+            <div class="word">stagnant<span class="pos">adj. C1</span></div>
+            <div class="zh">停滞的、不增长的。经济学里指技术进步缓慢、每小时产出几乎不提高的部门；常见搭配 stagnant sector、stagnant wages。注意它描述的是增长速度，不是绝对水平。</div>
+            <div class="ex">Unit costs in <b>stagnant</b> sectors therefore drift upward.</div>
+            <span class="lvl">本文核心词</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="drift">🔊</button>
+            <div class="word">drift<span class="pos">v. / n. C1</span></div>
+            <div class="zh">缓慢地、非刻意地移动。经济写作里常指价格、成本、比率在没有明显推手的情况下逐渐上行；drift upward 即「缓缓走高」。它比 rise 更强调那种没有方向感的漂移。</div>
+            <div class="ex">Unit costs in stagnant sectors therefore <b>drift</b> upward.</div>
+            <span class="lvl">C1</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="aggregate">🔊</button>
+            <div class="word">aggregate<span class="pos">adj. / n. C1</span></div>
+            <div class="zh">总体的、加总的。指把各部分合并后得到的总量，如 aggregate demand（总需求）、aggregate productivity growth（总生产率增长）。它强调的是合并后的那个数，而不是各个部分。</div>
+            <div class="ex">If the <b>aggregate</b> rate is the weighted average of the sectoral ones, the average falls.</div>
+            <span class="lvl">学术高频</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="intermediate">🔊</button>
+            <div class="word">intermediate<span class="pos">adj. C1</span></div>
+            <div class="zh">中间的、作为中间投入的。在国民核算里 intermediate input 指被其他企业买去用于生产、而非卖给最终消费者的产品与服务，与 final good 相对。注意它不等于「中等的」。</div>
+            <div class="ex">An <b>intermediate</b> service, however sluggish, accrues to the final good it enters.</div>
+            <span class="lvl">本课机制词</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="accrue">🔊</button>
+            <div class="word">accrue<span class="pos">v. C2</span></div>
+            <div class="zh">累积、归到…名下。正式用法里常接 to，表示收益、成本或增长落到某处。它是不及物动词，这个意义下不用被动语态表达。</div>
+            <div class="ex">An intermediate service, however sluggish, <b>accrues</b> to the final good it enters.</div>
+            <span class="lvl">C2</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="conjecture">🔊</button>
+            <div class="word">conjecture<span class="pos">n. C2</span></div>
+            <div class="zh">猜想、推测。指尚未被证实、但被提出以待检验的命题；语气弱于 theory，强于 guess。学术写作中用它来标明这只是个待检验的说法。</div>
+            <div class="ex">His <b>conjecture</b> rested on two provisos.</div>
+            <span class="lvl">观点归属信号词</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="proviso">🔊</button>
+            <div class="word">proviso<span class="pos">n. C2</span></div>
+            <div class="zh">限制性条件、附条件。指某项主张成立所必须满足的前提，复数 provisos；常见短语 on the proviso that（条件是…）。它比 condition 更正式，通常写在主张之后而非之前。</div>
+            <div class="ex">His conjecture rested on two <b>provisos</b>.</div>
+            <span class="lvl">C2</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="tertiarisation">🔊</button>
+            <div class="word">tertiarisation<span class="pos">n. C2</span></div>
+            <div class="zh">第三产业化、经济重心向服务业转移的过程。由 tertiary sector 加后缀构成，是结构变迁文献的专门术语；通俗说法是 the shift to services。</div>
+            <div class="ex">Meet both, and <b>tertiarisation</b> lifts the aggregate rate.</div>
+            <span class="lvl">学科术语</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="empirical">🔊</button>
+            <div class="word">empirical<span class="pos">adj. C1</span></div>
+            <div class="zh">经验的、实证的。指依靠观测或数据而非纯推理得出的，如 empirical evidence。它与 theoretical 相对，但两者并不互斥。</div>
+            <div class="ex">Whether the provisos hold is <b>empirical</b>, and the evidence has not obliged.</div>
+            <span class="lvl">学术高频</span>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="oblige">🔊</button>
+            <div class="word">oblige<span class="pos">v. C1</span></div>
+            <div class="zh">施恩、帮忙、顺从要求。此处是较文雅的用法：the evidence has not obliged 意为证据并没有配合这个说法。obliged 作表语时常见义为感激的，如 I am much obliged，要注意区分。</div>
+            <div class="ex">Whether the provisos hold is empirical, and the evidence has not <b>obliged</b>.</div>
+            <span class="lvl">正式语体</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns（5 个高级学术句型）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. X takes as much Y as it did a century ago, yet Z…</h3>
+          <div class="zh">用一个<b>具体到可数的例子</b>开篇，再用 <i>yet</i> 转折。它的好处是把抽象机制先落到一件人人都见过的东西上——四个人、同样长的时间——读者不需要任何专业背景就能跟上。<i>as much + 不可数名词 + as</i> 表示「和……一样多」，后半句用一般现在时描述仍在持续的事实。</div>
+          <div class="eg">A Schubert quartet takes four players and <b>as much time as it did a century ago</b>, yet musicians' wages rise with everyone else's.</div>
+          <div class="practice">✍️ 仿写：一封手写信件今天仍需要同样的笔迹与时间，可寄信的成本却涨了。<br><input placeholder="A handwritten letter takes ... as much ... as it did ..., yet ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. Because A, B rises even where C does not.</h3>
+          <div class="zh"><i>because</i> 从句前置，主句后再用 <i>even where</i> 补一个<b>让步性对照</b>。三步推进：给出统一的机制 → 陈述结果 → 承认存在例外地带、并说明例外也不改结果。这是学术写作里最经济的「先立规则、再挡掉反驳」的写法。</div>
+          <div class="eg">Because all sectors hire in one labour market, pay rises <b>even where hourly output does not</b>.</div>
+          <div class="practice">✍️ 仿写：因为所有部门共用一套电网，成本会上升——即便某些工厂的用电量并没有增长。<br><input placeholder="Because all sectors share one grid, costs rise even where ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. not through A, but through B</h3>
+          <div class="zh">破折号之后的<b>介词短语平行结构</b>，把一种「看起来像原因」的解释排除掉，换成真正的机制。两侧必须同为 <i>through + 名词</i>，读起来有对称的节奏。它比 <i>not because A but because B</i> 更紧凑，适合放在句尾作收束。</div>
+          <div class="eg">Unit costs in stagnant sectors therefore drift upward — <b>not through failure, but through shared wages</b>.</div>
+          <div class="practice">✍️ 仿写：价格的上涨不是因为需求旺盛，而是因为供给受限。<br><input placeholder="Prices rose — not through ..., but through ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. X observed in 2001 that this reverses the arithmetic: …</h3>
+          <div class="zh"><b>观点归属句</b>的标准形态：研究者 + 动词 + 年份 + that 从句，随后用冒号把机制展开。用 <i>observed</i>、<i>noted</i>、<i>argued</i> 这类中性动词比 <i>proved</i> 稳妥；年份紧接动词之后，读者一眼就能定位这条主张的年代。</div>
+          <div class="eg"><b>Oulton observed in 2001 that this reverses the arithmetic:</b> an intermediate service, however sluggish, accrues to the final good it enters.</div>
+          <div class="practice">✍️ 仿写：李在 2019 年指出这一关系在样本期内并不成立：……<br><input placeholder="... observed in 2019 that this relationship ...: ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. Half a century on, the quarrel is less about A than about B.</h3>
+          <div class="zh">收口句的两种手法叠用：句首的 <i>Half a century on</i>（半个世纪过去）拉开时间尺度，暗示争论仍未解决；<i>less about A than about B</i> 在<b>介词短语层面</b>做取舍，把争论的焦点从表面移到底层。写作时可替换时间状语以适应不同题材。</div>
+          <div class="eg"><b>Half a century on, the quarrel is less about the theorem than about what the statistics record.</b></div>
+          <div class="practice">✍️ 仿写：争论了这么久之后，问题已不在于该不该做，而在于由谁来做。<br><input placeholder="Decades on, the question is less about ... than about ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar（5 个高级结构）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. 两个 if 从句并列推进一个结论</h3>
+          <div class="zh">用 <i>and</i> 把两个 <i>if</i> 从句串起来，共同导向一个主句 —— 这不是两个独立条件，而是<b>一个合取条件</b>：两者同时成立，结论才成立。好处是可以逐步加码，读起来像推导而不像断言。写的时候注意两个从句的时态要一致，主句用一般现在时表示逻辑必然。</div>
+          <div class="eg">If the aggregate rate is the weighted average of the sectoral ones, and the weight keeps migrating to the slow sector, <b>the average falls</b>.</div>
+          <div class="practice">✍️ 仿写：如果需求继续增长，而供给受到限制，价格就会上升。<input placeholder="If demand keeps rising, and supply ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>2. even where 引导的让步—对照从句（含助动词替代）</h3>
+          <div class="zh"><i>even where</i> 相当于 even in cases where，在承认「有些地方不是这样」的同时断言结论依旧成立。后半句的 <i>does not</i> 是<b>助动词替代</b>：它替代的是前文的 <i>rises</i>，避免重复动词。判断办法是把被替代的部分补回去读一遍（hourly output does not rise）是否成立。</div>
+          <div class="eg">Pay rises even where hourly output <b>does not</b>.</div>
+          <div class="practice">✍️ 仿写：总体在改善，即便某些指标没有。<input placeholder="Conditions improved even where some indicators ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>3. 破折号引出 that 同位语从句 + be 型虚拟语气</h3>
+          <div class="zh"><i>provisos</i> 之后的破折号带出两个 <i>that</i> 从句，说明这两个条件的具体内容；这类从句里英语用<b>原形动词</b>作虚拟（<i>be positive</i>、<i>keep rising</i>），不受主语单复数影响。它常出现在 demand、require、suggest 等词之后。写的时候最容易犯的错是把它写成直陈语气（is / keeps）。</div>
+          <div class="eg">His conjecture rested on two provisos — that productivity in such services <b>be</b> positive, and that their weight <b>keep</b> rising.</div>
+          <div class="practice">✍️ 仿写：这项提议附带一个条件：所有数据都必须公开。<input placeholder="The proposal carried one proviso — that all data ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>4. 祈使句 + and + 陈述句（条件等价结构）</h3>
+          <div class="zh"><i>Meet both, and tertiarisation lifts the aggregate rate.</i> 祈使句在此不是命令，而是<b>条件</b>：它等于 If you meet both, then …。这种结构比 if 从句短促有力，常用来收束一段论证。注意并列的两个分句之间要用逗号 + <i>and</i>，陈述句用一般将来时或一般现在时均可。</div>
+          <div class="eg"><b>Meet both, and</b> tertiarisation lifts the aggregate rate.</div>
+          <div class="practice">✍️ 仿写：再往前推一步，就能看出这个结论并不稳固。<input placeholder="Push the argument one step further, and ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>5. 现在分词短语置于句首作状语（附着规则）</h3>
+          <div class="zh">句首的 <i>Using two releases of a shared productivity database, …</i> 是分词短语作状语，交代方法。它的<b>逻辑主语必须就是主句的主语</b>——此处即两位研究者，否则就成了悬垂分词。这是学术方法部分最常见的句式，一句话就把工具、样本与动作三件事交代完。</div>
+          <div class="eg"><b>Using two releases of a shared productivity database,</b> Hartwig and Krämer examined six of the largest seven economies.</div>
+          <div class="practice">✍️ 仿写：用同一套问卷，研究团队在四个城市重复了这项调查。<input placeholder="Using the same questionnaire, the team ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz（6 题 · 雅思 / 托福风格）</h2>
+      <div class="card">
+        <p style="color:var(--muted);font-size:14px;margin-top:0;">先通读全文再作答；每题点「检查答案」即可看解析。</p>
+        <div id="quizBox"></div>
+      </div>
+    </section>
+
+    <!-- 6. CHINESE EXTENSION -->
+    <section id="ext" class="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 Deep Dive</h2>
+      <div class="card">
+
+        <h3>一、一句话概括</h3>
+        <p>演奏一首舒伯特的四重奏，今天所需的四个乐手与时长和一百年前几乎一样，可乐手的工资却要跟着整个经济一起涨。于是「产出不动、工资在动」的部门，单位成本必然缓缓走高。鲍莫尔 1967 年把这个观察推到了宏观层面：如果总生产率的增速只是各部门增速的加权平均，而权重又不断向慢部门迁移，那么总增速本身就会下降。半个世纪来，这套推理被一次实证检验支持过，也被一个漂亮的反驳质疑过；而那次反驳最终又被另一组数据挡了回去——不过挡回去的地方，恰好是「数据到底记录了什么」。</p>
+
+        <h3>二、两个「病」：成本病与增长病</h3>
+        <p>这两个名字指的是同一套机制的两种后果，读文献时最容易混淆，值得先分清。</p>
+        <table>
+          <tr><th>名称</th><th>说的是什么</th><th>提出与命名</th></tr>
+          <tr>
+            <td><b>成本病</b><br>（cost disease）</td>
+            <td>停滞部门的价格<b>相对上升</b>。因为工资在全社会趋同，产出不涨的部门只能让价格去吸收工资的上涨。</td>
+            <td>鲍莫尔与鲍恩 1966 年对表演艺术的研究已见其形；鲍莫尔 1967 年给出模型。</td>
+          </tr>
+          <tr>
+            <td><b>增长病</b><br>（growth disease）</td>
+            <td>总体生产率增速<b>趋于下降</b>。总量增速是各部门增速的加权平均，权重不断向慢部门移动，平均值就被拉低。</td>
+            <td>诺德豪斯 2008 年用美国 1948—2001 年的行业数据作了检验，并给了它这个名字。</td>
+          </tr>
+        </table>
+        <p>诺德豪斯检验出的关系非常紧：一个部门的生产率增速比其余部门慢 1 个百分点，其相对价格的涨幅就大约多出 1 个百分点；实际产出的对应值约为四分之三个百分点。对一个只有两个部门、假设极少的模型而言，这个拟合度出乎意料。</p>
+
+        <h3>三、奥尔顿的反驳：中间投入如何翻转算术</h3>
+        <p>鲍莫尔的模型默认停滞部门卖的是<b>最终消费品</b>——音乐直接卖给听众、护理直接交给病人。但现代服务业有相当大的一块并不如此：它卖给<b>别的企业</b>，作为生产过程中的投入。2014 年，英国商务服务总产出中约 71% 属于中间消耗，美国约 75%，都远高于各自经济整体的中间消耗占比（英国 40.8%、美国 40.7%）。</p>
+        <p>这个差别会翻转算术。如果一项服务是中间投入，那么即便它自身的生产率增长很慢，这份增长也会<b>计进</b>用它生产出来的那个最终产品里。于是服务业比重的上升非但不会拉低总体增速，反而可能抬高它。鲍莫尔本人接受了这个修正，并坦承自己此前忽略了这一点。</p>
+        <p>但这个结论并非无条件成立，它依赖两个前提：其一，这些中间服务业自身的生产率增长必须为正；其二，它们在增加值中的权重必须持续上升。两个都满足，乐观结论才成立。</p>
+
+        <h3>四、实证检验：两个条件，只满足了一个</h3>
+        <p>前提是否成立，只能靠数据回答。哈特维希与克莱默用欧盟 KLEMS 生产率数据库的两个版本，检验了七国集团中除加拿大外的六个经济体。</p>
+        <table>
+          <tr><th>奥尔顿的前提</th><th>是否满足</th><th>后果</th></tr>
+          <tr>
+            <td>① 中间服务业的生产率增长为正</td>
+            <td><b>不满足</b>——测算出的全要素生产率增长为负</td>
+            <td>权重越大，对总体增速的拖累越重</td>
+          </tr>
+          <tr>
+            <td>② 这些行业在增加值中的权重上升</td>
+            <td><b>满足</b>——六国均上升</td>
+            <td>把负增长的行业放到了更大的权重上</td>
+          </tr>
+          <tr>
+            <td colspan="2"><b>综合结果</b></td>
+            <td>结构变迁在六个经济体中<b>都压低了</b>总体生产率增速</td>
+          </tr>
+        </table>
+        <p>值得注意的是：制造业的情况几乎正好相反——全要素生产率在上升，但权重在下降，同样不利于总体增速。两个方向叠加，结论就更难被推翻。</p>
+
+        <h3>五、为什么「负增长」本身成了新的争论焦点</h3>
+        <p>商务服务业的生产率增长被测算为负，这个结果初看很反直觉。奥尔顿本人不接受它：他在后续研究中认为这更可能是<b>测量误差</b>，并对数据作了若干修正，把负值调成了正值。他的理由也不难理解——负的全要素生产率意味着企业在变得低效，或者技术知识正在被遗忘，这在和平时期难以置信。</p>
+        <p>但数据库的编制者列出了负增长的其他来源，测量误差只是其中之一：组织方式的变动、未被观测的投入（例如研发支出）、边际成本不完全反映边际收益、规模报酬的变化、以及行业内市场份额在企业之间的重新分配。此外，商务服务业并不只包含信息与通信技术类服务，它还包括维修、保洁、会计、培训、安保、广告营销等大量劳动密集型活动 —— 这些部门的生产率本来就可能停滞甚至走低。</p>
+        <p>所以争论的落点变了：分歧不再只是「定理对不对」，而是「这些数字记录的是什么」。这正是第 4 题的考点。</p>
+
+        <h3>六、四个数字与它们的口径</h3>
+        <table>
+          <tr><th>项目</th><th>数值</th><th>口径说明</th></tr>
+          <tr>
+            <td>商务服务的中间使用占比</td>
+            <td>英国约 71%、美国约 75%（2014 年）</td>
+            <td>分母是商务服务的<b>总产出</b>，不是增加值；两国口径由同一数据库给出，可作对照。</td>
+          </tr>
+          <tr>
+            <td>经济整体的中间使用占比</td>
+            <td>英国 40.8%、美国 40.7%</td>
+            <td>用于说明上面的两个数字「远高于一般水平」。不要把这一行当成商务服务的数字。</td>
+          </tr>
+          <tr>
+            <td>生产率与相对价格</td>
+            <td>约 1 比 1；实际产出约 0.75 比 1</td>
+            <td>来自美国 1948—2001 年行业数据，是<b>跨部门的相关关系</b>，不是对单个部门的预测。</td>
+          </tr>
+          <tr>
+            <td>被检验的经济体</td>
+            <td>6 个（七国集团除加拿大）</td>
+            <td>正文写作 the largest seven economies 中的六个；德国是其中唯一制造业权重未下降的国家。</td>
+          </tr>
+        </table>
+
+        <h3>七、对雅思与托福的可迁移之处</h3>
+        <ul>
+          <li><b>主旨题（Gist）</b>：本文主旨不是「音乐会为什么变贵了」，而是「一个关于服务业的经典论断，如何在被反驳、又被数据检验之后存活下来」。凡选项以单个例子、单个国家或单个数字为核心的，多半把细节当成了主线。</li>
+          <li><b>细节题（Detail）</b>：数字题的干扰项主要靠三种手法——换对象（把经济整体的 40.8% 说成商务服务的）、换分母（把占总产出说成占增加值）、换时间（把 2014 年说成 2004 年）。</li>
+          <li><b>推理题（Inference）</b>：由「第二个条件满足而第一个不满足」可以推出——权重上升这件事，放大的是一个负面的量。推理题的正确答案通常是对原文的一次换说法，而不是新信息；凡引入原文没有的强度（必然、从未、全部）都要警惕。</li>
+          <li><b>词汇题（Vocabulary in context）</b>：<i>proviso</i> 取「前提条件」而非「反对意见」；<i>empirical</i> 取「要靠数据回答的」；<i>accrue</i> 后接 to，取「计入、归于」；<i>oblige</i> 在此是文雅用法，取「配合、顺从要求」，不要误读成「感激」。</li>
+          <li><b>NOT / EXCEPT 题</b>：把三个选项逐一回原文定位。干扰项常常是<b>说得通、但文中没说</b>的立场，例如把「鲍莫尔接受了奥尔顿的修正」写成「鲍莫尔认为奥尔顿的逻辑有误」。</li>
+          <li><b>写作（Task 2）</b>：遇到「某现象是否必然导致某结果」这类题，可以用本课的四步骨架：<b>机制的直觉 → 数据与检验 → 一个看似能推翻它的反驳 → 检验反驳本身</b>。结尾用 <i>the quarrel is less about A than about B</i> 收口，能把争论从结论层推到方法层。</li>
+        </ul>
+
+        <h3>八、限制与边界</h3>
+        <div class="box">
+          <ul style="margin:0;">
+            <li>本课讨论的是<b>经济学中的一个理论争论及其检验</b>，不构成对任何国家、政府、政党、政策或经济体的评价。文中出现的国名仅用于交代数据的来源与范围。</li>
+            <li>「负的全要素生产率增长」是一个<b>测算结果</b>，不是对相关行业效率或从业者能力的判断。它的成因在学界仍有分歧，本课已列出测量误差之外的多种解释。</li>
+            <li>诺德豪斯的数字来自特定国家与特定年份区间（美国 1948—2001），<b>不可直接外推</b>到其他经济体或其他时期。</li>
+            <li>商务服务的中间使用占比（2014 年）与总体检验所用的数据库版本不同年，正文并列时已各自标注年份，请勿混用。</li>
+            <li>本课不构成任何投资、理财或政策建议；其内容仅为英语阅读与学术写作的素材。</li>
+          </ul>
+        </div>
+
+        <h3>九、事实与立场</h3>
+        <div class="box">
+          <ul style="margin:0;">
+            <li>本课只讨论<b>已发表的学术文献与公开数据库</b>中的方法与结论，不涉及任何当代政治议题、国家间比较评价或制度优劣判断。</li>
+            <li>文中出现的学者姓名、机构名称与数据库名称仅用于交代观点归属与数据来源；引述其研究不等于支持其全部结论。</li>
+            <li>哈特维希与克莱默的检验与奥尔顿的回应<b>至今并存</b>，本课不裁定谁对，只呈现争论的结构：一方认为数据不支持该前提，另一方认为数据本身不可靠。</li>
+            <li>本课的教学目标是让读者学会<b>区分「模型的结论」「反驳的前提」与「检验所用的数据口径」</b>，而不是记住任何一个增长率数字。</li>
+          </ul>
+        </div>
+
+        <h3>十、关键术语中英对照</h3>
+        <table>
+          <tr><th>English</th><th>中文</th><th>备注</th></tr>
+          <tr><td>cost disease</td><td>成本病</td><td>停滞部门相对价格上升</td></tr>
+          <tr><td>growth disease</td><td>增长病</td><td>总量增速随结构变迁而下降</td></tr>
+          <tr><td>unbalanced growth</td><td>不平衡增长</td><td>鲍莫尔 1967 年论文的标题用语</td></tr>
+          <tr><td>progressive / stagnant sector</td><td>进步部门 / 停滞部门</td><td>按生产率增速划分，不含价值判断</td></tr>
+          <tr><td>tertiarisation</td><td>第三产业化</td><td>也写作 the shift to services</td></tr>
+          <tr><td>intermediate input</td><td>中间投入</td><td>与 final good（最终产品）相对</td></tr>
+          <tr><td>value added</td><td>增加值</td><td>权重通常按增加值份额计算</td></tr>
+          <tr><td>Domar weight</td><td>多玛权重</td><td>行业总产出占经济总产出的比重</td></tr>
+          <tr><td>total factor productivity</td><td>全要素生产率</td><td>常缩写为 TFP</td></tr>
+          <tr><td>proviso</td><td>前提条件</td><td>主张成立所必须满足者</td></tr>
+          <tr><td>empirical</td><td>实证的</td><td>与 theoretical 相对</td></tr>
+          <tr><td>accrue to</td><td>计入、归于</td><td>不及物，后接 to</td></tr>
+        </table>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <p><b>主题：</b>经济学人 Economist-style · 一套关于「服务业拉低增长」的经典推理，如何先被实证支持、再被一个漂亮的反驳质疑，最后又被数据挡了回去——而挡回去的地方，恰恰是「这些数字记录的是什么」。</p>
+
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🎯 学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div>读懂英语经济评论的一种高阶推进结构：<b>可感的例子 → 机制与量化检验 → 一个能推翻它的反驳 → 对反驳本身的实证检验</b>，并能独立画出篇章结构表。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div>掌握 10 个 C1–C2 学术词汇，其中 <i>proviso</i>、<i>conjecture</i>、<i>accrue</i>、<i>oblige</i> 是正式语体的高频词，<i>aggregate</i>、<i>empirical</i>、<i>intermediate</i> 可直接迁移到雅思与托福写作。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div>掌握 5 个高级句型，尤其是用于开篇的 <i>X takes as much Y as it did a century ago, yet Z</i>、用于「立规则再挡掉反驳」的 <i>Because A, B rises even where C does not</i>，以及用于收口的 <i>Half a century on, the quarrel is less about A than about B</i>。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div>能识别并复现 5 个高级语法结构：并列 if 从句推进结论、even where 让步从句与助动词替代、破折号引出 that 同位语从句与 be 型虚拟、祈使句加 and 的条件等价结构、句首现在分词短语的附着规则。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div>建立一条阅读习惯：读到任何一个以「某数据表明某结论」开头的段落，先问一句——<b>这个数据测的到底是什么，它有别的解释吗？</b></div></div>
+
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">🧪 考试技巧 Exam Skills</h3>
+        <ul>
+          <li><b>主旨题（Gist）：</b>本文主旨<b>不是</b>「音乐会为什么变贵了」，而是「一个关于服务业的经典论断如何在被反驳、又被数据检验之后存活下来」。凡选项以单个例子、单个国家或单个数字为核心的，多半把细节当成了主线。</li>
+          <li><b>细节题（Detail）：</b>数字题的干扰项主要靠三种手法——换对象（把经济整体的 40.8% 说成商务服务的）、换分母（把占总产出说成占增加值）、换时间（把 2014 年说成 2004 年）。</li>
+          <li><b>推理题（Inference）：</b>由「第二个条件满足而第一个不满足」可以推出——权重上升这件事，放大的是一个负面的量。推理题的正确答案通常是对原文的一次换说法，而不是新信息。</li>
+          <li><b>词汇题（Vocabulary in context）：</b><i>proviso</i> 取「前提条件」而非「反对意见」；<i>empirical</i> 取「要靠数据回答的」；<i>accrue</i> 后接 to，取「计入、归于」；<i>oblige</i> 在此是文雅用法，取「配合、顺从要求」。</li>
+          <li><b>NOT / EXCEPT 题：</b>把三个选项逐一回原文定位。干扰项常常是<b>说得通、但文中没说</b>的立场，例如把「鲍莫尔接受了奥尔顿的修正」写成「鲍莫尔认为奥尔顿的逻辑有误」。</li>
+        </ul>
+
+        <h3 style="color:var(--accent);font-size:18px;margin-top:16px;">📌 使用建议 How to Use</h3>
+        <ul>
+          <li>第一遍：不看文本，连听四段音频，抓住每段的功能（给例子 / 给数据 / 给反驳 / 给检验）。</li>
+          <li>第二遍：逐段精读，把高亮词的中文释义先遮住，靠上下文猜，再点开核对。</li>
+          <li>第三遍：到「句型练习」做仿写，写完后与原文句子逐词比对结构，重点看 <i>not through A, but through B</i> 与 <i>Meet both, and …</i> 两处的节奏。</li>
+          <li>第四遍：读一遍第六节的「限制与边界」与「事实与立场」，想一想：如果只让你用一句话转述本课论点，你会怎么把「争论已经从结论层移到了方法层」这一层一起说清楚？</li>
+          <li>最后：完成 6 道测验，把错题对应的段落回读一遍。</li>
+        </ul>
+        <button class="print-btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+      </div>
+      <footer>Pola News · Advanced English · 每日一课，日积月累 🦘</footer>
+    </section>
+  </main>
+</div>
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');});
+function go(sec){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(sec).classList.add('active');
+  document.querySelectorAll('nav.sidebar a').forEach(a=>a.classList.remove('active'));
+  const link=document.querySelector('nav.sidebar a[data-sec="'+sec+'"]');
+  if(link)link.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window.innerWidth<=780)sidebar.classList.remove('open');
+}
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.sec);});
+});
+
+/* ---------- Reading progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Keyword tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('mouseenter',()=>{
+    tip.innerHTML='<b>'+w.textContent.trim()+'</b><br>'+w.dataset.def;
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let left=r.left;
+    if(left+330>window.innerWidth)left=window.innerWidth-340;
+    tip.style.left=Math.max(10,left)+'px';
+    tip.style.top=(r.bottom+8)+'px';
+  });
+  w.addEventListener('mouseleave',()=>{tip.style.display='none';});
+});
+
+/* ---------- Speech (Web Speech API, replaced by pre-generated audio) ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+loadVoices();
+if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.onvoiceschanged=loadVoices;
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  const match=p=>en.find(p);
+  return match(v=>/Samantha|Google US English|Microsoft Aria|Daniel/i.test(v.name))
+      || match(v=>/en-US/i.test(v.lang))
+      || en[0]
+      || null;
+}
+function resetBtn(){
+  document.querySelectorAll('.play-btn,.speak-btn').forEach(b=>{
+    b.classList.remove('playing');
+    b.textContent=b.dataset.icon||'🔊';
+  });
+}
+function stopSpeech(){
+  if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  stopSpeech();
+  if(typeof window.speechSynthesis==='undefined')return;
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.rate=0.95; u.pitch=1;
+  u.onend=resetBtn; u.onerror=resetBtn;
+  if(btn){btn.classList.add('playing');btn.textContent='⏸';}
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- Segment texts (auto-extracted from the reading section) ---------- */
+const segmentTexts=[
+  "A Schubert quartet takes four players and as much time as it did a century ago, yet musicians' wages rise with everyone else's. Because all sectors hire in one labour market, pay rises even where hourly output does not; unit costs in stagnant sectors drift upward — not through failure, but through shared wages. If the aggregate rate is the weighted average of the sectoral ones, and the weight keeps migrating to the slow sector, the average falls.",
+  "Nordhaus named this the growth disease and tested it on American industry data from 1948 to 2001. A sector growing one point more slowly than the rest saw its relative price rise by about one point more; for real output the figure was roughly three-quarters of a point. Slow sectors were not merely dearer: they claimed a larger share of spending while producing less.",
+  "The model assumes that what the slow sector sells goes to the final consumer. In 2014 some 71 per cent of British business services output went to other firms, 75 per cent of American — against economy-wide figures of 40.8 and 40.7. Oulton observed in 2001 that this reverses the arithmetic: an intermediate service, however sluggish, accrues to the final good it enters. His conjecture rested on two provisos — that productivity in such services be positive, and their weight keep rising. Meet both, and tertiarisation lifts the aggregate rate. Baumol conceded the point.",
+  "Whether the provisos hold is empirical, and the evidence has not obliged. Using two releases of a shared productivity database, Hartwig and Krämer examined six of the largest seven economies: the weight of business services rose in every one, yet measured productivity there was negative, so structural change depressed growth throughout. Oulton blames measurement error; the compilers list organisational change and unobserved inputs among the alternatives. Half a century on, the quarrel is less about the theorem than about what the statistics record."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. What is the passage primarily concerned with? 本文的核心议题是什么？",opts:["Why live musical performance has become more expensive than recorded music","How a classic claim about slow services was tested, objected to, and then defended against the objection","The history of productivity measurement in the United States since 1948","Why wages in manufacturing have risen faster than wages in services"],ans:1,
+   fb:"正确。四段分明：段 1 用一个可感的例子推出机制并给出宏观结论；段 2 给出一次量化检验；段 3 提出一个足以翻转算术的反驳及其两个前提；段 4 检验那两个前提，并指出争论已经从结论层移到了数据层。B 覆盖这条主线。A 是开篇的例子，不是议题；C 把数据的年代当成了主题；D 与原文相反——本文说的恰恰是各部门工资趋于同步上涨。"},
+  {q:"2. According to paragraph 3, approximately what share of the gross output of British business services went to other firms in 2014? 依第三段，2014 年英国商务服务总产出中约有多大比例流向了其他企业？",opts:["40.8 per cent","40.7 per cent","About 71 per cent","About 75 per cent"],ans:2,
+   fb:"正确。原文写的是 In 2014 some 71 per cent of the gross output of British business services went to other firms，C 正是对它的换说法。D 是美国的比例，属于把 B 国数字安到 A 国上；A 与 B 是两国经济整体的中间消耗占比，被拿来当对照用的，不是商务服务的数字。数字题的干扰项几乎总是这样产生的：换对象、换分母、换年份。"},
+  {q:"3. The author mentions Nordhaus primarily in order to: 作者提到诺德豪斯，主要是为了：",opts:["Show that the model's predicted link between productivity and relative prices was supported by industry data","Argue that official productivity statistics systematically understate service output","Contrast the American experience of structural change with the European one","Explain why wages tend to rise at the same rate across all sectors"],ans:0,
+   fb:"正确。这是目的题。段 2 整段都在做一件事：把段 1 推出的机制拿去和一组行业数据对照，并报告「拟合得很紧」。A 正是它在论证中的位置。B 过头了，对统计口径的质疑出现在段 4，且是奥尔顿提出的；C 无据，本文从未做地区间的对比；D 是段 1 的机制，不是这段引用诺德豪斯的目的。"},
+  {q:"4. It can be inferred from paragraph 4 that the authors regard the negative productivity figures for business services as: 由第四段可推知，两位作者如何看待商务服务业的那些负增长数据？",opts:["Decisive proof that those industries have become less efficient over time","A sufficient reason to reject Oulton's reasoning as logically invalid","A measured result whose interpretation remains contested","An artefact confined to one or two of the economies studied"],ans:2,
+   fb:"正确。注意原文的两处措辞：measured productivity there was negative（是「测算出来的」，不是「实际就是」），紧接着又列出奥尔顿归因于测量误差、编制者列出组织变动与未观测投入等替代解释。C 正是这个立场。A 过头了，原文从未下这个断言；B 反了，原文说的是 Oulton's reasoning is logically consistent，被否定的只是它的前提；D 无据，原文写的是 rose in every one、throughout，六国皆然。"},
+  {q:"5. In paragraph 3, the word provisos most nearly means: 第三段中的 provisos 最接近下列哪个意思？",opts:["Conclusions drawn from the available data","Conditions that must be met for a claim to hold","Objections raised by critics of the model","Measurements of output per hour worked"],ans:1,
+   fb:"正确。破折号后紧跟着就是这两个条件的内容——生产率增长为正、权重持续上升——而且段 4 第一句用 Whether the provisos hold 回指它们，说明它们是「成立的前提」而不是别的。B 正确。A 把「结果」当成了「前提」；C 把「条件」误当成了「反对意见」，这是本题最容易掉进去的坑；D 与此处无关。做词汇题时把四个选项逐一代回原句，同时检查它与前后句的衔接，是排除这三项最快的办法。"},
+  {q:"6. Which of the following is NOT stated in the passage? 下列哪一项是文中没有表述的？",opts:["Nordhaus tested the model on American industry data from 1948 to 2001","Oulton has attributed the negative productivity figures to measurement error","The weight of business services rose in every one of the economies examined","Baumol rejected Oulton's argument as logically flawed"],ans:3,
+   fb:"正确。原文写的是 Baumol conceded the point（鲍莫尔接受了这一点），与 D 正好相反，所以 D 是文中没有表述、且与原文冲突的一项。严格说 NOT 题的选项应当是「文中未提及」，本题把它设计成「与原文相反」，是因为这类题在雅思里也常以这种形式出现——无论如何，定位后即可排除。A 见第 2 段；B 见第 4 段；C 见第 4 段的 rose in every one。做这类题的办法是把三个选项逐一回原文定位，剩下那一项往往不是错的，而是「未被言及」。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

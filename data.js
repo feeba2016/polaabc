@@ -10200,5 +10200,67 @@ const EPISODES = [
         "ex": "The <b>anachronism</b> lies with us — we need the genius to have been alone."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-27",
+    "title": "The Quartet That Never Got Faster",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-27-the-quartet-that-never-got-faster",
+    "url": "lessons/c1/2026-10-27-the-quartet-that-never-got-faster.html",
+    "vocab": [
+      {
+        "word": "stagnant",
+        "zh": "停滞的、不增长的。经济学里指技术进步缓慢、每小时产出几乎不提高的部门；常见搭配 stagnant sector、stagnant wages。注意它描述的是增长速度，不是绝对水平。",
+        "ex": "Unit costs in <b>stagnant</b> sectors therefore drift upward."
+      },
+      {
+        "word": "drift",
+        "zh": "缓慢地、非刻意地移动。经济写作里常指价格、成本、比率在没有明显推手的情况下逐渐上行；drift upward 即「缓缓走高」。它比 rise 更强调那种没有方向感的漂移。",
+        "ex": "Unit costs in stagnant sectors therefore <b>drift</b> upward."
+      },
+      {
+        "word": "aggregate",
+        "zh": "总体的、加总的。指把各部分合并后得到的总量，如 aggregate demand（总需求）、aggregate productivity growth（总生产率增长）。它强调的是合并后的那个数，而不是各个部分。",
+        "ex": "If the <b>aggregate</b> rate is the weighted average of the sectoral ones, the average falls."
+      },
+      {
+        "word": "intermediate",
+        "zh": "中间的、作为中间投入的。在国民核算里 intermediate input 指被其他企业买去用于生产、而非卖给最终消费者的产品与服务，与 final good 相对。注意它不等于「中等的」。",
+        "ex": "An <b>intermediate</b> service, however sluggish, accrues to the final good it enters."
+      },
+      {
+        "word": "accrue",
+        "zh": "累积、归到…名下。正式用法里常接 to，表示收益、成本或增长落到某处。它是不及物动词，这个意义下不用被动语态表达。",
+        "ex": "An intermediate service, however sluggish, <b>accrues</b> to the final good it enters."
+      },
+      {
+        "word": "conjecture",
+        "zh": "猜想、推测。指尚未被证实、但被提出以待检验的命题；语气弱于 theory，强于 guess。学术写作中用它来标明这只是个待检验的说法。",
+        "ex": "His <b>conjecture</b> rested on two provisos."
+      },
+      {
+        "word": "proviso",
+        "zh": "限制性条件、附条件。指某项主张成立所必须满足的前提，复数 provisos；常见短语 on the proviso that（条件是…）。它比 condition 更正式，通常写在主张之后而非之前。",
+        "ex": "His conjecture rested on two <b>provisos</b>."
+      },
+      {
+        "word": "tertiarisation",
+        "zh": "第三产业化、经济重心向服务业转移的过程。由 tertiary sector 加后缀构成，是结构变迁文献的专门术语；通俗说法是 the shift to services。",
+        "ex": "Meet both, and <b>tertiarisation</b> lifts the aggregate rate."
+      },
+      {
+        "word": "empirical",
+        "zh": "经验的、实证的。指依靠观测或数据而非纯推理得出的，如 empirical evidence。它与 theoretical 相对，但两者并不互斥。",
+        "ex": "Whether the provisos hold is <b>empirical</b>, and the evidence has not obliged."
+      },
+      {
+        "word": "oblige",
+        "zh": "施恩、帮忙、顺从要求。此处是较文雅的用法：the evidence has not obliged 意为证据并没有配合这个说法。obliged 作表语时常见义为感激的，如 I am much obliged，要注意区分。",
+        "ex": "Whether the provisos hold is empirical, and the evidence has not <b>obliged</b>."
+      }
+    ]
   }
 ];
