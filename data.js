@@ -7893,6 +7893,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-27",
+    "title": "The Bulb That Paid a Fine for Lasting",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-27-the-bulb-that-paid-a-fine-for-lasting",
+    "url": "lessons/b2/2026-10-27-the-bulb-that-paid-a-fine-for-lasting.html",
+    "vocab": [
+      {
+        "word": "cartel",
+        "zh": "卡特尔；同业联盟（读作 /kɑːˈtel/，重音在第二音节。form a cartel 结成卡特尔；a price-fixing cartel 操纵价格的卡特尔。指同业企业为避免竞争而订立的正式协议，通常涉及划分市场、限定产量与约定价格。它在绝大多数司法辖区被视为违法，因此这个词自带负面色彩；勿与 consortium 联营体（中性偏正面）混用）",
+        "ex": "\"... the largest lamp makers in Europe and the United States met in Geneva and formed a cartel.\""
+      },
+      {
+        "word": "levy",
+        "zh": "征收；课以（读作 /ˈlevi/，及物。levy a fine / a tax on someone 对某人处以罚款／征税。名词同形：a levy on imports 进口税。正式用语，主语通常是政府或权威机构，比 impose 更偏向“依法征收”而非单纯强加）",
+        "ex": "\"... on any bulb that lasted too long, as well as any that failed too soon, the cartel could levy a fine.\""
+      },
+      {
+        "word": "durability",
+        "zh": "耐用性；持久性（不可数，读作 /ˌdjʊərəˈbɪləti/。product durability 产品耐用性；durability testing 耐久性测试。形容词 durable 耐用的；动词 endure 持久忍耐。与之相对的固定说法正是本课主题 planned obsolescence 计划报废）",
+        "ex": "\"What made it notorious was the enforcement of a ceiling on durability.\""
+      },
+      {
+        "word": "obsolescence",
+        "zh": "报废；淘汰（不可数，读作 /ˌɒbsəˈlesns/，重音在第二音节。planned obsolescence 计划报废。形容词 obsolete 过时的、已废弃的，如 an obsolete format 已淘汰的格式。注意它不等于 old：obsolete 指“因被替代而失去用处”，一件全新的东西也可以是 obsolete）",
+        "ex": "\"For decades the affair has been read as the textbook case of planned obsolescence, ...\""
+      },
+      {
+        "word": "cite",
+        "zh": "引用；举出（作为例证）（读作 /saɪt/，及物。cite something as evidence / as proof 举某物为例证／证据；cite a study 引用一项研究。名词 citation 引文、（法律上的）传票。三个同音词务必分清：cite 引用 · site 地点 · sight 视力）",
+        "ex": "\"... and critics cite it as proof that durable bulbs were available and then suppressed.\""
+      },
+      {
+        "word": "arbitrary",
+        "zh": "任意的；武断的（读作 /ˈɑːbɪtrəri/，重音在第一音节。an arbitrary decision 武断的决定；an arbitrary threshold 人为划定的界限。语气偏负面，强调“没有依据、凭决定者一句话”。副词 arbitrarily。与 random 随机的 不同：arbitrary 是“凭人定”，random 是“无规律”）",
+        "ex": "\"A thousand hours was therefore not an arbitrary number in every respect.\""
+      },
+      {
+        "word": "threshold",
+        "zh": "门槛；临界值（读作 /ˈθreʃhəʊld/。a threshold of 70 per cent 百分之七十的临界点；below / above the threshold 低于／高于门槛；cross the threshold 越过门槛。原义是“门槛”，引申为“一旦越过就发生质变的那个点”，科技、经济、心理文本里极常见）",
+        "ex": "\"... but that figure describes a threshold, not a death: ...\""
+      },
+      {
+        "word": "deteriorate",
+        "zh": "恶化；劣化（读作 /dɪˈtɪəriəreɪt/，不及物。conditions deteriorate 情况恶化；deteriorate with age / heat 随年限／受热而劣化。强调“从好到坏的渐进过程”，主语通常是物或状态；说人的态度变坏不宜用它，可用 worsen 或 turn sour。名词 deterioration）",
+        "ex": "\"... capacitors that deteriorate in heat that a cheap heat sink cannot dissipate.\""
+      },
+      {
+        "word": "dissipate",
+        "zh": "散去；耗散（读作 /ˈdɪsɪpeɪt/，正式，及物或不及物。dissipate heat / energy 散热／耗散能量；the heat dissipates 热量散掉。物理与工程文本的高频词。引申义为“消散、浪费掉”，如 dissipate one's energy 把精力耗光。名词 dissipation 耗散）",
+        "ex": "\"... in heat that a cheap heat sink cannot dissipate.\""
+      },
+      {
+        "word": "mandate",
+        "zh": "强制要求；规定（读作 /mænˈdeɪt/。mandate that someone (should) do something 规定某人必须做某事，从句常用虚拟式原形（尤其美式）。作名词意为“授权、任期”：a five-year mandate 五年任期。形容词 mandatory 强制的，如 mandatory testing 强制检测）",
+        "ex": "\"... and ecodesign rules increasingly mandate that makers disclose how long spare parts will stay available.\""
+      },
+      {
+        "word": "disclose",
+        "zh": "披露；公开（读作 /dɪsˈkləʊz/，正式，及物。disclose information / figures 披露信息／数据；disclose that ... 透露……。名词 disclosure，是新闻、法律、金融文本的核心词：financial disclosure 财务披露。比 reveal 更偏向正式程序下的公开）",
+        "ex": "\"... ecodesign rules increasingly mandate that makers disclose how long spare parts will stay available.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
