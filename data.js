@@ -7960,6 +7960,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-10-28",
+    "title": "The Mistake That Shrinks When You Copy It",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-10-28-the-mistake-that-shrinks-when-you-copy-it",
+    "url": "lessons/b2/2026-10-28-the-mistake-that-shrinks-when-you-copy-it.html",
+    "vocab": [
+      {
+        "word": "fragile",
+        "zh": "脆弱的；易损的（读作 /ˈfrædʒaɪl/。a fragile qubit 脆弱的量子比特；a fragile ceasefire 脆弱的停火。既可用于实物，也可用于抽象事物：a fragile relationship 脆弱的关系。名词 fragility 脆弱性）",
+        "ex": "\"A quantum computer is assembled from the most fragile components in engineering: ...\""
+      },
+      {
+        "word": "decohere",
+        "zh": "退相干；失去量子相干性（读作 /ˌdiːkəʊˈhɪə/，不及物。名词 decoherence。词根 cohere 黏合、连贯，加否定前缀 de- 后表示“散开、失去关联”。主语是量子态，不是人）",
+        "ex": "\"... a physical qubit holds its state for a fraction of a millisecond before it decoheres, ...\""
+      },
+      {
+        "word": "redundancy",
+        "zh": "冗余；重复备份（读作 /rɪˈdʌndənsi/，重音在第二音节。built-in redundancy 内置冗余。工程里是褒义：故意多出来的部分，用来换可靠。注意它在人力资源语境里意为“裁员”，靠上下文区分）",
+        "ex": "\"... using redundancy not to repeat the message but to let errors betray themselves.\""
+      },
+      {
+        "word": "threshold",
+        "zh": "门槛；临界值（读作 /ˈθreʃhəʊld/。below / above the threshold 低于／高于临界值；cross the threshold 越过临界点。本课专指纠错阈值：低于它，加大编码才越纠越对；高于它，越纠越错）",
+        "ex": "\"... the physical error rate must sit below a critical threshold.\""
+      },
+      {
+        "word": "syndrome",
+        "zh": "校正子；综合征（读作 /ˈsɪndrəʊm/。syndrome measurement 校正子测量。借自医学，在量子纠错里指“测量得到的那组错误线索”——它只说哪里可能错了，不说量子态是什么，这正是绕开不可克隆定理的关键）",
+        "ex": "\"... a distance-7 surface code held a logical qubit at 0.143 per cent error per cycle of syndrome measurement; ...\""
+      },
+      {
+        "word": "suppress",
+        "zh": "抑制；压制（读作 /səˈpres/，及物。suppress an error 抑制错误；suppress inflation 抑制通胀。强调“压下去使它不表现出来”，不等于“消灭”。名词 suppression）",
+        "ex": "\"... increasing the code distance by two suppressed the logical error by a factor of 2.14.\""
+      },
+      {
+        "word": "exponential",
+        "zh": "指数的；指数级的（读作 /ˌekspəˈnenʃl/，重音在第三音节。exponential growth / decay 指数增长／衰减。副词 exponentially。书面语里应保留“按固定倍数反复相乘”的本义，不要只当“很快”用）",
+        "ex": "\"... the suppression is exponential, each step in size buying another division.\""
+      },
+      {
+        "word": "constituent",
+        "zh": "组成的；成分（读作 /kənˈstɪtjuənt/，重音在第二音节。its constituent physical qubits 构成它的那些物理量子比特。只能放在名词前，不用于表语。作名词另可指“选民”）",
+        "ex": "\"The encoded qubit also outlived the best of its constituent physical qubits by about 2.4 times, ...\""
+      },
+      {
+        "word": "latency",
+        "zh": "延迟；等待时间（读作 /ˈleɪtənsi/。decoder latency 解码延迟；low-latency networks 低延迟网络。原义“潜伏”，在计算机与网络文本里指“从发出请求到收到回应之间那段等待”。比 delay 更强调系统性而非偶发性）",
+        "ex": "\"... the decoder returned its verdict at an average latency of 63 microseconds, ...\""
+      },
+      {
+        "word": "correlated",
+        "zh": "相关的；有关联的（读作 /ˈkɒrəleɪtɪd/。correlated errors 关联错误；correlated with 与……相关。统计里 correlation 指共同变化，<b>不等于因果</b>。量子纠错里特指“多个比特同时出错”，最危险，因为编码假设错误各自独立）",
+        "ex": "\"... rare correlated errors striking many qubits at once, roughly once an hour, ...\""
+      },
+      {
+        "word": "overhead",
+        "zh": "开销；额外成本（读作 /ˈəʊvəhed/，重音在第一音节。memory overhead 内存开销；communication overhead 通信开销；商业里指管理费用。<b>不可数</b>，不说 an overhead）",
+        "ex": "\"Overhead, not ingenuity, separates a demonstration from a machine.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

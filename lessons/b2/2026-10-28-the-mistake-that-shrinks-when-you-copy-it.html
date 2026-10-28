@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Mistake That Shrinks When You Copy It</title>
+<style>
+:root{
+  --accent:#475569;
+  --accent2:#0891b2;
+  --bg:#f6f8fa;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#bae6fd;
+  --border:#dde3ea;
+  --soft:#eef2f7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(71,85,105,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(71,85,105,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(71,85,105,.5);}70%{box-shadow:0 0 0 12px rgba(71,85,105,0);}100%{box-shadow:0 0 0 0 rgba(71,85,105,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#7dd3fc;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(71,85,105,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#bae6fd;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Technology 科技前沿</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Mistake That Shrinks When You Copy It</h1>
+      <p class="subtitle">量子比特极其脆弱，多加几个却可能让情况更糟——除非物理错误率低于一条临界线。2024 年 12 月，这条线第一次被真正跨过；而决定量子计算机究竟要造多大的，是另一个叫 Λ 的数｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Paradox of Adding More 越加越糟的悖论</div>
+            <p>A quantum computer is assembled from the most <span class="kw" data-def="脆弱的；易损的（形容词，读作 /ˈfrædʒaɪl/，英式，美式常读作 /ˈfrædʒl/。a fragile qubit 脆弱的量子比特；a fragile ceasefire 脆弱的停火。它指“一碰就坏、经不起扰动”，既可用于实物也可用于抽象事物（关系、和平、信心）。名词 fragility 脆弱性；副词 fragilely 极少用，通常改说 in a fragile state">fragile</span> components in engineering: a physical qubit holds its state for a fraction of a millisecond before it <span class="kw" data-def="退相干；失去量子相干性（动词，读作 /ˌdiːkəʊˈhɪə/，不及物）。the qubit decoheres 量子比特退相干；decoherence 是名词，也是量子计算文本里最常出现的词之一。词根 cohere 本义是“黏合、连贯”，加否定前缀 de- 后表示“散开、失去关联”。注意它的主语是量子态，不是人">decoheres</span>, surrendering the calculation to noise. The obvious remedy — make copies — is forbidden by the no-cloning theorem. What engineers do instead is spread one logical qubit across many physical ones, using <span class="kw" data-def="冗余；重复备份（不可数名词，读作 /rɪˈdʌndənsi/，重音在第二音节。built-in redundancy 内置冗余；redundancy in a code 编码中的冗余。工程里它是褒义：故意多出来的部分，用来换取可靠。注意它在人力资源语境里另有“裁员”之意，阅读时要靠上下文区分">redundancy</span> not to repeat the message but to let errors betray themselves. Here lies the paradox: correction is itself built from noisy parts, and every added qubit, gate and measurement brings fresh ways to fail. Whether the trade pays off depends on one condition — the physical error rate must sit below a critical <span class="kw" data-def="门槛；临界值（名词，读作 /ˈθreʃhəʊld/。below / above the threshold 低于／高于临界值；cross the threshold 越过临界点。原义是“门槛”，引申为“一旦越过就发生质变的那个点”。本课里它专指纠错阈值：物理错误率低于它，加大编码才会越纠越对；高于它，越纠越错">threshold</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Crossing the Line 跨过那条线</div>
+            <p>In December 2024 Google Quantum AI reported in Nature what the field had chased for decades: on a 105-qubit superconducting processor, a distance-7 surface code held a logical qubit at 0.143 per cent error per cycle of <span class="kw" data-def="校正子；症候（名词，读作 /ˈsɪndrəʊm/）。syndrome measurement 校正子测量；syndrome extraction 校正子提取。借自医学（综合征），在量子纠错里指“测量得到的那组错误线索”——它只告诉你哪里可能错了，不告诉你量子态本身是什么，这正是绕开不可克隆定理的关键">syndrome</span> measurement, and increasing the code distance by two <span class="kw" data-def="抑制；压制（动词，读作 /səˈpres/，及物。suppress an error / a signal 抑制错误／信号；suppress inflation 抑制通胀。它强调“压下去使它不表现出来”，并不等于“消灭”。名词 suppression，正是本课第 2 段的核心词：the suppression is exponential 这种抑制是指数级的">suppressed</span> the logical error by a factor of 2.14. Because that figure is a ratio, its effect compounds — the suppression is <span class="kw" data-def="指数的；指数级的（形容词，读作 /ˌekspəˈnenʃl/，重音在第三音节。exponential growth / decay 指数增长／衰减；an exponential improvement 指数级改善。副词 exponentially，学术写作里极常用的加强词。注意日常口语里常被夸张地用来表示“非常快”，书面语里应保留“按固定倍数反复相乘”的本义">exponential</span>, each step in size buying another division. The encoded qubit also outlived its best <span class="kw" data-def="组成的；构成部分的（形容词，读作 /kənˈstɪtjuənt/，重音在第二音节。its constituent physical qubits 构成它的那些物理量子比特；the constituent parts of a system 系统的组成部分。作名词时意为“成分”或“选民”。注意它永远放在名词前，不用于表语（不说 the parts are constituent）">constituent</span> physical qubit by about 2.4 times. Speed mattered too: the decoder’s average <span class="kw" data-def="延迟；等待时间（名词，读作 /ˈleɪtənsi/，不可数或可数。decoder latency 解码延迟；low-latency networks 低延迟网络。原义是“潜伏”，在计算机与网络文本里指“从发出请求到收到回应之间那段等待”。与 lag 相比更技术、更中性；与 delay 相比更强调系统性而非偶发性">latency</span> was 63 microseconds, tolerable because its verdict can be folded in afterwards. Long runs hit a floor — rare <span class="kw" data-def="相关的；有关联的（形容词，读作 /ˈkɒrəleɪtɪd/。correlated errors 关联错误；correlated with something 与某事物相关。统计里 correlation 指两个变量共同变化，但不等于因果。量子纠错里的 correlated error 特指“多个比特同时出错”——它最危险，因为编码假设错误是各自独立的">correlated</span> errors striking many qubits at once, roughly once an hour, whose origin nobody understands.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Slope That Decides Everything 决定一切的斜率</div>
+            <p>What matters most, however, is not any single error rate but the slope, conventionally written Λ — the factor <span class="kw" data-def="by which 是“介词 + 关系代词”引导的定语从句，此处修饰 the factor。还原为 the logical error falls by the factor。选哪个介词取决于从句里的搭配：fall by a factor 按某一倍数下降 ⇒ by which；in which 表地点或方式；for which 表原因或目的。正式文体里这个结构极常见，而口语中常把介词留在句尾">by which</span> the logical error falls each time the code distance grows by two. It is the compounding interest of fault tolerance: a slope near two means one extra decimal place of reliability costs dozens of physical qubits, a slope of twelve only a handful. In October 2026 a trapped-ion processor ran a triangular color code at distances 3, 5 and 7 through twenty-nine thousand attempts, of which three came back wrong — about five logical errors per million rounds, with Λ near 12. A specialist outside the work noted that a machine scaled on that slope could reach useful reliability under a million physical qubits.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What It Costs 代价</div>
+            <p>That last number is the whole argument. At a physical error rate near 0.1 per cent, a surface code must reach a distance of about twenty before the logical error approaches one in a trillion, and a distance-d code costs roughly 2d² physical qubits — close to a thousand for one protected qubit. A machine with a thousand logical qubits therefore implies on the order of a million physical ones, before the factories, wiring and refrigeration are counted. Speed suffers too — one logical operation takes tens of microseconds. <span class="kw" data-def="开销；额外成本（名词，读作 /ˈəʊvəhed/，重音在第一音节）。overhead 在计算机科学里指“为达成目标而额外付出的资源”，如 memory overhead 内存开销、communication overhead 通信开销；在商业里指“管理费用”。它是不可数名词，不说 an overhead。本课落点正是这个词：overhead, not ingenuity, separates a demonstration from a machine">Overhead</span>, not ingenuity, separates a demonstration from a machine. Error correction does not rescue a bad qubit; it rewards one already good enough to deserve being copied.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+        <div class="card" style="background:var(--soft);">
+          <p style="margin:0;font-size:14.5px;color:#4b5563;"><b>背景速览：</b>surface code 表面码是把许多物理量子比特排成方格、用相邻测量反复检查的一种纠错方案；code distance 码距越大，能容忍的错误越多，代价是需要的比特数按平方增长。Λ（lambda）指码距每增加 2、逻辑错误率下降的倍数。文中 2024 年 12 月的结果发表于《Nature》（105 比特超导处理器，码距 7，每轮纠错错误率 0.143%，Λ ≈ 2.14）；2026 年 10 月的结果来自离子阱处理器上的三角 color code（码距 3／5／7，约五百万分之一每轮，Λ ≈ 12）。两者路线不同，此处只陈述事实，不作优劣比较。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fragile">🔊</button><div class="word">fragile<span class="pos">adj.</span></div><div class="zh">脆弱的；易损的（读作 /ˈfrædʒaɪl/。a fragile qubit 脆弱的量子比特；a fragile ceasefire 脆弱的停火。既可用于实物，也可用于抽象事物：a fragile relationship 脆弱的关系。名词 fragility 脆弱性）</div><div class="ex">"A quantum computer is assembled from the most fragile components in engineering: ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="decohere">🔊</button><div class="word">decohere<span class="pos">v.</span></div><div class="zh">退相干；失去量子相干性（读作 /ˌdiːkəʊˈhɪə/，不及物。名词 decoherence。词根 cohere 黏合、连贯，加否定前缀 de- 后表示“散开、失去关联”。主语是量子态，不是人）</div><div class="ex">"... a physical qubit holds its state for a fraction of a millisecond before it decoheres, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="redundancy">🔊</button><div class="word">redundancy<span class="pos">n.</span></div><div class="zh">冗余；重复备份（读作 /rɪˈdʌndənsi/，重音在第二音节。built-in redundancy 内置冗余。工程里是褒义：故意多出来的部分，用来换可靠。注意它在人力资源语境里意为“裁员”，靠上下文区分）</div><div class="ex">"... using redundancy not to repeat the message but to let errors betray themselves."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="threshold">🔊</button><div class="word">threshold<span class="pos">n.</span></div><div class="zh">门槛；临界值（读作 /ˈθreʃhəʊld/。below / above the threshold 低于／高于临界值；cross the threshold 越过临界点。本课专指纠错阈值：低于它，加大编码才越纠越对；高于它，越纠越错）</div><div class="ex">"... the physical error rate must sit below a critical threshold."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="syndrome">🔊</button><div class="word">syndrome<span class="pos">n.</span></div><div class="zh">校正子；综合征（读作 /ˈsɪndrəʊm/。syndrome measurement 校正子测量。借自医学，在量子纠错里指“测量得到的那组错误线索”——它只说哪里可能错了，不说量子态是什么，这正是绕开不可克隆定理的关键）</div><div class="ex">"... a distance-7 surface code held a logical qubit at 0.143 per cent error per cycle of syndrome measurement; ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="suppress">🔊</button><div class="word">suppress<span class="pos">v.</span></div><div class="zh">抑制；压制（读作 /səˈpres/，及物。suppress an error 抑制错误；suppress inflation 抑制通胀。强调“压下去使它不表现出来”，不等于“消灭”。名词 suppression）</div><div class="ex">"... increasing the code distance by two suppressed the logical error by a factor of 2.14."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="exponential">🔊</button><div class="word">exponential<span class="pos">adj.</span></div><div class="zh">指数的；指数级的（读作 /ˌekspəˈnenʃl/，重音在第三音节。exponential growth / decay 指数增长／衰减。副词 exponentially。书面语里应保留“按固定倍数反复相乘”的本义，不要只当“很快”用）</div><div class="ex">"... the suppression is exponential, each step in size buying another division."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="constituent">🔊</button><div class="word">constituent<span class="pos">adj. / n.</span></div><div class="zh">组成的；成分（读作 /kənˈstɪtjuənt/，重音在第二音节。its constituent physical qubits 构成它的那些物理量子比特。只能放在名词前，不用于表语。作名词另可指“选民”）</div><div class="ex">"The encoded qubit also outlived the best of its constituent physical qubits by about 2.4 times, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="latency">🔊</button><div class="word">latency<span class="pos">n.</span></div><div class="zh">延迟；等待时间（读作 /ˈleɪtənsi/。decoder latency 解码延迟；low-latency networks 低延迟网络。原义“潜伏”，在计算机与网络文本里指“从发出请求到收到回应之间那段等待”。比 delay 更强调系统性而非偶发性）</div><div class="ex">"... the decoder returned its verdict at an average latency of 63 microseconds, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="correlated">🔊</button><div class="word">correlated<span class="pos">adj.</span></div><div class="zh">相关的；有关联的（读作 /ˈkɒrəleɪtɪd/。correlated errors 关联错误；correlated with 与……相关。统计里 correlation 指共同变化，<b>不等于因果</b>。量子纠错里特指“多个比特同时出错”，最危险，因为编码假设错误各自独立）</div><div class="ex">"... rare correlated errors striking many qubits at once, roughly once an hour, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="overhead">🔊</button><div class="word">overhead<span class="pos">n.</span></div><div class="zh">开销；额外成本（读作 /ˈəʊvəhed/，重音在第一音节。memory overhead 内存开销；communication overhead 通信开销；商业里指管理费用。<b>不可数</b>，不说 an overhead）</div><div class="ex">"Overhead, not ingenuity, separates a demonstration from a machine."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 本课的“可靠”词链：</b>fragile 脆弱 → decohere 退相干 → <b>redundancy 冗余</b> → syndrome 校正子 → <b>suppress 抑制</b> → exponential 指数级。写科技类说明文时，这条链几乎可以整段套用。<br>
+        <b>② 三个易混的“错”：</b>error 错误（泛指计算结果不对）→ fault 故障（硬件或部件本身坏了）→ failure 失效（整个系统停摆）。<b>fault-tolerant 容错</b>用的是 fault，不是 error。<br>
+        <b>③ -ency / -ence 结尾的名词：</b><b>latency 延迟</b> · coherence 相干性 · resilience 恢复力 · efficiency 效率。它们几乎都是不可数的抽象名词，是学术写作的主语常客。<br>
+        <b>④ suppress 一族：</b>suppress 抑制 → suppression 抑制（行为）→ suppressor 抑制器。前缀 sup-（＝ sub-，向下）＋ press 压，字面就是“压下去”。同族：compress 压缩、depress 使沮丧／压低、oppress 压迫。<br>
+        <b>⑤ exponential 的程度阶梯：</b>slight 轻微 → noticeable 明显 → substantial 显著 → <b>exponential 指数级</b> → dramatic 戏剧性。写作里别动不动就用 exponential，它的本义是“按固定倍数反复相乘”，没有倍数关系就别用。<br>
+        <b>⑥ 一个高频对比：</b><b>correlation ≠ causation</b>（相关不等于因果）。这是所有学术写作的通则，本课用 correlated errors 时同样要小心：它描述的是“同时发生”，并未说明为什么同时发生。</p>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. 完全倒装：Here lies the paradox · Here lies the paradox: correction is itself built from noisy parts ...</h3>
+          <div class="zh">结构：<b>Here / There + 谓语动词 + 主语</b>。当句首是 here、there 等地点副词，且主语是名词（不是代词）时，谓语要整个提到主语之前。比较：正常语序 <i>The paradox lies here</i> → 倒装后 <i>Here lies the paradox</i>。作用有二：把前文讨论已久的那个东西放在句末形成悬念，同时让 here 与上文紧密衔接。<b>注意</b>：主语若是代词则不倒装——<i>Here it is</i>（不是 Here is it）。</div>
+          <div class="eg"><b>Here lies the paradox</b>: correction is itself built from noisy parts, and every added qubit, gate and measurement brings fresh ways to fail.</div>
+          <div class="practice">✍️ 仿写：问题就在这里：修得越多，出错的地方也越多。<input type="text" placeholder="Here lies the problem: ..."></div>
+        </div>
+        <div class="item">
+          <h3>2. Whether 引导的名词性从句作主语 · Whether the trade pays off depends on one condition ...</h3>
+          <div class="zh">结构：<b>Whether + 陈述句 + 单数谓语</b>，整个从句充当句子的主语，等于 <i>the question of whether ...</i>。它表达“是否”这一未定之事，后面常接 depends on、remains、is unclear 之类。与第 4 段另一个主语从句 <i>What matters most is not any single error rate but the slope</i> 是同一家族。<b>注意</b>：主语从句只能用 <b>whether</b>，不能用 if。</div>
+          <div class="eg"><b>Whether the trade pays off depends on</b> one condition — the physical error rate must sit below a critical threshold.</div>
+          <div class="practice">✍️ 仿写：这套方案能不能推广，取决于成本。<input type="text" placeholder="Whether ... depends on ..."></div>
+        </div>
+        <div class="item">
+          <h3>3. not ... but ... 平行结构 · ... using redundancy not to repeat the message but to let errors betray themselves.</h3>
+          <div class="zh">结构：<b>not X but Y</b>，X 与 Y 必须语法平行——这里是两个<b>不定式</b>：not to repeat ... but to let ...。作用是先否定一个常见误解，再推出真正的要点，是议论性写作里最有力的一刀。检验办法：把 not 与 but 后面的成分单独抽出来，看能否互换位置而句子仍然成立。<b>注意</b>书面语里 but 前通常加逗号。</div>
+          <div class="eg">... using redundancy <b>not to repeat</b> the message <b>but to let</b> errors betray themselves.</div>
+          <div class="practice">✍️ 仿写：备份的目的不是把原文抄一遍，而是让错误自己暴露出来。<input type="text" placeholder="... not to ..., but to ..."></div>
+        </div>
+        <div class="item">
+          <h3>4. 独立主格（名词 + 现在分词）· ... the suppression is exponential, each step in size buying another division.</h3>
+          <div class="zh">结构：<b>名词 / 代词 + 现在分词</b>，自带逻辑主语，与主句用逗号隔开，相当于一个省略的状语从句：<i>as each step in size buys another division</i>。它把一句完整的从句压成五个词，是学术写作里压缩句子最常用的一招。<b>两条铁律</b>：（a）它的逻辑主语与主句主语<b>不同</b>（此处主句主语是 the suppression，独立主格的主语是 each step）；（b）它<b>没有谓语动词</b>，不能写成 each step buys（那是完整句，会造成逗号粘连）。</div>
+          <div class="eg">... the suppression is exponential, <b>each step in size buying</b> another division.</div>
+          <div class="practice">✍️ 仿写：成本每季度都在下降，规模每翻一番就省下一半。<input type="text" placeholder="..., each doubling saving ..."></div>
+        </div>
+        <div class="item">
+          <h3>5. 介词 + 关系代词引导定语从句 · ... the factor by which the logical error falls each time the code distance grows by two.</h3>
+          <div class="zh">结构：<b>名词 + 介词 + which / whom + 从句</b>。介词由从句内部的搭配决定：逻辑错误率<i>按</i>某个倍数下降，英语说 fall <b>by</b> a factor，所以是 <b>by which</b>。同类还有 <i>the rate at which heat dissipates</i>（at a rate）、<i>the basis on which the claim rests</i>（on the basis）。<b>判断方法</b>：把先行词代回从句，看缺哪个介词。<b>注意</b>：口语里常把介词丢在句尾（the factor which the error falls by），正式写作中则应前置。</div>
+          <div class="eg">What matters most, however, is not any single error rate but the slope, conventionally written Λ — <b>the factor by which</b> the logical error falls each time the code distance grows by two.</div>
+          <div class="practice">✍️ 仿写：这就是温度变化所依据的那条曲线。<input type="text" placeholder="This is the curve by which ..."></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar in Depth</h2>
+      <p class="subtitle">5 个语法点，例句均来自本课正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① 完全倒装：Here / There 开头的句子</h3>
+          <div class="zh">触发条件有三条，缺一不可：<br>· 句首是 <b>here / there / now / then</b> 等副词，或是地点介词短语（<i>In a quiet room sits the machine</i>）；<br>· 主语是<b>名词或名词短语</b>（若是代词则不倒装：Here it comes，不是 Here comes it）；<br>· 谓语动词是不及物的 <b>be / lie / stand / sit / come / remain</b> 等。<br>它与<b>部分倒装</b>要分清：Never / Seldom / Not only 开头只把助动词提前（<i>Never had they seen such a floor</i>），主语和谓语的相对位置不变；而完全倒装是<b>整个谓语</b>跑到主语前面。<br>常见错误是把进行时也倒装错了：<i>Here is coming the bus</i>（错）→ <i>Here comes the bus</i>（对）。</div>
+          <div class="eg">正文原句：<b>Here lies the paradox</b>: correction is itself built from noisy parts ...<br>可改写为 There remains a floor that nobody yet understands.</div>
+        </div>
+        <div class="item">
+          <h3>② Whether 引导的名词性从句 vs. if</h3>
+          <div class="zh">两者都表示“是否”，但分工严格：<br>· 作<b>主语、表语、同位语</b>时，只能用 <b>whether</b>：<i>Whether it works remains to be seen</i>（不可用 if）；<br>· 作<b>介词宾语</b>时，只能用 whether：<i>It depends on whether the rate is low enough</i>；<br>· 作<b>动词宾语</b>时两者皆可，但正式文体更倾向 whether：<i>We tested whether / if the code held</i>；<br>· <b>whether or not</b> 可连用，if 一般不与 or not 紧邻（<i>if or not</i> 错）；<br>· 后接<b>不定式</b>时只能用 whether：<i>whether to scale up</i>。<br>本课两处主语从句正是典型：Whether the trade pays off ... / What matters most is ...</div>
+          <div class="eg">正文原句：<b>Whether the trade pays off</b> depends on one condition — the physical error rate must sit below a critical threshold.<br>正文原句：<b>What matters most</b>, however, is not any single error rate but the slope.</div>
+        </div>
+        <div class="item">
+          <h3>③ not ... but ... 的平行与“把话说窄”</h3>
+          <div class="zh">· <b>平行是硬要求</b>：名词对名词、不定式对不定式、从句对从句。本课第 3 段还出现 <i>not any single error rate but the slope</i>（名词对名词）。<br>· 标点：书面语里 but 前加逗号；口语里常省略。<br>· 同类表达还有 <b>rather than</b>（而不是）、<b>not so much A as B</b>（与其说是 A 不如说是 B）、<b>anything but</b>（根本不是）。<br>· 修辞作用：这个结构最适合做“<b>把话说窄</b>”的动作——先承认常识版本里合理的那部分，再把批评精确限定在真正站得住的那一点上。本课末尾的 <i>Overhead, not ingenuity, separates a demonstration from a machine</i>、以及 <i>Error correction does not rescue a bad qubit; it rewards one already good enough ...</i> 都是同一个招式。</div>
+          <div class="eg">正文原句：... using redundancy <b>not to repeat</b> the message <b>but to let</b> errors betray themselves.<br>正文原句：<b>Overhead, not ingenuity</b>, separates a demonstration from a machine.</div>
+        </div>
+        <div class="item">
+          <h3>④ 独立主格：名词 + 分词</h3>
+          <div class="zh">构成：<b>逻辑主语 + 现在分词 / 过去分词 / 形容词 / 介词短语</b>，与主句用逗号隔开。<br>· 现在分词表<b>主动进行</b>：<i>each step buying another division</i>；<br>· 过去分词表<b>被动完成</b>：<i>the cycle completed, the decoder returned</i>；<br>· 省略分词：<i>the answer folded in afterwards</i>（本课第 2 段末）、<i>his hands in his pockets</i>。<br><b>三条注意</b>：（a）它的逻辑主语<b>不能</b>与主句主语相同，否则就是分词作状语（<i>Walking home, I saw it</i>）；（b）它<b>不是完整句</b>，不能自带时态；（c）正式文体里可用 <b>with</b> 引出：<i>with each step buying another division</i>。<br>功能上，它把一层从句压成一个短语，是学术英语里压缩信息密度的核心手段。</div>
+          <div class="eg">正文原句：... the suppression is exponential, <b>each step in size buying</b> another division.<br>正文原句：... tolerable because the answer can be <b>folded in</b> afterwards.</div>
+        </div>
+        <div class="item">
+          <h3>⑤ 介词 + which / whom 的定语从句</h3>
+          <div class="zh">选择介词的唯一依据是<b>从句内部的固定搭配</b>。判断方法：把先行词代回从句，看缺哪个介词。<br>· <b>by which</b>：fall <b>by</b> a factor（按倍数变化）、the method <b>by</b> which（凭方法）；<br>· <b>at which</b>：the rate <b>at</b> which、the temperature <b>at</b> which；<br>· <b>for which</b>：the reason <b>for</b> which、be responsible <b>for</b> which；<br>· <b>in which</b>：the way <b>in</b> which、a system <b>in</b> which；<br>· 指人时用 <b>whom</b>：the specialist <b>with</b> whom we spoke。<br><b>三条注意</b>：（a）介词前置后<b>不能</b>再用 that；（b）<b>whose</b> 可替代表所属：<i>a processor whose qubits number 105</i>；（c）口语中把介词留在句尾完全正确，只是正式写作里前置更受青睐。</div>
+          <div class="eg">正文原句：... conventionally written Λ — <b>the factor by which</b> the logical error falls each time the code distance grows by two.<br>正文原句：... through twenty-nine thousand attempts, <b>of which</b> three came back wrong ...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、为什么“多加几个”反而可能更糟</h3>
+        <p>量子计算机最反直觉的地方，就在“备份”这两个字上。</p>
+        <p>普通的电脑靠复制来保平安：一份文件存三处，坏了一处还有两处。但量子态有一条硬规矩——<b>不可克隆定理</b>：一个未知的量子态无法被原样复制。你没法把它抄一份放着。于是工程师换了思路：<b>不去复制，而是把一个逻辑比特的信息摊开到许多物理比特上</b>。这些物理比特之间彼此纠缠，你只要反复去测那些“关系”（也就是校正子 syndrome），就能知道哪里出了错，而且<b>始终不需要去测那个信息本身</b>——一旦测了，量子态就塌缩了，计算也就没了。</p>
+        <p>问题随之而来。检查是靠额外的量子比特、额外的门操作、额外的测量完成的，而<b>这些新增的东西自己也会出错</b>。所以并不是“加得越多越安全”：如果每个零件本身太不可靠，你加进来的错误会比修掉的错误更多，结果是越纠越错。这就是<b>阈值定理</b>要说的事——只有当物理错误率低于某个临界值，把码距加大才会让逻辑错误率<b>指数级</b>下降；高于这个值，越加越糟。</p>
+        <p>一个很好用的比喻是投票：让一群人一起判断，人越多结果越准——<b>但这只在每个人单独判断的准确率高过某个门槛时才成立</b>。如果每个人正确率还不到一半，那么人越多，投出来的结果反而越离谱。量子纠错不是把坏比特修好，而是<b>奖励那些本来就足够好的比特</b>。</p>
+
+        <h3>二、2024 年 12 月那篇 Nature：这几个数字各是什么意思</h3>
+        <table class="facts">
+          <tr><th>数字</th><th>含义</th><th>为什么重要</th></tr>
+          <tr><td>105 个物理比特</td><td>处理器上可用的量子比特总数</td><td>规模只是前提，不是成绩；真正被保护的是其中的一个逻辑比特</td></tr>
+          <tr><td>码距 7</td><td>distance-7 表面码，用 49 个数据比特编码 1 个逻辑比特</td><td>码距越大，能同时容忍的错误越多，代价是比特数按平方增长</td></tr>
+          <tr><td>0.143% 每轮</td><td>每一轮校正子测量之后，逻辑比特出错的概率</td><td>它必须比单个物理比特出错的概率更低，否则编码就是白做</td></tr>
+          <tr><td>Λ ≈ 2.14</td><td>码距每增加 2，逻辑错误率下降的倍数</td><td>这是“斜率”，决定了要造多大才够用——见下一节</td></tr>
+          <tr><td>2.4 倍</td><td>逻辑比特的寿命 ÷ 最好的那个物理比特的寿命</td><td>越过所谓 breakeven 盈亏平衡点：编码终于比不编码活得久</td></tr>
+          <tr><td>63 微秒</td><td>译码器给出判断的平均延迟（码距 5）</td><td>经典计算机必须跟得上量子芯片，否则纠错来不及</td></tr>
+        </table>
+        <p>其中有两个细节值得单独拿出来说，因为它们正好示范了“<b>把话说窄</b>”。</p>
+        <ul>
+          <li><b>延迟比周期长，却仍然可用。</b>一轮纠错只要 1.1 微秒，而译码器平均要 63 微秒才给出答案。这听起来像是跟不上，实际上可以：译码器允许<b>落后于</b>量子芯片，把它的判断在事后折回去算。工程上的“实时”往往不是字面意义上的同步。</li>
+          <li><b>存在一个没人解释得清的地板。</b>把实验拉长之后，逻辑错误率没有继续按指数下降，而是撞上了一层底——大约每小时发生一次的<b>关联错误</b>：许多比特在同一瞬间一起出错。表面码的基本假设是错误各自独立，而这类事件正好违反了这个假设。它们的来源<b>至今不明</b>，这也是该论文自己列出的开放问题。</li>
+        </ul>
+        <p>顺便记一个事实：同一时期，中国科学技术大学团队基于 107 比特“祖冲之 3.2 号”超导处理器，于 2025 年 12 月在《物理评论快报》报告了码距为 7 的表面码逻辑比特，错误抑制因子约 1.4，并采用了全微波的量子态泄漏抑制架构。这里只列出可查的事实，<b>不对不同研究团队或技术路线作任何优劣比较</b>。</p>
+
+        <h3>三、Λ 才是最要紧的那个数</h3>
+        <p>把注意力从“现在错误率有多低”挪到“每加大一圈能降多少”，是理解量子计算现状的关键一步。这个斜率通常写作希腊字母 Λ（lambda）。</p>
+        <p>它的作用类似复利。假设 Λ = 2，那么你想让可靠性提高十倍，就得把码距往上加好几级，每一级都要多出几十个物理比特；假设 Λ = 12，同样的十倍可能只要多几个比特。<b>Λ 直接决定了那台机器最后要造多大</b>，也决定了它到底是“理论上可行”还是“工程上做得出来”。</p>
+        <p>2026 年 10 月公布的一项工作走的是另一条路：在离子阱处理器上跑三角 <b>color code</b>（色码），码距分别取 3、5、7，一共试了两万九千次，其中三次出错——折算下来大约每百万轮五个逻辑错误，测得的 Λ 接近 12。一位并未参与该工作的专家评价说，按这条斜率放大，也许在<b>一百万个物理比特以内</b>就能达到有用计算所要求的可靠性。</p>
+        <p>请注意这句话里两个必须保留的限定词：<b>“也许”和“如果放大”</b>。Λ 高不等于机器已经造出来了；它只说明，<b>一旦</b>把现在的器件按同样的方式放大，需要多少零件才够。</p>
+
+        <h3>四、代价：一百万个物理比特从哪儿来</h3>
+        <table class="facts">
+          <tr><th>环节</th><th>大致情况</th><th>后果</th></tr>
+          <tr><td>物理错误率</td><td>约 0.1%</td><td>决定了需要多大的码距</td></tr>
+          <tr><td>目标逻辑错误率</td><td>约一万亿分之一</td><td>码距大约要到 20 上下</td></tr>
+          <tr><td>比特开销</td><td>码距 d 的表面码约需 2d² 个物理比特</td><td>d ≈ 20 ⇒ 一个逻辑比特要近千个物理比特</td></tr>
+          <tr><td>整机规模</td><td>一千个逻辑比特</td><td>约一百万个物理比特，还没算别的</td></tr>
+          <tr><td>额外开销</td><td>制备特殊量子态的“工厂”、布线、制冷</td><td>实际数字只会更大</td></tr>
+          <tr><td>速度</td><td>码距 20 时，一次逻辑操作要几十微秒</td><td>比一个普通处理器核心慢上千倍</td></tr>
+        </table>
+        <ul>
+          <li><b>纠错不是免费的。</b>每提高一个数量级的可靠性，都要用更多的物理比特去换。这就是 overhead 开销，也是本课标题真正的落点：<b>把演示变成机器，缺的不是聪明，是开销</b>。</li>
+          <li><b>零件好一点，比零件多一点更划算。</b>因为逻辑错误率随物理错误率超线性下降，把单个比特的错误率减半，换来的是整机开销成倍地缩小。所以业内有句话：追求比特数量，不如追求比特质量。</li>
+          <li><b>慢，是这个方案的固有代价。</b>一次逻辑操作要跑几十轮检查，每轮又是微秒级，累加起来就是几十微秒。量子计算机并不是“全面更快”，它只在特定问题上快。</li>
+          <li><b>剩下的都是工程问题。</b>布线、制冷、成品率、经典译码器的吞吐——这些不如“跨过阈值”好听，但正是它们挡在演示与机器之间。</li>
+        </ul>
+
+        <h3>五、中外对照：一人持本，一人读书</h3>
+        <p>同样是“怎么发现并修掉一个错误”，中国古代校勘学给出的是另一套办法，而且思路出奇地接近。</p>
+        <p>汉代刘向整理宫廷藏书时留下过一个说法，后世常引作：<b>一人读书，校其上下，得谬误，为校；一人持本，一人读书，若冤家相对，为雠</b>。意思是：一个人拿着底本，另一个人照着念，两人像冤家对质一样逐字核对——这叫“雠校”。<b>两份副本互相参照，差异之处就是疑点所在</b>：这几乎就是“冗余 + 比对”的原始形态。今天我们说的“校对”一词，就是从这里来的。</p>
+        <p>到了二十世纪，史学家陈垣在《校勘学释例》（1931，据校《元典章》而成）里把这套办法归纳为<b>校法四例</b>，至今仍是古籍整理的基本功夫：</p>
+        <table class="facts">
+          <tr><th>方法</th><th>做法</th><th>可比之处</th></tr>
+          <tr><td>对校</td><td>拿同一部书的祖本或别本对读，遇不同处注于其旁</td><td>最直接、最可靠；相当于用多个副本做冗余比对</td></tr>
+          <tr><td>本校</td><td>用本书前后文互证，比较异同，不依赖他书</td><td>只用自身结构找异常，不需要外部参照</td></tr>
+          <tr><td>他校</td><td>用他书校本书，如类书、古注、引文</td><td>引入外部信息来交叉验证</td></tr>
+          <tr><td>理校</td><td>无本可据，凭学识推理判断</td><td>最见功力也最危险；陈垣本人对它有一句常被引用的评价：<b>最高妙者此法，最危险者亦此法</b></td></tr>
+        </table>
+        <p>读到这里你会发现，两边的骨架其实是同一副：<b>冗余给出副本 → 比对暴露差异 → 判断哪一处是错的 → 修正</b>。量子纠错里的“校正子”，正是差异本身——它只告诉你哪里不对，从不告诉你内容是什么。</p>
+
+        <h3>六、三点辨析：这条对照不能推得太远</h3>
+        <ul>
+          <li><b>不是“古今对照”，而是“方法对照”。</b>校勘学并不意味着中国古代更早懂得纠错，量子纠错也并不意味着西方更先进。<b>本课对照的是两套“用冗余定位错误”的构造方式，不是两个时代或两个地方的优劣。</b></li>
+          <li><b>对象完全不同：一个是凝固的文本，一个是仍在演化的态。</b>校勘面对的是已经抄完、不会再变的书；量子纠错面对的是一个每微秒都在变化的量子态，而且<b>不能直接去读它</b>——读了就毁了。校勘可以慢慢来，甚至可以搁置几十年；纠错必须在微秒级完成。</li>
+          <li><b>“正确”的性质也不同。</b>校勘里的“原本”往往已经失传，所谓误字是相对于推断而言的，所以校勘四法里才会留一个“理校”作为不得已；量子纠错则有明确定义的码空间，“什么是对的”是<b>定义出来的</b>，译码器必须给出唯一判定。<br>由此产生一个很有意思的差别：<b>校勘允许存疑</b>——列出异文，注明“某本作某”，不下结论；<b>工程不允许</b>——译码器犹豫一微秒，错误就累积一层。人文学科可以把判断挂起来，工程挂不起来。</li>
+        </ul>
+
+        <h3>七、一个可以立刻用上的读法</h3>
+        <p>本课其实示范了一次判断流程：<b>看到“量子计算机又进步了”这类标题 → 先问进步的是哪个量 → 分清“现在的水平”与“每加大一圈能改善多少” → 再问代价是什么 → 最后检查那些限定词有没有被删掉</b>。</p>
+        <p>“低于阈值”是个真里程碑，但它说的是<b>方向对了</b>，不是说机器快好了。真正决定那台机器能不能落地的，是 Λ，是由 Λ 推出的一百万个物理比特，是布线、制冷、译码延迟，以及那层至今没人解释得清的关联错误。<b>下次读到这类新闻，先找三个词：斜率、开销、以及那句被省略的“如果”。</b></p>
+
+        <p class="source"><b>说明：</b>本课只讨论量子纠错的技术原理、公开实验结果与工程约束，不涉及任何国家、地区、机构或企业的优劣评价，不作任何技术路线排名，不包含任何国家排行榜。文中提到的研究团队与成果仅陈述其公开发表的事实；对尚未解释的现象（如关联错误的来源）已明确标注“尚无定论”。当代实验数据截至公开资料所见，具体数值可能随后续研究修订。古籍部分以传世文献与通行整理本为准。</p>
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>🔮 科技前沿 Technology　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>量子纠错、那条叫“阈值”的临界线，以及决定机器要造多大的那个数 Λ</p>
+        <p>量子比特极其脆弱，而用来修它的零件同样会出错——所以“多加几个”并不总是更安全。只有当物理错误率低于一条临界线时，加大编码才会让错误率指数级下降。2024 年 12 月，这条线第一次被真正跨过；但真正决定量子计算机能否从演示走向机器的，是另一个数：码距每加大一圈能把错误压下去多少倍，以及由此推算出的、以百万计的物理比特开销。<b>纠错不拯救坏的比特，它奖励本来就足够好的比特。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级科技与学术词汇（fragile · decohere · redundancy · threshold · syndrome · suppress · exponential · constituent · latency · correlated · overhead），能区分 error / fault / failure，并知道 exponential 不能当作“很快”滥用。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 470 词的科技说明文，能识别作者在哪一步把“成就”重新表述成了“条件”。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——Here 开头的完全倒装、Whether 引导的名词性从句作主语、not ... but ... 平行结构、独立主格（名词 + 现在分词）、介词 + which 引导的定语从句。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习一件事——分清“现在有多好”与“每加大一圈好多少”；读科技新闻时主动去找斜率、开销，以及那些被省略的限定词。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过刘向“雠校”与陈垣校法四例，理解另一套“用冗余定位错误”的构造方式，并知道这条对照能推到哪一步为止。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. Here lies the paradox: correction is itself built from noisy parts, and every added qubit, gate and measurement brings fresh ways to fail.</div>
+          <div class="eg" style="margin-top:8px;">2. Whether the trade pays off depends on one condition — the physical error rate must sit below a critical threshold.</div>
+          <div class="eg" style="margin-top:8px;">3. Because that figure is a ratio, its effect compounds — the suppression is exponential, each step in size buying another division.</div>
+          <div class="eg" style="margin-top:8px;">4. What matters most is not any single error rate but the slope, conventionally written Λ — the factor by which the logical error falls each time the code distance grows by two.</div>
+          <div class="eg" style="margin-top:8px;">5. Error correction does not rescue a bad qubit; it rewards one already good enough to deserve being copied.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-10-28 · 科技前沿 Technology｜量子纠错、阈值，与决定机器规模的那个数 Λ</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["A quantum computer is assembled from the most fragile components in engineering: a physical qubit holds its state for a fraction of a millisecond before it decoheres, surrendering the calculation to noise. The obvious remedy — make copies — is forbidden by the no-cloning theorem. What engineers do instead is spread one logical qubit across many physical ones, using redundancy not to repeat the message but to let errors betray themselves. Here lies the paradox: correction is itself built from noisy parts, and every added qubit, gate and measurement brings fresh ways to fail. Whether the trade pays off depends on one condition — the physical error rate must sit below a critical threshold.","In December 2024 Google Quantum AI reported in Nature what the field had chased for decades: on a 105-qubit superconducting processor, a distance-7 surface code held a logical qubit at 0.143 per cent error per cycle of syndrome measurement, and increasing the code distance by two suppressed the logical error by a factor of 2.14. Because that figure is a ratio, its effect compounds — the suppression is exponential, each step in size buying another division. The encoded qubit also outlived its best constituent physical qubit by about 2.4 times. Speed mattered too: the decoder’s average latency was 63 microseconds, tolerable because its verdict can be folded in afterwards. Long runs hit a floor — rare correlated errors striking many qubits at once, roughly once an hour, whose origin nobody understands.","What matters most, however, is not any single error rate but the slope, conventionally written Λ — the factor by which the logical error falls each time the code distance grows by two. It is the compounding interest of fault tolerance: a slope near two means one extra decimal place of reliability costs dozens of physical qubits, a slope of twelve only a handful. In October 2026 a trapped-ion processor ran a triangular color code at distances 3, 5 and 7 through twenty-nine thousand attempts, of which three came back wrong — about five logical errors per million rounds, with Λ near 12. A specialist outside the work noted that a machine scaled on that slope could reach useful reliability under a million physical qubits.","That last number is the whole argument. At a physical error rate near 0.1 per cent, a surface code must reach a distance of about twenty before the logical error approaches one in a trillion, and a distance-d code costs roughly 2d² physical qubits — close to a thousand for one protected qubit. A machine with a thousand logical qubits therefore implies on the order of a million physical ones, before the factories, wiring and refrigeration are counted. Speed suffers too — one logical operation takes tens of microseconds. Overhead, not ingenuity, separates a demonstration from a machine. Error correction does not rescue a bad qubit; it rewards one already good enough to deserve being copied."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"According to paragraph 1, what remedy is ruled out by the no-cloning theorem? 按照第 1 段的说法，不可克隆定理排除了哪一种补救办法？",
+   opts:["Adding more physical qubits to the processor 往处理器里多加一些物理量子比特","Making an exact copy of an unknown quantum state 把一个未知的量子态原样复制一份","Measuring the qubit directly and recording the answer 直接测量量子比特并把结果记下来","Running the same calculation twice and comparing the results 把同一道计算跑两遍再比较"],
+   ans:1,
+   fb:"正确！第 1 段说得很直白：The obvious remedy — make copies — is forbidden, because the no-cloning theorem rules out duplicating an unknown quantum state。工程师真正做的是 spread one logical qubit across many physical ones（摊开，而不是复制）。选项 C 也要排除：直接测量会让量子态塌缩，计算就没了。"},
+  {q:"What does the passage say determines whether error correction helps or hurts? 课文说，纠错到底是帮忙还是添乱，取决于什么？",
+   opts:["Whether the physical error rate sits below a critical threshold 物理错误率是否低于一条临界值","Whether the processor is kept at room temperature 处理器是否保持在室温","Whether the code distance happens to be an odd number 码距是否刚好是奇数","Whether the qubits are made of superconducting metal 量子比特是否由超导金属制成"],
+   ans:0,
+   fb:"正确！这是全文的第一根支柱：Whether the trade pays off depends on one condition — the physical error rate must sit below a critical threshold。<b>threshold 阈值</b>是本课的核心词：低于它，加大编码才越纠越对；高于它，越纠越错。选项 B 与事实相反——超导处理器恰恰要接近绝对零度。"},
+  {q:"In the December 2024 Nature result, what does the figure 2.14 refer to? 在 2024 年 12 月那篇 Nature 结果里，2.14 这个数字指什么？",
+   opts:["The percentage of errors per cycle of measurement 每一轮测量的错误百分比","The number of physical qubits on the processor 处理器上物理量子比特的个数","The lifetime of the best constituent physical qubit 最好的那个物理量子比特的寿命","The factor by which the logical error fell when the code distance grew by two 码距增加 2 时逻辑错误率下降的倍数"],
+   ans:3,
+   fb:"正确！这就是 Λ：increasing the code distance by two suppressed the logical error by a factor of 2.14。注意别和另外两个数字搞混——每轮错误率是 <b>0.143%</b>，物理比特总数是 <b>105</b>，寿命倍数是 <b>2.4 倍</b>。把这三个数分清楚，这一段的成绩单就读懂了。"},
+  {q:"Why is Λ (lambda) described as the number that matters most? 为什么课文说 Λ 才是最要紧的那个数？",
+   opts:["It counts how many qubits a processor contains 它统计一个处理器有多少个量子比特","It measures how cold the refrigerator has to be 它衡量制冷机必须有多冷","It sets how much reliability a given increase in code size buys 它决定了码距加大一圈能换来多少可靠性","It records how long a single experiment was run 它记录一次实验跑了多久"],
+   ans:2,
+   fb:"正确！课文把它比作 the compounding interest of fault tolerance（容错的复利）。Λ 高，说明每加大一圈能压下去的错误更多，于是整机需要的物理比特更少——<b>它决定那台机器最后要造多大</b>。这正是本课第 3、4 段的连接点：从 Λ ≈ 12 才推得出“一百万个物理比特以内”这个估算。"},
+  {q:"What does the “roughly once an hour” detail in paragraph 2 illustrate? 第 2 段里“大约每小时一次”这个细节说明什么？",
+   opts:["How often the decoder fails to return any verdict at all 译码器完全给不出判断的频率","How long a single logical operation takes 一次逻辑操作要花多长时间","The speed advantage of superconducting qubits over trapped ions 超导量子比特相对离子阱的速度优势","A floor set by rare correlated errors whose origin nobody yet understands 由罕见的关联错误造成的一层底，其来源至今无人解释"],
+   ans:3,
+   fb:"正确！这是本课最值得记住的“把话说窄”之处：rare correlated errors striking many qubits at once, roughly once an hour, whose origin nobody yet understands。表面码假设错误各自独立，而这类事件正好违反假设，于是逻辑错误率不再继续指数下降。<b>论文自己把它列为开放问题</b>，我们也应照实说“尚无定论”。"},
+  {q:"Which statement best captures the conclusion of the passage? 下列哪一项最符合文章的结论？",
+   opts:["A machine with a million physical qubits has already been built and is running 一百万个物理比特的机器已经造好并在运行","Error correction can make any noisy qubit reliable provided enough of them are added 只要数量足够多，纠错能让任何噪声比特变得可靠","Error correction rewards qubits that are already good enough; the obstacle now is overhead, not theory 纠错奖励本来就足够好的量子比特；现在的障碍是开销，不是理论","Experiment has disproved the threshold theorem altogether 实验已经彻底推翻了阈值定理"],
+   ans:2,
+   fb:"正确！这正是全文最后一句：<b>Error correction does not rescue a bad qubit; it rewards one already good enough to deserve being copied</b>，加上 <b>Overhead, not ingenuity, separates a demonstration from a machine</b>。选项 A 与事实相反——一百万是估算，不是既有；选项 B 恰恰是第 1 段要推翻的“越加越安全”想法；选项 D 更是说反了：实验验证的正是阈值定理。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
