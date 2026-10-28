@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Fold That Would Not Slip — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#701a75;
+  --accent2:#155e75;
+  --bg:#f8f9fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#fae8ff;
+  --border:#f5d0fe;
+  --soft:#fdf4ff;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(112,26,117,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(112,26,117,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(112,26,117,.55);}70%{box-shadow:0 0 0 12px rgba(112,26,117,0);}100%{box-shadow:0 0 0 0 rgba(112,26,117,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#f5d0fe;}
+#tip{position:fixed;z-index:1200;background:#4a044e;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(112,26,117,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fae8ff;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 前沿科技 Tech Frontier</span>
+      <h1 class="title">The Fold That Would Not Slip</h1>
+      <p class="subtitle">How a film that stops sliding took the strength–toughness trade-off apart · 2026-10-28 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The inherited picture</div>
+            <p>For two decades the mechanics of layered two-dimensional films have been described by one <span class="kw" data-def="inherited（形容词）：承袭的、沿用的。指从前人那里接过来、未经重新审视就继续使用的，如 an inherited picture（一个沿用下来的图景）、inherited assumptions（沿袭的假设）。学术写作里它常带轻微的批评意味，暗示「这套说法可能早该被复查了」。">inherited</span> picture: the shear-lag model borrowed from <span class="kw" data-def="nacre（名词）：珍珠层、珠母层。贝壳内层由碳酸钙硬质片层与有机质软层交替堆叠而成的复合材料，是仿生材料学里最常被引用的原型，nacre-inspired 即「仿珍珠层的」。强度可达其矿物组分的上百倍，因此成为「砖—泥」结构设计的范本。">nacre</span>, in which stiff bricks are bound by a softer <span class="kw" data-def="mortar（名词）：灰浆、砂浆。砌体中填充在砖块之间、把砖粘结起来的材料。在仿生材料学里与 brick 配对出现，构成 brick-and-mortar（砖—泥）结构：硬相承担载荷，软相传递剪切并耗散能量。注意它读 /ˈmɔːtə/，与「迫击炮」同形。">mortar</span>. Performance rises along two routes — stack the sheets more evenly, or bind them more firmly. Both have worked. Both now press against the same ceiling: the model demands large grains, while bonding strength trades against bonding density.</p>
+          </div>
+          <button class="play-btn" data-i="0" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The alternative</div>
+            <p>The alternative is to stop treating the sheet as a brick. Graphene is <span class="kw" data-def="pliant（形容词）：柔韧的、易弯曲的。既可形容物体（pliant material），也可形容人（a pliant colleague，容易妥协的同事），后者多含贬义。近义词中 flexible 最中性，pliant 更强调「受力即变形且不易折断」，supple 多用于皮革与身体。这里是它的本义用法。">pliant</span>; it folds where a rigid plate would crack. At low temperature, one team produced multilayer graphene oxide sheets roughly nine nanometres thick, their outer layers folded into bands about two nanometres deep while the interior stayed ordered. Blade-coated and reduced, the sheets assembled into a film whose layers <span class="kw" data-def="clasp（动词）：扣住、紧握。比 hold 或 grip 更具体，指用搭扣、手指或环形结构把东西合拢固定住，如 clasp one's hands（十指交叉握紧）。名词同形，指搭扣。本文取比喻义：相邻折叠像搭扣一样彼此咬住。">clasp</span> one another — less stacked paper than interlocked blocks.</p>
+          </div>
+          <button class="play-btn" data-i="1" data-icon="▶">▶</button>
+        </div>
+
+      </div>
+    </section>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · What the film did</div>
+            <p>The film reached 2.9 gigapascals in <span class="kw" data-def="tensile（形容词）：拉伸的、张力的。tensile strength 即抗拉强度，指材料在被拉断前能承受的最大应力，与 compressive strength（抗压强度）相对。注意它与 tensile 作「可拉伸的」这一义项的区分：前者是力学术语，后者描述手感。读音 /ˈtensaɪl/。">tensile</span> strength, 84.5 megajoules per cubic metre in toughness and about five per cent elastic strain, beyond earlier nacre-inspired films. After a hundred cycles at four per cent strain it still carried 1.9 gigapascals. Simulations suggest why: as the film is pulled, neighbouring folds press together and convert part of the tensile load into local compression — what the authors call pull-to-push. Stress then travels by shear-locking, not <span class="kw" data-def="interfacial（形容词）：界面的、发生于界面上的。由 interface（界面）加后缀 -ial 构成，如 interfacial chemistry（界面化学）、interfacial drag（界面拖曳）、interfacial tension（界面张力）。在材料与胶体科学里它是高频术语，注意与 international、internal 区分。">interfacial</span> drag, at an efficiency near ninety-six per cent.</p>
+          </div>
+          <button class="play-btn" data-i="2" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The boundary</div>
+            <p>What changes is the design variable. Instead of tuning interfacial chemistry, the team tuned the sheet's spatial <span class="kw" data-def="configuration（名词）：构型、配置。指各部分的相对空间排布方式，强调整体形状而非逐个部件的清单；读作 /kənˌfɪɡəˈreɪʃn/。它比 arrangement 更技术化，比 structure 更强调「可被改变的一种设定」，常见于 engineering、chemistry（电子构型）与 computing 中。">configuration</span> — a move from planar stacking toward <span class="kw" data-def="topological（形容词）：拓扑（学）的。拓扑学研究的是在连续变形下保持不变的性质，如连通性、缠绕方式、孔洞数目。因此 topological assembly 指靠「缠绕、互锁、穿插」这类几何关系而非靠粘结来传递载荷。它关心的不是距离或角度，而是「谁套着谁」。">topological</span> assembly, the trick by which a rope outperforms the <span class="kw" data-def="filament（名词）：细丝、单丝。指极细的纤维状单元，如灯丝、碳纤维单丝、细胞骨架丝。在复合材料语境下，它是构成绳、束、膜的最基本单元，常与 bundle、yarn、rope 构成由细到粗的层级。复数 filaments。">filaments</span> it is made of. The authors keep the scope narrow: shear-locking extends the older model rather than replacing it, and fold density, pore defects and interlayer free space remain to be controlled. None of this makes a device. It makes a design space.</p>
+          </div>
+          <button class="play-btn" data-i="3" data-icon="▶">▶</button>
+        </div>
+
+        <div class="card" style="background:var(--soft);">
+          <div class="role" style="color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.5px;">Source · 素材来源</div>
+          <p style="font-size:14px;margin:6px 0 0;color:#4b5563;">Wang, L., Liao, Y., Huang, J. et al. “Clasping folds enable superior elastic strength of graphene films.” <i>Nature</i> 658, 643–649 (2026). DOI: 10.1038/s41586-026-11109-y · 数值为论文及机构新闻稿的公开报道值，以论文正文与补充材料为准。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary（10 个 C1–C2 学术词）</h2>
+      <div class="card">
+        <div class="vocab-grid">
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="inherited" data-icon="🔊">🔊</button>
+            <div class="word">inherited<span class="pos">adj.</span></div>
+            <div class="zh">承袭的、沿用的</div>
+            <div class="ex">For two decades the mechanics of such films have been described by one inherited picture.</div>
+            <div class="lvl">C1</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="nacre" data-icon="🔊">🔊</button>
+            <div class="word">nacre<span class="pos">n.</span></div>
+            <div class="zh">珍珠层、珠母层（仿生材料学原型）</div>
+            <div class="ex">The shear-lag model was borrowed from nacre, in which stiff bricks are bound by a softer mortar.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="mortar" data-icon="🔊">🔊</button>
+            <div class="word">mortar<span class="pos">n.</span></div>
+            <div class="zh">灰浆、砂浆（砖—泥结构中的软相）</div>
+            <div class="ex">In a brick-and-mortar architecture, the hard phase carries load while the mortar transfers it.</div>
+            <div class="lvl">C1</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="pliant" data-icon="🔊">🔊</button>
+            <div class="word">pliant<span class="pos">adj.</span></div>
+            <div class="zh">柔韧的、受力即变形而不断裂的</div>
+            <div class="ex">Graphene is pliant; it folds where a rigid plate would crack.</div>
+            <div class="lvl">C2</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="clasp" data-icon="🔊">🔊</button>
+            <div class="word">clasp<span class="pos">v. / n.</span></div>
+            <div class="zh">扣住、咬合；搭扣</div>
+            <div class="ex">The sheets assembled into a film whose layers clasp one another.</div>
+            <div class="lvl">C2</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="tensile" data-icon="🔊">🔊</button>
+            <div class="word">tensile<span class="pos">adj.</span></div>
+            <div class="zh">拉伸的、张力的（tensile strength 抗拉强度）</div>
+            <div class="ex">The film reached 2.9 gigapascals in tensile strength.</div>
+            <div class="lvl">C1 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="interfacial" data-icon="🔊">🔊</button>
+            <div class="word">interfacial<span class="pos">adj.</span></div>
+            <div class="zh">界面的（interfacial chemistry 界面化学）</div>
+            <div class="ex">Stress travels by shear-locking, not interfacial drag.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="configuration" data-icon="🔊">🔊</button>
+            <div class="word">configuration<span class="pos">n.</span></div>
+            <div class="zh">构型、配置（各部分的相对空间排布）</div>
+            <div class="ex">The team tuned the sheet's spatial configuration rather than its interfacial chemistry.</div>
+            <div class="lvl">C1</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="topological" data-icon="🔊">🔊</button>
+            <div class="word">topological<span class="pos">adj.</span></div>
+            <div class="zh">拓扑（学）的（研究连续变形下不变的性质）</div>
+            <div class="ex">It marks a move from planar stacking toward topological assembly.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="filament" data-icon="🔊">🔊</button>
+            <div class="word">filament<span class="pos">n.</span></div>
+            <div class="zh">细丝、单丝（构成绳与膜的最基本单元）</div>
+            <div class="ex">A rope outperforms the filaments it is made of.</div>
+            <div class="lvl">C2</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns（5 个高级学术句型）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. 文献综述开篇：时间框架 + 单一范式</h3>
+          <div class="zh">For two decades X has been described by one inherited picture: Y.</div>
+          <div class="eg">For two decades the mechanics of layered two-dimensional films have been described by one inherited picture: the shear-lag model borrowed from nacre.</div>
+          <div class="practice">
+            <b>用法</b>：先给一个时间跨度，再用 one inherited picture 把现有范式打包，最后用冒号点出名字。inherited 自带「沿用而未经复查」的轻微批评意味，为后文的转折埋线。<br>
+            ✏️ 仿写：<input placeholder="For two decades the study of ___ has been described by one inherited picture: ___.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. 平行短句 + 比喻收束</h3>
+          <div class="zh">Both have worked. Both now press against the same ceiling.</div>
+          <div class="eg">Both have worked. Both now press against the same ceiling: the model demands large grains, while bonding strength trades against bonding density.</div>
+          <div class="practice">
+            <b>用法</b>：两个结构完全相同的短句接连出现，第二句用比喻（ceiling）把「共同局限」具象化，再用冒号补出具体理由。学术写作里，短句并列比长句更能制造节奏压力。<br>
+            ✏️ 仿写：<input placeholder="Both have worked. Both now press against the same ___.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. 提出范式转换：stop treating X as Y</h3>
+          <div class="zh">The alternative is to stop treating X as Y.</div>
+          <div class="eg">The alternative is to stop treating the sheet as a brick.</div>
+          <div class="practice">
+            <b>用法</b>：用「停止把 X 当作 Y」来否定一个隐含的比喻，比直接说 a new approach 有力得多——它点明旧范式的问题不在参数而在类比本身。后接 stop + 动名词，注意 stop 后接动名词表示「停止做某事」。<br>
+            ✏️ 仿写：<input placeholder="The alternative is to stop treating ___ as ___.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. 冒号引出机制（因果链的压缩写法）</h3>
+          <div class="zh">Simulations suggest why: as X is pulled, Y happens.</div>
+          <div class="eg">Simulations suggest why: as the film is pulled, neighbouring folds press together and convert part of the tensile load into local compression.</div>
+          <div class="practice">
+            <b>用法</b>：suggest why 后接冒号，再用 as 引导时间／伴随从句铺开全过程。这一句把「证据—现象—机制」三层压进一句，是科技报道中最常见的密度写法。注意 suggest 后不加 that 时可直接接名词性成分。<br>
+            ✏️ 仿写：<input placeholder="Simulations suggest why: as ___, ___ and ___.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>5. 对照短句收尾（先否定，再肯定）</h3>
+          <div class="zh">None of this makes a device. It makes a design space.</div>
+          <div class="eg">None of this makes a device. It makes a design space.</div>
+          <div class="practice">
+            <b>用法</b>：同一动词重复两次，宾语一换，落差即成。前句降调（不要夸大成果），后句升调（指出真正的贡献所在），是给科技报道划边界最经济的收尾法。雅思写作中这类「先收再放」的结构同样适用。<br>
+            ✏️ 仿写：<input placeholder="None of this makes ___. It makes ___.">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar（5 个高级语法）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. 分号连接独立分句（Semicolon between independent clauses）</h3>
+          <div class="zh">用分号替代连词，表紧密的并列或对比；正式文体中用于避免逗号拼接。</div>
+          <div class="eg">Graphene is pliant; it folds where a rigid plate would crack.</div>
+          <div class="practice">
+            分号两边必须都是<b>完整句子</b>（各有主语与谓语）。它比句号更紧，比逗号更正式。
+            误用 <s>Graphene is pliant, it folds.</s> 即 comma splice（逗号拼接），是学术写作里最常见的错误之一。
+            同为并列，and 只表示「并且」，分号则把因果、对比留给读者去补，语气更克制。
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. 独立主格结构（Nominative absolute）</h3>
+          <div class="zh">名词 + 分词，自带逻辑主语，作状语；与句子主句主语不同。</div>
+          <div class="eg">…multilayer graphene oxide sheets roughly nine nanometres thick, <b>their outer layers folded</b> into bands about two nanometres deep while the interior stayed ordered.</div>
+          <div class="practice">
+            their outer layers 是 folded 的<b>逻辑主语</b>，与主句主语 sheets 不同，因此不能写成 folding（那会暗示整个片层在折叠）。
+            独立主格在科技写作中极常见，用来把「整体—局部」两层信息挤进一句，避免拆成两句。
+            判断方法：若把这段删掉，主句依然完整，且这段自带主语，即独立主格。
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. 冒号引导的同位解释（Colon introducing an appositive）</h3>
+          <div class="zh">冒号后为名词短语时作同位语，为完整句子时作解释；后者首字母大小写两种风格皆可。</div>
+          <div class="eg">…have been described by one inherited picture<b>:</b> the shear-lag model borrowed from nacre. / Simulations suggest why<b>:</b> as the film is pulled, …</div>
+          <div class="practice">
+            第一例冒号后是<b>名词短语</b>（同位语，说明 picture 是什么）；第二例是<b>完整句子</b>（解释 why 的内容）。
+            美式用法在冒号后接完整句子时首字母可大写，英式与多数期刊风格则小写——本文统一小写，科技期刊常见此风格。
+            冒号前必须是完整句子，这点与破折号不同。
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. 破折号 + 省略比较结构（Dash + elliptical comparison）</h3>
+          <div class="zh">破折号后接 less X than Y 的比较，前后成分须对称且可省略。</div>
+          <div class="eg">…a film whose layers clasp one another — <b>less stacked paper than interlocked blocks</b>.</div>
+          <div class="practice">
+            破折号引出补充性比喻，比冒号随意、比括号显眼。less A than B 是「与其说是 A，不如说是 B」，
+            此处 A 与 B 都是名词短语（stacked paper / interlocked blocks），结构对称才成立。
+            科技写作里破折号常用来放「给非专业读者的类比」，位置多在句末。
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>5. rather than 的平行结构（Parallelism with rather than）</h3>
+          <div class="zh">rather than 前后的成分必须形式一致；后接动词时用 -ing 与主句谓语呼应。</div>
+          <div class="eg">…shear-locking <b>extends</b> the older model <b>rather than replacing</b> it.</div>
+          <div class="practice">
+            主句谓语是 extends（第三人称单数），rather than 后便不能用 replace 原形，而要用 <b>replacing</b>——
+            这是rather than 后接动名词的典型情形（当前面是谓语动词而非不定式时）。
+            对比：He chose to extend <b>rather than replace</b> the model.（前面是不定式，故用原形）。
+            平行结构是雅思写作评分标准 Grammatical Range 里的直接得分点。
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz（雅思 / 托福风格 · 6 题）</h2>
+      <div class="card">
+        <p class="subtitle" style="margin-bottom:12px;">全部作答后请留意：<b>本文的数字有四个组别</b>——薄膜的性能值、循环测试值、纳米片尺度、旧路线的对照值。数字配对题的干扰项几乎总是在这四组之间搬运。</p>
+        <div id="quizBox"></div>
+      </div>
+    </section>
+
+    <!-- 6. CHINESE EXTENSION -->
+    <section id="ext" class="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 · 学术背景深度解析</h2>
+      <div class="card">
+
+        <h3>一、剪切滞后模型：一个借来的图景</h3>
+        <p>要把「一堆纳米薄片」变成「一张能用」的宏观薄膜，核心难题从来不是薄片本身有多强——单层石墨烯的面内强度极高——而是<b>如何把这份强度从纳米尺度传到宏观尺度</b>。载荷要在成千上万个片层之间来回传递，传递的关卡就是层与层之间的界面。</p>
+        <p>过去二十年，这个问题的标准答案是<b>剪切滞后（shear-lag）模型</b>。它借自贝壳珍珠层：碳酸钙硬片是「砖」，有机质是「泥」，硬砖承压，软泥靠剪切变形把力从一片传到下一片。这个模型极其成功，几乎所有仿珍珠层材料都靠它设计。</p>
+        <p>模型之下有两条公认的提升路线。第一条是<b>让片层排得更整齐</b>：流动诱导取向、水塑拉伸、毛细压缩等手段提升堆叠有序度，MXene 基薄膜的强度已推到约 1.9 GPa。第二条是<b>让层间粘得更牢</b>：共价键、离子键、片层缠结等强化层间相互作用，石墨烯基薄膜达到约 0.7 GPa 的强度与 42.7 MJ·m⁻³ 的韧性。两条路线都奏效，却都撞上同一道天花板：模型要求足够大的晶粒尺寸，而层间键合的强度与密度之间存在此消彼长——粘得越牢，能粘的点往往越少。</p>
+
+        <h3>二、为什么「又强又韧」这么难</h3>
+        <p>这道题难在两种性能的物理来源相反。<b>强度</b>要求结构致密、界面牢固，让裂纹无处可去；<b>韧性</b>却要求裂纹在扩展途中被不断消耗——靠的是片层拔出、滑移、桥联这些「让步」机制。把界面锁死，裂纹不再绕路，材料变脆；把界面放松，片层一拉就滑，强度上不去。</p>
+        <p>于是「强而不韧、韧而不强」成了层状材料的常态。本文的意义正在于此：它没有在这条权衡曲线上找更好的点，而是<b>换掉了这条曲线所依托的机制</b>。</p>
+
+        <h3>三、从「界面」到「几何」：借来的第二个思路</h3>
+        <p>薄膜之外，人类很早就会用另一种办法解决同样的难题：绳子。单根纤维的强度有限，捻成绳之后，纤维之间靠摩擦与相互挤压传力，整根绳子远强于任何一根纤维；打成结，靠的是纯粹的<b>空间缠绕关系</b>，不需要任何粘结剂。绳子与结给出的启示是：<b>传力效率可以由几何构型决定，而不必由界面化学决定。</b></p>
+        <p>本文做的正是这件事的二维版本。研究团队用改进的低温氧化方法制备出「表层折叠、内部有序」的核壳结构氧化石墨烯片，平均厚度约 9.1 纳米，表面的折叠条带约 2 纳米；再经刮涂与还原组装，让相邻片层的折叠彼此咬合。拉伸时，相邻折叠条带逐渐接触挤压，把一部分<b>拉力</b>转化成了层间的<b>推力</b>——作者称之为「拉—推」（pull-to-push）力链拓扑转变，并据此提出<b>剪切互锁</b>（shear-lock）的应力传递策略。模拟给出的应力传递效率约 96%。</p>
+
+        <h3>四、数据口径表（数字题的设陷阱处）</h3>
+        <table>
+          <tr><th>量</th><th>数值</th><th>口径与说明</th></tr>
+          <tr><td>抗拉强度</td><td>2.9 GPa</td><td>本文薄膜的拉伸强度</td></tr>
+          <tr><td>韧性</td><td>84.5 MJ·m⁻³</td><td>单位体积吸收的能量</td></tr>
+          <tr><td>弹性应变</td><td>约 5%</td><td>可完全回复的形变范围</td></tr>
+          <tr><td>循环残余应力</td><td>1.9 GPa</td><td>4% 应变下循环 100 次后仍可承受的应力</td></tr>
+          <tr><td>纳米片厚度</td><td>约 9.1 nm</td><td>多层氧化石墨烯片的平均厚度（尺度，非性能）</td></tr>
+          <tr><td>折叠条带厚度</td><td>约 2 nm</td><td>表层折叠的深度（尺度，非性能）</td></tr>
+          <tr><td>应力传递效率</td><td>约 96%</td><td>模拟所得，高于所比较的传统模型</td></tr>
+          <tr><td>旧路线对照</td><td>1.9 GPa / 0.7 GPa / 42.7 MJ·m⁻³</td><td>分别为 MXene 基薄膜强度、石墨烯基薄膜强度与韧性（此前报道值）</td></tr>
+        </table>
+        <p>注意第一行与第四行：同为 1.9，一个是<b>循环后的残余应力</b>，一个是<b>另一种薄膜的强度</b>；第五行的 9.1 是<b>长度尺度</b>而非性能值。科技报道里的数字题，干扰项几乎总是这样搬运出来的。</p>
+
+        <div class="box">
+          <b>事实与立场（必读）</b><br>
+          ① 本文所有数值均转述自论文与机构新闻稿的<b>公开报道值</b>，以论文正文与补充材料为最终依据；不同报道口径可能存在四舍五入差异。<br>
+          ② 文中「航空、防护装备」等应用方向<b>是作者对研究前景的表述，不是已验证的器件结果</b>；论文报告的是薄膜尺度的力学性能，与工程构件之间尚有大量工作。<br>
+          ③ 作者本人把剪切互锁定位为对经典剪切滞后模型的<b>拓展而非取代</b>，并明确指出折叠密度、孔隙缺陷与层间可活动空间仍待调控——即这项工作是「打开一个设计空间」，而非给出终点方案。<br>
+          ④ 本文只讨论机制与已发表数据，<b>不构成任何材料选型、工程或投资建议</b>，也不涉及对任何机构、国家或产业前景的评价。<br>
+          ⑤ 文中未点名研究团队所属单位与国别，是为让注意力集中在机制本身；如需引用原始文献，请使用文末的卷期页码与 DOI。
+        </div>
+
+        <h3>五、一个可迁移的读法</h3>
+        <p>这类科技报道有一个通用骨架：<b>老办法的极限 → 新办法的机制 → 数据 → 边界</b>。读的时候，第一段要找「旧范式叫什么、为什么撞墙」，第二段要找「换了什么变量」，第三段要找「数字属于哪个口径」，第四段要找「作者自己划了什么界」。</p>
+        <p>其中第四段最容易被忽略，却最有用：雅思与托福的推断题、作者态度题，答案几乎都藏在作者主动写下的限定里。本文那句「None of this makes a device. It makes a design space.」就是一处标准的态度落点。</p>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 本课学习目标</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇</b>：掌握 10 个 C1–C2 学术词，其中 nacre、tensile、interfacial、topological 为材料科学高频术语，pliant 与 clasp 属 C2 常用义项。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句式</b>：掌握 5 个可直接迁移到写作中的学术句型，尤其是「时间框架 + 单一范式」的综述开篇与「先否定再肯定」的收尾法。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法</b>：分号连接独立分句、独立主格、冒号同位解释、破折号省略比较、rather than 平行结构——五个均为雅思写作 Grammatical Range 的直接得分点。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>阅读</b>：建立「老办法极限 → 新办法机制 → 数据 → 边界」的科技报道阅读骨架，能主动定位作者划下的限定。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div><b>思辨</b>：区分「报道值」与「原文值」、区分「作者的展望」与「已验证的结果」，这是科技类阅读里最容易被模糊的一条线。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 · 科技类阅读的三个落点</h3>
+        <p style="font-size:15px;"><b>① 数字题先确认单位。</b>本文有吉帕、兆焦每立方米、纳米、百分比四组单位。干扰项几乎总是在同单位内换对象，或跨单位搬运。做题时先划单位，再看数值，效率最高。</p>
+        <p style="font-size:15px;"><b>② NOT / EXCEPT 题要区分「提到」与「归类」。</b>本文第 2 题的三个干扰项都在原文出现过，但只有一项不是「局限」。这类题的陷阱不是无中生有，而是<b>换了归属</b>。</p>
+        <p style="font-size:15px;"><b>③ 态度题看作者自己写的限定。</b>科技报道的作者态度极少直说，都藏在他主动加的限定里。本文末段的 narrow、rather than replacing、remain to be controlled、None of this makes a device 四处连起来，就是完整答案。</p>
+
+        <h3 style="color:var(--accent);">🔗 原始文献</h3>
+        <p style="font-size:14.5px;color:#4b5563;">Wang, L., Liao, Y., Huang, J. et al. “Clasping folds enable superior elastic strength of graphene films.” <i>Nature</i> <b>658</b>, 643–649 (2026). DOI: 10.1038/s41586-026-11109-y<br>本页为英语学习材料，内容为教学用转述与评论，非论文原文翻译；一切事实与数据以原始文献为准。</p>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>Pola News · Advanced English C1–C2 · 2026-10-28 · The Fold That Would Not Slip</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');});
+function go(sec){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(sec).classList.add('active');
+  document.querySelectorAll('nav.sidebar a').forEach(a=>a.classList.remove('active'));
+  const link=document.querySelector('nav.sidebar a[data-sec="'+sec+'"]');
+  if(link)link.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window.innerWidth<=780)sidebar.classList.remove('open');
+}
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.sec);});
+});
+
+/* ---------- Reading progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Keyword tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('mouseenter',()=>{
+    tip.innerHTML='<b>'+w.textContent.trim()+'</b><br>'+w.dataset.def;
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let left=r.left;
+    if(left+330>window.innerWidth)left=window.innerWidth-340;
+    tip.style.left=Math.max(10,left)+'px';
+    tip.style.top=(r.bottom+8)+'px';
+  });
+  w.addEventListener('mouseleave',()=>{tip.style.display='none';});
+});
+
+/* ---------- Speech (Web Speech API, replaced by pre-generated audio) ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+loadVoices();
+if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.onvoiceschanged=loadVoices;
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  const match=p=>en.find(p);
+  return match(v=>/Samantha|Google US English|Microsoft Aria|Daniel/i.test(v.name))
+      || match(v=>/en-US/i.test(v.lang))
+      || en[0]
+      || null;
+}
+function resetBtn(){
+  document.querySelectorAll('.play-btn,.speak-btn').forEach(b=>{
+    b.classList.remove('playing');
+    b.textContent=b.dataset.icon||'🔊';
+  });
+}
+function stopSpeech(){
+  if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  stopSpeech();
+  if(typeof window.speechSynthesis==='undefined')return;
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.rate=0.95; u.pitch=1;
+  u.onend=resetBtn; u.onerror=resetBtn;
+  if(btn){btn.classList.add('playing');btn.textContent='⏸';}
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- Segment texts (auto-extracted from the reading section) ---------- */
+const segmentTexts=[
+  "For two decades the mechanics of layered two-dimensional films have been described by one inherited picture: the shear-lag model borrowed from nacre, in which stiff bricks are bound by a softer mortar. Performance rises along two routes — stack the sheets more evenly, or bind them more firmly. Both have worked. Both now press against the same ceiling: the model demands large grains, while bonding strength trades against bonding density.",
+  "The alternative is to stop treating the sheet as a brick. Graphene is pliant; it folds where a rigid plate would crack. At low temperature, one team produced multilayer graphene oxide sheets roughly nine nanometres thick, their outer layers folded into bands about two nanometres deep while the interior stayed ordered. Blade-coated and reduced, the sheets assembled into a film whose layers clasp one another — less stacked paper than interlocked blocks.",
+  "The film reached 2.9 gigapascals in tensile strength, 84.5 megajoules per cubic metre in toughness and about five per cent elastic strain, beyond earlier nacre-inspired films. After a hundred cycles at four per cent strain it still carried 1.9 gigapascals. Simulations suggest why: as the film is pulled, neighbouring folds press together and convert part of the tensile load into local compression — what the authors call pull-to-push. Stress then travels by shear-locking, not interfacial drag, at an efficiency near ninety-six per cent.",
+  "What changes is the design variable. Instead of tuning interfacial chemistry, the team tuned the sheet's spatial configuration — a move from planar stacking toward topological assembly, the trick by which a rope outperforms the filaments it is made of. The authors keep the scope narrow: shear-locking extends the older model rather than replacing it, and fold density, pore defects and interlayer free space remain to be controlled. None of this makes a device. It makes a design space."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. According to the passage, the film's tensile strength reached —",opts:["1.9 gigapascals","0.7 gigapascals","9.1 gigapascals","2.9 gigapascals"],ans:3,
+   fb:"正确。原文写的是 The film reached 2.9 gigapascals in tensile strength。A 是 4% 应变循环一百次之后仍可承受的残余应力；B 是此前石墨烯基薄膜的强度报道值；C 是纳米片的平均厚度，单位是纳米而不是吉帕。四个选项恰好落在四个不同的口径上——这正是数字题最典型的构造方式：单位相同则换对象，单位不同则直接搬运。做这类题先划单位再看数值。"},
+  {q:"2. Which of the following is NOT presented in the passage as a limitation of the shear-lag model?",opts:["It demands large grains.","Bonding strength trades against bonding density.","It was borrowed from the structure of nacre.","It leaves little room for further gains in elastic strain."],ans:2,
+   fb:"正确。C 说的是模型的来源，不是它的局限。原文把两者分得很清楚：来源是 borrowed from nacre，局限写在同一段末——demands large grains（A）、bonding strength trades against bonding density（B），加上段首的 press against the same ceiling 与末段谈到的弹性形变天花板（D）。NOT 题的干扰项常常就是这样：把一个「文中确实提到过的信息」伪装成「文中提到的局限」，逐项回原文核对归属即可排除。"},
+  {q:"3. The reference to a rope in the final paragraph serves primarily to —",opts:["Show that geometry alone can let an assembly outperform its own components","Suggest that graphene films will shortly replace steel in large structures","Argue that interfacial chemistry is irrelevant to mechanical performance","Demonstrate that the shear-lag model has been abandoned by the field"],ans:0,
+   fb:"正确。原文是 the trick by which a rope outperforms the filaments it is made of——整根绳强于构成它的任何一根纤维，靠的是缠绕的几何关系，不需要任何粘结剂。作者用这个类比说明：改变片层的空间构型，就能让宏观组装体超过其构件本身，而不必继续在界面化学上加码。A 正是这个意思。B 过头了，航空与防护只是作者提到的可能方向，原文明确说这还不是器件；C 过头了，作者说的是换变量，不是说界面化学无关紧要；D 与原文相反——末段写的是 extends the older model rather than replacing it。"},
+  {q:"4. The multilayer graphene oxide sheets were approximately —",opts:["two nanometres thick, with folds about nine nanometres deep","nine nanometres thick, with folds about two nanometres deep","ninety-six nanometres thick, with folds about five nanometres deep","2.9 nanometres thick, with folds about 1.9 nanometres deep"],ans:1,
+   fb:"正确。原文写的是 roughly nine nanometres thick, their outer layers folded into bands about two nanometres deep。A 把两个尺度对调了，是数字题最常见的陷阱；C 把百分之九十六的传递效率与百分之五的弹性应变当成了纳米尺度；D 把两个吉帕值搬到了纳米单位上。做数字题时先确认单位再看数值，往往能一次性排除掉一半选项。"},
+  {q:"5. Which of the following best describes the author's attitude toward the reported findings?",opts:["Unqualified endorsement","Dismissive scepticism","Measured approval with clearly stated boundaries","Detached reportage offering no evaluation"],ans:2,
+   fb:"正确。全文的态度是可辨认的：前三段用 beyond earlier nacre-inspired films、what the authors call pull-to-push、at an efficiency near ninety-six per cent 等措辞承认成果；但第四段主动划界——作者把新模型定位为对旧模型的拓展而非取代，接着列出仍待调控的三个变量，最后用 None of this makes a device. It makes a design space. 收尾。C 同时覆盖了「肯定」与「划界」两层。A 过头了，遗漏了第四段；B 与全文基调相反；D 不准确，作者并非没有评价，只是把评价落在了边界上。"},
+  {q:"6. Which of the following would be the most appropriate title for the passage?",opts:["The Shear-Lag Model and Its Critics","From Stacking to Shaping: How One Film Changed the Way Load Travels","Graphene and the Future of Lightweight Aerospace Structures","Why Bonding Density Determines the Strength of Layered Films"],ans:1,
+   fb:"正确。四段的主线是「换变量」：第一段讲旧模型靠界面传力并撞上天花板；第二段讲改为调控片层自身的空间构型；第三段报数据并给机制，即拉—推转变与剪切互锁；第四段落到设计变量从平面堆叠转向空间构型组装，并划出边界。B 的 From Stacking to Shaping 正好概括这条线。A 只覆盖第一段；C 把末段提到的应用展望当成了主题，而原文明确说这还不是器件；D 只覆盖第一段两个局限中的一个。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

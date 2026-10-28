@@ -10329,5 +10329,67 @@ const EPISODES = [
         "ex": "Whether the provisos hold is empirical, and the evidence has not <b>obliged</b>."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-10-28",
+    "title": "The Fold That Would Not Slip",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-10-28-the-fold-that-would-not-slip",
+    "url": "lessons/c1/2026-10-28-the-fold-that-would-not-slip.html",
+    "vocab": [
+      {
+        "word": "inherited",
+        "zh": "承袭的、沿用的",
+        "ex": "For two decades the mechanics of such films have been described by one inherited picture."
+      },
+      {
+        "word": "nacre",
+        "zh": "珍珠层、珠母层（仿生材料学原型）",
+        "ex": "The shear-lag model was borrowed from nacre, in which stiff bricks are bound by a softer mortar."
+      },
+      {
+        "word": "mortar",
+        "zh": "灰浆、砂浆（砖—泥结构中的软相）",
+        "ex": "In a brick-and-mortar architecture, the hard phase carries load while the mortar transfers it."
+      },
+      {
+        "word": "pliant",
+        "zh": "柔韧的、受力即变形而不断裂的",
+        "ex": "Graphene is pliant; it folds where a rigid plate would crack."
+      },
+      {
+        "word": "clasp",
+        "zh": "扣住、咬合；搭扣",
+        "ex": "The sheets assembled into a film whose layers clasp one another."
+      },
+      {
+        "word": "tensile",
+        "zh": "拉伸的、张力的（tensile strength 抗拉强度）",
+        "ex": "The film reached 2.9 gigapascals in tensile strength."
+      },
+      {
+        "word": "interfacial",
+        "zh": "界面的（interfacial chemistry 界面化学）",
+        "ex": "Stress travels by shear-locking, not interfacial drag."
+      },
+      {
+        "word": "configuration",
+        "zh": "构型、配置（各部分的相对空间排布）",
+        "ex": "The team tuned the sheet's spatial configuration rather than its interfacial chemistry."
+      },
+      {
+        "word": "topological",
+        "zh": "拓扑（学）的（研究连续变形下不变的性质）",
+        "ex": "It marks a move from planar stacking toward topological assembly."
+      },
+      {
+        "word": "filament",
+        "zh": "细丝、单丝（构成绳与膜的最基本单元）",
+        "ex": "A rope outperforms the filaments it is made of."
+      }
+    ]
   }
 ];
