@@ -10487,27 +10487,27 @@ const EPISODES = [
       {
         "word": "variant",
         "zh": "异文（同一文本在不同版本间的局部差异）",
-        "ex": "Besides several thousand smaller variants, whole passages appear in only one of the two texts."
+        "ex": "Some 285 lines appear only in the first, some 102 only in the second, besides several thousand smaller variants."
       },
       {
         "word": "conflate",
         "zh": "合并（把多个文本拼成一个）；也指混淆",
-        "ex": "For two centuries editors conflated the two texts, emending as they went."
+        "ex": "The question is not whether to conflate but how much."
       },
       {
         "word": "emend",
         "zh": "校勘、订正（据理据推测并改写原文）",
-        "ex": "Where a reading looked corrupt, the editor emended it and recorded the change in the apparatus."
+        "ex": "Editors conflated them, emending as they went."
       },
       {
         "word": "orthodoxy",
         "zh": "正统、被普遍接受的学说或做法",
-        "ex": "The two-text reading hardened into an orthodoxy within a decade."
+        "ex": "The two-text reading hardened into an orthodoxy."
       },
       {
         "word": "ascribe",
         "zh": "归因于、归属于（ascribe X to Y）",
-        "ex": "The revisionists ascribed the cuts to Shakespeare himself; Vickers ascribed them to the workshop."
+        "ex": "Where the revisionists ascribed the cuts to Shakespeare himself, he saw a printing house and a playing company under pressure."
       },
       {
         "word": "crux",
@@ -10517,7 +10517,7 @@ const EPISODES = [
       {
         "word": "apparatus",
         "zh": "校勘记（critical apparatus）；装置、机构",
-        "ex": "Recent volumes make the borrowing visible in the apparatus rather than hiding it."
+        "ex": "Recent volumes make the borrowing visible in the apparatus."
       }
     ]
   }
