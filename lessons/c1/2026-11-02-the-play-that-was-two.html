@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Play That Was Two — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#86198f;
+  --accent2:#075985;
+  --bg:#f8f9fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#fce7f3;
+  --border:#f9a8d4;
+  --soft:#fdf2f8;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(134,25,143,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(134,25,143,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(134,25,143,.55);}70%{box-shadow:0 0 0 12px rgba(134,25,143,0);}100%{box-shadow:0 0 0 0 rgba(134,25,143,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#f9a8d4;}
+#tip{position:fixed;z-index:1200;background:#500724;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(134,25,143,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fce7f3;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 文学评论 Literary Criticism</span>
+      <h1 class="title">The Play That Was Two</h1>
+      <p class="subtitle">What happens when editors stop repairing one text and start printing two · 2026-11-02 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The two-century repair</div>
+            <p>For two centuries editors treated the two earliest <span class="kw" data-def="witness（名词）：在版本学里指某一文本的某一实物载体或抄本／印本，即能够「见证」该文本某一状态的那一本书，如 the two earliest witnesses（最早的两个文本见证）。这是校勘学的专门义项，与法律上「目击证人」无关，也不要理解为「证据」。">witnesses</span> as imperfect copies of one lost original. The <span class="kw" data-def="quarto（名词）：四开本。早期近代英国戏剧最常见的印本开本，把一张全开纸折两次成四叶八页，成品窄而高、价格低廉。莎剧研究中 Q1、Q2 即第一、第二四开本。读音 /ˈkwɔːtəʊ/，复数 quartos。">quarto</span> of 1608 and the <span class="kw" data-def="folio（名词）：对开本。把一张全开纸折一次成两叶四页的大开本，昂贵、多用于文集与经典化出版物；1623 年莎士比亚戏剧全集即第一对开本（First Folio，常简作 F 或 F1）。它与廉价的四开本在开本、价格与读者定位上都不同。">folio</span> of 1623 differ so widely — some 285 lines appear only in the first, some 102 only in the second, besides several thousand smaller <span class="kw" data-def="variant（名词）：异文。同一文本在不同抄本或印本之间出现的字词、短语、行次的差异，是校勘学的基本工作单位。动词 vary，形容词 variant 少见，名词 a variant reading 即「一处异文」。注意与 version（版本／稿次，指整体形态差异）区分：异文是局部差异，版本是整体差异。">variants</span> — that neither could stand alone. Editors <span class="kw" data-def="conflate（动词）：合并、把两个（或多个）文本合成一个。版本学专指把四开本与对开本的内容拼合为一个「完整」文本的做法，名词 conflation，其反义是 deconflation（拆分）与 versioning（分版本刊行）。日常英语里该词也有「混淆」义（conflate X with Y），二者须按语境区分。">conflated</span> them, <span class="kw" data-def="emend（动词）：校勘、订正。当现存文本明显有误时，由编者依理据推测并改写原文，名词 emendation，与 correction（有据可依的改正）相对。学术写作中 emend the text、a conjectural emendation（推测性校改）都是固定搭配。">emending</span> as they went. Charles Knight stated the principle in 1843: no line that seemed Shakespeare's ought to be lost.</p>
+          </div>
+          <button class="play-btn" data-i="0" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The revisionist turn</div>
+            <p>The consensus broke in the late 1970s. Warren's 1976 paper argued that the folio was not a damaged quarto but a revision; Urkowitz developed the case in 1980, reading the cuts as theatrical economy. The Division of the Kingdoms (1983) pressed it across twelve essays. Three years later the Oxford Complete Works did what argument could not: it printed the two as separate plays, and the two-text reading hardened into an <span class="kw" data-def="orthodoxy（名词）：正统、被普遍接受的学说或做法。由 ortho-（正确）+ doxa（意见）构成，与 heresy（异端）、heterodoxy 相对。学术写作里 harden into an orthodoxy 是常见搭配，隐含批评：一个原本只是假说的说法，因反复被引而不再被检验。">orthodoxy</span>.</p>
+          </div>
+          <button class="play-btn" data-i="1" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The materialist reply</div>
+            <p>Sir Brian Vickers replied at book length in 2016. Where the revisionists <span class="kw" data-def="ascribe（动词）：把某事物归因于、归属于某人或某原因，固定搭配 ascribe X to Y，如 ascribe the cuts to Shakespeare himself（把这些删减归因于莎士比亚本人）。名词 ascription。它与 attribute to 近义但更正式，与 impute 的区别在于 ascribe 不含「归咎、指责」的贬义色彩。">ascribed</span> the cuts to Shakespeare himself, he saw a printing house and a playing company under pressure. The quarto's omissions, he argued, were the work of the printer Nicholas Okes, who had ordered too little paper; the folio's were made by the players, to shorten the evening. The dispute is not about how much is missing but about who removed it.</p>
+          </div>
+          <button class="play-btn" data-i="2" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What changed in practice</div>
+            <p>Practice has since grown candid. Ernst Honigmann observed that even an edition claiming to print one text borrows from the other at every <span class="kw" data-def="crux（名词）：难解之处、校勘上的死结。版本学里特指某一处异文无法判定取舍的疑难位置，拉丁原义为「十字架」，引申为「折磨人的难题」。复数有 cruxes 与 cruces 两种写法，读音 /krʌks/。它比 problem 更技术化，专指文本层面的疑难。">crux</span>: the question is not whether to conflate but how much. Recent volumes make the borrowing visible in the <span class="kw" data-def="apparatus（名词）：此处指校勘记（critical apparatus），即学术版页面底部或卷末罗列异文、校改与来源的那部分；广义也指仪器、装置、机构。学术写作中 critical apparatus 是固定术语。注意它的复数是 apparatuses，且作「校勘记」时通常带 critical 限定。">apparatus</span> — superscripts in the third Arden, shaped brackets in the Folger, and in the Norton a parallel pair beside a scars-and-stitches version. What has changed is the unit: no longer one play to be repaired, but two to be chosen between.</p>
+          </div>
+          <button class="play-btn" data-i="3" data-icon="▶">▶</button>
+        </div>
+
+        <div class="card" style="background:var(--soft);">
+          <div class="role" style="color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.5px;">Source · 素材来源</div>
+          <p style="font-size:14px;margin:6px 0 0;color:#4b5563;">Internet Shakespeare Editions, <i>King Lear</i>: Textual Introduction（四开本与对开本异文计数、Taylor &amp; Wells 1986、Honigmann 与 Ioppolo 的引述）· Taylor, G. &amp; Warren, M., eds. <i>The Division of the Kingdoms: Shakespeare's Two Versions of King Lear</i> (Clarendon Press, 1983) · Urkowitz, S. <i>Shakespeare's Revision of King Lear</i> (1980) · Vickers, B. <i>The One King Lear</i> (Harvard University Press, 2016) · Knight, C. <i>The Pictorial Edition of the Works of Shakespeare</i>, vol. 6 (1843), p. 392（转引自 Wells 在 Taylor &amp; Warren 1983 中的引述）· Folger Shakespeare Library, <i>King Lear</i>: Further Reading · Calvo, C. Sederi 2 (1991) 关于修正派与反修正派的综述。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary（10 个 C1–C2 学术词）</h2>
+      <div class="card">
+        <div class="vocab-grid">
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="witness" data-icon="🔊">🔊</button>
+            <div class="word">witness<span class="pos">n.</span></div>
+            <div class="zh">文本见证（版本学：某一文本的实物载体）</div>
+            <div class="ex">Editors treated the two earliest witnesses as imperfect copies of one lost original.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="quarto" data-icon="🔊">🔊</button>
+            <div class="word">quarto<span class="pos">n.</span></div>
+            <div class="zh">四开本（早期近代戏剧的廉价开本）</div>
+            <div class="ex">The quarto of 1608 and the folio of 1623 differ so widely that neither could stand alone.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="folio" data-icon="🔊">🔊</button>
+            <div class="word">folio<span class="pos">n.</span></div>
+            <div class="zh">对开本（1623 年第一对开本即 F1）</div>
+            <div class="ex">Warren argued that the folio was not a damaged quarto but a revision.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="variant" data-icon="🔊">🔊</button>
+            <div class="word">variant<span class="pos">n.</span></div>
+            <div class="zh">异文（同一文本在不同版本间的局部差异）</div>
+            <div class="ex">Besides several thousand smaller variants, whole passages appear in only one of the two texts.</div>
+            <div class="lvl">C1 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="conflate" data-icon="🔊">🔊</button>
+            <div class="word">conflate<span class="pos">v.</span></div>
+            <div class="zh">合并（把多个文本拼成一个）；也指混淆</div>
+            <div class="ex">For two centuries editors conflated the two texts, emending as they went.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="emend" data-icon="🔊">🔊</button>
+            <div class="word">emend<span class="pos">v.</span></div>
+            <div class="zh">校勘、订正（据理据推测并改写原文）</div>
+            <div class="ex">Where a reading looked corrupt, the editor emended it and recorded the change in the apparatus.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="orthodoxy" data-icon="🔊">🔊</button>
+            <div class="word">orthodoxy<span class="pos">n.</span></div>
+            <div class="zh">正统、被普遍接受的学说或做法</div>
+            <div class="ex">The two-text reading hardened into an orthodoxy within a decade.</div>
+            <div class="lvl">C1</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="ascribe" data-icon="🔊">🔊</button>
+            <div class="word">ascribe<span class="pos">v.</span></div>
+            <div class="zh">归因于、归属于（ascribe X to Y）</div>
+            <div class="ex">The revisionists ascribed the cuts to Shakespeare himself; Vickers ascribed them to the workshop.</div>
+            <div class="lvl">C1</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="crux" data-icon="🔊">🔊</button>
+            <div class="word">crux<span class="pos">n.</span></div>
+            <div class="zh">校勘上的疑难处、死结</div>
+            <div class="ex">Even an edition claiming to print one text borrows from the other at every crux.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+          <div class="vocab">
+            <button class="speak-btn" data-word="apparatus" data-icon="🔊">🔊</button>
+            <div class="word">apparatus<span class="pos">n.</span></div>
+            <div class="zh">校勘记（critical apparatus）；装置、机构</div>
+            <div class="ex">Recent volumes make the borrowing visible in the apparatus rather than hiding it.</div>
+            <div class="lvl">C2 · 术语</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns（5 个高级学术句型）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. 综述开篇：时间跨度 + 一个共同预设</h3>
+          <div class="zh">For two centuries X treated Y as Z.</div>
+          <div class="eg">For two centuries editors treated the two earliest witnesses as imperfect copies of one lost original.</div>
+          <div class="practice">
+            <b>用法</b>：先用一段时间状语搭出「长久以来」的框架，再点出学界共有的那个预设。好处是：三行之内读者就知道了旧范式是什么，后文一旦推翻，落差立刻显出来。注意 treated Y as Z 后面通常是一个<b>后来被证明为误</b>的说法，这个句型自带反讽张力。<br>
+            ✏️ 仿写：<input placeholder="For two decades scholars treated ___ as ___.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. 把数据群塞进破折号，再用 so … that 收束</h3>
+          <div class="zh">X and Y differ so widely — [具体数字] — that neither could stand alone.</div>
+          <div class="eg">The quarto of 1608 and the folio of 1623 differ so widely — some 285 lines appear only in the first, some 102 only in the second, besides thousands of smaller variants — that neither could stand alone.</div>
+          <div class="practice">
+            <b>用法</b>：so 与 that 被一组破折号打断，但语法关系不断——把证据插在最需要它的位置，读者不必等到句末才知道「差得多」是什么意思。学术写作里这是压缩信息密度最有效的手段之一；<b>代价是读起来慢</b>，一段里用一次就够。<br>
+            ✏️ 仿写：<input placeholder="The two accounts differ so widely — ___ — that neither could stand alone.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. 范式断裂 + 观点归属（文献综述的核心句式）</h3>
+          <div class="zh">The consensus broke in + 时间. 学者名's + 年份 + paper argued that …</div>
+          <div class="eg">The consensus broke in the late 1970s. Warren's 1976 paper argued that the folio was not a damaged quarto but a revision.</div>
+          <div class="practice">
+            <b>用法</b>：第一句用 consensus broke 宣告断裂（比 however 有力得多），第二句立刻把新说法<b>挂到一个具体的人与年份上</b>。雅思与托福的段落匹配题、观点归属题，几乎都靠这种「学者 + 年份 + argued that」的结构定位。not A but B 则把新旧两说压进一句。<br>
+            ✏️ 仿写：<input placeholder="The consensus broke in ___. ___'s ___ paper argued that ___ was not ___ but ___.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. Where 引导的对照：同一事实，两种目光</h3>
+          <div class="zh">Where A saw B, C saw D.</div>
+          <div class="eg">Where the revisionists ascribed the cuts to Shakespeare himself, he saw a printing house and a playing company under pressure.</div>
+          <div class="practice">
+            <b>用法</b>：where 在此处相当于 whereas（在…的地方／在…这件事上），专门用来把两位学者的分歧并排摆出，且不评价谁对。两个分句<b>结构对称</b>（saw B / saw D）是它的力量来源——不对称就会散。学术写作中它比 however 更克制，因为它把判断权留给读者。<br>
+            ✏️ 仿写：<input placeholder="Where ___ saw ___, ___ saw ___.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>5. 收口：指出真正变化的是「单位」</h3>
+          <div class="zh">What has changed is X: no longer Y, but Z.</div>
+          <div class="eg">What has changed is the unit: no longer one play to be repaired, but two to be chosen between.</div>
+          <div class="practice">
+            <b>用法</b>：What has changed is … 是一个名词性关系从句作主语的强调结构，把读者的注意力从「结论变了」引向更根本的「讨论的对象变了」。冒号后用 no longer A but B 给对照，两个不定式（to be repaired / to be chosen between）还要保持形式平行。这是写结论段最高级的一招：不重复论点，而是抬升一层。<br>
+            ✏️ 仿写：<input placeholder="What has changed is ___: no longer ___, but ___.">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar（5 个高级语法）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>1. 破折号插入语（Parenthetical dash）</h3>
+          <div class="zh">成对的破折号插入解释性成分；可与 so … that 等关联结构共存而不破坏其语法关系。</div>
+          <div class="eg">The quarto and the folio differ <b>so</b> widely <b>—</b> some 285 lines appear only in the first <b>—</b> <b>that</b> neither could stand alone.</div>
+          <div class="practice">
+            so 与 that 之间被破折号打断，但<b>so … that 的从属关系依然成立</b>——这是破折号与括号共用时最容易被误判的地方。
+            破折号内若再出现逗号（本句 some 285 lines … , some 102 …），层次不会乱，因为破折号比逗号<b>高一级</b>。
+            对比：用逗号插入同一段会与内部逗号混淆，用括号则语气太轻、不足以承载关键论据。
+            注意破折号<b>必须成对</b>；只写一个破折号时，它引出的通常是不成对的补充说明。
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. so … that 结果从句及其前置倒装</h3>
+          <div class="zh">so + 形容词／副词置于句首时，主句须部分倒装（助动词提前）。</div>
+          <div class="eg">正常语序：The two texts differ <b>so</b> widely <b>that</b> neither could stand alone.<br>倒装：<b>So</b> widely <b>do</b> the two texts differ <b>that</b> neither could stand alone.</div>
+          <div class="practice">
+            规则：so + 形容词／副词短语移至句首 → 主语前插入助动词（do / does / did / be / have / 情态动词），谓语核心留在主语之后。
+            本文用的是正常语序；倒装形式多见于<b>强调与修辞性段落</b>，学术写作中适量使用可提升 Grammatical Range 得分。
+            常见错误：<s>So widely the two texts differ that…</s>（缺助动词）。
+            同类触发词还包括 <b>not only</b>、<b>never</b>、<b>under no circumstances</b>，均为「否定／强调成分前置 → 倒装」。
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. Where 引导的对比状语从句</h3>
+          <div class="zh">where 在此不表地点，而相当于 whereas，用于把两种解读并置。</div>
+          <div class="eg"><b>Where</b> the revisionists ascribed the cuts to Shakespeare himself, he saw a printing house and a playing company under pressure.</div>
+          <div class="practice">
+            判断方法：若把 where 换成 whereas 或 while 句子仍成立，即为对比用法；若换成 in the place that 才成立，则是地点用法。
+            它比 whereas 短、比 but 客观，因此在<b>学术争鸣综述</b>里极为常见。
+            结构要求：两个分句宜保持对称（saw B / saw D），否则对比的重心会漂移。
+            注意 where 从句可以前置也可以后置，前置时对比意味更强。
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. 冒号引出被陈述的原则（Colon introducing a stated principle）</h3>
+          <div class="zh">冒号前须为完整句子；冒号后可接名词短语（同位语）或完整句子（解释／陈述）。</div>
+          <div class="eg">Charles Knight stated the principle in 1843<b>:</b> no line that seemed Shakespeare's ought to be lost.<br>Ernst Honigmann observed that … at every crux<b>:</b> the question is not whether to conflate but how much.</div>
+          <div class="practice">
+            第一例冒号后是<b>一句完整陈述</b>，内容正是 principle 的具体内容；第二例冒号前的 observed that 从句本身已完整，冒号后补出其观察所得。
+            两例冒号前都是完整句子——这是硬规则，与破折号不同（破折号可接在名词后）。
+            风格提示：美式英语在冒号后接完整句子时可大写首字母，英式与多数学术期刊风格小写；本页统一小写。
+            考题里，冒号后的内容往往是<b>对前句某个抽象名词的释义</b>，是词义题的高频落点。
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>5. 虚拟条件句与 were-倒装（Subjunctive with inverted were）</h3>
+          <div class="zh">与现在事实相反的假设：If 从句用过去式（be 一律用 were），主句用 would + 原形；省略 if 时 were 须提前。</div>
+          <div class="eg"><b>Were</b> the folio a revision, its cuts <b>would be</b> deliberate — and the quarto's omissions <b>would call for</b> a different explanation.</div>
+          <div class="practice">
+            本句是对<b>尚未证实的学术假说</b>作条件推演，正是虚拟语气的典型语境：说话者并不认为 folio 是修订本，只是假设如此。
+            省略 if 后 were 必须置于主语之前，这是虚拟条件句三项倒装（were / had / should）中最常见的一种。
+            常见错误：<s>If the folio was a revision…</s>（正式文体中应用 were）。
+            学术写作里这句型用来「暂且接受对方前提以检验其后果」，是一种<b>既客气又锋利</b>的反驳方式。
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz（雅思 / 托福风格 · 6 题）</h2>
+      <div class="card">
+        <p class="subtitle" style="margin-bottom:12px;">做题提示：本文的事实分四组——<b>两个早期印本的年份</b>、<b>异文的计数</b>、<b>各家对删减的归因</b>、<b>当代各版本的处理方式</b>。干扰项几乎总在这四组之间搬运，或把一个学者的话安到另一个头上。</p>
+        <div id="quizBox"></div>
+      </div>
+    </section>
+
+    <!-- 6. CHINESE EXTENSION -->
+    <section id="ext" class="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 · 学术背景深度解析</h2>
+      <div class="card">
+
+        <h3>一、两本书，一部戏：问题从哪来</h3>
+        <p>《李尔王》有两份早期文本。其一是 1608 年的<b>四开本</b>（quarto，学界记作 Q1，1619 年曾重印）；其二是 1623 年<b>第一对开本</b>（First Folio，记作 F 或 F1）所收的版本。两份文本不只在字句上有出入，连整场戏都有此有彼无的情况。</p>
+        <p>从最早的编者到二十世纪后期，主流的处理方式建立在一个共同预设上：<b>莎士比亚只写过一部《李尔王》，现存两份文本都是这部戏被损坏后的残留</b>。既然如此，把两份拼起来、取长补短，就是唯一合理的做法。1843 年 Charles Knight 把这条原则说得最直白：凡是看上去出自莎士比亚之手的文字，一行也不该丢掉。</p>
+        <p>这个预设决定了之后两百年的编辑实践。它极其有效——现代读者看到的《李尔王》绝大多数是拼合本——但它也<b>把两份文本的差异预先判定为「损坏」</b>，而不是当作有待解释的现象。</p>
+
+        <h3>二、1976—1986：把「损坏」重新读成「修订」</h3>
+        <p>转折始于 1976 年 Michael Warren 在国际莎士比亚大会上提交的一篇论文（1978 年发表）。他比较了四开本与对开本中 Albany 与 Edgar 两人的戏份，指出对开本把 Edgar 的角色放大、把 Albany 压缩，这种<b>有方向的改动</b>不像抄坏的痕迹，更像有人有意为之。</p>
+        <p>1980 年 Steven Urkowitz 在专著中把这条路走完，把对开本的删减读作<b>剧场性的精简</b>——为演出节奏而动刀。同年 Gary Taylor 又指出另一条线索：对开本第四幕的删改明显在加快剧情向战争推进。1983 年 Taylor 与 Warren 合编的论文集《The Division of the Kingdoms》收录十二篇文章，把这一说法推到主流面前。</p>
+        <p>真正的分水岭是 1986 年的牛津版莎士比亚全集：Wells 与 Taylor 把四开本与对开本<b>作为两部独立文本同时刊出</b>。这是「两文本说」第一次获得出版层面的承认，此后它迅速成为新的正统，并外溢到《哈姆雷特》《特洛伊罗斯与克瑞西达》《奥瑟罗》等同样存在四开本／对开本之争的剧目。</p>
+
+        <h3>三、2016：把作者换成印刷所与剧团</h3>
+        <p>2016 年，Sir Brian Vickers 出版《The One King Lear》（哈佛大学出版社），首次以专著篇幅正面反驳两文本说。他的论证不走文学阐释，而走<b>早期近代印刷与演出的物质条件</b>：</p>
+        <ul>
+          <li><b>四开本的缺失</b>：Vickers 认为是印刷商 Nicholas Okes 造成的——他低估了排印所需纸张，临到印时只能删字删行来压缩版面，因此删掉的多是零碎、无关宏旨的地方，不足以解释为作者的艺术意图。</li>
+          <li><b>对开本的删减</b>：他则归因于剧团自身为缩短演出时长而做的裁切，同样看不到莎士比亚本人的手。</li>
+        </ul>
+        <p>这一反驳的锋利之处在于<b>换了主语</b>：修正派问「莎士比亚为什么要改」，Vickers 问「在印刷所与剧场里，谁有理由、也有能力动这些文字」。争论因此从意图层面下沉到生产条件层面。需要说明的是，两边都没有作者手稿可据，因此双方给出的都是<b>假说</b>而非定论；学术界的回应也远非一致，既有支持修正派的，也有批评其论证基础不牢的。</p>
+
+        <h3>四、真正改变的是什么</h3>
+        <p>值得注意的收口来自 Ernst Honigmann 的一个观察：即使是宣称只印单一文本的「纯粹」版本，在处理疑难异文时也几乎总会借用另一文本的读法。因此问题从来不是「该不该拼」，而是「拼到什么程度」。</p>
+        <p>当代版本于是<b>不再假装纯粹，而是把借用显示出来</b>：阿登第三版（Foakes 编）用上标字母标注异文来源；福尔杰版（Mowat 与 Werstine 编）用不同形状的括号区分读法出处；诺顿莎士比亚第三版（Grace Ioppolo 编）干脆把两个文本并列排印，另附一个她自称为<b>带着缝合疤痕</b>的合成本。读者被允许，也被要求，看见编辑做了什么。</p>
+        <p>这里可以对照中国自身的校勘传统：刘向校书、乾嘉考据直到陈垣《校勘学释例》归纳的对校、本校、他校、理校四法，处理的其实是同一件事——<b>当没有原本可依时，编者该据什么作出判断，又该把判断的痕迹留到什么程度</b>。中西之别不在问题，而在答案的呈现方式：一个偏向择善而从，一个越来越偏向存异并存。</p>
+
+        <h3>五、事实口径表（细节题的设陷阱处）</h3>
+        <table>
+          <tr><th>项目</th><th>数值 / 事实</th><th>口径与说明</th></tr>
+          <tr><td>四开本</td><td>1608 年（Q1）</td><td>1619 年重印本通常记作 Q2，与 Q1 属同一文本系统</td></tr>
+          <tr><td>对开本</td><td>1623 年（F1）</td><td>首部莎士比亚戏剧全集所收</td></tr>
+          <tr><td>仅见于四开本的行数</td><td>约 285 行</td><td>计数方法不同，另有「对开本较四开本少约 300 行」的说法</td></tr>
+          <tr><td>仅见于对开本的行数</td><td>约 102 行</td><td>与上项属同一组计数；两数不可对调</td></tr>
+          <tr><td>Warren</td><td>1976 年会议论文，1978 年发表</td><td>从 Albany 与 Edgar 的戏份变化立论</td></tr>
+          <tr><td>Urkowitz</td><td>1980 年专著</td><td>把删减读作剧场性的精简</td></tr>
+          <tr><td>Taylor &amp; Warren</td><td>1983 年论文集，十二篇</td><td>两文本说进入主流</td></tr>
+          <tr><td>牛津版全集</td><td>1986 年</td><td>首次把两个文本作为独立文本同时刊出</td></tr>
+          <tr><td>Vickers</td><td>2016 年专著</td><td>归因于印刷商 Okes（四开本）与剧团（对开本）</td></tr>
+        </table>
+        <p>注意归因一项：<b>纸张不足对应四开本，缩短演出对应对开本</b>，两组各归各主。NOT 类题目最常见的干扰，就是把其中一个原因安到另一个文本头上。</p>
+
+        <div class="box">
+          <b>事实与立场（必读）</b><br>
+          ① 本页只转述公开发表的学术争论与可核实的出版事实，<b>不构成对任何学者、机构或出版社的评价</b>，也不代表对两文本说或单一文本说中的任何一方持立场。<br>
+          ② 双方结论均属<b>假说层级</b>：莎士比亚《李尔王》的作者手稿不存于世，修订说与印刷所／剧团说都无法直接证实，判断须回到各家原始论证。<br>
+          ③ 异文计数因计数方法而异，正文采用其中一组并已在表中注明另一说；引用时请注明口径。<br>
+          ④ 本页内容为教学用转述与评论，非任何原著、论文或学术版的翻译；一切事实以所引原始文献与各版本前言为准。<br>
+          ⑤ 本文属纯学术议题，<b>不涉及任何当代政治、国家或政体评价</b>；文中出现的本土校勘学对照仅为理解辅助，不构成中西优劣判断。
+        </div>
+
+        <h3>六、一个可迁移的读法</h3>
+        <p>文学评论类文章有一个稳定的骨架：<b>流传的说法 → 一个具体的反例或反证 → 新的解释框架 → 争论的层级迁移</b>。读的时候，第一段要找「旧共识是什么、它的前提是什么」，第二段要找「谁在什么时候、用什么证据翻的案」，第三段要找「反驳换掉了哪个变量」，第四段要找「作者认为争论本身移动到了哪一层」。</p>
+        <p>其中第四段最容易被跳过，却最常出题。本文末句那句「变化的不是结论而是单位」就是标准的态度落点：作者不站队，而是指出上面的问题被重新定义了。雅思与托福的作者态度题、推断题，答案多半藏在这种地方。</p>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 本课学习目标</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇</b>：掌握 10 个 C1–C2 学术词，其中 witness、quarto、folio、variant、crux、apparatus 为版本学（textual scholarship）专用术语，conflate 与 emend 属校勘动词，orthodoxy 与 ascribe 可用于任何学术综述。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句式</b>：掌握 5 个可迁移到综述写作中的句型，尤其是「时间跨度 + 共同预设」的开篇、「范式断裂 + 观点归属」的中段，以及「变化的是单位」的收口法。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法</b>：破折号插入语、so … that 及其前置倒装、Where 引导的对比从句、冒号引出陈述原则、虚拟条件句的 were-倒装——五个均为雅思写作 Grammatical Range 的直接得分点。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>阅读</b>：建立「旧共识 → 反证 → 新框架 → 争论层级迁移」的评论类阅读骨架，能主动定位作者把争论搬到了哪一层。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div><b>思辨</b>：区分「假说」与「定论」、区分「作者的行为」与「生产条件造成的后果」，这是人文类阅读里最容易被模糊的一条线。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 · 学术争鸣类文章的三个落点</h3>
+        <p style="font-size:15px;"><b>① 观点归属题先锁「人名 + 年份」。</b>本文有 Warren（1976）、Urkowitz（1980）、Taylor 与 Warren（1983）、牛津版（1986）、Vickers（2016）五组定位符。做题时先在题干里找名字，回原文按年份定位，比通读快得多；干扰项几乎总是「A 的话安到 B 头上」。</p>
+        <p style="font-size:15px;"><b>② NOT / EXCEPT 题要区分「提到过」与「属于哪一边」。</b>纸张不足与缩短演出两个原因都在原文里，但分别属于四开本与对开本。这类题的陷阱不是无中生有，而是<b>换了归属</b>；逐项回原文核对主语即可排除。</p>
+        <p style="font-size:15px;"><b>③ 态度题不要急着站队。</b>本文作者不评价两说谁对，而是把落点放在「争论的单位变了」。遇到这种收法，正确答案通常描述的是<b>作者如何重新框定问题</b>，而不是作者支持哪一方。</p>
+
+        <h3 style="color:var(--accent);">🔗 原始文献与延伸阅读</h3>
+        <p style="font-size:14.5px;color:#4b5563;">Internet Shakespeare Editions, <i>King Lear</i>: Textual Introduction · Taylor, G. &amp; Warren, M., eds. <i>The Division of the Kingdoms: Shakespeare's Two Versions of King Lear</i> (Clarendon Press, 1983) · Urkowitz, S. <i>Shakespeare's Revision of King Lear</i> (Princeton University Press, 1980) · Wells, S. &amp; Taylor, G., eds. <i>The Complete Works</i> (Oxford, 1986) · Vickers, B. <i>The One King Lear</i> (Harvard University Press, 2016) · Calvo, C. Authorial Revision and Authoritative Texts, <i>Sederi</i> 2 (1991) · 陈垣《校勘学释例》（校法四例）。<br>本页为英语学习材料，内容为教学用转述与评论，非任何原著、论文或学术版的翻译；一切事实与数据以原始文献为准。</p>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>Pola News · Advanced English C1–C2 · 2026-11-02 · The Play That Was Two</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');});
+function go(sec){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(sec).classList.add('active');
+  document.querySelectorAll('nav.sidebar a').forEach(a=>a.classList.remove('active'));
+  const link=document.querySelector('nav.sidebar a[data-sec="'+sec+'"]');
+  if(link)link.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window.innerWidth<=780)sidebar.classList.remove('open');
+}
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.sec);});
+});
+
+/* ---------- Reading progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Keyword tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('mouseenter',()=>{
+    tip.innerHTML='<b>'+w.textContent.trim()+'</b><br>'+w.dataset.def;
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let left=r.left;
+    if(left+330>window.innerWidth)left=window.innerWidth-340;
+    tip.style.left=Math.max(10,left)+'px';
+    tip.style.top=(r.bottom+8)+'px';
+  });
+  w.addEventListener('mouseleave',()=>{tip.style.display='none';});
+});
+
+/* ---------- Speech (Web Speech API, replaced by pre-generated audio) ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+loadVoices();
+if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.onvoiceschanged=loadVoices;
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  const match=p=>en.find(p);
+  return match(v=>/Samantha|Google US English|Microsoft Aria|Daniel/i.test(v.name))
+      || match(v=>/en-US/i.test(v.lang))
+      || en[0]
+      || null;
+}
+function resetBtn(){
+  document.querySelectorAll('.play-btn,.speak-btn').forEach(b=>{
+    b.classList.remove('playing');
+    b.textContent=b.dataset.icon||'🔊';
+  });
+}
+function stopSpeech(){
+  if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  stopSpeech();
+  if(typeof window.speechSynthesis==='undefined')return;
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.rate=0.95; u.pitch=1;
+  u.onend=resetBtn; u.onerror=resetBtn;
+  if(btn){btn.classList.add('playing');btn.textContent='⏸';}
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- Segment texts (auto-extracted from the reading section) ---------- */
+const segmentTexts=[
+  "For two centuries editors treated the two earliest witnesses as imperfect copies of one lost original. The quarto of 1608 and the folio of 1623 differ so widely — some 285 lines appear only in the first, some 102 only in the second, besides several thousand smaller variants — that neither could stand alone. Editors conflated them, emending as they went. Charles Knight stated the principle in 1843: no line that seemed Shakespeare's ought to be lost.",
+  "The consensus broke in the late 1970s. Warren's 1976 paper argued that the folio was not a damaged quarto but a revision; Urkowitz developed the case in 1980, reading the cuts as theatrical economy. The Division of the Kingdoms (1983) pressed it across twelve essays. Three years later the Oxford Complete Works did what argument could not: it printed the two as separate plays, and the two-text reading hardened into an orthodoxy.",
+  "Sir Brian Vickers replied at book length in 2016. Where the revisionists ascribed the cuts to Shakespeare himself, he saw a printing house and a playing company under pressure. The quarto's omissions, he argued, were the work of the printer Nicholas Okes, who had ordered too little paper; the folio's were made by the players, to shorten the evening. The dispute is not about how much is missing but about who removed it.",
+  "Practice has since grown candid. Ernst Honigmann observed that even an edition claiming to print one text borrows from the other at every crux: the question is not whether to conflate but how much. Recent volumes make the borrowing visible in the apparatus — superscripts in the third Arden, shaped brackets in the Folger, and in the Norton a parallel pair beside a scars-and-stitches version. What has changed is the unit: no longer one play to be repaired, but two to be chosen between."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. According to the passage, how do the two early texts differ in the lines they record?",
+   opts:["About 285 lines appear only in the quarto, and about 102 only in the folio.","About 102 lines appear only in the quarto, and about 285 only in the folio.","About 285 lines are common to both texts, and about 102 remain disputed.","About 102 lines were cut by the printer, and about 285 by the players."],
+   ans:0,
+   fb:"正确。原文的顺序是四开本在先、对开本在后：some 285 lines appear only in the first, some 102 only in the second。B 把两个数字对调了，是数字题最常见的陷阱；C 把「仅见于某一文本」偷换成「两本共有」，意思完全相反；D 把 Vickers 对两个文本的归因当成了行数统计。做这类题时先把数字与它的主体一起划出来，不要只记数值。"},
+  {q:"2. Which of the following is NOT offered in the passage as an explanation for the cuts in the folio?",
+   opts:["They were made to shorten a performance.","They reflect a revision by Shakespeare himself.","They were the result of a printer who had ordered too little paper.","They can be read as a form of theatrical economy."],
+   ans:2,
+   fb:"正确。纸张不足是 Vickers 为四开本的缺失给出的解释，不属于对开本。A 与 C 同源——原文写 folio's were made by the players, to shorten the evening，而 Urkowitz 把同一批删减读作 theatrical economy；B 是修正派的说法，即 Warren 与 Urkowitz 认为对开本出自作者本人的修订。NOT 题的干扰项往往不是无中生有，而是「文中确实提到、但属于另一边」的信息，逐项回原文核对归属即可排除。"},
+  {q:"3. The passage presents Vickers's 2016 account primarily as —",
+   opts:["A decisive refutation that has closed the two-text debate for good","A materialist alternative that relocates agency from the author to the printing house and the playing company","A restatement of the revisionist case, supported by fuller manuscript evidence","An argument about how many lines are missing rather than about who removed them"],
+   ans:1,
+   fb:"正确。第三段的核心是换主语：where the revisionists ascribed the cuts to Shakespeare himself, he saw a printing house and a playing company under pressure——把动因从作者的意图换成印刷所与剧团的生产条件，正是「物质层面」的解释。A 过头了，原文只说他 replied at book length，并未宣布争论结束；C 与原文相反，且莎士比亚的《李尔王》手稿不存于世，谈不上 manuscript evidence；D 正好说反，末句写的是 not about how much is missing but about who removed it。"},
+  {q:"4. Ernst Honigmann is cited in the final paragraph in order to —",
+   opts:["Show that conflation was abandoned once and for all after 1986","Establish that the folio text is the more authoritative of the two","Demonstrate that the quarto omissions resulted from a paper shortage","Point out that even an edition claiming to print one text depends on the other"],
+   ans:3,
+   fb:"正确。原文是 even an edition claiming to print one text borrows from the other at every crux，引他正是为了说明「纯粹版本」只是表面上的纯粹。A 与原文相反——恰恰因为无法彻底不拼，才有下一句 the question is not whether to conflate but how much；B 全文未作此类权威性排序；C 是 Vickers 的论点，不是 Honigmann 的。引用题（why does the author mention X）的答案几乎总是「X 的那句话在论证链条里的作用」，而不是「X 是谁」。"},
+  {q:"5. Which of the following can be inferred from the final paragraph about recent editions?",
+   opts:["They have stopped using the folio text altogether.","They tend to display their editorial borrowing rather than conceal it.","They have restored a single authoritative text based on the quarto.","They no longer record variants in the critical apparatus."],
+   ans:1,
+   fb:"正确。末段说 Recent volumes make the borrowing visible in the apparatus，随后举出上标字母、形状括号与并列排印三种做法——共同点都是「把借用显示出来」。A 与 C 都被末句排除：变化的是 the unit，即两个文本之间如何选择，而不是回到单一文本；D 与原文相反，校勘记正是被用来显示借用的地方。推断题要选「原文必然蕴含」的那一项，凡是加了 altogether、no longer 这类绝对化词语的选项，多半是过度推断。"},
+  {q:"6. Which of the following would be the most appropriate title for the passage?",
+   opts:["Nicholas Okes and the Paper Shortage of 1608","Why Shakespeare Revised His Greatest Tragedy","From One Play to Two: How Editors Redefined the Text They Were Editing","A Buyer's Guide to the Arden, the Folger and the Norton"],
+   ans:2,
+   fb:"正确。四段主线是「一个文本被拆成两个、且编辑实践随之改变」：第一段讲两百年里两个文本被当作一个原本的损坏副本；第二段讲七十到八十年代翻案，并在 1986 年首次分刊；第三段讲 2016 年的反向反驳；第四段落到变化的是单位——不再是一部待修补的戏，而是两部待选择的戏。C 正好覆盖这条线。A 是第三段的一个细节；B 预设了尚未证实的修订说，且只覆盖第二段；D 把第四段的例证当成了主题。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

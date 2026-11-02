@@ -10458,5 +10458,67 @@ const EPISODES = [
         "ex": "A rope outperforms the filaments it is made of."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-11-02",
+    "title": "The Play That Was Two",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-11-02-the-play-that-was-two",
+    "url": "lessons/c1/2026-11-02-the-play-that-was-two.html",
+    "vocab": [
+      {
+        "word": "witness",
+        "zh": "文本见证（版本学：某一文本的实物载体）",
+        "ex": "Editors treated the two earliest witnesses as imperfect copies of one lost original."
+      },
+      {
+        "word": "quarto",
+        "zh": "四开本（早期近代戏剧的廉价开本）",
+        "ex": "The quarto of 1608 and the folio of 1623 differ so widely that neither could stand alone."
+      },
+      {
+        "word": "folio",
+        "zh": "对开本（1623 年第一对开本即 F1）",
+        "ex": "Warren argued that the folio was not a damaged quarto but a revision."
+      },
+      {
+        "word": "variant",
+        "zh": "异文（同一文本在不同版本间的局部差异）",
+        "ex": "Besides several thousand smaller variants, whole passages appear in only one of the two texts."
+      },
+      {
+        "word": "conflate",
+        "zh": "合并（把多个文本拼成一个）；也指混淆",
+        "ex": "For two centuries editors conflated the two texts, emending as they went."
+      },
+      {
+        "word": "emend",
+        "zh": "校勘、订正（据理据推测并改写原文）",
+        "ex": "Where a reading looked corrupt, the editor emended it and recorded the change in the apparatus."
+      },
+      {
+        "word": "orthodoxy",
+        "zh": "正统、被普遍接受的学说或做法",
+        "ex": "The two-text reading hardened into an orthodoxy within a decade."
+      },
+      {
+        "word": "ascribe",
+        "zh": "归因于、归属于（ascribe X to Y）",
+        "ex": "The revisionists ascribed the cuts to Shakespeare himself; Vickers ascribed them to the workshop."
+      },
+      {
+        "word": "crux",
+        "zh": "校勘上的疑难处、死结",
+        "ex": "Even an edition claiming to print one text borrows from the other at every crux."
+      },
+      {
+        "word": "apparatus",
+        "zh": "校勘记（critical apparatus）；装置、机构",
+        "ex": "Recent volumes make the borrowing visible in the apparatus rather than hiding it."
+      }
+    ]
   }
 ];
