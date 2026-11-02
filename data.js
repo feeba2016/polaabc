@@ -8027,6 +8027,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-11-02",
+    "title": "The Novel Nobody Bought",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-11-02-the-novel-nobody-bought",
+    "url": "lessons/b2/2026-11-02-the-novel-nobody-bought.html",
+    "vocab": [
+      {
+        "word": "commercial",
+        "zh": "商业的；以营利为目的的（读作 /kəˈmɜːʃl/，重音在第二音节。a commercial triumph 商业上的成功。副词 commercially：commercially viable 商业上可行。文学新闻里的高频搭配：<i>critically acclaimed but commercially unsuccessful</i> 叫好不叫座）",
+        "ex": "\"When The Great Gatsby appeared in April 1925, its author expected a commercial triumph.\""
+      },
+      {
+        "word": "ledger",
+        "zh": "账簿；分类账（读作 /ˈledʒə/，注意 g 读作 /dʒ/。keep a ledger 记账。原义是中世纪教堂里固定摆放、供人诵读的大书，后转指商人的总账。本课用 his own ledger，强调这是<b>作者本人记下的数目</b>，不是出版社后来的统计）",
+        "ex": "\"His own ledger records earnings of about two thousand dollars from it.\""
+      },
+      {
+        "word": "anecdote",
+        "zh": "轶事；趣闻（读作 /ˈænɪkdəʊt/，重音在第一音节。a glorified anecdote 被拔高了的趣闻。它指“关于真人真事的一小段故事”，与短篇小说不同。形容词 anecdotal：anecdotal evidence 轶事证据，学术写作中带贬义，指不足以支撑结论的个别例子）",
+        "ex": "\"... one of the most influential reviewers of the day calling it no more than a glorified anecdote.\""
+      },
+      {
+        "word": "nostalgic",
+        "zh": "怀旧的；恋旧的（读作 /nɒˈstældʒɪk/。a nostalgic period piece 一部怀旧的年代作品。名词 nostalgia 源自希腊语 nostos 返乡＋algos 痛苦，本义是“想家想得难受”。说一部作品 nostalgic，往往暗示它让人回望过去，而不是直面现在）",
+        "ex": "\"... the novel came to look like a nostalgic period piece about a decade nobody wished to remember, ...\""
+      },
+      {
+        "word": "obscurity",
+        "zh": "默默无闻；湮没无闻（不可数，读作 /əbˈskjʊərəti/，重音在第二音节。fade into obscurity 渐渐湮没无闻。形容词 obscure：an obscure 19th-century novelist 一位不为人知的十九世纪小说家；obscure 另可指“晦涩难懂的”）",
+        "ex": "\"Obscurity, in that sense, was not a verdict delivered by enemies; ...\""
+      },
+      {
+        "word": "circulation",
+        "zh": "发行量；流通（读作 /ˌsɜːkjəˈleɪʃn/，重音在第三音节。a daily circulation of 500,000 五十万份日发行量；in circulation 在流通中。动词 circulate 循环、流传。本课的关键对比：先变的是 circulation，不是 opinion）",
+        "ex": "\"What changed first was not opinion but circulation.\""
+      },
+      {
+        "word": "distribution",
+        "zh": "分发；配送（读作 /ˌdɪstrɪˈbjuːʃn/，重音在第三音节。distribution channels 发行渠道。动词 distribute 分发，及物：distribute copies to soldiers 把书分发给士兵。<b>与 circulation 的分工</b>：distribution 指发出去的动作，circulation 指流传开的结果）",
+        "ex": "\"Had it not been for that distribution, the novel might well have disappeared.\""
+      },
+      {
+        "word": "reputation",
+        "zh": "声誉；名望（读作 /ˌrepjuˈteɪʃn/，重音在第三音节。earn / establish a reputation 赢得／树立声望；live up to one&#39;s reputation 名不虚传。它指“别人对你的普遍看法”，与实际成就未必一致——所以第 4 段说 Reputation followed）",
+        "ex": "\"Reputation followed.\""
+      },
+      {
+        "word": "reassessment",
+        "zh": "重新评估；再评价（读作 /ˌriːəˈsesmənt/，由 re- 再＋assessment 评估构成。a critical reassessment 批评界的重新评估。动词 reassess。它强调<b>推翻或修订既有判断</b>，不是简单再看一遍）",
+        "ex": "\"A critical reassessment had been under way for a decade before the sales figures moved.\""
+      },
+      {
+        "word": "curriculum",
+        "zh": "课程；课程体系（读作 /kəˈrɪkjələm/，复数 curricula 或 curriculums。the school curriculum 学校课程；be on the curriculum 被列入课程。拉丁语原义是“跑道”。本课关键：进了教材的书就不再需要竞争注意力）",
+        "ex": "\"Slower, and in the long run more decisive, was the school curriculum: once a book is assigned, it stops competing for attention.\""
+      },
+      {
+        "word": "canon",
+        "zh": "经典；正典（读作 /ˈkænən/。the literary canon 文学正典；enter the canon 进入经典之列。原义“尺度、规则”。<b>关键理解</b>：canon 不是作品自身的属性，而是群体长期共同认定的结果，所以能变动、能被扩充。注意与 cannon 大炮、canyon 峡谷拼写相近）",
+        "ex": "\"The canon, it seems, is not fixed on publication day; it is assembled afterwards, ...\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

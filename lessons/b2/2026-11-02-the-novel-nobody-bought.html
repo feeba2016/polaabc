@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Novel Nobody Bought</title>
+<style>
+:root{
+  --accent:#065f46;
+  --accent2:#92400e;
+  --bg:#f6f8fa;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#bbf7d0;
+  --border:#dde3ea;
+  --soft:#eef2f7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(6,95,70,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(6,95,70,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(6,95,70,.5);}70%{box-shadow:0 0 0 12px rgba(6,95,70,0);}100%{box-shadow:0 0 0 0 rgba(6,95,70,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#86efac;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(6,95,70,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#bbf7d0;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Literature 文学选段</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Novel Nobody Bought</h1>
+      <p class="subtitle">1925 年，菲茨杰拉德盼着它卖出七万五千册；到当年十月只卖出不到两万册。1940 年他去世时，相信自己已被遗忘。真正把这本书救回来的不是评论家，而是十五万册塞进军装口袋、免费发给士兵的平装本｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Numbers He Did Not Want 他不想要的那组数字</div>
+            <p>When The Great Gatsby appeared in April 1925, its author expected a <span class="kw" data-def="商业的；以营利为目的的（形容词，读作 /kəˈmɜːʃl/，重音在第二音节）。a commercial triumph 商业上的成功；commercial success / failure 商业上的成功／失败。注意它和 commercial break（广告时段）、commercial law（商法）是同一词根。副词 commercially：commercially viable 商业上可行。反义常用 non-commercial 非商业的；critically acclaimed but commercially unsuccessful 是文学新闻里极常见的搭配">commercial</span> triumph. He had told his editor that he hoped for seventy-five thousand copies, and he believed the book would finally establish him as a serious novelist rather than a fashionable one. His first two novels had each sold around fifty thousand copies, and he thought the new one would do better still. By October, fewer than twenty thousand had been sold — roughly half what each of his two earlier novels had managed. His own <span class="kw" data-def="账簿；分类账（名词，读作 /ˈledʒə/，注意 g 读作 /dʒ/）。keep a ledger 记账；the company&#39;s ledger 公司的账簿。原义是中世纪教堂里固定摆放、供人诵读的大书，后来转指商人的总账。引申义：指“某人自己留下的记录”，因此比 sales figures 更有个人色彩——本课说 his own ledger，强调这是作者本人记下的数目，不是出版社后来的统计">ledger</span> records earnings of about two thousand dollars from it. Fifteen years later, when Fitzgerald died in 1940, he was convinced that he had failed and that his work had been forgotten.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Not Hatred, Just Indifference 不是厌恶，只是无人问津</div>
+            <p>The reviews were not hostile. Critics admired the prose; what they doubted was its importance, one of the most influential reviewers of the day calling it no more than a glorified <span class="kw" data-def="轶事；趣闻（名词，读作 /ˈænɪkdəʊt/，重音在第一音节）。a glorified anecdote 被拔高了的趣闻；an amusing anecdote 一则有趣的轶事。它指“关于真人真事的一小段故事”，与短篇小说 short story 不同——轶事不追求结构与人物弧线，只讲一件发生过的事。形容词 anecdotal：anecdotal evidence 轶事证据，学术写作里常用来指“不足以支撑结论的个别例子”，带贬义">anecdote</span>. <span class="kw" data-def="Nor did 是否定副词提前引起的部分倒装。还原为 Anyone did not argue against it either。规则：当 nor、never、seldom、rarely、hardly、not only 等否定或半否定词置于句首时，助动词（did / do / have / had / can 等）要提到主语之前。本课这句的作用是把“连反对都没有”这件事推到最前面——因为下文紧接着说“要被攻击，先得被看见”">Nor did</span> anyone argue against it — to be attacked, a book has to be noticed. When the Depression arrived, the novel came to look like a <span class="kw" data-def="怀旧的；恋旧的（形容词，读作 /nɒˈstældʒɪk/，英式也读 /nəˈstældʒɪk/）。a nostalgic period piece 一部怀旧的、只属于某个过去年代的作品；feel nostalgic about one&#39;s childhood 怀念童年。名词 nostalgia 怀旧之情，源自希腊语 nostos（返乡）＋ algos（痛苦），本义是“想家想得难受”。注意它是带感情色彩的词：说一部作品 nostalgic，往往暗示它让人回望过去，而不是直面现在">nostalgic</span> period piece about a decade nobody wished to remember, and unsold copies sat in the publisher&#39;s warehouse, gathering dust. Nobody was burning the book; it was simply not being opened. <span class="kw" data-def="默默无闻；湮没无闻（不可数名词，读作 /əbˈskjʊərəti/，重音在第二音节）。fade into obscurity 渐渐湮没无闻；live in obscurity 默默无闻地度日。形容词 obscure 不为人知的、晦涩的：an obscure 19th-century novelist 一位不为人知的十九世纪小说家。注意 obscure 作形容词时还可指“难以理解的”，如 an obscure passage 一段晦涩的文字——两个意思在文学评论里都会出现">Obscurity</span>, in that sense, was not a verdict delivered by enemies; it was simply what happened when nobody had a reason to pick the book up.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Paperback in a Uniform Pocket 军装口袋里的平装本</div>
+            <p>What changed first was not opinion but <span class="kw" data-def="发行量；流通（名词，读作 /ˌsɜːkjəˈleɪʃn/，重音在第三音节）。a daily circulation of 500,000 五十万份的日发行量；in circulation 在流通中；withdraw from circulation 停止流通。词根 circulate 循环、流传。本课的对比是核心：改变这本书命运的首先是 circulation（有多少人拿到手），而不是 opinion（人们怎么看它）——先有人读，才有后来的重估">circulation</span>. In the spring of 1942, publishers and booksellers formed the Council on Books in Wartime and began producing Armed Services Editions — cheap paperbacks, small enough to fit a uniform pocket, given free to soldiers overseas. The Great Gatsby was among them. The books cost nothing and travelled wherever a soldier went. According to a 1945 report in the Saturday Evening Post, some 155,000 copies reached American servicemen, several times the total sold during Fitzgerald&#39;s lifetime. Nothing about the novel itself had changed. <span class="kw" data-def="It was 是强调句型的开头。完整结构是 It is / was + 被强调部分 + that / who + 其余部分。本句强调主语 soldiers：还原为 Soldiers, not critics, rescued the book。被强调的若是人，连词可用 who 或 that；若是物或状语，只能用 that。判断方法：把 It was 与 that 去掉后句子仍成立，就是强调句">It was</span> soldiers, not critics, who rescued the book. <span class="kw" data-def="Had it not been for 是虚拟条件句省略 if 后引起的倒装，还原为 If it had not been for that distribution（要是没有那次分发的话）。这是对过去事实相反的假设，主句用 might / would have done。规则：if 被省略时，had、were、should 要提到主语之前。它是学术与评论写作里极常用的让步句式，语气比 because of 更克制，暗示“差一点就没发生”">Had it not been for</span> that <span class="kw" data-def="分发；配送（名词，读作 /ˌdɪstrɪˈbjuːʃn/，重音在第三音节）。the distribution of free paperbacks 免费平装本的分发；distribution channels 发行渠道；distribution network 配送网络。动词 distribute 分发，及物：distribute copies to soldiers 把书分发给士兵。注意它与 circulation 的分工：distribution 指“发出去这个动作”，circulation 指“流传开来的结果或总量”——本课两个词先后出现，正好构成因果">distribution</span>, the novel might well have disappeared.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · How a Canon Is Assembled 经典是怎么被拼出来的</div>
+            <p><span class="kw" data-def="声誉；名望（名词，读作 /ˌrepjuˈteɪʃn/，重音在第三音节）。earn / establish a reputation 赢得／树立声望；a reputation as a serious novelist 作为严肃小说家的声誉；live up to one&#39;s reputation 名不虚传。它指“别人对你的普遍看法”，与个人实际的成就未必一致——这正是本课第 4 段首句 Reputation followed 的用意：声誉是跟随而来的，不是作品自带的">Reputation</span> followed. Edmund Wilson, a Princeton classmate of Fitzgerald&#39;s, republished work by him in 1941; a bestselling biography by Arthur Mizener followed in 1951, and by 1960 the novel was selling about a hundred thousand copies a year. A critical <span class="kw" data-def="重新评估；再评价（名词，读作 /ˌriːəˈsesmənt/，由 re- 再 ＋ assessment 评估构成）。a critical reassessment 批评界的重新评估；prompt a reassessment of something 促使人们重新评价某事。动词 reassess。它强调的是“推翻或修订既有判断”，而不是简单再看一遍——所以常说 a radical reassessment 一次彻底的重新评价">reassessment</span> had been under way for a decade before the sales figures moved. Slower, and in the long run more decisive, was the school <span class="kw" data-def="课程；课程体系（名词，读作 /kəˈrɪkjələm/，重音在第二音节，复数 curricula /kəˈrɪkjələ/ 或 curriculums）。the school curriculum 学校课程；a core curriculum 核心课程；be on the curriculum 被列入课程。拉丁语原义是“跑道”，引申为“一整套学习路径”。本课的关键在于：一本进了教材的书就不再需要竞争注意力，这是经典形成里最安静也最有力的一步">curriculum</span>: once a book is assigned, it stops competing for attention. Today it has sold close to thirty million copies worldwide and about half a million more every year. The <span class="kw" data-def="经典；正典（名词，读作 /ˈkænən/）。the literary canon 文学正典；enter the canon 进入经典之列；the Western canon 西方正典。原义是“尺度、规则”，后指“被公认最重要、最值得反复研读的那批作品”。关键理解：canon 不是作品自身的属性，而是一个群体长期共同认定的结果——所以它可以变动，可以被质疑，也可以被扩充。注意它和 cannon（大炮）、canyon（峡谷）拼写相近">canon</span>, it seems, is not fixed on publication day; it is assembled afterwards, by soldiers, biographers, teachers and whoever else happens to put the book into someone&#39;s hands.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+        <div class="card" style="background:var(--soft);">
+          <p style="margin:0;font-size:14.5px;color:#4b5563;"><b>背景速览：</b>The Great Gatsby《了不起的盖茨比》1925 年 4 月 10 日由 Charles Scribner&#39;s Sons 出版，是菲茨杰拉德的第三部长篇。文中数字均按各自口径使用：20,000 册指<b>到 1925 年 10 月</b>的销量；约 2,000 美元出自作者本人的账簿；155,000 册是 1945 年《星期六晚邮报》对 Armed Services Editions（军供版，二战期间免费发给海外美军的小开本平装书）分发量的报道。Edmund Wilson 是作者的普林斯顿同学，1941 年在其编辑的《最后的大亨》中重推菲茨杰拉德；Arthur Mizener 的传记《The Far Side of Paradise》出版于 1951 年。本课只谈一部小说的接受史，不涉及任何国家、制度或社会优劣的评价。</p>
+        </div>
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="commercial">🔊</button><div class="word">commercial<span class="pos">adj.</span></div><div class="zh">商业的；以营利为目的的（读作 /kəˈmɜːʃl/，重音在第二音节。a commercial triumph 商业上的成功。副词 commercially：commercially viable 商业上可行。文学新闻里的高频搭配：<i>critically acclaimed but commercially unsuccessful</i> 叫好不叫座）</div><div class="ex">"When The Great Gatsby appeared in April 1925, its author expected a commercial triumph."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ledger">🔊</button><div class="word">ledger<span class="pos">n.</span></div><div class="zh">账簿；分类账（读作 /ˈledʒə/，注意 g 读作 /dʒ/。keep a ledger 记账。原义是中世纪教堂里固定摆放、供人诵读的大书，后转指商人的总账。本课用 his own ledger，强调这是<b>作者本人记下的数目</b>，不是出版社后来的统计）</div><div class="ex">"His own ledger records earnings of about two thousand dollars from it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="anecdote">🔊</button><div class="word">anecdote<span class="pos">n.</span></div><div class="zh">轶事；趣闻（读作 /ˈænɪkdəʊt/，重音在第一音节。a glorified anecdote 被拔高了的趣闻。它指“关于真人真事的一小段故事”，与短篇小说不同。形容词 anecdotal：anecdotal evidence 轶事证据，学术写作中带贬义，指不足以支撑结论的个别例子）</div><div class="ex">"... one of the most influential reviewers of the day calling it no more than a glorified anecdote."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="nostalgic">🔊</button><div class="word">nostalgic<span class="pos">adj.</span></div><div class="zh">怀旧的；恋旧的（读作 /nɒˈstældʒɪk/。a nostalgic period piece 一部怀旧的年代作品。名词 nostalgia 源自希腊语 nostos 返乡＋algos 痛苦，本义是“想家想得难受”。说一部作品 nostalgic，往往暗示它让人回望过去，而不是直面现在）</div><div class="ex">"... the novel came to look like a nostalgic period piece about a decade nobody wished to remember, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="obscurity">🔊</button><div class="word">obscurity<span class="pos">n.</span></div><div class="zh">默默无闻；湮没无闻（不可数，读作 /əbˈskjʊərəti/，重音在第二音节。fade into obscurity 渐渐湮没无闻。形容词 obscure：an obscure 19th-century novelist 一位不为人知的十九世纪小说家；obscure 另可指“晦涩难懂的”）</div><div class="ex">"Obscurity, in that sense, was not a verdict delivered by enemies; ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="circulation">🔊</button><div class="word">circulation<span class="pos">n.</span></div><div class="zh">发行量；流通（读作 /ˌsɜːkjəˈleɪʃn/，重音在第三音节。a daily circulation of 500,000 五十万份日发行量；in circulation 在流通中。动词 circulate 循环、流传。本课的关键对比：先变的是 circulation，不是 opinion）</div><div class="ex">"What changed first was not opinion but circulation."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="distribution">🔊</button><div class="word">distribution<span class="pos">n.</span></div><div class="zh">分发；配送（读作 /ˌdɪstrɪˈbjuːʃn/，重音在第三音节。distribution channels 发行渠道。动词 distribute 分发，及物：distribute copies to soldiers 把书分发给士兵。<b>与 circulation 的分工</b>：distribution 指发出去的动作，circulation 指流传开的结果）</div><div class="ex">"Had it not been for that distribution, the novel might well have disappeared."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reputation">🔊</button><div class="word">reputation<span class="pos">n.</span></div><div class="zh">声誉；名望（读作 /ˌrepjuˈteɪʃn/，重音在第三音节。earn / establish a reputation 赢得／树立声望；live up to one&#39;s reputation 名不虚传。它指“别人对你的普遍看法”，与实际成就未必一致——所以第 4 段说 Reputation followed）</div><div class="ex">"Reputation followed."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reassessment">🔊</button><div class="word">reassessment<span class="pos">n.</span></div><div class="zh">重新评估；再评价（读作 /ˌriːəˈsesmənt/，由 re- 再＋assessment 评估构成。a critical reassessment 批评界的重新评估。动词 reassess。它强调<b>推翻或修订既有判断</b>，不是简单再看一遍）</div><div class="ex">"A critical reassessment had been under way for a decade before the sales figures moved."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="curriculum">🔊</button><div class="word">curriculum<span class="pos">n.</span></div><div class="zh">课程；课程体系（读作 /kəˈrɪkjələm/，复数 curricula 或 curriculums。the school curriculum 学校课程；be on the curriculum 被列入课程。拉丁语原义是“跑道”。本课关键：进了教材的书就不再需要竞争注意力）</div><div class="ex">"Slower, and in the long run more decisive, was the school curriculum: once a book is assigned, it stops competing for attention."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="canon">🔊</button><div class="word">canon<span class="pos">n.</span></div><div class="zh">经典；正典（读作 /ˈkænən/。the literary canon 文学正典；enter the canon 进入经典之列。原义“尺度、规则”。<b>关键理解</b>：canon 不是作品自身的属性，而是群体长期共同认定的结果，所以能变动、能被扩充。注意与 cannon 大炮、canyon 峡谷拼写相近）</div><div class="ex">"The canon, it seems, is not fixed on publication day; it is assembled afterwards, ..."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 本课的“书的一生”词链：</b>commercial 商业的 → circulation 发行量 → obscurity 默默无闻 → distribution 分发 → reassessment 重新评估 → curriculum 课程 → canon 经典。写文学接受史时，这条链几乎可以整段套用。<br>
+        <b>② 三个易混的“名气”：</b>fame 名气（中性，人尽皆知）→ reputation 声誉（别人对你的具体看法，可好可坏）→ prestige 声望（带有敬意的、体制性的地位）。<b>reputation 可以是坏的</b>：a bad reputation 名声不好；而 prestige 只能是好的。<br>
+        <b>③ 一对高频反义：</b><b>obscurity 湮没无闻</b> ↔ <b>prominence 显赫、受瞩目</b>。副词短语 rise to prominence 崛起、崭露头角，正好是 fade into obscurity 的反面。<br>
+        <b>④ distribute 一族：</b>distribute 分发 → distribution 分发（行为／系统）→ distributor 发行商 → distributive 分配的。前缀 dis-（分开）＋tribute（给予）。同族：contribute 贡献、attribute 归因于、tribute 贡品／致敬。<br>
+        <b>⑤ re- 开头的一族“重做”：</b>reassess 重新评估 → reevaluate 重新评价 → reissue 重印／再版 → revive 使复兴 → rediscover 重新发现。<b>reissue 与 republish</b> 在本课尤其重要：1941 年那次是 republish（换个由头再出），不是初版。<br>
+        <b>⑥ 一个写作提醒：</b><b>anecdotal evidence 轶事证据</b>在学术写作里几乎总是贬义。读到 “the evidence is largely anecdotal”，应理解为“证据不足”，而不是“证据很生动”。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. What 引导的主语从句 + not A but B · What changed first was not opinion but circulation.</h3>
+          <div class="zh">结构：<b>What + 谓语（单数）+ 表语</b>。这里的 what 等于 the thing that，本身已经包含了先行词，所以后面不能再加 that。它常与 <b>not A but B</b> 连用，用来<b>先否定一个常见答案、再给出真正的答案</b>——这是议论文里效率极高的一种开场。<b>注意</b>：what 从句作主语时谓语通常用单数，即使表语是复数（<i>What we need are better tools</i> 例外，口语中偶见）。</div>
+          <div class="eg">What changed first was not opinion but circulation.</div>
+          <div class="practice">仿写：先改变的不是价格，而是人们的习惯。
+            <input type="text" placeholder="What changed first was ..." data-ans="What changed first was not price but habit.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. 强调句 It was … who … · It was soldiers, not critics, who rescued the book.</h3>
+          <div class="zh">结构：<b>It is / was + 被强调部分 + that / who + 其余部分</b>。被强调的可以是主语、宾语或状语，但不能是谓语。被强调的若是人，用 who 或 that 均可；若是物或状语，只能用 that。<b>快速判断法</b>：把 It was 与 that 去掉后句子仍成立，就是强调句。本句把 soldiers 推到最前面，正是为了和 critics 形成对照——上文刚说过评论界并不看好它。</div>
+          <div class="eg">It was soldiers, not critics, who rescued the book.</div>
+          <div class="practice">仿写：是读者，不是评论家，决定了一本书能活多久。
+            <input type="text" placeholder="It was ..." data-ans="It was readers, not critics, who decided how long a book would live.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. 虚拟条件句省略 if 的倒装 · Had it not been for that distribution, the novel might well have disappeared.</h3>
+          <div class="zh">结构：<b>Had + 主语 + 过去分词</b>（＝ If + 主语 + had + 过去分词），主句用 <b>might / would / could have done</b>。这是对<b>过去事实相反</b>的假设，而事实是那次分发确实发生了。<b>Had it not been for X</b> 已经固化成一个短语，意为“要是没有 X 的话”，语气比 because of X 克制得多，暗示“差一点就没发生”。同类还有 Were it not for X（对现在）、Should it rain（对将来）。</div>
+          <div class="eg">Had it not been for that distribution, the novel might well have disappeared.</div>
+          <div class="practice">仿写：要是没有那笔资助，这项研究可能根本启动不了。
+            <input type="text" placeholder="Had it not been for ..." data-ans="Had it not been for that grant, the research might never have started.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. 否定副词提前的部分倒装 · Nor did anyone argue against it — to be attacked, a book has to be noticed.</h3>
+          <div class="zh">结构：<b>Nor / Never / Seldom / Rarely / Hardly + 助动词 + 主语 + 实义动词</b>。nor 表示“也不”，接在否定句之后，因此它所在的句子本身就必须是倒装。本句的作用很妙：它不是说“没人反对”，而是说“连反对都没有”——因为反对也需要先被看见。这类倒装的修辞功能是<b>把否定推到句首，让否定成为全句的重心</b>。</div>
+          <div class="eg">Nor did anyone argue against it — to be attacked, a book has to be noticed.</div>
+        </div>
+
+        <div class="item">
+          <h3>5. 现在分词短语作伴随状语 · … unsold copies sat in the publisher&#39;s warehouse, gathering dust. Nobody was burning the book; it was simply not being opened.</h3>
+          <div class="zh">结构：<b>主句 + 现在分词短语</b>。分词短语的逻辑主语就是主句主语（unsold copies），动作与主句谓语<b>同时发生</b>，用来补充说明状态或结果。它等价于一个并列谓语或定语从句，但更紧凑：<i>… sat in the warehouse and gathered dust</i>。<b>注意</b>：若分词的逻辑主语与主句主语不一致，就要带上自己的主语，构成<b>独立主格</b>（名词＋分词），如 <i>The reviews having appeared, sales barely moved.</i></div>
+          <div class="eg">… unsold copies sat in the publisher&#39;s warehouse, gathering dust. Nobody was burning the book; it was simply not being opened.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <p class="subtitle">5 个语法点，例句均取自正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① What 引导的名词性从句作主语</h3>
+          <div class="zh">what 引导的名词性从句可以充当主语、宾语或表语。作主语时，what 相当于 <b>the thing(s) that</b>，既充当引导词又在从句中充当成分。谓语通常用单数。它特别适合“下定义”或“纠正误解”的语境。</div>
+          <div class="eg">What changed first was not opinion but circulation.</div>
+          <div class="eg" style="margin-top:8px;">What they doubted was its importance.</div>
+        </div>
+
+        <div class="item">
+          <h3>② 强调句型 It is / was … that / who …</h3>
+          <div class="zh">强调句可强调主语、宾语、状语，<b>不能强调谓语或表语</b>。判断标准：去掉 It is/was 与 that/who 后句子仍成立。与主语句的区别在于：that 从句是定语从句（有先行词）还是强调结构。<b>常见陷阱</b>：<i>It is the soldiers who rescued it</i> 去掉框架后是 <i>The soldiers rescued it</i>，成立，故为强调句。</div>
+          <div class="eg">It was soldiers, not critics, who rescued the book.</div>
+        </div>
+
+        <div class="item">
+          <h3>③ 否定副词提前引起的部分倒装</h3>
+          <div class="zh">当 <b>nor、never、seldom、rarely、hardly、scarcely、not only、no sooner</b> 等词置于句首时，助动词要提到主语之前。若句中无助动词，则要借助 do / does / did。本课的 nor 承接上一句的否定（The reviews were not hostile），形成“也不……”的递进。</div>
+          <div class="eg">Nor did anyone argue against it — to be attacked, a book has to be noticed.</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 虚拟语气：对过去的假设与省略 if 的倒装</h3>
+          <div class="zh">对过去事实相反的假设：<b>从句 had done，主句 would / might / could have done</b>。若省略 if，则把 had 提到句首。<b>Had it not been for X</b> 已成固定短语，功能相当于介词短语 without X，但带有“差一点就……”的语气。注意：主句用 might have 表示“有可能”，语气比 would have 更弱、更谨慎。</div>
+          <div class="eg">Had it not been for that distribution, the novel might well have disappeared.</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 非谓语：现在分词作伴随状语，以及被动语态的时态搭配</h3>
+          <div class="zh">现在分词短语作状语时，逻辑主语须与主句主语一致；若不一致须用独立主格。本课还密集使用了被动语态：<b>had been sold</b>（过去完成时的被动，发生在 1925 年 10 月之前）、<b>was distributed / were given</b>（一般过去时被动）、<b>is assigned</b>（一般现在时被动，表示常态）。<b>选用哪一种被动，取决于动作相对于叙述基准的时间</b>。</div>
+          <div class="eg">By October, fewer than twenty thousand had been sold.</div>
+          <div class="eg" style="margin-top:8px;">… unsold copies sat in the publisher&#39;s warehouse, gathering dust. Nobody was burning the book; it was simply not being opened.</div>
+          <div class="eg" style="margin-top:8px;">Once a book is assigned, it stops competing for attention.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、《了不起的盖茨比》为什么卖不动</h3>
+        <p>1925 年 4 月 10 日，查尔斯·斯克里布纳父子出版公司推出了菲茨杰拉德的第三部长篇。作者此前两部《人间天堂》（1920）与《美丽与毁灭》（1922）各卖出约五万册，因此他对新作寄望甚高，曾对编辑说希望卖出七万五千册。<b>到当年十月，销量不到两万册</b>——只有前作的一半左右。</p>
+        <p>作者自己的账簿记下的收入是<b>约两千美元</b>。这个数字之所以常被引用，是因为它出自他本人之手：不是出版社后来的统计，而是一个人坐下来算自己挣了多少的记录。</p>
+        <p>1926 年的舞台改编（欧文·戴维斯）与派拉蒙的默片版都给菲茨杰拉德带来了钱，但没能换来他最想要的东西——被当作一位严肃小说家看待。1940 年 12 月他去世时，出版社的仓库里还堆着没卖出去的存货。他相信自己已经失败，也相信自己已被遗忘。</p>
+        <p>值得留意的是他自己的解释：他认为当时小说的主要购买者是女性，而这本书里没有一个令人欣赏的女性角色。<b>这是当事人当时的判断，未必成立</b>，本课只作引述，不作定论。</p>
+
+        <h3>二、救活它的不是评论，是渠道</h3>
+        <p>常见的文学史叙事是“评论界终于读懂了它”，但顺序其实是反的：<b>先有人读了，评论界才回头重估。</b></p>
+        <p>1942 年春，美国出版业的从业者组成了“战时图书委员会”（Council on Books in Wartime），开始印制 <b>Armed Services Editions 军供版</b>——一种开本很小、纸质低廉、能塞进军装口袋的平装书，免费发给海外作战的军人。《了不起的盖茨比》是其中的一种。据《星期六晚邮报》1945 年的报道，<b>约 155,000 册</b>送到了军人手里，是作者生前总销量的好几倍。</p>
+        <p>这件事的意义在于：它不是“说服了谁”，而是<b>凭空造出一整代读者</b>。在没有书评、没有课堂、没有榜单的地方，书先被读掉了。等到这批人回国、长大、进入各行各业，一本小说的读者基础已经不是出版那天能决定的了。</p>
+
+        <h3>三、经典是怎么被拼出来的：四个环节</h3>
+        <table class="facts">
+          <tr><th>环节</th><th>时间</th><th>作用</th></tr>
+          <tr><td>分发</td><td>1942—1945</td><td>军供版约 155,000 册送到军人手中，凭空造出一代读者；先有读者，后有评价</td></tr>
+          <tr><td>编辑与重印</td><td>1941</td><td>埃德蒙·威尔逊在其编辑的《最后的大亨》中重推菲茨杰拉德，先让同行改口</td></tr>
+          <tr><td>传记</td><td>1951</td><td>阿瑟·迈兹纳《The Far Side of Paradise》成为畅销书，让公众重新认识作者本人</td></tr>
+          <tr><td>教材</td><td>1960 年代起</td><td>进入中学课程，一本书从此不必再与其他书竞争注意力</td></tr>
+          <tr><td>数量</td><td>持续增长</td><td>1960 年前后约每年十万册；2020 年全球累计近三千万册，如今每年再卖约五十万册</td></tr>
+        </table>
+        <p>把这四行连起来看，会发现一个不太舒服的结论：<b>一本“伟大”的书，与它被分发的方式、被谁写进传记、被哪一级教育体系采用，关系极大。</b>作品本身当然重要，但它并不是唯一的变量。</p>
+
+        <h3>四、中外对照：陶渊明的“身后重估”</h3>
+        <p>中国文学史上有一个几乎同构的案例，而且时间跨度长得多。</p>
+        <p>南朝梁代钟嵘的《诗品》把一百多位诗人分上、中、下三品，<b>陶渊明被列在中品</b>。刘勰的《文心雕龙》体大思精，却几乎不称述陶渊明——这一点后代学者屡屡指出。最早真正为陶渊明做系统性工作的，是昭明太子萧统：他编成《陶渊明集》并作序，称其文章<b>“不群”“独超众类”</b>。</p>
+        <p>真正的转折点要到北宋。苏轼在给弟弟苏辙等人的书信中反复论陶，说他的诗<b>“质而实绮，癯而实腴”</b>（看上去朴素其实华美，看上去清瘦其实丰腴），并认为曹植、刘桢、李白、杜甫诸人都有所不及。宋代以后，陶渊明的地位迅速上升，被奉为<b>“隐逸诗人之宗”</b>，与他在六朝批评中的位次判若两人。</p>
+        <p>这个对照必须加上三点辨析，否则会讲歪：</p>
+        <ul>
+          <li><b>① 变的不是作品，是尺度。</b>六朝批评重辞采、声律、用典，陶诗语言平易、少用典故，因此只列中品；宋人重“平淡”“自然”，也看重人格气节，陶于是成为典范。《盖茨比》那边同理——小说一个字没改，变的是<u>读者群与评价标准</u>。<b>不是作品变好了，是尺子换了。</b></li>
+          <li><b>② 两地的机制不同。</b>陶渊明的升格主要靠<b>选本与批评家</b>——编集、作序、题跋、诗话，在批评史内部一层层加码，历时数百年；《盖茨比》主要靠<b>发行渠道与教育制度</b>——军队分发、畅销传记、中学教材，在大约二十年内完成。一个是批评传统内部的累积，一个是传播与制度从外部的推动。</li>
+          <li><b>③ 萧统欣赏的，并不是后世推崇的那一点。</b>萧统看重的是陶渊明文章的“不群”与为人，而不是宋人所说的“平淡自然”。所以这更接近一种<b>追认，而不是预见</b>——不能据此说“中国早就懂了，只是西方慢”。</li>
+        </ul>
+        <p>顺带可以记一个方法论：<b>“重估”是文学史的常态，不是例外。</b>读到“某作品一问世即被公认为杰作”这类说法时，值得先问一句——是谁认定的，认定的时候书在谁手上。</p>
+
+        <h3>五、把话说窄：本课不说的三件事</h3>
+        <ul>
+          <li><b>数字口径要分开。</b>20,000 / 21,000 / 25,000 三种说法分别对应“到 1925 年 10 月”“第一年”“到 1940 年作者去世时”。本课按各自口径使用，<b>不强行统一成一个数</b>。</li>
+          <li><b>155,000 是报道口径。</b>它出自 1945 年《星期六晚邮报》的报道，不是出版方完整的发行台账，因此本课文写作“据 1945 年的一篇报道”。</li>
+          <li><b>本课只谈一部小说的接受史</b>——它如何被分发、被重印、被写进教材。课文与扩展<u>不涉及</u>任何国家、制度或社会优劣的评价，不作跨国比较与排名；陶潜案例只用于说明“评价尺度会变”这一文学史现象，不构成任何高下判断。</li>
+        </ul>
+
+        <h3>六、参考来源</h3>
+        <p class="source">Wikipedia 相关条目（The Great Gatsby；Armed Services Editions；Council on Books in Wartime）· Clarion Ledger 2025 年 4 月百年纪念评论 · St. Paul Pioneer Press 2025 年回顾当年书评与军供版数据 · 中文对照部分：钟嵘《诗品》、萧统《陶渊明集序》、苏轼论陶渊明诗文。</p>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>📚 文学选段 Literature　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>《了不起的盖茨比》的失败与重估，以及“经典”究竟是怎么被拼出来的</p>
+        <p>1925 年菲茨杰拉德盼着卖出七万五千册，到当年十月只卖出不到两万册；1940 年他去世时相信自己已被遗忘。真正改变这本书命运的，先是十五万册塞进军装口袋、免费发给士兵的平装本，之后才是传记、重印与教材。<b>经典不是在出版那天定下来的，而是后来被一点点拼出来的——由士兵、传记作者、教师，以及一切把书塞进别人手里的人。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级文学与学术词汇（commercial · ledger · anecdote · nostalgic · obscurity · circulation · distribution · reputation · reassessment · curriculum · canon），能区分 fame / reputation / prestige，并知道 anecdotal evidence 在学术写作中带贬义。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 470 词的文学接受史说明文，能识别作者在哪一步把“常识”（评论界发现了杰作）重新表述成了“反常识”（先有读者，后有评价）。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——What 引导的名词性从句作主语、It was … who 强调句、Nor 开头的部分倒装、省略 if 的虚拟条件倒装（Had it not been for …）、现在分词短语作伴随状语。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习把一部作品的成功拆成“作品本身”与“它如何被分发、被重印、被纳入制度”两组变量；读到“一问世即被公认为杰作”时，先问一句是谁认定的。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过陶渊明从《诗品》中品到宋代典范的升格，理解“评价尺度会变”这一文学史现象，并知道这条对照能推到哪一步为止。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. What changed first was not opinion but circulation.</div>
+          <div class="eg" style="margin-top:8px;">2. It was soldiers, not critics, who rescued the book.</div>
+          <div class="eg" style="margin-top:8px;">3. Had it not been for that distribution, the novel might well have disappeared.</div>
+          <div class="eg" style="margin-top:8px;">4. Nor did anyone argue against it — to be attacked, a book has to be noticed.</div>
+          <div class="eg" style="margin-top:8px;">5. The canon, it seems, is not fixed on publication day; it is assembled afterwards, by soldiers, biographers, teachers and whoever else happens to put the book into someone&#39;s hands.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-11-02 · 文学选段 Literature｜《了不起的盖茨比》的失败与重估，与经典是怎么被拼出来的</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Pattern practice check ---------- */
+document.querySelectorAll('.practice input').forEach(inp=>{
+  inp.addEventListener('blur',()=>{
+    const v=(inp.value||'').trim();
+    const key=(inp.dataset.ans||'').trim();
+    if(!v){inp.style.borderColor='';return;}
+    const norm=s=>s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+    inp.style.borderColor=(norm(v)===norm(key))?'#22c55e':'#ef4444';
+  });
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["When The Great Gatsby appeared in April 1925, its author expected a commercial triumph. He had told his editor that he hoped for seventy-five thousand copies, and he believed the book would finally establish him as a serious novelist rather than a fashionable one. His first two novels had each sold around fifty thousand copies, and he thought the new one would do better still. By October, fewer than twenty thousand had been sold — roughly half what each of his two earlier novels had managed. His own ledger records earnings of about two thousand dollars from it. Fifteen years later, when Fitzgerald died in 1940, he was convinced that he had failed and that his work had been forgotten.", "The reviews were not hostile. Critics admired the prose; what they doubted was its importance, one of the most influential reviewers of the day calling it no more than a glorified anecdote. Nor did anyone argue against it — to be attacked, a book has to be noticed. When the Depression arrived, the novel came to look like a nostalgic period piece about a decade nobody wished to remember, and unsold copies sat in the publisher's warehouse, gathering dust. Nobody was burning the book; it was simply not being opened. Obscurity, in that sense, was not a verdict delivered by enemies; it was simply what happened when nobody had a reason to pick the book up.", "What changed first was not opinion but circulation. In the spring of 1942, publishers and booksellers formed the Council on Books in Wartime and began producing Armed Services Editions — cheap paperbacks, small enough to fit a uniform pocket, given free to soldiers overseas. The Great Gatsby was among them. The books cost nothing and travelled wherever a soldier went. According to a 1945 report in the Saturday Evening Post, some 155,000 copies reached American servicemen, several times the total sold during Fitzgerald's lifetime. Nothing about the novel itself had changed. It was soldiers, not critics, who rescued the book. Had it not been for that distribution, the novel might well have disappeared.", "Reputation followed. Edmund Wilson, a Princeton classmate of Fitzgerald's, republished work by him in 1941; a bestselling biography by Arthur Mizener followed in 1951, and by 1960 the novel was selling about a hundred thousand copies a year. A critical reassessment had been under way for a decade before the sales figures moved. Slower, and in the long run more decisive, was the school curriculum: once a book is assigned, it stops competing for attention. Today it has sold close to thirty million copies worldwide and about half a million more every year. The canon, it seems, is not fixed on publication day; it is assembled afterwards, by soldiers, biographers, teachers and whoever else happens to put the book into someone's hands."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"According to paragraph 1, how many copies had the novel sold by October 1925? 按照第 1 段的说法，到 1925 年 10 月这本书卖出了多少册？",
+   opts:["About seventy-five thousand 约七万五千册（那是作者的期望值）","About fifty thousand 约五万册（那是他前两部小说的成绩）","Fewer than twenty thousand 不到两万册","More than a hundred and fifty thousand 超过十五万册（那是军供版的数量）"],
+   ans:2,
+   fb:"正确！第 1 段写得很清楚：By October, fewer than twenty thousand had been sold。三个数字要分清楚——<b>75,000</b> 是作者希望的销量，<b>约 20,000</b> 是到当年十月的实际销量，<b>155,000</b> 是后来军供版的分发量。选项 B 的约五万册是他前两部小说各自的成绩。"},
+  {q:"What does Fitzgerald's own ledger show? 菲茨杰拉德本人的账簿显示了什么？",
+   opts:["He sold the film rights for a large sum 他把电影版权卖了一大笔钱","He earned about two thousand dollars from the novel 他从这本小说赚了大约两千美元","He was paid a monthly salary by his publisher 出版商按月付他薪水","He lost money on every copy that was printed 每印一本他都亏钱"],
+   ans:1,
+   fb:"正确！原句是 His own ledger records earnings of about two thousand dollars from it。注意 <b>his own ledger</b> 这个措辞的分量：这是作者本人记下的数字，不是出版社后来的统计——所以它常被引用。选项 A 有一定干扰性：1926 年的舞台改编与默片确实给他带来了钱，但那不是账簿上这本小说的收入。"},
+  {q:"How does the passage characterise the reviews the novel received? 课文如何描述这本小说当时得到的评论？",
+   opts:["Violently hostile from the very start 从一开始就充满敌意","Silent — no reviewer mentioned the book at all 完全沉默，根本没有评论家提到它","Not hostile, but doubtful of its importance 并不怀有敌意，但怀疑它的重要性","Unanimously enthusiastic 一致地热烈赞扬"],
+   ans:2,
+   fb:"正确！这正是本课第 2 段要纠正的常识：The reviews were not hostile. Critics admired the prose; what they doubted was its importance。<b>真正杀死一本书的往往不是差评，而是无人问津</b>——所以课文紧接着说 Nor did anyone argue against it：连反对都没有，因为要被攻击，先得被看见。选项 B 也不对，评论并非没有，只是没把它当回事。"},
+  {q:"According to paragraph 3, what changed first? 按照第 3 段的说法，最先改变的是什么？",
+   opts:["The opinions of professional critics 职业评论家的看法","Circulation — free paperbacks reached soldiers overseas 发行量——免费平装本送到了海外士兵手里","The price of the hardback edition 精装本的定价","Fitzgerald's standing as a serious novelist 菲茨杰拉德作为严肃小说家的地位"],
+   ans:1,
+   fb:"正确！这就是全文的转折点：<b>What changed first was not opinion but circulation</b>。常见的文学史叙事是“评论界终于读懂了它”，但顺序其实是反的——<b>先有人读了，评论界才回头重估</b>。选项 A 恰恰是课文要推翻的那个常识；选项 D 是第 4 段才出现的结果（Reputation followed），不是最先改变的东西。"},
+  {q:"Roughly how many copies of the novel are said to have reached American servicemen? 据说大约有多少册送到了美国军人手中？",
+   opts:["About 155,000 约 155,000 册","About 20,000 约 20,000 册","About 75,000 约 75,000 册","About 30 million 约三千万册"],
+   ans:0,
+   fb:"正确！According to a 1945 report in the Saturday Evening Post, some 155,000 copies reached American servicemen — 这是作者生前总销量的好几倍。请把四个数字对号入座：<b>20,000</b> 到 1925 年 10 月的销量 · <b>75,000</b> 作者的期望 · <b>155,000</b> 军供版分发量 · <b>约 30,000,000</b> 今天的全球累计销量。另外注意课文写的是“据 1945 年的一篇报道”，这是报道口径，不是出版方完整的发行台账。"},
+  {q:"Which statement best captures the conclusion of the passage? 下列哪一项最符合文章的结论？",
+   opts:["Gatsby was always recognised as a masterpiece; only the sales were slow 《盖茨比》一直被公认为杰作，只是销路慢一些","The novel was rescued chiefly by a bestselling biography published in 1951 这本书主要是靠 1951 年那本畅销传记被救回来的","A classic is not fixed on publication day but assembled later by readers, institutions and chance 经典不是在出版那天定下来的，而是后来由读者、机构和偶然性一点点拼出来的","Fitzgerald lived long enough to see the novel enter school curricula 菲茨杰拉德活到了看见这本书进入学校课程"],
+   ans:2,
+   fb:"正确！这正是全文的最后一句：<b>The canon, it seems, is not fixed on publication day; it is assembled afterwards, by soldiers, biographers, teachers and whoever else happens to put the book into someone's hands</b>。选项 A 与事实相反——他去世时几乎已被遗忘；选项 B 把 1951 年的传记说成主因，而课文明确说最先改变的是分发；选项 D 也不对，他 1940 年就去世了，教材要到 1960 年代才轮到它。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
