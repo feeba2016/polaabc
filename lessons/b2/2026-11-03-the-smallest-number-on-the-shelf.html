@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Smallest Number on the Shelf</title>
+<style>
+:root{
+  --accent:#9d174d;
+  --accent2:#1e40af;
+  --bg:#f6f8fa;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#fbcfe8;
+  --border:#dde3ea;
+  --soft:#eef2f7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(157,23,77,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(157,23,77,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(157,23,77,.5);}70%{box-shadow:0 0 0 12px rgba(157,23,77,0);}100%{box-shadow:0 0 0 0 rgba(157,23,77,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#f9a8d4;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(157,23,77,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fbcfe8;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Economics 经济商业</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Smallest Number on the Shelf</h1>
+      <p class="subtitle">一块巧克力还是两块钱，包装上却从 100 克变成了 90 克。价签没动，每克的价格涨了约 11%。货架上那行最小的数字——单位价格——原是为这件事而印的，可它回答不了最关键的那个问题｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Price That Did Not Move 没有动过的那个价格</div>
+            <p><span class="kw" data-def="What has changed is 是 What 引导的主语从句，what 等于 the thing that，本身已含先行词，后面不能再加 that。它常与 not A but B 连用，用来先否定一个显而易见的答案、再给出真正的答案——议论文里极高效率的一种开场。本句先说“变的不是价格”，读者自然会问：那变的是什么？">What has changed is</span> not the price on the ticket but the small print on the wrapper: the bar still costs two dollars, yet it now says 90 grams where it once said 100. <span class="kw" data-def="The shelf price unchanged 是独立主格结构：名词 the shelf price ＋ 形容词 unchanged 作补足语，相当于一个省略了谓语的状语从句 Because the shelf price is unchanged。独立主格的主语与主句主语不同（这里主句主语是 the same coins），因此不能改成分词短语。它的修辞效果是“把一个安静的前提放在句首，让主句去说后果”。同型：The meeting over, everyone left.／Weather permitting, we will go.">The shelf price unchanged</span>, the same coins buy ten grams less, and the price of a gram has risen by about eleven per cent. Economists call this <span class="kw" data-def="缩水式通胀（名词，读作 /ˌʃrɪŋkˈfleɪʃn/，由 shrink 收缩＋ inflation 通货膨胀合成）。指厂商在不涨价的情况下减少商品数量或容量，等于变相提高单位价格。这个词进入英语词汇的时间很晚（约 2009 年），此前只有行业内部的说法 contents reduction strategy。相关新词 skimpflation 指暗中降低品质（换配方、减配料）。注意：它与 deflation（通货紧缩，物价普遍下降）只差几个字母，意思完全不同">shrinkflation</span> — reducing a product&#39;s quantity without a <span class="kw" data-def="成比例的；相称的（形容词，读作 /prəˈpɔːʃənl/，重音在第二音节）。be proportional to 与……成正比；a proportional cut 等比例的削减。名词 proportion 比例、部分；in proportion 成比例、相称。本课的关键在于 without a proportional cut：价格没有按数量同比例下降，所以每克的价格事实上上升了——这正是“缩水式通胀”能被称作通胀的原因">proportional</span> cut in its price. The trick depends on <span class="kw" data-def="显著性；凸显程度（不可数名词，读作 /ˈseɪliəns/，重音在第一音节）。the salience of a price 价格的显著程度；give salience to something 使某物突出。形容词 salient 显著的、突出的：the salient point 要点。这是认知科学与行为经济学的常用词，指“某个信息在注意中占多大比重”。本课的核心论断：价格之所以比克重管用，不是因为它更重要，而是因为它更 salient">salience</span>. A price is the largest, most familiar number on a shelf ticket; a weight is one that few shoppers memorise. <span class="kw" data-def="Had the same increase been made 是虚拟条件句省略 if 后的倒装，还原为 If the same increase had been made through the shelf price。这是对过去事实相反的假设（事实是它通过克重变化完成的），主句用 would have done。规则：省略 if 时，had / were / should 要提到主语之前。同类常用：Had it not been for X 要是没有 X 的话">Had the same increase been made</span> through the shelf price, it would almost certainly have been noticed; an <span class="kw" data-def="等值的；等量的（形容词，读作 /ɪˈkwɪvələnt/，重音在第二音节）。be equivalent to 与……相等；an equivalent price rise 等值的涨价。名词 the equivalent of ……的等量物。它是比较型写作里的关键词：允许你换一种说法重述同一件事，从而把“感觉”上的差别暴露出来。本课用它做对照——同样的涨价，做成价格人人看得见，做成克重几乎没人注意">equivalent</span> price rise is visible, a quiet loss of ten grams is not.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · What a Shelf Ticket Can Do 一张价签能造成多大差别</div>
+            <p>A six-week field experiment in a Brisbane supermarket made this measurable. Both the price and the size of five products were left untouched; only the shelf tickets were altered, each implying the same increase in the per-unit price. A ticket suggesting a price rise sold 391 units; one suggesting the same price with a smaller pack, 435; one pairing a lower price with an even smaller pack, 530. Price, in short, is weighed more heavily than size, an <span class="kw" data-def="不对称；不对等（名词，读作 /ˌeɪˈsɪmətri/，美音常作 /ˌeɪˈsɪmətri/ 或 /ˌæsɪˈmetri/）。an information asymmetry 信息不对称；a power asymmetry 权力不对等。形容词 asymmetric 不对称的，反义 symmetric 对称的、balanced 均衡的。经济学里最有名的一支是 information asymmetry 信息不对称——本课的用法是它的心理学近亲：注意力与权重的不对称">asymmetry</span> linked to loss aversion. <span class="kw" data-def="Nor does 是否定副词提前引起的部分倒装。还原为 the difference does not arrive all at once either。nor 接在否定句之后表示“也不”，因此所在句子必须是倒装。规则：nor、never、seldom、rarely、hardly、not only 等置于句首时，助动词（do / does / did / have / can 等）提到主语之前；若句中无助动词，要借助 do。本课用它引出第二条理由：不仅价格比克重更响，而且变化是分批到达的">Nor does</span> the difference arrive all at once: a few missing grams are easy to overlook in one weekly shop, and the <span class="kw" data-def="累积的；渐增的（形容词，读作 /ˈkjuːmjələtɪv/，重音在第一音节）。the cumulative effect 累积效应；cumulative damage 累积损害。动词 accumulate 积累；名词 accumulation。它强调“一次不多、多次相加后很大”，与一次性变化 one-off 相对。本课用它解释为什么常客反而最难察觉：每星期少几克，看不出来，加起来却很可观">cumulative</span> loss becomes obvious only to someone returning after a long absence.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Number Too Small to Read 小到看不清的那个数字</div>
+            <p>Most consumer-protection systems therefore require a <span class="kw" data-def="披露；公示；公开（名词，读作 /dɪsˈkləʊʒə/，重音在第二音节）。a disclosure requirement 披露要求；financial disclosure 财务披露。动词 disclose 公开、透露：disclose the previous price 公开此前的价格。它指“把原本只有一方知道的信息摆到台面上”，因此天然带制度色彩：谁来披露、披露什么、披露多久，都是规则设计问题。本课后半段的核心：披露什么，决定了你能比较什么">disclosure</span>: alongside the headline price, a unit price is printed — the cost per 100 grams, per kilogram or per litre. In Australia a <span class="kw" data-def="强制的；法定的（形容词，读作 /ˈmændətəri/，重音在第一音节，美音常作 /ˈmændətɔːri/）。a mandatory code 强制性规范；mandatory labelling 强制标示；it is mandatory to do something 做某事是强制的。反义 voluntary 自愿的、optional 可选的。本课的关键对比：同一件事，在澳大利亚由强制性行业规范约束，在美国只有部分州对食品有要求">mandatory</span> industry code has required many grocery retailers to display it since 2009. A 100-gram bar at two dollars shows two dollars per 100 grams; at 90 grams the same ticket shows roughly 2.22. A 2026 study of canned tuna in Food Policy tested whether it helps. Only sixteen US states regulate unit-price labelling for food; the authors found shoppers there three times more responsive to changes in that <span class="kw" data-def="度量指标；计量标准（名词，读作 /ˈmetrɪk/）。the relevant price metric 相关的那个价格指标；key performance metrics 关键绩效指标。它指“用来量某件事的那个具体尺度”，与 measure（测量行为／措施）、measurement（测出来的值）不同。本课的用法值得留意：单位价格不是另一种价格，而是另一套 metric——换 metric 会改变人注意什么">metric</span>, and their <span class="kw" data-def="反事实的（形容词，读作 /ˌkaʊntəˈfæktʃuəl/，也作名词，指“与实际发生情况相反的假设情形”）。counterfactual simulations 反事实模拟。构词：counter- 相反 ＋ factual 事实的。学术写作里它描述一种常见做法：先估计真实世界的关系，再在模型里把某个条件改成“如果没有／如果全都”，比较两种情形之差。注意它一定是模型推演，不是观测到的结果">counterfactual</span> simulations put the annual gain in consumer <span class="kw" data-def="（消费者）福利；福祉（不可数名词，读作 /ˈwelfeə/）。consumer welfare 消费者福利；social welfare 社会福利。经济学里的 welfare 有专门含义：指人们从消费中得到的满足，通常用“愿意支付的价格与实际支付价格之差”（消费者剩余）来衡量。所以它不等于“口袋里多出来的现金”，读数据时务必分清。形容词 welfare-enhancing 增进福利的">welfare</span> at just over three million dollars in the short term and over eight million later.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What the Label Cannot Say 标价签说不出口的那件事</div>
+            <p>Yet the unit price answers only one question: which bar is cheaper today. It cannot tell you what your usual bar weighed last month, because nothing obliges a seller to publish the previous figure. Australia&#39;s competition regulator identified that gap in March 2025 and recommended notices showing both the old and the new unit price, placed near the shelf ticket and online for a set period. <span class="kw" data-def="Only when 是 only ＋ 状语从句置于句首引起的部分倒装。还原为 shoppers can compare a product with its own earlier self only when a change is disclosed。规则：only 修饰状语（副词、介词短语或状语从句）并置于句首时，主句助动词提到主语之前；only 修饰主语时不倒装（Only he knows）。修辞作用：把“只有这个条件”推到最前面，使条件成为全句重心">Only when</span> a change is disclosed can shoppers compare a product with its own earlier self. That may matter twice over: people judge a size cut they have discovered more harshly than an equivalent price rise, partly because it feels <span class="kw" data-def="被隐藏的；被遮掩的（形容词，读作 /kənˈsiːld/）。feel concealed 感觉被藏着；a concealed change 暗中进行的变化。动词 conceal 隐藏、隐瞒，及物：conceal the true cost 隐瞒真实成本。近义词 hidden 更口语，concealed 更书面、更常用于规章与评论。本课的落点：之所以发现之后反应更强烈，不是因为损失更大，而是因为它让人觉得“本来不该瞒着”">concealed</span>. Fewer shrinking packs would not automatically mean better value — quality may fall instead. The label tells only part of the story; what matters is what that price buys.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+        <div class="card" style="background:var(--soft);">
+          <p style="margin:0;font-size:14.5px;color:#4b5563;"><b>背景速览：</b>shrinkflation 缩水式通胀，指不涨价而减少数量或容量。文中数字按各自口径使用：11% 是 100 克降到 90 克、价格不变时每克价格的涨幅（2÷0.9 ÷ 2÷1 ≈ 1.11）；2,529 例是英国统计部门记录的 2012—2017 年案例数；布里斯班实验指 Yao、Wang 与 Mortimer 的研究（<i>Journal of the Academy of Marketing Science</i>，2020），六周、五种商品，<b>只改价签上的“原价／原规格”字样，商品与价格实际都没动</b>，四组销量分别为 391／435／448／530；澳大利亚的竞争监管机构是 ACCC，其超市调查最终报告发布于 2025 年 3 月 21 日；金枪鱼罐头研究发表于 <i>Food Policy</i> 2026 年第 142 卷。本课只讨论“信息如何被摆出来”，<b>不评价任何国家、地区或企业的监管与经营优劣，不作跨国排名</b>。</p>
+        </div>
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="shrinkflation">🔊</button><div class="word">shrinkflation<span class="pos">n.</span></div><div class="zh">缩水式通胀（读作 /ˌʃrɪŋkˈfleɪʃn/，shrink 收缩＋inflation 通胀）。厂商不涨价而减少数量或容量，等于变相抬价。约 2009 年才进入英语词汇，此前业内只说 contents reduction strategy。相关新词 <b>skimpflation</b> 指暗中降品质。注意与 deflation（通货紧缩）只差几个字母，意思完全不同</div><div class="ex">"Economists call this shrinkflation — reducing a product&#39;s quantity without a proportional cut in its price."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="proportional">🔊</button><div class="word">proportional<span class="pos">adj.</span></div><div class="zh">成比例的；相称的（读作 /prəˈpɔːʃənl/，重音在第二音节）。be proportional to 与……成正比；a proportional cut 等比例削减。名词 proportion 比例；in proportion 相称。本课要点：<b>without a proportional cut</b> 价格未按数量同比例下降，所以每克价格事实上上升了</div><div class="ex">"... reducing a product&#39;s quantity without a proportional cut in its price."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="salience">🔊</button><div class="word">salience<span class="pos">n.</span></div><div class="zh">显著性；凸显程度（不可数，读作 /ˈseɪliəns/，重音在第一音节）。the salience of a price 价格的显著程度。形容词 salient 显著的：the salient point 要点。行为经济学常用词，指“某信息在注意力中占多大比重”。本课核心：价格比克重管用，不是因为更重要，而是因为它更 <b>salient</b></div><div class="ex">"The trick depends on salience."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="equivalent">🔊</button><div class="word">equivalent<span class="pos">adj.</span></div><div class="zh">等值的；等量的（读作 /ɪˈkwɪvələnt/，重音在第二音节）。be equivalent to 与……相等；an equivalent price rise 等值的涨价。名词 the equivalent of ……的等量物。比较型写作的关键词：允许换一种说法重述同一件事，从而把“感觉”上的差别暴露出来</div><div class="ex">"... an equivalent price rise is visible, a quiet loss of ten grams is not."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="cumulative">🔊</button><div class="word">cumulative<span class="pos">adj.</span></div><div class="zh">累积的；渐增的（读作 /ˈkjuːmjələtɪv/，重音在第一音节）。the cumulative effect 累积效应；cumulative loss 累积损失。动词 accumulate 积累。它强调“一次不多、多次相加后很大”，与 one-off 一次性相对。本课用它解释为什么常客最难察觉</div><div class="ex">"... the cumulative loss becomes obvious only to someone returning after a long absence."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="disclosure">🔊</button><div class="word">disclosure<span class="pos">n.</span></div><div class="zh">披露；公示（读作 /dɪsˈkləʊʒə/，重音在第二音节）。a disclosure requirement 披露要求。动词 disclose 公开：disclose the previous price。它指“把原本只有一方知道的信息摆上台面”，所以天然带制度色彩——谁来披露、披露什么、披露多久，都是规则设计问题</div><div class="ex">"Most consumer-protection systems therefore require a disclosure: ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="mandatory">🔊</button><div class="word">mandatory<span class="pos">adj.</span></div><div class="zh">强制的；法定的（读作 /ˈmændətəri/，重音在第一音节，美音常作 /ˈmændətɔːri/）。a mandatory code 强制性规范；mandatory labelling 强制标示。反义 voluntary 自愿的、optional 可选的。本课要点：同是单位价格，在澳大利亚由强制性行业规范约束，在美国只有部分州对食品有要求</div><div class="ex">"In Australia a mandatory industry code has required many grocery retailers to display it since 2009."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="metric">🔊</button><div class="word">metric<span class="pos">n.</span></div><div class="zh">度量指标；计量标准（读作 /ˈmetrɪk/）。the relevant price metric 相关的那个价格指标；key performance metrics 关键绩效指标。它指“用来量某件事的那个具体尺度”，与 measure（测量行为／措施）、measurement（测得的值）不同。本课要点：单位价格不是另一种价格，而是另一套 <b>metric</b>；换 metric 会改变人注意什么</div><div class="ex">"... the authors found shoppers there three times more responsive to changes in that metric, ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="counterfactual">🔊</button><div class="word">counterfactual<span class="pos">adj./n.</span></div><div class="zh">反事实的（读作 /ˌkaʊntəˈfæktʃuəl/；作名词指“与实际相反的假设情形”）。counterfactual simulations 反事实模拟。构词：counter- 相反＋factual 事实的。学术写作里指先估计真实关系，再在模型里把条件改成“如果没有／如果全都”，比较两者之差。<b>它一定是模型推演，不是观测结果</b></div><div class="ex">"... their counterfactual simulations put the annual gain in consumer welfare at just over three million dollars ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="welfare">🔊</button><div class="word">welfare<span class="pos">n.</span></div><div class="zh">福利；福祉（不可数，读作 /ˈwelfeə/）。consumer welfare 消费者福利。经济学里的专门含义：人们从消费中得到的满足，常用“愿付价格与实际支付之差”（消费者剩余）衡量。<b>它不等于口袋里多出来的现金</b>，读数据时务必分清</div><div class="ex">"... the annual gain in consumer welfare at just over three million dollars in the short term ..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="concealed">🔊</button><div class="word">concealed<span class="pos">adj.</span></div><div class="zh">被隐藏的；被遮掩的（读作 /kənˈsiːld/）。feel concealed 感觉被藏着；a concealed change 暗中进行的变化。动词 conceal 隐瞒，及物：conceal the true cost。近义 hidden 更口语，concealed 更书面、常用于规章与评论。本课落点：反应更强烈不是因为损失更大，而是因为“本来不该瞒着”</div><div class="ex">"... people judge a size cut they have discovered more harshly than an equivalent price rise, partly because it feels concealed."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 本课的“价格”词链：</b>headline price 标价 → shelf ticket 货架价签 → unit price 单位价格 → per-unit price 每单位价格 → effective price 实际有效价格。写消费类文章时，这条链几乎可以整段套用。<br>
+        <b>② 三个“涨价”的说法，语气不同：</b><b>price rise</b> 涨价（中性）→ <b>effective price increase</b> 实际价格上涨（强调“算下来”才涨了，是缩水式通胀的学理说法）→ <b>hidden price increase</b> 隐性涨价（带批评色彩）。同一件事，换一个说法就换了立场。<br>
+        <b>③ mandatory 的一族“必须”：</b>mandatory 法定的 → compulsory 义务的（常用于教育、兵役）→ obligatory 按规矩必须做的 → required 被要求的。反义：<b>voluntary</b> 自愿的、<b>optional</b> 可选的、<b>discretionary</b> 自行酌定的。<br>
+        <b>④ disclose 一族：</b>disclose 披露 → disclosure 披露（行为／制度）→ non-disclosure 不披露 → undisclosed 未公开的（an undisclosed fee 一笔未予说明的费用）。<br>
+        <b>⑤ 一对易混：</b><b>metric 指标</b>（用来量的那把尺子）↔ <b>measure 措施／量度</b>。想说“换一种算法”，用 metric；想说“采取一项办法”，用 measure。别写成 change the measure。<br>
+        <b>⑥ 一个写作提醒：</b><b>counterfactual</b> 与 <b>hypothetical</b> 都有“假设”的意思，但 counterfactual 专指“与已发生的事实相反”，且多用于模型推演；hypothetical 只是“假想的”，不要求与事实相反。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. What 引导的主语从句 + not A but B · What has changed is not the price on the ticket but the small print on the wrapper.</h3>
+          <div class="zh">结构：<b>What + 谓语（通常用单数）+ 表语</b>。what 等于 the thing that，本身已含先行词，后面不能再加 that。它与 <b>not A but B</b> 连用时，功能是<b>先否定一个显而易见的答案、再给出真正的答案</b>，因此特别适合做段落首句。本课第 1 段就是这样开的：先说“变的不是价格”，读者自然会问那变的是什么。<b>注意</b>：what 从句作主语时谓语一般用单数。</div>
+          <div class="eg">What has changed is not the price on the ticket but the small print on the wrapper: the bar still costs two dollars, yet it now says 90 grams where it once said 100.</div>
+          <div class="practice">仿写：真正变贵的不是手机，而是装在里面的那块电池。
+            <input type="text" placeholder="What has become ..." data-ans="What has become expensive is not the phone but the battery inside it.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. 独立主格结构 · The shelf price unchanged, the same coins buy ten grams less.</h3>
+          <div class="zh">结构：<b>名词 / 代词 + 形容词（或分词、介词短语、副词）</b>，意义上相当于一个省略了谓语的状语从句，可还原为 <b>Because / While the shelf price is unchanged</b>。它与分词短语做状语的区别在主语：<b>分词短语的逻辑主语必须等于主句主语</b>，独立主格则自带主语。用它可以在一句话里先放下一条安静的前提，再让主句去说后果，节奏非常紧凑。同类：<i>The meeting over, everyone left.</i>／<i>Weather permitting, we will go.</i></div>
+          <div class="eg">The shelf price unchanged, the same coins buy ten grams less, and the price of a gram has risen by about eleven per cent.</div>
+          <div class="practice">仿写：包装没换，里面的东西却少了一半。
+            <input type="text" placeholder="The packaging ..., " data-ans="The packaging unchanged, the contents had shrunk by half.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. 虚拟条件句省略 if 的倒装 · Had the same increase been made through the shelf price, it would almost certainly have been noticed.</h3>
+          <div class="zh">结构：<b>Had + 主语 + 过去分词</b>（＝ If + 主语 + had + 过去分词），主句用 <b>would / might / could have done</b>。这是对<b>过去事实相反</b>的假设——事实是这次涨价通过克重完成，而不是通过价格。规则：if 被省略时，had、were、should 要提到主语之前。它比直接说 through the price 更克制，因为暗示“另一种做法本可以不同”。</div>
+          <div class="eg">Had the same increase been made through the shelf price, it would almost certainly have been noticed; an equivalent price rise is visible, a quiet loss of ten grams is not.</div>
+          <div class="practice">仿写：要是当初把改动写进说明书，顾客早就发现了。
+            <input type="text" placeholder="Had the change ..., " data-ans="Had the change been written into the instructions, customers would have noticed it at once.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. 否定副词提前的部分倒装 · Nor does the difference arrive all at once.</h3>
+          <div class="zh">结构：<b>Nor / Never / Seldom / Rarely / Hardly + 助动词 + 主语 + 实义动词</b>。nor 表示“也不”，须接在否定句之后，因此它所在的句子必须倒装。本课的妙处在于<b>它是第二条理由的开关</b>：第 2 段先说价格比克重更“响”，再用 nor 引出第二点——变化还是分批到达的。这类倒装的修辞功能是把否定推到句首，让否定成为全句重心。</div>
+          <div class="eg">Nor does the difference arrive all at once: a few missing grams are easy to overlook in one weekly shop, and the cumulative loss becomes obvious only to someone returning after a long absence.</div>
+        </div>
+
+        <div class="item">
+          <h3>5. only + 状语从句提前的部分倒装 · Only when a change is disclosed can shoppers compare a product with its own earlier self.</h3>
+          <div class="zh">结构：<b>Only + 状语（副词／介词短语／状语从句）置于句首 → 主句助动词提到主语之前</b>。还原为 shoppers can compare … only when a change is disclosed。<b>常见陷阱</b>：only 修饰主语时不倒装（<i>Only he knew the answer</i>）。本句把条件推到最前面，正是全文的落点：单位价格能比今天和今天，却比不了今天和昨天——除非有人把昨天的数字也摆出来。</div>
+          <div class="eg">Only when a change is disclosed can shoppers compare a product with its own earlier self.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <p class="subtitle">5 个语法点，例句均取自正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① What 引导的名词性从句作主语（＋ not A but B 对照）</h3>
+          <div class="zh">what 引导的名词性从句可充当主语、宾语或表语。作主语时 what 相当于 <b>the thing(s) that</b>，既作引导词又在从句中充当成分，谓语通常用单数。它特别适合“下定义”“纠正误解”的语境，因为它天然制造一个悬念：先说某件事变了／重要了，再说出是什么。对照结构 <b>not A but B</b> 要求 A 与 B 语法成分平行——本课是 the price on the ticket 与 the small print on the wrapper 两个名词短语平行。</div>
+          <div class="eg">What has changed is not the price on the ticket but the small print on the wrapper: the bar still costs two dollars, yet it now says 90 grams where it once said 100.</div>
+          <div class="eg" style="margin-top:8px;">The label tells only part of the story; what matters is what that price buys.</div>
+        </div>
+
+        <div class="item">
+          <h3>② 独立主格结构（名词 + 形容词／分词）</h3>
+          <div class="zh">独立主格由<b>名词或代词 + 补足成分</b>构成，补足成分可以是形容词、过去分词、现在分词、介词短语或副词。它<b>不是句子</b>（没有谓语动词），在句中作状语，表示时间、原因、条件或伴随状况。判断标准：把这个结构改成一个从句，需要自己补一个 be 动词——能补上，且主语与主句主语不同，就是独立主格。它多见于书面与新闻语体，口语里一般改成从句。</div>
+          <div class="eg">The shelf price unchanged, the same coins buy ten grams less.</div>
+          <div class="eg" style="margin-top:8px;">notices showing both the old and the new unit price, placed near the shelf ticket and online for a set period</div>
+        </div>
+
+        <div class="item">
+          <h3>③ 虚拟语气：对过去的假设与省略 if 的倒装</h3>
+          <div class="zh">对过去事实相反的假设：<b>从句 had done，主句 would / might / could have done</b>。若省略 if，had 提到句首。本课这句是<b>被动语态的过去虚拟</b>（had been made），主句也是被动（would have been noticed），两层被动叠加，读起来很“学术”。相关固化短语：<b>Had it not been for X</b> 要是没有 X 的话；<b>Were it not for X</b>（对现在）；<b>Should X happen</b>（对将来）。</div>
+          <div class="eg">Had the same increase been made through the shelf price, it would almost certainly have been noticed; ...</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 部分倒装：nor 与 only + 状语</h3>
+          <div class="zh">两种触发条件的共同点是<b>只把助动词提前，不提前实义动词</b>。<b>① 否定词族</b>：nor、never、seldom、rarely、hardly、scarcely、not only、no sooner 置于句首。<b>② only 修饰状语</b>并置于句首。若句中原本没有助动词，要借助 do / does / did（<i>Nor did they complain</i>）。<b>注意</b>：only 修饰主语时<b>不倒装</b>，这是最常考的例外。</div>
+          <div class="eg">Nor does the difference arrive all at once: a few missing grams are easy to overlook in one weekly shop, ...</div>
+          <div class="eg" style="margin-top:8px;">Only when a change is disclosed can shoppers compare a product with its own earlier self.</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 被动语态的时态与情态搭配，及过去分词短语作后置定语</h3>
+          <div class="zh">同一段里换用不同形式的被动，取决于<b>动作相对于叙述基准的时间</b>与<b>说话人的语气</b>：一般过去时被动（were left untouched）陈述实验操作；一般现在时被动（is printed）陈述制度常态；情态完成被动（would have been noticed）表示对过去可能性的判断。另有一处<b>过去分词短语作后置定语</b>：notices … placed near the shelf ticket，等于 which were placed near the ticket，比定语从句简洁。</div>
+          <div class="eg">Both the price and the size of five products were left untouched; only the shelf tickets were altered, ...</div>
+          <div class="eg" style="margin-top:8px;">... alongside the headline price, a unit price is printed — the cost per 100 grams, per kilogram or per litre.</div>
+          <div class="eg" style="margin-top:8px;">... it would almost certainly have been noticed; ...</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、一个词是怎么被造出来的</h3>
+        <p>把商品变少而价格不动，行业里原先叫 <b>contents reduction strategy</b>（内容缩减策略），听着像中性的生产安排。约 2009 年起，<b>shrinkflation</b> 这个合成词进入英语词汇，把 shrink（收缩）与 inflation（通胀）捆在一起，语义立刻变了：它不再是“包装稍作调整”，而是一次<b>没有写在价签上的涨价</b>。</p>
+        <p>数字要按口径读。英国国家统计部门在 2012—2017 年间记录过 <b>2,529 例</b>缩水案例；这个数是“被记录下来的案例”，不是“全部发生过多少次”，也不能直接换算成通胀率。另有一点容易混淆：<b>deflation</b>（通货紧缩，物价普遍下降）与它只差几个字母，含义完全相反。</p>
+        <p>算一遍就明白：100 克卖 2 元，每克 0.02 元；90 克仍卖 2 元，每克约 0.0222 元，涨幅约 11%。<b>标价没动，单位价格动了</b>——这正是全课要追的那条线。</p>
+
+        <h3>二、为什么价格比克重更“响”：布里斯班的价签实验</h3>
+        <p>Yao、Wang 与 Mortimer 的研究（<i>Journal of the Academy of Marketing Science</i>，2020）在布里斯班一家超市做了六周现场实验，2022 年由研究者本人在 The Conversation 撰文介绍。设计非常干净：<b>五种商品的实际价格与规格一动不动，只改货架价签上“原价／原规格”的字样</b>，让顾客以为发生了某种变化；四组字样都隐含同一个单位价格涨幅。</p>
+        <table class="facts">
+          <tr><th>价签暗示</th><th>销量（件）</th><th>说明</th></tr>
+          <tr><td>只涨价</td><td>391</td><td>最直白的一种，反而卖得最少</td></tr>
+          <tr><td>价格不变、规格变小</td><td>435</td><td>标准的缩水式通胀</td></tr>
+          <tr><td>规格变大、价格涨得更多</td><td>448</td><td>单位价格同样上涨</td></tr>
+          <tr><td>价格略降、规格缩得更多</td><td>530</td><td>单位价格同样上涨，却最受欢迎</td></tr>
+        </table>
+        <p>研究者用两个机制解释：<b>框架效应</b>（一点小好处＋一点大损失，比纯粹的小损失更顺眼，即 silver lining effect）与<b>损失厌恶</b>；更根本的一点是——<b>价格比规格更显眼，被赋予的权重更大</b>（即课文里的 salience）。</p>
+        <p><b>把话说窄：</b>这个实验测的是<b>标价方式对感知的影响</b>，不是“真实涨价之后顾客会怎么反应”。商品没变、价格没变、只有标签变了，所以结论落在“信息如何被呈现”，而非“涨价多少会被容忍”。把这个边界讲清楚，比多背一个数字重要。</p>
+
+        <h3>三、那行最小的数字：单位价格</h3>
+        <p>多数消费者保护体系要求商家在醒目的标价之外，再印一个<b>单位价格</b>——每 100 克、每公斤或每升多少钱。澳大利亚自 2009 年起通过强制性的<i>Unit Pricing Code</i>（单位价格规范）要求许多食品零售商标示；据 2026 年 <i>Food Policy</i> 的一篇论文，美国当时只有 <b>16 个州</b>对食品的单位价格标示有规定。</p>
+        <p>它解决的是<b>横向比较</b>：今天货架上 A 牌与 B 牌哪个划算。它解决不了<b>纵向比较</b>：你常买的那盒，上个月是不是更多。<b>要发现纵向变化，你得记住旧克重或旧单位价格——而这恰恰是普通顾客不会做的事。</b></p>
+        <p>澳大利亚竞争与消费者委员会（ACCC）在 2025 年 3 月 21 日发布的超市调查最终报告里明确点出这个缺口：许多消费者<b>记不住常买商品的单位价格，也不会每次购物都比一遍</b>，因此建议在规格变化导致单位价格上升时，要求超市在价签旁与商品网页上公示<b>变化前后的单位价格</b>，并持续一段固定时间；报告还提醒要防止把改包装说成“全新商品”来绕开规则。据一篇 2026 年的政策综述梳理，相关咨询在此后展开，政府在 2026 年 5 月的回应中表示仍在研究咨询结果。</p>
+
+        <h3>四、2026 年那篇金枪鱼罐头研究在测什么</h3>
+        <p>Wan、Harris-Lagoudakis 与 Crespi 的论文《Shrinkflation, unit price disclosure, and consumer welfare: Evidence from canned tuna》发表于 <i>Food Policy</i> 2026 年第 142 卷。它利用“各州规则不同”这一现成差异，配合扫描数据，比较有／无单位价格标示要求地区的消费者反应：在有规则的州，消费者对单位价格变化的反应约为<b>三倍</b>；反事实模拟估计，若全国都要求标示，年度消费者剩余短期增加约 <b>303 万美元</b>，长期（零售商相应调价后）约 <b>833 万美元</b>。</p>
+        <p>读这类研究有三点必须收窄：</p>
+        <ul>
+          <li><b>① 口径很窄。</b>对象是一个国家、一个品类（罐装金枪鱼）、一次有记录的缩水事件。不能外推成“全国所有商品能省多少钱”。</li>
+          <li><b>② consumer welfare 不是现金。</b>它是福利经济学概念，用消费者剩余衡量；说“涨了三百万美元”，不等于谁的钱包多了三百万。</li>
+          <li><b>③ counterfactual 是模型推演。</b>“如果全国都标示”这件事并没有发生，数字依赖模型假设，属于估计而非观测。</li>
+        </ul>
+
+        <h3>五、中外对照：中国的“计价单位”与“规格”</h3>
+        <p>中国也有自己的一套“把信息摆出来”的规则，只是切入口不同。国家市场监督管理总局令第 56 号《明码标价和禁止价格欺诈规定》于 2022 年 4 月 14 日公布、<b>2022 年 7 月 1 日起施行</b>，其中第七条要求销售商品标示<b>品名、价格和计价单位</b>；同一品牌或种类的商品因<b>规格</b>等不同而实行不同价格的，应分别标示品名以示区别。第十九条又把“不标示或者显著弱化标示对消费者不利的价格条件”列为禁止的价格欺诈行为。</p>
+        <p>这个对照必须加上三点辨析，否则会讲歪：</p>
+        <ul>
+          <li><b>① 对照的是方法，不是高下。</b>两边都在处理同一个问题：让消费者看见自己究竟在买多少、按什么单位计价。这里只比“信息如何被摆出来”，<b>不比较任何国家或地区的监管优劣</b>。</li>
+          <li><b>② 不是同一件事。</b>中国的规则落在<b>明码标价＋规格区分＋不得弱化不利条件</b>；课文里讨论的“公示变化前后的单位价格”，是一类更专门、更强调<b>历史信息</b>的要求。二者关注点不同，不能互相替代，也不宜直接说成谁更严。</li>
+          <li><b>③ 注意力问题是共通的。</b>在中国城市的电商与生鲜场景里，“件／斤／净含量”混用、促销装与常规装并列、会员价与到手价分层，“规格”同样是最容易被略过的一栏。<b>这是人的注意力问题，不是某一地独有的问题</b>；也正因如此，课文才把 salience 放在第一段。</li>
+        </ul>
+        <p>顺带记一个方法论：<b>任何标价制度都只回答它被设计来回答的那个问题。</b>单位价格回答“今天哪一个更划算”，却不回答“我上次买的是不是更多”。看到“已经有标签了，为什么还要加告示”这类争论时，先分清两者在比什么。</p>
+
+        <h3>六、把话说窄：本课不说的三件事</h3>
+        <ul>
+          <li><b>不评价企业动机。</b>课文只写“成本上升时厂商可能选择减量”，不判断这是不是故意欺瞒；成本、配方、包装、渠道都可能是原因。</li>
+          <li><b>不作跨国比较与排名。</b>澳大利亚、美国、中国的规则只在各自语境里陈述，不比较宽严、不给结论；政策进展写到“据 2026 年一篇政策综述的梳理”为止。</li>
+          <li><b>不把“缩水变少”说成绝对坏事。</b>更小的包装未必是问题，商家有权调整产品与价格；关键是消费者能不能看见变了什么。而且<b>包装不再变小，也不等于更划算</b>——品质可能悄悄下降（有时叫 skimpflation），折扣可能变少，所以评估得同时看<u>价格、数量与品质</u>，既比今天的竞品，也比自己的旧版本。</li>
+        </ul>
+
+        <h3>七、参考来源</h3>
+        <p class="source">The Conversation（2022，作者自述布里斯班现场实验）· Yao, Wang &amp; Mortimer, <i>Journal of the Academy of Marketing Science</i>（2020）· ACCC 超市调查最终报告及新闻稿（2025-03-21）· Torrens University Australia 政策综述（2026，单位价格与缩水告示）· Wan, Harris-Lagoudakis &amp; Crespi, <i>Food Policy</i> vol. 142（2026）· 中文对照部分：国家市场监督管理总局令第 56 号《明码标价和禁止价格欺诈规定》（2022）。</p>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>💰 经济商业 Economics &amp; Business　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>缩水式通胀与货架上那行最小的数字——单位价格能回答什么，又回答不了什么</p>
+        <p>一块巧克力还是两块钱，包装上却从 100 克变成 90 克；价签没动，每克的价格涨了约 11%。布里斯班的现场实验证明，只改价签上的字样就能显著改变销量；单位价格标签让人能在货架上横向比较，却说不出这包以前多重。<b>任何标价制度都只回答它被设计来回答的那个问题——包装不再偷偷变小，也不等于更划算。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级经济与学术词汇（shrinkflation · proportional · salience · equivalent · cumulative · disclosure · mandatory · metric · counterfactual · welfare · concealed），能区分 mandatory / voluntary，并知道 welfare 在经济学里不等于现金。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 510 词的经济类说明文，能识别作者如何在第一段就把“常识”（价格没变就是没涨价）重新表述成“反常识”（动的不是价格，是单位价格）。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——What 引导的名词性从句作主语 + not A but B、独立主格、省略 if 的虚拟条件倒装、nor 与 only + 状语引起的部分倒装、被动语态的时态与情态搭配。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习把一次消费拆成“价格、数量、品质”三个变量，并追问“现行规则让我看见了哪一个、没让我看见哪一个”；读到“已经有标签了，为什么还要加告示”时，先分清两者在比什么。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过《明码标价和禁止价格欺诈规定》中“计价单位”与“规格”的要求，理解“信息如何被摆出来”这一共同问题，并知道这条对照能推到哪一步为止。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. What has changed is not the price on the ticket but the small print on the wrapper: the bar still costs two dollars, yet it now says 90 grams where it once said 100.</div>
+          <div class="eg" style="margin-top:8px;">2. The shelf price unchanged, the same coins buy ten grams less, and the price of a gram has risen by about eleven per cent.</div>
+          <div class="eg" style="margin-top:8px;">3. Had the same increase been made through the shelf price, it would almost certainly have been noticed; an equivalent price rise is visible, a quiet loss of ten grams is not.</div>
+          <div class="eg" style="margin-top:8px;">4. Nor does the difference arrive all at once: a few missing grams are easy to overlook in one weekly shop, and the cumulative loss becomes obvious only to someone returning after a long absence.</div>
+          <div class="eg" style="margin-top:8px;">5. Only when a change is disclosed can shoppers compare a product with its own earlier self.</div>
+          <div class="eg" style="margin-top:8px;">6. The label tells only part of the story; what matters is what that price buys.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-11-03 · 经济商业 Economics &amp; Business｜缩水式通胀，与那行小到看不清的单位价格</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Pattern practice check ---------- */
+document.querySelectorAll('.practice input').forEach(inp=>{
+  inp.addEventListener('blur',()=>{
+    const v=(inp.value||'').trim();
+    const key=(inp.dataset.ans||'').trim();
+    if(!v){inp.style.borderColor='';return;}
+    const norm=s=>s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+    inp.style.borderColor=(norm(v)===norm(key))?'#22c55e':'#ef4444';
+  });
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["What has changed is not the price on the ticket but the small print on the wrapper: the bar still costs two dollars, yet it now says 90 grams where it once said 100. The shelf price unchanged, the same coins buy ten grams less, and the price of a gram has risen by about eleven per cent. Economists call this shrinkflation — reducing a product's quantity without a proportional cut in its price. The trick depends on salience. A price is the largest, most familiar number on a shelf ticket; a weight is one that few shoppers memorise. Had the same increase been made through the shelf price, it would almost certainly have been noticed; an equivalent price rise is visible, a quiet loss of ten grams is not.", "A six-week field experiment in a Brisbane supermarket made this measurable. Both the price and the size of five products were left untouched; only the shelf tickets were altered, each implying the same increase in the per-unit price. A ticket suggesting a price rise sold 391 units; one suggesting the same price with a smaller pack, 435; one pairing a lower price with an even smaller pack, 530. Price, in short, is weighed more heavily than size, an asymmetry linked to loss aversion. Nor does the difference arrive all at once: a few missing grams are easy to overlook in one weekly shop, and the cumulative loss becomes obvious only to someone returning after a long absence.", "Most consumer-protection systems therefore require a disclosure: alongside the headline price, a unit price is printed — the cost per 100 grams, per kilogram or per litre. In Australia a mandatory industry code has required many grocery retailers to display it since 2009. A 100-gram bar at two dollars shows two dollars per 100 grams; at 90 grams the same ticket shows roughly 2.22. A 2026 study of canned tuna in Food Policy tested whether it helps. Only sixteen US states regulate unit-price labelling for food; the authors found shoppers there three times more responsive to changes in that metric, and their counterfactual simulations put the annual gain in consumer welfare at just over three million dollars in the short term and over eight million later.", "Yet the unit price answers only one question: which bar is cheaper today. It cannot tell you what your usual bar weighed last month, because nothing obliges a seller to publish the previous figure. Australia's competition regulator identified that gap in March 2025 and recommended notices showing both the old and the new unit price, placed near the shelf ticket and online for a set period. Only when a change is disclosed can shoppers compare a product with its own earlier self. That may matter twice over: people judge a size cut they have discovered more harshly than an equivalent price rise, partly because it feels concealed. Fewer shrinking packs would not automatically mean better value — quality may fall instead. The label tells only part of the story; what matters is what that price buys."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"According to paragraph 1, what actually changed? 按照第 1 段的说法，真正变的是什么？",
+   opts:["The shelf price rose by about eleven per cent 货架价格涨了约 11%（11% 是每克价格的涨幅，不是标价）","The small print on the wrapper — the bar kept its price but lost ten grams 包装上的小字：价格不变，克重少了十克","The manufacturer relabelled the unit price on the ticket 厂商把价签上的单位价格重新贴了一遍","The chocolate bar was withdrawn from the shelves 这块巧克力被下架了"],
+   ans:1,
+   fb:"正确！原文是 What has changed is not the price on the ticket but the small print on the wrapper。<b>价格一分没动，动的是克重</b>。请把三个数分开：<b>2 美元</b> 是标价（没变）；<b>100 克 → 90 克</b> 是规格；<b>约 11%</b> 是每克价格的涨幅。选项 A 恰恰是课文要纠正的那个直觉——涨价的是单位价格，不是标价。"},
+  {q:"In the Brisbane field experiment, which shelf ticket produced the highest sales? 布里斯班现场实验中，哪一种价签卖得最好？",
+   opts:["The one suggesting a straightforward price rise 暗示直接涨价的那种（391 件，最少）","The one suggesting the same price with a smaller pack 暗示价格不变、规格变小的那种（435 件）","The one pairing a lower price with an even smaller pack 价格略降、规格缩得更多的那种（530 件）","The one suggesting a larger pack with a higher price 规格变大、价格涨得更多的那种（448 件）"],
+   ans:2,
+   fb:"正确！530 件。关键前提是：<b>四种价签隐含的单位价格涨幅完全相同</b>，商品与价格实际都没变，只有标签上的字样不同。所以差异不是来自更便宜，而是来自<b>呈现方式</b>——价格比规格更显眼，且“一点小好处＋一点大损失”比纯粹的小损失更顺眼。四个数字对号入座：391／435／448／530。"},
+  {q:"What can a unit price tell a shopper? 单位价格能告诉顾客什么？",
+   opts:["Which product on the shelf is cheaper today — but not what the pack used to weigh 今天货架上哪个更划算，但说不出这包以前多重","What the pack weighed last month 这包上个月的克重（没有任何规则要求商家印出旧数字）","How much profit the manufacturer makes 厂商赚多少利润","Whether the retailer has broken the law 零售商有没有违法"],
+   ans:0,
+   fb:"正确！这正是第 4 段的落点：<b>单位价格回答“今天和今天比”，回答不了“今天和昨天比”</b>。它让你在货架上横向比较，却无法告诉你常买的那盒上个月是不是更多——除非额外把变化前的数字也公示出来。选项 B 恰恰是那个缺口，也正是 ACCC 2025 年报告建议加告示的原因。"},
+  {q:"According to the 2026 Food Policy study of canned tuna, what did the authors find? 按照 2026 年《Food Policy》上那项金枪鱼罐头研究，作者发现了什么？",
+   opts:["Unit pricing lowered shelf prices by about three per cent 单位价格让货架价格降了约 3%","Australia introduced its unit pricing code in 2026 澳大利亚在 2026 年才引入单位价格规范（是 2009 年）","Sixteen Australian states regulate unit-price labelling 澳大利亚有 16 个州管单位价格标示（16 个州说的是美国）","Shoppers in regulated US states were about three times more responsive to unit price changes 有规定的那些美国州，消费者对单位价格变化的敏感度约为三倍"],
+   ans:3,
+   fb:"正确！原文是 the authors found shoppers there three times more responsive to changes in that metric。三个易混点要分开：<b>16 个州</b> 是美国（澳大利亚是 2009 年起的强制性行业规范）；<b>三倍</b> 说的是反应敏感度，不是价格降了多少；论文里的 <b>303 万／833 万美元</b> 是反事实模拟估计的消费者剩余，<b>不是现金</b>，而且只针对一个品类。"},
+  {q:"Why did Australia's competition regulator recommend size-change notices? 澳大利亚的竞争监管机构为什么建议加规格变更告示？",
+   opts:["Because shrinkflation had been made illegal 因为缩水式通胀已被定为违法（报告并未建议禁止这种做法）","Because many consumers do not remember unit prices or compare them every shop 因为许多消费者记不住单位价格，也不会每次都比对","Because manufacturers asked retailers to do so 因为厂商请求零售商这么做（报告把通知责任放在超市，而非只交给供应商）","Because the unit pricing code was about to be repealed 因为单位价格规范即将被废止"],
+   ans:1,
+   fb:"正确！报告说的正是：许多消费者<b>记不住常买商品的单位价格，也不会每次购物都比一遍</b>，尤其在价格没变的时候。所以光有单位价格不够，还得把<b>变化前后</b>的数字一起摆出来。选项 A 是常见误读——报告讨论的是让消费者看见，不是禁止缩水；选项 C 也错，ACCC 明确认为通知责任应落在超市而非只交给供应商。"},
+  {q:"Which statement best captures the conclusion of the passage? 下列哪一项最符合文章的结论？",
+   opts:["Shrinkflation is always dishonest and should be banned 缩水式通胀总是不诚实，应当被禁止","Clearer unit prices alone would guarantee lower prices for shoppers 更清晰的单位价格本身就足以保证顾客买到更低价","Fewer shrinking packs would not automatically mean better value — price, quantity and quality all matter 包装不再变小不等于更划算，价格、数量与品质都要看","The number on the shelf tells the whole story 货架上那个数字说出了全部真相"],
+   ans:2,
+   fb:"正确！最后一段说得明白：<b>Fewer shrinking packs would not automatically mean better value — quality may fall instead</b>。包装不再偷偷变小，商家也可能改配方、减配料（有时叫 skimpflation）或减少折扣。所以评估要同时看<u>价格、数量与品质</u>，既比今天的竞品，也比自己的旧版本。选项 C 是唯一同时守住“不把商家动机说死”和“不把标签说成万能”的那一项。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

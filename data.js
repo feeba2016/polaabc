@@ -8094,6 +8094,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-11-03",
+    "title": "The Smallest Number on the Shelf",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-11-03-the-smallest-number-on-the-shelf",
+    "url": "lessons/b2/2026-11-03-the-smallest-number-on-the-shelf.html",
+    "vocab": [
+      {
+        "word": "shrinkflation",
+        "zh": "缩水式通胀（读作 /ˌʃrɪŋkˈfleɪʃn/，shrink 收缩＋inflation 通胀）。厂商不涨价而减少数量或容量，等于变相抬价。约 2009 年才进入英语词汇，此前业内只说 contents reduction strategy。相关新词 <b>skimpflation</b> 指暗中降品质。注意与 deflation（通货紧缩）只差几个字母，意思完全不同",
+        "ex": "\"Economists call this shrinkflation — reducing a product&#39;s quantity without a proportional cut in its price.\""
+      },
+      {
+        "word": "proportional",
+        "zh": "成比例的；相称的（读作 /prəˈpɔːʃənl/，重音在第二音节）。be proportional to 与……成正比；a proportional cut 等比例削减。名词 proportion 比例；in proportion 相称。本课要点：<b>without a proportional cut</b> 价格未按数量同比例下降，所以每克价格事实上上升了",
+        "ex": "\"... reducing a product&#39;s quantity without a proportional cut in its price.\""
+      },
+      {
+        "word": "salience",
+        "zh": "显著性；凸显程度（不可数，读作 /ˈseɪliəns/，重音在第一音节）。the salience of a price 价格的显著程度。形容词 salient 显著的：the salient point 要点。行为经济学常用词，指“某信息在注意力中占多大比重”。本课核心：价格比克重管用，不是因为更重要，而是因为它更 <b>salient</b>",
+        "ex": "\"The trick depends on salience.\""
+      },
+      {
+        "word": "equivalent",
+        "zh": "等值的；等量的（读作 /ɪˈkwɪvələnt/，重音在第二音节）。be equivalent to 与……相等；an equivalent price rise 等值的涨价。名词 the equivalent of ……的等量物。比较型写作的关键词：允许换一种说法重述同一件事，从而把“感觉”上的差别暴露出来",
+        "ex": "\"... an equivalent price rise is visible, a quiet loss of ten grams is not.\""
+      },
+      {
+        "word": "cumulative",
+        "zh": "累积的；渐增的（读作 /ˈkjuːmjələtɪv/，重音在第一音节）。the cumulative effect 累积效应；cumulative loss 累积损失。动词 accumulate 积累。它强调“一次不多、多次相加后很大”，与 one-off 一次性相对。本课用它解释为什么常客最难察觉",
+        "ex": "\"... the cumulative loss becomes obvious only to someone returning after a long absence.\""
+      },
+      {
+        "word": "disclosure",
+        "zh": "披露；公示（读作 /dɪsˈkləʊʒə/，重音在第二音节）。a disclosure requirement 披露要求。动词 disclose 公开：disclose the previous price。它指“把原本只有一方知道的信息摆上台面”，所以天然带制度色彩——谁来披露、披露什么、披露多久，都是规则设计问题",
+        "ex": "\"Most consumer-protection systems therefore require a disclosure: ...\""
+      },
+      {
+        "word": "mandatory",
+        "zh": "强制的；法定的（读作 /ˈmændətəri/，重音在第一音节，美音常作 /ˈmændətɔːri/）。a mandatory code 强制性规范；mandatory labelling 强制标示。反义 voluntary 自愿的、optional 可选的。本课要点：同是单位价格，在澳大利亚由强制性行业规范约束，在美国只有部分州对食品有要求",
+        "ex": "\"In Australia a mandatory industry code has required many grocery retailers to display it since 2009.\""
+      },
+      {
+        "word": "metric",
+        "zh": "度量指标；计量标准（读作 /ˈmetrɪk/）。the relevant price metric 相关的那个价格指标；key performance metrics 关键绩效指标。它指“用来量某件事的那个具体尺度”，与 measure（测量行为／措施）、measurement（测得的值）不同。本课要点：单位价格不是另一种价格，而是另一套 <b>metric</b>；换 metric 会改变人注意什么",
+        "ex": "\"... the authors found shoppers there three times more responsive to changes in that metric, ...\""
+      },
+      {
+        "word": "counterfactual",
+        "zh": "反事实的（读作 /ˌkaʊntəˈfæktʃuəl/；作名词指“与实际相反的假设情形”）。counterfactual simulations 反事实模拟。构词：counter- 相反＋factual 事实的。学术写作里指先估计真实关系，再在模型里把条件改成“如果没有／如果全都”，比较两者之差。<b>它一定是模型推演，不是观测结果</b>",
+        "ex": "\"... their counterfactual simulations put the annual gain in consumer welfare at just over three million dollars ...\""
+      },
+      {
+        "word": "welfare",
+        "zh": "福利；福祉（不可数，读作 /ˈwelfeə/）。consumer welfare 消费者福利。经济学里的专门含义：人们从消费中得到的满足，常用“愿付价格与实际支付之差”（消费者剩余）衡量。<b>它不等于口袋里多出来的现金</b>，读数据时务必分清",
+        "ex": "\"... the annual gain in consumer welfare at just over three million dollars in the short term ...\""
+      },
+      {
+        "word": "concealed",
+        "zh": "被隐藏的；被遮掩的（读作 /kənˈsiːld/）。feel concealed 感觉被藏着；a concealed change 暗中进行的变化。动词 conceal 隐瞒，及物：conceal the true cost。近义 hidden 更口语，concealed 更书面、常用于规章与评论。本课落点：反应更强烈不是因为损失更大，而是因为“本来不该瞒着”",
+        "ex": "\"... people judge a size cut they have discovered more harshly than an equivalent price rise, partly because it feels concealed.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
