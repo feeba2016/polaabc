@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Assumption That Did the Work — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#14532d;
+  --accent2:#78350f;
+  --bg:#f8f9fc;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#d9f99d;
+  --border:#a3e635;
+  --soft:#f7fee7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(20,83,45,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(20,83,45,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(20,83,45,.55);}70%{box-shadow:0 0 0 12px rgba(20,83,45,0);}100%{box-shadow:0 0 0 0 rgba(20,83,45,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#bef264;}
+#tip{position:fixed;z-index:1200;background:#052e16;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(20,83,45,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#d9f99d;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 经济学人 Economist-style</span>
+      <h1 class="title">The Assumption That Did the Work</h1>
+      <p class="subtitle">How a wager about self-correcting markets shaped antitrust for three decades, and what quietly replaced it · 2026-11-03 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The wager</div>
+            <p>Antitrust economics long rested on a <span class="kw" data-def="wager（名词）：赌注；引申为一项未经明言、却被整套推理依赖的前提。读音 /ˈweɪdʒə/。学术评论里用 wager 而非 assumption，是在强调该前提「押了注」——结论随它的成立与否而翻转。搭配：rest on a wager、a risky wager。">wager</span>: leave monopoly alone and prices summon the entry that undoes it. Bork pressed the point into a standard in 1978; by 1979 courts called the statute a consumer welfare <span class="kw" data-def="prescription（名词）：处方；法律上指规范性要求、准则。consumer welfare prescription 是 1979 年美国法院对该法的定性用语，意为「以消费者福利为准绳的规定」。注意法律义与医学义（药方）截然不同，判读时按语境取义。">prescription</span>, and the maxim that the law protects competition rather than competitors hardened into a <span class="kw" data-def="canon（名词）：正典；规范、准则、公认标准。读音 /ˈkænən/。形容词 canonical（规范的、公认的）。学术写作中 harden into a canon 指某个说法从争议性主张变成不假思索的前提。与 cannon（大炮）同音异义，切勿混淆。">canon</span>. Easterbrook supplied the logic in 1984 — condemn a beneficial practice and the benefit is lost for good, whereas a missed monopoly decays.</p>
+          </div>
+          <button class="play-btn" data-i="0" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · The post-Chicago formalisation</div>
+            <p>What the post-Chicago writers did was not to abandon that goal but to replace the model behind it. Game theory showed exclusion to be profitable in cases Chicago had treated as an <span class="kw" data-def="anomaly（名词）：反常、异常现象。读音 /əˈnɒməli/。形容词 anomalous。芝加哥学派把排他行为判为「理论上无利可图、因而现实中罕见」，也就是把它当成 anomaly；后芝加哥学派论证的正是这种「反常」其实是常态的策略。">anomaly</span>. In 1986 Krattenmaker and Salop set out the mechanics: buy up an input, withhold it, and rival costs rise. Bottleneck, real <span class="kw" data-def="foreclosure（名词）：封锁。反垄断经济学专指通过控制关键投入品的供应，把竞争对手从该投入品市场上排挤出去，使其成本上升。与金融上的「取消抵押品赎回权」同形异义，须按语境区分。动词 foreclose，搭配 real foreclosure / foreclosure of supply。">foreclosure</span>, cartel ringmaster — all work the same way: nothing need be <span class="kw" data-def="sacrifice（动词兼名词）：牺牲、让渡。读音 /ˈsækrɪfaɪs/。掠夺性定价要求先承受亏损（a period of sacrifice），而抬高对手成本不需要，这是后芝加哥学派区分两种策略的核心。搭配：nothing need be sacrificed、require a sacrifice。">sacrificed</span>. Predatory pricing bleeds; raising rivals' costs can pay from the first day.</p>
+          </div>
+          <button class="play-btn" data-i="1" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The toolkit that acquits</div>
+            <p>Yet the same formal toolkit <span class="kw" data-def="acquit（动词）：宣判无罪、开脱。读音 /əˈkwɪt/。反垄断语境里指某套分析工具得出「该行为不构成违法」的结论。名词 acquittal。与形近词 acquire（获得）无关。本文用 acquit 与 indict 对举，构成一组成对的反义动词。">acquits</span> as often as it <span class="kw" data-def="indict（动词）：控告、起诉；引申为「判为有害／归责」。读音 /ɪnˈdaɪt/（注意 b 不发音）。名词 indictment。学术写作中用于「某模型把某行为判为反竞争」这一比喻义，与法律上的正式起诉义并存。">indicts</span>. Rochet and Tirole defined a two-sided market in 2003 as one where transactions depend on the structure of fees, not only the level. Once structure is the variable, a below-cost price on one side is not predation but the <span class="kw" data-def="subsidy（名词）：补贴。读音 /ˈsʌbsədi/。双边市场中，平台对一边收取低于成本的费用乃至免费，由另一边补足，称为 cross-subsidisation（交叉补贴）。它不是掠夺性定价的证据，而是把两边都拉上船的定价手段。注意 subsidy 的重音在第一音节。">subsidy</span> that brings the other aboard. Chicago's conclusion survives here, though not the reasoning: the cross-subsidy is simply what an <span class="kw" data-def="equilibrium（名词）：均衡。读音 /ˌiːkwɪˈlɪbriəm/，复数 equilibria 或 equilibriums。指各参与方在给定他人行为下均无改变动机的状态。学术用法强调它是模型的解，而非「理想状态」；a competitive equilibrium 不等于「好的结果」。">equilibrium</span> looks like.</p>
+          </div>
+          <button class="play-btn" data-i="2" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Where the quarrel moved</div>
+            <p>The quarrel has moved. What divides the schools is not a value but an assumption about how markets correct themselves — one its users rarely state. Easterbrook's asymmetry <span class="kw" data-def="presume（动词）：假定、预设。读音 /prɪˈzjuːm/。名词 presumption（假定、预设），形容词 presumptive。与 assume 的差别在于 presume 常带有「未经声明就把某事当成前提」的意味，语气更正式也更重。搭配：presume that、the presumption that。">presumes</span> easy entry, enduring precedents and no lawful alternative — each an <span class="kw" data-def="empirical（形容词）：经验性的、实证的。读音 /ɪmˈpɪrɪkl/。指须由观察或数据判定，而非由理论推定。an empirical claim in disguise 指某个看似逻辑必然的命题，实质上是一个可以被数据推翻的事实判断。注意重音在第二音节。">empirical</span> claim in disguise. The lesson generalises beyond one <span class="kw" data-def="doctrine（名词）：学说、教义、原则体系。读音 /ˈdɒktrɪn/。法律与经济学中指一套被系统化表述并可被援引的规则或主张，如 the consumer welfare doctrine。比 theory 更强调规范化与可援引性，比 rule 更强调体系性。">doctrine</span>: before asking what a rule wants, ask which model it has silently assumed. Were the model different, the same evidence would point the other way.</p>
+          </div>
+          <button class="play-btn" data-i="3" data-icon="▶">▶</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary（10 个 C1–C2 学术词）</h2>
+      <div class="card">
+        <p style="margin-top:0;color:var(--muted);font-size:14.5px;">以下词条按在正文出现的顺序排列。释义为学术语境义，例句尽量取自本课主题，便于在雅思写作与托福综合写作中迁移。</p>
+      </div>
+      <div class="vocab-grid">
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="wager" data-icon="🔊">🔊</button>
+          <div class="word">wager<span class="pos">n.</span></div>
+          <div class="zh">赌注；引申为「被整套论证依赖却未言明的前提」</div>
+          <div class="ex">The whole case for non-intervention rests on a wager that entry will arrive before prices do lasting damage.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="prescription" data-icon="🔊">🔊</button>
+          <div class="word">prescription<span class="pos">n.</span></div>
+          <div class="zh">处方；法律上指规范性要求、准则（与医学义须按语境区分）</div>
+          <div class="ex">Courts came to read the statute as a consumer welfare prescription, not as a charter for dispersed ownership.</div>
+          <span class="lvl">C1</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="canon" data-icon="🔊">🔊</button>
+          <div class="word">canon<span class="pos">n.</span></div>
+          <div class="zh">正典；规范、公认准则（形容词 canonical；与 cannon「大炮」同音异义）</div>
+          <div class="ex">Within a decade the maxim that the law protects competition rather than competitors had hardened into a canon.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="foreclosure" data-icon="🔊">🔊</button>
+          <div class="word">foreclosure<span class="pos">n.</span></div>
+          <div class="zh">封锁（反垄断）：控制关键投入品供应以抬高对手成本；与金融「取消赎回权」异义</div>
+          <div class="ex">Real foreclosure differs from a bottleneck: it works through sheer volume of supply withheld, not through the uniqueness of the input.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="sacrifice" data-icon="🔊">🔊</button>
+          <div class="word">sacrifice<span class="pos">v./n.</span></div>
+          <div class="zh">牺牲、让渡（掠夺性定价要求先承受亏损，抬高对手成本则不必）</div>
+          <div class="ex">The distinction turns on sacrifice: predatory pricing bleeds for a period, whereas raising rivals' costs can pay from the first day.</div>
+          <span class="lvl">C1</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="anomaly" data-icon="🔊">🔊</button>
+          <div class="word">anomaly<span class="pos">n.</span></div>
+          <div class="zh">反常、异常现象（形容词 anomalous）</div>
+          <div class="ex">Where one school saw an anomaly too rare to worry about, the other saw a business plan waiting to be modelled.</div>
+          <span class="lvl">C1</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="acquit" data-icon="🔊">🔊</button>
+          <div class="word">acquit<span class="pos">v.</span></div>
+          <div class="zh">宣判无罪；开脱（名词 acquittal；与 indict 对举）</div>
+          <div class="ex">A framework that acquits as often as it indicts is not biased in either direction; it is simply sensitive to which model one starts from.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="indict" data-icon="🔊">🔊</button>
+          <div class="word">indict<span class="pos">v.</span></div>
+          <div class="zh">控告；引申为「判为有害、归责」（b 不发音；名词 indictment）</div>
+          <div class="ex">The models indict a practice only once the exclusion has been shown to pay for itself without a period of sacrifice.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="equilibrium" data-icon="🔊">🔊</button>
+          <div class="word">equilibrium<span class="pos">n.</span></div>
+          <div class="zh">均衡（模型的解；复数 equilibria；不等于「理想状态」）</div>
+          <div class="ex">What looks like predation from one side is, in a two-sided market, simply what an equilibrium looks like.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="presumption" data-icon="🔊">🔊</button>
+          <div class="word">presumption<span class="pos">n.</span></div>
+          <div class="zh">假定、预设（动词 presume；比 assume 更强调「未经声明即当作前提」）</div>
+          <div class="ex">The asymmetry between the two errors is not a theorem; it is a presumption about how quickly markets correct themselves.</div>
+          <span class="lvl">C1</span>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">💡 词族与搭配速记</h3>
+        <p style="font-size:14.5px;"><b>① 成对反义动词</b>：acquit / indict（开脱 / 归责）、converge / diverge、vindicate / repudiate。学术写作中把两个反义动词放在同一句里对举，是压缩篇幅、同时显得平衡的常见手段，本文第三段第一句即如此。</p>
+        <p style="font-size:14.5px;"><b>② 法律—经济双义名词</b>：prescription、foreclosure、sacrifice 在普通英语与专门语境中义项不同。雅思阅读的词汇题尤其爱考这类「熟词生义」，做题时不要按最熟悉的义项直接代入。</p>
+        <p style="font-size:14.5px;"><b>③ -ise/-ize 与 -ion 的名词化链</b>：subsidy → subsidise → cross-subsidisation；equilibrium → equilibrate。学术语体偏好名词化，因为它能把一个过程压缩成一个可谈论的对象。</p>
+      </div>
+    </section>
+
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns（5 个可迁移学术句型）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>句型 1 · What X did was not to A but to B</h3>
+          <div class="zh">wh-型分裂句：把一个常被误解的作为重新描述为「不是 A 而是 B」。学术综述里用来纠正对某一学派的刻板印象，雅思写作讨论双方观点时极为好用。</div>
+          <div class="eg">What the post-Chicago writers did was not to abandon that goal but to replace the model behind it.</div>
+          <div class="practice">✍️ 练习：用该句型改写「这派学者并非否定自由贸易，而是换了衡量贸易收益的方式」。<input type="text" placeholder="What the critics did was not to ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>句型 2 · What divides A from B is not X but Y</h3>
+          <div class="zh">wh-型分裂句作主语：把分歧从「价值观」层面移到「前提／模型」层面。这是本课的收口句型，也是态度题的标准落点。</div>
+          <div class="eg">What divides the schools is not a value but an assumption about how markets correct themselves — one its users rarely state.</div>
+          <div class="practice">✍️ 练习：用该句型改写「两派之争不在目标，而在对数据生成过程的假定」。<input type="text" placeholder="What divides the two camps is not ... but ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>句型 3 · Once X is the variable, Y is not evidence of A but B</h3>
+          <div class="zh">Once 引导的条件从句 + not A but B 的对照表语：说明「换个自变量，同一个证据的指向就翻转」。学术写作中用于呈现模型依赖。</div>
+          <div class="eg">Once structure is the variable, a below-cost price on one side is not predation but the subsidy that brings the other aboard.</div>
+          <div class="practice">✍️ 练习：用该句型改写「一旦把时间跨度纳入考量，短期亏损就不构成失败的证据，而只是投资的一部分」。<input type="text" placeholder="Once ... is the variable, ... is not evidence of ... but ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>句型 4 · Nothing need be sacrificed / X need not be done</h3>
+          <div class="zh">情态动词 need + 被动不定式：高度正式的学术语体，表达「不必付出某种代价」。注意 need 后接被动不定式时整体仍表主动含义。</div>
+          <div class="eg">Bottleneck, real foreclosure, cartel ringmaster — all work the same way: nothing need be sacrificed.</div>
+          <div class="practice">✍️ 练习：用该句型改写「这一策略不必等待对手退出即可获利」。<input type="text" placeholder="Nothing need be ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>句型 5 · Were X, Y would ...（虚拟条件句倒装）</h3>
+          <div class="zh">省略 if、把 were 提至句首的虚拟条件句：表达对现状相反的假设，语气正式且紧凑。写作中用于「反事实收束」。</div>
+          <div class="eg">Were the model different, the same evidence would point the other way.</div>
+          <div class="practice">✍️ 练习：用该句型改写「如果进入壁垒可忽略，那么这套不对称就成立」。<input type="text" placeholder="Were ... , ... would ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar（5 个高级语法点）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>语法 1 · wh-型分裂句（wh-cleft）</h3>
+          <div class="zh">结构：What + 主语 + 谓语 + be + 被强调成分。作用是把已知信息（X 做了某事）打包成主语，把新信息（不是 A 而是 B）放在表语位置，从而把读者的注意力强行导向对比。</div>
+          <div class="eg">What the post-Chicago writers did was not to abandon that goal but to replace the model behind it.</div>
+          <div class="practice">📌 要点：强调部分是动词不定式时，to 不可省（not to abandon ... but to replace ...）。写作中若两处不定式共享 to，可写成 not to A but B，但隔开写更清晰。</div>
+        </div>
+
+        <div class="item">
+          <h3>语法 2 · 虚拟条件句的倒装（were-型）</h3>
+          <div class="zh">结构：Were + 主语 + 表语/补语, 主句 would/could/might + 动词原形。等于 If the model were different，但省略 if 后必须倒装，属于正式书面语体。</div>
+          <div class="eg">Were the model different, the same evidence would point the other way.</div>
+          <div class="practice">📌 要点：只有 were 可以这种倒装（Had I known 同理用于过去，Should it prove 用于将来）。主语是名词时同样倒装：Were the assumption sound, ...</div>
+        </div>
+
+        <div class="item">
+          <h3>语法 3 · not A but B 与 rather than 的层次差别</h3>
+          <div class="zh">not A but B 用于「否掉一种定性、换成另一种」，语气强；rather than 用于「在两者中偏向其一」，语气弱，且常只表偏好而非排他。</div>
+          <div class="eg">The maxim that the law protects competition rather than competitors hardened into a canon.</div>
+          <div class="practice">📌 要点：本文第一段用 rather than（该准则的表述本身），第二、三段用 not ... but ...（作者自己的重新定性）。语气差别正是观点归属题的线索。</div>
+        </div>
+
+        <div class="item">
+          <h3>语法 4 · whereas / while 引导的对照与分号的句间衔接</h3>
+          <div class="zh">whereas 连接两个并列分句，强调直接对立，位置可在句中或句首；分号则在不使用连词的情况下把两个紧密相关的独立分句并置，语体正式。</div>
+          <div class="eg">Easterbrook supplied the logic in 1984 — condemn a beneficial practice and the benefit is lost for good, whereas a missed monopoly decays.</div>
+          <div class="practice">📌 要点：破折号在这里引出对 the logic 的具体说明，随后 whereas 转入对照。三层衔接（破折号 + 逗号 + whereas）在一段话里完成「给出 → 展开 → 对立」。</div>
+        </div>
+
+        <div class="item">
+          <h3>语法 5 · 正式情态：need + 被动不定式</h3>
+          <div class="zh">结构：Nothing/Need + 主语 + be + 过去分词？在否定与疑问句中 need 可作情态动词，后接不带 to 的不定式；被动形式为 need be done。语体极为正式，口语中几乎全部换成 need to be done。</div>
+          <div class="eg">Bottleneck, real foreclosure, cartel ringmaster — all work the same way: nothing need be sacrificed.</div>
+          <div class="practice">📌 要点：学术写作选它，不只是为了正式，而是为了把「代价」抽象成一个无需主语的命题——谁牺牲、牺牲什么都不重要，重要的是「不必有牺牲」。</div>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🧭 语法在文中的作用</h3>
+        <p style="font-size:14.5px;">本文四个语法选择指向同一个效果：<b>把争论从「谁的价值更正确」搬到「哪个模型被预设了」</b>。分裂句负责重新定性，虚拟倒装负责反事实收束，not A but B 负责给出新定性，whereas 负责摆出旧对立，need + 被动负责把一个具体代价抽象成命题。 IELTS 写作评分标准里的 Grammatical Range and Accuracy，看的正是这种「有功能的选择」，而不是句式是否复杂。</p>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz（6 题 · 雅思 / 托福风格）</h2>
+      <div class="card">
+        <p style="margin-top:0;color:var(--muted);font-size:14.5px;">题型分布：主旨题 1 · 推断题 2 · 细节题 1 · NOT / 观点归属题 1 · 语境词汇题 1。建议先在限定时间内通读全文，再逐题回到原文定位。</p>
+      </div>
+      <div id="quizBox"></div>
+    </section>
+
+    <!-- 6. CHINESE EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 Deep Dive</h2>
+      <div class="card ext">
+
+        <h3>一、学说史脉络：四次换模型，而不是四次换价值</h3>
+        <p>本课讲的是反垄断经济学一段真实的范式更替。要读懂它，先要分辨清楚：<b>四个阶段改的是「市场如何运作」的模型，而不是「反垄断该追求什么」的目标</b>。</p>
+        <table>
+          <tr><th>阶段</th><th>核心主张</th><th>对「大」的态度</th></tr>
+          <tr><td>结构学派（约 1930s–1970s）</td><td>市场结构决定行为、行为决定绩效（structure–conduct–performance）</td><td>高度集中本身即隐患，倾向拆分与阻止集中</td></tr>
+          <tr><td>芝加哥学派（约 1970s–1990s）</td><td>以消费者福利为唯一准绳，用价格与产出衡量</td><td>大往往来自效率；保护竞争，而非保护竞争者</td></tr>
+          <tr><td>后芝加哥学派（约 1980s–2000s）</td><td>沿用同一目标，但用博弈论重算策略可行性</td><td>排他可以在不牺牲利润的前提下成立，因而并非罕见</td></tr>
+          <tr><td>双边市场理论（2000s 起）</td><td>交易量取决于价格结构，而不只是价格总水平</td><td>一边低于成本可能是均衡的一部分，不等于掠夺</td></tr>
+        </table>
+        <p>注意第二与第三阶段：<b>后芝加哥学派并没有推翻消费者福利标准</b>，它推翻的是「哪些行为有利可图」的计算。这一点是全文最容易被误读的地方，也是第 3 题的考点。</p>
+
+        <h3>二、抬高对手成本：为什么它比掠夺性定价更「可信」</h3>
+        <p>掠夺性定价（predatory pricing）的著名难题是<b>牺牲</b>：要先把价格压到成本以下、承受亏损，等对手退出后再提价回收。问题是，回收期不确定、新进入者可能再来，所以对理性企业而言这往往是赔本买卖——芝加哥学派正是据此认为掠夺性定价罕见，近乎神话。</p>
+        <p>抬高对手成本（raising rivals' costs, RRC）绕开了这个难题。它的机制是：<b>先控制关键投入品的供应，让对手不得不转向更贵的替代来源，成本上升之后，自己在产出市场提价即可</b>。关键在于——这个过程<b>不需要先亏损</b>，企业可以边做边赚。因此它比掠夺性定价「可信」（credible）。</p>
+        <p>Krattenmaker 与 Salop 在 1986 年那篇论文里把这类做法归纳为若干路径，正文提到三条：<b>bottleneck</b>（控制不可替代的关键设施或投入）、<b>real foreclosure</b>（买下或锁定足够大的供应份额，逼对手竞价剩余供应）、<b>cartel ringmaster</b>（由买方出面组织上游形成卡特尔式的歧视性定价）。三者机制不同，落点相同：让对手的成本结构变差。</p>
+
+        <h3>三、双边市场：为什么低价失去了证据力</h3>
+        <p>Rochet 与 Tirole 在 2003 年给出的定义值得逐字记住：<b>双边市场是「交易量取决于收费的结构、而不只是总水平」的市场</b>。这句话有两个直接后果。</p>
+        <ul>
+          <li><b>价格结构本身成为策略变量</b>：平台必须「把两边都拉上船」（get both sides on board），所以它会给一边定低于成本的价格、甚至免费，再从另一边收回。这不是倾销，而是定价设计。</li>
+          <li><b>「低价 = 未损害」与「低价 = 掠夺」两种直觉同时失效</b>：因为单边价格根本不是有意义的观测单位。要看的是总水平与结构，以及两边之间的交叉补贴。</li>
+        </ul>
+        <p>于是出现了本课最有意思的一幕：<b>芝加哥学派那句「低价不是伤害」的结论活下来了，支撑它的理由却被换掉了</b>——不再是「垄断会自我毁灭」，而是「跨边补贴本来就是这个均衡的样子」。结论相同而机制不同，正是推断题最爱考的地方。</p>
+
+        <h3>四、争论的层级迁移：本文真正的落点</h3>
+        <p>第四段把整个争论从价值层搬到模型层。Easterbrook 1984 年那套误差成本框架常被理解成一个定理：<b>错判有益行为的代价，高于放过有害行为的代价</b>。但它是从三个前提推出来的：进入足够容易、判例错误长期存在、企业缺乏等效的合法替代做法。</p>
+        <p>这三条看起来像逻辑设定，实际上每一条都是<b>可以被数据推翻的经验命题</b>。批评者（如 Devlin 与 Jacobs 2010 年的研究）正是这样拆它的：一旦把前提摊开，「宁可漏判」就不再是中性的技术结论，而是一个关于市场自我纠正速度的赌注。</p>
+        <p>由此得到本课可迁移的一条读法：<b>在问一条规则想要什么之前，先问它已经、并且是不声不响地，假设了哪一种企业与市场模型。</b>末句那句反事实假设（换一个模型，同一批证据会指向相反方向）就是这个落点的收口。</p>
+
+        <h3>五、事实口径表（细节题与数字题的设陷阱处）</h3>
+        <table>
+          <tr><th>项目</th><th>数值 / 事实</th><th>口径与说明</th></tr>
+          <tr><td>Bork</td><td>1978 年《The Antitrust Paradox》</td><td>把立法目的收敛为消费者福利最大化，是学说的定型之作</td></tr>
+          <tr><td>法院的「消费者福利处方」表述</td><td>1979 年</td><td>Reiter v. Sonotone, 442 U.S. 330；原文为 Congress designed the Sherman Act as a consumer welfare prescription</td></tr>
+          <tr><td>Easterbrook</td><td>1984 年，63 Tex. L. Rev. 1</td><td>误差成本框架的经典出处；「垄断会自我毁灭」见该文开篇部分</td></tr>
+          <tr><td>Krattenmaker 与 Salop</td><td>1986 年，96 Yale L.J. 209</td><td>抬高对手成本的系统化表述；正文列出其中三条路径</td></tr>
+          <tr><td>Salop 与 Scheffman</td><td>1983 年，73 Am. Econ. Rev. (P&amp;P) 267</td><td>同一思路的更早版本，常与上文并引</td></tr>
+          <tr><td>Rochet 与 Tirole</td><td>2003 年，JEEA 1(4): 990–1029</td><td>双边市场的奠基性形式化；2006 年 RAND 37(3): 645–667 为进展报告</td></tr>
+          <tr><td>Devlin 与 Jacobs</td><td>2010 年，52 Wm. &amp; Mary L. Rev. 75</td><td>对误差成本框架的批评：三条前提皆为伪装的经验命题</td></tr>
+        </table>
+        <p><b>易错点</b>：2003 年那篇与 2006 年那篇页码都以 645 与 667 结尾附近出现，引用时务必核对年份与期刊；「1983」与「1986」两篇也常被互换归属。</p>
+
+        <h3>六、术语的中英对照（理解辅助，不作法域评价）</h3>
+        <p>经济学概念在不同法域有不同的法律表达。仅作术语对应，便于阅读英文文献时定位：<b>滥用市场支配地位</b>对应 abuse of dominance；<b>低于成本销售</b>对应 below-cost sales，与 predatory pricing 相邻但范围不同；<b>消费者福利标准</b>即 consumer welfare standard。我国《反垄断法》于 2007 年通过、2008 年施行，2022 年完成修订。此处仅陈述可查证的立法事实，<b>不构成对任何法域立法优劣的比较或评价</b>。</p>
+
+        <div class="box">
+          <b>事实与立场（必读）</b><br>
+          ① 本页只转述公开发表的学术文献与可核实的判例引用，<b>不构成对任何企业、机构、法院或法域的评价</b>，也不代表对各学派中的任何一方持立场。<br>
+          ② 正文讨论的是<b>学说史与分析框架</b>，不是任何具体案件的结论；文中出现的路径分类均为理论类型，不等于对任何实际行为的定性。<br>
+          ③ 抬高对手成本与双边市场都是<b>模型</b>：模型说明某种策略在给定条件下可以成立，<b>不能反推某个现实中的企业采用了该策略</b>。<br>
+          ④ 误差成本框架是<b>规范性的制度设计论证</b>，其前提（进入难易、判例持续性、替代做法的可得性）本身可争论，本文已如实呈现双方。<br>
+          ⑤ 本页为英语学习材料，内容为教学用转述与评论，非任何原著或论文的翻译；一切事实、页码与数据以所引原始文献为准。<br>
+          ⑥ 本文属纯学术议题，<b>不涉及任何当代政治、国家、政党或政体评价</b>；本土术语对照仅为理解辅助。
+        </div>
+
+        <h3>七、可迁移的读法</h3>
+        <p>经济学评论类文章有一个稳定骨架：<b>一个被默认的前提 → 该前提被形式化工具推翻 → 同一工具在别处又支持了旧结论 → 争论的层级迁移</b>。读的时候，第一段要找「这个前提是什么、它当时为什么显得合理」，第二段要找「谁用什么工具、在哪一年把它拆掉」，第三段要找「同一个工具在哪里又替对方说话」，第四段要找「作者认为争论被搬到了哪一层」。</p>
+        <p>第三段最容易被跳过，却最常出题——因为它负责让文章不显得一边倒。遇到这种结构，态度题的答案几乎总是描述<b>作者如何重新框定问题</b>，而不是作者支持哪一方。</p>
+
+      </div>
+    </section>
+
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 本课学习目标</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇</b>：掌握 10 个 C1–C2 学术词，其中 wager、canon、presumption 可直接用于任何学术综述的「前提批判」，foreclosure、acquit、indict 属法律经济学的专门义项，equilibrium 与 subsidy 为经济学通用核心词。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句式</b>：掌握 5 个可迁移到综述写作中的句型，尤其是 What X did was not to A but to B 与 What divides A from B is not X but Y 这一对「重新定性」结构。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法</b>：wh-型分裂句、were-倒装虚拟条件句、not A but B 与 rather than 的层次差别、whereas 对照与分号衔接、need + 被动不定式——五个均为雅思写作 Grammatical Range 的直接得分点。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>阅读</b>：建立「被默认的前提 → 被形式化工具推翻 → 同一工具反过来支持旧结论 → 争论层级迁移」的经济评论阅读骨架。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div><b>思辨</b>：区分「结论相同而机制不同」，以及区分「模型说明某策略可以成立」与「现实中某企业采用了该策略」——这两条是经济学类阅读里最常被模糊的线。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 · 学说更替类文章的三个落点</h3>
+        <p style="font-size:15px;"><b>① 观点归属题先锁「人名 + 年份」。</b>本文有 Bork（1978）、法院（1979）、Easterbrook（1984）、Krattenmaker 与 Salop（1986）、Rochet 与 Tirole（2003）五组定位符。做题时先在题干里找名字，回原文按年份定位，比通读快得多；干扰项几乎总是把 1983 与 1986、或 2003 与 2006 的归属互换。</p>
+        <p style="font-size:15px;"><b>② 遇到「某学派推翻了某标准」要格外小心。</b>本文第二段明确写的是 not to abandon that goal but to replace the model behind it。凡选项说「抛弃了目标／转向政治目标」，基本都是把「换模型」误读成「换价值」。这类题的陷阱不是无中生有，而是<b>换了层级</b>。</p>
+        <p style="font-size:15px;"><b>③ 态度题不要急着站队。</b>本文作者不评价哪一派正确，而是把落点放在「分歧不在价值而在预设」。遇到这种收法，正确答案通常描述的是<b>作者如何重新框定问题</b>；带 decisive、for good、closed the debate 这类绝对化措辞的选项，多半是过度推断。</p>
+
+        <h3 style="color:var(--accent);">🔗 原始文献与延伸阅读</h3>
+        <p style="font-size:14.5px;color:#4b5563;">Bork, R. <i>The Antitrust Paradox</i> (1978) · Reiter v. Sonotone Corp., 442 U.S. 330 (1979) · Easterbrook, F., The Limits of Antitrust, <i>63 Tex. L. Rev.</i> 1 (1984) · Salop, S. &amp; Scheffman, D., Raising Rivals' Costs, <i>73 Am. Econ. Rev.</i> (Papers &amp; Proceedings) 267 (1983) · Krattenmaker, T. &amp; Salop, S., Anticompetitive Exclusion: Raising Rivals' Costs to Achieve Power over Price, <i>96 Yale L.J.</i> 209 (1986) · Rochet, J.-C. &amp; Tirole, J., Platform Competition in Two-Sided Markets, <i>1 J. Eur. Econ. Assoc.</i> 990 (2003) · 同作者，Two-Sided Markets: A Progress Report, <i>37 RAND J. Econ.</i> 645 (2006) · Devlin, A. &amp; Jacobs, M., Antitrust Error, <i>52 Wm. &amp; Mary L. Rev.</i> 75 (2010) · 《中华人民共和国反垄断法》（2007 年通过，2022 年修订）。<br>本页为英语学习材料，内容为教学用转述与评论，非任何原著或论文的翻译；一切事实与数据以原始文献为准。</p>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>Pola News · Advanced English C1–C2 · 2026-11-03 · The Assumption That Did the Work</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');});
+function go(sec){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(sec).classList.add('active');
+  document.querySelectorAll('nav.sidebar a').forEach(a=>a.classList.remove('active'));
+  const link=document.querySelector('nav.sidebar a[data-sec="'+sec+'"]');
+  if(link)link.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window.innerWidth<=780)sidebar.classList.remove('open');
+}
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.sec);});
+});
+
+/* ---------- Reading progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Keyword tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('mouseenter',()=>{
+    tip.innerHTML='<b>'+w.textContent.trim()+'</b><br>'+w.dataset.def;
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let left=r.left;
+    if(left+330>window.innerWidth)left=window.innerWidth-340;
+    tip.style.left=Math.max(10,left)+'px';
+    tip.style.top=(r.bottom+8)+'px';
+  });
+  w.addEventListener('mouseleave',()=>{tip.style.display='none';});
+});
+
+/* ---------- Speech (Web Speech API, replaced by pre-generated audio) ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+loadVoices();
+if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.onvoiceschanged=loadVoices;
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  const match=p=>en.find(p);
+  return match(v=>/Samantha|Google US English|Microsoft Aria|Daniel/i.test(v.name))
+      || match(v=>/en-US/i.test(v.lang))
+      || en[0]
+      || null;
+}
+function resetBtn(){
+  document.querySelectorAll('.play-btn,.speak-btn').forEach(b=>{
+    b.classList.remove('playing');
+    b.textContent=b.dataset.icon||'🔊';
+  });
+}
+function stopSpeech(){
+  if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  stopSpeech();
+  if(typeof window.speechSynthesis==='undefined')return;
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.rate=0.95; u.pitch=1;
+  u.onend=resetBtn; u.onerror=resetBtn;
+  if(btn){btn.classList.add('playing');btn.textContent='⏸';}
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- Segment texts (auto-extracted from the reading section) ---------- */
+const segmentTexts=[
+  "Antitrust economics long rested on a wager: leave monopoly alone and prices summon the entry that undoes it. Bork pressed the point into a standard in 1978; by 1979 courts called the statute a consumer welfare prescription, and the maxim that the law protects competition rather than competitors hardened into a canon. Easterbrook supplied the logic in 1984 — condemn a beneficial practice and the benefit is lost for good, whereas a missed monopoly decays.",
+  "What the post-Chicago writers did was not to abandon that goal but to replace the model behind it. Game theory showed exclusion to be profitable in cases Chicago had treated as an anomaly. In 1986 Krattenmaker and Salop set out the mechanics: buy up an input, withhold it, and rival costs rise. Bottleneck, real foreclosure, cartel ringmaster — all work the same way: nothing need be sacrificed. Predatory pricing bleeds; raising rivals' costs can pay from the first day.",
+  "Yet the same formal toolkit acquits as often as it indicts. Rochet and Tirole defined a two-sided market in 2003 as one where transactions depend on the structure of fees, not only the level. Once structure is the variable, a below-cost price on one side is not predation but the subsidy that brings the other aboard. Chicago's conclusion survives here, though not the reasoning: the cross-subsidy is simply what an equilibrium looks like.",
+  "The quarrel has moved. What divides the schools is not a value but an assumption about how markets correct themselves — one its users rarely state. Easterbrook's asymmetry presumes easy entry, enduring precedents and no lawful alternative — each an empirical claim in disguise. The lesson generalises beyond one doctrine: before asking what a rule wants, ask which model it has silently assumed. Were the model different, the same evidence would point the other way."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. According to the passage, what did Frank Easterbrook's 1984 argument imply about judicial errors?",
+   opts:["Both types of error carry equal weight, so courts should weigh each case afresh.","Condemning a beneficial practice is costlier than missing a harmful one, because the lost benefit is gone for good.","Missing a monopoly is the graver error, since monopoly power tends to persist indefinitely.","The costs of running the antitrust system itself should be excluded from the calculation."],
+   ans:1,
+   fb:"正确。原文写的是 condemn a beneficial practice and the benefit is lost for good, whereas a missed monopoly decays——方向是「误判有益行为更贵」。C 恰好说反，把 decays 偷换成了 persist indefinitely，是推断题最常见的镜像陷阱；A 与原文的不对称相反；D 与 Easterbrook 的框架不符，他明确要求把制度自身的运行成本计入。"},
+  {q:"2. In the passage, how does raising rivals' costs differ from classic predatory pricing?",
+   opts:["It is available only to firms operating in two-sided markets.","It lowers the predator's own costs rather than raising those of its rivals.","It requires the predator to sell below cost for a sustained period before recoupment.","It need not involve a sacrifice, because the firm can profit as the strategy unfolds."],
+   ans:3,
+   fb:"正确。第二段的对照句是 Predatory pricing bleeds; raising rivals' costs can pay from the first day，前一句 nothing need be sacrificed 也在说同一件事。B 说反了——这套策略的作用对象是 rivals' costs；C 描述的正是它绕开的那套机制（先亏后收）；A 属无中生有，双边市场是第三段才出现的另一回事。"},
+  {q:"3. The passage characterises the post-Chicago contribution as —",
+   opts:["A replacement of the model behind the standard rather than of the standard itself","A rejection of the consumer welfare standard in favour of explicitly political goals","An empirical refutation of Chicago based on industry-level price data","A revival of the structuralist view that bigness is an injury in its own right"],
+   ans:0,
+   fb:"正确。第二段首句是全文的转轴：What the post-Chicago writers did was not to abandon that goal but to replace the model behind it。B 是最强的干扰项——它把「换模型」误读成「换价值」，而原文恰恰否认了这一点；C 错在 empirical，原文的推进工具是博弈论模型而非行业数据；D 把更早的结构学派主张安到了后芝加哥头上。"},
+  {q:"4. In the third paragraph, the word acquits is closest in meaning to —",
+   opts:["Convicts","Indicts","Exonerates","Compels"],
+   ans:2,
+   fb:"正确。原文 Yet the same formal toolkit acquits as often as it indicts——acquit 与 indict 是一对反义动词，前者「宣判无罪／开脱」，后者「控告／归责」，所以 acquits 义近 exonerates。A 与 B 都与原义相反；D 无关。语境词汇题的做法是把目标词放回它与相邻词的<b>关系</b>里：这里的关系是 as often as 连接的对举，方向必然相反。"},
+  {q:"5. What does the passage suggest about the Chicago claim that low prices are not the injury?",
+   opts:["It has been abandoned by every later school of thought.","It survives in two-sided markets, though on an entirely different reasoning.","It holds only where entry barriers are high and precedents endure.","It was never in fact accepted by the courts."],
+   ans:1,
+   fb:"正确。第三段明确写 Chicago's conclusion survives here, though not the reasoning，随后给出新理由：跨边补贴本来就是这个均衡的样子。A 被 survives 排除；C 把 Easterbrook 那三个前提误当成这条结论的适用条件；D 与第一段 by 1979 courts called the statute a consumer welfare prescription 相反。这题考的是「结论相同而机制不同」，务必把两句话分开读。"},
+  {q:"6. Which of the following would be the most appropriate title for the passage?",
+   opts:["Why Monopoly Is Self-Destructive","Two-Sided Markets and the End of Predation Doctrine","The Hidden Model: How an Assumption, Not a Value, Divides Antitrust","Robert Bork and the Making of the Consumer Welfare Standard"],
+   ans:2,
+   fb:"正确。四段主线是「一个未言明的模型预设在替整套学说出结论」：第一段立那个 wager 与误差成本不对称；第二段讲它背后的模型被换掉；第三段讲同一工具又反过来支持旧结论；第四段收口到分歧不在价值而在 assumption，以及末句的反事实假设。C 正好覆盖。A 是第一段里被后续推翻的那句；B 只覆盖第三段；D 只覆盖第一段的人物。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

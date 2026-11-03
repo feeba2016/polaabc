@@ -10587,5 +10587,67 @@ const EPISODES = [
         "ex": "Recent volumes make the borrowing visible in the apparatus."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-11-03",
+    "title": "The Assumption That Did the Work",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-11-03-the-assumption-that-did-the-work",
+    "url": "lessons/c1/2026-11-03-the-assumption-that-did-the-work.html",
+    "vocab": [
+      {
+        "word": "wager",
+        "zh": "赌注；引申为「被整套论证依赖却未言明的前提」",
+        "ex": "The whole case for non-intervention rests on a wager that entry will arrive before prices do lasting damage."
+      },
+      {
+        "word": "prescription",
+        "zh": "处方；法律上指规范性要求、准则（与医学义须按语境区分）",
+        "ex": "Courts came to read the statute as a consumer welfare prescription, not as a charter for dispersed ownership."
+      },
+      {
+        "word": "canon",
+        "zh": "正典；规范、公认准则（形容词 canonical；与 cannon「大炮」同音异义）",
+        "ex": "Within a decade the maxim that the law protects competition rather than competitors had hardened into a canon."
+      },
+      {
+        "word": "foreclosure",
+        "zh": "封锁（反垄断）：控制关键投入品供应以抬高对手成本；与金融「取消赎回权」异义",
+        "ex": "Real foreclosure differs from a bottleneck: it works through sheer volume of supply withheld, not through the uniqueness of the input."
+      },
+      {
+        "word": "sacrifice",
+        "zh": "牺牲、让渡（掠夺性定价要求先承受亏损，抬高对手成本则不必）",
+        "ex": "The distinction turns on sacrifice: predatory pricing bleeds for a period, whereas raising rivals' costs can pay from the first day."
+      },
+      {
+        "word": "anomaly",
+        "zh": "反常、异常现象（形容词 anomalous）",
+        "ex": "Where one school saw an anomaly too rare to worry about, the other saw a business plan waiting to be modelled."
+      },
+      {
+        "word": "acquit",
+        "zh": "宣判无罪；开脱（名词 acquittal；与 indict 对举）",
+        "ex": "A framework that acquits as often as it indicts is not biased in either direction; it is simply sensitive to which model one starts from."
+      },
+      {
+        "word": "indict",
+        "zh": "控告；引申为「判为有害、归责」（b 不发音；名词 indictment）",
+        "ex": "The models indict a practice only once the exclusion has been shown to pay for itself without a period of sacrifice."
+      },
+      {
+        "word": "equilibrium",
+        "zh": "均衡（模型的解；复数 equilibria；不等于「理想状态」）",
+        "ex": "What looks like predation from one side is, in a two-sided market, simply what an equilibrium looks like."
+      },
+      {
+        "word": "presumption",
+        "zh": "假定、预设（动词 presume；比 assume 更强调「未经声明即当作前提」）",
+        "ex": "The asymmetry between the two errors is not a theorem; it is a presumption about how quickly markets correct themselves."
+      }
+    ]
   }
 ];
