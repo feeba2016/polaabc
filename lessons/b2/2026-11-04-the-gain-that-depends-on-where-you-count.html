@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Gain That Depends on Where You Count</title>
+<style>
+:root{
+  --accent:#3730a3;
+  --accent2:#a16207;
+  --bg:#f6f8fa;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#ddd6fe;
+  --border:#dde3ea;
+  --soft:#eef2f7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(55,48,163,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(55,48,163,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(55,48,163,.5);}70%{box-shadow:0 0 0 12px rgba(55,48,163,0);}100%{box-shadow:0 0 0 0 rgba(55,48,163,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#c4b5fd;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(55,48,163,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ddd6fe;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Technology 科技前沿</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Gain That Depends on Where You Count</h1>
+      <p class="subtitle">2022 年 12 月 5 日，一束激光只用了 2.05 兆焦，就放出 3.15 兆焦的聚变能。同一次实验，可以被写成「人类首次能量净增益」，也可以被写成「仅有百分之一」。变的不是能量，是分母。｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The Shot 那一枪</div>
+            <p>At 1:03 in the morning on 5 December 2022, the National Ignition Facility in California fired 192 laser beams at a cylinder the size of a thimble. Inside it hung a capsule of frozen deuterium and tritium, smaller than a peppercorn. The beams vaporised the cylinder&#39;s inner wall, which threw off X-rays, which in turn <span class="kw" data-def="向内爆聚（implode 的过去式）。前缀 im- 表向内，plode 与「拍击」同源，与 explode（向外爆炸）方向正好相反。激光聚变的原理是靠向内压缩燃料，而不是向外炸开——这个方向差别是本课的关键">imploded</span> the capsule until its fuel fused. The shot released 3.15 megajoules of fusion energy from the 2.05 megajoules of laser light that had entered the cylinder — the first controlled fusion reaction on Earth to return more than it was given. The facility, which cost 3.5 billion dollars and was finished in 2009, had missed its original <span class="kw" data-def="点火（名词，读作 /ɪɡˈnɪʃn/，重音在第二音节）。动词 ignite 点燃。核聚变语境里 ignition 特指聚变反应开始自持燃烧、释放的能量足以维持反应的状态。注意别与 ignition 的日常义（汽车点火）混为一谈，这里是一个有严格标准的物理判据">ignition</span> target by a decade. Its designers had put the odds of <span class="kw" data-def="收支相抵、不赚不亏（break even 的现在分词，作介词 of 的宾语）。作名词写 breakeven，指盈亏平衡点。本课用它指输出等于输入的那个临界点，英文报道里也叫 scientific breakeven——注意它只算进靶的激光能量，不算电网供电">breaking even</span> at slightly better than a coin toss.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Three Numbers 三个数字</div>
+            <p>The same shot has been reported as a triumph, as a <span class="kw" data-def="十倍的（后缀 -fold 表示倍数）。twofold 两倍、threefold 三倍、hundredfold 百倍。a tenfold gain 十倍增益，比 ten times 更书面。注意 tenfold 只表示倍数，不表示「十层」">tenfold</span> gain, and as a one-per-cent return, and every version is arithmetically honest. What changes is the <span class="kw" data-def="分母。分数 a/b 里 b 是分母，a 是分子（numerator）。这是本课的核心比喻：同一个结果，换个分母，结论就从胜利变成百分之一。写作中可用 change the denominator 表示「换一个衡量基准」">denominator</span>. Measured against the laser energy delivered into the cylinder, the return is 1.5 times the input. Measured against the roughly 250 kilojoules that actually reached the fuel capsule, the gain is close to ten. Measured against the 300 megajoules drawn from the grid to charge and fire the lasers, 3.15 megajoules is a <span class="kw" data-def="舍入误差；引申为微不足道的量。原指计算中因四舍五入产生的微小偏差。3.15 兆焦对着 300 兆焦，约是百分之一，用这个词形容数量级的悬殊差距最传神">rounding error</span> — about one per cent. The three figures describe one event, not three. A <span class="kw" data-def="比率（读作 /ˈreɪʃiəʊ/，复数 ratios）。the ratio of A to B 即 A 与 B 之比。注意与 rate（速率，必须带时间单位）区分：ratio 是纯比值，rate 是单位时间内的量">ratio</span>, in other words, records a relationship and hides a boundary: whoever chooses where the counting starts has already chosen the headline.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Why a Shot Is Not a Station 一枪不等于一座电站</div>
+            <p>Ignition answered a physics question; it did not build a power station, and the difference is mostly a matter of <span class="kw" data-def="重复；重复率。repetition rate 重复频率，是激光聚变走向电站最硬的瓶颈之一。动词 repeat，形容词 repetitive 多指「重复而乏味的」。本课用它区分「能做一次」与「能一直做」">repetition</span>. NIF fires at most a few times a day, <span class="kw" data-def="独立主格结构：名词 + 过去分词，不带 be 动词，表示伴随的状态或方式。each target assembled and positioned by hand 相当于 each target being assembled and positioned by hand。这个结构能把一整套工序压缩成插入语，是学术写作里最省字的写法之一">each target assembled and positioned by hand</span>, and a commercial plant would need to fire around ten times a second, with the heat captured and the tritium bred back inside the same building. There is also the <span class="kw" data-def="间接成本、固定开销（名词，商业语境常用复数 overheads）。原指房租、水电等不随产量变动的支出，这里指装置自身消耗掉、却不产生聚变输出的那部分能量。注意与 cost（直接成本）区分">overhead</span> that no press release mentions: the lasers convert grid electricity into ultraviolet light at roughly one per cent <span class="kw" data-def="效率（名词）。convert A into B at one per cent efficiency 以百分之一的效率把 A 转成 B。注意 efficiency（投入产出之比）与 effectiveness（是否达到目的）不是一回事：一台机器可以很有效，同时效率极低">efficiency</span>, so most of the energy leaves the building as waste heat. Nor has anyone shown that materials can survive years of neutron <span class="kw" data-def="轰击（名词，不可数）。neutron bombardment 中子轰击。动词 bombard 轰炸、连续冲击。聚变产生的高能中子会不断撞击反应堆内壁，材料能否长期承受，是工程上尚未回答的问题">bombardment</span>. NIF was never designed to supply electricity. Its mission is <span class="kw" data-def="受托管理、守护之责（不可数名词）。stockpile stewardship 核武库管理计划。注意这个词强调「替他人保管并负责」，与 ownership（所有权）不同。美国国家点火装置的首要任务其实是这个，而不是发电">stewardship</span> of the nuclear stockpile, which is why about a tenth of its shots are reserved for unclassified research.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What Actually Changed 真正改变的是什么</div>
+            <p>None of this makes the shot small. For seventy years the question had been whether a laboratory could make a star burn and pay for its own spark; that question now has an answer, and later shots pushed the <span class="kw" data-def="产出量、当量（名词）。这里指聚变释放的能量；作动词是「产生、屈服」。核领域里 yield 是中性的技术词，指反应或爆炸释放的能量，不带褒贬。注意与 output（一般产出）相比，yield 更强调「一次反应给出的量」">yield</span> to 3.88 megajoules with no more laser energy. What the <span class="kw" data-def="里程碑（名词）。reach a milestone 达成里程碑。原指路旁标里程的石碑，引申为进程中的关键节点。注意与 mileage（里程数、油耗）区分，两词形近义远">milestone</span> did not do is shorten the distance to a <span class="kw" data-def="插座（名词）。a socket in the wall 墙上的插座，英式常用 socket，美式也说 outlet。全课最后一句用它把话题从实验室拉回普通家庭：能量增益如果不能变成插座里的电，对住户就没有意义">socket</span> in the wall, and the old joke that fusion is always thirty years away survives because a physics question and an engineering question keep being reported as one. Had it not been for that confusion, the headline would have been duller and truer: a ratio moved. Not until the ratio is quoted together with its denominator — grid electricity in, grid electricity out — will the number mean anything to a household.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ignition">🔊</button><div class="word">ignition<span class="pos">n.</span></div><div class="zh">点火（读作 /ɪɡˈnɪʃn/，重音在第二音节）。动词 ignite 点燃。核聚变语境里特指聚变自持燃烧、释放能量足以维持反应的状态。<b>miss the ignition target</b> 未能达成点火目标——装置原定 2012 年实现，实际晚了十年。别只记「汽车点火」这个日常义，这里是一个有严格判据的物理概念</div><div class="ex">"The facility, which cost 3.5 billion dollars and was finished in 2009, had missed its original ignition target by a decade."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="odds">🔊</button><div class="word">odds<span class="pos">n.</span></div><div class="zh">可能性；成败几率（复数名词，读作 /ɒdz/）。<b>put the odds at</b> 把胜算估计为；<b>against all odds</b> 尽管希望渺茫。本课说科学家把「收支相抵」的把握估成「略好于抛硬币」——科研预测里这种坦率的概率表述，比事后叙事更可信</div><div class="ex">"Its designers had put the odds of breaking even at slightly better than a coin toss."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="denominator">🔊</button><div class="word">denominator<span class="pos">n.</span></div><div class="zh">分母（读作 /dɪˈnɒmɪneɪtə/）。分数 a/b 中 b 为分母，a 为分子（numerator）。<b>What changes is the denominator.</b> 变的是分母——本课的核心比喻。写作中可用 <b>change the denominator</b> 表示「换一个衡量基准」，是讨论数据争议时极好用的说法</div><div class="ex">"The same shot has been reported as a triumph, as a tenfold gain, and as a one-per-cent return, and every version is arithmetically honest. What changes is the denominator."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="tenfold">🔊</button><div class="word">tenfold<span class="pos">adj./adv.</span></div><div class="zh">十倍的（后缀 -fold 表倍数：twofold 两倍、threefold 三倍、hundredfold 百倍）。<b>a tenfold gain</b> 十倍增益，比 ten times 更书面，多用于增长、放大的描述。注意它只表倍数，不表「十层」「十重」</div><div class="ex">"The same shot has been reported as a triumph, as a tenfold gain, and as a one-per-cent return, and every version is arithmetically honest."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ratio">🔊</button><div class="word">ratio<span class="pos">n.</span></div><div class="zh">比率（读作 /ˈreɪʃiəʊ/，复数 ratios）。<b>the ratio of A to B</b> A 与 B 之比。<b>A ratio records a relationship and hides a boundary.</b> 比率记录一种关系，同时藏起一条边界——本课的落点句。注意与 rate（速率，必须带时间单位）区分</div><div class="ex">"A ratio, in other words, records a relationship and hides a boundary: whoever chooses where the counting starts has already chosen the headline."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="repetition">🔊</button><div class="word">repetition<span class="pos">n.</span></div><div class="zh">重复；重复率。<b>a matter of repetition</b> 一个「能否重复」的问题。动词 repeat，形容词 repetitive（重复而乏味）。本课用它区分「能做一次」与「能一直做」——科学演示与工业装置的分界线往往就在这里</div><div class="ex">"Ignition answered a physics question; it did not build a power station, and the difference is mostly a matter of repetition."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="overhead">🔊</button><div class="word">overhead<span class="pos">n.</span></div><div class="zh">间接成本、固定开销（常用复数 overheads）。原指房租、水电等不随产量变动的支出；本课指装置自身消耗掉、却不产生聚变输出的那部分能量。<b>the overhead that no press release mentions</b> 新闻稿从不提的那笔开销——读技术报道时要专门去找的句子</div><div class="ex">"There is also the overhead that no press release mentions: the lasers convert grid electricity into ultraviolet light at roughly one per cent efficiency..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="efficiency">🔊</button><div class="word">efficiency<span class="pos">n.</span></div><div class="zh">效率。<b>at one per cent efficiency</b> 以百分之一的效率。注意 efficiency（投入与产出之比）不等于 effectiveness（是否达到目的）：一台机器可以非常有效地完成任务，同时效率极低——本课的激光器正是如此</div><div class="ex">"... the lasers convert grid electricity into ultraviolet light at roughly one per cent efficiency, so most of the energy leaves the building as waste heat."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="stewardship">🔊</button><div class="word">stewardship<span class="pos">n.</span></div><div class="zh">受托管理、守护之责（不可数）。<b>stockpile stewardship</b> 核武库管理计划。这个词强调「替他人保管并负责」，与 ownership（所有权）不同：管理者不是所有者。本课用它解释为什么这台机器从来不是为发电而造的</div><div class="ex">"NIF was never designed to supply electricity. Its mission is stewardship of the nuclear stockpile, which is why about a tenth of its shots are reserved for unclassified research."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="yield">🔊</button><div class="word">yield<span class="pos">n./v.</span></div><div class="zh">（反应释放的）当量、产出量；动词义为产生、屈服。核领域里 yield 是中性的技术词，只指能量数值，不带褒贬。<b>push the yield to 3.88 megajoules</b> 把当量推到 3.88 兆焦。与 output 相比，yield 更强调「一次反应给出的量」</div><div class="ex">"... later shots pushed the yield to 3.88 megajoules with no more laser energy."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="milestone">🔊</button><div class="word">milestone<span class="pos">n.</span></div><div class="zh">里程碑。原指路旁标里程的石碑，引申为进程中的关键节点。<b>reach a milestone</b> 达成里程碑。<b>What the milestone did not do is...</b> 这个里程碑没能做到的是……——用「它没做到什么」来给成就定性，是学术写作里克制的写法</div><div class="ex">"What the milestone did not do is shorten the distance to a socket in the wall..."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 「增益」的三种说法：</b><b>gain</b> 增益（通用）→ <b>return</b> 回报（强调投入产出）→ <b>yield</b> 当量（核领域专用）→ <b>Q value</b> Q 值（专业符号）。同一个 3.15 兆焦，换一个词，读者对它的期待就变了。<br>
+        <b>② 「衡量基准」词链：</b><b>denominator</b> 分母 → <b>baseline</b> 基准线 → <b>benchmark</b> 参照标准 → <b>point of comparison</b> 比较基准。写数据评论时，先问「分母是什么」，比先看结论有用得多。<br>
+        <b>③ 效率与代价：</b><b>efficiency</b> 效率 → <b>overhead</b> 间接开销 → <b>loss</b> 损耗 → <b>waste heat</b> 废热。四个词连起来，就是「为什么账面赢利、实际亏损」的完整解释链。<br>
+        <b>④ 「做到一次」与「一直做到」：</b><b>demonstration</b> 演示 → <b>repetition rate</b> 重复频率 → <b>scalability</b> 可扩展性 → <b>deployment</b> 部署。技术新闻里最常被跳过的一环，就是这四个词之间的落差。<br>
+        <b>⑤ 一个易混：</b><b>efficiency</b> 效率（产出除以投入）↔ <b>effectiveness</b> 有效性（是否达成目的）。中文都常译成「效果」，英文里却是两件事。<br>
+        <b>⑥ 一个写作提醒：</b>表达倍数用 <b>times</b>（1.5 times the input）或 <b>-fold</b>（a tenfold gain），但百分数要用 <b>per cent of</b>（one per cent of the grid supply）。三种说法不能混着写，否则读者算不出来。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. 关系从句的链条 · which threw off X-rays, which in turn imploded the capsule</h3>
+          <div class="zh">结构：<b>主句 + which 从句 + which 从句（用 in turn 衔接）</b>。物理过程是一环扣一环的：激光打在内壁上 → 内壁放出 X 射线 → X 射线压缩燃料。用两个 which 串起来，读者不必停顿就能看见因果的顺序。in turn 是关键——它把第二个 which 从句从「补充说明」变成「下一步」，链条才不会散。<b>写作提示</b>：链条最多三环，超过就该断句；每一环必须是真的因果，不能只是时间上的先后。</div>
+          <div class="eg">The beams vaporised the cylinder&#39;s inner wall, which threw off X-rays, which in turn imploded the capsule until its fuel fused.</div>
+          <div class="practice">仿写：融雪汇成溪流，溪流又把泥沙带进水库。
+            <input type="text" placeholder="The melting snow fed streams, which ..." data-ans="The melting snow fed streams, which in turn carried silt down into the reservoir.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. 独立主格结构 · each target assembled and positioned by hand</h3>
+          <div class="zh">结构：<b>名词 + 过去分词（短语）</b>，不带 be 动词，也不带连词，逻辑主语与主句主语不同。这里 each target 就是 assembled 的逻辑主语，整段相当于 and each target is assembled and positioned by hand。<b>为什么用它</b>：主句说的是「一天只能打几次」，插入语交代的是「每次都要人工装配」——两件事同时成立，用独立主格并列，就不必另起一句，也不必用 and 把因果压平。<b>常见变体</b>：with + 名词 + 分词（with the heat captured）；名词 + 现在分词（the fuel burning）；名词 + 形容词（his eyes wide）。</div>
+          <div class="eg">NIF fires at most a few times a day, each target assembled and positioned by hand, and a commercial plant would need to fire around ten times a second.</div>
+          <div class="practice">仿写：所有窗户都关着，这栋楼在中午依然凉爽。
+            <input type="text" placeholder="All the windows shut, ..." data-ans="All the windows shut, the building stays cool even at midday.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. Not until 置于句首的部分倒装 · Not until the ratio is quoted together with its denominator will the number mean anything</h3>
+          <div class="zh">结构：<b>Not until + 时间／条件（从句）+ 助动词 + 主语 + 动词</b>。还原为 The number will not mean anything until the ratio is quoted...。倒装只发生在<b>主句</b>：until 从句内部语序正常（the ratio is quoted），主句才把 will 提到主语前。<b>修辞效果</b>：把「还不知道什么」摆在最前面，读者先被扣住，最后才拿到结论。同一句式还有强调版 It is not until X that Y，那个版本不倒装。</div>
+          <div class="eg">Not until the ratio is quoted together with its denominator — grid electricity in, grid electricity out — will the number mean anything to a household.</div>
+          <div class="practice">仿写：直到把电费算进去，这个「节省」才显出真相。
+            <input type="text" placeholder="Not until the electricity bill is included ..." data-ans="Not until the electricity bill is included does the saving reveal what it really is.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. Had it not been for 的虚拟倒装 · Had it not been for that confusion, the headline would have been duller and truer</h3>
+          <div class="zh">结构：<b>Had it not been for + 名词</b>＝ If it had not been for + 名词，省略 if 后 had 提前，not 留在原位（不能说 Hadn't it been for）。含义是「要不是因为……」。本句还有一层精妙：主句用 would have been（对过去的反事实），因为说的是「当时那条新闻本可以怎么写」。<b>三个固定形式</b>：Had it not been for（对过去）· Were it not for（对现在）· Should it rain（对将来）。</div>
+          <div class="eg">Had it not been for that confusion, the headline would have been duller and truer: a ratio moved.</div>
+          <div class="practice">仿写：要不是那些脚注，这篇论文读起来会顺得多，也更不可信。
+            <input type="text" placeholder="Had it not been for the footnotes, ..." data-ans="Had it not been for the footnotes, the paper would read far more smoothly and be far less trustworthy.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>5. whoever 引导的名词性从句作主语 + 冒号收束 · whoever chooses where the counting starts has already chosen the headline</h3>
+          <div class="zh">结构：<b>whoever + 从句</b> 整个作主语，谓语用单数 has；后面再套一个 where 引导的宾语从句。whoever 与 whoever 的区别要记牢：whoever 作主语或宾语（＝ anyone who），whomever 只作宾语（正式书面语，日常多用 whoever）。<b>冒号的作用</b>：前面是判断，后面是解释，把抽象命题落到「标题」这个具体物件上——这是评论写作最常用的一收。</div>
+          <div class="eg">A ratio, in other words, records a relationship and hides a boundary: whoever chooses where the counting starts has already chosen the headline.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <p class="subtitle">5 个语法点，例句均取自正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① 现在完成时被动 + 排比的三种口径</h3>
+          <div class="zh"><b>has been reported as A, as B, and as C</b>：现在完成被动表示「至今仍被这样报道」，三个 as 引导的并列成分把三种口径排在一起，读者自然去比较它们的差别——排比在这里不是修辞装饰，而是论证结构本身。<b>注意</b>：report 的被动常与 as 搭配（be reported as / be reported to be），前者后接名词，后者后接动词。同段的 measured against 是过去分词短语作状语，省略了 when it is，用来交代「以什么为基准」，一句话连用三次，形成对照。</div>
+          <div class="eg">The same shot has been reported as a triumph, as a tenfold gain, and as a one-per-cent return, and every version is arithmetically honest.</div>
+          <div class="eg" style="margin-top:8px;">Measured against the laser energy delivered into the cylinder, the return is 1.5 times the input.</div>
+        </div>
+
+        <div class="item">
+          <h3>② 两种倒装的分工：Nor 前置与 Not until 前置</h3>
+          <div class="zh"><b>Nor / Neither 前置</b>：承接前文的否定，把助动词提到主语前——<b>Nor has anyone shown that...</b>（＝ And nobody has shown that...）。<b>Not until 前置</b>：时间状语提前，主句倒装——<b>Not until ... will the number mean anything</b>。两者都是部分倒装，只提前助动词，实义动词留在原位。<b>易错点</b>：Nor 后面的句子本身已是否定，不能再加 not；Not until 的从句不倒装，只有主句倒装。</div>
+          <div class="eg">Nor has anyone shown that materials can survive years of neutron bombardment.</div>
+          <div class="eg" style="margin-top:8px;">Not until the ratio is quoted together with its denominator — grid electricity in, grid electricity out — will the number mean anything to a household.</div>
+        </div>
+
+        <div class="item">
+          <h3>③ 独立主格与 with 复合结构</h3>
+          <div class="zh">本段连续用了两种「附带说明」的结构。<b>独立主格</b>：each target assembled and positioned by hand（名词 + 过去分词，逻辑主语与主句不同）。<b>with 复合结构</b>：with the heat captured and the tritium bred back inside the same building（with + 名词 + 分词）。两者功能相同，区别在 with 更强调「伴随」、也更口语；独立主格更书面、更紧。<b>判断口诀</b>：名词与后面的分词如果是被动关系用过去分词，主动关系用现在分词。</div>
+          <div class="eg">NIF fires at most a few times a day, each target assembled and positioned by hand, and a commercial plant would need to fire around ten times a second, with the heat captured and the tritium bred back inside the same building.</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 虚拟语气：Had it not been for 与「本可以」的过去反事实</h3>
+          <div class="zh">Had it not been for that confusion 是 If it had not been for that confusion 的倒装形式，对<b>过去</b>的反事实；主句 would have been 与之配对。整句的意思是「当时那条新闻本来可以写得更乏味、也更真实」——注意 would have been 在这里不表「将会」，而表「本来会是」。<b>对照记忆</b>：Were it not for the funding（对现在）· Had it not been for the delay（对过去）· Should the test fail（对将来）。</div>
+          <div class="eg">Had it not been for that confusion, the headline would have been duller and truer: a ratio moved.</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 名词化：让动作变成可以被讨论的东西</h3>
+          <div class="zh">学术英语偏爱名词化——把动词或形容词变成名词，好让它充当主语、宾语或被比较的对象。<b>ignite → ignition</b>（点火这件事变成一个有判据的概念）；<b>repeat → repetition</b>（重复变成可测量的频率）；<b>efficient → efficiency</b>（效率变成可计算的百分比）。<b>代价</b>：名词化会让句子变抽象、动作感消失，所以每段最多用两三个；本课在解释概念时用它，在讲过程时仍用动词（the beams vaporised..., the capsule imploded...）。</div>
+          <div class="eg">Ignition answered a physics question; it did not build a power station, and the difference is mostly a matter of repetition.</div>
+          <div class="eg" style="margin-top:8px;">... the lasers convert grid electricity into ultraviolet light at roughly one per cent efficiency.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、那一枪发生了什么</h3>
+        <p>2022 年 12 月 5 日凌晨 1 时 03 分，美国加州劳伦斯利弗莫尔国家实验室的<b>国家点火装置（NIF）</b>向一个顶针大小的圆柱体（hohlraum，黑腔）发射 <b>192 束</b>激光。腔内悬着一颗胡椒粒大小的金刚石涂层胶囊，里面装着冷冻的氘和氚。激光先把腔壁汽化，腔壁放出 X 射线，X 射线从四面八方同时压缩胶囊，直到燃料发生聚变。这一枪进入黑腔的激光能量是 <b>2.05 兆焦</b>，释放的聚变能是 <b>3.15 兆焦</b>。</p>
+        <p>装置 2009 年建成，造价 35 亿美元，原定 2012 年实现点火，实际晚了十年。设计团队事后说，开打之前他们把「收支相抵」的把握估成<b>略好于抛硬币</b>——这种坦率的概率表述，比后来的庆功叙事更值得注意。</p>
+
+        <h3>二、三个分母，三种结论</h3>
+        <p>同一枪之所以能被写成三种新闻，是因为「投入」可以从三个地方开始算。下表把口径摊开，你会发现没有一条是假的，但每一条都在替读者做选择。</p>
+        <table class="facts">
+          <tr><th>分母（从哪里算起）</th><th>投入</th><th>增益</th><th>新闻标题</th></tr>
+          <tr><td>进入黑腔的激光能量</td><td>2.05 MJ</td><td>约 1.5 倍</td><td>人类首次实现能量净增益</td></tr>
+          <tr><td>真正打到燃料胶囊上的能量</td><td>约 250 kJ</td><td>Q ≈ 10</td><td>增益十倍，接近点火判据</td></tr>
+          <tr><td>从电网取电驱动激光器</td><td>约 300 MJ</td><td>约 1%</td><td>耗电百倍于所得，离发电还很远</td></tr>
+        </table>
+        <p><b>把话说准：</b>「净能量增益」在核聚变领域有严格定义，指的是<b>聚变输出大于进入靶的激光能量</b>（scientific breakeven），不是「输出大于电厂买电」。所以三条标题都不算造谣，但只有第三条回答了普通人真正关心的问题：<b>插座里的电，变多了还是变少了？</b></p>
+
+        <h3>三、为什么一枪不等于一座电站</h3>
+        <ul>
+          <li><b>重复频率。</b>NIF 一天最多打几次，每次靶都要人工装配、精确定位；一座电站需要每秒大约十次。差的是六个数量级，不是一个量级。</li>
+          <li><b>废热。</b>激光器把电网的电变成紫外光的效率大致只有百分之一，其余都以废热形式散掉。这一笔「新闻稿从不提的开销」，正是 overhead 一词在本课的用法。</li>
+          <li><b>材料。</b>氘氚聚变产生的高能中子会持续轰击第一壁，还没有人证明材料能扛住几年。</li>
+          <li><b>氚。</b>氚在自然界极少，必须靠聚变中子与锂反应「边烧边生」，这套循环尚未在装置里闭合。</li>
+        </ul>
+        <p>还有一件常被误解的事：<b>NIF 从来不是为了发电而建的。</b>它的首要任务是核武库管理（stockpile stewardship）——用实验室里的聚变来研究极端条件下的物质行为，替代部分核试验。约十分之一的打靶次数留给公开研究。这不是「顺便」，而是这台机器设计时的目的。知道这一点，就不难理解它为什么在效率上毫无竞争力：那不是它的指标。</p>
+
+        <h3>四、后来的三次</h3>
+        <p>2023 年 7 月 30 日，同样的激光能量打出 <b>3.88 兆焦</b>；同年 10 月又有 2.4 与 3.4 兆焦的记录。增益提高了，分母没变——所以「百分之一」那条评语也一并保留。这正是本课想留下的思维方式：<b>看到倍数，先找分母；分母不变，倍数才有可比性。</b></p>
+
+        <h3>五、中外对照：两条路线，两把尺子</h3>
+        <p>核聚变有两条主流路线。<b>惯性约束</b>（NIF 走的路）是用激光在十亿分之一秒内把燃料压爆，追求的是<b>瞬间的增益</b>，所以它的核心指标是 Q 值。另一条是<b>磁约束</b>，用强磁场把上亿度的等离子体悬在空中，追求的是<b>长时间的稳定运行</b>，核心指标是温度、密度与约束时间的乘积（聚变三乘积）以及持续时长。</p>
+        <p>中国走的是磁约束路线。位于合肥的<b>全超导托卡马克「东方超环」（EAST）</b>于 2025 年 1 月 20 日实现<b>上亿摄氏度、1066 秒</b>的高约束模等离子体稳态运行（约 17 分 46 秒），此前它已累计完成十几万次等离子体实验；成都的<b>「中国环流三号」</b>在 2025 年 3 月实现离子温度 1.17 亿度、电子温度 1.6 亿度的运行。下一步的<b>紧凑型聚变能实验装置 BEST</b> 已在合肥启动总装，计划 2027 年底建成，目标是首次演示聚变能发电；旁边的<b>CRAFT（「夸父」）</b>不做聚变反应，专门为未来的堆造部件、做测试。</p>
+        <p><b>三点辨析（否则这个对照会讲歪）：</b></p>
+        <ul>
+          <li><b>① 比的不是高低，是「尺子」。</b>1066 秒回答的是「能不能稳得住」，Q 值回答的是「这一枪赚不赚」。拿秒数去比增益，等于拿体温计去量身高。本课不做任何技术路线优劣的判断。</li>
+          <li><b>② 两条路线的瓶颈不同。</b>激光路线卡在效率与重复频率，磁约束卡在稳态控制、排热与材料。它们的「工程难题」不是同一道题。</li>
+          <li><b>③ 「永远还要五十年」这句话对两条路线都成立，但含义不同。</b>它说的不是科学家不努力，而是<b>演示与部署之间那一大段工程距离</b>：一次次实验把这段距离缩短，却从没有一次实验能把它一次性取消。</li>
+        </ul>
+
+        <h3>六、把话说窄：本课不说的四件事</h3>
+        <ul>
+          <li><b>不说「无限清洁能源已经实现」。</b>能净增益的是「进入靶的激光能量」这一口径，离电网净输出还差约两个数量级。</li>
+          <li><b>不给商业化时间表。</b>各方估计从十年到数十年不等，均属预测；本课只陈述已发生的实验事实与已知的工程瓶颈。</li>
+          <li><b>不比较各国投入与水平。</b>核聚变是长期、多国、多条路线并行的研究，本课只说明两条技术路线的指标差异。</li>
+          <li><b>不谈 NIF 的军事用途细节。</b>只说明其首要任务是核武库管理，不展开、不推测。</li>
+        </ul>
+
+        <h3>七、参考来源</h3>
+        <p class="source">劳伦斯利弗莫尔国家实验室 2023 财年年报（2022-12-05 与 2023-07-30 两次打靶数据）· Physics Today 2022-12-13 报道（300 兆焦电网取电、约 250 千焦到达胶囊、峰值功率约 500 万亿瓦）· New Scientist 2022-12-13 报道（装置造价 35 亿美元）· 中国科学院合肥物质科学研究院等离子体物理研究所关于 EAST 2025-01-20 运行的公开报道 · 关于 BEST（2027 年底建成、演示聚变发电）与 CRAFT（「夸父」）的公开报道。</p>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>🔮 科技前沿 Technology　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>核聚变「能量净增益」——同一次实验为什么能写成胜利、十倍和百分之一，以及一枪与一座电站之间隔着什么</p>
+        <p>2022 年 12 月 5 日，NIF 用 2.05 兆焦的激光打出 3.15 兆焦的聚变能。这个结果被写成三种新闻，区别全在分母：算进靶的激光，是 1.5 倍；算到燃料胶囊上的能量，是十倍；算到电网取电，是百分之一。而真正的距离不在数字里，在重复频率、废热、材料与氚循环里。<b>看到倍数，先找分母。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级科技与数据词汇（ignition · odds · denominator · tenfold · ratio · repetition · overhead · efficiency · stewardship · yield · milestone），能区分 efficiency 与 effectiveness，并理解 denominator 作为「衡量基准」的比喻用法。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 500 词的科技说明文，能分辨同一组数据的三种口径，识别「同一事实、不同分母」的报道差异，并找出作者为结论设下的边界。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——关系从句链条、独立主格与 with 复合结构、Nor / Not until 引起的部分倒装、Had it not been for 的过去反事实、名词化表达。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习「先问分母」的读数据习惯：任何倍数、百分比、纪录，都要先确认它相对什么而言；并理解「演示成功」与「工程可用」之间的落差为什么常用 repetition 这个词来概括。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过惯性约束（Q 值）与磁约束（稳态时长、三乘积）两种指标，理解「尺子不同则不能直接比较」，学会在跨体系比较时先说明指标定义。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. The beams vaporised the cylinder&#39;s inner wall, which threw off X-rays, which in turn imploded the capsule until its fuel fused.</div>
+          <div class="eg" style="margin-top:8px;">2. The same shot has been reported as a triumph, as a tenfold gain, and as a one-per-cent return, and every version is arithmetically honest. What changes is the denominator.</div>
+          <div class="eg" style="margin-top:8px;">3. NIF fires at most a few times a day, each target assembled and positioned by hand, and a commercial plant would need to fire around ten times a second.</div>
+          <div class="eg" style="margin-top:8px;">4. Nor has anyone shown that materials can survive years of neutron bombardment.</div>
+          <div class="eg" style="margin-top:8px;">5. Had it not been for that confusion, the headline would have been duller and truer: a ratio moved.</div>
+          <div class="eg" style="margin-top:8px;">6. Not until the ratio is quoted together with its denominator — grid electricity in, grid electricity out — will the number mean anything to a household.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-11-04 · 科技前沿 Technology｜核聚变「净增益」：换一个分母，结论就换一张脸</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Pattern practice check ---------- */
+document.querySelectorAll('.practice input').forEach(inp=>{
+  inp.addEventListener('blur',()=>{
+    const v=(inp.value||'').trim();
+    const key=(inp.dataset.ans||'').trim();
+    if(!v){inp.style.borderColor='';return;}
+    const norm=s=>s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+    inp.style.borderColor=(norm(v)===norm(key))?'#22c55e':'#ef4444';
+  });
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["At 1:03 in the morning on 5 December 2022, the National Ignition Facility in California fired 192 laser beams at a cylinder the size of a thimble. Inside it hung a capsule of frozen deuterium and tritium, smaller than a peppercorn. The beams vaporised the cylinder's inner wall, which threw off X-rays, which in turn imploded the capsule until its fuel fused. The shot released 3.15 megajoules of fusion energy from the 2.05 megajoules of laser light that had entered the cylinder — the first controlled fusion reaction on Earth to return more than it was given. The facility, which cost 3.5 billion dollars and was finished in 2009, had missed its original ignition target by a decade. Its designers had put the odds of breaking even at slightly better than a coin toss.", "The same shot has been reported as a triumph, as a tenfold gain, and as a one-per-cent return, and every version is arithmetically honest. What changes is the denominator. Measured against the laser energy delivered into the cylinder, the return is 1.5 times the input. Measured against the roughly 250 kilojoules that actually reached the fuel capsule, the gain is close to ten. Measured against the 300 megajoules drawn from the grid to charge and fire the lasers, 3.15 megajoules is a rounding error — about one per cent. The three figures describe one event, not three. A ratio, in other words, records a relationship and hides a boundary: whoever chooses where the counting starts has already chosen the headline.", "Ignition answered a physics question; it did not build a power station, and the difference is mostly a matter of repetition. NIF fires at most a few times a day, each target assembled and positioned by hand, and a commercial plant would need to fire around ten times a second, with the heat captured and the tritium bred back inside the same building. There is also the overhead that no press release mentions: the lasers convert grid electricity into ultraviolet light at roughly one per cent efficiency, so most of the energy leaves the building as waste heat. Nor has anyone shown that materials can survive years of neutron bombardment. NIF was never designed to supply electricity. Its mission is stewardship of the nuclear stockpile, which is why about a tenth of its shots are reserved for unclassified research.", "None of this makes the shot small. For seventy years the question had been whether a laboratory could make a star burn and pay for its own spark; that question now has an answer, and later shots pushed the yield to 3.88 megajoules with no more laser energy. What the milestone did not do is shorten the distance to a socket in the wall, and the old joke that fusion is always thirty years away survives because a physics question and an engineering question keep being reported as one. Had it not been for that confusion, the headline would have been duller and truer: a ratio moved. Not until the ratio is quoted together with its denominator — grid electricity in, grid electricity out — will the number mean anything to a household."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What did the shot of 5 December 2022 actually demonstrate? 2022 年 12 月 5 日那一枪究竟证明了什么？",
+   opts:["That a fusion plant was ready to be connected to the grid 一座聚变电站已经可以直接并网",
+         "That the facility finally reached, on schedule, the ignition target set for 2012 装置按原计划达成了 2012 年的点火目标",
+         "That 2.05 megajoules of laser light could produce 3.15 megajoules of fusion energy 2.05 兆焦的激光可以产出 3.15 兆焦的聚变能",
+         "That the lasers had become more efficient than the electricity supply 激光器效率已经超过电网供电效率"],
+   ans:2,
+   fb:"正确！第 1 段给了两个数字：<b>2.05 megajoules</b> 进入黑腔，<b>3.15 megajoules</b> 聚变输出——这是地球上第一次受控聚变反应「给出的多于被给予的」。A 与 D 都越过了工程的边界，B 恰好相反：装置原定 2012 年点火，<b>迟了十年</b>。"},
+  {q:"Why can the same result be described both as a tenfold gain and as a one-per-cent return? 为什么同一个结果既能叫十倍增益，又能叫百分之一？",
+   opts:["Because the experiment was repeated with different equipment 因为实验换了一套设备重做",
+         "Because the gain is measured from different starting points: energy on the capsule, or electricity from the grid 因为增益从不同的起点算起：打到胶囊上的能量，或从电网取的电",
+         "Because the fusion yield was later revised downwards 因为聚变当量后来被下调了",
+         "Because one figure describes power and the other describes energy 因为一个说的是功率，另一个说的是能量"],
+   ans:1,
+   fb:"正确！第 2 段的核心句是 <b>What changes is the denominator</b>。以打到燃料胶囊上的约 250 千焦为分母，增益接近十倍；以电网取电的 300 兆焦为分母，3.15 兆焦只是百分之一。三个数字描述的是同一件事，不是三件事。"},
+  {q:"How much electricity did the facility draw from the grid to fire the lasers? 装置为发射激光从电网取了多少电？",
+   opts:["About 3.15 megajoules, the same as the fusion yield 约 3.15 兆焦，与聚变当量相同",
+         "About 2.05 megajoules, matching the laser output 约 2.05 兆焦，与激光能量相同",
+         "About 250 kilojoules, the energy that reached the capsule 约 250 千焦，即打到胶囊上的能量",
+         "About 300 megajoules, roughly a hundred times the fusion energy released 约 300 兆焦，约为所释放聚变能的百倍"],
+   ans:3,
+   fb:"正确！原文写得很直白：<b>the 300 megajoules drawn from the grid to charge and fire the lasers</b>。300 兆焦对 3.15 兆焦，正是那个百分之一。注意 B 是激光进入黑腔的能量、C 是打到胶囊上的能量——这两个数正是另两条新闻用的分母。"},
+  {q:"Which obstacle does the passage place between a successful shot and a power station? 课文把哪一道障碍放在「成功的一枪」与「一座电站」之间？",
+   opts:["The repetition rate: NIF fires a few times a day, while a plant would need about ten shots a second 重复频率：NIF 一天打几次，而电站需要每秒约十次",
+         "The impossibility of ever achieving ignition a second time 第二次实现点火在原理上不可能",
+         "A shortage of deuterium in seawater 海水中缺少氘",
+         "The refusal of governments to fund further experiments 政府拒绝继续资助实验"],
+   ans:0,
+   fb:"正确！第 3 段的判断是 <b>the difference is mostly a matter of repetition</b>，紧接着给出「一天几次」与「每秒十次」的对比。B 与事实相反：2023 年 7 月又打出了 3.88 兆焦；C 也说反了，氘在海水中储量丰富。"},
+  {q:"What is the National Ignition Facility's primary mission? 国家点火装置的首要任务是什么？",
+   opts:["Supplying electricity to the surrounding region 向周边地区供电",
+         "Testing commercial laser designs for private companies 为私营企业测试商用激光设计",
+         "Stewardship of the nuclear stockpile 核武库管理",
+         "Measuring the efficiency of solar panels 测量太阳能板的效率"],
+   ans:2,
+   fb:"正确！原文是 <b>Its mission is stewardship of the nuclear stockpile</b>，约十分之一的打靶次数留给公开研究。这一点解释了它为什么在效率上毫无竞争力——发电从来不是它的设计指标。"},
+  {q:"Which sentence best states the passage's conclusion? 哪一句最接近全文的结论？",
+   opts:["Fusion will supply household electricity within a decade 聚变将在十年内进入家庭供电",
+         "The result was too small to matter scientifically 这个结果小到没有科学意义",
+         "Physics questions and engineering questions are really the same question 物理问题与工程问题其实是同一个问题",
+         "A ratio only means something once you know what it was measured against 比率只有在知道它相对什么来算之后才有意义"],
+   ans:3,
+   fb:"正确！收束句是 <b>Not until the ratio is quoted together with its denominator ... will the number mean anything to a household</b>。A 是课文明确回避的时间表，B 低估了点火的意义（七十年未解的那个问题有了答案），C 恰好说反：全文都在强调两者被混为一谈。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#3730a3';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Work That GDP Cannot See</title>
+<style>
+:root{
+  --accent:#0f766e;
+  --accent2:#9a3412;
+  --bg:#f6f8fa;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#ccfbf1;
+  --border:#dde3ea;
+  --soft:#eef2f7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(15,118,110,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(15,118,110,.5);}70%{box-shadow:0 0 0 12px rgba(15,118,110,0);}100%{box-shadow:0 0 0 0 rgba(15,118,110,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#99f6e4;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(15,118,110,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ccfbf1;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Social Issues 社会问题</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Work That GDP Cannot See</h1>
+      <p class="subtitle">每天有 164 亿小时的无酬照护劳动，相当于 20 亿人每天上满八小时班、却一分钱不拿。按最低时薪折算，它约占全球产出的百分之九。一个国家的账本记下了医院，却没有记下夜里守着病床的那个女儿。｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Number With a Hole 一个有洞的数字</div>
+            <p>Ask what a country produces and you will be shown a single figure that counts almost everything except the work most people do before breakfast. In 2013, international statistical standards formally agreed that <span class="kw" data-def="无酬照护（unpaid 无报酬的 + care 照护）。指做饭、清洁、洗衣、喂饭、穿衣、陪伴老人与幼儿等没有工资的家庭劳动。2013 年第 19 届国际劳工统计学家会议通过决议，明确把无酬家务与照护劳动计入「工作」的统计定义——这是本课事实链的起点">unpaid care</span> — cooking, cleaning, washing, feeding, dressing, sitting with the very young and the very old — counts as work. Five years later the International Labour Organization put a number on it. Drawing on time-use surveys from sixty-four countries, it <span class="kw" data-def="估计（动词，读作 /ˈestɪmeɪt/，重音在第一音节；作名词时读 /ˈestɪmət/）。estimate that + 从句：估算出……。注意它与 calculate（精确计算）的区别：estimate 承认自己有误差范围，这正是本课的诚实之处——后面第 2 段专门交代这个数字的底子有多薄">estimated</span> that 16.4 billion hours of unpaid care are performed every day: the <span class="kw" data-def="相当于、等同物（形容词或名词，读作 /ɪˈkwɪvələnt/，重音在第二音节）。be equivalent to + 名词：等同于……。这里把「164 亿小时」换算成「20 亿人上八小时班」，是科普写作里最有效的一种换算——把无法感知的量变成能感知的场景">equivalent</span> of two billion people working an eight-hour shift for no wage at all. The <span class="kw" data-def="遗漏、省略（名词，读作 /əˈmɪʃn/，重音在第二音节）。动词 omit 省略；形容词 omittable 可省略的。本课用它区分「算错了」与「没被算」：账本里没有这些小时，不是因为加错了，而是因为一开始就没打算加">omission</span> is not an error of arithmetic. It follows from a decision about what counts as production.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · What the Figure Is Worth 这个数字值多少</div>
+            <p>Valued at an hourly minimum wage, those hours come to about nine per cent of world output — roughly eleven trillion dollars. The <span class="kw" data-def="估计（estimate 的名词形式，读作 /ˈestɪmət/，重音在第一音节；注意动词读 /ˈestɪmeɪt/，元音不同）。The estimate rests on a fragile base 这个估计建立在一个脆弱的底子上。名词与动词同形不同音的词还有 record、present、object，考试常考">estimate</span> rests on a <span class="kw" data-def="脆弱的、易碎的（形容词，读作 /ˈfrædʒaɪl/，英式读音）。fragile base 脆弱的底子；fragile evidence 不牢靠的证据。注意它不只指物理上的易碎，也常用来形容论证、共识、经济复苏的「经不起推敲」">fragile</span> base. Fewer than half of all countries run a regular time-use survey, and those that do ask different questions with different diaries, so the totals are <span class="kw" data-def="拼凑起来（stitch together 的过去分词）。原义「把布片缝在一起」，引申为「用不同来源的材料勉强凑成一个整体」。这里指各国调查口径不一，全球总数是靠拼接得来的，而不是一次统一清点出来的">stitched together</span> rather than counted. The direction, however, is not in <span class="kw" data-def="争议、纠纷（名词，读作 /dɪˈspjuːt/，重音在第二音节）。in dispute 有争议的；beyond dispute 无可争议。动词 dispute 表示「对……提出质疑」，不是「吵架」。课文用它划清界限：具体数字可以商榷，方向没有争议">dispute</span>. Women perform 76 per cent of the hours, on average 3.2 times as many as men: four hours and twenty-five minutes a day against one hour and twenty-three minutes. Where the gap has been measured twice, it <span class="kw" data-def="缩小（动词 narrow 的过去式）。narrow 作动词表示「使变窄、缩小」，如 narrow the gap 缩小差距。这里是主动用法：差距自己缩小了。形容词仍是 narrow（狭窄的），名词是 narrowness">narrowed</span> by seven minutes a day over two decades — a pace that would need 210 years to close it.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Where the Cost Lands 代价落在哪里</div>
+            <p>The cost of this accounting shows up elsewhere. In 2018, 606 million women of working age reported that they were outside the <span class="kw" data-def="劳动力（固定搭配，注意不是 labour power）。be outside the labour force 不在劳动力队伍中——统计上指既没有工作、也不在找工作的人，与 unemployed（失业，指正在找工作）是两个不同概念。这个区别常被误读：照护者不是失业，是被算作「不参与」">labour force</span> because of unpaid care; the figure for men was 41 million. Paid care is no refuge either: across countries, care workers earn between 4 and 40 per cent less per hour than other workers with similar qualifications. Care work that is <span class="kw" data-def="看不见的（形容词）。invisible in the national accounts 在国民账户里看不见。注意它的反义 visible 与名词 invisibility；这个词在本课是双关：既指统计上没被记录，也指日常生活中没被注意">invisible</span> in the national accounts is also invisible in budgets, and governments build what they measure: a hospital ward appears in the total, while the daughter who <span class="kw" data-def="为……配备人员（动词 staff，这里用第三人称单数 staffs）。staff a ward 给病房配齐人手。注意 staff 作名词是「全体员工」（集合名词，谓语可用单数或复数），作动词才是「配备人员」——这个转换在新闻英语里很常见">staffs</span> it at night does not. Economists call the repair a <span class="kw" data-def="卫星账户（satellite account）。国民经济核算里的一个附属账户：在不改动 GDP 主账的前提下，另立一套账，把家务生产、环境代价等主账装不下的东西折算进来。satellite 在这里不是「卫星」，而是「依附于主体的、平行的」意思">satellite</span> account — a parallel <span class="kw" data-def="账簿、分类账（名词，读作 /ˈledʒə/，重音在第一音节）。a parallel ledger 一套平行的账。原指记账用的总账本，引申为任何记录体系。写作中 the ledger 常代指「官方记录」，如 enter it in the ledger 把它记进账里">ledger</span> that values household production without pretending it is a market <span class="kw" data-def="交易（名词，读作 /trænˈzækʃn/，重音在第二音节）。a market transaction 市场交易。动词 transact 进行交易。本课的关键限定：卫星账户给家务「估值」，但并不把它当成买卖——一旦当成买卖，就要有买主和卖主，而照护里往往两者是同一家人">transaction</span>. A few countries publish one. Most do not.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · What the Number Is For 这个数字有什么用</div>
+            <p>None of this is an argument for putting a price on a parent&#39;s attention. It is an argument about what a total is for. A figure that leaves out the hours on which every other hour depends is not <span class="kw" data-def="中立的（形容词）。not neutral 并非中立。统计常被当成「只是数字」，但选择记什么、不记什么本身就是判断。注意 neutral 与 neutralise（使中和、抵消）同源不同用">neutral</span>; it merely looks complete, and its completeness is what makes it <span class="kw" data-def="有说服力的（形容词，读作 /pəˈsweɪsɪv/，重音在第二音节）。动词 persuade 说服；名词 persuasion。这里指出一个反直觉的点：一个数字之所以有说服力，往往正因为它看起来「完整」——缺口被格式藏住了">persuasive</span>. The weakest objection is that care cannot be measured, since it already is, badly and unevenly. The stronger claim is that once the hours are counted, the question stops being statistical. If the work is real enough to be entered in a ledger, it is real enough to be shared.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="estimate">🔊</button><div class="word">estimate<span class="pos">n./v.</span></div><div class="zh">估计。名词读 /ˈestɪmət/（重音在前，词尾轻读），动词读 /ˈestɪmeɪt/（词尾重读）——同形不同音，考试常考。<b>The estimate rests on a fragile base.</b> 这个估计建立在一个脆弱的底子上。与 calculate（精确计算）不同，estimate 本身就承认误差，所以后面才需要交代口径</div><div class="ex">"Drawing on time-use surveys from sixty-four countries, it estimated that 16.4 billion hours of unpaid care are performed every day..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="equivalent">🔊</button><div class="word">equivalent<span class="pos">adj./n.</span></div><div class="zh">相当于的；等同物（读作 /ɪˈkwɪvələnt/，重音在第二音节）。<b>be equivalent to + 名词</b> 等同于……；<b>the equivalent of</b> ……的等量。本课用它把「164 亿小时」换算成「20 亿人上满八小时班」——把无法感知的量变成能感知的场景，是科普写作最有效的一招</div><div class="ex">"... the equivalent of two billion people working an eight-hour shift for no wage at all."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="fragile">🔊</button><div class="word">fragile<span class="pos">adj.</span></div><div class="zh">脆弱的、经不起推敲的（读作 /ˈfrædʒaɪl/）。<b>a fragile base</b> 脆弱的底子；<b>fragile evidence</b> 不牢靠的证据。它不只形容易碎的东西，也常形容论证、共识、经济复苏。用它给数据「定性」，比说 the data is bad 精确得多</div><div class="ex">"The estimate rests on a fragile base. Fewer than half of all countries run a regular time-use survey..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="dispute">🔊</button><div class="word">dispute<span class="pos">n./v.</span></div><div class="zh">争议；对……提出质疑（读作 /dɪˈspjuːt/，重音在第二音节）。<b>in dispute</b> 有争议的；<b>beyond dispute</b> 无可争议。动词 dispute 不是「吵架」，而是「不认同某个说法并给出理由」。课文用它划界：具体数字可以商量，方向没有争议</div><div class="ex">"The direction, however, is not in dispute."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="narrow">🔊</button><div class="word">narrow<span class="pos">v./adj.</span></div><div class="zh">缩小；狭窄的。<b>narrow the gap</b> 缩小差距——作动词时它是及物的；但课文中 it narrowed by seven minutes 是主动用法，指差距自己缩小了。同族：narrowly（勉强地、差一点）、narrowness（狭窄）。注意 by 表幅度、to 表结果</div><div class="ex">"Where the gap has been measured twice, it narrowed by seven minutes a day over two decades — a pace that would need 210 years to close it."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="invisible">🔊</button><div class="word">invisible<span class="pos">adj.</span></div><div class="zh">看不见的。<b>invisible in the national accounts</b> 在国民账户里看不见。本课是双关：既指统计上没被记录，也指日常生活中没被注意。反义 visible；名词 invisibility。<b>invisible in budgets</b> 在预算里也看不见——两句并置，正是全课的因果链</div><div class="ex">"Care work that is invisible in the national accounts is also invisible in budgets, and governments build what they measure..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="staff">🔊</button><div class="word">staff<span class="pos">v./n.</span></div><div class="zh">为……配备人员（动词，第三人称单数 staffs）。<b>staff a ward</b> 给病房配齐人手。作名词时是「全体员工」，集合名词，谓语单复数皆可（英式偏复数）。名词转动词、意思从「人」变成「配人」，这个转换在新闻英语里很常见</div><div class="ex">"... a hospital ward appears in the total, while the daughter who staffs it at night does not."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="satellite">🔊</button><div class="word">satellite<span class="pos">n./adj.</span></div><div class="zh">卫星；附属的。<b>satellite account</b> 卫星账户——国民经济核算里的附属账户，在不改动主账的前提下另立一套账，把家务生产、环境代价等主账装不下的东西折算进来。这里的 satellite 不是「人造卫星」，而是「依附于主体的、平行的」</div><div class="ex">"Economists call the repair a satellite account — a parallel ledger that values household production without pretending it is a market transaction."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="ledger">🔊</button><div class="word">ledger<span class="pos">n.</span></div><div class="zh">账簿、分类账（读作 /ˈledʒə/，重音在第一音节）。<b>a parallel ledger</b> 一套平行的账。<b>enter it in the ledger</b> 把它记进账里。引申义指任何官方记录体系，所以 the ledger 常被用来代指「被正式承认的东西」</div><div class="ex">"If the work is real enough to be entered in a ledger, it is real enough to be shared."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="neutral">🔊</button><div class="word">neutral<span class="pos">adj.</span></div><div class="zh">中立的（读作 /ˈnjuːtrəl/）。<b>is not neutral</b> 并非中立。统计常被当成「只是数字」，但选择记什么、不记什么本身就是判断。同族：neutrality 中立性；neutralise 使中和、抵消</div><div class="ex">"A figure that leaves out the hours on which every other hour depends is not neutral; it merely looks complete..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="transaction">🔊</button><div class="word">transaction<span class="pos">n.</span></div><div class="zh">交易（读作 /trænˈzækʃn/，重音在第二音节）。<b>a market transaction</b> 市场交易。本课的关键限定：卫星账户给家务「估值」，却不把它当成买卖——一旦当成买卖，就要有买主和卖主，而照护里两者往往是同一家人</div><div class="ex">"... a parallel ledger that values household production without pretending it is a market transaction."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 「量」的四种可信度：</b><b>count</b> 清点（最硬）→ <b>measure</b> 测量 → <b>estimate</b> 估算（承认误差）→ <b>guess</b> 猜测。写数据新闻时，动词选错，可信度就被夸大或贬低了。<br>
+        <b>② 「记账」词链：</b><b>account</b> 账目 → <b>accounts</b> 账户（复数）→ <b>ledger</b> 账簿 → <b>satellite account</b> 卫星账户 → <b>audit</b> 审计。这条链能一路写到财政与国民经济核算。<br>
+        <b>③ 「看不见」的三层：</b><b>invisible</b> 看不见 → <b>uncounted</b> 没被计入 → <b>undervalued</b> 被低估 → <b>unrecognised</b> 未被承认。政策文件里这四个词常被混用，其实一层比一层重。<br>
+        <b>④ 「争议」的强度：</b><b>in dispute</b> 有争议 → <b>contested</b> 有人实际交过手 → <b>controversial</b> 引发公众争论 → <b>refuted</b> 已被驳倒。课文只用到第一档，是克制的写法。<br>
+        <b>⑤ 一个易混：</b><b>estimate</b>（估计，可数名词）↔ <b>estimation</b>（评价、判断，如 in my estimation 依我看）。中文都译「估计」，英文里后者不表示数字。<br>
+        <b>⑥ 一个写作提醒：</b>倍数写 <b>3.2 times as many as</b>（同级比较的倍数式），不说 3.2 times more than——后者在严谨语境里会被读成「多出 3.2 倍」即 4.2 倍。这类歧义在数据写作中必须避开。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. 祈使句 + and 的结果句 · Ask what a country produces and you will be shown a single figure</h3>
+          <div class="zh">结构：<b>祈使句 + and + 陈述句</b>，相当于 If you ask..., you will be shown...。祈使句在这里不是命令，而是「设想一个动作」，and 后面接它必然的结果。这种句式在英文评论写作里极为常见，因为它把条件关系压进一个逗号，句子短、语气稳。<b>对照</b>：换成 or 就变成「否则」——Ask politely, or you will get nothing；换成逗号加分词（Asked what a country produces, you would be shown...）则更书面、更被动。</div>
+          <div class="eg">Ask what a country produces and you will be shown a single figure that counts almost everything except the work most people do before breakfast.</div>
+          <div class="practice">仿写：查一下这座城市的水价，你会发现它比瓶装水便宜一百倍。
+            <input type="text" placeholder="Check the price of tap water in this city and ..." data-ans="Check the price of tap water in this city and you will find it is a hundred times cheaper than bottled water.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. what 引导的名词性从句作宾语 · governments build what they measure</h3>
+          <div class="zh">结构：<b>build + what they measure</b>，what 从句整体作 build 的宾语，等于 the things that they measure。what 在这里既充当从句的宾语（measure 的宾语），又连接主句，一个词干两件事。<b>同类</b>：This is what matters. / She said what everyone was thinking. <b>易错点</b>：what 从句不能有先行词——不能说 the things what they measure；也不等于 that 从句（that 从句只陈述事实，不充当成分）。</div>
+          <div class="eg">Care work that is invisible in the national accounts is also invisible in budgets, and governments build what they measure: a hospital ward appears in the total, while the daughter who staffs it at night does not.</div>
+          <div class="practice">仿写：我们往往只保护自己已经登记在册的东西。
+            <input type="text" placeholder="We tend to protect only ..." data-ans="We tend to protect only what we have already written down.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. Where 引导的情形状语从句前置 · Where the gap has been measured twice, it narrowed by seven minutes</h3>
+          <div class="zh">结构：<b>Where + 从句，主句</b>。这里的 where 不表具体地点，而表「在……情形下」，相当于 in the cases where。它比 if 更中性：if 强调条件，where 强调「有数据覆盖的那部分地区／那部分情形」，语气更像学术写作里的限定。<b>同族</b>：Where possible, ...（在可能的情况下）；Where relevant, ...（在相关处）。前置之后主句再给结论，逻辑层次清楚。</div>
+          <div class="eg">Where the gap has been measured twice, it narrowed by seven minutes a day over two decades — a pace that would need 210 years to close it.</div>
+          <div class="practice">仿写：在有连续十年数据的地方，这个比例几乎没有变化。
+            <input type="text" placeholder="Where ten years of data are available, ..." data-ans="Where ten years of data are available, the ratio has barely changed.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. 破折号同位语 + that 定语从句 · a satellite account — a parallel ledger that values household production</h3>
+          <div class="zh">结构：<b>术语 + 破折号 + 同位语名词短语 + that 定语从句</b>。satellite account 是行话，读者不懂；破折号后的 a parallel ledger 先用日常词给它一个可想象的形状，再由 that 从句补上功能（给家务生产估值，但不假装它是市场交易）。<b>这个三层结构是解释专业术语的标准模板</b>：术语 → 比喻 → 限定条件。缺了第三层，比喻就会说过头。</div>
+          <div class="eg">Economists call the repair a satellite account — a parallel ledger that values household production without pretending it is a market transaction.</div>
+        </div>
+
+        <div class="item">
+          <h3>5. If 平行条件句收束 · If the work is real enough to be entered in a ledger, it is real enough to be shared</h3>
+          <div class="zh">结构：<b>If + 主语 + be + adj. + enough to do，主语 + be + 同一形容词 + enough to do</b>。前后两句用完全相同的骨架，只换动词（entered / shared）——这叫<b>平行结构</b>，是把论证收紧的最省力办法：既然你承认前半句，就没有理由拒绝后半句。<b>注意</b>：enough 必须放在形容词之后（real enough），不能写 enough real；to 后面接动词原形。</div>
+          <div class="eg">If the work is real enough to be entered in a ledger, it is real enough to be shared.</div>
+          <div class="practice">仿写：如果这个风险大到需要投保，它就大到需要被公开讨论。
+            <input type="text" placeholder="If the risk is large enough to insure, ..." data-ans="If the risk is large enough to insure, it is large enough to be discussed in public.">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <p class="subtitle">5 个语法点，例句均取自正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① 动名词作介词宾语与主语：把动作当成一件事来谈</h3>
+          <div class="zh"><b>putting a price on a parent&#39;s attention</b> 作介词 for 的宾语；<b>an argument about what a total is for</b> 中 about 后接名词性从句。动名词的好处是让「动作」变成可以评论的对象：不是「给父母的注意力定价」（一个动作），而是「给父母的注意力定价这件事」（一个命题）。<b>注意</b>：介词后一律用动名词，不用不定式；但介词 to 后若是不定式符号则接原形（look forward to seeing 是动名词，因为 to 是介词）。</div>
+          <div class="eg">None of this is an argument for putting a price on a parent&#39;s attention. It is an argument about what a total is for.</div>
+        </div>
+
+        <div class="item">
+          <h3>② 倍数与差额：times as many as / per cent less than</h3>
+          <div class="zh"><b>3.2 times as many as men</b>：倍数用「times as + 形容词原级 + as」，不说 times more than（后者有歧义，可能被读成 4.2 倍）。<b>between 4 and 40 per cent less per hour than</b>：差额用 less than，且 between A and B 把区间交代清楚，避免把 4% 说成平均值。<b>写数据的三条纪律</b>：倍数用 as...as；差额用 more／less than；区间一定写 between...and。</div>
+          <div class="eg">Women perform 76 per cent of the hours, on average 3.2 times as many as men: four hours and twenty-five minutes a day against one hour and twenty-three minutes.</div>
+          <div class="eg" style="margin-top:8px;">... care workers earn between 4 and 40 per cent less per hour than other workers with similar qualifications.</div>
+        </div>
+
+        <div class="item">
+          <h3>③ 限定性定语从句 vs 非限定性定语从句</h3>
+          <div class="zh"><b>Care work that is invisible in the national accounts</b>：that 从句限定范围——指的是「那些在国民账户里看不见的照护劳动」，不是全部照护劳动。去掉从句，句子意思就变了。<b>...the daughter who staffs it at night does not</b>：who 从句同样起限定作用，指「那个值夜班的女儿」。<b>判断口诀</b>：去掉从句后句子仍指同一对象 → 非限定（用逗号 + which／who）；去掉后所指变了 → 限定（不用逗号）。本课两处都是限定，因为作者要对比的正是「被记下的」与「没被记下的」。</div>
+          <div class="eg">Care work that is invisible in the national accounts is also invisible in budgets, and governments build what they measure: a hospital ward appears in the total, while the daughter who staffs it at night does not.</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 被动语态与「拼接」语义：are stitched together rather than counted</h3>
+          <div class="zh">被动语态在这里承担了一个额外的功能：它<b>隐藏了施动者</b>。the totals are stitched together 不说是谁拼的——因为重点是「这个方法本身不牢」，不是指责某个机构。<b>rather than</b> 连接两个过去分词，保持平行（stitched / counted），表示「是前者而不是后者」。<b>对比</b>：are stitched together 强调过程的不牢靠；are counted 强调有统一样本的清点。一个动词的选择，就把方法论的可信度分了等级。</div>
+          <div class="eg">Fewer than half of all countries run a regular time-use survey, and those that do ask different questions with different diaries, so the totals are stitched together rather than counted.</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 否定的范围：None of this is... / is not neutral; it merely looks complete</h3>
+          <div class="zh"><b>None of this is an argument for X. It is an argument about Y.</b> 先用全称否定划清界限（这些都不构成「给亲情定价」的理由），再给出真正的论点——这是学术写作里防止被误读的标准动作。<b>not...; it merely...</b> 是同一逻辑的第二种形态：先否定一个期待（并非中立），再用 merely 把对方的错觉点破（只是看起来完整）。<b>注意</b>：None of + 复数名词作主语时，正式文体谓语常用单数（None of this is），口语可用复数。</div>
+          <div class="eg">A figure that leaves out the hours on which every other hour depends is not neutral; it merely looks complete, and its completeness is what makes it persuasive.</div>
+          <div class="eg" style="margin-top:8px;">None of this is an argument for putting a price on a parent&#39;s attention.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、一件被「重新定义」的事</h3>
+        <p>2013 年，在日内瓦召开的国际劳工统计学家会议通过一项决议，把<b>无酬家务与照护劳动</b>正式纳入「工作」的统计定义。这句话看起来只是术语调整，实际上是分水岭：在此之前，做饭、洗衣、喂饭、陪伴老人与幼儿，在多数国家的官方统计里既不算就业、也不算产出，只是「家庭内部的事」。定义一改，这部分劳动就第一次有了被清点的资格。</p>
+        <p>五年后，国际劳工组织（ILO）在《照护工作与未来体面劳动》报告中给出了量级：全球每天有 <b>164 亿小时</b>的无酬照护劳动。这个数字来自 64 个国家的时间利用调查，覆盖约三分之二的全球劳动年龄人口。</p>
+
+        <h3>二、164 亿小时是怎么算出来的</h3>
+        <p>靠的不是问卷里问「你昨天做了什么」，而是<b>时间利用调查（time-use survey）</b>：受访者按固定时间格（常见为 10 或 15 分钟一格）记录一整天的活动，调查方再按统一的活动分类编码，把「做饭」「洗衣」「陪孩子写作业」「陪老人就医」分别归入不同类别，最后按人口加权推算全国总量。</p>
+        <p>这套方法的优点是能抓住「说不出口的劳动」——没人会把自己做饭的 40 分钟当成工作汇报，但日记会记下来。缺点也很明显：<b>各国问卷不同、时间格不同、分类不同</b>，全球总数只能靠拼接。课文因此说 the totals are stitched together rather than counted，并把这个底子称为 fragile。</p>
+
+        <h3>三、三个数字，三层含义</h3>
+        <table class="facts">
+          <tr><th>数字</th><th>含义</th><th>该怎么读</th></tr>
+          <tr><td>每天 164 亿小时</td><td>相当于 20 亿人每天上满八小时班、零报酬</td><td>量级，不是精确值；用于说明「规模」，不能用于逐年比较</td></tr>
+          <tr><td>约占全球产出 9%</td><td>按各国最低时薪折价，约 11 万亿美元（购买力平价）</td><td>是<b>影子价值</b>，不是实际发生的交易额——这笔钱从未进入任何市场</td></tr>
+          <tr><td>女性承担 76.2%，为男性 3.2 倍</td><td>平均每天 4 小时 25 分 vs 1 小时 23 分</td><td>是<b>平均值</b>，不代表每个家庭；差距在缩小，但速度极慢</td></tr>
+        </table>
+        <p>还有一个常被误引的数字：在有两次以上调查数据的 23 个国家里，性别差距二十年只缩小了<b>每天 7 分钟</b>。按这个速度推算，要 <b>210 年</b>（即到 2228 年）才能消除。这个推算本身是线性的、粗糙的，它的用处不在于预测，而在于<b>让人意识到「正在改善」和「快要改善」不是一回事</b>。</p>
+
+        <h3>四、代价落在哪里</h3>
+        <p>2018 年，<b>6.06 亿</b>劳动年龄女性表示自己因为无酬照护而退出劳动力市场，男性同一数字是 <b>4100 万</b>——差 15 倍。注意统计口径的细节：她们不被计入「失业」，而被计入「不参与劳动」，因为失业的定义是「正在找工作」。这个技术性区别有实际后果：失业率不会因为照护而上升，问题因此在指标上消失。</p>
+        <p>有偿照护也不是避风港。跨国数据显示，照护工作者的时薪比其他同等资历的劳动者<b>低 4% 到 40%</b>，文献里称为 care pay penalty（照护薪酬惩罚）。至于修补办法，经济学界提出的是<b>卫星账户</b>：不动 GDP 主账，另立一套账，把家庭生产折算进来。少数国家已定期发布，多数没有。</p>
+
+        <h3>五、中外对照：同一把尺子，两套刻度</h3>
+        <p>中国有可对照的实测数据。国家统计局于 2018 年开展<b>第二次全国时间利用调查</b>，覆盖 11 个省（市）、20226 户、48580 人。结果是：居民一天无酬劳动平均 <b>2 小时 42 分</b>，其中<b>男性 1 小时 32 分、女性 3 小时 48 分</b>；无酬劳动参与率 <b>70.2%</b>（男 55.3%、女 84.2%）；单看家务劳动，平均 1 小时 26 分，<b>男性 45 分钟、女性 2 小时 6 分</b>。</p>
+        <p>与 2008 年第一次调查相比，女性无酬劳动增加 10 分钟、男性增加 14 分钟，<b>性别差距缩小了 4 分钟</b>；但仅看家务劳动，差距缩小了 <b>29 分钟</b>。而「陪伴照料家人」从 23 分钟增至 53 分钟，增长 1.3 倍——总量几乎没变，<b>结构变了</b>：家务被社会化服务分走一部分，照料的时间反而在增加。</p>
+        <p><b>三点辨析（否则这个对照会讲歪）：</b></p>
+        <ul>
+          <li><b>① 比的是「怎么量」，不是谁做得好。</b>本课只对照方法：一边是全球 64 国的加权推算，一边是一国 11 省市的抽样实测。一个是「世界平均」，一个是「全国平均」，本就不能直接比大小。</li>
+          <li><b>② 两套口径并不重合。</b>ILO 的 care work 指直接照料加上间接照料（家务）；中国的「无酬劳动」含七类，还包括购买商品或服务、看病就医、公益活动，范围更宽。所以中国的 2 小时 42 分不能直接对着 ILO 的全球值读。</li>
+          <li><b>③ 结论惊人地相似。</b>中国十年缩 4 分钟，ILO 的 23 国二十年缩 7 分钟——同一个量级。这说明照护分工的黏性不是某一国的政策问题，而是<b>结构性问题</b>：它跟着就业形态、家庭规模、公共服务供给一起变，单靠呼吁改变不了。</li>
+        </ul>
+
+        <h3>六、把话说窄：本课不说的四件事</h3>
+        <ul>
+          <li><b>不评价任何国家的家庭政策或性别政策。</b>不做跨国排名，不说哪种制度更先进；只陈述统计口径与实测数字。</li>
+          <li><b>不把 9% 当成实际产值。</b>这是按最低时薪折算的影子价值，用于说明规模；它不是可以征税、可以分配的钱。</li>
+          <li><b>不把平均值当作每个家庭的实况。</b>76.2%、3.2 倍都是总体平均，个体差异极大；双职工家庭、单亲家庭、三代同住家庭的情况完全不同。</li>
+          <li><b>不推断因果。</b>课文说照护使 6.06 亿女性退出劳动力市场，这是受访者的自述原因，不是随机实验的因果识别；相关与因果在此必须分开说。</li>
+        </ul>
+
+        <h3>七、参考来源</h3>
+        <p class="source">国际劳工组织《照护工作与未来体面劳动》（2018）及其新闻稿（164 亿小时／每日、9% 全球 GDP／11 万亿美元购买力平价、76.2%、3.2 倍、6.06 亿与 4100 万口径、210 年推算、照护薪酬惩罚 4%—40%）· 2013 年国际劳工统计学家会议关于工作统计定义的决议 · 国家统计局《2018 年全国时间利用调查公报》及社科文司解读（无酬劳动 2 小时 42 分、男女分项、参与率、与 2008 年对比）。</p>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>🏛️ 社会问题 Social Issues　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>无酬照护劳动为什么不在账本里——164 亿小时、9% 的产出、3.2 倍的性别差距，以及「被量到」为什么等于「被看见」</p>
+        <p>2013 年，无酬照护才在统计定义上被算作「工作」。五年后，国际劳工组织估出量级：每天 164 亿小时，折价约合全球产出的 9%，女性承担 76%。这个估计的底子并不牢——不到一半的国家有常规时间利用调查，全球总数靠拼接。但它指向的方向没有争议，而且代价是具体的：6.06 亿女性因此退出劳动力市场。<b>一个漏掉基础的总额，只是看起来完整。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级社会统计词汇（estimate · equivalent · fragile · dispute · narrow · invisible · staff · satellite · ledger · neutral · transaction），能区分 estimate 的名词与动词读音，并理解 satellite account、care pay penalty 这类固定术语的构成方式。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 470 词的社会议题说明文，能追踪「数字 → 口径 → 局限 → 结论」的论证链，识别作者在哪些地方主动承认了证据的薄弱（a fragile base），并说明这种诚实为什么反而增强了说服力。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种结构——祈使句 + and 的结果句、what 引导的名词性从句、Where 引导的情形状语从句、破折号同位语解释术语、倍数与差额的规范写法。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习用「什么被计入了、什么没有」来审视任何统计口径；理解「不被计入」不等于「不重要」，也不等于「算错了」，而往往是一个关于「什么算产出」的决定。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过 2018 年全国时间利用调查与 ILO 全球估计的对照，学会在跨体系比较时先对齐口径——比的是「怎么量」，不是「谁更好」。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. Ask what a country produces and you will be shown a single figure that counts almost everything except the work most people do before breakfast.</div>
+          <div class="eg" style="margin-top:8px;">2. The omission is not an error of arithmetic. It follows from a decision about what counts as production.</div>
+          <div class="eg" style="margin-top:8px;">3. The estimate rests on a fragile base. Fewer than half of all countries run a regular time-use survey.</div>
+          <div class="eg" style="margin-top:8px;">4. Where the gap has been measured twice, it narrowed by seven minutes a day over two decades — a pace that would need 210 years to close it.</div>
+          <div class="eg" style="margin-top:8px;">5. A figure that leaves out the hours on which every other hour depends is not neutral; it merely looks complete, and its completeness is what makes it persuasive.</div>
+          <div class="eg" style="margin-top:8px;">6. If the work is real enough to be entered in a ledger, it is real enough to be shared.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-11-05 · 社会问题 Social Issues｜无酬照护：一本记不下它的账本</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Pattern practice check ---------- */
+document.querySelectorAll('.practice input').forEach(inp=>{
+  inp.addEventListener('blur',()=>{
+    const v=(inp.value||'').trim();
+    const key=(inp.dataset.ans||'').trim();
+    if(!v){inp.style.borderColor='';return;}
+    const norm=s=>s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+    inp.style.borderColor=(norm(v)===norm(key))?'#22c55e':'#ef4444';
+  });
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Ask what a country produces and you will be shown a single figure that counts almost everything except the work most people do before breakfast. In 2013, international statistical standards formally agreed that unpaid care — cooking, cleaning, washing, feeding, dressing, sitting with the very young and the very old — counts as work. Five years later the International Labour Organization put a number on it. Drawing on time-use surveys from sixty-four countries, it estimated that 16.4 billion hours of unpaid care are performed every day: the equivalent of two billion people working an eight-hour shift for no wage at all. The omission is not an error of arithmetic. It follows from a decision about what counts as production.", "Valued at an hourly minimum wage, those hours come to about nine per cent of world output — roughly eleven trillion dollars. The estimate rests on a fragile base. Fewer than half of all countries run a regular time-use survey, and those that do ask different questions with different diaries, so the totals are stitched together rather than counted. The direction, however, is not in dispute. Women perform 76 per cent of the hours, on average 3.2 times as many as men: four hours and twenty-five minutes a day against one hour and twenty-three minutes. Where the gap has been measured twice, it narrowed by seven minutes a day over two decades — a pace that would need 210 years to close it.", "The cost of this accounting shows up elsewhere. In 2018, 606 million women of working age reported that they were outside the labour force because of unpaid care; the figure for men was 41 million. Paid care is no refuge either: across countries, care workers earn between 4 and 40 per cent less per hour than other workers with similar qualifications. Care work that is invisible in the national accounts is also invisible in budgets, and governments build what they measure: a hospital ward appears in the total, while the daughter who staffs it at night does not. Economists call the repair a satellite account — a parallel ledger that values household production without pretending it is a market transaction. A few countries publish one. Most do not.", "None of this is an argument for putting a price on a parent's attention. It is an argument about what a total is for. A figure that leaves out the hours on which every other hour depends is not neutral; it merely looks complete, and its completeness is what makes it persuasive. The weakest objection is that care cannot be measured, since it already is, badly and unevenly. The stronger claim is that once the hours are counted, the question stops being statistical. If the work is real enough to be entered in a ledger, it is real enough to be shared."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What did the international statistical standards of 2013 establish? 2013 年的国际统计标准确立了什么？",
+   opts:["That household work should be added directly to GDP 家务劳动应当直接加进 GDP",
+         "That unpaid care counts as work 无酬照护算作工作",
+         "That governments must fund childcare services 政府必须出资兴办托幼服务",
+         "That time-use surveys should be run every year 时间利用调查必须每年开展"],
+   ans:1,
+   fb:"正确！原文说得很清楚：<b>international statistical standards formally agreed that unpaid care ... counts as work</b>。注意 A 是常见误读——被算作「工作」不等于被计入 GDP 主账，后者正是卫星账户要解决的问题（第 3 段）。"},
+  {q:"How was the figure of 16.4 billion hours a day produced?「每天 164 亿小时」这个数字是怎么来的？",
+   opts:["By counting households in a single country 数了某一个国家的家庭",
+         "By asking governments to report care spending 让各国政府上报照护支出",
+         "By estimating from hospital and school records 用医院与学校的记录推算",
+         "By combining time-use surveys from sixty-four countries 汇总 64 个国家的时间利用调查"],
+   ans:3,
+   fb:"正确！第 1 段：<b>Drawing on time-use surveys from sixty-four countries</b>。方法靠的是逐格记录的日记式调查，而不是问「你昨天干了什么」——因为没人会把做饭的四十分钟当成工作汇报。"},
+  {q:"Why does the passage call the base of the estimate fragile? 为什么说这个估计的底子脆弱？",
+   opts:["Fewer than half of countries run a regular time-use survey, and their diaries differ 不到一半的国家有常规时间利用调查，且各国日记口径不同",
+         "The surveys were all carried out in the same year 所有调查都在同一年完成",
+         "Respondents refuse to answer questions about care 受访者拒绝回答照护相关的问题",
+         "The ILO has never published the underlying data 国际劳工组织从未公布原始数据"],
+   ans:0,
+   fb:"正确！原文是 <b>Fewer than half of all countries run a regular time-use survey, and those that do ask different questions with different diaries</b>，所以全球总数是 <b>stitched together rather than counted</b>——拼起来的，不是数出来的。"},
+  {q:"What does the figure of 210 years refer to? 文中「210 年」指的是什么？",
+   opts:["The time needed for unpaid care to be included in GDP 无酬照护被计入 GDP 所需的时间",
+         "The average working life of a paid care worker 有偿照护工作者的平均职业生涯",
+         "The time it would take, at the measured pace, to close the gender gap in unpaid care 按已测得的缩小速度，消除无酬照护性别差距所需的时间",
+         "The period since the first time-use survey was conducted 自第一次时间利用调查以来经过的时间"],
+   ans:2,
+   fb:"正确！逻辑链是：在有两次以上数据的 23 国里，差距二十年只缩小了<b>每天 7 分钟</b>，按这个速度线性外推需要 210 年。注意作者随后提醒——这个外推是粗糙的，它的用处在于说明「正在改善」不等于「快要改善」。"},
+  {q:"What is a satellite account? 什么是卫星账户？",
+   opts:["A fund set up by international organisations 国际组织设立的基金",
+         "A parallel ledger that values household production without treating it as a market transaction 一套平行账，为家庭生产估值，但不把它当作市场交易",
+         "A survey carried out by satellite imagery 用卫星影像开展的调查",
+         "A tax on unpaid domestic work 对无酬家务征收的税"],
+   ans:1,
+   fb:"正确！原文给的定义是 <b>a parallel ledger that values household production without pretending it is a market transaction</b>。satellite 在这里不是「人造卫星」，而是「依附于主体的、平行的」——它不动 GDP 主账，另立一套。"},
+  {q:"Which sentence best states the passage's conclusion? 哪一句最接近全文的结论？",
+   opts:["Unpaid care should be paid for by the state 无酬照护应由国家支付报酬",
+         "GDP is an obsolete measure and should be abandoned GDP 已经过时，应当废除",
+         "A total that omits the hours everything else depends on only looks complete — and once counted, the question stops being statistical 漏掉基础的总额只是看起来完整；而一旦被计数，问题就不再是统计问题",
+         "Care cannot be measured, so it cannot be compared 照护无法测量，因此无法比较"],
+   ans:2,
+   fb:"正确！收束句是 <b>is not neutral; it merely looks complete, and its completeness is what makes it persuasive</b>，末句落到 <b>if the work is real enough to be entered in a ledger, it is real enough to be shared</b>。D 恰好是课文驳斥的那个「最弱的反对意见」——它已经在被测量了，只是测得糟。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#0f766e';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

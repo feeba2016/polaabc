@@ -8162,6 +8162,140 @@ const EPISODES = [
   },
   {
     "level": "B2",
+    "date": "2026-11-04",
+    "title": "The Gain That Depends on Where You Count",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-11-04-the-gain-that-depends-on-where-you-count",
+    "url": "lessons/b2/2026-11-04-the-gain-that-depends-on-where-you-count.html",
+    "vocab": [
+      {
+        "word": "ignition",
+        "zh": "点火（读作 /ɪɡˈnɪʃn/，重音在第二音节）。动词 ignite 点燃。核聚变语境里特指聚变自持燃烧、释放能量足以维持反应的状态。<b>miss the ignition target</b> 未能达成点火目标——装置原定 2012 年实现，实际晚了十年。别只记「汽车点火」这个日常义，这里是一个有严格判据的物理概念",
+        "ex": "\"The facility, which cost 3.5 billion dollars and was finished in 2009, had missed its original ignition target by a decade.\""
+      },
+      {
+        "word": "odds",
+        "zh": "可能性；成败几率（复数名词，读作 /ɒdz/）。<b>put the odds at</b> 把胜算估计为；<b>against all odds</b> 尽管希望渺茫。本课说科学家把「收支相抵」的把握估成「略好于抛硬币」——科研预测里这种坦率的概率表述，比事后叙事更可信",
+        "ex": "\"Its designers had put the odds of breaking even at slightly better than a coin toss.\""
+      },
+      {
+        "word": "denominator",
+        "zh": "分母（读作 /dɪˈnɒmɪneɪtə/）。分数 a/b 中 b 为分母，a 为分子（numerator）。<b>What changes is the denominator.</b> 变的是分母——本课的核心比喻。写作中可用 <b>change the denominator</b> 表示「换一个衡量基准」，是讨论数据争议时极好用的说法",
+        "ex": "\"The same shot has been reported as a triumph, as a tenfold gain, and as a one-per-cent return, and every version is arithmetically honest. What changes is the denominator.\""
+      },
+      {
+        "word": "tenfold",
+        "zh": "十倍的（后缀 -fold 表倍数：twofold 两倍、threefold 三倍、hundredfold 百倍）。<b>a tenfold gain</b> 十倍增益，比 ten times 更书面，多用于增长、放大的描述。注意它只表倍数，不表「十层」「十重」",
+        "ex": "\"The same shot has been reported as a triumph, as a tenfold gain, and as a one-per-cent return, and every version is arithmetically honest.\""
+      },
+      {
+        "word": "ratio",
+        "zh": "比率（读作 /ˈreɪʃiəʊ/，复数 ratios）。<b>the ratio of A to B</b> A 与 B 之比。<b>A ratio records a relationship and hides a boundary.</b> 比率记录一种关系，同时藏起一条边界——本课的落点句。注意与 rate（速率，必须带时间单位）区分",
+        "ex": "\"A ratio, in other words, records a relationship and hides a boundary: whoever chooses where the counting starts has already chosen the headline.\""
+      },
+      {
+        "word": "repetition",
+        "zh": "重复；重复率。<b>a matter of repetition</b> 一个「能否重复」的问题。动词 repeat，形容词 repetitive（重复而乏味）。本课用它区分「能做一次」与「能一直做」——科学演示与工业装置的分界线往往就在这里",
+        "ex": "\"Ignition answered a physics question; it did not build a power station, and the difference is mostly a matter of repetition.\""
+      },
+      {
+        "word": "overhead",
+        "zh": "间接成本、固定开销（常用复数 overheads）。原指房租、水电等不随产量变动的支出；本课指装置自身消耗掉、却不产生聚变输出的那部分能量。<b>the overhead that no press release mentions</b> 新闻稿从不提的那笔开销——读技术报道时要专门去找的句子",
+        "ex": "\"There is also the overhead that no press release mentions: the lasers convert grid electricity into ultraviolet light at roughly one per cent efficiency...\""
+      },
+      {
+        "word": "efficiency",
+        "zh": "效率。<b>at one per cent efficiency</b> 以百分之一的效率。注意 efficiency（投入与产出之比）不等于 effectiveness（是否达到目的）：一台机器可以非常有效地完成任务，同时效率极低——本课的激光器正是如此",
+        "ex": "\"... the lasers convert grid electricity into ultraviolet light at roughly one per cent efficiency, so most of the energy leaves the building as waste heat.\""
+      },
+      {
+        "word": "stewardship",
+        "zh": "受托管理、守护之责（不可数）。<b>stockpile stewardship</b> 核武库管理计划。这个词强调「替他人保管并负责」，与 ownership（所有权）不同：管理者不是所有者。本课用它解释为什么这台机器从来不是为发电而造的",
+        "ex": "\"NIF was never designed to supply electricity. Its mission is stewardship of the nuclear stockpile, which is why about a tenth of its shots are reserved for unclassified research.\""
+      },
+      {
+        "word": "yield",
+        "zh": "（反应释放的）当量、产出量；动词义为产生、屈服。核领域里 yield 是中性的技术词，只指能量数值，不带褒贬。<b>push the yield to 3.88 megajoules</b> 把当量推到 3.88 兆焦。与 output 相比，yield 更强调「一次反应给出的量」",
+        "ex": "\"... later shots pushed the yield to 3.88 megajoules with no more laser energy.\""
+      },
+      {
+        "word": "milestone",
+        "zh": "里程碑。原指路旁标里程的石碑，引申为进程中的关键节点。<b>reach a milestone</b> 达成里程碑。<b>What the milestone did not do is...</b> 这个里程碑没能做到的是……——用「它没做到什么」来给成就定性，是学术写作里克制的写法",
+        "ex": "\"What the milestone did not do is shorten the distance to a socket in the wall...\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
+    "date": "2026-11-05",
+    "title": "The Work That GDP Cannot See",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-11-05-the-work-that-gdp-cannot-see",
+    "url": "lessons/b2/2026-11-05-the-work-that-gdp-cannot-see.html",
+    "vocab": [
+      {
+        "word": "estimate",
+        "zh": "估计。名词读 /ˈestɪmət/（重音在前，词尾轻读），动词读 /ˈestɪmeɪt/（词尾重读）——同形不同音，考试常考。<b>The estimate rests on a fragile base.</b> 这个估计建立在一个脆弱的底子上。与 calculate（精确计算）不同，estimate 本身就承认误差，所以后面才需要交代口径",
+        "ex": "\"Drawing on time-use surveys from sixty-four countries, it estimated that 16.4 billion hours of unpaid care are performed every day...\""
+      },
+      {
+        "word": "equivalent",
+        "zh": "相当于的；等同物（读作 /ɪˈkwɪvələnt/，重音在第二音节）。<b>be equivalent to + 名词</b> 等同于……；<b>the equivalent of</b> ……的等量。本课用它把「164 亿小时」换算成「20 亿人上满八小时班」——把无法感知的量变成能感知的场景，是科普写作最有效的一招",
+        "ex": "\"... the equivalent of two billion people working an eight-hour shift for no wage at all.\""
+      },
+      {
+        "word": "fragile",
+        "zh": "脆弱的、经不起推敲的（读作 /ˈfrædʒaɪl/）。<b>a fragile base</b> 脆弱的底子；<b>fragile evidence</b> 不牢靠的证据。它不只形容易碎的东西，也常形容论证、共识、经济复苏。用它给数据「定性」，比说 the data is bad 精确得多",
+        "ex": "\"The estimate rests on a fragile base. Fewer than half of all countries run a regular time-use survey...\""
+      },
+      {
+        "word": "dispute",
+        "zh": "争议；对……提出质疑（读作 /dɪˈspjuːt/，重音在第二音节）。<b>in dispute</b> 有争议的；<b>beyond dispute</b> 无可争议。动词 dispute 不是「吵架」，而是「不认同某个说法并给出理由」。课文用它划界：具体数字可以商量，方向没有争议",
+        "ex": "\"The direction, however, is not in dispute.\""
+      },
+      {
+        "word": "narrow",
+        "zh": "缩小；狭窄的。<b>narrow the gap</b> 缩小差距——作动词时它是及物的；但课文中 it narrowed by seven minutes 是主动用法，指差距自己缩小了。同族：narrowly（勉强地、差一点）、narrowness（狭窄）。注意 by 表幅度、to 表结果",
+        "ex": "\"Where the gap has been measured twice, it narrowed by seven minutes a day over two decades — a pace that would need 210 years to close it.\""
+      },
+      {
+        "word": "invisible",
+        "zh": "看不见的。<b>invisible in the national accounts</b> 在国民账户里看不见。本课是双关：既指统计上没被记录，也指日常生活中没被注意。反义 visible；名词 invisibility。<b>invisible in budgets</b> 在预算里也看不见——两句并置，正是全课的因果链",
+        "ex": "\"Care work that is invisible in the national accounts is also invisible in budgets, and governments build what they measure...\""
+      },
+      {
+        "word": "staff",
+        "zh": "为……配备人员（动词，第三人称单数 staffs）。<b>staff a ward</b> 给病房配齐人手。作名词时是「全体员工」，集合名词，谓语单复数皆可（英式偏复数）。名词转动词、意思从「人」变成「配人」，这个转换在新闻英语里很常见",
+        "ex": "\"... a hospital ward appears in the total, while the daughter who staffs it at night does not.\""
+      },
+      {
+        "word": "satellite",
+        "zh": "卫星；附属的。<b>satellite account</b> 卫星账户——国民经济核算里的附属账户，在不改动主账的前提下另立一套账，把家务生产、环境代价等主账装不下的东西折算进来。这里的 satellite 不是「人造卫星」，而是「依附于主体的、平行的」",
+        "ex": "\"Economists call the repair a satellite account — a parallel ledger that values household production without pretending it is a market transaction.\""
+      },
+      {
+        "word": "ledger",
+        "zh": "账簿、分类账（读作 /ˈledʒə/，重音在第一音节）。<b>a parallel ledger</b> 一套平行的账。<b>enter it in the ledger</b> 把它记进账里。引申义指任何官方记录体系，所以 the ledger 常被用来代指「被正式承认的东西」",
+        "ex": "\"If the work is real enough to be entered in a ledger, it is real enough to be shared.\""
+      },
+      {
+        "word": "neutral",
+        "zh": "中立的（读作 /ˈnjuːtrəl/）。<b>is not neutral</b> 并非中立。统计常被当成「只是数字」，但选择记什么、不记什么本身就是判断。同族：neutrality 中立性；neutralise 使中和、抵消",
+        "ex": "\"A figure that leaves out the hours on which every other hour depends is not neutral; it merely looks complete...\""
+      },
+      {
+        "word": "transaction",
+        "zh": "交易（读作 /trænˈzækʃn/，重音在第二音节）。<b>a market transaction</b> 市场交易。本课的关键限定：卫星账户给家务「估值」，却不把它当成买卖——一旦当成买卖，就要有买主和卖主，而照护里两者往往是同一家人",
+        "ex": "\"... a parallel ledger that values household production without pretending it is a market transaction.\""
+      }
+    ]
+  },
+  {
+    "level": "B2",
     "date": "2026-11-06",
     "title": "The Sky Painted a Floor Below",
     "category": "general",
