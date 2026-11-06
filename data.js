@@ -10716,5 +10716,67 @@ const EPISODES = [
         "ex": "The asymmetry between the two errors is not a theorem; it is a presumption about how quickly markets correct themselves."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-11-06",
+    "title": "The Ninety-Five Percent in the Drawer",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-11-06-the-ninety-five-percent-in-the-drawer",
+    "url": "lessons/c1/2026-11-06-the-ninety-five-percent-in-the-drawer.html",
+    "vocab": [
+      {
+        "word": "null",
+        "zh": "零的、不显著的（null result 未达显著的结果；null hypothesis 零假设）",
+        "ex": "Only ten of the forty-eight null results ever reached a journal, a shortfall no proxy had quite captured."
+      },
+      {
+        "word": "pooled",
+        "zh": "合并的、汇总的（动词 pool；元分析的核心动作，勿与 pulled 混淆）",
+        "ex": "A pooled finding can be erased by enough unpublished studies of zero effect — that is the arithmetic behind the fail-safe N."
+      },
+      {
+        "word": "tolerance",
+        "zh": "容许限度、耐受度（此处指 5k+10 的判据阈值；工程指公差，医学指耐受性）",
+        "ex": "Rosenthal set a tolerance of five unpublished null studies per published study, plus ten."
+      },
+      {
+        "word": "precision",
+        "zh": "精度（样本越大精度越高、置信区间越窄；与 accuracy 分工：precision 看方差）",
+        "ex": "In a funnel plot, precision rises with sample size, so the smallest studies scatter wide at the mouth of the cone."
+      },
+      {
+        "word": "taper",
+        "zh": "逐渐收窄、收拢成锥形（名词 tapering；与 tape 拼写相邻）",
+        "ex": "The scatter of estimates should taper into a cone around the pooled effect; asymmetry is the tell."
+      },
+      {
+        "word": "asymmetry",
+        "zh": "不对称（形容词 asymmetric；漏斗图不对称是偏倚的线索，不是判决）",
+        "ex": "Asymmetry in the funnel signals that one flank of small studies is missing — but heterogeneity can carve the same shape."
+      },
+      {
+        "word": "formalised",
+        "zh": "使形式化、把直觉变成可操作的规则（英式拼写；美式 formalize）",
+        "ex": "Egger formalised the suspicion in 1997: a non-zero intercept in a weighted regression is evidence of a cut funnel."
+      },
+      {
+        "word": "imputes",
+        "zh": "插补、按模型填补缺失值（名词 imputation；与 attribute「归因」不同，不含归咎义）",
+        "ex": "Trim-and-fill trims the offending studies first, then imputes their missing counterparts to restore the symmetry."
+      },
+      {
+        "word": "provenance",
+        "zh": "来历、出处（本义指艺术品的流传记录；学术语境指数据经过了什么筛选）",
+        "ex": "A detector of asymmetry is not a detector of provenance: the shape records selection, but cannot say what did the selecting."
+      },
+      {
+        "word": "cull",
+        "zh": "挑选性剔除、筛除（名词 the cull 指被筛掉的部分；强调按标准剔除）",
+        "ex": "The cull precedes submission: authors do not write up null findings at all."
+      }
+    ]
   }
 ];
