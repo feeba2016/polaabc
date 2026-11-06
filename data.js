@@ -8161,6 +8161,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-11-06",
+    "title": "The Sky Painted a Floor Below",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-11-06-the-sky-painted-a-floor-below",
+    "url": "lessons/b2/2026-11-06-the-sky-painted-a-floor-below.html",
+    "vocab": [
+      {
+        "word": "voluntarily",
+        "zh": "自愿地（读作 /ˈvɒləntrəli/，重音在第一音节）。形容词 voluntary 自愿的；名词 volunteer 志愿者。<b>had admitted himself voluntarily</b> 主动入院——这是有书信为据的事实：梵高 1889 年 5 月 8 日自己住进圣保罗疗养院。讲艺术家生平时，这一个副词就是全部的差别",
+        "ex": "\"... an asylum in southern France where Vincent van Gogh had admitted himself voluntarily the previous month.\""
+      },
+      {
+        "word": "asylum",
+        "zh": "收容所；（旧）精神病疗养院（读作 /əˈsaɪləm/，重音在第一音节）。本义“不受追捕的庇护所”，故 asylum seeker（寻求庇护者）同源。19 世纪的精神病院多称 asylum，现代多用 psychiatric hospital。<b>Saint-Paul-de-Mausole</b> 即普罗旺斯一家由修道院改建的疗养院",
+        "ex": "\"The Starry Night, finished in June 1889 at Saint-Paul-de-Mausole, an asylum in southern France where Vincent van Gogh had admitted himself voluntarily...\""
+      },
+      {
+        "word": "crescent",
+        "zh": "新月；月牙（读作 /ˈkreznt/）。<b>hangs as a crescent</b> 像一弯月牙那样挂着；形容词 crescent-shaped 月牙形的。本课要点：那年六月中旬的月亮其实接近满月，他画成细月是有意的取舍（a decision, not a mistake），不是天文学的错误",
+        "ex": "\"The moon hangs as a crescent although it was almost full that week — a decision, not a mistake.\""
+      },
+      {
+        "word": "invented",
+        "zh": "虚构的；凭想象造出的（invent 的过去分词作表语）。<b>was invented</b> 是被造出来的。invent 在此不是“发明工具”，而是“造出原本不存在之物”，与 discover（发现已存在之物）相对。画中的村庄与尖顶教堂都属于这一类——圣雷米镇其实在北边，从窗口看不见",
+        "ex": "\"The village below was invented: out of sight to the north lay the town of Saint-Rémy, and the pointed steeple resembles a church from the Netherlands of his childhood...\""
+      },
+      {
+        "word": "confirmed",
+        "zh": "证实的（confirm 的过去分词，读作 /kənˈfɜːmd/，重音在第二音节）。<b>have confirmed that + 从句</b> 用现在完成时表示“已经证实”。名词 confirmation。金星的指认之所以可靠，是因为有双证据：梵高信里写了晨星，天文计算又证明 1889 年 6 月黎明前金星确实在东方天空那个位置",
+        "ex": "\"The bright star beside the cypress is Venus, and astronomers have confirmed that the planet stood in the eastern sky before dawn that June...\""
+      },
+      {
+        "word": "contested",
+        "zh": "有争议的；未成定论的（contest 的过去分词作形容词）。<b>remains contested</b> 仍无定论。动词 contest 除“比赛”外还指“对……提出质疑”；近义 disputed。学术写作里用它标注“这是争点，不是结论”——天文学界对画的到底是哪一夜至今没有共识",
+        "ex": "\"The identification of Venus rests on his own letter; the precise night remains contested.\""
+      },
+      {
+        "word": "turbulence",
+        "zh": "湍流；动荡（不可数，读作 /ˈtɜːbjələns/，重音在第一音节）。<b>the mathematical law of turbulence</b> 湍流的数学规律；引申义 political turbulence 政局动荡。这条规律 1941 年才被写成公式，而画面笔触 2024 年被发现与它吻合——气流画的画，撞上了三十年后才诞生的公式",
+        "ex": "\"... their energy follows the mathematical law of turbulence, a rule not formulated until 1941.\""
+      },
+      {
+        "word": "sentiment",
+        "zh": "情致；真实情感（读作 /ˈsentɪmənt/，重音在第一音节）。<b>the real sentiment of things</b> 事物本身的真实情致。注意与形容词 sentimental（多愁善感的，常带贬义）区分。泰奥 1889 年 10 月写信提醒弟弟：对新风格的追求反而削弱了事物本身的味道——这是来自最亲近的人的提醒",
+        "ex": "\"His brother had sensed the risk earlier, writing that the search for style weakened the real sentiment of things.\""
+      },
+      {
+        "word": "bequest",
+        "zh": "遗赠；遗赠物（读作 /bɪˈkwest/，重音在第二音节）。<b>through the bequest of</b> 通过……的遗赠；动词 bequeath 遗赠。莉莉·布利斯是 MoMA 三位创始人之一，1931 年去世时把收藏遗赠给美术馆，并允许用其中藏品交换更重要的作品——她自己生前从没拥有一幅梵高，只是一直想买",
+        "ex": "\"Not until 1941 did it enter a museum, when the Museum of Modern Art in New York acquired it by exchange through the bequest of Lillie P. Bliss...\""
+      },
+      {
+        "word": "reproduced",
+        "zh": "被复制的；被翻印的（reproduce 的过去分词，读作 /ˌriːprəˈdjuːst/，重音在第三音节）。<b>among the most reproduced paintings on earth</b> 地球上被复制得最多的画之一。reproduce 也指生物繁殖；名词 reproduction 复制品。见过一万次复制品的人，站在原作前依然会停下来——复制品与原作的关系是艺术史的基本课题",
+        "ex": "\"Today it is the museum&#39;s most visited object and among the most reproduced paintings on earth.\""
+      },
+      {
+        "word": "exhibited",
+        "zh": "被展出（exhibit 的过去分词，读作 /ɪɡˈzɪbɪtɪd/，重音在第二音节）。<b>was not exhibited in his lifetime</b> 生前从未展出。名词 exhibition 展览。一幅后来被复制得最多的画，第一次公开挂在墙上时，作者已经去世多年——接受史里这样的时间差非常常见",
+        "ex": "\"The man who painted it counted it among his failures, and it was not exhibited in his lifetime.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Sky Painted a Floor Below</title>
+<style>
+:root{
+  --accent:#b91c1c;
+  --accent2:#44403c;
+  --bg:#f6f8fa;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#fecaca;
+  --border:#dde3ea;
+  --soft:#eef2f7;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(185,28,28,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(185,28,28,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(185,28,28,.5);}70%{box-shadow:0 0 0 12px rgba(185,28,28,0);}100%{box-shadow:0 0 0 0 rgba(185,28,28,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#fca5a5;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(185,28,28,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#fecaca;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Arts 艺术鉴赏</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Sky Painted a Floor Below</h1>
+      <p class="subtitle">梵高《星月夜》常被叫作「圣雷米疗养院窗外的夜景」，可它是在楼下的画室里凭记忆画的：金星是真的，村庄是造出来的，月亮的形状是他自己选的。一幅自称「view」的画，为什么经得起天文台的检验，又经不起逐格核对？｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A View Without the Bars 没有铁栅的风景</div>
+            <p>Millions of visitors stop each year in front of a painting they already know: The Starry Night, finished in June 1889 at Saint-Paul-de-Mausole, an <span class="kw" data-def="收容所；这里指精神病疗养院（读作 /əˈsaɪləm/，重音在第一音节）。Saint-Paul-de-Mausole 是普罗旺斯一家由修道院改建的疗养院。相关词 asylum seeker 出自同一词源：asylum 本义是“不受追捕的庇护所”。19 世纪的精神病院常称 asylum，现代多用 psychiatric hospital">asylum</span> in southern France where Vincent van Gogh had admitted himself <span class="kw" data-def="自愿地（副词，读作 /ˈvɒləntrəli/，重音在第一音节）。形容词 voluntary 自愿的，名词 volunteer 志愿者。had admitted himself voluntarily 主动入院——这是有书信为据的事实：梵高 1889 年 5 月 8 日自己住进了圣保罗疗养院，不是被送进去的。讲述艺术家生平时，这一个副词就是全部的差别">voluntarily</span> the previous month. His bedroom window faced east and was fitted with <span class="kw" data-def="bars 铁窗棂（名词 bar 的复数，指窗上的横栅）。be fitted with bars 被装上铁栅；形容词 barred 即“装有铁栅的”，如 a barred window。梵高卧室的窗确实带铁栅——而这幅画最终把 bars 留在了画外，只画了窗外的天空">bars</span>, and patients were not allowed to paint in their rooms. So he went down to a ground-floor studio and painted the night <span class="kw" data-def="from memory 凭记忆（介词短语作方式状语）。paint the night from memory 凭记忆画出那个夜晚。同型：recite a poem from memory 凭记忆背诵；play the piece from memory 不看谱演奏。注意区别：from observation 凭现场观察；from imagination 凭想象。这幅画三种来源都有">from memory</span>. In a letter to his brother Theo he recorded what the window actually gave him: the countryside seen a long time before sunrise, with nothing but the <span class="kw" data-def="morning star 晨星（指金星 Venus，黎明前出现在东方天空的明亮行星）。evening star 昏星——也是金星，日落后出现。同一颗行星，两个名字取决于它出现在日出前还是日落后。梵高在给泰奥的信里写的正是这颗 the morning star, which looked very big">morning star</span>, which looked very big. That gap between what a barred window framed and what a canvas received is where this painting&#39;s story begins.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · What Was Real and What Was Not 哪些是真的，哪些不是</div>
+            <p>Part of the picture <span class="kw" data-def="checks out 核实无误；成立（动词短语 check out，主语通常是说法、账目、细节）。Part of the picture checks out 画里有一部分经得起核对。新闻与口语常用：His story checks out. 他的说法属实。反义说法：fall apart 站不住脚">checks out</span>. The bright star beside the cypress is Venus, and astronomers have <span class="kw" data-def="confirmed 证实（confirm 的过去分词，现在完成时 have confirmed）。confirm that + 从句：证实某事属实。名词 confirmation 确认。金星的指认之所以可靠，是因为有独立证据：梵高自己在信里写了晨星，天文计算又证明 1889 年 6 月黎明前金星确实在东方天空的那个位置">confirmed</span> that the planet stood in the eastern sky before dawn that June; the low hills belong to the Alpilles, which the window really overlooked. Much else was carried in, not seen. The village below was <span class="kw" data-def="invented 虚构的；凭想象造出的（invent 的过去分词作表语）。invent 在这里不是“发明工具”，而是“造出原本不存在之物”；与 discover（发现已存在之物）相对。invented village 想象中的村庄——圣雷米镇其实在北边，从窗口根本看不见">invented</span>: out of sight to the north lay the town of Saint-Rémy, and the pointed steeple resembles a church from the Netherlands of his childhood rather than the low towers of Provence. The moon hangs as a <span class="kw" data-def="crescent 新月；月牙（名词，读作 /ˈkreznt/）。hangs as a crescent 像一弯月牙那样挂着。形容词可用 crescent-shaped 月牙形的。那年六月中旬的月亮其实接近满月，他却画成一弯细月——这是有意的取舍，不是天文学上的错误">crescent</span> although it was almost full that week — a decision, not a mistake. And the great <span class="kw" data-def="swirl 漩涡；打旋的涡形（名词，读作 /swɜːl/，动词同形）。the great swirl 那道大漩涡，指画面中央翻卷的星云。相关词：whirl 旋转（第 3 段的 fourteen whirls 指画面里十四处涡形笔触）；spiral 螺旋线。任何真实的天空都不会长成这样——它是这幅画最出名的部分，也是完全来自画家的部分">swirl</span> that everyone remembers belongs to no sky at all. The canvas mixes records with inventions, and nothing in it marks which is which.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Measuring the Sky 给天空做测量</div>
+            <p>Because the painting claims to be a view, people keep testing it. One art historian, working with astronomers, matched the sky to the dawn of 19 June 1889; others object that the dates and the window&#39;s direction do not fit, and newer studies propose a different night. The identification of Venus rests on his own letter; the precise night remains <span class="kw" data-def="contested 有争议的；未成定论的（contest 的过去分词作形容词）。remains contested 仍无定论。动词 contest 除“比赛”外还指“对……提出质疑”。近义 disputed。学术写作里用它标注“这是争点，不是结论”——本文对具体是哪一夜同样不下结论">contested</span>. Physicists joined in too: in 2024 a team measured fourteen whirls in the painted sky and found that their energy follows the mathematical law of <span class="kw" data-def="turbulence 湍流（不可数名词，读作 /ˈtɜːbjələns/，重音在第一音节）。the mathematical law of turbulence 湍流的数学规律；引申义指局势动荡，如 political turbulence。这条规律要到 1941 年才被数学家写成公式——而画作的笔触在 2024 年被发现与它惊人地吻合">turbulence</span>, a rule not <span class="kw" data-def="formulated 被系统地表述成公式、定理（formulate 的过去分词，动词读作 /ˈfɔːmjuleɪt/，重音在第一音节）。formulate a theory / a policy 把理论、政策明确表述出来。区别于 invent：formulate 强调“整理成清晰的形式”，而不是“从无到有造出来”">formulated</span> until 1941. It is a nice fact and not an explanation — Van Gogh knew no such mathematics, and the hills below were not spinning that night. His brother had sensed the risk earlier, writing that the search for style weakened the real <span class="kw" data-def="sentiment 情致；真实情感（名词，读作 /ˈsentɪmənt/，重音在第一音节）。the real sentiment of things 事物本身的真实情致。注意与形容词 sentimental（多愁善感的，常带贬义）区分。泰奥 1889 年 10 月写信提醒弟弟：对新风格的追求反而削弱了事物本身的味道">sentiment</span> of things.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · From Failure to Icon 从失败到镇馆之宝</div>
+            <p>The man who painted it <span class="kw" data-def="counted it among his failures 把它列进自己失败的清单（count A among B 把 A 算作 B 之一）。梵高在 1889 年秋天的书信里把这幅画归入自己“走偏了”的一批作品。注意：这是作者本人的评价，不是后人的判断——作家的自评与作品的命运常常是两回事">counted it among his failures</span>, and it was not exhibited in his lifetime. Theo died within a year, and the canvas passed to his widow Jo, who spent decades building her brother-in-law&#39;s reputation before letting it go. Not until 1941 did it enter a museum, when the Museum of Modern Art in New York acquired it <span class="kw" data-def="by exchange 通过交换（美术馆藏品交易的术语）。acquire by exchange 以馆内其他藏品换得，不是直接购买，也不是捐赠。MoMA 1941 年正是用莉莉·布利斯遗赠中的几幅画换来了这幅《星月夜》。注意与 by purchase（购买）、by donation（捐赠）、on loan（借展）区分">by exchange</span> through the <span class="kw" data-def="bequest 遗赠；遗赠物（名词，读作 /bɪˈkwest/，重音在第二音节）。through the bequest of Lillie P. Bliss 通过莉莉·布利斯的遗赠。动词 bequeath 遗赠。布利斯是 MoMA 三位创始人之一，1931 年去世时把收藏遗赠给美术馆，并允许美术馆用其中藏品去交换更重要的作品——她自己生前从没拥有一幅梵高，只是一直想买">bequest</span> of Lillie P. Bliss, a founder who had died wishing she owned a van Gogh. Today it is the museum&#39;s most visited object and among the most <span class="kw" data-def="reproduced 被复制的；被翻印的（reproduce 的过去分词）。among the most reproduced paintings on earth 地球上被复制得最多的画之一。reproduce 既指印刷复制，也指生物繁殖；名词 reproduction 复制品。复制品与原作的关系，是艺术史的基本课题——见过一万次复制品的人，站在原作前依然会停下来">reproduced</span> paintings on earth. Yet the irony survives the fame: had the painter shown us only what the window framed, we would have a field, some bars and a very big star — and no painting at all.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="voluntarily">🔊</button><div class="word">voluntarily<span class="pos">adv.</span></div><div class="zh">自愿地（读作 /ˈvɒləntrəli/，重音在第一音节）。形容词 voluntary 自愿的；名词 volunteer 志愿者。<b>had admitted himself voluntarily</b> 主动入院——这是有书信为据的事实：梵高 1889 年 5 月 8 日自己住进圣保罗疗养院。讲艺术家生平时，这一个副词就是全部的差别</div><div class="ex">"... an asylum in southern France where Vincent van Gogh had admitted himself voluntarily the previous month."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="asylum">🔊</button><div class="word">asylum<span class="pos">n.</span></div><div class="zh">收容所；（旧）精神病疗养院（读作 /əˈsaɪləm/，重音在第一音节）。本义“不受追捕的庇护所”，故 asylum seeker（寻求庇护者）同源。19 世纪的精神病院多称 asylum，现代多用 psychiatric hospital。<b>Saint-Paul-de-Mausole</b> 即普罗旺斯一家由修道院改建的疗养院</div><div class="ex">"The Starry Night, finished in June 1889 at Saint-Paul-de-Mausole, an asylum in southern France where Vincent van Gogh had admitted himself voluntarily..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="crescent">🔊</button><div class="word">crescent<span class="pos">n.</span></div><div class="zh">新月；月牙（读作 /ˈkreznt/）。<b>hangs as a crescent</b> 像一弯月牙那样挂着；形容词 crescent-shaped 月牙形的。本课要点：那年六月中旬的月亮其实接近满月，他画成细月是有意的取舍（a decision, not a mistake），不是天文学的错误</div><div class="ex">"The moon hangs as a crescent although it was almost full that week — a decision, not a mistake."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="invented">🔊</button><div class="word">invented<span class="pos">adj.</span></div><div class="zh">虚构的；凭想象造出的（invent 的过去分词作表语）。<b>was invented</b> 是被造出来的。invent 在此不是“发明工具”，而是“造出原本不存在之物”，与 discover（发现已存在之物）相对。画中的村庄与尖顶教堂都属于这一类——圣雷米镇其实在北边，从窗口看不见</div><div class="ex">"The village below was invented: out of sight to the north lay the town of Saint-Rémy, and the pointed steeple resembles a church from the Netherlands of his childhood..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="confirmed">🔊</button><div class="word">confirmed<span class="pos">v./adj.</span></div><div class="zh">证实的（confirm 的过去分词，读作 /kənˈfɜːmd/，重音在第二音节）。<b>have confirmed that + 从句</b> 用现在完成时表示“已经证实”。名词 confirmation。金星的指认之所以可靠，是因为有双证据：梵高信里写了晨星，天文计算又证明 1889 年 6 月黎明前金星确实在东方天空那个位置</div><div class="ex">"The bright star beside the cypress is Venus, and astronomers have confirmed that the planet stood in the eastern sky before dawn that June..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="contested">🔊</button><div class="word">contested<span class="pos">adj.</span></div><div class="zh">有争议的；未成定论的（contest 的过去分词作形容词）。<b>remains contested</b> 仍无定论。动词 contest 除“比赛”外还指“对……提出质疑”；近义 disputed。学术写作里用它标注“这是争点，不是结论”——天文学界对画的到底是哪一夜至今没有共识</div><div class="ex">"The identification of Venus rests on his own letter; the precise night remains contested."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="turbulence">🔊</button><div class="word">turbulence<span class="pos">n.</span></div><div class="zh">湍流；动荡（不可数，读作 /ˈtɜːbjələns/，重音在第一音节）。<b>the mathematical law of turbulence</b> 湍流的数学规律；引申义 political turbulence 政局动荡。这条规律 1941 年才被写成公式，而画面笔触 2024 年被发现与它吻合——气流画的画，撞上了三十年后才诞生的公式</div><div class="ex">"... their energy follows the mathematical law of turbulence, a rule not formulated until 1941."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="sentiment">🔊</button><div class="word">sentiment<span class="pos">n.</span></div><div class="zh">情致；真实情感（读作 /ˈsentɪmənt/，重音在第一音节）。<b>the real sentiment of things</b> 事物本身的真实情致。注意与形容词 sentimental（多愁善感的，常带贬义）区分。泰奥 1889 年 10 月写信提醒弟弟：对新风格的追求反而削弱了事物本身的味道——这是来自最亲近的人的提醒</div><div class="ex">"His brother had sensed the risk earlier, writing that the search for style weakened the real sentiment of things."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bequest">🔊</button><div class="word">bequest<span class="pos">n.</span></div><div class="zh">遗赠；遗赠物（读作 /bɪˈkwest/，重音在第二音节）。<b>through the bequest of</b> 通过……的遗赠；动词 bequeath 遗赠。莉莉·布利斯是 MoMA 三位创始人之一，1931 年去世时把收藏遗赠给美术馆，并允许用其中藏品交换更重要的作品——她自己生前从没拥有一幅梵高，只是一直想买</div><div class="ex">"Not until 1941 did it enter a museum, when the Museum of Modern Art in New York acquired it by exchange through the bequest of Lillie P. Bliss..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reproduced">🔊</button><div class="word">reproduced<span class="pos">v./adj.</span></div><div class="zh">被复制的；被翻印的（reproduce 的过去分词，读作 /ˌriːprəˈdjuːst/，重音在第三音节）。<b>among the most reproduced paintings on earth</b> 地球上被复制得最多的画之一。reproduce 也指生物繁殖；名词 reproduction 复制品。见过一万次复制品的人，站在原作前依然会停下来——复制品与原作的关系是艺术史的基本课题</div><div class="ex">"Today it is the museum&#39;s most visited object and among the most reproduced paintings on earth."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="exhibited">🔊</button><div class="word">exhibited<span class="pos">v.</span></div><div class="zh">被展出（exhibit 的过去分词，读作 /ɪɡˈzɪbɪtɪd/，重音在第二音节）。<b>was not exhibited in his lifetime</b> 生前从未展出。名词 exhibition 展览。一幅后来被复制得最多的画，第一次公开挂在墙上时，作者已经去世多年——接受史里这样的时间差非常常见</div><div class="ex">"The man who painted it counted it among his failures, and it was not exhibited in his lifetime."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① “看”的三种来源：</b><b>from observation</b> 凭现场观察 → <b>from memory</b> 凭记忆 → <b>from imagination</b> 凭想象。《星月夜》三种都有：金星和山丘来自观察，构图靠记忆，村庄和漩涡出自想象——学术写作里区分信息来源时，这三个短语非常好用。<br>
+        <b>② 一组“证实 vs 质疑”：</b><b>confirm</b> 证实 → <b>verification</b> 核验 → <b>contest / dispute</b> 质疑 → <b>refute</b> 驳倒 → <b>contested / disputed</b> 有争议的 → <b>inconclusive</b> 无定论的。写文献综述就靠这条链标注每个结论的强度。<br>
+        <b>③ invent 一族的三个方向：</b><b>invent</b> 虚构／发明 → <b>invention</b> 虚构之物（本课 records with inventions 中的 inventions 即此义）→ <b>inventive</b> 有创意的（褒义）→ <b>invented</b> 被造出来的（可中性可贬义）。判断褒贬看语境。<br>
+        <b>④ “遗赠与收藏”词链：</b><b>bequeath</b> 遗赠（动词）→ <b>bequest</b> 遗赠物 → <b>acquire</b> 藏购 → <b>acquisition</b> 藏购行为 → <b>by exchange</b> 以藏换藏 → <b>provenance</b> 收藏流转史。美术馆年报告报的正是这些词。<br>
+        <b>⑤ 一个易混：</b><b>exhibit</b> 展出（人把画挂出来）↔ <b>exhibition</b> 展览（活动本身）。作不及物动词时 exhibit 可指“表现出（品质）”，如 exhibit great courage，别只记“展览”。<br>
+        <b>⑥ 一个写作提醒：</b><b>contested</b> 与 <b>debatable</b> 都指有争议，但 contested 暗示已经有人<b>实际交手</b>（提出过具体的反对论证），debatable 只是“可以争论”。引天文学界分歧时用 contested 更准确。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. 过去分词短语作后置定语 + 同位语 · The Starry Night, finished in June 1889 at Saint-Paul-de-Mausole, an asylum in southern France...</h3>
+          <div class="zh">结构：<b>名词 + 过去分词短语（作后置定语）+ 同位语（名词短语）+ where 定语从句</b>。finished in June 1889... 相当于 which was finished in June 1889，过去分词自带被动含义；an asylum in southern France 是 Saint-Paul-de-Mausole 的同位语，负责把一个冷冰冰的地名翻译成读者能理解的身份。<b>这种“画名 + 创作信息 + 地点身份”的三层挂接，是艺术类写作的标准开场</b>——一句话同时交代了作品、时间和地点的性质。</div>
+          <div class="eg">Millions of visitors stop each year in front of a painting they already know: The Starry Night, finished in June 1889 at Saint-Paul-de-Mausole, an asylum in southern France where Vincent van Gogh had admitted himself voluntarily the previous month.</div>
+          <div class="practice">仿写：每年有成千上万的人排队看《神奈川冲浪里》，一幅 19 世纪初（约 1831 年）的木刻版画，出自一位后来被称为“画狂老人”的浮世绘画家。
+            <input type="text" placeholder="Thousands queue each year to see ..., a woodblock print ..." data-ans="Thousands queue each year to see The Great Wave, a woodblock print made around 1831 by an ukiyo-e artist who later called himself the old man mad about painting.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. 地点状语提前的完全倒装 · out of sight to the north lay the town of Saint-Rémy</h3>
+          <div class="zh">结构：<b>表地点的介词短语 + 谓语动词（lay / stood / sat 等）+ 主语</b>。主语 the town of Saint-Rémy 被推到句尾，因为信息重心在“那座看不见的镇子”。这叫<b>完全倒装</b>（整个谓语提前，不只提前助动词）。修辞效果：读者的视线先落在 out of sight（看不见）上，然后才被领向镇子——句法顺序模拟了“找而不得”的过程。<b>注意</b>：这类倒装的谓语多是不及物的静态动词（lie / stand / sit / live）。</div>
+          <div class="eg">The village below was invented: out of sight to the north lay the town of Saint-Rémy, and the pointed steeple resembles a church from the Netherlands of his childhood rather than the low towers of Provence.</div>
+          <div class="practice">仿写：山谷深处坐落着一座几乎没人听说过的村子。
+            <input type="text" placeholder="Deep in the valley ..." data-ans="Deep in the valley lay a village that almost nobody had heard of.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. Not until + 时间的部分倒装 · Not until 1941 did it enter a museum</h3>
+          <div class="zh">结构：<b>Not until + 时间（短语／从句）置于句首 → 主句用问句语序（助动词提前）</b>。还原为 it did not enter a museum until 1941。倒装把 52 年的空白压在句首三个词里，比平铺直叙更有落差感。<b>常见变体</b>：Not until 1941 <i>was it</i> acquired...（换助动词）；强调句型 It was not until 1941 that it entered a museum（不倒装）。<b>易错点</b>：倒装只发生在主句，until 引导的从句不倒装。</div>
+          <div class="eg">Not until 1941 did it enter a museum, when the Museum of Modern Art in New York acquired it by exchange through the bequest of Lillie P. Bliss, a founder who had died wishing she owned a van Gogh.</div>
+        </div>
+
+        <div class="item">
+          <h3>4. Had + 主语 + 过去分词的虚拟倒装（混合条件句）· had the painter shown us only what the window framed, we would have...</h3>
+          <div class="zh">结构：<b>Had + 主语 + 过去分词</b>（＝ If the painter had shown...），省略 if 后 had 提到主语前。本句的精妙在<b>混合条件</b>：条件是对过去的反事实（他当年若只画窗外），结果是<b>现在的状态</b>（we would have a field... 用一般现在时）——因为画今天还在。全用 would have a field 而不是 would have had，正是过去条件＋现在结果的标准搭配。句尾 and no painting at all 是省略了谓语的补语追加，节奏干脆。</div>
+          <div class="eg">Yet the irony survives the fame: had the painter shown us only what the window framed, we would have a field, some bars and a very big star — and no painting at all.</div>
+          <div class="practice">仿写：要是他只拍下站在原地的那只鸟，我们就只会得到一张证件照。
+            <input type="text" placeholder="Had he photographed ..., " data-ans="Had he photographed only the bird standing still, we would have an ID photo — and no picture at all.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>5. 让步从句 + 破折号同位语 A, not B · The moon hangs as a crescent although it was almost full that week — a decision, not a mistake.</h3>
+          <div class="zh">结构：<b>although 让步从句陈述事实（月近满），主句陈述画面（细月），破折号后用同位语把整件事定性</b>。a decision, not a mistake 用<b>名词短语 + not + 名词短语</b>的对照，替代了一个完整的句子（It was a decision, not a mistake），让评断像批注一样轻。这种“事实 — 取舍 — 定性”的三拍结构，是写艺术评论最经济的收束方式。<b>对比</b>：although / though / while 都能引导让步，while 更强调“同一时间两个事实并置”。</div>
+          <div class="eg">The moon hangs as a crescent although it was almost full that week — a decision, not a mistake.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <p class="subtitle">5 个语法点，例句均取自正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① 过去分词短语作后置定语与同位语挂接</h3>
+          <div class="zh">过去分词短语放在名词后作后置定语，等于一个<b>省略了 which was 的被动定语从句</b>：a painting they already know: The Starry Night, <b>finished in June 1889</b>... ＝ which was finished in June 1889。它后面可以继续挂<b>同位语</b>（an asylum in southern France）和<b>where 定语从句</b>，把信息层层挂上而不必另起句子。判断用分词还是从句的口诀：信息是补充说明的“标签”，用分词；信息需要完整叙述，用从句。同段还有一例：the countryside <b>seen</b> a long time before sunrise（＝ that he had seen...）。</div>
+          <div class="eg">Millions of visitors stop each year in front of a painting they already know: The Starry Night, finished in June 1889 at Saint-Paul-de-Mausole, an asylum in southern France where Vincent van Gogh had admitted himself voluntarily the previous month.</div>
+          <div class="eg" style="margin-top:8px;">... a rule not formulated until 1941.（过去分词短语作后置定语，＝ which was not formulated...）</div>
+        </div>
+
+        <div class="item">
+          <h3>② 完全倒装 vs 部分倒装：两种倒装的分工</h3>
+          <div class="zh"><b>完全倒装</b>：地点状语提前，整个谓语移到主语前，限于不及物的静态动词——<b>out of sight to the north lay the town of Saint-Rémy</b>。<b>部分倒装</b>：否定词或 only 状语提前，只把<b>助动词</b>提到主语前——<b>Not until 1941 did it enter a museum</b>（did 提前，enter 留在原位）。两者的触发条件完全不同：前者由地点触发、为了信息重心，后者由否定／限定词触发、是语法强制的。<b>检验方法</b>：把主语和谓语交换回去，句子还原后语法仍成立，说明倒装用对了。</div>
+          <div class="eg">The village below was invented: out of sight to the north lay the town of Saint-Rémy, and the pointed steeple resembles a church from the Netherlands of his childhood rather than the low towers of Provence.</div>
+          <div class="eg" style="margin-top:8px;">Not until 1941 did it enter a museum, when the Museum of Modern Art in New York acquired it by exchange through the bequest of Lillie P. Bliss...</div>
+        </div>
+
+        <div class="item">
+          <h3>③ 虚拟语气：Had 开头的过去反事实与混合条件句</h3>
+          <div class="zh">对过去事实相反的假设：从句 <b>had done</b>，主句 <b>would / could / might have done</b>；省略 if 时 had 提前。本课主句却用 <b>we would have</b>（一般现在时），这是<b>混合条件句</b>：条件在过去（当年若只画窗外），结果延续到现在（今天我们手上只有一片田野）。判断混合点的时间词很关键——条件句看“那时”（shown），主句看“现在”（would have）。相关固化短语：<b>Had it not been for X</b> 要不是 X；<b>Were it not for X</b>（对现在）；<b>Should X happen</b>（对将来）。</div>
+          <div class="eg">Yet the irony survives the fame: had the painter shown us only what the window framed, we would have a field, some bars and a very big star — and no painting at all.</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 让步与对比：although 从句与 rather than 结构</h3>
+          <div class="zh"><b>although</b> 引导让步从句，先承认一个与画面矛盾的事实（it was almost full that week），再让主句陈述画面（hangs as a crescent）——让步从句的功能是把“反方证据”摆上桌再继续论证。<b>rather than</b> 连接两个并列成分时要求<b>平行结构</b>：a church from the Netherlands of his childhood rather than the low towers of Provence（名词短语对名词短语）。注意 rather than 后接动词原形（He resigned rather than compromise）与接名词短语的用法都存在，关键是前后对称。</div>
+          <div class="eg">The moon hangs as a crescent although it was almost full that week — a decision, not a mistake.</div>
+          <div class="eg" style="margin-top:8px;">... the pointed steeple resembles a church from the Netherlands of his childhood rather than the low towers of Provence.</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 被动语态的时态选择与系表结构</h3>
+          <div class="zh">同一段落里被动语态换了三种时间姿态：<b>一般过去时被动</b>（was not exhibited）陈述历史事件；<b>一般过去时被动作背景交代</b>（Much else was carried in, not seen —— 把「搬运进来」的动作压进叙述背景，与 not seen 并列省略了 was）；<b>一般现在时被动</b>（is reproduced）陈述至今有效的状态。另一类容易误判的是<b>系表结构</b>：remains contested 中的 contested 是形容词化的过去分词，remains 是系动词——它描述状态，不描述动作，所以不能再加 by 短语。<b>is fitted with</b> 则是“be fitted with + 工具”的固定搭配（被装上）。</div>
+          <div class="eg">The man who painted it counted it among his failures, and it was not exhibited in his lifetime.</div>
+          <div class="eg" style="margin-top:8px;">The identification of Venus rests on his own letter; the precise night remains contested.</div>
+          <div class="eg" style="margin-top:8px;">His bedroom window faced east and was fitted with bars, and patients were not allowed to paint in their rooms.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、白天画出来的夜景：创作过程</h3>
+        <p>1888 年 12 月梵高在阿尔勒经历精神危机、割伤左耳之后，于 <b>1889 年 5 月 8 日自愿住进</b>圣雷米镇外的圣保罗疗养院（Saint-Paul-de-Mausole，由一座古老修道院改建）。他分到一间朝东的二层卧室，窗上有铁栅；院方<b>不允许在卧室里作画</b>，但给他安排了底楼的画室。他在 <b>1889 年 5 月底—6 月初</b>写给弟弟泰奥的信里说：「今天清晨，日出前很久，我从窗口望见乡间，除了晨星什么都没有，那颗晨星看上去非常大。」（书信编号 777）</p>
+        <p>所以这幅画的工序是：<b>先在黎明看，再下楼凭记忆画</b>。《星月夜》约 73.7 × 92.1 厘米，画于 1889 年 6 月；<b>具体动笔与完成的确切日期，文献里并没有定论</b>——各种天文学研究给出的日期主张彼此不同，下面会讲到。</p>
+
+        <h3>二、天文学家来验画：金星为真，「哪一夜」有争议</h3>
+        <p>画里那颗带最大光环的亮星，通常被认作<b>金星</b>。这个指认的证据链最完整：梵高自己的信写了晨星（独立证据），天文回算又证明 1889 年 6 月黎明前金星确实位于东方天空。一位艺术史家与天文学家合作，把画面天空对应到 <b>1889 年 6 月 19 日黎明</b>；但也有学者反驳，认为窗口朝向与日期对不上、所用书信的日期也有出入；后来还有基于<b>月相</b>的研究主张另一个夜晚。结论很清楚：<b>金星为真有书信支撑，「画的到底是哪一夜」仍在争论。</b></p>
+        <p><b>把话说窄：</b>天文方法能检验「画面与某夜天空是否吻合」，但检验的前提是先假设「有一段窗框视野」。梵高自己改了月亮的形状、搬来了村庄——所以在证据用尽的地方，分歧不会被彻底解决。</p>
+
+        <h3>三、物理学家来验画：湍流的巧合</h3>
+        <p>2024 年 9 月，一篇发表于流体力学期刊的论文用像素亮度量测了画面天空中的 <b>十四处涡形笔触</b>，发现其能量随尺度的分布符合<b>湍流的标度律</b>（指数约 −5/3）——而这条规律的数学表达要到 <b>1941 年</b>才由数学家柯尔莫哥洛夫写出来。梵高一个公式都不知道，他只是反复观察普罗旺斯多风的天空，然后把看到的东西画了下来；物理在旁边自己对上了。</p>
+        <p>正文的判断值得记住：<b>这是一个很妙的巧合，不是一个解释</b>。它不能证明梵高「直觉理解了湍流」，也不能反过来当诊断依据；它能说明的只是——<b>长期盯着真实天空看的人，笔触里会留下真实的结构</b>。</p>
+
+        <h3>四、画里什么对得上、什么对不上</h3>
+        <table class="facts">
+          <tr><th>画面元素</th><th>状态</th><th>说明</th></tr>
+          <tr><td>金星（晨星）</td><td>✅ 真</td><td>信里写了 + 天文回算吻合，双重证据</td></tr>
+          <tr><td>地平线的山丘</td><td>✅ 真</td><td>阿尔皮耶山脉（Alpilles），窗口确实望得见</td></tr>
+          <tr><td>柏树</td><td>🟡 真但被放大</td><td>院区确有柏树；他形容其线条与比例「美如埃及方尖碑」，画中把它画得比天还高</td></tr>
+          <tr><td>月亮的形状</td><td>🟡 改过</td><td>六月中旬月亮接近满月，他画成一弯细月——取舍而非笔误</td></tr>
+          <tr><td>村庄与尖顶教堂</td><td>❌ 虚构</td><td>圣雷米镇在北边，从窗口看不见；那个细高的尖顶更像他记忆里的荷兰教堂，不像普罗旺斯的矮塔</td></tr>
+          <tr><td>天空的大漩涡</td><td>❌ 虚构</td><td>任何真实的天空都不会长这样——全画最出名的部分，恰恰是纯属画家的部分</td></tr>
+        </table>
+
+        <h3>五、从「失败」到镇馆之宝：一条收藏链</h3>
+        <p>梵高本人把这幅画归入自己「走偏了」的一批作品；泰奥 1889 年 10 月写信说，觉得弟弟对新风格的追求削弱了「事物本身的情致」。<b>它生前从未展出</b>。梵高 1890 年 7 月去世，泰奥半年后也随之去世；画作传到弟媳约翰娜（Jo）手中，她用几十年时间整理书信、办展览，一步步建立起梵高的声名。</p>
+        <p>此后这幅画几经转手（1901 年售出后又买回；1906—1938 年由鹿特丹藏家收藏三十余年），1938 年到巴黎画商罗森伯格手中，<b>1941 年被纽约现代艺术博物馆（MoMA）以「以藏换藏」的方式购入</b>：用的是创始人之一莉莉·布利斯的遗赠——布利斯 1931 年去世时把收藏遗赠给美术馆，并允许用其中藏品去交换更重要的作品。她生前从没拥有一幅梵高，只是一直想买。MoMA 的收藏编号是 <b>472.1941</b>。今天它是全馆被观看最多的展品，也是地球上被复制得最多的画之一；1971 年唐·麦克林的歌《Vincent》又把「starry, starry night」唱进了流行文化。</p>
+
+        <h3>六、中外对照：外师造化，中得心源</h3>
+        <p>中国绘画传统里有一句八字方法论，唐代张璪所说：<b>「外师造化，中得心源。」</b>向自然学习（外师造化），最后要经过内心的消化与再造（中得心源）。苏轼更有名的说法是<b>「论画以形似，见与儿童邻」</b>——只以画得像不像来论画，见识就近于孩童。宋人郭熙在《林泉高致》里要求山水画「可行、可望、可游、可居」：画的是理想化的自然，让人神游其中，而不是某一扇窗的实录。</p>
+        <p>这个对照要加上三点辨析，否则会讲歪：</p>
+        <ul>
+          <li><b>① 关键差别在「宣称」。</b>《星月夜》的张力来自它长期被当作「疗养院窗外的实景」来接受与检验——宣称是 view，就要接受天文台与窗口朝向的核对。中国文人画<b>从不声称</b>某张画是某个窗口的实录，「心源」公开写进方法论，所以不会出现「画里哪部分是真的」这种验证问题。两种传统各自自洽。</li>
+          <li><b>② 共通点也真实存在。</b>两边都认为最高的真实不在表面的形似：西方这幅画的魅力恰恰在于它越过窗框画出了「感受中的天空」；中国的写意传统则一开始就公开这样做。<b>殊途同归的是「观察要经过再造」。</b></li>
+          <li><b>③ 不比高下。</b>本课只比较「作品的宣称方式决定它的检验方式」，不评价两种绘画传统谁更高级；检验工具的差异（天文回算 vs 画论传统）源于宣称的差异，不是水平的差异。</li>
+        </ul>
+
+        <h3>七、把话说窄：本课不说的四件事</h3>
+        <ul>
+          <li><b>不采用后世的精神医学诊断。</b>梵高生前未获诊断，各种事后「确诊」均为推测，本课不作定论，也不把画作当作诊断材料。</li>
+          <li><b>不给「画的到底是哪一夜」下结论。</b>6 月 19 日说、月相研究主张的其他日期，各家均未形成共识，正文只说 remains contested。</li>
+          <li><b>不比较中西绘画高下。</b>第六节的对照只处理「宣称方式与检验方式」这一个维度。</li>
+          <li><b>不把作者自评当最终判决。</b>梵高把画归入失败、泰奥当年有保留，都按书信如实陈述；作品后来的命运说明，作者与观众的判断可以长期不一致。</li>
+        </ul>
+
+        <h3>八、参考来源</h3>
+        <p class="source">MoMA 官方收藏记录（accession 472.1941，含完整收藏流转史）及馆藏音频「Lillie P. Bliss and the Birth of the Modern」· 梵高书信（编号 777，约 1889 年 5 月底—6 月初致泰奥）· 艺术史家与天文学家合作的 1889-06-19 天象比对说及相关商榷 · 2024 年 9 月流体力学期刊的湍流标度研究 · 阿姆斯特丹梵高博物馆关于圣雷米时期的综述。</p>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>🎨 艺术鉴赏 Arts &amp; Design　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>梵高《星月夜》——一幅自称「view」的画，哪些部分经得起天文检验，哪些纯属虚构，以及它如何从作者笔下的「失败」变成镇馆之宝</p>
+        <p>这幅画是在疗养院楼下的画室里凭记忆完成的：金星是真的（书信与天文回算双重证据），山丘是真的，村庄与尖顶是造出来的，月亮的形状是他自己选的，大漩涡属于任何真实的天空。作者把它归入自己的失败之作，它生前从未展出；1941 年经由布利斯遗赠以藏换藏进入 MoMA，如今是被复制得最多的画之一。<b>一件作品的宣称方式，决定了它该被怎样检验。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级艺术与学术词汇（voluntarily · asylum · crescent · invented · confirmed · contested · turbulence · sentiment · bequest · reproduced · exhibited），能区分 confirm / contest / refute 组成的「证实—质疑」链条，并记住 bequest 与 by exchange 的美术馆语境含义。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 500 词的艺术史说明文，能区分文本中「事实陈述」与「定性评断」两个层次（如 a decision, not a mistake），并追踪「宣称 → 检验 → 分歧」的论证结构。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——过去分词短语作后置定语与同位语挂接、地点状语提前的完全倒装、Not until 引起的部分倒装、Had 开头的混合条件句、被动语态的时态选择与系表结构。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习用「核对清单」的方式对待一幅名画：哪些元素有独立证据，哪些是放大与取舍，哪些纯属虚构；并理解「这是巧合，不是解释」（a nice fact and not an explanation）这类科学写作的自我设限句式。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过「外师造化，中得心源」与「论画以形似，见与儿童邻」，理解两种绘画传统对「写实与再造」的不同宣称方式——宣称决定检验，而不是高下。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. Millions of visitors stop each year in front of a painting they already know: The Starry Night, finished in June 1889 at Saint-Paul-de-Mausole, an asylum in southern France where Vincent van Gogh had admitted himself voluntarily the previous month.</div>
+          <div class="eg" style="margin-top:8px;">2. The village below was invented: out of sight to the north lay the town of Saint-Rémy, and the pointed steeple resembles a church from the Netherlands of his childhood rather than the low towers of Provence.</div>
+          <div class="eg" style="margin-top:8px;">3. The moon hangs as a crescent although it was almost full that week — a decision, not a mistake.</div>
+          <div class="eg" style="margin-top:8px;">4. Not until 1941 did it enter a museum, when the Museum of Modern Art in New York acquired it by exchange through the bequest of Lillie P. Bliss, a founder who had died wishing she owned a van Gogh.</div>
+          <div class="eg" style="margin-top:8px;">5. Yet the irony survives the fame: had the painter shown us only what the window framed, we would have a field, some bars and a very big star — and no painting at all.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-11-06 · 艺术鉴赏 Arts &amp; Design｜梵高《星月夜》：在楼下画室里画出来的天空</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Pattern practice check ---------- */
+document.querySelectorAll('.practice input').forEach(inp=>{
+  inp.addEventListener('blur',()=>{
+    const v=(inp.value||'').trim();
+    const key=(inp.dataset.ans||'').trim();
+    if(!v){inp.style.borderColor='';return;}
+    const norm=s=>s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+    inp.style.borderColor=(norm(v)===norm(key))?'#22c55e':'#ef4444';
+  });
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Millions of visitors stop each year in front of a painting they already know: The Starry Night, finished in June 1889 at Saint-Paul-de-Mausole, an asylum in southern France where Vincent van Gogh had admitted himself voluntarily the previous month. His bedroom window faced east and was fitted with bars, and patients were not allowed to paint in their rooms. So he went down to a ground-floor studio and painted the night from memory. In a letter to his brother Theo he recorded what the window actually gave him: the countryside seen a long time before sunrise, with nothing but the morning star, which looked very big. That gap between what a barred window framed and what a canvas received is where this painting's story begins.", "Part of the picture checks out. The bright star beside the cypress is Venus, and astronomers have confirmed that the planet stood in the eastern sky before dawn that June; the low hills belong to the Alpilles, which the window really overlooked. Much else was carried in, not seen. The village below was invented: out of sight to the north lay the town of Saint-Rémy, and the pointed steeple resembles a church from the Netherlands of his childhood rather than the low towers of Provence. The moon hangs as a crescent although it was almost full that week — a decision, not a mistake. And the great swirl that everyone remembers belongs to no sky at all. The canvas mixes records with inventions, and nothing in it marks which is which.", "Because the painting claims to be a view, people keep testing it. One art historian, working with astronomers, matched the sky to the dawn of 19 June 1889; others object that the dates and the window's direction do not fit, and newer studies propose a different night. The identification of Venus rests on his own letter; the precise night remains contested. Physicists joined in too: in 2024 a team measured fourteen whirls in the painted sky and found that their energy follows the mathematical law of turbulence, a rule not formulated until 1941. It is a nice fact and not an explanation — Van Gogh knew no such mathematics, and the hills below were not spinning that night. His brother had sensed the risk earlier, writing that the search for style weakened the real sentiment of things.", "The man who painted it counted it among his failures, and it was not exhibited in his lifetime. Theo died within a year, and the canvas passed to his widow Jo, who spent decades building her brother-in-law's reputation before letting it go. Not until 1941 did it enter a museum, when the Museum of Modern Art in New York acquired it by exchange through the bequest of Lillie P. Bliss, a founder who had died wishing she owned a van Gogh. Today it is the museum's most visited object and among the most reproduced paintings on earth. Yet the irony survives the fame: had the painter shown us only what the window framed, we would have a field, some bars and a very big star — and no painting at all."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"Where was The Starry Night actually painted? 《星月夜》实际是在哪里画的？",
+   opts:["Outdoors, under the night sky it depicts 在户外、它所描绘的那片夜空下（现场写生）","In his barred bedroom, looking straight out of the window 在装了铁栅的卧室里、对着窗口直接画（院方不允许在卧室作画）","In a ground-floor studio, painted from memory the day after watching the sky 在底楼画室里、观察夜空之后凭记忆完成","In Arles, before he moved to the asylum 在阿尔勒、搬进疗养院之前（时间是 1889 年 6 月，地点在圣雷米）"],
+   ans:2,
+   fb:"正确！第 1 段说得明白：<b>patients were not allowed to paint in their rooms. So he went down to a ground-floor studio and painted the night from memory</b>。窗口朝东、带铁栅，他先在黎明看，再下楼凭记忆画——这就是标题 the sky painted a floor below 的由来。"},
+  {q:"Which element of the painting is supported by BOTH the artist's letter and astronomical calculation? 画面中的哪个元素同时有书信和天文计算的双重支撑？",
+   opts:["Venus, the bright morning star 金星——那颗明亮的晨星","The village and its church steeple 村庄和尖顶教堂（那是虚构的，圣雷米在北边看不见）","The shape of the moon 月亮的形状（接近满月，他画成细月）","The great swirl in the sky 天空中的大漩涡（纯属虚构）"],
+   ans:0,
+   fb:"正确！原文是 The identification of Venus <b>rests on his own letter</b>：梵高在信里写了 the morning star, which looked very big，天文回算又证明 1889 年 6 月黎明前金星确实在东方天空的那个位置。B、C、D 恰好是虚构与取舍的清单。"},
+  {q:"Which part of the composition was invented rather than seen from the window? 画面里哪一部分是造出来的、而不是从窗口看见的？",
+   opts:["The low hills on the horizon 地平线上的山丘（阿尔皮耶山脉，真的望得见）","The bright star beside the cypress 柏树旁的亮星（金星，为真）","The cypress tree in the foreground 前景的柏树（真有，只是被放大）","The village with its pointed steeple 那座带细尖顶的村庄"],
+   ans:3,
+   fb:"正确！第 2 段：The village below was invented——<b>out of sight to the north lay the town of Saint-Rémy</b>，而且那个细高的尖顶像他记忆里的荷兰教堂，不像普罗旺斯的矮塔。注意 C 是干扰项：柏树确实存在，只是被画得比天还高，属于「放大」而不是「虚构」。"},
+  {q:"What did the 2024 physics study find, and how does the passage frame it? 2024 年的物理学研究发现了什么，课文又是怎么给它定性的？",
+   opts:["It proves Van Gogh intuitively understood mathematics 它证明梵高凭直觉理解了数学（课文明确否认这一点）","It found the painted whirls follow the law of turbulence — a nice fact and not an explanation 研究发现画中涡形笔触符合湍流规律——课文称之为「很妙的事实，而不是解释」","It dated the painting to a single exact night 它把画创作的那一夜精确到了唯一日期（日期主张仍有争议）","It showed the village was based on a real map 它证明村庄是按某张真实地图画的（村庄是虚构的）"],
+   ans:1,
+   fb:"正确！2024 年的研究量测了画面天空里的十四处涡形笔触，发现其能量分布符合湍流的标度律——而这条规律 1941 年才被写成公式。课文的定性是 <b>It is a nice fact and not an explanation</b>：巧合能说明长期观察之功，不能当证明用。"},
+  {q:"How did the Museum of Modern Art acquire the painting in 1941? 1941 年 MoMA 是怎么得到这幅画的？",
+   opts:["It was donated directly by the artist's family 由艺术家家族直接捐赠（是「以藏换藏」，不是直接捐赠）","Lillie P. Bliss bought it herself and left it to the museum 莉莉·布利斯生前自己买下并留给美术馆（她从没拥有一幅梵高）","The museum won it in an auction 美术馆在拍卖会上拍得（没有拍卖）","By exchange, using pictures from the Bliss bequest 通过交换，用的是布利斯遗赠中的几幅画"],
+   ans:3,
+   fb:"正确！原文是 acquired it <b>by exchange through the bequest of Lillie P. Bliss</b>。布利斯是 MoMA 三位创始人之一，1931 年去世时把收藏遗赠给美术馆，并允许用其中藏品交换更重要的作品——一个想买梵高而没买成的人，最后由她的遗赠「替她买下」了这幅画。"},
+  {q:"Which statement best captures the passage's conclusion? 下列哪一项最符合文章的结论？",
+   opts:["The painting is a scientifically accurate record of one night 这幅画是某个夜晚的科学精确记录（月亮改了形、村庄是虚构的）","Astronomers have settled exactly which night it shows 天文学家已精确锁定了画的是哪一夜（恰恰 remains contested）","Van Gogh was wrong to call it a failure 梵高把它称作失败是错的（课文只陈述他的自评，不作判决）","The canvas mixes records with inventions, and a work's claims decide how it should be tested 画布混合了记录与虚构，作品的宣称方式决定它该被怎样检验"],
+   ans:2,
+   fb:"正确！第 2 段的收束句是 <b>The canvas mixes records with inventions, and nothing in it marks which is which</b>。全课的落点正在这里：它宣称是 view，所以被拿去天文核对，但证据走到村庄与漩涡面前就用尽了。A、B 都把话说满了，C 则越过了课文边界——课文只按书信如实呈现梵高的自评，不替作品翻案。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
