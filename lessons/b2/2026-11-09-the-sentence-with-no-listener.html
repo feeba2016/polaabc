@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Sentence With No Listener</title>
+<style>
+:root{
+  --accent:#6b21a8;
+  --accent2:#8c6239;
+  --bg:#f8f7fb;
+  --card:#ffffff;
+  --text:#20242e;
+  --muted:#6b7280;
+  --highlight:#e9d5ff;
+  --border:#e2dcec;
+  --soft:#f3eef8;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(107,33,168,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(107,33,168,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(107,33,168,.5);}70%{box-shadow:0 0 0 12px rgba(107,33,168,0);}100%{box-shadow:0 0 0 0 rgba(107,33,168,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#d8b4fe;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(107,33,168,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e9d5ff;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Literature 文学选段</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Sentence With No Listener</h1>
+      <p class="subtitle">《达洛维夫人》的第一句听上去像给女仆留的便条：达洛维夫人说她要自己去买花。可这句话没有引号，也没有点名任何听话人——她说给谁听？还是这根本是她心里的念头？一句开场白如何悄悄改变了英语小说的写法？｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Sentence Without a Listener 没有听话人的一句话</div>
+            <p>On 14 May 1925 the Hogarth Press, a small publishing house run by Virginia Woolf and her husband Leonard, issued a novel whose first sentence sounds like a note left for a servant: Mrs Dalloway said she would buy the flowers herself. On a simple reading this is <span class="kw" data-def="reported speech 间接引语；转述句（语法术语）。指把别人的话转述出来：she said (that) she would...。它与直接引语 direct speech（带引号的原话）相对。本课的要点：这句开场白长得像转述句，却可能根本不是转述任何人的话——这正是它微妙的地方">reported speech</span> — a <span class="kw" data-def="hostess 女主人；宴会主持人（读作 /ˈhəʊstəs/，-ess 是阴性后缀，如 actress、waitress）。hostess 宴会的女主人——克拉丽莎在小说里正是要操办一场晚间聚会的人。动词 host（主办）不分性别">hostess</span> announcing that she will run the <span class="kw" data-def="errand 差事；跑腿的活儿（读作 /ˈerənd/，重音在第一音节）。run an errand 办一件差事、替人跑一趟腿。go on errands / do errands 都常用。买花正是小说开头那趟差事——一小件家务，后面却通向一整段人生回忆">errand</span> instead of her maid. Yet the sentence never tells us who was listening. No <span class="kw" data-def="quotation marks 引号（quotation 引用 + marks 记号）。直接引语要用引号框起来；这句话偏偏没有引号。注意单引号是 quotation mark，复数常指一对引号。写作术语里 quote 可作名词或动词">quotation marks</span> frame it, and no listener is named. Could it be that we are not overhearing what Clarissa said at all, but what she thought? The novel <span class="kw" data-def="declines 拒绝（decline 的第三人称单数，读作 /dɪˈklaɪnz/，重音在第二音节）。decline to answer 拒不作答。注意：decline 比 refuse 更客气、更书面，常用于正式拒绝邀请或拒绝置评">declines</span> to answer, and that refusal is where the modern experiment begins.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Three Versions of One Thought 同一个念头的三种写法</div>
+            <p>Grammarians call the <span class="kw" data-def="device 手法；技巧（读作 /dɪˈvaɪs/，重音在第二音节）。此处不是“设备”，而是文学术语：一种有意的写作手法。a literary device 文学手法；rhetorical device 修辞手法。注意与 device 的“设备”义区分，靠语境判断">device</span> <span class="kw" data-def="free indirect discourse 自由间接引语（文学与语言学核心术语，读作 /dɪˈskɔːs/）。discourse 本义是语篇、话语。自由间接引语＝用间接引语的语法（第三人称、过去时）直接呈现人物的想法，不加引号也不加 she thought 之类的引出语——叙述者的声音与人物的声音叠在同一句里">free indirect discourse</span>, and its logic is easiest to see in three versions of a single thought. Direct speech quotes the speaker outright: 'I will buy the flowers myself,' Clarissa said. Indirect speech folds the words into the narrator's tense: Clarissa said that she would buy the flowers herself. Free indirect discourse removes the frame and lets the thought stand alone in the third person, wearing the past tense of narration but speaking with the character's own <span class="kw" data-def="rhythm 节奏；韵律（读作 /ˈrɪðəm/，注意拼写里 b 不发音）。the character's own rhythm 人物自己的节奏——指句子读起来的呼吸感、停顿和强调方式属于谁。动词为 rhythmic 的形容词形式 rhythmical">rhythm</span> and <span class="kw" data-def="exclamations 感叹；感叹语（exclaim 的名词，读作 /ˌekskləˈmeɪʃənz/，重音在第三音节）。exclamation mark 感叹号。小说开篇几段里 What a lark! What a plunge!（多有趣！多像一跃！）就是典型的感叹语——它们本不属于全知的叙述者，而属于克拉丽莎">exclamations</span>. The reader steps inside a mind without an introduction. In the novel this voice drifts from one <span class="kw" data-def="pedestrian 行人（读作 /pəˈdestriən/，重音在第二音节）。注意两义：名词“行人”，形容词“平淡无奇的”（a pedestrian explanation 平淡的解释）。此处是名词义：伦敦街上一个又一个路人——叙述的声音就在他们之间流动">pedestrian</span> to another along the London pavements, so that the city itself becomes a chain of minds passing a sentence along.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Hours and the Big Bell 一本书的钟点</div>
+            <p>Woolf drafted the book under the title <em>The Hours</em>, and time is its true architecture: the whole story occupies a single Wednesday in June 1923, measured out by Big Ben, whose strokes are followed by the repeated sentence the leaden circles dissolved in the air. Her diary names the method <span class="kw" data-def="tunnelling 挖隧道；打地道（英式拼写，tunnel 的动名词，美式拼作 tunneling）。伍尔夫在日记里把自己的方法叫 tunnelling：往人物过去里“挖隧道”，让此刻的一件小事通向埋在几十年前的记忆——她的原话正是 dig out beautiful caves behind my characters">tunnelling</span> — every hour of London dug down into buried decades, so that a morning errand for flowers opens onto a country house in the 1890s and a proposal once refused. Meanwhile the narration keeps crossing the city to Septimus Warren Smith, a <span class="kw" data-def="decorated 授勋的；荣获勋章的（decorate 的过去分词作定语，读作 /ˈdekəreɪtɪd/）。a decorated veteran 一位获得过勋章的老兵。decorate 本义“装饰”，引申为授勋——因为勋章是一种国家授予的装饰">decorated</span> <span class="kw" data-def="veteran 老兵；老手（读作 /ˈvetərən/，重音在第一音节）。此处指一战退伍军人。veteran 也可指某领域的资深者，如 a veteran teacher。小说里赛普蒂默斯是一战老兵，创伤反应（当时叫 shell shock，今日所称 PTSD 的一种）贯穿全书">veteran</span> whose suffering runs beneath Clarissa's day. The two never meet; the tunnels simply follow the same ground.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · An Heirloom Promoted 被升格的旧人物</div>
+            <p>Clarissa herself was an <span class="kw" data-def="heirloom 传家之物；祖传遗物（读作 /ˈeəluːm/，重音在第一音节）。heir 继承人 + loom 的旧义“工具”。此处是比喻用法：克拉丽莎这个人物是伍尔夫从自己早期作品里“继承”下来、反复打磨的旧角色——作者也会传自己的家当">heirloom</span>: a minor character from Woolf's first novel, <em>The Voyage Out</em> (1915), promoted ten years later to the short story <em>Mrs Dalloway in Bond Street</em> (1923), and finally to carry an entire Wednesday. The book must have looked slight — little happens, a party is given, a mind speaks — yet it became one of the most studied openings in English fiction, imitated everywhere from classrooms to Michael Cunningham's 1998 novel <em>The Hours</em>, which borrows the famous sentence as its own beginning. What the opening line offers is a quiet <span class="kw" data-def="bargain 交易；约定（读作 /ˈbɑːɡən/，重音在第一音节）。a quiet bargain 一笔安静的交易——指作品与读者之间的默契：少一点事件，多一点贴近。动词 bargain 讲价；短语 a good bargain 划算的买卖；into the bargain 另外、加之">bargain</span>: fewer events, closer attention. Where older novels asked what happened next, Woolf's asks what it felt like to be there — and the novel has never entirely turned back.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="errand">🔊</button><div class="word">errand<span class="pos">n.</span></div><div class="zh">差事；跑腿的活儿（读作 /ˈerənd/，重音在第一音节）。<b>run the errand</b> 办这趟差事；go on errands 跑腿。买花正是小说开头那趟差事——一件小家务，通过 tunnelling 的手法通向几十年前的回忆</div><div class="ex">"... a hostess announcing that she will run the errand instead of her maid."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="hostess">🔊</button><div class="word">hostess<span class="pos">n.</span></div><div class="zh">女主人；宴会主持人（读作 /ˈhəʊstəs/）。-ess 是阴性后缀（actress、waitress）。克拉丽莎在小说里正要操办一场晚间聚会，她是那次聚会的主人——这个词划定了她的社会身份</div><div class="ex">"On a simple reading this is reported speech — a hostess announcing that she will run the errand instead of her maid."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="declines">🔊</button><div class="word">declines<span class="pos">v.</span></div><div class="zh">拒绝（decline 的第三人称单数，读作 /dɪˈklaɪnz/，重音在第二音节）。<b>declines to answer</b> 拒不作答。decline 比 refuse 更客气、更书面，常用于正式拒绝邀请或拒绝置评；名词 decline 还可指“衰退”（the decline of an empire）</div><div class="ex">"The novel declines to answer, and that refusal is where the modern experiment begins."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="device">🔊</button><div class="word">device<span class="pos">n.</span></div><div class="zh">手法；技巧（读作 /dɪˈvaɪs/，重音在第二音节）。此处是文学术语，不是“设备”：a literary device 文学手法。<b>call the device free indirect discourse</b> 把这种手法叫作自由间接引语。靠语境区分两义</div><div class="ex">"Grammarians call the device free indirect discourse, and its logic is easiest to see in three versions of a single thought."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rhythm">🔊</button><div class="word">rhythm<span class="pos">n.</span></div><div class="zh">节奏；韵律（读作 /ˈrɪðəm/，拼写里的 b 不发音）。<b>the character's own rhythm</b> 人物自己的节奏——句子的呼吸感、停顿与强调属于谁。形容词 rhythmical；形容词拼写 rhythm 仍是词根</div><div class="ex">"Free indirect discourse removes the frame and lets the thought stand alone in the third person, wearing the past tense of narration but speaking with the character's own rhythm and exclamations."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="exclamations">🔊</button><div class="word">exclamations<span class="pos">n.</span></div><div class="zh">感叹；感叹语（读作 /ˌekskləˈmeɪʃənz/，重音在第三音节）。exclaim 感叹；exclamation mark 感叹号。小说开篇的 What a lark! What a plunge!（多有趣！多像一跃！）就是典型感叹语——它们属于克拉丽莎，不属于全知叙述者</div><div class="ex">"... speaking with the character's own rhythm and exclamations."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="pedestrian">🔊</button><div class="word">pedestrian<span class="pos">n.</span></div><div class="zh">行人（读作 /pəˈdestriən/，重音在第二音节）。注意两义：名词“行人”，形容词“平淡无奇的”（a pedestrian explanation）。此处是名词义：叙述的声音在伦敦街上一个又一个路人之间流动</div><div class="ex">"In the novel this voice drifts from one pedestrian to another along the London pavements, so that the city itself becomes a chain of minds passing a sentence along."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="tunnelling">🔊</button><div class="word">tunnelling<span class="pos">n.</span></div><div class="zh">挖隧道；打地道（英式拼写，美式作 tunneling；动词 tunnel）。伍尔夫在日记里给自家方法起的名字：往人物过去里“挖隧道”，让此刻的一件小事通向埋藏几十年的记忆——她的原话是 dig out beautiful caves behind my characters</div><div class="ex">"Her diary names the method tunnelling — every hour of London dug down into buried decades, so that a morning errand for flowers opens onto a country house in the 1890s..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="veteran">🔊</button><div class="word">veteran<span class="pos">n.</span></div><div class="zh">老兵；老手（读作 /ˈvetərən/，重音在第一音节）。<b>a decorated veteran</b> 获得过勋章的老兵。也指某领域资深者（a veteran teacher）。小说里的赛普蒂默斯是一战退伍军人，他的痛苦与克拉丽莎的一天平行展开，两人却从未见面</div><div class="ex">"Meanwhile the narration keeps crossing the city to Septimus Warren Smith, a decorated veteran whose suffering runs beneath Clarissa's day."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="heirloom">🔊</button><div class="word">heirloom<span class="pos">n.</span></div><div class="zh">传家之物；祖传遗物（读作 /ˈeəluːm/，重音在第一音节）。heir 继承人 + loom 的旧义“工具”。<b>was an heirloom</b> 是比喻：克拉丽莎这个人物是伍尔夫从 1915 年的处女作里“继承”下来、十年间反复升格的旧角色</div><div class="ex">"Clarissa herself was an heirloom: a minor character from Woolf's first novel, The Voyage Out (1915), promoted ten years later to the short story Mrs Dalloway in Bond Street (1923)..."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="bargain">🔊</button><div class="word">bargain<span class="pos">n.</span></div><div class="zh">交易；约定（读作 /ˈbɑːɡən/，重音在第一音节）。<b>a quiet bargain</b> 一笔安静的交易——作品与读者的默契：少一点事件，多一点贴近。动词 bargain 讲价；a good bargain 划算的买卖；into the bargain 另外、加之</div><div class="ex">"What the opening line offers is a quiet bargain: fewer events, closer attention."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① “说话的三副面具”：</b><b>direct speech</b> 直接引语（带引号）→ <b>indirect speech</b> 间接引语（that 连接、时态后移）→ <b>free indirect discourse</b> 自由间接引语（去掉框架、留下语法）。这三个术语在文学评论与语言学论文里高频出现，顺序就叠着记忆。<br>
+        <b>② 一组“拒绝”的礼貌等级：</b><b>decline</b> 婉拒（最客气、最书面）→ <b>refuse</b> 拒绝（较直接）→ <b>reject</b> 驳回／拒收（对提案、稿件）→ <b>turn down</b> 拒绝（口语）。decline an invitation / refuse an order / reject a manuscript 各有搭配习惯。<br>
+        <b>③ promote 的两个方向：</b><b>promote</b> 提拔（职员）、升格（本课：人物从小角色升为主角）、促销（商品）；名词 promotion。方向都是“往上、往前推”——人物被 promote to carry an entire Wednesday，与公司 promote sb to manager 结构相同。<br>
+        <b>④ “旧与新”的词链：</b><b>heirloom</b> 传家之物 → <b>inherit</b> 继承 → <b>heir</b> 继承人 → <b>legacy</b> 遗产／遗留影响。文学史里的人物、母题、句式都会被后来的作家继承——这条链写读书报告很好用。<br>
+        <b>⑤ 一个易混：</b><b>device</b>（手法／设备）↔ <b>devise</b>（动词：设计出）。词尾 -ce 是名词、-se 是动词，同族还有 advice / advise，practice / practise（英式）。<br>
+        <b>⑥ 一个写作提醒：</b><b>pedestrian</b> 作形容词是“平淡乏味”的贬义，作名词是中性的“行人”。在学术论文里写 The argument is pedestrian 是批评；写 pedestrians on the pavement 是写街道——同词两性，别误伤。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. whose 定语从句 + 过去分词后置定语 · ...a novel whose first sentence sounds like a note left for a servant</h3>
+          <div class="zh">结构：<b>名词 + whose 定语从句 + 过去分词短语（作后置定语）</b>。whose first sentence sounds like... 说明“这本书的”第一句；left for a servant 相当于 which was left for a servant，过去分词自带被动含义，把“写给谁”压进两个词。<b>这种“作品 + whose 特征 + 分词补充”的挂接，是文学评论介绍文本的标准开场</b>——一句话同时交代了作品、它的标记性特征和这句话的社会语境。</div>
+          <div class="eg">On 14 May 1925 the Hogarth Press, a small publishing house run by Virginia Woolf and her husband Leonard, issued a novel whose first sentence sounds like a note left for a servant: Mrs Dalloway said she would buy the flowers herself.</div>
+          <div class="practice">仿写：这座美术馆展出了一幅画，画中人物的目光跟随着房间里的每一位观者。
+            <input type="text" placeholder="The gallery displays a painting whose ..." data-ans="The gallery displays a painting whose figures keep their eyes on every visitor in the room.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. 现在分词短语作伴随状语 · ...wearing the past tense of narration but speaking with the character's own rhythm</h3>
+          <div class="zh">结构：<b>主句 + 现在分词短语（wearing..., speaking...），由 but 连接两个分词形成对照</b>。分词的逻辑主语就是主句主语 the thought：它“穿着”叙述的过去时，却“说着”人物的语气——一穿一说，把自由间接引语的双重性压进一组并列分词。<b>这是描写文学手法最经济的句式：主句给动作，分词给方式</b>。</div>
+          <div class="eg">Free indirect discourse removes the frame and lets the thought stand alone in the third person, wearing the past tense of narration but speaking with the character's own rhythm and exclamations.</div>
+          <div class="practice">仿写：这位译者在保留原句结构的同时，用现代汉语的节奏说话。
+            <input type="text" placeholder="The translator keeps the original structure, ..." data-ans="The translator keeps the original structure, wearing the grammar of the source but speaking in the rhythm of modern Chinese.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. so that 结果状语从句 + 现在分词短语收尾 · so that the city itself becomes a chain of minds passing a sentence along</h3>
+          <div class="zh">结构：<b>主句 + so that 从句（结果），从句内再接现在分词短语 passing a sentence along 作后置修饰</b>。此处 so that 表结果而非目的（判别见语法④）：叙述在路人之间流动，其<b>结果</b>是城市变成“接力传句的头脑链”。passing a sentence along 修饰 minds，把一部小说的空间结构画成了一条接力线。</div>
+          <div class="eg">In the novel this voice drifts from one pedestrian to another along the London pavements, so that the city itself becomes a chain of minds passing a sentence along.</div>
+          <div class="practice">仿写：消息从一张桌子传到另一张桌子，结果整个办公室变成了一条传递谣言的链条。
+            <input type="text" placeholder="The news travelled from desk to desk, so that ..." data-ans="The news travelled from desk to desk, so that the whole office became a chain of people passing the rumour along.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. 过去分词短语插入 + whose 从句接力 · ...measured out by Big Ben, whose strokes are followed by the repeated sentence...</h3>
+          <div class="zh">结构：<b>a single Wednesday..., measured out by Big Ben（过去分词短语，被动含义）+ whose strokes are followed by...（whose 从句本身又含被动语态）</b>。measured out by 说明“这一天由大本钟来计量”；whose strokes are followed by the sentence 则把钟声与那句著名的“铅圈消散”绑在一起——<b>两个被动式层层相扣，全是钟在作主语，人物只是被计时的人</b>。这正是本句型的修辞妙处：被动语态让时间成为主动者。</div>
+          <div class="eg">Woolf drafted the book under the title The Hours, and time is its true architecture: the whole story occupies a single Wednesday in June 1923, measured out by Big Ben, whose strokes are followed by the repeated sentence the leaden circles dissolved in the air.</div>
+        </div>
+
+        <div class="item">
+          <h3>5. Where 引导的对比状语从句 + 名词所有格替代主语 · Where older novels asked..., Woolf's asks...</h3>
+          <div class="zh">结构：<b>Where + 从句（旧小说问什么）, 主语（Woolf's ＝ Woolf's novel，所有格替代）+ 谓语（asks）</b>。这里的 where 不是地理方位，而是“在……之处／就……而言”的抽象对比，相当于 while in contrast。<b>Woolf's 用名词所有格独立作主语（省略了 novel），避免重复，也让两代小说在新旧两句里对仗</b>。时态同样精心：asked（过去）对 asks（现在延续至今）。</div>
+          <div class="eg">Where older novels asked what happened next, Woolf's asks what it felt like to be there — and the novel has never entirely turned back.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <p class="subtitle">5 个语法点，例句均取自正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① whose 引导的定语从句与过去分词后置定语</h3>
+          <div class="zh"><b>whose</b> 是关系限定词，指“某物／某人的”，既可指人也可指物：a novel <b>whose</b> first sentence...（这本书的）＝ of which the first sentence...。指物时 whose 比 of which 简洁得多，是学术写作的首选。它后面还叠了一层<b>过去分词后置定语</b>：a note <b>left</b> for a servant（＝ which was left...）。判断口诀：信息是“标签”，用分词；需要完整叙述，用从句。同段还有 a publishing house <b>run</b> by Virginia Woolf（＝ that was run by...）。</div>
+          <div class="eg">On 14 May 1925 the Hogarth Press, a small publishing house run by Virginia Woolf and her husband Leonard, issued a novel whose first sentence sounds like a note left for a servant: Mrs Dalloway said she would buy the flowers herself.</div>
+        </div>
+
+        <div class="item">
+          <h3>② 现在分词短语作伴随状语：逻辑主语必须同源</h3>
+          <div class="zh"><b>分词短语的逻辑主语必须等于主句主语</b>，否则就是悬垂分词（dangling participle）这一经典语法错误。本课例句里主句主语是 the thought，所以 wearing（穿着过去时）与 speaking（说着人物语气）都自动归它——动作同时发生、修饰整个主句，这就是<b>伴随状语</b>。两个分词用 but 连接时对照格外鲜明。另一例：a chain of minds <b>passing</b> a sentence along（分词作后置定语，逻辑主语是 minds）。<b>检验方法</b>：把分词改写成分句（and it wears... / and it speaks...），主语对得上就对。</div>
+          <div class="eg">Free indirect discourse removes the frame and lets the thought stand alone in the third person, wearing the past tense of narration but speaking with the character's own rhythm and exclamations.</div>
+        </div>
+
+        <div class="item">
+          <h3>③ so that 的结果用法与目的用法的判别</h3>
+          <div class="zh"><b>so that + 目的</b>：从句常带 may / might / can，主句是“人为努力”（He spoke slowly so that everyone could hear）。<b>so that + 结果</b>：从句用陈述时态，主句往往不是努力性动词，从句前常有逗号——本课正是结果用法：this voice drifts..., <b>so that the city itself becomes</b> a chain of minds（主句只是“声音在流动”，结果自动发生）。<b>三条判据</b>：① 有无情态动词（can/may 偏目的）；② 主句是否是刻意动作；③ 逗号分隔多偏结果。同段第二处 so that a morning errand... opens onto a country house 也是结果用法。</div>
+          <div class="eg">In the novel this voice drifts from one pedestrian to another along the London pavements, so that the city itself becomes a chain of minds passing a sentence along.</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 被动语态的修辞功能：让非人物作主语</h3>
+          <div class="zh">本课的被动语态大多不是躲开施动者，而是<b>故意换主语</b>：a single Wednesday... <b>measured out by Big Ben</b>（这一天被钟计量——时间成了主动者）；whose strokes <b>are followed by</b> the repeated sentence（连小说的句子都在追随钟声）；a proposal once <b>refused</b>（被拒绝的求婚，往事压缩成三个词）；a party <b>is given</b>（聚会照常举行——谁办的并不重要）。<b>写作启示</b>：被动语态的真正价值在于控制信息重心——把要强调的对象放到主语位置，把次要的施动者塞进 by 短语。</div>
+          <div class="eg">Woolf drafted the book under the title The Hours, and time is its true architecture: the whole story occupies a single Wednesday in June 1923, measured out by Big Ben, whose strokes are followed by the repeated sentence the leaden circles dissolved in the air.</div>
+          <div class="eg" style="margin-top:8px;">The book must have looked slight — little happens, a party is given, a mind speaks — yet it became one of the most studied openings in English fiction...</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ Where 引导的抽象对比从句与名词所有格替代</h3>
+          <div class="zh"><b>where</b> 不只指地点，还可引导抽象的“在……之处／就……而言”从句，与主句形成对照：Where older novels <b>asked</b>..., Woolf's <b>asks</b>...（旧小说问“接下来发生什么”，伍尔夫的书问“身处其中是什么感受”）。主语 Woolf's 是<b>名词所有格独立替代</b>（＝ Woolf's novel），替代词在所有格后省去，避免重复。注意时态设计：从句 asked 用过去时指传统，主句 asks 用一般现在时指这一传统被改变后延续至今的状态；句尾 has never entirely turned back 用现在完成时把影响拉到当下。</div>
+          <div class="eg">Where older novels asked what happened next, Woolf's asks what it felt like to be there — and the novel has never entirely turned back.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、一家自己的出版社，一句自己的开场白</h3>
+        <p>《达洛维夫人》于 <b>1925 年 5 月 14 日</b>由<b>霍加斯出版社（Hogarth Press）</b>在伦敦出版——这家出版社是伍尔夫与丈夫伦纳德 <b>1917 年亲手创办</b>的，起初只是两口子客厅里的一台手动印刷机，后来成了推动现代主义文学的重要阵地。自办出版意味着伍尔夫不必迁就商业编辑的口味，可以放心写一本「几乎什么都没有发生」的小说。</p>
+        <p>那句开场白的原文是：<b>“Mrs Dalloway said she would buy the flowers herself.”</b>（达洛维夫人说她要自己去买花。）它像一句转述，却没有任何引出框架——没有引号，没有「对露西说」，甚至没有点出听话人。正文的三个版本对比，就是理解全书的钥匙。</p>
+
+        <h3>二、三种引语对照表</h3>
+        <table class="facts">
+          <tr><th>版本</th><th>写法</th><th>效果</th></tr>
+          <tr><td>直接引语<br>direct speech</td><td>'I will buy the flowers myself,' Clarissa said.</td><td>引号框住原话，人物的声音与叙述者截然分开</td></tr>
+          <tr><td>间接引语<br>indirect speech</td><td>Clarissa said that she would buy the flowers herself.</td><td>that 引出、时态后移，叙述者全程掌控转述</td></tr>
+          <tr><td>自由间接引语<br>free indirect discourse</td><td>Mrs Dalloway said she would buy the flowers herself.</td><td>保留间接引语的语法（第三人称、过去时），却拿掉引出框架——读者不知不觉走进了人物的内心</td></tr>
+        </table>
+        <p>小说紧接着的开头几段还给了更明显的证据：克拉丽莎站在窗边等着开门，心里冒出 <b>What a lark! What a plunge!</b>（多有趣！多像一跃！）——这样的感叹语不可能出自全知叙述者，只能是人物自己的声音。两种声音叠在同一句法框架里，这就是自由间接引语的魔力。</p>
+
+        <h3>三、《时时刻刻》：一本书的钟点</h3>
+        <p>伍尔夫 1922—1924 年间写作此书时用的书名是 <b>《The Hours》（时时刻刻）</b>。全书压缩在 <b>1923 年 6 月的一个星期三</b>之内，由大本钟的报时分割章节；每一记钟声后面，常跟着那句著名的重复：<b>the leaden circles dissolved in the air</b>（铅做的声圈在空气里消散）。时间属于所有人，也公平地消磨所有人。</p>
+        <p>她在日记里把方法称作 <b>tunnelling（挖隧道）</b>：往每个人物身后挖出「美丽的洞穴」——克拉丽莎早晨买花的一趟差事，隧道通向 1890 年代乡间宅邸的少女时代、萨利·西顿、彼得·沃尔什被拒绝的求婚。与此同时，叙述在城市另一头造了一个平行人物：<b>赛普蒂默斯·沃伦·史密斯</b>，一位获得勋章的一战退伍老兵，创伤反应贯穿他的一天。克拉丽莎与赛普蒂默斯<b>从未见面</b>，但两条「隧道」在同一个伦敦的地下平行延伸——这是小说结构上最著名的设计。</p>
+
+        <h3>四、克拉丽莎的履历：一个被升格的角色</h3>
+        <p>克拉丽莎·达洛维并非横空出世：她是伍尔夫处女作<b>《远航》（The Voyage Out，1915）</b>里的一个小角色，十年后在短篇<b>《达洛维夫人在邦德街》（Mrs Dalloway in Bond Street，1923）</b>里第一次担纲，最终才在长篇里撑起完整的一天。作家会「传自己的家当」——一个人物被反复打磨、逐步升格，这正是正文把她比作 heirloom 的原因。</p>
+        <p>这本书当时的接受并不轰动——评论界觉得它「事情太少」，但它在二十世纪经典化的速度惊人。1998 年，美国作家迈克尔·坎宁安的小说<b>《The Hours》</b>直接借用了伍尔夫当年的工作书名，并把那句开场白重新写进自己的开头，该书获 <b>1999 年普利策小说奖</b>；2002 年改编的同名电影（妮可·基德曼饰演伍尔夫）又让「买花」这句话第三次进入大众文化。一句 1925 年的句子，成了后代作家可以不断「借走」的句子。</p>
+
+        <h3>五、中外对照：说书人显身 vs 叙述者隐身</h3>
+        <p>中国古典白话小说有一整套<b>说书人套语</b>：「却说」「且说」「看官听说」「欲知后事如何，且听下回分解」。叙述者公开显身、公开掌控视角，听众与人物之间永远隔着一层「讲故事的框」。伍尔夫的实验方向恰好相反：把叙述者的框架一层层拆掉，让叙述者的声音<b>藏进</b>人物的心里。二十世纪八十年代初，王蒙的<b>《春之声》</b>等作品把意识流手法引入当代中国小说——闷罐车厢里人物的联想自由流动，与伍尔夫在伦敦街头流动的声音遥相呼应。</p>
+        <p>这个对照要加上三点辨析，否则会讲歪：</p>
+        <ul>
+          <li><b>① 语言资源不同。</b>英语的过去时态、第三人称代词构成了一套现成的「引语信号」；汉语没有时态屈折，自由间接引语在汉语里要靠语气词、短句节奏和省略「他想」来暗示。翻译《达洛维夫人》时，译者必须为每种声音重新设计汉语的标记——这是两种语言资源的问题，不是水平问题。</li>
+          <li><b>② 叙述框架是选择，不是进化。</b>说书人套语不「落后」：显身的叙述者能直接议论、直接与听众交流，这是自由间接引语做不到的功能。两种传统各自发展出了自己的长处。</li>
+          <li><b>③ 心理深描并非西方专利。</b>《红楼梦》大量段落让人物的内心活动混在叙述里（如黛玉听戏文时的联想），效果上极接近自由间接引语——文学对「内心声音」的兴趣是普遍的，只是实现手段因语言与传统而异。</li>
+        </ul>
+
+        <h3>六、把话说窄：本课不做的几件事</h3>
+        <ul>
+          <li><b>不谈作者的健康与私人生活。</b>伍尔夫的一生常被围绕精神疾病来讲述，此类事后叙述与诊断不属于文学分析的依据，本课不作涉及。</li>
+          <li><b>不评判传统优劣。</b>第五节的对照只处理「叙述框架的显与隐」这一个维度，不比较中西小说谁更高级。</li>
+          <li><b>不给人物下诊断。</b>赛普蒂默斯的痛苦按小说自身的写法呈现；当时叫 shell shock，今日的医学名称另有其词，正文只作中性提示，不作医学判断。</li>
+          <li><b>不把「接受史」写成「封神榜」。</b>1925 年评论界的保留意见与后来的经典化都如实陈述——一部作品被承认的过程本身就是文学史的一部分。</li>
+        </ul>
+
+        <h3>七、参考来源</h3>
+        <p class="source">《达洛维夫人》原文（Hogarth Press，1925 年 5 月 14 日出版；开场白与 the leaden circles dissolved in the air 均为原文引用）· 伍尔夫日记中关于 tunnelling 与 working title The Hours 的记述 · 短篇 Mrs Dalloway in Bond Street（1923）与 The Voyage Out（1915）· Michael Cunningham《The Hours》（1998，1999 年普利策小说奖）及其 2002 年电影改编 · 中国古典小说说书人套语的通行研究与王蒙 1980 年代初意识流实验的相关评论。</p>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>📚 文学选段 Literature　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>伍尔夫《达洛维夫人》——一句没有听话人的开场白，如何悄悄拆掉叙述者的框架，把读者的耳朵放进人物心里</p>
+        <p>1925 年 5 月 14 日，霍加斯出版社出版了《达洛维夫人》。第一句「达洛维夫人说她要自己去买花」长得像转述，却无引号、无听众——它可能是自由间接引语：用间接引语的语法直接呈现人物的念头。全书压缩在 1923 年 6 月的一个星期三里，由大本钟报时，往人物的过去里「挖隧道」；克拉丽莎与老兵赛普蒂默斯从未见面，两条线却平行延伸。<b>旧小说问「接下来发生什么」，伍尔夫问「身处其中是什么感受」。</b></p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级文学与通用词汇（errand · hostess · declines · device · rhythm · exclamations · pedestrian · tunnelling · veteran · heirloom · bargain），并记住 direct speech / indirect speech / free indirect discourse 这条术语链。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 470 词的文学评论式说明文，能分辨文中「语法描述」与「文学判断」两个层次，并追踪「一句开场白 → 一种手法 → 一部书的结构 → 一段接受史」的论证链。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——whose 定语从句与过去分词后置定语、现在分词短语作伴随状语、so that 结果从句的判别、被动语态的修辞功能、where 引导的抽象对比从句与名词所有格替代。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习「三个版本对照」的分析方法：把同一句话改写成直接引语、间接引语、自由间接引语，观察信息与权力的移动——谁在说话、谁在听、叙述者站在哪里。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过「说书人显身 vs 叙述者隐身」与王蒙 1980 年代初的意识流实验，理解叙述框架的显与隐是语言资源与传统的选择，而非高下。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. On 14 May 1925 the Hogarth Press, a small publishing house run by Virginia Woolf and her husband Leonard, issued a novel whose first sentence sounds like a note left for a servant: Mrs Dalloway said she would buy the flowers herself.</div>
+          <div class="eg" style="margin-top:8px;">2. Free indirect discourse removes the frame and lets the thought stand alone in the third person, wearing the past tense of narration but speaking with the character's own rhythm and exclamations.</div>
+          <div class="eg" style="margin-top:8px;">3. In the novel this voice drifts from one pedestrian to another along the London pavements, so that the city itself becomes a chain of minds passing a sentence along.</div>
+          <div class="eg" style="margin-top:8px;">4. Woolf drafted the book under the title The Hours, and time is its true architecture: the whole story occupies a single Wednesday in June 1923, measured out by Big Ben, whose strokes are followed by the repeated sentence the leaden circles dissolved in the air.</div>
+          <div class="eg" style="margin-top:8px;">5. Where older novels asked what happened next, Woolf's asks what it felt like to be there — and the novel has never entirely turned back.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-11-09 · 文学选段 Literature｜《达洛维夫人》：一句没有听话人的一句话</footer>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Pattern practice check ---------- */
+document.querySelectorAll('.practice input').forEach(inp=>{
+  inp.addEventListener('blur',()=>{
+    const v=(inp.value||'').trim();
+    const key=(inp.dataset.ans||'').trim();
+    if(!v){inp.style.borderColor='';return;}
+    const norm=s=>s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+    inp.style.borderColor=(norm(v)===norm(key))?'#22c55e':'#ef4444';
+  });
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["On 14 May 1925 the Hogarth Press, a small publishing house run by Virginia Woolf and her husband Leonard, issued a novel whose first sentence sounds like a note left for a servant: Mrs Dalloway said she would buy the flowers herself. On a simple reading this is reported speech — a hostess announcing that she will run the errand instead of her maid. Yet the sentence never tells us who was listening. No quotation marks frame it, and no listener is named. Could it be that we are not overhearing what Clarissa said at all, but what she thought? The novel declines to answer, and that refusal is where the modern experiment begins.", "Grammarians call the device free indirect discourse, and its logic is easiest to see in three versions of a single thought. Direct speech quotes the speaker outright: 'I will buy the flowers myself,' Clarissa said. Indirect speech folds the words into the narrator's tense: Clarissa said that she would buy the flowers herself. Free indirect discourse removes the frame and lets the thought stand alone in the third person, wearing the past tense of narration but speaking with the character's own rhythm and exclamations. The reader steps inside a mind without an introduction. In the novel this voice drifts from one pedestrian to another along the London pavements, so that the city itself becomes a chain of minds passing a sentence along.", "Woolf drafted the book under the title The Hours, and time is its true architecture: the whole story occupies a single Wednesday in June 1923, measured out by Big Ben, whose strokes are followed by the repeated sentence the leaden circles dissolved in the air. Her diary names the method tunnelling — every hour of London dug down into buried decades, so that a morning errand for flowers opens onto a country house in the 1890s and a proposal once refused. Meanwhile the narration keeps crossing the city to Septimus Warren Smith, a decorated veteran whose suffering runs beneath Clarissa's day. The two never meet; the tunnels simply follow the same ground.", "Clarissa herself was an heirloom: a minor character from Woolf's first novel, The Voyage Out (1915), promoted ten years later to the short story Mrs Dalloway in Bond Street (1923), and finally to carry an entire Wednesday. The book must have looked slight — little happens, a party is given, a mind speaks — yet it became one of the most studied openings in English fiction, imitated everywhere from classrooms to Michael Cunningham's 1998 novel The Hours, which borrows the famous sentence as its own beginning. What the opening line offers is a quiet bargain: fewer events, closer attention. Where older novels asked what happened next, Woolf's asks what it felt like to be there — and the novel has never entirely turned back."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What is odd about the novel's opening sentence? 开场白那句妙在哪里？",
+   opts:["It names the wrong servant 它叫错了仆人的名字（没有这回事）","It is shouted to Lucy, who refuses to go 它是对露西大声喊出的，而露西拒绝了（小说没有这个情节）","No listener is named and no quotation marks frame it, so it may be a thought 没有点名听话人，也没有引号框住——它可能只是她心里的念头","It appears twice with different wording 它以不同措辞出现了两次（并非如此）"],
+   ans:2,
+   fb:"正确！第 1 段说得明白：<b>No quotation marks frame it, and no listener is named</b>——它长得像转述句，却可能根本不是转述：我们听到的也许是克拉丽莎心里的声音。这种悬而未决正是小说 declines to answer 的地方。"},
+  {q:"Which description matches free indirect discourse? 下列哪一项是自由间接引语？",
+   opts:["Quoting a character with quotation marks 用引号直接引用人物的话（那是 direct speech）","Paraphrasing with 'that' clearly marked 用 that 明确标记的转述（那是 indirect speech）","Two characters speaking to each other 人物之间的对话（那是 dialogue）","A thought standing alone in the third person and past tense, without a reporting frame 无引出框架、以第三人称和过去时态独立呈现的念头"],
+   ans:3,
+   fb:"正确！第 2 段的公式：<b>the grammar of indirect speech minus the reporting frame</b>——保留第三人称与过去时，拿掉引号和 she said。A、B 分别是直接引语与间接引语，C 是对话。"},
+  {q:"What was the novel's working title? 这本书当年的工作书名是什么？",
+   opts:["The Hours 《时时刻刻》","Bond Street 《邦德街》","The Voyage Out 《远航》","The Leaden Circles 《铅圈》"],
+   ans:0,
+   fb:"正确！第 3 段：<b>Woolf drafted the book under the title The Hours</b>——时间才是这本书真正的建筑结构。《The Voyage Out》是伍尔夫 1915 年的处女作（克拉丽莎首次出场的地方），《Bond Street》是 1923 年的短篇。"},
+  {q:"How are Clarissa and Septimus related in the novel's structure? 克拉丽莎与赛普蒂默斯在小说结构里是什么关系？",
+   opts:["They meet at the evening party 他们在晚宴上相遇（小说里两人从未见面）","They are close relatives 他们是近亲（没有这层关系）","They never meet, but the narration keeps crossing between them across the same city 两人从未见面，但叙述在同一座城市里不断在两者之间穿行","He is the florist who delivers her flowers 他是给她送花的花商（并非如此）"],
+   ans:2,
+   fb:"正确！第 3 段：the narration keeps crossing the city to Septimus... <b>The two never meet; the tunnels simply follow the same ground</b>——两条「隧道」在同一个伦敦的地下平行延伸，这正是小说结构上最著名的设计。"},
+  {q:"Where had the character Clarissa Dalloway appeared before 1925? 1925 年之前，克拉丽莎·达洛维这个人物在哪里出现过？",
+   opts:["As a minor character in Woolf's first novel The Voyage Out (1915), then in a 1923 short story 作为小角色出现在伍尔夫 1915 年的处女作《远航》里，后来又在 1923 年的一篇短篇中担纲","Nowhere — she was created brand new for this novel 从未出现过——她是为这部小说全新创造的（正文称她为 heirloom，恰恰相反）","In Woolf's collections of poetry 在伍尔夫的诗集里（伍尔夫以小说与随笔著称）","Only in the 1998 novel by Michael Cunningham 只在 1998 年坎宁安的小说里（那已是她的「第三次生命」）"],
+   ans:0,
+   fb:"正确！第 4 段把克拉丽莎称作 an <b>heirloom</b>：a minor character from Woolf's first novel, The Voyage Out (1915), promoted ten years later to the short story Mrs Dalloway in Bond Street (1923)——作家也会传自己的家当。"},
+  {q:"Which statement best captures the passage's conclusion? 下列哪一项最符合文章的结论？",
+   opts:["A novel needs many events to hold a reader 小说需要大量事件才能留住读者（正文说的恰恰相反）","The opening line offers a bargain — fewer events, closer attention — asking what it felt like rather than what happened 开场白提供了一笔交易：少一点事件，多一点贴近；问的不是发生了什么，而是身处其中是什么感受","Woolf invented the quotation mark 伍尔夫发明了引号（正文只说她拆掉了引号框架）","The book was instantly recognized as a masterpiece 这本书立即被公认为杰作（正文说当时的接受并不轰动）"],
+   ans:1,
+   fb:"正确！第 4 段：a quiet <b>bargain</b>: fewer events, closer attention；结尾一句点题——<b>Where older novels asked what happened next, Woolf's asks what it felt like to be there</b>。C 是玩笑干扰项：伍尔夫拆掉的是叙述框架，不是发明了标点。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

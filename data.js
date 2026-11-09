@@ -8362,6 +8362,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-11-09",
+    "title": "The Sentence With No Listener",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-11-09-the-sentence-with-no-listener",
+    "url": "lessons/b2/2026-11-09-the-sentence-with-no-listener.html",
+    "vocab": [
+      {
+        "word": "errand",
+        "zh": "差事；跑腿的活儿（读作 /ˈerənd/，重音在第一音节）。<b>run the errand</b> 办这趟差事；go on errands 跑腿。买花正是小说开头那趟差事——一件小家务，通过 tunnelling 的手法通向几十年前的回忆",
+        "ex": "\"... a hostess announcing that she will run the errand instead of her maid.\""
+      },
+      {
+        "word": "hostess",
+        "zh": "女主人；宴会主持人（读作 /ˈhəʊstəs/）。-ess 是阴性后缀（actress、waitress）。克拉丽莎在小说里正要操办一场晚间聚会，她是那次聚会的主人——这个词划定了她的社会身份",
+        "ex": "\"On a simple reading this is reported speech — a hostess announcing that she will run the errand instead of her maid.\""
+      },
+      {
+        "word": "declines",
+        "zh": "拒绝（decline 的第三人称单数，读作 /dɪˈklaɪnz/，重音在第二音节）。<b>declines to answer</b> 拒不作答。decline 比 refuse 更客气、更书面，常用于正式拒绝邀请或拒绝置评；名词 decline 还可指“衰退”（the decline of an empire）",
+        "ex": "\"The novel declines to answer, and that refusal is where the modern experiment begins.\""
+      },
+      {
+        "word": "device",
+        "zh": "手法；技巧（读作 /dɪˈvaɪs/，重音在第二音节）。此处是文学术语，不是“设备”：a literary device 文学手法。<b>call the device free indirect discourse</b> 把这种手法叫作自由间接引语。靠语境区分两义",
+        "ex": "\"Grammarians call the device free indirect discourse, and its logic is easiest to see in three versions of a single thought.\""
+      },
+      {
+        "word": "rhythm",
+        "zh": "节奏；韵律（读作 /ˈrɪðəm/，拼写里的 b 不发音）。<b>the character's own rhythm</b> 人物自己的节奏——句子的呼吸感、停顿与强调属于谁。形容词 rhythmical；形容词拼写 rhythm 仍是词根",
+        "ex": "\"Free indirect discourse removes the frame and lets the thought stand alone in the third person, wearing the past tense of narration but speaking with the character's own rhythm and exclamations.\""
+      },
+      {
+        "word": "exclamations",
+        "zh": "感叹；感叹语（读作 /ˌekskləˈmeɪʃənz/，重音在第三音节）。exclaim 感叹；exclamation mark 感叹号。小说开篇的 What a lark! What a plunge!（多有趣！多像一跃！）就是典型感叹语——它们属于克拉丽莎，不属于全知叙述者",
+        "ex": "\"... speaking with the character's own rhythm and exclamations.\""
+      },
+      {
+        "word": "pedestrian",
+        "zh": "行人（读作 /pəˈdestriən/，重音在第二音节）。注意两义：名词“行人”，形容词“平淡无奇的”（a pedestrian explanation）。此处是名词义：叙述的声音在伦敦街上一个又一个路人之间流动",
+        "ex": "\"In the novel this voice drifts from one pedestrian to another along the London pavements, so that the city itself becomes a chain of minds passing a sentence along.\""
+      },
+      {
+        "word": "tunnelling",
+        "zh": "挖隧道；打地道（英式拼写，美式作 tunneling；动词 tunnel）。伍尔夫在日记里给自家方法起的名字：往人物过去里“挖隧道”，让此刻的一件小事通向埋藏几十年的记忆——她的原话是 dig out beautiful caves behind my characters",
+        "ex": "\"Her diary names the method tunnelling — every hour of London dug down into buried decades, so that a morning errand for flowers opens onto a country house in the 1890s...\""
+      },
+      {
+        "word": "veteran",
+        "zh": "老兵；老手（读作 /ˈvetərən/，重音在第一音节）。<b>a decorated veteran</b> 获得过勋章的老兵。也指某领域资深者（a veteran teacher）。小说里的赛普蒂默斯是一战退伍军人，他的痛苦与克拉丽莎的一天平行展开，两人却从未见面",
+        "ex": "\"Meanwhile the narration keeps crossing the city to Septimus Warren Smith, a decorated veteran whose suffering runs beneath Clarissa's day.\""
+      },
+      {
+        "word": "heirloom",
+        "zh": "传家之物；祖传遗物（读作 /ˈeəluːm/，重音在第一音节）。heir 继承人 + loom 的旧义“工具”。<b>was an heirloom</b> 是比喻：克拉丽莎这个人物是伍尔夫从 1915 年的处女作里“继承”下来、十年间反复升格的旧角色",
+        "ex": "\"Clarissa herself was an heirloom: a minor character from Woolf's first novel, The Voyage Out (1915), promoted ten years later to the short story Mrs Dalloway in Bond Street (1923)...\""
+      },
+      {
+        "word": "bargain",
+        "zh": "交易；约定（读作 /ˈbɑːɡən/，重音在第一音节）。<b>a quiet bargain</b> 一笔安静的交易——作品与读者的默契：少一点事件，多一点贴近。动词 bargain 讲价；a good bargain 划算的买卖；into the bargain 另外、加之",
+        "ex": "\"What the opening line offers is a quiet bargain: fewer events, closer attention.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
