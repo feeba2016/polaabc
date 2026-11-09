@@ -8418,8 +8418,8 @@ const EPISODES = [
       },
       {
         "word": "heirloom",
-        "zh": "传家之物；祖传遗物（读作 /ˈeəluːm/，重音在第一音节）。heir 继承人 + loom 的旧义“工具”。<b>was an heirloom</b> 是比喻：克拉丽莎这个人物是伍尔夫从 1915 年的处女作里“继承”下来、十年间反复升格的旧角色",
-        "ex": "\"Clarissa herself was an heirloom: a minor character from Woolf's first novel, The Voyage Out (1915), promoted ten years later to the short story Mrs Dalloway in Bond Street (1923)...\""
+        "zh": "传家之物；祖传遗物（读作 /ˈeəluːm/，重音在第一音节）。heir 继承人 + loom 的旧义“工具”。<b>was an heirloom</b> 是比喻：克拉丽莎这个人物是伍尔夫从 1915 年的处女作里“继承”下来、八年间反复升格的旧角色",
+        "ex": "\"Clarissa herself was an heirloom: a minor character from Woolf's first novel, The Voyage Out (1915), promoted eight years later to the short story Mrs Dalloway in Bond Street (1923)...\""
       },
       {
         "word": "bargain",
