@@ -10979,5 +10979,67 @@ const EPISODES = [
         "ex": "The cull precedes submission: authors do not write up null findings at all."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-11-09",
+    "title": "The Shelf That Disagrees With the Calendar",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-11-09-the-shelf-that-disagrees-with-the-calendar",
+    "url": "lessons/c1/2026-11-09-the-shelf-that-disagrees-with-the-calendar.html",
+    "vocab": [
+      {
+        "word": "anomaly",
+        "zh": "异常、反常之处（形容词 anomalous；比 exception 更强调「规则本身可能有毛病」）",
+        "ex": "The anomaly is on the shelf, not in the poems: one half of a single year's output is filed forward and the other half backward."
+      },
+      {
+        "word": "administer",
+        "zh": "管理、施行；把（框架）施加于（名词 administration；兼有「给药、执行」义）",
+        "ex": "Periods are administered over the past by people who need it in usable portions, which is why the filing looks like a fact."
+      },
+      {
+        "word": "retrospection",
+        "zh": "回溯、事后回看（形容词 retrospective；by construction 指「在方法上必然如此」）",
+        "ex": "Period naming is retrospection by construction: nobody living inside the centuries in question could have called them by the name we now use."
+      },
+      {
+        "word": "plurality",
+        "zh": "复数性、多元并存（形容词 plural；政治学另有「相对多数」义，此处不取）",
+        "ex": "Lovejoy argued for a plurality of Romanticisms: not one movement with several faces, but several movements sharing a single word."
+      },
+      {
+        "word": "arbitrate",
+        "zh": "仲裁、居中裁断（名词 arbitration；用于学术争论时带修辞色彩，暗示存在可裁决的法庭）",
+        "ex": "Peckham tried to arbitrate in 1951, keeping the criteria of nature and imagination while dropping symbol and myth."
+      },
+      {
+        "word": "nominalism",
+        "zh": "唯名论（形容词 nominalist；主张共相只是名称，文学研究中借指只承认个别案例）",
+        "ex": "What one side dismissed as nominalism was, on the other, ordinary methodological caution about large nouns."
+      },
+      {
+        "word": "dislodge",
+        "zh": "使移出原位、逐出（本义为把嵌紧之物撬开；此处指批评未能挪动制度）",
+        "ex": "None of these objections dislodged the period, because its authority was never bibliographic in the first place."
+      },
+      {
+        "word": "annex",
+        "zh": "并吞、划入辖区（名词 annexation；此处指用扩容而非反驳来消化对手）",
+        "ex": "The long eighteenth century did not refute Romanticism; it annexed the decades in which Romanticism had begun."
+      },
+      {
+        "word": "coinage",
+        "zh": "新造的词、造词行为（动词 coin；比 neologism 更强调「被造出来的时间」）",
+        "ex": "Early modern was a coinage of the 1960s, a fact that makes its air of inevitability worth examining."
+      },
+      {
+        "word": "sediment",
+        "zh": "沉积、沉淀；沉积物（形容词 sedimentary；地学术语移用于人文论述）",
+        "ex": "What sedimented over three centuries was not a discovery but a unit of work, and units are what arguments are conducted in."
+      }
+    ]
   }
 ];
