@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pola News · The Blank After the Test — Advanced English (C1-C2)</title>
+<style>
+:root{
+  --accent:#34305e;
+  --accent2:#8a4b2a;
+  --bg:#f9f8fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#64748b;
+  --highlight:#e6e3f0;
+  --border:#cfc9e0;
+  --soft:#f4f2f9;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:248px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a .en{display:block;font-size:11px;color:var(--muted);font-weight:500;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(52,48,94,.3);}
+nav.sidebar a.active .en{color:rgba(255,255,255,.8);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:1000px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:23px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;font-size:16.5px;line-height:1.85;}
+.seg p i{font-style:italic;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(52,48,94,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,48,94,.55);}70%{box-shadow:0 0 0 12px rgba(52,48,94,0);}100%{box-shadow:0 0 0 0 rgba(52,48,94,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent);transition:.15s;}
+.kw:hover{background:#cfc9e0;}
+#tip{position:fixed;z-index:1200;background:#191735;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.vocab .lvl{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--accent2);border-radius:6px;padding:1px 7px;margin-top:6px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext .box{background:var(--soft);border-left:4px solid var(--accent2);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px;}
+.ext table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+.ext th,.ext td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+.ext th{background:var(--soft);color:var(--accent);font-weight:700;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(52,48,94,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+.level-badge{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:12px;padding:3px 12px;border-radius:20px;letter-spacing:.5px;}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);width:248px;}
+  nav.sidebar.open{transform:none;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#e6e3f0;color:#000;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>Advanced English · C1–C2 · IELTS / TOEFL</small></div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读<span class="en">Full Text</span></a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表<span class="en">Vocabulary</span></a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">🗣️</span> 句型练习<span class="en">Sentence Patterns</span></a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点<span class="en">Grammar</span></a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验<span class="en">Quiz</span></a>
+    <a href="#ext" data-sec="ext"><span class="ic">🇨🇳</span> 中文知识扩展<span class="en">Deep Dive</span></a>
+    <a href="#about" data-sec="about"><span class="ic">ℹ️</span> 关于本课<span class="en">About</span></a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <span class="level-badge">C1–C2 · 国际政治 International Politics</span>
+      <h1 class="title">The Blank After the Test</h1>
+      <p class="subtitle">Treaty law wrote down which reservations may not be made, and then left the sentence unfinished — 2026-11-12 · 全文阅读（点高亮词看中文释义）</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · The permission and its limit</div>
+            <p>A <span class="kw" data-def="reservation（名词）：保留。国际条约法术语，指一国在签署、批准或加入条约时单方面声明排除或更改某些条款对该国的法律效果。读音 /ˌrezəˈveɪʃn/。日常英语中意为「预订、保留意见」，此处为严格技术义，不可译为「保留态度」。">reservation</span> looks like partial membership: a state joins a multilateral treaty while exempting itself from a clause it dislikes. Article 19 of the Vienna Convention permits this, except where the reservation is <span class="kw" data-def="incompatible（形容词）：不相容的、不能并存的。读音 /ˌɪnkəmˈpætəbl/，名词 incompatibility。介词固定搭配 with。与 inconsistent 的分别：inconsistent 指前后不一致（逻辑矛盾），incompatible 指两者无法同时成立，语气更绝对，是法律文本的固定用语。">incompatible</span> with the treaty's object and purpose. That test has no arithmetic. And the Convention attaches no stated consequence to failing it. It says which reservations may not be made; it does not say what happens to a state that makes one anyway.</p>
+          </div>
+          <button class="play-btn" data-i="0" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Two answers, and a judgement in 1988</div>
+            <p>Two answers were available, pulling in opposite directions. One left the judgement to each contracting party, individually and from its own standpoint, so that silence could <span class="kw" data-def="cure（动词）：补正、使（瑕疵）消灭。读音 /kjʊə/。日常义为「治愈」，法律英语中特指通过某种行为使原本无效或违法的状态归于正常，如治愈程序瑕疵。此处 cure an invalid reservation 指其他缔约方的沉默使一项本无效的保留事实上获得效力，是全文最关键的一个动词。">cure</span> an invalid reservation. <i>Belilos v Switzerland</i> cut that path in 1988. The Court looked past the label, found a reservation where Switzerland had declared an interpretation, held it <span class="kw" data-def="void（形容词兼动词）：无效的；使无效。读音 /vɔɪd/。法律术语中指自始不产生法律效力，比 invalid 更绝对——invalid 只是「不合格」，void 是「根本不存在法律效果」，如同从未发生。名词 voidness。">void</span> for vagueness and for <span class="kw" data-def="want（名词）：缺乏、欠缺。读音 /wɒnt/。此处不是动词「想要」，而是古旧书面语中的名词用法，常见于法律与公文固定搭配 for want of（因缺乏……）与 in want of（需要……）。同义表达为 for lack of，但 want of 更正式、更具文书气。">want</span> of a brief statement of the law, and held Switzerland bound regardless.</p>
+          </div>
+          <button class="play-btn" data-i="1" data-icon="▶">▶</button>
+        </div>
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Who pays, and by what authority</div>
+            <p>The move shifts the cost from the state to the treaty. <i>Loizidou</i> made the reasoning explicit in 1995: the Strasbourg court, unlike the International Court of Justice, supervises a law-making <span class="kw" data-def="instrument（名词）：文书、法律文件。读音 /ˈɪnstrəmənt/。日常义为「工具、乐器」，法律英语中专指具有法律效力的正式文件（条约、议定书、批准书）。a law-making instrument 指以立法为目的的条约，区别于仅作双边交换的契约性条约，这个区分正是本段论证的支点。">instrument</span> directly, and a practice of unconditional acceptance separates them. In 1994 the Human Rights Committee denied that such treaties were a web of inter-State exchanges, and asserted its own <span class="kw" data-def="competence（名词）：权限、职权范围。读音 /ˈkɒmpɪtəns/。日常义为「能力」，法律英语中专指某一机构依法享有的管辖与裁断权限，与 jurisdiction 近义但更强调「是否有资格处理」。asserted its own competence 即主张自己有权作此判断，而不必等待各国表态。">competence</span>. The Commission's 2011 Guide split the difference: an invalid reservation is void, and the reserving state is <span class="kw" data-def="presume（动词）：推定、假定为。读音 /prɪˈzjuːm/，名词 presumption。与 assume 的关键分别：assume 是日常的「姑且认为」，presume 在法律上是「若无反证则认定为真」，会把举证责任转移给对方。is presumed bound 意为除非另有证明，否则认定其仍受约束。">presumed</span> bound without its benefit, <span class="kw" data-def="severance（名词）：割除、分离。读音 /ˈsevərəns/。动词 sever。本义为切断，法律英语中指把无效的部分从整体中剥离、其余部分继续有效，与「整个行为归于无效」相对。severance by default 即默认采取割除方案——这一句就是 2011 年《实践指南》的实质。">severance</span> by default.</p>
+          </div>
+          <button class="play-btn" data-i="2" data-icon="▶">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The old word that does the work</div>
+            <p>The objection is that consent, the foundation of the law of treaties, has been quietly <span class="kw" data-def="overrule（动词）：推翻、否决。读音 /ˌəʊvəˈruːl/。本义为上级法院撤销下级裁判，引申为以更高位阶的依据压过原有依据。此处用被动 has been overruled by purpose，宾语是 consent——不是某条规则被推翻，而是整个体系的基石被另一个原则顶替，语气克制但分量极重。">overruled</span> by purpose; Switzerland, on the Court's own account, discovered itself bound against what it had tried to secure. The defence is that the alternative hands enforcement back to silence. But note what rescues the compromise: intention. A regime built to replace consent with purpose ends by asking what the state meant.</p>
+          </div>
+          <button class="play-btn" data-i="3" data-icon="▶">▶</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Vocabulary（10 个 C1–C2 学术词）</h2>
+      <div class="card">
+        <p style="margin-top:0;color:var(--muted);font-size:14.5px;">词条按在正文出现的顺序排列。本期十个词几乎全部是<b>法律英语的高频技术词</b>——它们的日常义与专业义分岔很大，正是雅思阅读与托福学术听力的经典设陷处。例句围绕条约制度与机构权限展开，可直接迁移到 Task 2 的论证段落。</p>
+      </div>
+      <div class="vocab-grid">
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="reservation" data-icon="🔊">🔊</button>
+          <div class="word">reservation<span class="pos">n.</span></div>
+          <div class="zh">保留（条约法术语：单方面排除某些条款对本国的法律效果；日常义为「预订、保留意见」，此处不可混用）</div>
+          <div class="ex">A reservation is not a refusal to join; it is a request to join on narrower terms, which is why the device spreads membership and fragments obligation at the same time.</div>
+          <span class="lvl">C1</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="incompatible" data-icon="🔊">🔊</button>
+          <div class="word">incompatible<span class="pos">adj.</span></div>
+          <div class="zh">不相容的、无法并存的（名词 incompatibility；介词固定搭配 with；比 inconsistent 更绝对）</div>
+          <div class="ex">The threshold is compatibility with the treaty's object and purpose, a standard that resists arithmetic and therefore resists agreement about its own application.</div>
+          <span class="lvl">C1</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="cure" data-icon="🔊">🔊</button>
+          <div class="word">cure<span class="pos">v.</span></div>
+          <div class="zh">补正、使（瑕疵）消灭（法律义；日常义为「治愈」——同一动词在两种语域里指向完全不同的机制）</div>
+          <div class="ex">Silence can cure a defect in procedure, but whether it can cure a reservation that was never lawful is a different question entirely.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="void" data-icon="🔊">🔊</button>
+          <div class="word">void<span class="pos">adj./v.</span></div>
+          <div class="zh">无效的；使无效（比 invalid 更绝对：不是「不合格」，而是自始不产生法律效果）</div>
+          <div class="ex">A void act is treated as though it had never occurred, which is precisely why its consequences have to be supplied by a separate rule.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="want" data-icon="🔊">🔊</button>
+          <div class="word">want<span class="pos">n.</span></div>
+          <div class="zh">缺乏、欠缺（古旧书面语；固定搭配 for want of / in want of，同义于 for lack of 但更文书化）</div>
+          <div class="ex">The reservation failed for want of a brief statement of the law, a requirement the Court treated as substantive rather than merely formal.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="instrument" data-icon="🔊">🔊</button>
+          <div class="word">instrument<span class="pos">n.</span></div>
+          <div class="zh">文书、法律文件（法律义；日常义为「工具、乐器」；a law-making instrument 指以立法为目的的条约）</div>
+          <div class="ex">Whether a treaty is a law-making instrument or a bargain between parties decides which tribunal is entitled to supervise it.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="competence" data-icon="🔊">🔊</button>
+          <div class="word">competence<span class="pos">n.</span></div>
+          <div class="zh">权限、职权范围（法律义；日常义为「能力」；与 jurisdiction 近义，但更强调「有无资格处理」）</div>
+          <div class="ex">To assert competence is to claim the right to decide, and a body that can decide compatibility without waiting for states has already changed the regime.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="presume" data-icon="🔊">🔊</button>
+          <div class="word">presume<span class="pos">v.</span></div>
+          <div class="zh">推定、假定为（名词 presumption；与 assume 的分别：presume 会把举证责任转移给对方）</div>
+          <div class="ex">The state is presumed to remain a party unless a contrary intention is established, so the burden of showing otherwise falls on the state itself.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="severance" data-icon="🔊">🔊</button>
+          <div class="word">severance<span class="pos">n.</span></div>
+          <div class="zh">割除、分离（动词 sever；指剥离无效部分而保留其余，与「整体归零」相对）</div>
+          <div class="ex">Severance keeps the state inside the treaty and removes only its exemption, an outcome the state may never have bargained for.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+        <div class="vocab">
+          <button class="speak-btn" data-word="overrule" data-icon="🔊">🔊</button>
+          <div class="word">overrule<span class="pos">v.</span></div>
+          <div class="zh">推翻、否决（本义为上级法院撤销下级裁判；此处指 consent 被 purpose 顶替）</div>
+          <div class="ex">When a foundational principle is overruled by a rival one, the change rarely appears as an amendment; it appears as a series of reasonable decisions.</div>
+          <span class="lvl">C2</span>
+        </div>
+
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">🗣️ 句型练习 Sentence Patterns（5 个高级学术句型）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>句型 1 · X looks like Y: 以冒号把直觉具体化</h3>
+          <div class="zh">先用一个比喻性判断（looks like partial membership）把陌生制度拉到读者熟悉的经验里，紧接着用冒号展开这个比喻的具体内容。冒号在这里不是举例，而是<b>兑现承诺</b>——它要求后半句必须把前半句的抽象说法落到可核对的动作上。学术写作开篇最忌悬空的定义，这个句式能逼自己立刻落地。</div>
+          <div class="eg">A reservation looks like partial membership: a state joins a multilateral treaty while exempting itself from a clause it dislikes.</div>
+          <div class="practice">✍️ 练习：用该句型改写「所谓制裁，看起来像是一种价格：买方仍然可以交易，只是要付更高的钱」。<input type="text" placeholder="X looks like Y: ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>句型 2 · It says X; it does not say Y（两分句对照式界定）</h3>
+          <div class="zh">同一个主语连出两个分句，前句给「写了什么」，后句给「没写什么」，分号让两者等重。这是法律与制度分析里最经济的一记界定：它不指控任何人失职，只陈述文本的实际边界，却让「空白」本身成为论证对象。写议论文时用来点出定义漏洞，比 it is unclear whether 有力得多。</div>
+          <div class="eg">It says which reservations may not be made; it does not say what happens to a state that makes one anyway.</div>
+          <div class="practice">✍️ 练习：用该句型改写「这份准则规定了数据可以如何收集，却没有规定违规之后由谁负责」。<input type="text" placeholder="It says ...; it does not say ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>句型 3 · 数量词 + 分词短语，一句话预告全文结构</h3>
+          <div class="zh">Two answers were available, pulling in opposite directions. 前半句只报数量，后半句用现在分词补出这两者的关系。它的功能是<b>结构预告</b>：读者立刻知道下文要分成两路，并且这两路互相拉扯。比写成 There were two answers, and they were opposite 更紧，因为分词短语把「相反」处理成一个附带的属性，而不是另起一句的判断。</div>
+          <div class="eg">Two answers were available, pulling in opposite directions.</div>
+          <div class="practice">✍️ 练习：用该句型改写「当时有三种解释并存，彼此无法调和」。<input type="text" placeholder="Three explanations ... , ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>句型 4 · Y, unlike X, does Z（介词短语插入的对比定位）</h3>
+          <div class="zh">unlike 引导的介词短语插在主谓之间，用两个逗号隔开。它一次性完成三件事：点名比较对象、划出差异、把主句的判断落到差异上。注意 unlike 后面接名词短语而非从句——写成 unlike the ICJ does 就错了。这个结构在比较两个机构的职权时几乎是标准写法。</div>
+          <div class="eg">The Strasbourg court, unlike the International Court of Justice, supervises a law-making instrument directly.</div>
+          <div class="practice">✍️ 练习：用该句型改写「与上诉法院不同，这个委员会不审理具体案件，只发布一般性意见」。<input type="text" placeholder="X, unlike Y, ..."></div>
+        </div>
+
+        <div class="item">
+          <h3>句型 5 · A regime built to X ends by Y（反讽式收口）</h3>
+          <div class="zh">过去分词短语 built to X 作后置定语，说明这套制度的初衷；ends by Y 给出它实际的结果。两个动词之间的落差就是全文的判断，而作者一个评价性的形容词都没用。这是最克制也最锋利的收尾方式：把讽刺交给结构，而不是交给语气词。</div>
+          <div class="eg">A regime built to replace consent with purpose ends by asking what the state meant.</div>
+          <div class="practice">✍️ 练习：用该句型改写「一套为减少主观判断而设计的评分系统，最终却要靠评委的直觉来兜底」。<input type="text" placeholder="A system built to ... ends by ..."></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar（5 个高级语法点）</h2>
+      <div class="card">
+
+        <div class="item">
+          <h3>语法 1 · except where 引导的例外条件从句</h3>
+          <div class="zh">Article 19 permits this, <b>except where</b> the reservation is incompatible with the treaty's object and purpose. except where 相当于 except in cases where，后面接完整从句。它的语用价值在于<b>把主句的许可与例外压在同一句里</b>，读者不会误以为例外是补充说明——法律文本靠这个结构把「原则」与「边界」绑成一条。若写成 However, this is not permitted when...，主句的许可就被单独放大了一拍。</div>
+          <div class="eg">Article 19 of the Vienna Convention permits this, except where the reservation is incompatible with the treaty's object and purpose.</div>
+          <div class="practice">📌 要点：except where / except when 接从句；except for 接名词短语；except that 接完整陈述句。三者不可混用。where 在此不表地点，而表「在……情形下」，是法律英语的典型用法。</div>
+        </div>
+
+        <div class="item">
+          <h3>语法 2 · 现在分词短语作伴随状语</h3>
+          <div class="zh">Two answers were available<b>, pulling in opposite directions</b>. 分词短语的逻辑主语必须与主句主语一致（此处是 two answers），且用现在分词表示主动、同时进行。它替代了 and they pulled... 这样的并列句，把第二个信息降为附属，从而让主句的判断保持在前景。学术写作中，凡是「补充说明同一主语的另一个动作」，都优先考虑分词而非另起一句。</div>
+          <div class="eg">Two answers were available, pulling in opposite directions.</div>
+          <div class="practice">📌 要点：悬垂分词（dangling participle）是最常见的失分点——若分词逻辑主语与主句主语不一致，必须改写为从句。例如不能说 Walking into the court, the verdict seemed predictable（走进去的不是 verdict）。</div>
+        </div>
+
+        <div class="item">
+          <h3>语法 3 · 评注性状语 on the Court's own account</h3>
+          <div class="zh">Switzerland, <b>on the Court's own account</b>, discovered itself bound against what it had tried to secure. 这个介词短语不作方式状语，而是<b>交代信息来源与立场</b>——它等于说「按法院自己的说法」。这类评注性状语（disjunct）在学术写作里承担举证归属的功能：它明确区分「我判断」与「文献如此记载」，是避免把转述当成事实的语言手段。</div>
+          <div class="eg">Switzerland, on the Court's own account, discovered itself bound against what it had tried to secure.</div>
+          <div class="practice">📌 要点：同类表达还有 by the author's own admission、on this reading、in the Court's view。它们通常用逗号与主句隔开，位置可在句首、主谓之间或句末；位置不同，强调重点略有差别，但都不改变命题内容。</div>
+        </div>
+
+        <div class="item">
+          <h3>语法 4 · 冒号引出解释性同位语</h3>
+          <div class="zh">The Commission's Guide split the difference<b>:</b> an invalid reservation is void, and the reserving state is presumed bound. 冒号后的完整从句与前面的 split the difference 构成同位关系——它不是原因，也不是结果，而是把前面那个抽象说法<b>原地展开</b>。这条用法要求冒号前必须是完整分句，冒号后可以是分句、短语或单个词，但不能是并列连词引导的从句（那样该用分号）。</div>
+          <div class="eg">The Commission's Guide split the difference: an invalid reservation is void, and the reserving state is presumed bound without its benefit.</div>
+          <div class="practice">📌 要点：冒号与分号的分工——分号连接两个对等分句，冒号表示后文解释前文。若冒号后是列举，须确保列举项与冒号前的名词在逻辑上对应，否则会读成残句。</div>
+        </div>
+
+        <div class="item">
+          <h3>语法 5 · 被动语态 + 推定动词，把举证责任写进句子</h3>
+          <div class="zh">...the reserving state <b>is presumed bound</b> without its benefit. 这里的被动不只是省略施动者，而是<b>法律效果的载体</b>：presume 一旦变成被动，句子的意思就从「某人假定」变成「法律上视为」，并自动把反证的负担交给对方。同类动词还有 is deemed、is held to be、shall be construed as——它们共同构成法律英语的「视为」句式。</div>
+          <div class="eg">An invalid reservation is void, and the reserving state is presumed bound without its benefit.</div>
+          <div class="practice">📌 要点：presume / assume / suppose 三词语气递减。法律文本用 presume（可反驳的推定），合同解释用 construe（解释为），国际公约用 shall be deemed（视为）。写作时要区分「我认为」与「规则视为」。</div>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🧭 语法在文中的作用</h3>
+        <p style="font-size:14.5px;">本文五个语法选择服务于同一件事：<b>让一段制度史读起来像一次文本勘查，而不是一次立场表态</b>。except where 把原则与边界锁进同一句，分词短语把「两路相反」降为背景而不另起判断，评注性状语把「法院这样说」与「事情如此」分开，冒号同位把抽象结论原地兑现，被动加推定则把「谁承担反证」写进语法而不是写进评论。IELTS 写作评分标准里的 Grammatical Range and Accuracy，看的正是这种「每个结构都在承担一项功能」的选择，而不是句子的长度。</p>
+      </div>
+    </section>
+
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Quiz（6 题 · 雅思 / 托福风格）</h2>
+      <div class="card">
+        <p style="margin-top:0;color:var(--muted);font-size:14.5px;">题型分布：细节题 2 · 推断题 2 · 语境词汇题 1 · 主旨题 1。本期第 2 题是典型的<b>理由归属陷阱</b>——两个判例的判决理由极易互换，建议先在原文标出年份再作答。</p>
+      </div>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. CHINESE EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🇨🇳 中文知识扩展 Deep Dive</h2>
+      <div class="card ext">
+
+        <h3>一、一条只写了「不许」的条文</h3>
+        <p>1969 年《维也纳条约法公约》用了五条（第 19 至 23 条）来处理保留，但真正下判断的只有第 19 条。它规定，一国在签署、批准、接受、核准或加入条约时，可以提出保留，<b>但三种情形除外</b>：条约本身禁止保留；条约只允许特定保留，而所提保留不在其中；以及——最难处理的一种——<b>保留与条约的目的和宗旨不相容</b>。</p>
+        <p>前两种是清单式的，可以点数。第三种不是。什么叫「不相容」，公约没有给判据，也没有给算术。更关键的是：<b>公约没说违反第 19 条的保留会有什么后果。</b>它规定了哪种保留不能提，却没有规定「提了会怎样」——是保留无效而国家仍受约束？还是保留有效而国家照旧免责？还是整个同意归于无效、该国根本不算缔约方？</p>
+        <p>这不是起草疏漏，而是当时谈不成。第 20 条承接了 1951 年的旧思路，把「接受与反对」交给各缔约国自行处理，而第 19 条又把判断标准写成一个需要解释的短语。两条之间的空隙，后来成了整个制度最激烈的战场。</p>
+
+        <h3>二、1951 年：从「全体一致」到「目的与宗旨」</h3>
+        <p>要理解这个空隙的来历，得回到<b>1951 年国际法院关于《防止及惩治灭绝种族罪公约》保留问题的咨询意见</b>。按传统的条约法观念，多边条约的每一项保留都必须得到全体缔约国同意，否则条约关系就被切碎了。国际法院拒绝了这个要求，理由是：那种做法会让公约几乎无法吸收新成员，而灭绝种族罪的普遍性恰恰是公约存在的理由。</p>
+        <p>法院给出的替代方案是：<b>看这项保留是否与公约的目的和宗旨相容</b>。相容则提出保留国成为缔约方（在保留范围内），不相容则不然。这个思路被 1969 年的公约采纳，写成了第 19 条第 3 项。</p>
+        <p>但请注意这个方案的代价：它把判断权从「全体同意的程序」换成了「一个实质标准的解释」。前者虽然僵化，却有明确的判定时点；后者开放，却没有人被指定来判。<b>制度把难题从程序挪进了实体，而实体问题是没法用表决解决的。</b></p>
+
+        <h3>三、Belilos 1988：先看实质，不看名字</h3>
+        <p>第一个把这个难题真正撞开的是欧洲人权法院。<b>1988 年 4 月 29 日，Belilos 诉瑞士案</b>。</p>
+        <p>案情本身很小：1981 年，瑞士公民 Belilos 夫人因参加一场未经批准的示威，被洛桑市警察当局罚款 200 瑞士法郎，后减为 120 法郎。她一路申诉到联邦法院，主张自己没有被一个独立、公正的法庭审判，这违反《欧洲人权公约》第 6 条第 1 款（公平审判）。瑞士政府则援引它在批准公约时作出的<b>「解释性声明」</b>——该声明称，第 6 条第 1 款的保障「仅在于确保司法机关对公共当局的行为有最终控制权」。</p>
+        <p>法院做了三步，每一步都值得记住：</p>
+        <ul>
+          <li><b>第一步，重定性。</b>判断一份声明的性质，不能只看它叫什么，要看它实际想产生什么法律效果。瑞士这份声明虽名为「解释」，实质是<b>把某类诉讼排除在条款适用范围之外</b>——那就是保留。<b>名称不决定性质，效果才决定。</b></li>
+          <li><b>第二步，判无效。</b>注意，法院在这里<b>没有</b>使用「目的与宗旨」检验，而是用了公约当时第 64 条的两项形式要求：不得提出<b>一般性</b>保留（措辞过于含糊宽泛，无法确定确切含义或范围），且必须附有<b>有关法律的简要说明</b>。法院明确说，第二项不是单纯的形式条件，而是实质条件。两项都不满足，保留无效。这一点常被记错——Belilos 的落点是第 64 条，不是第 19 条式的相容性检验。</li>
+          <li><b>第三步，也是最关键的一步。</b>法院补了一句：无论如何，瑞士「是、并且认为自己是一个受公约约束的缔约方」，<b>不因该声明的效力而改变</b>。保留被剔除，同意保留下来——这就是「割除」（severance）。</li>
+        </ul>
+        <p>这是历史上第一次由国际裁判机构判定一项保留无效。<b>而它一旦判定无效，就必须自己回答「然后呢」——公约没写，法院替它写了。</b>两年后的 Weber 诉瑞士案沿用同一处理：保留无效，但瑞士的缔约方地位不受影响。</p>
+        <p>另有一句常被忽略的细节：瑞士曾主张，保存机关与其他缔约国的<b>沉默</b>等于默示接受。法院回应得很干脆——保存机关与缔约国的沉默，并不剥夺公约机构自行评估的权力。这一句直接否掉了第 20 条那套「沉默即治愈」的逻辑在本案中的适用。</p>
+
+        <h3>四、Loizidou 1995 与第 24 号一般性意见：把判断权收回来</h3>
+        <p>如果 Belilos 只是一次性的补救，它不会成为制度转向。真正把它变成路线的是七年后的 <b>Loizidou 诉土耳其案（1995）</b>，以及几乎同时出现的<b>联合国人权事务委员会第 24 号一般性意见（1994）</b>。</p>
+        <p>Loizidou 案的保留是领土性质的限制。欧洲人权法院判其无效，理由正是<b>与公约的目的和宗旨不相容</b>。更重要的是它给出的<b>管辖权理由</b>：法院指出，它与国际法院的角色和目的存在根本差异——国际法院并不对这样一部造法性条约承担直接的监督职能，而公约缔约方之间存在「无条件接受」的实践。这两点加起来，构成把公约实践与国际法院实践区分开的充分依据。</p>
+        <p>这段话的法律意义在于：<b>它为「人权条约可以有一套不同于一般条约法的保留规则」提供了机构自身的授权依据</b>，而不只是道德劝说。</p>
+        <p>人权事务委员会走得更远。第 24 号一般性意见（1994）主张：此类公约<b>不是国家间互惠义务的一张网</b>，它关涉的是把权利赋予个人；因此保留与目的宗旨是否相容，必须<b>依法律原则客观地确定</b>，而委员会自身「特别适合」做这件事。意见书还举了极端例子：一国不能保留对他人施加酷刑的权利，也不能保留「除非证明有罪否则推定有罪」的权利。第 18 段进一步说，不能因为保留无效就推定该国不是缔约方——恰恰相反，它仍受约束，只是不能享受保留之利。</p>
+        <p>把三处并读，转向就清楚了：<b>判断权从「每个缔约国各自、从自己的立场」转移到「监督机构自己」；同意从「可分割的谈判筹码」变成「不可撤回的入场券」。</b></p>
+
+        <h3>五、2011 年《实践指南》：一句「推定」把两端缝起来</h3>
+        <p>国际法委员会从 1990 年代中期开始处理这个题目，前后约十五年，最终在 <b>2011 年二读通过《对条约的保留实践指南》</b>。它不是一个有约束力的公约，委员会自己说这是一只「工具箱」——供实践者查找与现有规则一致的解法。</p>
+        <p>指南在两个关键点上给出了折中：</p>
+        <ul>
+          <li><b>指南 4.5.1：</b>无效的保留无效，不产生法律效果。委员会认为这一点属于习惯国际法。</li>
+          <li><b>指南 4.5.3：</b>对于提出无效保留的国家，<b>推定</b>它仍是缔约方，只是不能享受该保留之利；<b>除非</b>它能表明相反的意图。而意图可以从保留的文本、提出时所给的理由、当时的声明，以及它对其他国家反应的回应（包括沉默）来判断。</li>
+        </ul>
+        <p>这两条合起来，实际上把 Belilos 的做法一般化了，但留了一个出口给「我本来就不打算在没有这条保留的情况下加入」的国家。学界普遍称其为「巧妙的中间方案」——它在<b>相互同意</b>这个条约法基石，与<b>「被禁止的保留自始无效」</b>这个原则之间各让一步。</p>
+        <p>还有一条常被忽略：指南 3.1.5.7 专门处理对争端解决条款与监督机制的保留，指出这类保留本身并不当然违背目的宗旨，除非它排除的条款是条约存在理由所系，或使保留国退出了它此前已接受的监督机制。这条把「能不能保留」与「保留到什么程度还算能接受」分开了。</p>
+
+        <h3>六、反对意见，以及「意图」这个旧词为什么回来了</h3>
+        <p>批评集中在两点。</p>
+        <p><b>第一，它把代价转嫁给了国家。</b>按法院自己的记载，瑞士是「发现自己」受约束的——它当初作那份声明，正是为了不被这样约束。割除方案让一个国家在<b>它从未同意过的义务范围</b>内受约束，这在以同意为基础的条约法里是相当激进的。有评论者（如 Marks 1990 年那篇《保留脱钩》）指出，法院在 Belilos 案中其实有四种可选处理，选择了对条约完整性最有利、对国家意愿最不利的那一种。</p>
+        <p><b>第二，它靠一个旧概念来自救。</b>指南 4.5.3 的整个运作依赖「意图」。也就是说，一套本意是用「目的与宗旨」替换「同意」的制度，最后要靠追问「这个国家当初到底想同意什么」来收尾。<b>这正是本课正文末句的意思：不是矛盾，而是条约法无法真正摆脱同意的证据。</b></p>
+        <p>还有第三层更宏观的批评，来自国际法「碎片化」的研究：人权机构对保留的处理，被视为一个专门领域对一般条约法发起的正式挑战——它把互惠逻辑换成了目的论逻辑。这一派学者（如 Koskenniemi 与 Leino）的态度是中立的：他们既不赞成也不反对，只指出这类「例外」一旦制度化，就会形成事实上的自足体制。</p>
+
+        <h3>七、事实口径表（细节题与年份题的锚点）</h3>
+        <table>
+          <tr><th>项目</th><th>通行说法 / 数值</th><th>口径与说明</th></tr>
+          <tr><td>《维也纳条约法公约》</td><td>1969 年通过，1980 年生效</td><td>第 19 条列三种禁止情形；第 20 条规定接受与反对；第 2 条第 1 项丁款按「意图产生的法律效果」定义保留，不看名称</td></tr>
+          <tr><td>国际法院咨询意见</td><td>1951 年，灭绝种族罪公约保留问题</td><td>拒绝「全体一致」规则，改采「与目的宗旨相容」标准；为第 19 条第 3 项所本</td></tr>
+          <tr><td><i>Belilos 诉瑞士</i></td><td>1988 年 4 月 29 日，Ser. A No. 132；[1988] 10 EHRR 466</td><td>罚款由 200 瑞郎减为 120 瑞郎；判无效的依据是公约<b>旧第 64 条</b>（一般性保留 + 未附法律简要说明），<b>不是</b>目的宗旨检验</td></tr>
+          <tr><td><i>Weber 诉瑞士</i></td><td>1990 年</td><td>沿用同一处理：保留无效，缔约方地位不变</td></tr>
+          <tr><td><i>Loizidou 诉土耳其</i></td><td>1995 年（初步反对阶段）</td><td>首次以「与目的宗旨不相容」判保留无效；并给出法院与国际法院角色不同的管辖权理由</td></tr>
+          <tr><td>人权事务委员会第 24 号一般性意见</td><td>1994 年</td><td>人权条约非互惠义务之网；相容性须客观确定；保留无效不导致丧失缔约方地位（第 18 段）</td></tr>
+          <tr><td>国际法委员会《实践指南》</td><td>2011 年二读通过</td><td>非约束性、非公约草案；4.5.1（无效保留无效果）、4.5.3（推定仍为缔约方，除非有相反意图）、3.1.5.7（争端解决类保留）</td></tr>
+        </table>
+        <p><b>易错点一：Belilos 的判决理由。</b>很多人以为它是「与目的宗旨不相容」的判例，其实它的落点是公约旧第 64 条的两项要求。用目的宗旨判无效的是七年后的 Loizidou。这一处是本课第 2 题的设陷点。</p>
+        <p><b>易错点二：谁有权判断。</b>第 20 条的原始设计是「各缔约国各自、从自己的立场」判断；Belilos、Loizidou 与第 24 号意见把它转给监督机构；2011 年指南没有解决这个权限之争，只是给了后果上的默认值。<b>三个层次不要混为一谈：谁能判、判什么、判了之后怎样。</b></p>
+
+        <h3>八、中国对照：把「谁有权作保留」写进国内程序</h3>
+        <p>本课讨论的是条约法层面的制度设计，不涉及任何具体条约的保留内容。在这个前提下，中国经验可以提供一个纯程序性的对照。</p>
+        <p><b>1990 年《中华人民共和国缔结条约程序法》</b>把条约的谈判、签署、批准、核准、加入以及保留的提出，一并纳入统一的国内程序：条约和重要协定须经全国人民代表大会常务委员会决定批准，由国家主席批准；其他协定按重要性分别由国务院核准或由主管部门报批。换言之，<b>「谁有权代表国家作出保留」这个问题，在中国法上是由国内法事先回答的，而不是留待国际层面逐案博弈。</b></p>
+        <p>这与本课的主线构成一个有意义的对照：国际条约法处理的是「保留提出来之后怎么办」，国内程序法处理的是「保留能不能提、由谁提」。<b>前者是事后补救，后者是事前授权。</b>两套机制解决的不是同一个问题，因此不能相互替代，也很难直接比较高下。</p>
+        <p>学术层面，国内国际法教材自王铁崖主编的《国际法》以来，讲授保留制度大体沿用维也纳公约的条文顺序——定义、允许范围、接受与反对、法律效果、撤回——并把「目的与宗旨」检验的可操作性当作重点讨论的问题之一。这与本课正文所指出的困难是同一个：<b>标准越实质，越依赖解释者的位置。</b></p>
+        <div class="box">
+          <b>对照不是评判</b>：本节只陈述程序框架与教材体例，<b>不涉及任何具体条约、具体保留或任何国家的实践评价</b>，也不比较两种机制的优劣。保留制度的国内程序与国际规则分处不同层面，各有其功能边界。
+        </div>
+
+        <h3>九、可迁移的读法：怎样读「制度有空隙」类文章</h3>
+        <p>这类文章有一个稳定骨架：<b>一条写了禁止却没写后果的规则 → 这个空白的来历（历史上的妥协）→ 第一次有人被迫填它 → 填补的依据从何而来 → 折中方案与原词的回流</b>。读的时候：</p>
+        <ul>
+          <li>第一段找那个<b>「只写了一半」的地方</b>：条文规定了什么，紧接着没规定什么。这个「没规定」往往就是全文的题目。</li>
+          <li>第二段找<b>妥协的时刻</b>：哪一年、哪两方、各让了什么。年份在这里是论证坐标，不是装饰。</li>
+          <li>第三段找<b>第一次</b>：谁第一个被迫回答那个空白？他依据的是哪一条？——注意区分「他判了什么」与「他凭什么判」。</li>
+          <li>第四段找<b>权限的转移</b>：判断权从谁手上到了谁手上。这一步通常是全文的主旨所在。</li>
+          <li>末段找<b>旧词的回流</b>：新方案最后依赖的是哪个本该被替换掉的概念。找到它，就找到了作者的判断。</li>
+        </ul>
+        <p>主旨题的正确选项几乎总是描述<b>权限或代价的转移</b>，而不是判定某个判例对错。凡是把文章读成「某法院越权」或「某国被冤枉」的选项，都只覆盖了一段。</p>
+
+        <div class="box">
+          <b>事实与立场（必读）</b><br>
+          ① 本页只转述公开的条约文本、司法判决与学术文献，年份、卷期与条文序号<b>以原始文件为准</b>；判决理由的归属（Belilos 依公约旧第 64 条、Loizidou 依目的宗旨检验）已逐条核对，若有版本差异以判决原文为准。<br>
+          ② 正文与本节对法院、委员会及学者观点的表述均为<b>转述</b>，非逐字引用；「巧妙的中间方案」「工具箱」等说法是学界与委员会自身的用语，本文如实交代其出处，<b>不代表本文对任何一方的评价</b>。<br>
+          ③ 本页<b>不涉及任何具体国家、具体条约或具体保留事项</b>，不对任何国家、机构或判决作评价；所引案例仅用于说明制度如何运作。<br>
+          ④ 涉及在世的学者与法官时，只取其在公开文献中的学理立场，不涉个人评价。<br>
+          ⑤ 本页为英语学习材料，内容为教学用转述与评论，非任何论著或判决书的翻译，<b>不构成法律意见</b>。
+        </div>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">ℹ️ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="color:var(--accent);margin-top:0;">🎯 本课学习目标</h3>
+        <div class="goal"><span class="ic">1️⃣</span><div><b>词汇</b>：掌握 10 个 C1–C2 学术词。本期特殊之处是<b>八个词都属于法律英语技术词</b>，日常义与专业义分岔极大：cure（补正／治愈）、void（无效／空的）、want（缺乏／想要）、instrument（文书／工具）、competence（权限／能力）。这五个正是雅思阅读最爱的熟词僻义。</div></div>
+        <div class="goal"><span class="ic">2️⃣</span><div><b>句式</b>：掌握 5 个可迁移句型，重点是 It says X; it does not say Y 的两分句界定式，与 A regime built to X ends by Y 的反讽式收口——后者能让结论句不带一个评价形容词却仍有判断力。</div></div>
+        <div class="goal"><span class="ic">3️⃣</span><div><b>语法</b>：except where 例外条件从句、现在分词作伴随状语、评注性状语、冒号引出同位语、被动加推定动词——五个均为学术写作 Grammatical Range 的直接得分点，其中「评注性状语」是区分 C1 与 B2 写作的标志性结构。</div></div>
+        <div class="goal"><span class="ic">4️⃣</span><div><b>阅读</b>：建立「制度有空隙」类文章的阅读骨架：只写了一半的规则 → 空白的来历 → 第一次填它 → 权限的转移 → 旧词的回流。</div></div>
+        <div class="goal"><span class="ic">5️⃣</span><div><b>思辨</b>：区分三个层次——<b>谁能判</b>（权限）、<b>判什么</b>（实体标准）、<b>判了之后怎样</b>（法律后果）。这三个层次被混为一谈，是读国际法与国际组织文献时最常见的误读来源。</div></div>
+
+        <h3 style="color:var(--accent);">📝 考试技巧 · 制度类文章的三个落点</h3>
+        <p style="font-size:15px;"><b>① 两个判例的理由不要互换。</b>本课有四个年份定位符：1951（国际法院咨询意见）、1988（Belilos）、1994（第 24 号一般性意见）、1995（Loizidou）。观点归属题的标准陷阱是把 1995 年的理由安到 1988 年头上——Belilos 判无效用的是公约旧第 64 条的形式要求，Loizidou 才用「与目的宗旨不相容」。作答时先找年份，再核对依据，最后才看结论。</p>
+        <p style="font-size:15px;"><b>② 「没有规定」也是信息。</b>原文第三句就说 the Convention attaches no stated consequence。这类否定性陈述最容易被略读跳过，却往往是推断题的答案所在——因为整篇文章的论证都靠这个空白启动。凡见到 does not say、no stated、left open，立刻标记。</p>
+        <p style="font-size:15px;"><b>③ 主旨题找「代价的转移」。</b>全文从「国家承担代价（保留无效则退出条约）」走到「条约承担代价（保留被剔除而国家仍受约束）」，最后落到「折中方案仍要回头问国家的意图」。正确选项通常描述这条迁移线；只覆盖单一判例（如 Belilos and the Strasbourg Court）或单一机制的选项，都只覆盖一段。</p>
+
+        <h3 style="color:var(--accent);">🔗 原始文献与延伸阅读</h3>
+        <p style="font-size:14.5px;color:#4b5563;">Vienna Convention on the Law of Treaties (1969), arts. 2(1)(d), 19–23 · <i>Reservations to the Convention on the Prevention and Punishment of the Crime of Genocide</i>, Advisory Opinion, ICJ Reports 1951 · <i>Belilos v Switzerland</i>, 29 April 1988, Series A No. 132; (1988) 10 EHRR 466 · <i>Weber v Switzerland</i>, 22 May 1990 · <i>Loizidou v Turkey</i> (Preliminary Objections), 1995 · Human Rights Committee, General Comment No. 24 (1994) on issues relating to reservations, paras. 8, 11, 13, 17, 18 · International Law Commission, <i>Guide to Practice on Reservations to Treaties</i> (2011), guidelines 1.2, 3.1.5.7, 4.5.1, 4.5.3 · Marks, S., Reservations Unhinged: The Belilos Case before the European Court of Human Rights, (1990) 39 ICLQ 300 · Bourguignon, H. J., The Belilos Case: New Light on Reservations to Multilateral Treaties, (1988–89) 29 Va. J. Int. Law 347 · McCall-Smith, K., Severing Reservations (2014) · Koskenniemi, M. & Leino, P., Fragmentation of International Law? Postmodern Anxieties · 《中华人民共和国缔结条约程序法》（1990）· 王铁崖主编《国际法》。<br>本页为英语学习材料，内容为教学用转述与评论，非任何论著或判决书的翻译，不构成法律意见；一切年份与条文序号以原始文件为准。</p>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 / 导出 PDF</button>
+      </div>
+    </section>
+
+    <footer>Pola News · Advanced English C1–C2 · 2026-11-12 · The Blank After the Test</footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+
+<script>
+/* ---------- Navigation ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>{sidebar.classList.toggle('open');});
+function go(sec){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(sec).classList.add('active');
+  document.querySelectorAll('nav.sidebar a').forEach(a=>a.classList.remove('active'));
+  const link=document.querySelector('nav.sidebar a[data-sec="'+sec+'"]');
+  if(link)link.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window.innerWidth<=780)sidebar.classList.remove('open');
+}
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.sec);});
+});
+
+/* ---------- Reading progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Keyword tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('mouseenter',()=>{
+    tip.innerHTML='<b>'+w.textContent.trim()+'</b><br>'+w.dataset.def;
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let left=r.left;
+    if(left+330>window.innerWidth)left=window.innerWidth-340;
+    tip.style.left=Math.max(10,left)+'px';
+    tip.style.top=(r.bottom+8)+'px';
+  });
+  w.addEventListener('mouseleave',()=>{tip.style.display='none';});
+});
+
+/* ---------- Speech (Web Speech API, replaced by pre-generated audio) ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+loadVoices();
+if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.onvoiceschanged=loadVoices;
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  const match=p=>en.find(p);
+  return match(v=>/Samantha|Google US English|Microsoft Aria|Daniel/i.test(v.name))
+      || match(v=>/en-US/i.test(v.lang))
+      || en[0]
+      || null;
+}
+function resetBtn(){
+  document.querySelectorAll('.play-btn,.speak-btn').forEach(b=>{
+    b.classList.remove('playing');
+    b.textContent=b.dataset.icon||'🔊';
+  });
+}
+function stopSpeech(){
+  if(typeof window.speechSynthesis!=='undefined')window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  stopSpeech();
+  if(typeof window.speechSynthesis==='undefined')return;
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.rate=0.95; u.pitch=1;
+  u.onend=resetBtn; u.onerror=resetBtn;
+  if(btn){btn.classList.add('playing');btn.textContent='⏸';}
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- Segment texts (auto-extracted from the reading section) ---------- */
+const segmentTexts=[
+  "A reservation looks like partial membership: a state joins a multilateral treaty while exempting itself from a clause it dislikes. Article 19 of the Vienna Convention permits this, except where the reservation is incompatible with the treaty's object and purpose. That test has no arithmetic. And the Convention attaches no stated consequence to failing it. It says which reservations may not be made; it does not say what happens to a state that makes one anyway.",
+  "Two answers were available, pulling in opposite directions. One left the judgement to each contracting party, individually and from its own standpoint, so that silence could cure an invalid reservation. Belilos v Switzerland cut that path in 1988. The Court looked past the label, found a reservation where Switzerland had declared an interpretation, held it void for vagueness and for want of a brief statement of the law, and held Switzerland bound regardless.",
+  "The move shifts the cost from the state to the treaty. Loizidou made the reasoning explicit in 1995: the Strasbourg court, unlike the International Court of Justice, supervises a law-making instrument directly, and a practice of unconditional acceptance separates them. In 1994 the Human Rights Committee denied that such treaties were a web of inter-State exchanges, and asserted its own competence. The Commission's 2011 Guide split the difference: an invalid reservation is void, and the reserving state is presumed bound without its benefit, severance by default.",
+  "The objection is that consent, the foundation of the law of treaties, has been quietly overruled by purpose; Switzerland, on the Court's own account, discovered itself bound against what it had tried to secure. The defence is that the alternative hands enforcement back to silence. But note what rescues the compromise: intention. A regime built to replace consent with purpose ends by asking what the state meant."
+];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.i],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"1. According to the passage, Article 19 of the Vienna Convention —",
+   opts:["sets out the procedure by which reservations must be registered with a depositary.","identifies which reservations may not be made, but not what follows if one is made.","requires the unanimous acceptance of every reservation by the contracting parties.","applies only to treaties whose text expressly permits reservations."],
+   ans:1,
+   fb:"正确。第一段末两句说得很直接：It says which reservations may not be made; it does not say what happens to a state that makes one anyway。A 属无中生有，正文未提保存机关的程序；C 恰好是 1951 年咨询意见所拒绝的旧规则；D 与 permits this, except where... 的许可结构相反。"},
+  {q:"2. In Belilos, the Court found the Swiss declaration invalid on the ground that —",
+   opts:["Switzerland had refused to appear before the Court.","the other contracting parties had objected to it in writing.","it was incompatible with the object and purpose of the Convention.","it was general in character and lacked a statement of the relevant law."],
+   ans:3,
+   fb:"正确。第二段写明 void for vagueness and for want of a brief statement of the law，即措辞过泛与欠缺法律简要说明两项。C 是最强的干扰项——那是七年后 Loizidou 案的判决依据，本课第 2 题专设此陷阱；B 与案情相反，瑞士恰恰主张其他缔约方的沉默构成默示接受；A 属无中生有。"},
+  {q:"3. The phrase silence could cure an invalid reservation implies that, under the earlier reading, —",
+   opts:["a defective reservation might acquire effect through the inaction of other parties.","reservations had to be renewed at fixed intervals to remain valid.","the depositary alone decided whether a reservation was admissible.","objecting states were required to act within a stated period of time."],
+   ans:0,
+   fb:"正确。cure 在此是法律义「补正」，全句说判断交给各缔约国 individually and from its own standpoint，因此无人反对即等于无人质疑，缺陷被沉默吸收。B、D 都把「沉默」误读成时限问题；C 与原文相反，正文强调沉默并不剥夺公约机构自行评估之权。"},
+  {q:"4. In the fourth paragraph, overruled is closest in meaning to —",
+   opts:["postponed until a later stage","explained in greater detail","displaced by something of higher authority","repeated in a different form"],
+   ans:2,
+   fb:"正确。原句是 consent has been quietly overruled by purpose——不是某条规则被修订，而是整个体系的基石被另一个原则顶替，与「以更高位阶的依据压过」最接近。A、B、D 都把一种位阶替换误读为程序、解释或重复，均未抓住 by purpose 这一被动结构所表达的取代关系。"},
+  {q:"5. The author's attitude towards the 2011 compromise is best described as —",
+   opts:["dismissive of its practical utility for practitioners.","attentive to the irony of its reliance on intention.","confident that it has settled the doctrinal dispute.","indifferent to its theoretical foundations."],
+   ans:1,
+   fb:"正确。末段先承认批评（consent 被 purpose 顶替），再指出方案最终要靠 intention 运作，并以 A regime built to replace consent with purpose ends by asking what the state meant 收口——这是指出反讽，不是否定其效用。A 与末段承认「替代方案代价更大」相悖；C 与 split the difference 的措辞不符；D 与全篇细读意图的方式相反。"},
+  {q:"6. Which of the following best captures the passage as a whole?",
+   opts:["Why Multilateral Treaties Cannot Do Without Reservations","The Strasbourg Court and the Reform of Human Rights Law","A Test Without a Remedy: How Treaty Law Answered a Question It Never Posed","Consent and Coercion in the Modern Law of Treaties"],
+   ans:2,
+   fb:"正确。全文从第 19 条只写禁止不写后果出发，经两个判例与一份一般性意见把判断权转移，最后落到 2011 年指南的推定与意图。A 只覆盖第一段的前提；B 只覆盖第二、三段；D 的 coercion 一词在全文无据，作者从未主张任何一方受到强制。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b45309';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.textContent='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.textContent='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>

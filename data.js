@@ -11108,5 +11108,67 @@ const EPISODES = [
         "ex": "What sedimented over three centuries was not a discovery but a unit of work, and units are what arguments are conducted in."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-11-12",
+    "title": "The Blank After the Test",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-11-12-the-blank-after-the-test",
+    "url": "lessons/c1/2026-11-12-the-blank-after-the-test.html",
+    "vocab": [
+      {
+        "word": "reservation",
+        "zh": "保留（条约法术语：单方面排除某些条款对本国的法律效果；日常义为「预订、保留意见」，此处不可混用）",
+        "ex": "A reservation is not a refusal to join; it is a request to join on narrower terms, which is why the device spreads membership and fragments obligation at the same time."
+      },
+      {
+        "word": "incompatible",
+        "zh": "不相容的、无法并存的（名词 incompatibility；介词固定搭配 with；比 inconsistent 更绝对）",
+        "ex": "The threshold is compatibility with the treaty's object and purpose, a standard that resists arithmetic and therefore resists agreement about its own application."
+      },
+      {
+        "word": "cure",
+        "zh": "补正、使（瑕疵）消灭（法律义；日常义为「治愈」——同一动词在两种语域里指向完全不同的机制）",
+        "ex": "Silence can cure a defect in procedure, but whether it can cure a reservation that was never lawful is a different question entirely."
+      },
+      {
+        "word": "void",
+        "zh": "无效的；使无效（比 invalid 更绝对：不是「不合格」，而是自始不产生法律效果）",
+        "ex": "A void act is treated as though it had never occurred, which is precisely why its consequences have to be supplied by a separate rule."
+      },
+      {
+        "word": "want",
+        "zh": "缺乏、欠缺（古旧书面语；固定搭配 for want of / in want of，同义于 for lack of 但更文书化）",
+        "ex": "The reservation failed for want of a brief statement of the law, a requirement the Court treated as substantive rather than merely formal."
+      },
+      {
+        "word": "instrument",
+        "zh": "文书、法律文件（法律义；日常义为「工具、乐器」；a law-making instrument 指以立法为目的的条约）",
+        "ex": "Whether a treaty is a law-making instrument or a bargain between parties decides which tribunal is entitled to supervise it."
+      },
+      {
+        "word": "competence",
+        "zh": "权限、职权范围（法律义；日常义为「能力」；与 jurisdiction 近义，但更强调「有无资格处理」）",
+        "ex": "To assert competence is to claim the right to decide, and a body that can decide compatibility without waiting for states has already changed the regime."
+      },
+      {
+        "word": "presume",
+        "zh": "推定、假定为（名词 presumption；与 assume 的分别：presume 会把举证责任转移给对方）",
+        "ex": "The state is presumed to remain a party unless a contrary intention is established, so the burden of showing otherwise falls on the state itself."
+      },
+      {
+        "word": "severance",
+        "zh": "割除、分离（动词 sever；指剥离无效部分而保留其余，与「整体归零」相对）",
+        "ex": "Severance keeps the state inside the treaty and removes only its exemption, an outcome the state may never have bargained for."
+      },
+      {
+        "word": "overrule",
+        "zh": "推翻、否决（本义为上级法院撤销下级裁判；此处指 consent 被 purpose 顶替）",
+        "ex": "When a foundational principle is overruled by a rival one, the change rarely appears as an amendment; it appears as a series of reasonable decisions."
+      }
+    ]
   }
 ];
