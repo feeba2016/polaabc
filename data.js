@@ -8429,6 +8429,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-11-12",
+    "title": "The Boss That Cannot Be Asked a Question",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-11-12-the-boss-that-cannot-be-asked-a-question",
+    "url": "lessons/b2/2026-11-12-the-boss-that-cannot-be-asked-a-question.html",
+    "vocab": [
+      {
+        "word": "misclassification",
+        "zh": "错误分类（mis- 错误 + classification 分类）。指把实际处于从属地位的劳动者登记成「自雇者／独立承包人」，从而避开最低工资、带薪假、病假与失业保险等雇主义务。<b>the risk of misclassification</b> 错误分类的风险——这是本课的核心法律概念，比 wrongly classified 更正式、更常见于政策文本",
+        "ex": "\"The word for that is misclassification, and it is where the argument starts.\""
+      },
+      {
+        "word": "deactivation",
+        "zh": "停用；账号封停（de- 去除 + activation 启用）。平台的 deactivation 相当于解雇，却常以「账号停用」的名义发出：不带解释、不给警告、不附理由。注意与 dismissal（解雇，法律用语）的区别——后者预设存在雇佣关系，前者恰恰回避它。动词 deactivate",
+        "ex": "\"Deactivation is dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse.\""
+      },
+      {
+        "word": "recourse",
+        "zh": "追索途径；申诉门路（读作 /rɪˈkɔːs/，重音在第二音节，s 发 /s/）。<b>have recourse to sth</b> 诉诸某途径；<b>without recourse</b> 无处申诉。法律文本里指当事人可采取的救济手段——申诉、仲裁、起诉都算。本课的关键是：封号之后有没有 recourse",
+        "ex": "\"Deactivation is dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse.\""
+      },
+      {
+        "word": "accountable",
+        "zh": "负有说明责任的；可被问责的（account + -able）。<b>be accountable to sb for sth</b> 就某事向某人负责。与 responsible 的差别：responsible 强调「该做的事归谁做」，accountable 强调「做完之后必须交代、必须接受追问」——本课要的正是后者。名词 accountability",
+        "ex": "\"A system can be strict and still be wrong. What it cannot easily be is accountable.\""
+      },
+      {
+        "word": "rebuttable",
+        "zh": "可反驳的；可被推翻的（rebut 反驳 + -able）。法律术语：<b>rebuttable presumption</b> 可反驳的推定——先假定成立，但只要对方拿出足够证据就能推翻。反义词 irrebuttable／conclusive 不可推翻的。这一条限定词，决定了整部指令的力度",
+        "ex": "\"Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company.\""
+      },
+      {
+        "word": "presumption",
+        "zh": "推定；假定（读作 /prɪˈzʌmpʃn/）。presume 假定。法律上的 presumption 不是猜测，而是「在无人举证之前，法律先这样认定」，因此举证责任会随之移动。与日常的 assumption（假设）不同：presumption 带法律效力。形容词 presumptive",
+        "ex": "\"Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company.\""
+      },
+      {
+        "word": "subordination",
+        "zh": "从属性；隶属关系（sub- 在下 + ordin- 次序，本义「排在下面」）。劳动法判断雇佣关系的核心标准：是否受指挥、受监督，能否自行决定价格与工时。形容词 subordinate 从属的；名词 subordinate 下属；动词 subordinate 使服从。<b>signs of subordination</b> 从属性的迹象",
+        "ex": "\"Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company.\""
+      },
+      {
+        "word": "oversight",
+        "zh": "监督；把关（over + sight，本义「在上方看着」）。<b>human oversight</b> 人工监督——重要决定不能只由自动系统作出，必须有人复核。与 supervision 的差别：supervision 偏日常管理，oversight 偏制度性、事后性的把关。注意别与 oversight 的另一义「疏忽」混淆（by an oversight 由于疏忽）",
+        "ex": "\"Its second is a set of duties about oversight: platforms must explain how automated decisions are made, and a person must review any decision that suspends an account or withholds pay.\""
+      },
+      {
+        "word": "opaque",
+        "zh": "不透明的；难以看懂的（读作 /əʊˈpeɪk/，重音在第二音节）。字面指不透光，引申指规则、流程、算法让人看不明白。<b>opaque system</b> 黑箱式的系统；opaque decision-making 不透明的决策。反义词 transparent 透明的。名词 opacity",
+        "ex": "\"The worker must first produce the facts, the evidence itself sitting inside a system that is often opaque to the person it judges.\""
+      },
+      {
+        "word": "asymmetry",
+        "zh": "不对称（a- 无 + symmetry 对称）。经济学与法学常用词：<b>information asymmetry</b> 信息不对称，指一方掌握的信息远多于另一方，谈判与追责因此失衡。形容词 asymmetric／asymmetrical。本课的金句正是把它从「权力」扩到「信息」",
+        "ex": "\"The asymmetry is not only of power but of information.\""
+      },
+      {
+        "word": "precarious",
+        "zh": "不稳定的；朝不保夕的（读作 /prɪˈkeəriəs/，重音在第二音节）。<b>precarious work</b> 不稳定就业：收入、工时、去留都无保障。名词 precarity 不稳定状态（学术高频）。近义 unstable，但 precarious 更强调「随时可能失去」",
+        "ex": "\"So the honest description of platform work remains precarious — not because the law is silent, but because the law has to be argued case by case.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",

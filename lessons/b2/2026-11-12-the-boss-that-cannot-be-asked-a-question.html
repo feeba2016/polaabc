@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Boss That Cannot Be Asked a Question</title>
+<style>
+:root{
+  --accent:#1e5f74;
+  --accent2:#a15c2b;
+  --bg:#f7f8f9;
+  --card:#ffffff;
+  --text:#1f2429;
+  --muted:#6b7280;
+  --highlight:#d5e5ea;
+  --border:#dbe4e8;
+  --soft:#eef4f6;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(30,95,116,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(31,41,55,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(30,95,116,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,95,116,.5);}70%{box-shadow:0 0 0 12px rgba(30,95,116,0);}100%{box-shadow:0 0 0 0 rgba(30,95,116,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#bcd6de;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(31,41,55,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(30,95,116,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#d5e5ea;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Social Issues 社会问题</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Boss That Cannot Be Asked a Question</h1>
+      <p class="subtitle">派单、计价、评分、封号——平台像老板一样管事，却从不承认自己是雇主。欧盟平台劳动指令的转化截止日是 <b>2026 年 12 月 2 日</b>；它真正改变的不是「你是不是雇员」，而是「谁必须去证明」。｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · A Boss With No Address 一个没有地址的老板</div>
+            <p>Suppose your manager could change your pay at midnight, send you to another part of the city, and dismiss you without a word — and suppose that manager had no face, no office and no telephone number. That is roughly how app-based work feels to many of the people doing it. In 2021 the European Commission estimated that more than 28 million people in the EU worked through digital labour platforms, a figure it expected to reach 43 million by 2025. Nine out of ten of those platforms classified the people working for them as self-employed, and up to 5.5 million were thought to be wrongly classified. The word for that is <span class="kw" data-def="misclassification 错误分类（mis- 错误 + classification 分类）。指把实际处于从属地位的劳动者登记成「自雇者 / 独立承包人」，从而避开最低工资、带薪休假、病假、失业保险等雇主义务。这是本课的核心法律概念，比 wrongly classified 更正式、更常用于政策文本">misclassification</span>, and it is where the argument starts.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · Three Functions of a Manager 管理者的三件事</div>
+            <p>A manager does three things: assigns the work, judges how well it was done, and decides what happens next. Research on algorithmic management describes platforms performing all three through software. Tasks are directed by a matching system, performance is scored by customers, and accounts are closed by a rule that nobody has read. The last of these is the sharpest. <span class="kw" data-def="deactivation 停用；账号封停（de- 去除 + activation 启用）。平台的 deactivation 相当于解雇，但常以「账号停用」的名义发出，不带解释、不给警告、不附理由。注意与 dismissal（解雇，法律用语）的区别：后者预设存在雇佣关系，前者恰恰回避它">Deactivation</span> is dismissal in everything but name, yet it often arrives without an explanation, a warning or any <span class="kw" data-def="recourse 追索途径；求助的门路（读作 /rɪˈkɔːs/，重音在第二音节，s 发 /s/）。have recourse to sth 诉诸某途径；without recourse 无处申诉。法律文本里指当事人可以采取的救济手段——申诉、仲裁、起诉都算">recourse</span>. Human Rights Watch interviewed workers who had been removed automatically, and nearly half of those it spoke to were later cleared of wrongdoing. A system can be strict and still be wrong. What it cannot easily be is <span class="kw" data-def="accountable 负有说明责任的；可被问责的（account + -able）。be accountable to sb for sth 就某事向某人负责。注意与 responsible 的差别：responsible 强调「该做的事归谁做」，accountable 强调「做完之后必须交代、必须接受追问」——本课要的正是后者">accountable</span>.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · Who Has to Prove What 谁该证明什么</div>
+            <p>Europe has now written a rule about this. Directive (EU) 2024/2831 came into force in December 2024, and member states have until 2 December 2026 to write it into national law. Its first mechanism is a <span class="kw" data-def="rebuttable 可反驳的；可被推翻的（rebut 反驳 + -able）。法律术语：rebuttable presumption 可反驳的推定——先假定成立，但只要对方拿出足够证据就能推翻。反义词是 irrebuttable / conclusive（不可推翻的）">rebuttable</span> <span class="kw" data-def="presumption 推定；假定（读作 /prɪˈzʌmpʃn/）。presume 假定。法律上的 presumption 不是猜测，而是「在无人举证之前，法律先这样认定」，因此举证责任会随之移动。与 assumption（日常假设）不同，presumption 带法律效力">presumption</span>: if a worker can show signs of <span class="kw" data-def="subordination 从属性；隶属关系（sub- 在下 + ordin- 次序，本义「排在下面」）。劳动法判断雇佣关系的核心标准：是否受指挥、受监督、不能自行决定价格与工时。形容词 subordinate 从属的；名词 subordinate 下属">subordination</span> — the platform sets the rate, the route, the penalty — the burden of proof moves to the company. Its second is a set of duties about <span class="kw" data-def="oversight 监督；监管（over + sight，本义「在上方看着」）。human oversight 人工监督——指重要决定不能只由自动系统作出，必须有人复核。注意与 supervision 的差别：supervision 偏日常管理，oversight 偏制度性、事后性的把关">oversight</span>: platforms must explain how automated decisions are made, and a person must review any decision that suspends an account or withholds pay. Slovakia, which passed its version in September 2026, went further and required such decisions to be taken by a natural person. Notice what the directive does not do. It does not declare anyone an employee. It changes who must prove what.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · The Part a Rule Cannot Reach 规则够不到的地方</div>
+            <p>On 2 December that obligation becomes real, and it will still leave most of the difficulty untouched. A presumption can be <span class="kw" data-def="rebutted 被反驳；被推翻（rebut 的过去分词）。rebut an argument 反驳一个论点；rebut the presumption 推翻这项推定。名词 rebuttal 反驳、答辩。真题里常与 refute（驳倒）同现，但 refute 语气更强，暗含「已成功驳倒」">rebutted</span>; a company with better lawyers and better data may rebut it. The worker must first produce the facts, the evidence itself sitting inside a system that is often <span class="kw" data-def="opaque 不透明的；难以看懂的（读作 /əʊˈpeɪk/，重音在第二音节）。字面指不透光，引申指规则、流程、算法让人看不明白。常用搭配 opaque system / opaque decision-making。反义词 transparent 透明的">opaque</span> to the person it judges. The <span class="kw" data-def="asymmetry 不对称（a- 无 + symmetry 对称）。经济学与法学常用词：information asymmetry 信息不对称，指一方掌握的信息远多于另一方，交易或谈判因此失衡。形容词 asymmetric / asymmetrical">asymmetry</span> is not only of power but of information. Nor does everyone want the status on offer: many value the flexibility precisely because no shift is guaranteed. So the honest description of platform work remains <span class="kw" data-def="precarious 不稳定的；朝不保夕的（读作 /prɪˈkeəriəs/，重音在第二音节）。precarious work 不稳定就业：收入、工时、去留都无保障。名词 precarity 不稳定状态（学术高频）。近义 unstable，但 precarious 更强调「随时可能失去」">precarious</span> — not because the law is silent, but because the law has to be argued case by case. Were the directive a switch, it would be simple. It is closer to a key: it opens a door that someone still has to walk through.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="misclassification">🔊</button><div class="word">misclassification<span class="pos">n.</span></div><div class="zh">错误分类（mis- 错误 + classification 分类）。指把实际处于从属地位的劳动者登记成「自雇者／独立承包人」，从而避开最低工资、带薪假、病假与失业保险等雇主义务。<b>the risk of misclassification</b> 错误分类的风险——这是本课的核心法律概念，比 wrongly classified 更正式、更常见于政策文本</div><div class="ex">"The word for that is misclassification, and it is where the argument starts."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="deactivation">🔊</button><div class="word">deactivation<span class="pos">n.</span></div><div class="zh">停用；账号封停（de- 去除 + activation 启用）。平台的 deactivation 相当于解雇，却常以「账号停用」的名义发出：不带解释、不给警告、不附理由。注意与 dismissal（解雇，法律用语）的区别——后者预设存在雇佣关系，前者恰恰回避它。动词 deactivate</div><div class="ex">"Deactivation is dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="recourse">🔊</button><div class="word">recourse<span class="pos">n.</span></div><div class="zh">追索途径；申诉门路（读作 /rɪˈkɔːs/，重音在第二音节，s 发 /s/）。<b>have recourse to sth</b> 诉诸某途径；<b>without recourse</b> 无处申诉。法律文本里指当事人可采取的救济手段——申诉、仲裁、起诉都算。本课的关键是：封号之后有没有 recourse</div><div class="ex">"Deactivation is dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="accountable">🔊</button><div class="word">accountable<span class="pos">adj.</span></div><div class="zh">负有说明责任的；可被问责的（account + -able）。<b>be accountable to sb for sth</b> 就某事向某人负责。与 responsible 的差别：responsible 强调「该做的事归谁做」，accountable 强调「做完之后必须交代、必须接受追问」——本课要的正是后者。名词 accountability</div><div class="ex">"A system can be strict and still be wrong. What it cannot easily be is accountable."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="rebuttable">🔊</button><div class="word">rebuttable<span class="pos">adj.</span></div><div class="zh">可反驳的；可被推翻的（rebut 反驳 + -able）。法律术语：<b>rebuttable presumption</b> 可反驳的推定——先假定成立，但只要对方拿出足够证据就能推翻。反义词 irrebuttable／conclusive 不可推翻的。这一条限定词，决定了整部指令的力度</div><div class="ex">"Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="presumption">🔊</button><div class="word">presumption<span class="pos">n.</span></div><div class="zh">推定；假定（读作 /prɪˈzʌmpʃn/）。presume 假定。法律上的 presumption 不是猜测，而是「在无人举证之前，法律先这样认定」，因此举证责任会随之移动。与日常的 assumption（假设）不同：presumption 带法律效力。形容词 presumptive</div><div class="ex">"Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="subordination">🔊</button><div class="word">subordination<span class="pos">n.</span></div><div class="zh">从属性；隶属关系（sub- 在下 + ordin- 次序，本义「排在下面」）。劳动法判断雇佣关系的核心标准：是否受指挥、受监督，能否自行决定价格与工时。形容词 subordinate 从属的；名词 subordinate 下属；动词 subordinate 使服从。<b>signs of subordination</b> 从属性的迹象</div><div class="ex">"Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="oversight">🔊</button><div class="word">oversight<span class="pos">n.</span></div><div class="zh">监督；把关（over + sight，本义「在上方看着」）。<b>human oversight</b> 人工监督——重要决定不能只由自动系统作出，必须有人复核。与 supervision 的差别：supervision 偏日常管理，oversight 偏制度性、事后性的把关。注意别与 oversight 的另一义「疏忽」混淆（by an oversight 由于疏忽）</div><div class="ex">"Its second is a set of duties about oversight: platforms must explain how automated decisions are made, and a person must review any decision that suspends an account or withholds pay."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="opaque">🔊</button><div class="word">opaque<span class="pos">adj.</span></div><div class="zh">不透明的；难以看懂的（读作 /əʊˈpeɪk/，重音在第二音节）。字面指不透光，引申指规则、流程、算法让人看不明白。<b>opaque system</b> 黑箱式的系统；opaque decision-making 不透明的决策。反义词 transparent 透明的。名词 opacity</div><div class="ex">"The worker must first produce the facts, the evidence itself sitting inside a system that is often opaque to the person it judges."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="asymmetry">🔊</button><div class="word">asymmetry<span class="pos">n.</span></div><div class="zh">不对称（a- 无 + symmetry 对称）。经济学与法学常用词：<b>information asymmetry</b> 信息不对称，指一方掌握的信息远多于另一方，谈判与追责因此失衡。形容词 asymmetric／asymmetrical。本课的金句正是把它从「权力」扩到「信息」</div><div class="ex">"The asymmetry is not only of power but of information."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="precarious">🔊</button><div class="word">precarious<span class="pos">adj.</span></div><div class="zh">不稳定的；朝不保夕的（读作 /prɪˈkeəriəs/，重音在第二音节）。<b>precarious work</b> 不稳定就业：收入、工时、去留都无保障。名词 precarity 不稳定状态（学术高频）。近义 unstable，但 precarious 更强调「随时可能失去」</div><div class="ex">"So the honest description of platform work remains precarious — not because the law is silent, but because the law has to be argued case by case."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 「推定」这条链：</b><b>presume</b> 假定 → <b>presumption</b> 推定 → <b>presumptive</b> 推定的 → <b>rebut</b> 反驳 → <b>rebuttable</b> 可反驳的。四个词串起来就是一句法条：a rebuttable presumption of employment。写议论文时想说「先这样算，除非有人能证明不是」，用的就是这套词。<br>
+        <b>② 「谁负责」的三种说法：</b><b>responsible</b> 负责（事归谁做）→ <b>accountable</b> 须交代（做完要接受追问）→ <b>liable</b> 负法律赔偿责任的。企业管理里常讲 single point of accountability；法律文书里常见 jointly and severally liable（连带责任）。三个词不能互换。<br>
+        <b>③ 「看不见」的三档：</b><b>transparent</b> 透明 → <b>opaque</b> 不透明 → <b>a black box</b> 黑箱（输入输出可见，内部机制不可见）。opaque 是形容词，opacity 是名词；形容算法时，opaque 比 unclear 更准确，因为它说的是「结构上就看不进去」。<br>
+        <b>④ 「不稳定」的梯度：</b><b>unstable</b> 不稳定（中性）→ <b>precarious</b> 朝不保夕（带处境判断）→ <b>precarity</b> 不稳定状态（学术名词，常与 gig economy、zero-hour contract 同现）。写社会议题时，precarity 是绕不开的关键词。<br>
+        <b>⑤ 一组「停止」的强度：</b><b>suspend</b> 暂停（可恢复）→ <b>deactivate</b> 停用（账号层面）→ <b>dismiss</b> 解雇（有雇佣关系）→ <b>terminate</b> 终止（合同用语）。平台的措辞往往停在第一、二档，而实际效果落在第三档——这个落差本身就是新闻点。<br>
+        <b>⑥ 一个易混：</b><b>oversight</b> 监督 ↔ <b>oversight</b> 疏忽。同一个词两个意思，靠语境定：human oversight 是前者，by an oversight 是后者。学术写作里若要避免歧义，可用 <b>supervision</b> 或 <b>scrutiny</b> 替代前者。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. Suppose + 虚拟语气并列 · Suppose your manager could change your pay...</h3>
+          <div class="zh">结构：<b>Suppose + 主语 + could/had（过去式）+ 三个并列动词短语</b>。Suppose 在这里不是「假设某事为真」的陈述，而是请读者进入一个设想，所以后面用 <b>could / had</b> 这类过去形式表示「与事实有距离」。三个动作一个比一个重（改薪水 → 派到别处 → 一句话不说就解雇），节奏由轻到重；第二句 and suppose that manager had no face... 用同样的句式再推一步，把「老板」抽掉实体。<b>这种「祈使式假设 + 递进」是议论文开篇最省力的钩子</b>：读者还没被告知结论，就已经站进了当事人的位置。</div>
+          <div class="eg">Suppose your manager could change your pay at midnight, send you to another part of the city, and dismiss you without a word — and suppose that manager had no face, no office and no telephone number.</div>
+          <div class="practice">仿写：设想你的老师可以在半夜改掉你的分数、把你调到另一个班、并且一句话不说就让你退课。
+            <input type="text" placeholder="Suppose your teacher could change your grade at midnight, ..." data-ans="Suppose your teacher could change your grade at midnight, move you to another class, and drop you from the course without a word.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. in everything but name + 冠词省略的三项并列 · ...dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse</h3>
+          <div class="zh">结构：<b>名词 + in everything but name</b>（除了名字之外，各方面都是……），后面接 <b>yet</b> 转折，再跟三个并列名词 <b>an explanation, a warning or any recourse</b>。这个短语的力量在于它绕开了「是不是」的争论：不必先证明它是解雇，只要指出它在一切实质上都等同于解雇。并列三项里，前两项用不定冠词 <b>a</b>，第三项换成 <b>any</b>——因为 recourse 在这里不可数，也因为 any 把否定推到底（连一点点申诉的门路都没有）。<b>并列中「冠词悄悄变化」是高级写作的细节</b>，读者不一定说出理由，但会觉得句子更准。</div>
+          <div class="eg">Deactivation is dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse.</div>
+          <div class="practice">仿写：这种「自愿加班」除了名字之外就是强制劳动，而且没有加班费、没有调休、也没有任何申诉渠道。
+            <input type="text" placeholder="This voluntary overtime is compulsory work in everything but name, ..." data-ans="This voluntary overtime is compulsory work in everything but name, and it comes without extra pay, a day off in lieu or any channel for complaint.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. 冒号引出 + 破折号插入语 · ...a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company</h3>
+          <div class="zh">结构：<b>主句 + 冒号（展开说明）+ if 条件从句 + 破折号夹住的插入语 + 主句（结果）</b>。冒号说明「这个机制具体是什么」；破折号里塞进三个并列名词短语 <b>the rate, the route, the penalty</b>，把抽象的 legal 概念立刻落成看得见的东西；破折号合上之后，条件句的主句才出现——<b>the burden of proof moves</b>。注意插入语用的是三个短名词，不是完整句子，因此不会打断条件的逻辑链。<b>学术写作里，冒号负责「具体化」，破折号负责「举例但不打断」</b>，两者配合能写出一句很长却不乱的话。</div>
+          <div class="eg">Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company.</div>
+          <div class="practice">仿写：这套规则有一个前提：如果学生能指出评分存在任意性——同一份答卷给出不同分数、没有评分标准、也不给复核机会——那么举证的责任就转到学校一方。
+            <input type="text" placeholder="The rule rests on one condition: if a student can show that marking is arbitrary — ..." data-ans="The rule rests on one condition: if a student can show that marking is arbitrary — the same script scored differently, no rubric, no chance of review — the burden of proof moves to the school.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. 独立主格结构 · ..., the evidence itself sitting inside a system that is often opaque...</h3>
+          <div class="zh">结构：<b>主句 + 逗号 + 名词（the evidence itself）+ 现在分词（sitting）</b>。这就是<b>独立主格</b>：分词短语自带主语，与主句主语不同，因此不能被改写成定语从句而不改变意思。此处主句主语是 the worker（工人要先拿出事实），独立主格的主语是 the evidence（证据却待在系统里）——<b>两个主语并置，矛盾就自己显形了</b>：能举证的人拿不到证据，拿着证据的一方不必举证。加 itself 是为了强调「证据本身」，也顺手把节奏压住。改写对照：若写成 and the evidence sits inside a system，语法也对，但两个分句平起平坐，因果的尖锐感会钝掉。</div>
+          <div class="eg">The worker must first produce the facts, the evidence itself sitting inside a system that is often opaque to the person it judges.</div>
+          <div class="practice">仿写：申请人必须先说明理由，而全部记录都在对方手里，申请人根本看不到。
+            <input type="text" placeholder="The applicant must first give reasons, the full record ..." data-ans="The applicant must first give reasons, the full record itself lying in the hands of the other side.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>5. 倒装虚拟条件句 · Were the directive a switch, it would be simple.</h3>
+          <div class="zh">结构：<b>Were + 主语 + 表语（省略 if）, 主句用 would + 动词</b>。这是 if the directive were a switch 的倒装形式：把 were 提到句首、删掉 if，语气更紧、更书面，常用于结论句里作一次「反向定位」。后半句 <b>It is closer to a key</b> 立刻把比喻换掉——先给一个不成立的比喻（开关：一按就灵），再给一个更准的比喻（钥匙：门开了还得有人走进去）。<b>「否定一个比喻 + 换上一个更准的比喻」是收尾的高效写法</b>：读者既记住了区别，也记住了立场。注意：只有 were / had / should 可以这样提前，实义动词不行。</div>
+          <div class="eg">Were the directive a switch, it would be simple. It is closer to a key: it opens a door that someone still has to walk through.</div>
+          <div class="practice">仿写：如果这部法律是一道闸门，事情就简单了。它更像一段台阶：得有人一级一级走上去。
+            <input type="text" placeholder="Were the law a gate, it would be simple. ..." data-ans="Were the law a gate, it would be simple. It is closer to a staircase: someone still has to climb it step by step.">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <p class="subtitle">5 个语法点，例句均取自正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① 名词化：把动作变成可以争论的东西</h3>
+          <div class="zh"><b>名词化（nominalisation）</b>是把动词或形容词变成名词：classify → <b>misclassification</b>，subordinate → <b>subordination</b>，deactivate → <b>deactivation</b>，supervise → <b>oversight</b>，rebut → <b>rebuttable</b>。它有三个用处：<b>（1）当主语</b>——Deactivation is dismissal in everything but name，一句话就把整件事放上审判台；<b>（2）压缩信息</b>——the misclassification of platform workers 比 people are classified wrongly 短得多，还能带修饰语；<b>（3）制造抽象层次</b>——政策文本必须能反复指称同一个现象，所以一定要给它一个名词。<b>代价是</b>：名词化太多会让句子失去动作感（the implementation of the optimisation of... 就是典型的重症）。<b>经验法则</b>：一段里用两三个名词化立概念，其余句子仍用动词。</div>
+          <div class="eg">The word for that is misclassification, and it is where the argument starts.</div>
+        </div>
+
+        <div class="item">
+          <h3>② 虚拟语气：与事实保持距离的两种写法</h3>
+          <div class="zh">本课两处虚拟用法不同。<b>（1）Suppose + 过去形式</b>：Suppose your manager <b>could</b> change your pay... and suppose that manager <b>had</b> no face——用过去形式不是指过去，而是标明「这是设想」，请读者暂时接受一个假设。<b>（2）倒装虚拟</b>：<b>Were</b> the directive a switch, it <b>would</b> be simple（＝ If the directive were a switch...）。<b>判别口诀</b>：说现在或将来不可能的事，从句用过去式（were / could），主句用 would；说过去没发生的事，从句用 had done，主句用 would have done。倒装时只提前 were / had / should 三个词，且省掉 if 后不加逗号以外的任何标记。</div>
+          <div class="eg">Were the directive a switch, it would be simple. It is closer to a key: it opens a door that someone still has to walk through.</div>
+        </div>
+
+        <div class="item">
+          <h3>③ 被动语态：什么时候该把施动者藏起来</h3>
+          <div class="zh">被动语态常被要求「少用」，但本课的被动都干着活。<b>（1）施动者不重要或不明</b>：up to 5.5 million <b>were thought to be</b> wrongly classified（谁认为的不重要，重要的是这个数字）；a presumption <b>can be rebutted</b>（重点在「可以被推翻」这个性质）。<b>（2）施动者是机构，写出来反而累赘</b>：Nine out of ten of those platforms classified... 是主动，因为主语正是要批评的对象；而 tasks <b>are directed</b> by a matching system 用被动，是因为要强调「任务被系统指挥」这件事本身。<b>（3）让读者看不见是谁做的</b>——这正是本课讨论的问题：accounts <b>are closed</b> by a rule that nobody has read。注意这个被动句的讽刺：句子本身也在隐藏施动者。<b>写作建议</b>：每用一次被动，问一句「我是故意不写施动者，还是忘了写」。</div>
+          <div class="eg">Tasks are directed by a matching system, performance is scored by customers, and accounts are closed by a rule that nobody has read.</div>
+          <div class="eg" style="margin-top:8px;">A presumption can be rebutted; a company with better lawyers and better data may rebut it.</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 独立主格：两个主语并置的写法</h3>
+          <div class="zh">独立主格（absolute construction）＝ <b>名词／代词 + 分词／形容词／介词短语</b>，整体作状语，自带逻辑主语，<b>与主句主语不同</b>。本课：The worker must first produce the facts, <b>the evidence itself sitting</b> inside a system...（主句主语 the worker，独立主格主语 the evidence）。三种常见形式：<b>+ 现在分词</b>（表主动、同时：the evidence sitting...）、<b>+ 过去分词</b>（表被动、已完成：the work finished, ...）、<b>+ with</b>（更口语：with the deadline approaching, ...）。<b>关键在于</b>：如果把独立主格改写成从句（and the evidence sits...），两个分句就变成并列，原先「一边…另一边…」的对照会消失。判断是否用独立主格，就看这两件事是不是<b>同时成立、彼此映照</b>。</div>
+          <div class="eg">The worker must first produce the facts, the evidence itself sitting inside a system that is often opaque to the person it judges.</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 否定词前置的倒装，与伪分裂句的强调</h3>
+          <div class="zh"><b>（1）否定词前置倒装</b>：Nor / Neither / Never / Rarely / Not only 放在句首时，主句要部分倒装（助动词提前）。本课：<b>Nor does</b> everyone want the status on offer（＝ And not everyone wants...）。这里用倒装不只是为了正式，更是为了<b>接上前一句</b>：上一句说「很多人想要这个身份」，Nor does... 立刻把「但不是所有人」缝上去，比另起一句 But not everyone... 更连贯。<b>（2）伪分裂句</b>：<b>What</b> it cannot easily be <b>is</b> accountable。把要强调的成分放到 is 后面，句末自然重读。与 It is... that... 的强调句相比，伪分裂句更适合「对比前文」：前文说它可以严格、可以出错，末句用 What it cannot be is... 收住，形成三段式的排比。两种手段都服务于同一件事：<b>控制读者重读哪个词</b>。</div>
+          <div class="eg">Nor does everyone want the status on offer: many value the flexibility precisely because no shift is guaranteed.</div>
+          <div class="eg" style="margin-top:8px;">A system can be strict and still be wrong. What it cannot easily be is accountable.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、一份文件，两个机制</h3>
+        <p>本课说的那份规则，正式名称是<b>《欧洲议会和理事会关于改善平台工作条件的指令》（Directive (EU) 2024/2831）</b>。它于 <b>2024 年 12 月</b>生效，成员国须在 <b>2026 年 12 月 2 日</b>之前把它写进本国法律——也就是本课写作时的三周之后。指令不直接适用于个人，它先约束国家，再由各国法律落到企业与劳动者身上，这个两步结构叫 <b>transposition（转化）</b>。</p>
+        <p>它的两条主线，一条管「身份」，一条管「算法」：</p>
+        <table class="facts">
+          <tr><th>机制</th><th>内容</th><th>关键限定词</th></tr>
+          <tr><td><b>雇佣关系推定</b><br>presumption of employment</td><td>劳动者只要举出从属性的迹象（平台定价、定路线、定处罚、限制接单自由、限制接别家的活），就<b>推定为雇员</b>，举证责任转到平台一方</td><td><b>rebuttable</b>（可反驳）——平台仍可在法庭上推翻</td></tr>
+          <tr><td><b>算法管理规则</b><br>rules on algorithmic management</td><td>平台须告知自动化系统如何分配任务、如何评价、如何影响报酬；重大决定（扣款、封号）须可解释、可要求<b>人工复核</b>；须有人工监督与风险评估</td><td><b>significant decision</b>（重大决定）——不是所有决定都触发复核</td></tr>
+        </table>
+        <p>请注意第一条里那个不起眼的形容词：<b>rebuttable</b>。它决定了整部指令的力度。如果推定不可反驳（irrebuttable），平台就只能认；因为可反驳，它就只是一次<b>举证责任的搬家</b>——法律没有宣布你是谁，只是规定「谁先拿出证据、谁负责说服法官」。</p>
+
+        <h3>二、「算法当老板」到底做了什么</h3>
+        <p>学界把算法管理拆成三类动作，正好对应一个人类管理者的一生职责：</p>
+        <table class="facts">
+          <tr><th>功能</th><th>算法怎么做</th><th>本课的对应句</th></tr>
+          <tr><td><b>指挥</b><br>direction</td><td>派单算法决定你接哪一单、什么价、走哪条路；拒单率影响后续派单</td><td>Tasks are directed by a matching system</td></tr>
+          <tr><td><b>评价</b><br>evaluation</td><td>乘客打分、准时率、完成率合成一个分数；分数掉到某条线以下就失去优先权</td><td>performance is scored by customers</td></tr>
+          <tr><td><b>惩戒</b><br>discipline</td><td>账号封停（deactivation）——相当于解雇，却常以「系统检测到异常」的名义发出</td><td>accounts are closed by a rule that nobody has read</td></tr>
+        </table>
+        <p>三件事分开看都不新鲜：派单像调度，评分像考核，封号像开除。新鲜的是<b>它们被同一个人（同一套系统）同时掌握，而这个人不承认自己是雇主</b>。雇主身份意味着最低工资、工时上限、带薪假、病假、失业保险、解雇理由与申诉程序；自雇身份意味着这些统统没有。权力留下了，义务被去掉了。</p>
+        <p>关于「封错了」的比例，本课引的是<b>人权观察（Human Rights Watch）</b>的访谈：在其访谈到的、被系统自动封号的人里，近半数后来被认定并无过错。这个数字要读得小心——它是访谈样本，不是统计抽样，不能外推成「一半的封号都是错的」；但它足以说明一件事：<b>自动惩戒的出错率不低，而当事人往往连「被判了什么罪」都不知道</b>。另一项调查（Pew，2021，美国样本）显示，超过一半的平台劳动者对自己「报酬是怎么算出来的」了解甚少。</p>
+        <blockquote>The asymmetry is not only of power but of information.
+          <em>不对称的不仅是权力，还有信息。——本课第 4 段</em>
+        </blockquote>
+
+        <h3>三、转化期正在发生什么</h3>
+        <p>2026 年下半年，各国陆续交卷。两个可以对照的例子：</p>
+        <ul>
+          <li><b>斯洛伐克</b>：2026 年 9 月 23 日议会通过《数字劳动平台工作法》，10 月 14 日签署，<b>12 月 2 日</b>生效。它把推定直接挂到劳动法既有的「依附性工作」标准上，并明确规定：<b>限制、暂停或注销账号的决定必须由自然人作出</b>；禁止处理劳动者的情绪与心理状态、健康、工会活动、私人通信等敏感数据；还要求平台报备并每半年报告劳动者人数、平均工时与平均收入。</li>
+          <li><b>立陶宛</b>：2026 年 10 月 13 日议会一读通过劳动法修正案（第 XVP-1914 号），同样把生效目标定在 12 月 2 日。它没有设「几项指标算数」的硬门槛，而是规定：只要能证明平台对工作实施了<b>指挥、控制或监督</b>，推定即成立，举证责任整体转移。</li>
+        </ul>
+        <p>这两个例子说明转化不是照抄：<b>指令给的是底线与方向，各国在「门槛怎么设、程序怎么走、数据能不能碰」上各有选择</b>。本课只陈述这两个已公开的立法进程，不评价其优劣，也不预测效果——它们都还没开始执行。</p>
+
+        <h3>四、中外对照：二分法加推定，还是三分法设类别</h3>
+        <p>中国处理同一个问题，走的是另一条技术路线。2021 年 7 月 16 日，人社部等<b>八个部门</b>联合印发<b>《关于维护新就业形态劳动者劳动保障权益的指导意见》（人社部发〔2021〕56 号）</b>，把平台用工<b>分成三种情形</b>，而不是两种：</p>
+        <table class="facts">
+          <tr><th>情形</th><th>法律性质</th><th>企业的责任</th></tr>
+          <tr><td>符合确立劳动关系情形</td><td>劳动关系</td><td>依法订立劳动合同，全套劳动法保护</td></tr>
+          <tr><td><b>不完全符合确立劳动关系情形</b>，但企业对劳动者进行劳动管理</td><td>新增的第三类（业内也称「不完全劳动关系」）</td><td>订立<b>书面协议</b>，合理确定双方权利义务；纳入最低工资、休息、劳动安全、社保等保障范围</td></tr>
+          <tr><td>个人依托平台自主经营、从事自由职业</td><td>民事关系</td><td>按民事法律调整</td></tr>
+        </table>
+        <p>第三条专门写了算法：企业制定修订<b>平台进入退出、订单分配、计件单价、抽成比例、报酬构成与支付、工作时间、奖惩</b>等直接涉及劳动者权益的规则与算法时，须充分听取工会或劳动者代表的意见，并将结果公示、告知劳动者；工会或劳动者代表提出协商要求的，企业应积极响应。同一份文件还要求建立<b>申诉机制</b>，并部署<b>职业伤害保障</b>试点——2022 年起在北京、上海、江苏、广东、海南、重庆、四川 <b>7 个省市</b>的出行、外卖、即时配送、同城货运 <b>4 个行业</b>开展，据人社部 2025 年初的答复，参保人数已超过 <b>800 万人</b>。地方细则把话讲得更具体，例如广东 2022 年的实施意见明确：<b>不得将「最严算法」作为考核要求</b>；外卖送餐员连续送单超过 4 小时应适当安排休息，网约车驾驶员连续工作 4 小时应至少休息 20 分钟；不得诱导、强迫劳动者注册个体工商户以规避用工责任。</p>
+        <p>这个对照要加三点辨析，否则容易讲歪：</p>
+        <ul>
+          <li><b>① 技术路线不同，不是水平高低。</b>欧盟从「雇员／自雇」这个既有二分出发，不新增身份，只把<b>举证责任</b>挪到平台一侧；中国在二分之外<b>增设第三类</b>，用「类别」去承载一部分保护。前者靠程序，后者靠分类——分类能一次覆盖很多人，但边界要靠协议与执法去填；推定不必新造概念，但每一个案子都要重新举证。</li>
+          <li><b>② 两边都不自动生效。</b>欧盟的推定可被反驳，且劳动者要先举出事实；中国的第三类要靠书面协议落实权利义务，协议写得好不好，取决于协商能力与监察力度。两部规则都把最难的部分留在了执行环节，而不是文本环节。</li>
+          <li><b>③ 共同的难题是「速度」。</b>算法按周迭代，法条按年修订。所以两边的落点都偏向<b>程序</b>：欧盟要解释与人工复核，中国要协商、公示与申诉渠道。程序不能保证结果公平，但能让不公平留下痕迹——这已经是现有工具能做到的上限。</li>
+        </ul>
+
+        <h3>五、把话说窄：本课不做的几件事</h3>
+        <ul>
+          <li><b>不列国家排行榜，不比较制度优劣。</b>第四节只对照「用什么工具处理同一个问题」，不评价哪一国更保护劳动者，也不用任何跨国指数。涉及的政策效果都还在观察期。</li>
+          <li><b>不把「算法」写成一个统一的实体。</b>派单、定价、评分、风控往往是不同团队、不同系统，甚至不同公司提供的服务。说 the algorithm decided 是一种方便的省略，不是准确描述。</li>
+          <li><b>数据口径要说清。</b>2800 万与 4300 万出自欧委会 2021 年的估算，其中 4300 万是对 2025 年的<b>预测</b>，不是实测；550 万是「可能被错误分类」的估计；「近半数封号者后来被澄清」来自人权观察的访谈样本，不是统计抽样；Pew 的调查是美国样本；中国的 800 万是<b>职业伤害保障试点参保人数</b>，不等于新就业形态劳动者的总人数。</li>
+          <li><b>不替任何一方下结论。</b>平台确实提供了低门槛的灵活收入，这一点在正文第 4 段也承认了；劳动者的从属性也确实存在。两者同时为真，才是这个议题难的地方。</li>
+        </ul>
+
+        <h3>六、参考来源</h3>
+        <p class="source">Directive (EU) 2024/2831（2024 年 12 月生效，转化截止 2026 年 12 月 2 日）· 欧盟委员会就业、社会事务与融入总司「平台工作与算法管理」专题页与转化报告 · 欧委会 2021 年影响评估与新闻稿（2800 万／4300 万／550 万等估算）· 欧洲改善生活与工作条件基金会（Eurofound）平台经济数据库：斯洛伐克 2026-09-23 立法、立陶宛 2026-10-13 一读（第 XVP-1914 号）· Human Rights Watch 关于平台经济体面劳动的提交意见（含自动封号后被澄清比例的访谈数据）· Pew Research Center《The State of Gig Work in 2021》· 人力资源社会保障部等八部门《关于维护新就业形态劳动者劳动保障权益的指导意见》（人社部发〔2021〕56 号）· 人社部对十四届全国人大二次会议第 1722 号建议的答复（2025-01，职业伤害保障试点参保超 800 万人）· 广东省《关于维护新就业形态劳动者劳动保障权益的实施意见》（粤人社规〔2022〕14 号）。</p>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>🏛️ 社会问题 Social Issues　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>算法管理与平台劳动身份——平台像雇主一样派单、评分、封号，却不承认自己是雇主；欧盟指令改的不是「你是不是雇员」，而是「谁必须去证明」</p>
+        <p>派单、定价、评分、封号，这四件事合起来就是一份完整的管理工作，只是做这件事的人没有面孔、没有办公室、也没有电话。欧盟 2024 年 12 月生效的平台工作指令，要求成员国在 <b>2026 年 12 月 2 日</b>前完成转化，办法是两条：一条把举证责任挪到平台一侧（<b>可反驳的雇佣推定</b>），一条要求算法可解释、重大决定可人工复核。<b>它不宣布任何人是雇员，它只改变谁必须证明什么。</b>而推定能被反驳、证据握在对方手里、并非所有人都想要那个身份——三件事决定了这部法律只是把门打开，走进去仍然要靠人。</p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级法律与社会政策词汇（misclassification · deactivation · recourse · accountable · rebuttable · presumption · subordination · oversight · opaque · asymmetry · precarious），并记住 presumption → rebuttable → rebut 这条法条链。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 500 词的政策评论文，能分辨文中「事实陈述」「法律机制」与「作者判断」三个层次，并追踪「现象 → 机制 → 立法 → 局限」这条论证链。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——名词化的三种用法、虚拟语气与倒装虚拟（Were...）、被动语态隐藏施动者的修辞功能、独立主格、否定词前置倒装与伪分裂句。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习一个可迁移的提问方式：<b>这条规则改变了谁的行为，还是只改变了谁的责任？</b>把它用在任何一条新规、任何一份用户协议上，都能问出东西。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过「二分法加推定」与「三分法设类别」的对照，理解同一个社会问题可以有不同的制度工具，工具之间的差别是<b>适用条件</b>的差别，不是高低的差别。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. Suppose your manager could change your pay at midnight, send you to another part of the city, and dismiss you without a word — and suppose that manager had no face, no office and no telephone number.</div>
+          <div class="eg" style="margin-top:8px;">2. Deactivation is dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse.</div>
+          <div class="eg" style="margin-top:8px;">3. Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company.</div>
+          <div class="eg" style="margin-top:8px;">4. The worker must first produce the facts, the evidence itself sitting inside a system that is often opaque to the person it judges.</div>
+          <div class="eg" style="margin-top:8px;">5. Were the directive a switch, it would be simple. It is closer to a key: it opens a door that someone still has to walk through.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-11-12 · 社会问题 Social Issues｜算法当老板：谁该证明什么</footer>
+
+<div id="tip"></div>
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Pattern practice check ---------- */
+document.querySelectorAll('.practice input').forEach(inp=>{
+  inp.addEventListener('blur',()=>{
+    const v=(inp.value||'').trim();
+    const key=(inp.dataset.ans||'').trim();
+    if(!v){inp.style.borderColor='';return;}
+    const norm=s=>s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+    inp.style.borderColor=(norm(v)===norm(key))?'#22c55e':'#ef4444';
+  });
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Suppose your manager could change your pay at midnight, send you to another part of the city, and dismiss you without a word — and suppose that manager had no face, no office and no telephone number. That is roughly how app-based work feels to many of the people doing it. In 2021 the European Commission estimated that more than 28 million people in the EU worked through digital labour platforms, a figure it expected to reach 43 million by 2025. Nine out of ten of those platforms classified the people working for them as self-employed, and up to 5.5 million were thought to be wrongly classified. The word for that is misclassification, and it is where the argument starts.", "A manager does three things: assigns the work, judges how well it was done, and decides what happens next. Research on algorithmic management describes platforms performing all three through software. Tasks are directed by a matching system, performance is scored by customers, and accounts are closed by a rule that nobody has read. The last of these is the sharpest. Deactivation is dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse. Human Rights Watch interviewed workers who had been removed automatically, and nearly half of those it spoke to were later cleared of wrongdoing. A system can be strict and still be wrong. What it cannot easily be is accountable.", "Europe has now written a rule about this. Directive (EU) 2024/2831 came into force in December 2024, and member states have until 2 December 2026 to write it into national law. Its first mechanism is a rebuttable presumption: if a worker can show signs of subordination — the platform sets the rate, the route, the penalty — the burden of proof moves to the company. Its second is a set of duties about oversight: platforms must explain how automated decisions are made, and a person must review any decision that suspends an account or withholds pay. Slovakia, which passed its version in September 2026, went further and required such decisions to be taken by a natural person. Notice what the directive does not do. It does not declare anyone an employee. It changes who must prove what.", "On 2 December that obligation becomes real, and it will still leave most of the difficulty untouched. A presumption can be rebutted; a company with better lawyers and better data may rebut it. The worker must first produce the facts, the evidence itself sitting inside a system that is often opaque to the person it judges. The asymmetry is not only of power but of information. Nor does everyone want the status on offer: many value the flexibility precisely because no shift is guaranteed. So the honest description of platform work remains precarious — not because the law is silent, but because the law has to be argued case by case. Were the directive a switch, it would be simple. It is closer to a key: it opens a door that someone still has to walk through."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What did the European Commission estimate in 2021? 欧委会在 2021 年估算的是什么？",
+   opts:["That every platform in the EU already employed its workers 欧盟所有平台都已雇用了劳动者（正文说十家有九家把他们归为自雇）","That more than 28 million people worked through platforms, with the figure expected to reach 43 million by 2025 超过 2800 万人通过平台工作，且预计到 2025 年达到 4300 万","That the platform economy would disappear by 2025 平台经济到 2025 年会消失（恰恰相反）","That 5.5 million platforms were operating in Europe 欧洲有 550 万家平台企业在运营（5.5 million 指的是可能被错误分类的人）"],
+   ans:1,
+   fb:"正确！第 1 段：<b>more than 28 million people... a figure it expected to reach 43 million by 2025</b>。注意 4300 万是对 2025 年的<b>预测</b>，不是实测；550 万是「可能被错误分类」的人数估计。"},
+  {q:"Why does the writer call deactivation dismissal in everything but name? 为什么说「封号」除了名字之外就是解雇？",
+   opts:["Because it is always announced in writing 因为它总是书面通知的（正文说它常常不带解释）","Because workers are paid twice for it 因为劳动者会得到双倍补偿（正文没有这回事）","Because the platform is legally an employer 因为平台在法律上就是雇主（恰恰相反，它不承认）","Because the effect is the same as being fired, yet it arrives without an explanation, a warning or any recourse 因为效果等同于被开除，却不带解释、不给警告、也没有任何申诉途径"],
+   ans:3,
+   fb:"正确！第 2 段的原句：<b>Deactivation is dismissal in everything but name, yet it often arrives without an explanation, a warning or any recourse</b>。这个短语绕开了「算不算解雇」的争论，直接指实质。"},
+  {q:"What does a rebuttable presumption actually change? «可反驳的推定»真正改变了什么？",
+   opts:["It gives every platform worker a permanent contract 它给每位平台劳动者一份长期合同（指令没有规定这一点）","It bans platforms from using algorithms 它禁止平台使用算法（只是规范，不是禁止）","It moves the burden of proof: the worker shows signs of subordination, and the company must then prove otherwise 它移动了举证责任——劳动者举出从属性的迹象，公司须反过来证明","It fixes a minimum wage for all app work 它为所有平台工作设定最低工资（正文没写，各国规定不同）"],
+   ans:2,
+   fb:"正确！第 3 段：if a worker can show signs of subordination... <b>the burden of proof moves to the company</b>。而 rebuttable 这个限定词意味着平台仍可在法庭上推翻它——所以正文说<b>它不宣布任何人是雇员，只改变谁必须证明什么</b>。"},
+  {q:"Which pair best describes the directive's duties on algorithmic management? 关于算法管理，指令要求的是哪一对义务？",
+   opts:["Explain how automated decisions are made, and let a person review decisions that suspend an account or withhold pay 说明自动决定如何作出，并让真人复核封号或扣款这类决定","Delete all ratings and publish every line of code 删除所有评分并公开每一行代码（都过度了）","Report workers to the police and share their messages 向警方报告劳动者并共享其通信（斯洛伐克法恰恰禁止处理私人通信）","Give platforms a licence to test algorithms on workers 允许平台在劳动者身上测试算法（与指令方向相反）"],
+   ans:0,
+   fb:"正确！第 3 段：platforms must <b>explain</b> how automated decisions are made, and <b>a person must review</b> any decision that suspends an account or withholds pay。斯洛伐克更进一步，要求这类决定必须由自然人作出。"},
+  {q:"Why does the writer end with the image of a key rather than a switch? 为什么结尾用「钥匙」而不是「开关」？",
+   opts:["Because keys are cheaper than switches 因为钥匙比开关便宜（与论证无关）","Because the directive takes effect at midnight 因为指令在午夜生效（正文没有这个细节）","Because platforms must hand over physical keys 因为平台必须交出实体钥匙（这是比喻，不是规定）","Because a switch would work by itself, whereas the directive only opens a door that someone still has to walk through 因为开关自己就会生效，而指令只是打开一扇门，还得有人走进去"],
+   ans:3,
+   fb:"正确！第 4 段：<b>Were the directive a switch, it would be simple. It is closer to a key: it opens a door that someone still has to walk through.</b> 推定可被反驳、证据在对方手里、也不是所有人都想要那个身份——三点决定了「自动生效」是不可能的。"},
+  {q:"Which statement would the writer most likely agree with? 作者最可能同意哪一句？",
+   opts:["Platform work offers real flexibility, and that is exactly why the rules are hard to write 平台工作确实提供了真实的灵活性，而这正是规则难写的原因","Nobody actually wants to be classified as an employee 没有人想被归为雇员（正文说 many value the flexibility，是「很多人」，不是「没有人」）","A clear law is enough to fix an unfair system 一部清楚的法律就足以修正不公的制度（正文强调执行才是难点）","Algorithms are a single system that one company controls 算法是某一家公司控制的单一系统（扩展第五节点明并非如此）"],
+   ans:0,
+   fb:"正确！第 4 段承认 <b>many value the flexibility precisely because no shift is guaranteed</b>，正因如此，规则不能简单地把所有人重新分类了事。这也是本课克制的立场：两边同时为真，才是难点。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>
