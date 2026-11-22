@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLA NEWS · B2 English — The Child Who Was Not There</title>
+<style>
+:root{
+  --accent:#6d2e46;
+  --accent2:#55683f;
+  --bg:#f8f6f7;
+  --card:#ffffff;
+  --text:#211f22;
+  --muted:#6b6570;
+  --highlight:#ecdde3;
+  --border:#e7dce1;
+  --soft:#f7f2f4;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;}
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:1000;transition:width .15s ease;}
+header.topbar{position:sticky;top:0;z-index:900;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-weight:800;font-size:20px;color:var(--accent);letter-spacing:.3px;}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.level-badge{margin-left:auto;background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:5px 12px;border-radius:999px;letter-spacing:1px;}
+.menu-btn{display:none;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:18px;cursor:pointer;}
+.wrap{display:flex;min-height:calc(100vh - 60px);}
+nav.sidebar{width:240px;flex-shrink:0;background:var(--card);border-right:1px solid var(--border);padding:18px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+nav.sidebar a{display:flex;align-items:center;gap:10px;padding:11px 14px;margin:4px 0;border-radius:12px;color:var(--text);text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s;}
+nav.sidebar a .ic{font-size:18px;width:24px;text-align:center;}
+nav.sidebar a:hover{background:var(--soft);}
+nav.sidebar a.active{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(109,46,70,.3);}
+main{flex:1;padding:26px clamp(16px,4vw,48px);max-width:980px;margin:0 auto;}
+section{display:none;animation:fade .35s ease;}
+section.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+h1.title{font-size:30px;margin:0 0 4px;color:var(--accent);}
+.subtitle{color:var(--muted);margin-bottom:18px;font-size:15px;}
+h2.sec{font-size:24px;margin:0 0 16px;color:var(--text);border-left:5px solid var(--accent);padding-left:12px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 4px 18px rgba(33,31,34,.05);}
+.seg{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--soft);margin-bottom:14px;border:1px solid var(--border);flex-wrap:wrap;}
+.seg .num{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
+.seg .body{flex:1;min-width:240px;}
+.seg .role{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.seg p{margin:0;}
+.play-btn{background:var(--accent);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(109,46,70,.35);}
+.play-btn.playing{animation:pulse 1s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(109,46,70,.5);}70%{box-shadow:0 0 0 12px rgba(109,46,70,0);}100%{box-shadow:0 0 0 0 rgba(109,46,70,0);}}
+.kw{background:var(--highlight);padding:1px 5px;border-radius:6px;cursor:pointer;font-weight:600;border-bottom:2px solid var(--accent2);transition:.15s;}
+.kw:hover{background:#e2ccd5;}
+#tip{position:fixed;z-index:1200;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:none;line-height:1.5;}
+#tip b{color:#fbbf24;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.vocab{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;transition:.2s;}
+.vocab:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(33,31,34,.1);}
+.vocab .word{font-weight:800;font-size:18px;color:var(--accent);}
+.vocab .pos{font-size:12px;color:var(--muted);font-weight:700;margin-left:6px;}
+.vocab .zh{color:#374151;font-size:14px;margin:6px 0;}
+.vocab .ex{font-size:13.5px;color:#4b5563;font-style:italic;border-left:3px solid var(--accent2);padding-left:8px;}
+.speak-btn{position:absolute;top:14px;right:14px;background:var(--accent2);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;}
+.speak-btn.playing{animation:pulse 1s infinite;}
+.item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed var(--border);}
+.item:last-child{border-bottom:none;}
+.item h3{margin:0 0 6px;color:var(--accent);font-size:17px;}
+.item .zh{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.item .eg{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14.5px;}
+.practice{margin-top:8px;font-size:14px;color:#374151;}
+.practice input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-top:5px;font-family:inherit;}
+.q{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.q .qt{font-weight:700;margin-bottom:10px;}
+.q .opts{display:flex;flex-direction:column;gap:8px;}
+.q label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14.5px;}
+.q label:hover{background:var(--soft);}
+.q label.correct{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:600;}
+.q label.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q .feedback{margin-top:10px;font-size:14px;font-weight:600;min-height:20px;}
+.q .check{margin-top:10px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;}
+.ext p{margin:10px 0;font-size:15px;}
+.ext h3{color:var(--accent);font-size:18px;margin-top:18px;}
+.ext ul{padding-left:22px;}
+.ext li{margin:6px 0;}
+.ext blockquote{margin:10px 0;padding:10px 14px;background:var(--soft);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-style:italic;color:#374151;}
+.ext blockquote em{font-style:normal;color:var(--muted);font-size:13.5px;display:block;margin-top:6px;}
+.ext .source{font-size:13px;color:var(--muted);}
+table.facts{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+table.facts th,table.facts td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+table.facts th{background:var(--soft);color:var(--accent);font-weight:700;white-space:nowrap;}
+.goal{display:flex;gap:10px;align-items:flex-start;margin:8px 0;}
+.goal .ic{font-size:20px;}
+.print-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(109,46,70,.3);}
+.print-btn:hover{filter:brightness(1.05);}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px;}
+@media(max-width:780px){
+  .menu-btn{display:block;}
+  nav.sidebar{position:fixed;left:0;top:60px;height:calc(100vh - 60px);transform:translateX(-100%);transition:.25s;z-index:800;box-shadow:6px 0 24px rgba(0,0,0,.12);}
+  nav.sidebar.open{transform:none;}
+  .seg{flex-wrap:wrap;}
+}
+@media print{
+  header.topbar,.menu-btn,nav.sidebar,#progress,.play-btn,.speak-btn,.print-btn,.check{display:none!important;}
+  body{background:#fff;}
+  main{max-width:100%;padding:0;}
+  section{display:block!important;page-break-inside:avoid;}
+  .card,.vocab,.q{border:1px solid #ccc;box-shadow:none;}
+  .kw{background:#ecdde3;color:#000;}
+  .level-badge{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
+  <div class="brand">POLA NEWS<small>B2 English Learning · Philosophy 哲学思考</small></div>
+  <div class="level-badge">B2 · 中高级</div>
+</header>
+
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <a href="#reading" class="active" data-sec="reading"><span class="ic">📖</span> 全文阅读</a>
+    <a href="#vocab" data-sec="vocab"><span class="ic">🔤</span> 词汇表</a>
+    <a href="#patterns" data-sec="patterns"><span class="ic">💡</span> 句型练习</a>
+    <a href="#grammar" data-sec="grammar"><span class="ic">📐</span> 语法点</a>
+    <a href="#quiz" data-sec="quiz"><span class="ic">✅</span> 练习测验</a>
+    <a href="#ext" data-sec="ext"><span class="ic">🌏</span> 中文知识扩展</a>
+    <a href="#about" data-sec="about"><span class="ic">⭐</span> 关于本课</a>
+  </nav>
+
+  <main>
+    <!-- 1. READING -->
+    <section id="reading" class="active">
+      <h1 class="title">The Child Who Was Not There</h1>
+      <p class="subtitle">两个司机，同样的疲劳、同样的疏忽、同样的车速。唯一的区别，是那天路边有没有一个孩子跑出来——而我们对他们的判断，正是从这里分开的。｜点高亮词看中文释义，点 ▶ 听朗读</p>
+
+      <div class="card">
+        <div class="seg">
+          <div class="num">1</div>
+          <div class="body">
+            <div class="role">Paragraph 1 · Two Lorries 两辆卡车</div>
+            <p>Two lorries leave the same depot on the same wet evening. Both drivers have been on the road for eleven hours. Both skipped the brake check they were supposed to sign, both take the same corner a little too fast, and both are tired in exactly the same way. The first driver reaches the yard, parks, and goes home. The second reaches the same corner at the same speed, and a child runs out from between two parked cars. Nothing the two men did differs in any way that was up to them. The file on the second driver will record <span class="kw" data-def="negligence 过失；疏忽（形容词 negligent，副词 negligently）。法律上的 negligence 指未达到应有的注意标准，与 intent（故意）相对。本课的关键是：两个司机的 negligence 程度完全相同，差别只在结果">negligence</span>. There is no file on the first. One will be questioned, will face a charge, and will hear a sound for the rest of his life. The other will sleep. This is not a story about carelessness. It is a story about what happened next.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="0">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">2</div>
+          <div class="body">
+            <div class="role">Paragraph 2 · A Word for That Feeling 给这种感觉一个名字</div>
+            <p>Bernard Williams opened his 1976 essay with a version of this scene, and gave the feeling it produces a name: <span class="kw" data-def="agent-regret 行动者之悔（Williams 造的词）。agent 行动者 + regret 悔。指行为人对自己造成的伤害所感到的悔，与旁观者的遗憾不同：他悔的是「这件事是我做的」，即使他并未选择去做。这个词无法简单译成「内疚」，因为内疚常预设过错">agent-regret</span>. The driver who killed the child does not merely regret that a child died; he regrets that he did it, although he did not choose to. That difference is <span class="kw" data-def="invisible 看不见的；无形的。be invisible to sb 对某人来说不可见。本课指这种「是我做的」的差别在路边站着的人看来完全不存在——旁观者只看见同一个结局的两个版本">invisible</span> to anyone standing at the roadside. Thomas Nagel, replying in the same <span class="kw" data-def="symposium 专题研讨会；学术讨论会（复数 symposiums 或 symposia）。词源是希腊语「一起喝酒」，柏拉图的《会饮篇》原文即以此为题。1976 年 Williams 与 Nagel 是在亚里士多德学会的同一次研讨会上各交一篇同名论文">symposium</span>, stated the principle we all claim to believe: people can be judged only for what lies within their control. Then he showed how little survives it. Luck enters at four points — how an action turns out, which situations we meet, what <span class="kw" data-def="temperament 气质；性情。指人天生的情绪与行为倾向。与 character（性格）相比，temperament 更强调先天成分，因此常与「构成运气」连用——谁天生胆大、谁天生谨慎，都不是自己选的">temperament</span> we start with, and the causes that produced us. Push the principle to its limit and the area of genuine <span class="kw" data-def="agency 能动性；行动能力（agent 行动者 + -cy）。指人作为行动主体去选择、干预的能力。the area of genuine agency 真正属于行动者的范围。注意与 freedom 的差别：freedom 讲「有没有被限制」，agency 讲「能不能作为主体去行动」">agency</span>, in his phrase, shrinks to a point without extension.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="1">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">3</div>
+          <div class="body">
+            <div class="role">Paragraph 3 · The Law Already Knows 法律早就知道</div>
+            <p>Notice that the law does not pretend otherwise. Every legal system punishes an <span class="kw" data-def="attempt （法律）未遂；企图。criminal attempt 犯罪未遂：已着手实施，但因意志以外的原因未得逞。与 completed offence（既遂）相对。动词 attempt 尝试；名词 attacker 是另一个词，别混">attempt</span> less severely than a completed <span class="kw" data-def="offence 罪行；违法行为（美式拼写 offense）。a completed offence 既遂之罪。与 crime 的差别：crime 是日常与统计用词，offence 更常用于刑法条文与诉讼程序">offence</span>, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back. The outcome is written into the sentence. Psychology has measured the same <span class="kw" data-def="reflex 本能反应；反射。本课指「一听结果就下判断」这种近乎自动的反应。conditioned reflex 条件反射。注意别与 reflection（反思）混淆——本课要说的正是：reflex 快，reflection 慢">reflex</span>. Baron and Hershey gave people identical decisions with different endings, and found that a decision was rated better when it happened to turn out well; a later <span class="kw" data-def="replication 重复实验；复制（动词 replicate）。学术写作里 replication study 指用同样方法再跑一遍，检验原结论站不站得住。与 repetition 不同：repetition 只是「又做了一次」，replication 是为了检验">replication</span> found the gap larger than the original, and present even in people who said outcomes should not count. A 2019 study by Kneer and Machery complicates the picture. Shown both drivers side by side, most participants judged them equally <span class="kw" data-def="blameworthy 该受责备的（blame 责备 + worthy 值得）。be blameworthy for sth 因某事该受责备；名词 blameworthiness。与 guilty 的差别：guilty 偏法律判定，blameworthy 偏道德评价——本课正是要把两者分开">blameworthy</span> — and still wanted the unlucky one punished more. Blame and punishment, it seems, run on different tracks.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="2">▶</button>
+        </div>
+
+        <div class="seg">
+          <div class="num">4</div>
+          <div class="body">
+            <div class="role">Paragraph 4 · Three Ways Out 三条出路</div>
+            <p>What is to be done with a judgement that refuses to add up? One answer is to deny the difference: what varies is our reaction, not their <span class="kw" data-def="desert 应得；应得的赏罚（读作 /dɪˈzɜːt/，重音在第二音节）。不可数名词，常用复数 deserts：get one's just deserts 得到应得的下场。注意与 dessert（甜点，双写 s）拼写不同、读音也不同">desert</span>. Another is to split the question, keeping blame for intentions and letting punishment answer for consequences — roughly what the law already does. The third is Nagel's, and the least comfortable: the idea of moral responsibility can neither be justified nor abandoned. We go on judging people by what they did, knowing that part of what they did was an accident. Were the principle applied consistently, very little would survive — and what survived would not look like morality at all. That is the cost of taking luck seriously: not a fairer world, but a thinner one.</p>
+          </div>
+          <button class="play-btn" data-icon="▶" data-seg="3">▶</button>
+        </div>
+
+      </div>
+    </section>
+    <!-- 2. VOCABULARY -->
+    <section id="vocab">
+      <h2 class="sec">🔤 词汇表 Core Vocabulary</h2>
+      <p class="subtitle">11 个 B2 核心词，全部出自正文｜点 🔊 听发音，例句均取自课文原句</p>
+      <div class="card vocab-grid">
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="negligence">🔊</button><div class="word">negligence<span class="pos">n.</span></div><div class="zh">过失；疏忽（形容词 negligent，副词 negligently）。法律上的 negligence 指未达到应有的注意标准，与 intent（故意）相对。本课的关键是：两个司机的 negligence 程度完全相同，差别只在结果。<b>gross negligence</b> 重大过失</div><div class="ex">"The file on the second driver will record negligence."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="agent-regret">🔊</button><div class="word">agent-regret<span class="pos">n.</span></div><div class="zh">行动者之悔（Williams 造的词）。agent 行动者 + regret 悔。指行为人对自己造成的伤害所感到的悔，与旁观者的遗憾不同：他悔的是「这件事是我做的」，即使他并未选择去做。译成「内疚」会失真，因为内疚常预设过错</div><div class="ex">"Bernard Williams opened his 1976 essay with a version of this scene, and gave the feeling it produces a name: agent-regret."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="symposium">🔊</button><div class="word">symposium<span class="pos">n.</span></div><div class="zh">专题研讨会；学术讨论会（复数 symposiums 或 symposia）。词源是希腊语「一起喝酒」，柏拉图的《会饮篇》原文即以此为题。1976 年 Williams 与 Nagel 是在亚里士多德学会的同一次研讨会上各交一篇同名论文。<b>hold a symposium on sth</b> 就某题举办研讨会</div><div class="ex">"Thomas Nagel, replying in the same symposium, stated the principle we all claim to believe: people can be judged only for what lies within their control."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="temperament">🔊</button><div class="word">temperament<span class="pos">n.</span></div><div class="zh">气质；性情。指人天生的情绪与行为倾向。与 character（性格）相比，temperament 更强调先天成分，因此常与「构成运气」连用——谁天生胆大、谁天生谨慎，都不是自己选的。形容词 temperamental（也有「喜怒无常」一义）</div><div class="ex">"Luck enters at four points — how an action turns out, which situations we meet, what temperament we start with, and the causes that produced us."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="agency">🔊</button><div class="word">agency<span class="pos">n.</span></div><div class="zh">能动性；行动能力（agent 行动者 + -cy）。指人作为行动主体去选择、干预的能力。<b>the area of genuine agency</b> 真正属于行动者的范围。与 freedom 的差别：freedom 讲「有没有被限制」，agency 讲「能不能作为主体去行动」。（另一个常用义是「代理机构」，靠语境区分）</div><div class="ex">"Push the principle to its limit and the area of genuine agency, in his phrase, shrinks to a point without extension."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="attempt">🔊</button><div class="word">attempt<span class="pos">n.</span></div><div class="zh">（法律）未遂；企图。<b>criminal attempt</b> 犯罪未遂：已着手实施，但因意志以外的原因未得逞，与 completed offence（既遂）相对。动词 attempt 尝试；形容词 attempted（attempted murder 谋杀未遂）。注意别与 attacker（袭击者）混淆</div><div class="ex">"Every legal system punishes an attempt less severely than a completed offence, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="offence">🔊</button><div class="word">offence<span class="pos">n.</span></div><div class="zh">罪行；违法行为（美式拼写 offense）。<b>a completed offence</b> 既遂之罪。与 crime 的差别：crime 是日常与统计用词，offence 更常用于刑法条文与诉讼程序。另一个意思是「冒犯」：take offence at sth 因某事见怪</div><div class="ex">"Every legal system punishes an attempt less severely than a completed offence, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="reflex">🔊</button><div class="word">reflex<span class="pos">n.</span></div><div class="zh">本能反应；反射。本课指「一听结果就下判断」这种近乎自动的反应。<b>a conditioned reflex</b> 条件反射。别与 reflection（反思）混淆——本课要说的正是：reflex 快，reflection 慢，而判断常常跑在反思前面</div><div class="ex">"Psychology has measured the same reflex."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="replication">🔊</button><div class="word">replication<span class="pos">n.</span></div><div class="zh">重复实验；复制（动词 replicate）。学术写作里 <b>replication study</b> 指用同样方法再跑一遍，检验原结论站不站得住。与 repetition 不同：repetition 只是「又做了一次」，replication 是为了检验。心理学近年因「重复危机」而格外看重它</div><div class="ex">"Baron and Hershey gave people identical decisions with different endings, and found that a decision was rated better when it happened to turn out well; a later replication found the gap larger than the original, and present even in people who said outcomes should not count."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="blameworthy">🔊</button><div class="word">blameworthy<span class="pos">adj.</span></div><div class="zh">该受责备的（blame 责备 + worthy 值得）。<b>be blameworthy for sth</b> 因某事该受责备；名词 blameworthiness。与 guilty 的差别：guilty 偏法律判定，blameworthy 偏道德评价——本课正是要把这两件事分开</div><div class="ex">"Shown both drivers side by side, most participants judged them equally blameworthy — and still wanted the unlucky one punished more."</div></div>
+        <div class="vocab"><button class="speak-btn" data-icon="🔊" data-word="desert">🔊</button><div class="word">desert<span class="pos">n.</span></div><div class="zh">应得；应得的赏罚（读作 /dɪˈzɜːt/，重音在第二音节）。不可数名词，常用复数 deserts：<b>get one's just deserts</b> 得到应得的下场。注意与 dessert（甜点，双写 s）拼写不同、读音也不同；与动词 desert（抛弃）读音亦不同</div><div class="ex">"One answer is to deny the difference: what varies is our reaction, not their desert."</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">词族速记 Word Webs</h3>
+        <p class="ext"><b>① 「运气」四档：</b><b>resultant luck</b> 结果运气（事情怎么收场）→ <b>circumstantial luck</b> 情境运气（碰上什么处境）→ <b>constitutive luck</b> 构成运气（天生是什么样的人）→ <b>causal luck</b> 因果运气（被什么前因造成）。四档一层比一层深，最后一档直通「自由意志存不存在」。<br>
+        <b>② 「责备」与「惩罚」两套词：</b><b>blame</b> 责备（道德层面，看意图）→ <b>punish</b> 惩罚（制度层面，看后果）→ <b>liability</b> 法律责任 → <b>sentence</b> 量刑。Kneer 与 Machery 的实验正是在这里撕开一道口子：<b>blame</b> 可以持平，<b>punishment</b> 却仍然跟着结果走。<br>
+        <b>③ 刑法里的三个关键词：</b><b>negligence</b> 过失（没尽到注意义务）→ <b>intent</b> 故意 → <b>attempt</b> 未遂。<b>attempt</b> 与 <b>completed offence</b> 的处罚差距，是「道德运气」在制度里最清楚的一处落脚。<br>
+        <b>④ 「悔」的三种强度：</b><b>regret</b> 遗憾／后悔（最轻）→ <b>remorse</b> 懊悔（带自责，常与罪恶感同现）→ <b>agent-regret</b> 行动者之悔（Williams 术语，专指「是我做的」这一层）。三个词一个比一个更贴第一人称。<br>
+        <b>⑤ 一个拼写陷阱：</b><b>desert</b> 应得（/dɪˈzɜːt/，重音在后）↔ <b>dessert</b> 甜点（与前者同音，只多一个 s）↔ <b>desert</b> 沙漠（/ˈdezət/，重音在前）。三个词在纸面上极易混，读出来才分得清。<br>
+        <b>⑥ 「无法调和」的说法：</b><b>refuse to add up</b> 怎么算都算不平 → <b>neither...nor...</b> 既不能……也不能…… → <b>incoherent</b> 自相矛盾的。写议论文时，承认「这件事讲不通」往往比硬给一个答案更有力——本课第 4 段就是这么收的。</p>
+      </div>
+    </section>
+    <!-- 3. SENTENCE PATTERNS -->
+    <section id="patterns">
+      <h2 class="sec">💡 句型练习 Key Sentence Patterns</h2>
+      <p class="subtitle">5 个高级句型，全部取自正文原句，语法板块逐一拆解</p>
+      <div class="card">
+        <div class="item">
+          <h3>1. 否定主语 + in any way that 定语从句 · Nothing the two men did differs in any way that was up to them.</h3>
+          <div class="zh">结构：<b>Nothing +（省略 that 的定语从句）+ 动词 + in any way that ...</b>。这句话的厉害之处在于它<b>用否定句说了一件肯定的事</b>：不说「两人做的事一样」，而说「没有一件事不同」——差别小到无处可指，只能用 nothing 来兜住。后置的 <b>in any way that was up to them</b>（在任何由他们做主的方面）把比较的范围明确限定住，等于提前堵住一个反驳：他们的疲劳、疏忽当然不同，但那些都不由他们做主。<b>写作提示</b>：想说「两者毫无区别」时，Nothing...differs in any way that... 比 They are the same 有力得多，因为它顺手划定了「哪一层相同」。</div>
+          <div class="eg">Nothing the two men did differs in any way that was up to them.</div>
+          <div class="practice">仿写：这两份答卷之间，没有任何一处差别是学生能够自己决定的。
+            <input type="text" placeholder="Nothing between the two scripts differs in any way that ..." data-ans="Nothing between the two scripts differs in any way that was up to the students.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>2. not merely A; B, although C · ...does not merely regret that a child died; he regrets that he did it, although he did not choose to</h3>
+          <div class="zh">结构：<b>not merely + 宾语从句；同一动词 + 另一个宾语从句, although + 让步从句</b>。前半句先承认一个大家都会同意的层面（孩子死了，谁都遗憾），分号之后立刻把动词重复一遍、只换宾语，重心就从「发生了什么」移到「是谁做的」。最后用 although 让步，把「他并未选择」这个本来能为他开脱的条件说出来——<b>说出来却不妨碍结论</b>，这正是本课要的那层意思：开脱成立，感受不因此消失。<b>not merely 后面不接 but also</b>，是因为作者不想做并列，他想做递进之后的转折，所以用分号另起。</div>
+          <div class="eg">The driver who killed the child does not merely regret that a child died; he regrets that he did it, although he did not choose to.</div>
+          <div class="practice">仿写：这位医生不只是遗憾手术失败了；他悔的是那一刀是他下的，尽管他已按规程做了一切。
+            <input type="text" placeholder="The surgeon does not merely regret that the operation failed; ..." data-ans="The surgeon does not merely regret that the operation failed; he regrets that the cut was his, although he had followed every protocol.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>3. 祈使句 + and + 结果 · Push the principle to its limit and the area of genuine agency...shrinks</h3>
+          <div class="zh">结构：<b>祈使句 + and + 陈述句</b>，等于 <b>If you push..., it will shrink...</b>。这种写法比 if 条件句更紧、更有推动感：读者被要求先做一个动作（把原则推到极限），结果自己就出现了。注意后半句里插了一个 <b>in his phrase</b>（用他的话说）——引用别人的术语时，用这个短语把归属交代清楚，比加引号更从容，也不会打断句子。若要表达相反结果，就把 and 换成 <b>or</b>：<b>Push it too far or the whole thing collapses.</b></div>
+          <div class="eg">Push the principle to its limit and the area of genuine agency, in his phrase, shrinks to a point without extension.</div>
+          <div class="practice">仿写：把这条规则用到每一个案例上，它的荒谬立刻就显出来了。
+            <input type="text" placeholder="Apply the rule to every case and ..." data-ans="Apply the rule to every case and its absurdity becomes obvious at once.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>4. even when + 破折号列举 · ...even when the failure was pure chance — the bullet jammed, the pedestrian stepped back</h3>
+          <div class="zh">结构：<b>主句 + even when 让步从句 + 破折号 + 两个独立短句</b>。<b>even when</b> 与 although 不同：although 只是「虽然」，even when 是「即便在……这种情况下也」，把让步推到极端，暗示对方再举多少例外都没用。破折号后的两个短句故意<b>不补主语、不用连词</b>（the bullet jammed, the pedestrian stepped back），读起来像快速闪过的两个画面——抽象论证里突然插进具体场景，是英文议论文常用的「落地」手法。<b>注意</b>：这种并列只适合两三个极短的句子，再多就散了。</div>
+          <div class="eg">Every legal system punishes an attempt less severely than a completed offence, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back.</div>
+          <div class="practice">仿写：几乎所有学校都按结果评奖，即便成败纯属偶然——球场上的球擦柱而入，考场上的题恰好复习过。
+            <input type="text" placeholder="Almost every school awards prizes by result, even when success was pure chance — ..." data-ans="Almost every school awards prizes by result, even when success was pure chance — the ball went in off the post, the question happened to be the one revised.">
+          </div>
+        </div>
+
+        <div class="item">
+          <h3>5. 分词短语作伴随状语 + what 从句 · We go on judging people by what they did, knowing that part of what they did was an accident.</h3>
+          <div class="zh">结构：<b>主句 + 逗号 + 现在分词（knowing）+ that 宾语从句</b>。分词的主语与主句主语相同（we），表示<b>同时进行的心理活动</b>：一边继续判断，一边知道判断的前提有问题。这比写成 and we know that... 更微妙——并列会让「知道」变成附加信息，分词则把它压成背景，<b>读者能感到那种明知如此却照旧如此的别扭</b>。宾语从句里又套了一个 <b>what they did</b>（名词性从句作 of 的宾语），一句话里两次指同一件事，第二次却换了性质：第一次是「他们做了什么」，第二次是「其中有一部分是偶然」。<b>这种同词复现、意义偏移的写法，是抽象写作里最省力的反讽。</b></div>
+          <div class="eg">We go on judging people by what they did, knowing that part of what they did was an accident.</div>
+          <div class="practice">仿写：我们照旧用分数给学生排序，明知其中一部分分数来自运气。
+            <input type="text" placeholder="We go on ranking students by their marks, knowing that ..." data-ans="We go on ranking students by their marks, knowing that part of those marks came from luck.">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRAMMAR -->
+    <section id="grammar">
+      <h2 class="sec">📐 语法点 Grammar Focus</h2>
+      <p class="subtitle">5 个语法点，例句均取自正文</p>
+      <div class="card">
+        <div class="item">
+          <h3>① 抽象名词与不可数性：negligence / agency / desert</h3>
+          <div class="zh">本课的核心词几乎都是<b>不可数抽象名词</b>：<b>negligence</b>（过失）、<b>agency</b>（能动性）、<b>desert</b>（应得）、<b>blameworthiness</b>（该受责备的程度）。它们的共同点是<b>不能加 a、不能加 s</b>：说 <b>an agency</b> 意思就变成「一家代理机构」，说 <b>deserts</b> 才是「应得的赏罚」这个固定复数。<b>判别办法</b>：能回答「多少」而不能回答「几个」的，多半不可数——much negligence、little agency。要数的话得借量词：<b>a degree of negligence</b>、<b>a sense of agency</b>、<b>a claim of desert</b>。<b>写作提醒</b>：中国学生最容易写 a serious negligence；正确写法是 serious negligence，或 a serious act of negligence。</div>
+          <div class="eg">The file on the second driver will record negligence. There is no file on the first.</div>
+        </div>
+
+        <div class="item">
+          <h3>② 名词化：把动作变成可以争论的东西</h3>
+          <div class="zh"><b>名词化（nominalisation）</b>是把动词或形容词变成名词：punish → <b>punishment</b>，justify → <b>justification</b>，responsible → <b>responsibility</b>，blameworthy → <b>blameworthiness</b>。它在本课干了三件事：<b>（1）当主语，接受评判</b>——Blame and punishment, it seems, run on different tracks，一句话把两个抽象物并置，然后宣布它们不同路；<b>（2）让比较成为可能</b>——只有先把两件事都变成名词，才能说 A 比 B 更依赖结果；<b>（3）承载限定语</b>——the idea of moral responsibility 能带上 of 短语，而 people are morally responsible 不能。<b>代价</b>是句子会失去动作感：the implementation of the evaluation of... 就是重症。<b>经验法则</b>：一段里用两三个名词化立概念，其余句子仍然用动词。</div>
+          <div class="eg">Blame and punishment, it seems, run on different tracks.</div>
+          <div class="eg" style="margin-top:8px;">The third is Nagel's, and the least comfortable: the idea of moral responsibility can neither be justified nor abandoned.</div>
+        </div>
+
+        <div class="item">
+          <h3>③ 定语从句：限定与非限定，一个逗号的差别</h3>
+          <div class="zh">本课两处对照极清楚。<b>限定性</b>：<b>The driver who killed the child</b> does not merely regret...——没有逗号，从句是「哪一个司机」的必需信息，去掉就不知道在说谁；而且它<b>已经用结果给人定了名</b>（「撞死孩子的那个」），这个称呼本身就是道德运气的证据。<b>非限定性</b>：Williams 那篇 1976 年的文章，<b>which</b> gave the feeling a name——加逗号，从句只是补充说明，删掉句子仍成立。<b>判别口诀</b>：删掉从句，句子还指得清对象吗？指得清就用逗号，指不清就不用。<b>还要注意</b>：非限定性从句不能用 that，只能用 which / who。</div>
+          <div class="eg">The driver who killed the child does not merely regret that a child died; he regrets that he did it, although he did not choose to.</div>
+        </div>
+
+        <div class="item">
+          <h3>④ 让步三档：although / even when / while</h3>
+          <div class="zh">三个词都能译成「虽然」，但强度与位置不同。<b>although</b> 最中性，承认一个反例：he did it, <b>although</b> he did not choose to。<b>even when</b> 把让步推到极端，含「即便在这种情况下也」的意思：punishes an attempt less severely... <b>even when</b> the failure was pure chance——言下之意是「不管失败得多偶然，量刑照样不同」，暗含批评。<b>while</b> 最轻，常用于对比两项事实而不强求让步：<b>While</b> blame may be equal, punishment is not。<b>位置</b>：although 与 while 可句首可句中，even when 多放句末或紧贴被修饰成分；<b>although 后面不能加 but</b>，这是中国学生最高频的错误之一。</div>
+          <div class="eg">Every legal system punishes an attempt less severely than a completed offence, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back.</div>
+        </div>
+
+        <div class="item">
+          <h3>⑤ 条件句两式：祈使 + and ／ 倒装虚拟 Were</h3>
+          <div class="zh">本课第 2 段与第 4 段各用了一种条件表达，效果不同。<b>（1）祈使 + and</b>：<b>Push</b> the principle to its limit <b>and</b> the area of genuine agency shrinks——像一次推演，读者跟着做，结论自己掉出来，语气推动力强。<b>（2）倒装虚拟</b>：<b>Were</b> the principle applied consistently, very little <b>would</b> survive——等于 If the principle were applied consistently...，删掉 if、把 were 提前，语气更冷、更书面，适合放在结论处做一次「假设推到底」的收束。注意这里是<b>被动</b>的虚拟（were applied），因为主语 the principle 是被施加的一方。<b>口诀</b>：说「你去试试看」用第一式，说「假如真的如此」用第二式；两式都能省掉 if，但只有 were / had / should 能提前。</div>
+          <div class="eg">Push the principle to its limit and the area of genuine agency, in his phrase, shrinks to a point without extension.</div>
+          <div class="eg" style="margin-top:8px;">Were the principle applied consistently, very little would survive — and what survived would not look like morality at all.</div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. QUIZ -->
+    <section id="quiz">
+      <h2 class="sec">✅ 练习测验 Comprehension Quiz</h2>
+      <div id="quizBox"></div>
+    </section>
+    <!-- 6. EXTENSION -->
+    <section id="ext">
+      <h2 class="sec">🌏 中文知识扩展 Extension</h2>
+      <div class="card ext">
+
+        <h3>一、1976 年，两篇同名论文</h3>
+        <p>1976 年，英国亚里士多德学会（Aristotelian Society）的联合研讨会上，<b>伯纳德·威廉斯（Bernard Williams）</b>与<b>托马斯·内格尔（Thomas Nagel）</b>各提交了一篇题为《道德运气》（Moral Luck）的论文，同期刊于学会增刊第 50 卷。后来威廉斯把它收进 1981 年的文集《Moral Luck: Philosophical Papers 1973–1980》，内格尔收进 1979 年的《Mortal Questions》。两篇文章同名、同期、互相回应，这件事本身就说明了问题的性质：它不是谁的独家发现，而是两个人从两端同时撞上的一堵墙。</p>
+        <p>威廉斯的入口是那个卡车司机。他强调的不是「司机很可怜」，而是一个结构性的不对称：<b>司机的悔与旁观者的遗憾不是同一种东西</b>。旁观者可以遗憾「一个孩子死了」，司机不能——他悔的是「这件事是我做的」，而这一层无法被「这不是他的错」抹掉。威廉斯说得很重：一个人若从不对任何人产生这类情感，那近乎一种疯狂；而认为理性的人永不该有这类情感，则是一种关于理性的疯狂观念。</p>
+        <p>他的靶子是康德。<b>康德式立场</b>认为，善良意志之所以善，不在于它成就了什么、促成了什么，而仅仅在于它如何意欲。若此说成立，道德评价就应当完全免疫于命运。威廉斯要说明的恰恰相反：<b>「道德」这个体系想要一个不受运气影响的领域，那个领域是一个幻觉</b>。值得注意的是，他与内格尔的结论并不相同——威廉斯想让「道德」让位给更宽的伦理生活，内格尔则停在悖论里。读二手介绍时最容易犯的错，就是把两人当成同一个人。</p>
+
+        <h3>二、内格尔的四档运气</h3>
+        <p>内格尔把一个笼统的「运气」拆成四层，一层比一层深：</p>
+        <table class="facts">
+          <tr><th>类型</th><th>运气落在哪里</th><th>一个中性的例子</th></tr>
+          <tr><td><b>结果运气</b><br>resultant luck</td><td>行为怎么收场</td><td>两个人同样疏忽，一个撞上了，一个没有</td></tr>
+          <tr><td><b>情境运气</b><br>circumstantial luck</td><td>碰上什么处境、被卷入什么问题</td><td>同一年毕业，一个遇上行业扩张，一个遇上收缩</td></tr>
+          <tr><td><b>构成运气</b><br>constitutive luck</td><td>天生是什么样的人：性情、能力、倾向</td><td>谁天生耐得住枯燥，谁坐不住十分钟</td></tr>
+          <tr><td><b>因果运气</b><br>causal luck</td><td>行为本身是否被先前的因果链决定</td><td>这个「想帮人」的念头，究竟从哪里来的</td></tr>
+        </table>
+        <p>四层合起来，压力全落在一条我们口头都认的原则上，内格尔称之为<b>控制原则</b>：人只能为自己能控制的事情受到道德评价。听起来无可反驳，但把它贯彻下去，能留下的东西少得可怕——性情不由自己选，处境不由自己挑，连「我愿意努力」这件事的意愿强度，也大半不是自己安排的。内格尔的结论是一句近乎消沉的话：真正属于行动者的范围，缩成了一个<b>没有延展的点</b>（a point without extension）。</p>
+        <blockquote>We go on judging people by what they did, knowing that part of what they did was an accident.
+          <em>我们照旧按人做过的事评判人，明知他们所做的有一部分是偶然。——本课第 4 段</em>
+        </blockquote>
+
+        <h3>三、法律早就把运气写进了条文</h3>
+        <p>「按结果判人」听起来不理性，但现代法律从不隐瞒它这么做。<b>未遂与既遂的区别</b>是最清楚的一处：多数法系对未遂的处罚都轻于既遂，即使失败纯属偶然——枪卡壳了，被害人恰好退后一步，投毒的分量算错了。中国《刑法》第二十三条规定：「已经着手实行犯罪，由于犯罪分子意志以外的原因而未得逞的，是犯罪未遂。对于未遂犯，<b>可以</b>比照既遂犯从轻或者减轻处罚。」注意这里用的是「可以」而不是「应当」，裁量权留在法官手里。民事侵权也一样：同样的过失，损害后果不同，赔偿数额可能相差几个量级。</p>
+        <p>但这不等于法律就是「结果主义」的。反例同样清楚：<b>危险驾驶</b>这类罪名，看的是行为本身的风险，不必等到有人受伤；<b>犯罪预备</b>、<b>共谋</b>也都在结果发生之前就介入。所以更准确的说法是：<b>法律在不同的位置，对「行为」与「结果」分配了不同的重量，而这个分配是公开的、可争论的</b>。这正是它与私人道德判断最大的区别——法律必须写明白自己看重什么，我们的道德直觉则常常既看重意图，又忍不住看结果，而且不肯承认。</p>
+
+        <h3>四、实验怎么说</h3>
+        <p>哲学家讨论了两千多年的事，心理学家从 1980 年代开始拿问卷去测。<b>巴伦与赫尔希（Baron &amp; Hershey, 1988）</b>给被试看同一个决策——一位医生要不要做一台有 8% 术中死亡率的手术——只改结局。结局好，被试就把这个决策评得更好、把决策者评得更能干、也更愿意让对方替自己做决定。更值得记的是后半句：<b>被试自己认为不该看结局，但仍然看了。</b>2023 年一项 692 人的重复研究把效应量算得比原研究更大（0.77 至 1.10 个标准差），而且在那些明确表示「评价决策时不该考虑结果」的人身上同样成立。</p>
+        <p><b>克尼尔与马凯里（Kneer &amp; Machery, 2019）</b>的研究把画面搅浑了。他们怀疑：早期实验之所以测出「道德运气」，是因为每个人只看到一个版本，于是自行想象了不同的疏忽程度。改成<b>同一个人并排看两个版本</b>之后，绝大多数被试判定两个司机<b>同样该受责备</b>、行为同样错、同样不可允许。但有一项例外——<b>惩罚</b>。即便承认道德上无差别，被试仍然希望撞死人的那个受更重的罚。</p>
+        <p>这个结果比「人有偏见」更细：<b>责备与惩罚走的不是同一条路</b>。前者更像一次道德判断，可以靠反思校正；后者更像一种制度性的反应，跟着实际发生的损害走。研究者给出的机制解释也值得记：结局不是被当成「额外的信息」，而是被当成<b>关于行为本身的证据</b>——读到孩子死了，人们会把那 8% 读得更大，把司机读得更疏忽。也就是说，这不是简单的算错，而是<b>证据被结局偷偷改写了</b>。</p>
+
+        <h3>五、中外对照：原心定罪与「不待成」</h3>
+        <p>中国思想史里有一条极有意思的线索，恰好从相反方向处理同一个张力。汉代董仲舒《春秋繁露·精华》说：</p>
+        <blockquote>《春秋》之听狱也，必本其事而原其志。志邪者不待成，首恶者罪特重，本直者其论轻。
+          <em>——《春秋繁露·精华》。大意：断案要从事实出发，但必须推究其动机；动机邪恶的，不必等到事成就可以论罪；首恶者罪更重；本心正直的，论处可以从轻。</em>
+        </blockquote>
+        <p>三层意思很清楚：<b>「必本其事而原其志」</b>——事实仍是起点，但不止于事实；<b>「志邪者不待成」</b>——动机恶，不等结果发生就可罚，这与「按结果判」正好相反；<b>「本直者其论轻」</b>——动机正，即使后果严重也可轻论。《公羊传》昭公十九年那个案例常被引来作证：许止为病中的父亲进药，父亲服药后去世，按律近乎弑父，而「君子原心，赦而不诛」。《盐铁论·刑德》把这套逻辑概括得更锋利：「志善而违于法者免，志恶而合于法者诛。」</p>
+        <p>这个对照要加三点辨析，否则会讲歪：</p>
+        <ul>
+          <li><b>① 方向相反，结构相同。</b>董仲舒把重量放在「志」，现代刑法把重量放在「事」，但两边都没有取消另一端——「不待成」仍须「本其事」，未遂也仍要看故意。这是同一张光谱上的两个落点，不是「中国重动机、西方重结果」的高下之分。</li>
+          <li><b>② 春秋决狱是特定历史条件下的司法方法，不是现行制度。</b>它兴起于汉武帝时期，靠儒家经义填补律条的空白，历代评价并不一致——《盐铁论》那句「志恶而合于法者诛」本身就被后人批评为容易出入人罪。把它写成「古人早就解决了道德运气」，是把一段有争议的司法史读成了标准答案。</li>
+          <li><b>③ 「中国重动机」在制度层面并不成立。</b>现行中国刑法同样承认结果影响量刑，未遂从轻、既遂从重就是明证。真正可比的是<b>用什么工具处理同一个张力</b>：一边用「原其志」的解释权，一边用「可以从轻」的裁量权。工具不同，难题相同。</li>
+        </ul>
+
+        <h3>六、把话说窄：本课不做的几件事</h3>
+        <ul>
+          <li><b>不做精神诊断。</b>不分析任何真实人物的心理，也不推测那位司机「应该」怎么想。agent-regret 是一个哲学概念，不是一份病历。</li>
+          <li><b>不讨论任何真实案件与判决。</b>正文与扩展里的司机、医生、考生都是构造出来的例子，不对应任何真实事件。</li>
+          <li><b>不给「谁更道德」的结论。</b>威廉斯与内格尔的结论本就不同，本课采用内格尔的悬置：这个概念既无法证成，也无法放弃。</li>
+          <li><b>数据口径要说清。</b>1988 年原实验样本很小（约 20 人），2023 年重复研究为 692 人；效应量以标准差计，不是百分比。问卷实验多使用在线样本，结论不能直接外推到法庭或考场。</li>
+          <li><b>「未遂从轻」是多数法系的通则，不是绝对规则。</b>中国《刑法》第二十三条用的是「可以」，具体案件仍由法官裁量。</li>
+          <li><b>不评价任何国家的司法制度，不做跨国排名。</b>第五节只对照「用什么工具处理同一个张力」，不比高下，也不涉及现行政策的优劣。</li>
+        </ul>
+
+        <h3>七、参考来源</h3>
+        <p class="source">Bernard Williams, “Moral Luck,” <i>Proceedings of the Aristotelian Society</i>, Supplementary Volume 50 (1976), pp. 115–135；重印于 <i>Moral Luck: Philosophical Papers 1973–1980</i>（Cambridge University Press, 1981）· Thomas Nagel, “Moral Luck,” 同刊同卷（1976），pp. 137–151；重印于 <i>Mortal Questions</i>（Cambridge University Press, 1979），pp. 24–38 · Jonathan Baron &amp; John C. Hershey, “Outcome Bias in Decision Evaluation,” <i>Journal of Personality and Social Psychology</i> 54(4) (1988), pp. 569–579 · Markus Kneer &amp; Edouard Machery, “No Luck for Moral Luck,” <i>Cognition</i> 182 (2019), pp. 331–348 · 董仲舒《春秋繁露·精华》· 桓宽《盐铁论·刑德》· 《春秋公羊传》昭公十九年 · 《中华人民共和国刑法》第二十三条。</p>
+
+      </div>
+    </section>
+    <!-- 7. ABOUT -->
+    <section id="about">
+      <h2 class="sec">⭐ 关于本课 About This Lesson</h2>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--accent);">本课内容</h3>
+        <p style="margin-top:0;"><b>类别：</b>🤔 哲学思考 Philosophy　|　<b>级别：</b>B2 中高级　|　<b>主题：</b>道德运气——两个司机做了完全相同的错事，只因为路边有没有一个孩子，我们对他们的判断就分开了。我们嘴上只认意图，实际却按结果判人。</p>
+        <p>1976 年，威廉斯与内格尔各写一篇《道德运气》，把这个矛盾摆上了台面。威廉斯用卡车司机说明<b>行动者之悔</b>无法被「不是你的错」抹掉；内格尔用<b>四档运气</b>说明，控制原则一旦贯彻到底，真正属于行动者的范围会缩成一个没有延展的点。而法律从不隐瞒自己看结果：<b>未遂轻于既遂</b>，是所有法系共同的妥协。心理学把这条裂缝量了出来——并排比较时，人们判两人<b>同样该受责备</b>，却仍想罚得更重的是撞死人的那个。责备与惩罚，走的不是同一条路。</p>
+
+        <h3 style="color:var(--accent);">学习目标 Learning Goals</h3>
+        <div class="goal"><span class="ic">🎯</span><div><b>词汇：</b>掌握 11 个 B2 级伦理与法律词汇（negligence · agent-regret · symposium · temperament · agency · attempt · offence · reflex · replication · blameworthy · desert），并分清 blame 与 punish、desert 与 dessert。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>阅读：</b>读懂约 500 词的哲学评论文，能分辨文中「场景」「概念」「证据」「作者立场」四个层次，并追踪「例子 → 命名 → 原则 → 实验 → 悬置」这条论证链。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>语法：</b>掌握五种高级结构——否定主语加定语从句、not merely 的递进转折、祈使句加 and 的条件表达、even when 加破折号列举、分词短语作伴随状语；并分清抽象名词的可数性。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>思维：</b>练习一个可迁移的提问方式：<b>我是在评价这个人，还是在评价这件事的结果？</b>把它用在一次考试、一场比赛、一份绩效评估上，答案往往不一样。</div></div>
+        <div class="goal"><span class="ic">🎯</span><div><b>对照：</b>通过「原心定罪」与「未遂从轻」的对照，理解同一个伦理张力可以有两种制度落点，差别在于<b>把重量放在哪一端</b>，而不在于谁更讲道理。</div></div>
+
+        <h3 style="color:var(--accent);">核心句背下来 Core Sentences</h3>
+        <div class="item" style="border-bottom:none;">
+          <div class="eg">1. Nothing the two men did differs in any way that was up to them.</div>
+          <div class="eg" style="margin-top:8px;">2. The driver who killed the child does not merely regret that a child died; he regrets that he did it, although he did not choose to.</div>
+          <div class="eg" style="margin-top:8px;">3. Push the principle to its limit and the area of genuine agency, in his phrase, shrinks to a point without extension.</div>
+          <div class="eg" style="margin-top:8px;">4. Every legal system punishes an attempt less severely than a completed offence, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back.</div>
+          <div class="eg" style="margin-top:8px;">5. We go on judging people by what they did, knowing that part of what they did was an accident.</div>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ 打印本页 Print</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>POLA NEWS · B2 English Learning · 2026-11-22 · 哲学思考 Philosophy｜道德运气：同一个错，两种判决</footer>
+
+<div id="tip"></div>
+<script>
+/* ---------- Sidebar ---------- */
+const sidebar=document.getElementById('sidebar');
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>sidebar.classList.toggle('open'));
+document.querySelectorAll('nav.sidebar a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=a.dataset.sec;
+    document.querySelectorAll('nav.sidebar a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+    sidebar.classList.remove('open');
+    stopSpeech();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- Progress bar ---------- */
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  prog.style.width=(sc*100)+'%';
+});
+
+/* ---------- Tooltip ---------- */
+const tip=document.getElementById('tip');
+document.querySelectorAll('.kw').forEach(w=>{
+  w.addEventListener('click',e=>{
+    e.stopPropagation();
+    tip.innerHTML='<b>'+(w.textContent)+'</b><br>'+(w.dataset.def||'');
+    tip.style.display='block';
+    const r=w.getBoundingClientRect();
+    let top=r.bottom+8, left=r.left;
+    if(left+280>window.innerWidth)left=window.innerWidth-290;
+    tip.style.top=top+'px';tip.style.left=left+'px';
+  });
+});
+document.addEventListener('click',()=>{tip.style.display='none';});
+
+/* ---------- Pattern practice check ---------- */
+document.querySelectorAll('.practice input').forEach(inp=>{
+  inp.addEventListener('blur',()=>{
+    const v=(inp.value||'').trim();
+    const key=(inp.dataset.ans||'').trim();
+    if(!v){inp.style.borderColor='';return;}
+    const norm=s=>s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+    inp.style.borderColor=(norm(v)===norm(key))?'#22c55e':'#ef4444';
+  });
+});
+
+/* ---------- Web Speech API ---------- */
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis.getVoices()||[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  const en=(voices||[]).filter(v=>(v.lang||'').toLowerCase().startsWith('en'));
+  if(!en.length)return null;
+  const match=p=>en.find(p);
+  let v=match(v=>/enhanced/i.test(v.name)&&/(female|woman)/i.test(v.name)); if(v)return v;
+  v=match(v=>/samantha/i.test(v.name)); if(v)return v;
+  v=match(v=>/zira/i.test(v.name)); if(v)return v;
+  v=match(v=>/karen/i.test(v.name)); if(v)return v;
+  v=match(v=>/(female|woman)/i.test(v.name)); if(v)return v;
+  return en[0];
+}
+let activeBtn=null;
+function resetBtn(){
+  if(activeBtn){activeBtn.textContent=activeBtn.dataset.icon||'▶';activeBtn.classList.remove('playing');activeBtn=null;}
+}
+function stopSpeech(){
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  resetBtn();
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){alert('您的浏览器不支持语音朗读，请使用 Chrome / Edge / Safari。');return;}
+  window.speechSynthesis.cancel();
+  resetBtn();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=pickVoice(); if(v)u.voice=v;
+  u.lang='en-US';
+  u.rate=0.92; u.pitch=1.0;
+  u.onend=resetBtn;
+  u.onerror=resetBtn;
+  if(btn){btn.textContent='⏸';btn.classList.add('playing');activeBtn=btn;}
+  window.speechSynthesis.speak(u);
+}
+const segmentTexts=["Two lorries leave the same depot on the same wet evening. Both drivers have been on the road for eleven hours. Both skipped the brake check they were supposed to sign, both take the same corner a little too fast, and both are tired in exactly the same way. The first driver reaches the yard, parks, and goes home. The second reaches the same corner at the same speed, and a child runs out from between two parked cars. Nothing the two men did differs in any way that was up to them. The file on the second driver will record negligence. There is no file on the first. One will be questioned, will face a charge, and will hear a sound for the rest of his life. The other will sleep. This is not a story about carelessness. It is a story about what happened next.", "Bernard Williams opened his 1976 essay with a version of this scene, and gave the feeling it produces a name: agent-regret. The driver who killed the child does not merely regret that a child died; he regrets that he did it, although he did not choose to. That difference is invisible to anyone standing at the roadside. Thomas Nagel, replying in the same symposium, stated the principle we all claim to believe: people can be judged only for what lies within their control. Then he showed how little survives it. Luck enters at four points — how an action turns out, which situations we meet, what temperament we start with, and the causes that produced us. Push the principle to its limit and the area of genuine agency, in his phrase, shrinks to a point without extension.", "Notice that the law does not pretend otherwise. Every legal system punishes an attempt less severely than a completed offence, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back. The outcome is written into the sentence. Psychology has measured the same reflex. Baron and Hershey gave people identical decisions with different endings, and found that a decision was rated better when it happened to turn out well; a later replication found the gap larger than the original, and present even in people who said outcomes should not count. A 2019 study by Kneer and Machery complicates the picture. Shown both drivers side by side, most participants judged them equally blameworthy — and still wanted the unlucky one punished more. Blame and punishment, it seems, run on different tracks.", "What is to be done with a judgement that refuses to add up? One answer is to deny the difference: what varies is our reaction, not their desert. Another is to split the question, keeping blame for intentions and letting punishment answer for consequences — roughly what the law already does. The third is Nagel's, and the least comfortable: the idea of moral responsibility can neither be justified nor abandoned. We go on judging people by what they did, knowing that part of what they did was an accident. Were the principle applied consistently, very little would survive — and what survived would not look like morality at all. That is the cost of taking luck seriously: not a fairer world, but a thinner one."];
+document.querySelectorAll('.play-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(segmentTexts[+b.dataset.seg],b);
+  });
+});
+document.querySelectorAll('.speak-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(b.classList.contains('playing')){stopSpeech();return;}
+    speak(b.dataset.word,b);
+  });
+});
+
+/* ---------- Quiz ---------- */
+const quizData=[
+  {q:"What actually separated the two drivers? 究竟是什么把两个司机区分开的？",
+   opts:["One had been driving much longer 一个开车时间久得多（正文说两人都是十一小时）","One of them skipped the brake check 其中一个跳过了刹车检查（两人都跳过了）","Only the outcome: whether a child happened to run out 只有结果——那天是否恰好有孩子跑出来","One was driving faster than the other 一个开得比另一个快（正文说同样速度）"],
+   ans:2,
+   fb:"正确！第 1 段：Both skipped the brake check... both take the same corner a little too fast... <b>Nothing the two men did differs in any way that was up to them.</b> 疲劳、疏忽、车速全部相同，唯一变量是结果。"},
+  {q:"What does agent-regret mean here? 这里的 agent-regret 指的是什么？",
+   opts:["The regret of the person who did it, which a bystander cannot share 做这件事的人的悔，旁观者无法分担","Anger that nothing could be done 对无能为力的愤怒（这是一种情绪，但不对应这个词）","Fear of being punished 害怕被惩罚（那是恐惧，不是悔）","Sympathy for the victim 对受害者的同情（那属于旁观者的遗憾）"],
+   ans:0,
+   fb:"正确！第 2 段：he does not merely regret that a child died; <b>he regrets that he did it</b>, although he did not choose to。悔的对象不是「发生了什么」，而是「是谁做的」。"},
+  {q:"What happens if the control principle is pushed to its limit? 「控制原则」推到极限会怎样？",
+   opts:["Everyone becomes responsible for every outcome 每人都要为所有结果负责（正好相反）","The law has to abolish the offence of attempt 法律必须废除未遂罪（本课没这么说）","Luck can be calculated in advance 运气可以被事先计算（不可能）","The area of genuine agency shrinks to a point without extension 真正属于行动者的范围缩成一个没有延展的点"],
+   ans:3,
+   fb:"正确！第 2 段：Push the principle to its limit and the area of genuine agency, in his phrase, <b>shrinks to a point without extension</b>。性情、处境、甚至意愿的强度，都不完全由自己安排。"},
+  {q:"What did Baron and Hershey find in 1988? 巴伦与赫尔希 1988 年发现了什么？",
+   opts:["People judge decisions only by intentions 人们只按意图评价决策（实验结论相反）","The same decision was rated better when it turned out well, even though participants said outcomes should not count 同一个决策，结局好就被评得更好——尽管被试自认不该看结局","Doctors are less affected by outcomes than patients 医生比病人更不受结局影响（文中无此结论）","Outcomes do not affect judgments of competence 结果不影响对能力的评价（恰好相反）"],
+   ans:1,
+   fb:"正确！第 3 段：identical decisions with different endings... <b>rated better when it happened to turn out well</b>；而且 the gap... present even in people who said outcomes should not count。知道自己有偏见，并不足以消除它。"},
+  {q:"What did Kneer and Machery find when both drivers were shown side by side? 两人并排呈现时，克尼尔与马凯里发现了什么？",
+   opts:["Both drivers were blamed more severely 两个司机都被判得更重（没有这个结果）","The difference disappeared entirely, including punishment 差异完全消失，惩罚也一样（惩罚是唯一的例外）","Participants refused to answer 被试拒绝回答（不符合实验设计）","Most judged them equally blameworthy, yet still wanted the unlucky one punished more 大多数人判两人同样该受责备，却仍希望倒霉的那个受更重的罚"],
+   ans:3,
+   fb:"正确！第 3 段：most participants judged them equally blameworthy — <b>and still wanted the unlucky one punished more</b>。于是有了那句收束：Blame and punishment, it seems, run on different tracks。"},
+  {q:"Which statement comes closest to the writer's final position? 哪一句最接近作者最后的立场？",
+   opts:["We should stop judging people altogether 我们应当彻底停止评判他人（正文没有这样主张）","The law should sentence people only by intention 法律应当只按意图量刑（正文只说法治已在两端分配重量）","The idea of moral responsibility can neither be justified nor abandoned; applying the principle consistently would leave a thinner morality 道德责任这个概念既无法证成也无法放弃；把原则贯彻到底只会剩下更薄的道德","Luck does not really exist 运气其实不存在（整课的前提正相反）"],
+   ans:2,
+   fb:"正确！第 4 段：the idea of moral responsibility can <b>neither be justified nor abandoned</b>；收尾是 Were the principle applied consistently, very little would survive — not a fairer world, but <b>a thinner one</b>。这是内格尔式的悬置，不是解决方案。"}
+];
+const qb=document.getElementById('quizBox');
+quizData.forEach((item,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let optsHtml=item.opts.map((o,j)=>`<label data-j="${j}"><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('');
+  d.innerHTML=`<div class="qt">${i+1}. ${item.q}</div><div class="opts">${optsHtml}</div><div class="feedback"></div><button class="check">检查答案 Check</button>`;
+  qb.appendChild(d);
+  const fb=d.querySelector('.feedback');
+  const check=d.querySelector('.check');
+  check.addEventListener('click',()=>{
+    const sel=d.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel){fb.textContent='请先选择一个答案。';fb.style.color='#b91c1c';return;}
+    const j=+sel.value;
+    d.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong'));
+    if(j===item.ans){
+      d.querySelector('label[data-j="'+j+'"]').classList.add('correct');
+      fb.innerHTML='✅ '+item.fb;fb.style.color='#166534';
+    }else{
+      d.querySelector('label[data-j="'+j+'"]').classList.add('wrong');
+      d.querySelector('label[data-j="'+item.ans+'"]').classList.add('correct');
+      fb.innerHTML='❌ 正确答案已标绿。'+item.fb;fb.style.color='#991b1b';
+    }
+  });
+});
+</script>
+<!-- 预生成音频播放层 -->
+<script>
+(function(){
+  var origSpeak=null,origCancel=null;
+  try{origSpeak=window.speechSynthesis.speak.bind(window.speechSynthesis);origCancel=window.speechSynthesis.cancel.bind(window.speechSynthesis);}catch(e){}
+  var currentAudio=null;
+  function stopAll(){if(currentAudio){try{currentAudio.pause();}catch(e){}currentAudio=null;}}
+  function resetBtnSafe(){if(typeof resetBtn==='function'){try{resetBtn();}catch(e){}}}
+
+  /* 动态计算音频路径前缀 */
+  var pageName=(window.location.pathname.split('/').pop()||'').toLowerCase();
+  var audioPrefix='';
+  if(pageName && pageName!=='interactive_lesson.html' && pageName!=='index.html'){
+    audioPrefix=pageName.replace('.html','')+'/';
+  }
+
+  function findAudioFile(text){
+    if(typeof segmentTexts!=='undefined'&&segmentTexts){
+      for(var i=0;i<segmentTexts.length;i++){
+        if(segmentTexts[i]===text)return audioPrefix+'seg'+i+'.mp3';
+      }
+    }
+    var wordEls=document.querySelectorAll('[data-word]');
+    for(var j=0;j<wordEls.length;j++){
+      if(wordEls[j].getAttribute('data-word')===text){
+        var safe=text.replace(/[^a-zA-Z0-9]/g,'_');
+        return audioPrefix+'word_'+safe+'.mp3';
+      }
+    }
+    return null;
+  }
+
+  window.speechSynthesis.speak=function(utterance){
+    stopAll();
+    var text=utterance.text||'';
+    var file=findAudioFile(text);
+    if(file){
+      var audio=new Audio(file);
+      audio.onended=function(){
+        currentAudio=null;
+        if(typeof utterance.onend==='function')utterance.onend();
+        resetBtnSafe();
+      };
+      audio.onerror=function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      };
+      currentAudio=audio;
+      audio.play().then(function(){}).catch(function(){
+        currentAudio=null;
+        if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+      });
+    }else{
+      if(origSpeak){origSpeak(utterance);}else{resetBtnSafe();}
+    }
+  };
+  window.speechSynthesis.cancel=function(){
+    stopAll();
+    if(origCancel){origCancel();}
+    resetBtnSafe();
+  };
+})();
+</script>
+
+</body>
+</html>

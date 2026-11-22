@@ -8496,6 +8496,73 @@ const EPISODES = [
     ]
   },
   {
+    "level": "B2",
+    "date": "2026-11-22",
+    "title": "The Child Who Was Not There",
+    "category": "general",
+    "emoji": "🎓",
+    "desc": "B2 高中大学英语",
+    "slug": "2026-11-22-the-child-who-was-not-there",
+    "url": "lessons/b2/2026-11-22-the-child-who-was-not-there.html",
+    "vocab": [
+      {
+        "word": "negligence",
+        "zh": "过失；疏忽（形容词 negligent，副词 negligently）。法律上的 negligence 指未达到应有的注意标准，与 intent（故意）相对。本课的关键是：两个司机的 negligence 程度完全相同，差别只在结果。<b>gross negligence</b> 重大过失",
+        "ex": "\"The file on the second driver will record negligence.\""
+      },
+      {
+        "word": "agent-regret",
+        "zh": "行动者之悔（Williams 造的词）。agent 行动者 + regret 悔。指行为人对自己造成的伤害所感到的悔，与旁观者的遗憾不同：他悔的是「这件事是我做的」，即使他并未选择去做。译成「内疚」会失真，因为内疚常预设过错",
+        "ex": "\"Bernard Williams opened his 1976 essay with a version of this scene, and gave the feeling it produces a name: agent-regret.\""
+      },
+      {
+        "word": "symposium",
+        "zh": "专题研讨会；学术讨论会（复数 symposiums 或 symposia）。词源是希腊语「一起喝酒」，柏拉图的《会饮篇》原文即以此为题。1976 年 Williams 与 Nagel 是在亚里士多德学会的同一次研讨会上各交一篇同名论文。<b>hold a symposium on sth</b> 就某题举办研讨会",
+        "ex": "\"Thomas Nagel, replying in the same symposium, stated the principle we all claim to believe: people can be judged only for what lies within their control.\""
+      },
+      {
+        "word": "temperament",
+        "zh": "气质；性情。指人天生的情绪与行为倾向。与 character（性格）相比，temperament 更强调先天成分，因此常与「构成运气」连用——谁天生胆大、谁天生谨慎，都不是自己选的。形容词 temperamental（也有「喜怒无常」一义）",
+        "ex": "\"Luck enters at four points — how an action turns out, which situations we meet, what temperament we start with, and the causes that produced us.\""
+      },
+      {
+        "word": "agency",
+        "zh": "能动性；行动能力（agent 行动者 + -cy）。指人作为行动主体去选择、干预的能力。<b>the area of genuine agency</b> 真正属于行动者的范围。与 freedom 的差别：freedom 讲「有没有被限制」，agency 讲「能不能作为主体去行动」。（另一个常用义是「代理机构」，靠语境区分）",
+        "ex": "\"Push the principle to its limit and the area of genuine agency, in his phrase, shrinks to a point without extension.\""
+      },
+      {
+        "word": "attempt",
+        "zh": "（法律）未遂；企图。<b>criminal attempt</b> 犯罪未遂：已着手实施，但因意志以外的原因未得逞，与 completed offence（既遂）相对。动词 attempt 尝试；形容词 attempted（attempted murder 谋杀未遂）。注意别与 attacker（袭击者）混淆",
+        "ex": "\"Every legal system punishes an attempt less severely than a completed offence, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back.\""
+      },
+      {
+        "word": "offence",
+        "zh": "罪行；违法行为（美式拼写 offense）。<b>a completed offence</b> 既遂之罪。与 crime 的差别：crime 是日常与统计用词，offence 更常用于刑法条文与诉讼程序。另一个意思是「冒犯」：take offence at sth 因某事见怪",
+        "ex": "\"Every legal system punishes an attempt less severely than a completed offence, even when the failure was pure chance — the bullet jammed, the pedestrian stepped back.\""
+      },
+      {
+        "word": "reflex",
+        "zh": "本能反应；反射。本课指「一听结果就下判断」这种近乎自动的反应。<b>a conditioned reflex</b> 条件反射。别与 reflection（反思）混淆——本课要说的正是：reflex 快，reflection 慢，而判断常常跑在反思前面",
+        "ex": "\"Psychology has measured the same reflex.\""
+      },
+      {
+        "word": "replication",
+        "zh": "重复实验；复制（动词 replicate）。学术写作里 <b>replication study</b> 指用同样方法再跑一遍，检验原结论站不站得住。与 repetition 不同：repetition 只是「又做了一次」，replication 是为了检验。心理学近年因「重复危机」而格外看重它",
+        "ex": "\"Baron and Hershey gave people identical decisions with different endings, and found that a decision was rated better when it happened to turn out well; a later replication found the gap larger than the original, and present even in people who said outcomes should not count.\""
+      },
+      {
+        "word": "blameworthy",
+        "zh": "该受责备的（blame 责备 + worthy 值得）。<b>be blameworthy for sth</b> 因某事该受责备；名词 blameworthiness。与 guilty 的差别：guilty 偏法律判定，blameworthy 偏道德评价——本课正是要把这两件事分开",
+        "ex": "\"Shown both drivers side by side, most participants judged them equally blameworthy — and still wanted the unlucky one punished more.\""
+      },
+      {
+        "word": "desert",
+        "zh": "应得；应得的赏罚（读作 /dɪˈzɜːt/，重音在第二音节）。不可数名词，常用复数 deserts：<b>get one's just deserts</b> 得到应得的下场。注意与 dessert（甜点，双写 s）拼写不同、读音也不同；与动词 desert（抛弃）读音亦不同",
+        "ex": "\"One answer is to deny the difference: what varies is our reaction, not their desert.\""
+      }
+    ]
+  },
+  {
     "level": "C1",
     "date": "2026-08-12",
     "title": "When Algorithms Author Life",
