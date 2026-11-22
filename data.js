@@ -11237,5 +11237,67 @@ const EPISODES = [
         "ex": "When a foundational principle is overruled by a rival one, the change rarely appears as an amendment; it appears as a series of reasonable decisions."
       }
     ]
+  },
+  {
+    "level": "C1",
+    "date": "2026-11-22",
+    "title": "The Apology That Fits on One Line",
+    "category": "general",
+    "emoji": "🏆",
+    "desc": "C1-C2 雅思托福英语",
+    "slug": "2026-11-22-the-apology-that-fits-on-one-line",
+    "url": "lessons/c1/2026-11-22-the-apology-that-fits-on-one-line.html",
+    "vocab": [
+      {
+        "word": "remedial",
+        "zh": "补救性的、修补性的（名词 remedy；固定搭配 remedial interchange 补救性交换；不要与「医疗的」混同）",
+        "ex": "A remedial interchange is not a single act but a sequence: the offender offers something, and the offended party decides whether the offer is enough."
+      },
+      {
+        "word": "interchange",
+        "zh": "交换、往复（此处为社会学固定术语，指双方来回的整套言语往来，而非单方行为）",
+        "ex": "What the term captures is reciprocity: an apology that meets no response has not yet completed the interchange it belongs to."
+      },
+      {
+        "word": "illocutionary",
+        "zh": "施事性的、语外之力的（奥斯汀三分法的中间层；IFID 即显性施事标记，如 I am sorry）",
+        "ex": "An explicit illocutionary formula leaves the hearer in no doubt about what is being done, which is precisely why it can be counted."
+      },
+      {
+        "word": "forbearance",
+        "zh": "克制、暂不追究（动词 forbear；语用学借指「承诺不再犯」；与 tolerance 的分别是强调忍住不追究）",
+        "ex": "A promise of forbearance is the part of an apology that looks forward, since the other four components all concern what has already happened."
+      },
+      {
+        "word": "prosody",
+        "zh": "韵律特征（音高、重音、节奏、语调的总和；文学义为诗律学；书面材料无法承载）",
+        "ex": "Strip away prosody and the same words can read as contrition or as sarcasm, which is a limit no coding scheme can repair."
+      },
+      {
+        "word": "elicit",
+        "zh": "引出、诱导出（ elicited responses 诱导式反应；与 extract 的分别是 elicit 靠提问或刺激让对方主动给出）",
+        "ex": "Data elicited under controlled conditions answer a different question from data recorded in the wild, and the difference is not a defect in either."
+      },
+      {
+        "word": "uniform",
+        "zh": "一致的、一律的（名词 uniformity；not uniform 常用于给论述留余地，表示批评力度因对象而异）",
+        "ex": "The objection is not uniform: it bears hardest on acts that are negotiated across many turns and only lightly on those completed in one."
+      },
+      {
+        "word": "constitute",
+        "zh": "构成、组成（比 make up 正式；学术与法律文本中用于界定「某物本身即是某类事物」）",
+        "ex": "If an apology constitutes a complete segment in itself, then a single-turn instrument records its shape without destroying it."
+      },
+      {
+        "word": "canonical",
+        "zh": "典范的、标准的（名词 canon 正典；比 standard 多一层「被公认为范本」的权威意味）",
+        "ex": "What a questionnaire captures is the canonical formula, the version speakers regard as correct rather than the one they produce under pressure."
+      },
+      {
+        "word": "utterance",
+        "zh": "话语、说出的具体一句话（区别于 sentence 抽象句单位与 statement 陈述内容）",
+        "ex": "Whether an utterance counts as an apology depends less on its wording than on how the person addressed chooses to take it."
+      }
+    ]
   }
 ];
